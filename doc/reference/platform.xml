@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/platform.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::platform -->
+      <class name="platform">
+        <purpose>Represents a compute platform.</purpose>
+
+        <description>
+          <para>
+            The platform class provides an interface to an OpenCL platform.
+          </para>
+        </description>
+
+        <!-- platform::platform(cl_platform_id) -->
+        <constructor specifiers="explicit">
+          <parameter name="id">
+            <paramtype>cl_platform_id</paramtype>
+          </parameter>
+          <description>
+            <para>
+              Creates a new platform object for <code>id</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- platform::platform(const platform&) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype>const <classname>platform</classname> &amp;</paramtype>
+          </parameter>
+          <description>
+            <para>
+              Creates a new platform object as a copy of <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- operator=(const platform&) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype>const <classname>platform</classname> &amp;</paramtype>
+          </parameter>
+          <description>
+            <para>
+              Copies the platform from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- platform::~platform() -->
+        <destructor>
+          <description>
+            <para>
+              Destroys the platform object.
+            </para>
+          </description>
+        </destructor>
+
+        <method-group name="public member functions">
+
+          <!-- platform::id() -->
+          <method name="id" cv="const">
+            <type>cl_platform_id</type>
+            <description>
+              <para>
+                Returns the ID of the platform.
+              </para>
+            </description>
+          </method>
+
+          <!-- platform::name() -->
+          <method name="name" cv="const">
+            <type>std::string</type>
+            <description>
+              <para>
+                Returns the name of the platform.
+              </para>
+            </description>
+          </method>
+
+          <!-- platform::vendor() -->
+          <method name="vendor" cv="const">
+            <type>std::string</type>
+            <description>
+              <para>
+                Returns the name of the vendor of the platform.
+              </para>
+            </description>
+          </method>
+
+          <!-- platform::get_info<T>(cl_platform_info) -->
+          <method name="get_info" cv="const">
+            <template>
+              <template-type-parameter name="T"/>
+            </template>
+            <type>T</type>
+            <parameter name="info">
+              <paramtype>cl_platform_info</paramtype>
+            </parameter>
+            <description>
+              <para>
+                Returns information about the platform.
+              </para>
+            </description>
+          </method>
+
+          <!-- platform::devices(cl_device_type) -->
+          <method name="devices" cv="const">
+            <type>std::vector&lt;<classname>device</classname>&gt;</type>
+            <parameter name="type">
+              <paramtype>cl_device_type</paramtype>
+              <default>CL_DEVICE_TYPE_ALL</default>
+            </parameter>
+            <description>
+              <para>
+                Returns a vector of devices for the platform.
+              </para>
+            </description>
+          </method>
+
+          <!-- platform::device_count(cl_device_type) -->
+          <method name="device_count" cv="const">
+            <type>size_t</type>
+            <parameter name="type">
+              <paramtype>cl_device_type</paramtype>
+              <default>CL_DEVICE_TYPE_ALL</default>
+            </parameter>
+            <description>
+              <para>
+                Returns the number of devices on the platform.
+              </para>
+            </description>
+          </method>
+        </method-group>
+
+        <method-group name="public static functions">
+
+          <!-- platform::platform_count() -->
+          <method name="platforms" specifiers="static">
+            <type>std::vector&lt;<classname>platform</classname>&gt;</type>
+            <description>
+              <para>
+                Returns a vector of all the OpenCL platforms available on the
+                system.
+              </para>
+            </description>
+          </method>
+
+          <!-- platform::platform_count() -->
+          <method name="platform_count" specifiers="static">
+            <type>size_t</type>
+            <description>
+              <para>
+                Returns the total number of OpenCL platforms available on the
+                system.
+              </para>
+            </description>
+          </method>
+        </method-group>
+      </class>
+    </namespace>
+  </namespace>
+</header>

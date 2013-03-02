@@ -1,0 +1,8 @@
+[section:introduction Introduction]
+
+The Boost Compute library provides a C++ interface to multi-core CPU and GPGPU
+computing platforms.
+
+[warning Boost.Compute is not an official Boost library]
+
+[endsect]

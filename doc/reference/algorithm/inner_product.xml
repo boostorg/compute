@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/inner_product.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::inner_product(first1, last1, first2, init, queue) -->
+      <function name="inner_product">
+        <template>
+          <template-type-parameter name="InputIterator1"/>
+          <template-type-parameter name="InputIterator2"/>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <type>T</type>
+
+        <parameter name="first1">
+          <paramtype>InputIterator1</paramtype>
+        </parameter>
+        <parameter name="last1">
+          <paramtype>InputIterator1</paramtype>
+        </parameter>
+        <parameter name="first2">
+          <paramtype>InputIterator2</paramtype>
+        </parameter>
+        <parameter name="init">
+          <paramtype>T</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <description>
+          <para>
+            Returns the inner product of the elements in the range
+            [<code>first1</code>, <code>last1</code>) with the elements in the
+            range starting at <code>first2</code>.
+          </para>
+        </description>
+      </function>
+
+      <!-- boost::compute::inner_product(first1,
+                                         last1,
+                                         first2,
+                                         init,
+                                         accumulate_function,
+                                         transform_function,
+                                         queue) -->
+      <function name="inner_product">
+        <template>
+          <template-type-parameter name="InputIterator1"/>
+          <template-type-parameter name="InputIterator2"/>
+          <template-type-parameter name="T"/>
+          <template-type-parameter name="BinaryAccumulateFunction"/>
+          <template-type-parameter name="BinaryTransformFunction"/>
+        </template>
+
+        <type>T</type>
+
+        <parameter name="first1">
+          <paramtype>InputIterator1</paramtype>
+        </parameter>
+        <parameter name="last1">
+          <paramtype>InputIterator1</paramtype>
+        </parameter>
+        <parameter name="first2">
+          <paramtype>InputIterator2</paramtype>
+        </parameter>
+        <parameter name="init">
+          <paramtype>T</paramtype>
+        </parameter>
+        <parameter name="accumulate_function">
+          <paramtype>BinaryAccumulateFunction</paramtype>
+        </parameter>
+        <parameter name="transform_function">
+          <paramtype>BinaryTransformFunction</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <description>
+          <para>
+             Returns the inner product of the elements in the range
+            [<code>first1</code>, <code>last1</code>) with the elements in the
+            range starting at <code>first2</code> using
+            <code>accumulate_function</code> and
+            <code>transform_function</code>.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

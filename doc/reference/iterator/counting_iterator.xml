@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/iterator/counting_iterator.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+      
+      <!-- boost::compute::counting_iterator<T> -->
+      <class name="counting_iterator">
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <purpose>A counting iterator</purpose>
+
+        <description>
+          <para>
+            The <code>counting_iterator</code> class provides a random-access
+            iterator that returns sequential values when dereferenced.
+          </para>
+          <para>
+            See also: <functionname>make_counting_iterator()</functionname>
+          </para>
+        </description>
+      </class>
+
+      <!-- boost::compute::make_counting_iterator(init) -->
+      <function name="make_counting_iterator">
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+        <type><classname>counting_iterator</classname>&lt;T&gt;</type>
+        <parameter name="init">
+          <paramtype>const T&amp;</paramtype>
+        </parameter>
+        <description>
+          <para>
+            Returns a new <classname>counting_iterator</classname> starting 
+            at <code>init</code>.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

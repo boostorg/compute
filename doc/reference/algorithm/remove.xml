@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/remove.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::remove(first, last, value, queue) -->
+      <function name="remove">
+        <template>
+          <template-type-parameter name="Iterator"/>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <type>Iterator</type>
+
+        <parameter name="first">
+          <paramtype>Iterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>Iterator</paramtype>
+        </parameter>
+        <parameter name="value">
+          <paramtype>const T&amp;</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <description>
+          <para>
+            Removes each element equal to <code>value</code> in the range
+            [<code>first</code>, <code>last</code>).
+          </para>
+          <para>
+            See also: <functionname>remove_if()</functionname>
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

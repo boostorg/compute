@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/buffer.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::buffer -->
+      <class name="buffer">
+        <purpose>A memory buffer</purpose>
+
+        <description>
+          <para>
+            The <code>buffer</code> class represents a memory buffer on a
+            compute device.
+          </para>
+          <para>
+            See also: <classname>context</classname>,
+                      <classname>command_queue</classname>
+          </para>
+        </description>
+
+        <!-- buffer::buffer(context, size, flags, host_ptr) -->
+        <constructor>
+          <parameter name="context">
+            <paramtype>const <classname>context</classname>&amp;</paramtype>
+          </parameter>
+          <parameter name="size">
+            <paramtype>size_t</paramtype>
+          </parameter>
+          <parameter name="flags">
+            <paramtype>cl_mem_flags</paramtype>
+            <default>read_write</default>
+          </parameter>
+          <parameter name="host_ptr">
+            <paramtype>void *</paramtype>
+            <default>0</default>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new compute buffer in <code>context</code> containing
+              <code>size</code> bytes.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- buffer::buffer(other) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype>const <classname>buffer</classname> &amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new buffer object as a copy of <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- operator=(other) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype>const <classname>buffer</classname> &amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Copies the buffer from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- buffer::~buffer() -->
+        <destructor>
+          <description>
+            <para>
+              Destroys the buffer object.
+            </para>
+          </description>
+        </destructor>
+
+        <method-group name="public member functions">
+
+          <!-- buffer::size() -->
+          <method name="size" cv="size">
+            <type>size_t</type>
+
+            <description>
+              <para>
+                Returns the size of the buffer in bytes.
+              </para>
+            </description>
+          </method>
+
+          <!-- buffer::get_info<T>(info) -->
+          <method name="get_info" cv="const">
+            <template>
+              <template-type-parameter name="T"/>
+            </template>
+
+            <type>T</type>
+
+            <parameter name="info">
+              <paramtype>cl_mem_info</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Returns information about the buffer.
+              </para>
+            </description>
+          </method>
+        </method-group>
+      </class>
+    </namespace>
+  </namespace>
+</header>

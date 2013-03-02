@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/container/vector.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::vector<T, Alloc> -->
+      <class name="vector">
+        <purpose>A resizable container</purpose>
+
+        <template>
+          <template-type-parameter name="T">
+            <purpose>value type</purpose>
+          </template-type-parameter>
+          <template-type-parameter name="Alloc">
+            <default><classname>allocator</classname>&lt;T&gt;</default>
+            <purpose>allocator type</purpose>
+          </template-type-parameter>
+        </template>
+      </class>
+    </namespace>
+  </namespace>
+</header>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/event.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::event -->
+      <class name="event">
+        <purpose>An event</purpose>
+
+        <description>
+          <para>
+            The <code>event</code> class represents an OpenCL event.
+          </para>
+        </description>
+
+        <!-- event::event(cl_event) -->
+        <constructor specifiers="explicit">
+          <parameter name="event">
+            <paramtype>cl_event</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new compute event for <code>event</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- event::event(other) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype>const <classname>event</classname> &amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new event object as a copy of <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- operator=(other) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype>const <classname>event</classname> &amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Copies the event from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- event::~event() -->
+        <destructor>
+          <description>
+            <para>
+              Destroys the event object.
+            </para>
+          </description>
+        </destructor>
+
+        <method-group name="public member functions">
+
+          <!-- event::get_info<T>(info) -->
+          <method name="get_info" cv="const">
+            <template>
+              <template-type-parameter name="T"/>
+            </template>
+
+            <type>T</type>
+
+            <parameter name="info">
+              <paramtype>cl_event_info</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Returns information about the event.
+              </para>
+            </description>
+          </method>
+
+          <!-- event::get_profiling_info<T>(info) -->
+          <method name="get_profiling_info" cv="const">
+            <template>
+              <template-type-parameter name="T"/>
+            </template>
+
+            <type>T</type>
+
+            <parameter name="info">
+              <paramtype>cl_profiling_info</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Returns profiling information for the event.
+              </para>
+              <para>
+                For example, to get the time when the command referred to by
+                the event was completed:
+<programlisting>
+cl_ulong end_time = e.get_profiling_info&lt;cl_ulong&gt;(event::profiling_command_end);
+</programlisting>
+              </para>
+            </description>
+          </method>
+        </method-group>
+      </class>
+    </namespace>
+  </namespace>
+</header>

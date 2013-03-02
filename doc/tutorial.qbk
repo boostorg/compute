@@ -1,0 +1,70 @@
+[section:tutorial Tutorial]
+
+[section Hello World]
+
+The hello world example gives a simple application that prints the name of
+the default GPU compute device on the system.
+
+Compute devices are represented with the
+[classref boost::compute::device device] class.
+
+[import ../example/hello_world.cpp]
+[hello_world_example]
+
+[endsect] [/ hello world]
+
+[section Transferring Data]
+
+Before any computation occurs, data must be transferred from the host to the
+compute device. The generic [funcref boost::compute::copy copy()] function
+provides a simple interface for transfering data and the generic
+[classref boost::compute::vector vector<T>] class provides a container for
+storing data on a compute device.
+
+The following example shows how to transfer data from an array on the host to
+a [classref boost::compute::vector vector<T>] on the device and then back to
+a separate `std::vector<T>` on the host. At the end of the example both
+`host_array` and `host_vector` contain the same values which were copied
+through the memory on the compute device.
+
+[import ../example/copy_data.cpp]
+[copy_data_example]
+
+[endsect] [/ transferring data]
+
+[section Transforming Data]
+
+The following example shows how to calculate the square-root of a vector of
+`float`s on a compute device using the [funcref boost::compute::transform
+transform()] function.
+
+[import ../example/transform_sqrt.cpp]
+[transform_sqrt_example]
+
+[endsect] [/ transforming data]
+
+[section Vector Data Types]
+
+In addition to the built-in scalar types (e.g. `int` and `float`), OpenCL
+also provides vector data types (e.g. `int2` and `vector4`). These can be
+used with the Boost Compute library on both the host and device.
+
+Boost.Compute provides typedefs for these types which take the form:
+`boost::compute::scalarN_` where `scalar` is a scalar data type (e.g. `int`,
+`float`, `char`) and `N` is the size of the vector. Supported vector sizes
+are: 2, 4, 8, and 16.
+
+The following example shows how to transfer a set of 3D points stored as an
+array of `float`s on the host the device and then calculate the sum of the
+point coordinates using the [funcref boost::compute::accumulate accumulate()]
+function. The sum is transferred to the host and the centroid computed by
+dividing by the total number of points.
+
+Note that even though the points are in 3D, they are stored as `float4` due to
+OpenCL's alignment requirements.
+
+[import ../example/point_centroid.cpp]
+[point_centroid_example]
+
+[endsect] [/ vector data types]
+[endsect] [/ tutorial ]

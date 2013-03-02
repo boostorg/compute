@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/copy.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::copy(first, last, result, queue) -->
+      <function name="copy">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="OutputIterator"/>
+        </template>
+
+        <type>OutputIterator</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="result">
+          <paramtype>OutputIterator</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <returns>
+          An iterator pointing to the end of the result range.
+        </returns>
+
+        <description>
+          <para>
+            Copies the values from the range [<code>first</code>,
+            <code>last</code>) to the range beginning at <code>result</code>.
+          </para>
+          <para>
+            The copy() function is one of the few Boost.Compute algorithms
+            which can take both device and host iterators as arguments. For
+            example, to copy values from a vector on the host to a vector on
+            the device:
+<programlisting>
+std::vector&lt;int&gt; host_vector = ...
+<classname>boost::compute::vector</classname>&lt;int&gt; device_vector = ...
+
+// copy all values in host_vector to device_vector
+<functionname>boost::compute::copy</functionname>(host_vector.begin(),
+                     host_vector.end(),
+                     device_vector.begin());
+</programlisting>
+          </para>
+          <para>
+            The generic <code>copy()</code> function can be used for a variety
+            of data transfer tasks and provides a standard interface to the
+            following OpenCL functions:
+              <itemizedlist>
+                <listitem><code>clEnqueueReadBuffer()</code></listitem>
+                <listitem><code>clEnqueueWriteBuffer()</code></listitem>
+                <listitem><code>clEnqueueCopyBuffer()</code></listitem>
+              </itemizedlist>
+            Unlike the aforementioned OpenCL functions, <code>copy()</code>
+            will also work with non-contiguous data-structures (e.g.
+            <code>std::list&lt;T&gt;</code>) as well as with "fancy"
+            iterators (e.g. <classname>transform_iterator</classname>).
+          </para>
+          <para>
+            See also: <functionname>copy_n()</functionname>,
+                      <functionname>copy_if()</functionname>,
+                      <functionname>copy_async()</functionname>
+          </para>
+        </description>
+      </function>
+
+      <!-- boost::compute::copy_async(first, last, result, queue) -->
+      <function name="copy_async">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="OutputIterator"/>
+        </template>
+
+        <type><classname>future</classname>&lt;OutputIterator&gt;</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="result">
+          <paramtype>OutputIterator</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <returns>
+          A <classname>future</classname> containing an iterator pointing to
+          the end of the result range.
+        </returns>
+
+        <description>
+          <para>
+            Copies the values from the range [<code>first</code>,
+            <code>last</code>) to the range beginning at <code>result</code>.
+            The copy is performed asynchronously.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

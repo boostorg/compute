@@ -1,0 +1,10 @@
+# build directory
+build/
+
+# vim temp files
+.*.sw*
+
+# generated documentation
+bin/
+doc/bin/
+doc/html/

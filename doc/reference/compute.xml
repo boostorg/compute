@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute.hpp">
+  <purpose>
+    Meta-header to include all Boost.Compute headers.
+  </purpose>
+</header>

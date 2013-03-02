@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/system.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::system -->
+      <class name="system">
+        <purpose>Represents the compute system.</purpose>
+
+        <description>
+          <para>
+            The system class provides an interface to an OpenCL system.
+          </para>
+        </description>
+
+        <method-group name="public static functions">
+
+          <!-- system::default_device() -->
+          <method name="default_device" specifiers="static">
+            <type><classname>device</classname></type>
+
+            <description>
+              <para>
+                Returns the default compute device for the system. The default
+                device returned is the first GPU device found. If no GPU devices
+                are available then the first CPU device is returned. If no OpenCL
+                devices are found on the system then a null device object is
+                returned.
+              </para>
+            </description>
+          </method>
+
+          <!-- system::default_gpu_device() -->
+          <method name="default_gpu_device" specifiers="static">
+            <type><classname>device</classname></type>
+
+            <description>
+              <para>
+                Returns the default GPU compute device for the system.
+              </para>
+            </description>
+          </method>
+
+          <!-- system::default_cpu_device() -->
+          <method name="default_cpu_device" specifiers="static">
+            <type><classname>device</classname></type>
+
+            <description>
+              <para>
+                Returns the default CPU compute device for the system.
+              </para>
+            </description>
+          </method>
+
+          <!-- system::default_context() -->
+          <method name="default_context" specifiers="static">
+            <type><classname>context</classname></type>
+
+            <description>
+              <para>
+                Returns the default compute context for the system.
+              </para>
+            </description>
+          </method>
+
+          <!-- system::platforms() -->
+          <method name="platforms" specifiers="static">
+            <type>std::vector&lt;<classname>platform</classname>&gt;</type>
+
+            <description>
+              <para>
+                Returns a vector of all the OpenCL platforms available on the
+                system.
+              </para>
+            </description>
+          </method>
+
+          <!-- system::platform_count() -->
+          <method name="platform_count" specifiers="static">
+            <type>size_t</type>
+
+            <description>
+              <para>
+                Returns the total number of OpenCL platforms available on the
+                system.
+              </para>
+            </description>
+          </method>
+        </method-group>
+      </class>
+    </namespace>
+  </namespace>
+</header>

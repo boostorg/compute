@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/kernel.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::kernel -->
+      <class name="kernel">
+        <purpose>Represents a compute kernel.</purpose>
+
+        <description>
+          <para>
+            Once created, kernels are executed on a compute device using one
+            of the following methods:
+              <itemizedlist>
+                <listitem>
+                  <methodname>command_queue::enqueue_nd_range_kernel()</methodname>
+                </listitem>
+                <listitem>
+                  <methodname>command_queue::enqueue_task()</methodname>
+                </listitem>
+              </itemizedlist>
+          </para>
+          <para>
+            See also: <classname>program</classname>,
+                      <classname>command_queue</classname>
+          </para>
+        </description>
+
+        <!-- kernel::kernel(program, name) -->
+        <constructor>
+          <parameter name="program">
+            <paramtype>const <classname>program</classname>&amp;</paramtype>
+          </parameter>
+          <parameter name="name">
+            <paramtype>const std::string&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new kernel object from <code>program</code> with
+              <code>name</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- kernel::kernel(other) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype>const <classname>kernel</classname> &amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new kernel object as a copy of <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- operator=(other) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype>const <classname>kernel</classname> &amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Copies the kernel from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- kernel::~kernel() -->
+        <destructor>
+          <description>
+            <para>
+              Destroys the kernel object.
+            </para>
+          </description>
+        </destructor>
+
+        <method-group name="public member functions">
+
+          <!-- kernel::name() -->
+          <method name="name" cv="const">
+            <type>std::string</type>
+
+            <description>
+              <para>
+                Returns the name of the kernel.
+              </para>
+            </description>
+          </method>
+
+          <!-- kernel::num_args() -->
+          <method name="num_args" cv="const">
+            <type>size_t</type>
+
+            <description>
+              <para>
+                Returns the number of arguments that the kernel function
+                expects.
+              </para>
+            </description>
+          </method>
+
+          <!-- kernel::get_program() -->
+          <method name="get_program" cv="const">
+            <type><classname>program</classname></type>
+
+            <description>
+              <para>
+                Returns the program for the kernel.
+              </para>
+            </description>
+          </method>
+
+          <!-- kernel::get_context() -->
+          <method name="get_context" cv="const">
+            <type><classname>context</classname></type>
+
+            <description>
+              <para>
+                Returns the context for the kernel.
+              </para>
+            </description>
+          </method>
+
+          <!-- kernel::get_info<T>(info) -->
+          <method name="get_info" cv="const">
+            <template>
+              <template-type-parameter name="T"/>
+            </template>
+
+            <type>T</type>
+
+            <parameter name="info">
+              <paramtype>cl_kernel_info</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Returns information about the kernel.
+              </para>
+              <para>
+                For example, to get the name of the kernel (without using the
+                <methodname alt="kernel::name()">name()</methodname> method):
+<programlisting>
+std::string function_name = kernel.get_info&lt;std::string&gt;(CL_KERNEL_FUNCTION_NAME);
+</programlisting>
+              </para>
+            </description>
+          </method>
+
+          <!-- kernel::set_arg(index, size, value) -->
+          <method name="set_arg">
+            <type>void</type>
+
+            <parameter name="index">
+              <paramtype>size_t</paramtype>
+            </parameter>
+            <parameter name="size">
+              <paramtype>size_t</paramtype>
+            </parameter>
+            <parameter name="value">
+              <paramtype>const void*</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Sets the argument at <code>index</code> to <code>value</code>
+                with <code>size</code>.
+              </para>
+            </description>
+          </method>
+
+          <!-- kernel::set_arg<T>(index, value) -->
+          <method name="set_arg">
+            <template>
+              <template-type-parameter name="T"/>
+            </template>
+
+            <type>void</type>
+
+            <parameter name="index">
+              <paramtype>size_t</paramtype>
+            </parameter>
+            <parameter name="value">
+              <paramtype>const T&amp;</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Sets the argument at <code>index</code> to <code>value</code>.
+              </para>
+            </description>
+          </method>
+
+          <!-- operator kernel::cl_kernel() -->
+          <method name="operator cl_kernel" cv="const">
+            <description>
+              <para>
+                Converts the kernel object to a <code>cl_kernel</code>.
+              </para>
+              <para>
+                This allows for kernel objects to be passed directly to
+                functions expecting a <code>cl_kernel</code> argument:
+<programlisting>
+<classname>boost::compute::kernel</classname> kernel = ...
+
+cl_uint arity;
+clGetKernelInfo(kernel,
+                CL_KERNEL_NUM_ARGS,
+                sizeof(cl_uint),
+                &amp;arity,
+                0);
+std::cout &lt;&lt; "arity = " &lt;&lt; arity &lt;&lt; std::endl;
+</programlisting>
+              </para>
+            </description>
+          </method>
+        </method-group>
+      </class>
+    </namespace>
+  </namespace>
+</header>

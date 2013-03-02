@@ -1,0 +1,66 @@
+[section Porting Guide]
+
+[section OpenCL C API]
+
+[table OpenCL API Translation Table
+    [[OpenCL Function] [Boost.Compute Function]]
+    [[*Buffers*]]
+    [[`clCreateBuffer()`] [[classref boost::compute::buffer buffer::buffer()]]]
+    [[`clReleaseMemObject()`] [[classref boost::compute::buffer buffer::~buffer()]]]
+    [[`clGetMemObjectInfo()`] [[memberref boost::compute::buffer::get_info buffer::get_info<T>()]]]
+
+    [[*Command Queues*]]
+    [[`clCreateCommandQueue()`] [[classref boost::compute::command_queue command_queue::command_queue()]]]
+    [[`clReleaseCommandQueue()`] [[classref boost::compute::command_queue command_queue::~command_queue()]]]
+    [[`clGetCommandQueueInfo()`] [[memberref boost::compute::command_queue::get_info command_queue::get_info<T>()]]]
+    [[`clEnqueueReadBuffer()`] [[memberref boost::compute::command_queue::enqueue_read_buffer command_queue::enqueue_read_buffer()]]]
+    [[`clEnqueueWriteBuffer()`] [[memberref boost::compute::command_queue::enqueue_write_buffer command_queue::enqueue_write_buffer()]]]
+    [[`clEnqueueCopyBuffer()`] [[memberref boost::compute::command_queue::enqueue_copy_buffer command_queue::enqueue_copy_buffer()]]]
+    [[`clEnqueueNDRangeKernel()`] [[memberref boost::compute::command_queue::enqueue_nd_range_kernel command_queue::enqueue_nd_range_kernel()]]]
+    [[`clEnqueueTask()`] [[memberref boost::compute::command_queue::enqueue_task command_queue::enqueue_task()]]]
+    [[`clEnqueueBarrier()`] [[memberref boost::compute::command_queue::enqueue_barrier command_queue::enqueue_barrier()]]]
+    [[`clEnqueueMarker()`] [[memberref boost::compute::command_queue::enqueue_marker command_queue::enqueue_marker()]]]
+    [[`clFlush()`] [[memberref boost::compute::command_queue::enqueue_task command_queue::flush()]]]
+    [[`clFinish()`] [[memberref boost::compute::command_queue::enqueue_task command_queue::finish()]]]
+
+    [[*Contexts*]]
+    [[`clCreateContext()`] [[classref boost::compute::context context::context()]]]
+    [[`clReleaseContext()`] [[classref boost::compute::context context::~context()]]]
+    [[`clGetContextInfo()`] [[memberref boost::compute::context::get_info context::get_info<T>()]]]
+
+    [[*Devices*]]
+    [[`clGetDeviceInfo()`] [[memberref boost::compute::device::get_info device::get_info<T>()]]]
+
+    [[*Events*]]
+    [[`clReleaseEvent()`] [[classref boost::compute::event event::~event()]]]
+    [[`clGetEventInfo()`] [[memberref boost::compute::event::get_info event::get_info<T>()]]]
+    [[`clGetEventProfilingInfo()`] [[memberref boost::compute::event::get_profiling_info event::get_profiling_info<T>()]]]
+
+    [[*Kernels*]]
+    [[`clCreateKernel()`] [[classref boost::compute::kernel kernel::kernel()]]]
+    [[`clReleaseKernel()`] [[classref boost::compute::kernel kernel::~kernel()]]]
+    [[`clGetKernelInfo()`] [[memberref boost::compute::kernel::get_info kernel::get_info<T>()]]]
+    [[`clGetKernelArgInfo()`] [[memberref boost::compute::kernel::get_arg_info kernel::get_arg_info<T>()]]]
+    [[`clGetKernelWorkGroupInfo()`] [[memberref boost::compute::kernel::get_work_group_info kernel::get_work_group_info<T>()]]]
+    [[`clSetKernelArg()`] [[memberref boost::compute::kernel::set_arg kernel::set_arg()]]]
+
+    [[*Platforms*]]
+    [[`clGetDeviceIDs()`] [[memberref boost::compute::platform::devices platform::devices()]]]
+    [[`clGetPlatformInfo()`] [[memberref boost::compute::platform::get_info platform::get_info<T>()]]]
+
+    [[*Programs*]]
+    [[`clCreateProgramWithSource()`] [[memberref boost::compute::program::create_with_source program::create_with_source()]]]
+    [[`clCreateProgramWithBinary()`] [[memberref boost::compute::program::create_with_binary program::create_with_binary()]]]
+    [[`clReleaseProgram()`] [[classref boost::compute::program program::~program()]]]
+    [[`clGetProgramInfo()`] [[memberref boost::compute::program::get_info program::get_info<T>()]]]
+    [[`clBuildProgram()`] [[memberref boost::compute::program::build program::build()]]]
+
+    [[*System*]]
+    [[`clGetPlatformIDs()`] [[memberref boost::compute::system::platforms system::platforms()]]]
+    [[`clUnloadCompiler()`] [[memberref boost::compute::system::unload_compiler system::unload_compiler()]]]
+    [[`clGetExtensionFunctionAddress()`] [[memberref boost::compute::system::get_extension_function_address system::get_extension_function_address()]]]
+]
+
+[endsect] [/ opencl c api]
+
+[endsect]

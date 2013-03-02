@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/container/valarray.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::valarray<T, Alloc> -->
+      <class name="valarray">
+        <purpose>A value container</purpose>
+
+        <template>
+          <template-type-parameter name="T">
+            <purpose>value type</purpose>
+          </template-type-parameter>
+        </template>
+      </class>
+    </namespace>
+  </namespace>
+</header>

@@ -1,0 +1,128 @@
+//---------------------------------------------------------------------------//
+// Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//
+// See http://kylelutz.github.com/compute for more information.
+//---------------------------------------------------------------------------//
+
+#ifndef BOOST_COMPUTE_COMPLEX_HPP
+#define BOOST_COMPUTE_COMPLEX_HPP
+
+#include <complex>
+
+#include <boost/compute/types.hpp>
+#include <boost/compute/functional.hpp>
+#include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/type_traits/make_vector_type.hpp>
+#include <boost/compute/type_traits/type_name.hpp>
+
+namespace boost {
+namespace compute {
+namespace detail {
+
+template<class T>
+meta_kernel& operator<<(meta_kernel &kernel, const std::complex<T> &x)
+{
+    typedef typename std::complex<T> value_type;
+
+    kernel << "(" << type_name<value_type>() << ")"
+           << "(" << x.real() << ", " << x.imag() << ")";
+
+    return kernel;
+}
+
+} // end detail namespace
+
+// returns the real component of a complex<T>
+template<class T>
+struct real
+{
+    typedef T result_type;
+
+    template<class Arg>
+    detail::invoked_vector_component_function<Arg, 0, result_type>
+    operator()(const Arg &x) const
+    {
+        return detail::invoked_vector_component_function<Arg, 0, result_type>(x);
+    }
+};
+
+// returns the imaginary component of a complex<T>
+template<class T>
+struct imag
+{
+    typedef T result_type;
+
+    template<class Arg>
+    detail::invoked_vector_component_function<Arg, 1, result_type>
+    operator()(const Arg &x) const
+    {
+        return detail::invoked_vector_component_function<Arg, 1, result_type>(x);
+    }
+};
+
+namespace detail {
+
+template<class Arg, class T>
+struct invoked_complex_conj
+{
+    typedef typename std::complex<T> result_type;
+
+    invoked_complex_conj(const Arg &arg)
+        : m_arg(arg)
+    {
+    }
+
+    Arg m_arg;
+};
+
+template<class Arg, class T>
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const invoked_complex_conj<Arg, T> &expr)
+{
+    typedef typename std::complex<T> value_type;
+
+    kernel << "(" << type_name<value_type>() << ")"
+           << "(" << expr.m_arg << ".x" << ", -" << expr.m_arg << ".y" << ")";
+
+    return kernel;
+}
+
+} // end detail namespace
+
+// returns the complex conjugate of a complex<T>
+template<class T>
+struct conj
+{
+    typedef typename std::complex<T> result_type;
+
+    template<class Arg>
+    detail::invoked_complex_conj<Arg, T>
+    operator()(const Arg &x) const
+    {
+        return detail::invoked_complex_conj<Arg, T>(x);
+    }
+};
+
+namespace detail {
+
+// type_name() specialization for std::complex
+template<class T>
+struct type_name_trait<std::complex<T> >
+{
+    static const char* value()
+    {
+        typedef typename make_vector_type<T, 2>::type vector_type;
+
+        return type_name<vector_type>();
+    }
+};
+
+} // end detail namespace
+} // end compute namespace
+} // end boost namespace
+
+#endif // BOOST_COMPUTE_COMPLEX_HPP

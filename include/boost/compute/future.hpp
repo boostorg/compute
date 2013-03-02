@@ -1,0 +1,148 @@
+//---------------------------------------------------------------------------//
+// Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//
+// See http://kylelutz.github.com/compute for more information.
+//---------------------------------------------------------------------------//
+
+#ifndef BOOST_COMPUTE_FUTURE_HPP
+#define BOOST_COMPUTE_FUTURE_HPP
+
+#include <boost/compute/event.hpp>
+
+namespace boost {
+namespace compute {
+
+template<class T>
+class future
+{
+public:
+    future()
+        : m_event(0)
+    {
+    }
+
+    future(const T &result, const event &event)
+        : m_result(result),
+          m_event(event)
+    {
+    }
+
+    future(const future<T> &other)
+        : m_result(other.m_result),
+          m_event(other.m_event)
+    {
+    }
+
+    future& operator=(const future<T> &other)
+    {
+        if(this != &other){
+            m_result = other.m_result;
+            m_event = other.m_event;
+        }
+
+        return *this;
+    }
+
+    ~future()
+    {
+    }
+
+    T get()
+    {
+        wait();
+
+        return m_result;
+    }
+
+    bool valid() const
+    {
+        return m_event != 0;
+    }
+
+    void wait() const
+    {
+        const_cast<event &>(m_event).wait();
+    }
+
+    event get_event() const
+    {
+        return m_event;
+    }
+
+private:
+    T m_result;
+    event m_event;
+};
+
+template<>
+class future<void>
+{
+public:
+    future()
+        : m_event(0)
+    {
+    }
+
+    template<class T>
+    future(const future<T> &other)
+        : m_event(other.get_event())
+    {
+    }
+
+    explicit future(const event &event)
+        : m_event(event)
+    {
+    }
+
+    template<class T>
+    future<void> &operator=(const future<T> &other)
+    {
+        if(this != &other){
+            m_event = other.m_event;
+        }
+
+        return *this;
+    }
+
+    ~future()
+    {
+    }
+
+    void get()
+    {
+        wait();
+    }
+
+    bool valid() const
+    {
+        return m_event != 0;
+    }
+
+    void wait() const
+    {
+        const_cast<event &>(m_event).wait();
+    }
+
+    event get_event() const
+    {
+        return m_event;
+    }
+
+private:
+    event m_event;
+};
+
+template<class Result>
+inline future<Result> make_future(const Result &result, const event &event)
+{
+    return future<Result>(result, event);
+}
+
+} // end compute namespace
+} // end boost namespace
+
+#endif // BOOST_COMPUTE_FUTURE_HPP

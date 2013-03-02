@@ -1,0 +1,58 @@
+//---------------------------------------------------------------------------//
+// Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//
+// See http://kylelutz.github.com/compute for more information.
+//---------------------------------------------------------------------------//
+
+#ifndef BOOST_COMPUTE_ALGORITHM_IS_SORTED_HPP
+#define BOOST_COMPUTE_ALGORITHM_IS_SORTED_HPP
+
+#include <boost/compute/functional.hpp>
+#include <boost/compute/command_queue.hpp>
+#include <boost/compute/algorithm/find.hpp>
+#include <boost/compute/iterator/binary_transform_iterator.hpp>
+#include <boost/compute/detail/default_queue_for_iterator.hpp>
+
+namespace boost {
+namespace compute {
+
+template<class InputIterator>
+inline bool is_sorted(InputIterator first,
+                      InputIterator last,
+                      command_queue &queue)
+{
+    typedef typename std::iterator_traits<InputIterator>::value_type value_type;
+
+    return ::boost::compute::find(
+               ::boost::compute::make_binary_transform_iterator(
+                   first,
+                   first + 1,
+                   ::boost::compute::less_equal<value_type>()
+               ),
+               ::boost::compute::make_binary_transform_iterator(
+                   last - 1,
+                   last,
+                   ::boost::compute::less_equal<value_type>()
+               ),
+               false,
+               queue
+           ).base() == last - 1;
+}
+
+template<class InputIterator>
+inline bool is_sorted(InputIterator first,
+                      InputIterator last)
+{
+    command_queue queue = detail::default_queue_for_iterator(first);
+
+    return ::boost::compute::is_sorted(first, last, queue);
+}
+
+} // end compute namespace
+} // end boost namespace
+
+#endif // BOOST_COMPUTE_ALGORITHM_IS_SORTED_HPP

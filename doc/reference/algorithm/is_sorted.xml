@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/is_sorted.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::is_sorted(first, last, queue) -->
+      <function name="is_sorted">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+        </template>
+
+        <type>bool</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <description>
+          <para>
+            Returns <code>true</code> if the values in the range
+            [<code>first</code>, <code>last</code>) are in sorted order.
+          </para>
+          <para>
+            See also: <functionname>sort()</functionname>
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/transform.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::transform(first, last, result, op, queue) -->
+      <function name="transform">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="OutputIterator"/>
+          <template-type-parameter name="UnaryOperator"/>
+        </template>
+
+        <type>OutputIterator</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="result">
+          <paramtype>OutputIterator</paramtype>
+        </parameter>
+        <parameter name="op">
+          <paramtype>UnaryOperator</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <returns>
+          An iterator pointing to the end of the result range.
+        </returns>
+
+        <description>
+          <para>
+            Transforms the elements in the range [<code>first</code>,
+            <code>last</code>) using <code>op</code> and stores the results
+            in the range beginning at <code>result</code>.
+          </para>
+        </description>
+      </function>
+
+      <!-- boost::compute::transform(first1, last1, first2, result, op, queue) -->
+      <function name="transform">
+        <template>
+          <template-type-parameter name="InputIterator1"/>
+          <template-type-parameter name="InputIterator2"/>
+          <template-type-parameter name="OutputIterator"/>
+          <template-type-parameter name="BinaryOperator"/>
+        </template>
+
+        <type>OutputIterator</type>
+
+        <parameter name="first1">
+          <paramtype>InputIterator1</paramtype>
+        </parameter>
+        <parameter name="last1">
+          <paramtype>InputIterator1</paramtype>
+        </parameter>
+        <parameter name="first2">
+          <paramtype>InputIterator2</paramtype>
+        </parameter>
+        <parameter name="result">
+          <paramtype>OutputIterator</paramtype>
+        </parameter>
+        <parameter name="op">
+          <paramtype>BinaryOperator</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <returns>
+          An iterator pointing to the end of the result range.
+        </returns>
+
+        <description>
+          <para>
+            Transforms the elements in the range [<code>first1</code>,
+            <code>last1</code>) and <code>first2</code> using <code>op</code>
+            and stores the results in the range beginning at
+            <code>result</code>.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

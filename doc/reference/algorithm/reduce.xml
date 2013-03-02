@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/reduce.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::reduce(first, last, init, function, queue) -->
+      <function name="reduce">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="T"/>
+          <template-type-parameter name="BinaryFunction"/>
+        </template>
+
+        <type>T</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="init">
+          <paramtype>T</paramtype>
+        </parameter>
+        <parameter name="function">
+          <paramtype>BinaryFunction</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <description>
+          <para>
+            Returns the result of applying <code>function</code> to the
+            elements in the range [<code>first</code>, <code>last</code>)
+            and <code>init</code>.
+          </para>
+          <para>
+            The difference between the <code>reduce()</code> function and the
+            <functionname>accumulate()</functionname> function is that
+            <code>reduce()</code> requires the binary operator to be
+            commutative.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

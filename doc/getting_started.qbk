@@ -1,0 +1,40 @@
+[section:gettingstarted Getting Started]
+
+[section Compilation and Usage]
+
+Boost.Compute is a header-only library, so no linking is required. All
+of the Boost.Compute headers can be included with the following directive:
+
+``
+#include <boost/compute.hpp>
+``
+
+All of the classes and functions in Boost.Compute live in the `boost::compute`
+namespace and can be brought into global scope with:
+
+``
+using namespace boost::compute;
+``
+
+[endsect]
+
+[section Architecture]
+
+The Boost Compute library consists of several different components. The core
+component provides a C++ wrapper over the OpenCL C API.
+
+On top of the core layer is a partial implementation of the C++ standard
+library providing common containers (e.g.
+[classref boost::compute::vector vector<T>],
+[classref boost::compute::array array<T, N>]) along with common algorithms
+(e.g. [funcref boost::compute::transform transform()] and
+[funcref boost::compute::sort sort()]).
+
+The library also provides number of "fancy" iterators (e.g.
+[classref boost::compute::transform_iterator transform_iterator] and
+[classref boost::compute::permutation_iterator permutation_iterator]) which
+enhance the functionality of the standard algorithms.
+
+[endsect]
+
+[endsect]

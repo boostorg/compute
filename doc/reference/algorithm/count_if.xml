@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/count_if.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::count_if(first, last, predicate, queue) -->
+      <function name="count_if">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="UnaryPredicate"/>
+        </template>
+
+        <type>size_t</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="predicate">
+          <paramtype>UnaryPredicate</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <description>
+          <para>
+            Returns the number of elements in the range [<code>first</code>,
+            <code>last</code>) for which <code>predicate</code> returns
+            <code>true</code>.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

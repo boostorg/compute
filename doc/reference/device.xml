@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/device.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::device -->
+      <class name="device">
+        <purpose>A compute device</purpose>
+
+        <description>
+          <para>
+            Typical compute devices include GPUs and multi-core CPUs. A list
+            of all compute devices available on a platform can be obtained via
+            the <methodname>platform::devices()</methodname> method.
+          </para>
+          <para>
+            A default device can be easily created with the one of the
+            following convenience methods:
+              <itemizedlist>
+                <listitem><methodname>system::default_device()</methodname></listitem>
+                <listitem><methodname>system::default_cpu_device()</methodname></listitem>
+                <listitem><methodname>system::default_gpu_device()</methodname></listitem>
+              </itemizedlist>
+          </para>
+          <para>
+            For example, to get the default GPU device on the system:
+<programlisting>
+// get the default GPU device
+<classname>boost::compute::device</classname> gpu = <methodname>boost::compute::system::default_gpu_device()</methodname>;
+</programlisting>
+          </para>
+        </description>
+
+        <!-- device::device() -->
+        <constructor>
+          <description>
+            <para>
+              Creates a null device object.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- device::device(cl_device) -->
+        <constructor specifiers="explicit">
+          <parameter name="id">
+            <paramtype>cl_device_id</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new device object for <code>id</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- device::device(const device&) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype>const <classname>device</classname> &amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new device object as a copy of <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- operator=(const device&) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype>const <classname>device</classname> &amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Copies the device from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- device::~device() -->
+        <destructor>
+          <description>
+            <para>
+              Destroys the device object.
+            </para>
+          </description>
+        </destructor>
+
+        <method-group name="public member functions">
+
+          <!-- device::id() -->
+          <method name="id" cv="const">
+            <type>cl_device_id</type>
+
+            <description>
+              <para>
+                Returns the device's ID.
+              </para>
+            </description>
+          </method>
+
+          <!-- device::type() -->
+          <method name="type" cv="const">
+            <type>cl_device_type</type>
+
+            <description>
+              <para>
+                Returns the type of the device.
+              </para>
+            </description>
+          </method>
+
+          <!-- device::name() -->
+          <method name="name" cv="const">
+            <type>std::string</type>
+
+            <description>
+              <para>
+                Returns the name of the device.
+              </para>
+            </description>
+          </method>
+
+          <!-- device::vendor() -->
+          <method name="vendor" cv="const">
+            <type>std::string</type>
+
+            <description>
+              <para>
+                Returns the name of the vendor of the device.
+              </para>
+            </description>
+          </method>
+
+          <!-- device::address_bits() -->
+          <method name="address_bits" cv="const">
+            <type>uint_</type>
+
+            <description>
+              <para>
+                Returns the device's address size in bits.
+              </para>
+            </description>
+          </method>
+
+          <!-- device::global_memory_size() -->
+          <method name="global_memory_size" cv="const">
+            <type>ulong_</type>
+
+            <description>
+              <para>
+                Returns the size of the global memory in bytes.
+              </para>
+            </description>
+          </method>
+
+          <!-- device::local_memory_size() -->
+          <method name="local_memory_size" cv="const">
+            <type>ulong_</type>
+
+            <description>
+              <para>
+                Returns the size of the local memory in bytes.
+              </para>
+            </description>
+          </method>
+
+          <!-- device::clock_frequency() -->
+          <method name="clock_frequency" cv="const">
+            <type>uint_</type>
+
+            <description>
+              <para>
+                Returns the clock frequency for the device.
+              </para>
+            </description>
+          </method>
+
+          <!-- device::compute_units() -->
+          <method name="compute_units" cv="const">
+            <type>uint_</type>
+
+            <description>
+              <para>
+                Returns the number of compute units.
+              </para>
+            </description>
+          </method>
+
+	  <!-- device::profiling_timer_resolution() -->
+          <method name="profiling_timer_resolution" cv="const">
+            <type>size_t</type>
+
+            <description>
+              <para>
+                Returns the profiling timer resolution in nanoseconds.
+              </para>
+            </description>
+          </method>
+
+          <!-- device::preferred_vector_width<T>() -->
+          <method name="preferred_vector_width" cv="const">
+            <template>
+              <template-type-parameter name="T"/>
+            </template>
+
+            <type>T</type>
+
+            <description>
+              <para>
+                Returns the preferred vector width for type <code>T</code>.
+              </para>
+            </description>
+          </method>
+
+          <!-- device::get_info<T>(cl_device_info) -->
+          <method name="get_info" cv="const">
+            <template>
+              <template-type-parameter name="T"/>
+            </template>
+
+            <type>T</type>
+
+            <parameter name="info">
+              <paramtype>cl_device_info</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Returns information about the device.
+              </para>
+            </description>
+          </method>
+        </method-group>
+      </class>
+    </namespace>
+  </namespace>
+</header>

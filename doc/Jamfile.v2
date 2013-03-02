@@ -1,0 +1,16 @@
+import quickbook ;
+import boostbook ;
+import modules ;
+
+xml compute
+  :
+    compute.qbk
+  :
+  ;
+
+boostbook standalone
+    :
+      compute
+    :
+      <xsl:param>html.stylesheet=boostbook.css
+    ;

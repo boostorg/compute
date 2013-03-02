@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/container/allocator.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::allocator<T> -->
+      <class name="allocator">
+        <purpose>A memory allocator</purpose>
+
+        <template>
+          <template-type-parameter name="T">
+            <purpose>value type</purpose>
+          </template-type-parameter>
+        </template>
+      </class>
+    </namespace>
+  </namespace>
+</header>

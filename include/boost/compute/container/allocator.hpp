@@ -1,0 +1,95 @@
+//---------------------------------------------------------------------------//
+// Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//
+// See http://kylelutz.github.com/compute for more information.
+//---------------------------------------------------------------------------//
+
+#ifndef BOOST_COMPUTE_CONTAINER_ALLOCATOR_HPP
+#define BOOST_COMPUTE_CONTAINER_ALLOCATOR_HPP
+
+#include <boost/compute/buffer.hpp>
+#include <boost/compute/context.hpp>
+#include <boost/compute/device_ptr.hpp>
+
+namespace boost {
+namespace compute {
+
+template<class T>
+class allocator
+{
+public:
+    typedef T value_type;
+    typedef device_ptr<T> pointer;
+    typedef const device_ptr<T> const_pointer;
+    typedef std::size_t size_type;
+    typedef std::ptrdiff_t difference_type;
+
+    allocator(const context &context)
+        : m_context(context),
+          m_mem_flags(buffer::read_write)
+    {
+    }
+
+    allocator(const allocator<T> &other)
+        : m_context(other.m_context),
+          m_mem_flags(other.m_mem_flags)
+    {
+    }
+
+    allocator<T>& operator=(const allocator<T> &other)
+    {
+        if(this != &other){
+            m_context = other.m_context;
+            m_mem_flags = other.m_mem_flags;
+        }
+
+        return *this;
+    }
+
+    ~allocator()
+    {
+    }
+
+    pointer allocate(size_type n)
+    {
+        return device_ptr<T>(buffer(m_context, n * sizeof(T), m_mem_flags));
+    }
+
+    void deallocate(pointer p, size_type n)
+    {
+        BOOST_ASSERT(p.get_buffer().get_context() == m_context);
+
+        (void) n;
+
+        delete p.get_buffer_ptr();
+    }
+
+    size_type max_size() const
+    {
+        return m_context.get_device().max_memory_alloc_size() / sizeof(T);
+    }
+
+    context get_context() const
+    {
+        return m_context;
+    }
+
+protected:
+    void set_mem_flags(cl_mem_flags flags)
+    {
+        m_mem_flags = flags;
+    }
+
+private:
+    context m_context;
+    cl_mem_flags m_mem_flags;
+};
+
+} // end compute namespace
+} // end boost namespace
+
+#endif // BOOST_COMPUTE_CONTAINER_ALLOCATOR_HPP

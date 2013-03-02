@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/for_each.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::for_each(first, last, function, queue) -->
+      <function name="for_each">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="Function"/>
+        </template>
+
+        <type>UnaryFunction</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="function">
+          <paramtype>UnaryFunction</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <returns>
+          The <code>function</code> object.
+        </returns>
+
+        <description>
+          <para>
+            Calls <code>function</code> on each element in the range
+            [<code>first</code>, <code>last</code>).
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

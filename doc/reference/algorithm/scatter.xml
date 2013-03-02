@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/scatter.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::scatter(first, last, map, result, queue) -->
+      <function name="scatter">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="MapIterator"/>
+          <template-type-parameter name="OutputIterator"/>
+        </template>
+
+        <type>void</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="map">
+          <paramtype>MapIterator</paramtype>
+        </parameter>
+        <parameter name="result">
+          <paramtype>OutputIterator</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <description>
+          <para>
+            Copies the elements from the range [<code>first</code>,
+            <code>last</code>) to the range beginning at <code>result</code>
+            using the output indices from the range beginning at
+            <code>map</code>.
+          </para>
+          <para>
+            See also: <functionname>gather()</functionname>
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

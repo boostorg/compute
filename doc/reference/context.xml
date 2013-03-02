@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/context.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::context -->
+      <class name="context">
+        <purpose>Represents a compute context.</purpose>
+
+        <description>
+          <para>
+            The <code>context</code> class represents a compute context.
+          </para>
+        </description>
+
+        <!-- context::context(const device&, const cl_context_properties*) -->
+        <constructor specifiers="explicit">
+          <parameter name="device">
+            <paramtype>const <classname>device</classname>&amp;</paramtype>
+          </parameter>
+          <parameter name="properties">
+            <paramtype>const cl_context_properties*</paramtype>
+            <default>0</default>
+          </parameter>
+          <description>
+            <para>
+              Creates a new context object for <code>device</code> with
+              <code>properties</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- context::context(const context&) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype>const <classname>context</classname> &amp;</paramtype>
+          </parameter>
+          <description>
+            <para>
+              Creates a new context object as a copy of <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- operator=(const context&) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype>const <classname>context</classname> &amp;</paramtype>
+          </parameter>
+          <description>
+            <para>
+              Copies the context from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- context::~context() -->
+        <destructor>
+          <description>
+            <para>Destroys the context object.</para>
+          </description>
+        </destructor>
+
+        <method-group name="public member functions">
+
+          <!-- context::get_info<T>(cl_context_info) -->
+          <method name="get_info" cv="const">
+            <template>
+              <template-type-parameter name="T"/>
+            </template>
+            <type>T</type>
+            <parameter name="info">
+              <paramtype>cl_context_info</paramtype>
+            </parameter>
+            <description>
+              <para>
+                Returns information about the context.
+              </para>
+            </description>
+          </method>
+        </method-group>
+      </class>
+    </namespace>
+  </namespace>
+</header>

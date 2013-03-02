@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/accumulate.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::accumulate(first, last, init, queue) -->
+      <function name="accumulate">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <type>T</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="init">
+          <paramtype>T</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <returns>
+          The sum of the elements.
+        </returns>
+
+        <description>
+          <para>
+            Returns the sum of the elements in the range [<code>first</code>,
+            <code>last</code>) plus <code>init</code>.
+          </para>
+        </description>
+      </function>
+
+      <!-- boost::compute::accumulate(first, last, init, function, queue) -->
+      <function name="accumulate">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="T"/>
+          <template-type-parameter name="BinaryFunction"/>
+        </template>
+
+        <type>T</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="init">
+          <paramtype>T</paramtype>
+        </parameter>
+        <parameter name="function">
+          <paramtype>BinaryFunction</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <returns>
+          The result of applying <code>function</code> to the elements.
+        </returns>
+
+        <description>
+          <para>
+            Returns the result of applying <code>function</code> to the
+            elements in the range [<code>first</code>, <code>last</code>)
+            and <code>init</code>.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

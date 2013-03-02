@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/iterator/constant_iterator.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+      
+      <!-- boost::compute::constant_iterator<T> -->
+      <class name="constant_iterator">
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <purpose>A constant value iterator</purpose>
+
+        <description>
+          <para>
+            The <code>constant_iterator</code> class provides an iterator that
+            always returns the same value when dereferenced.
+          </para>
+          <para>
+            See also: <functionname>make_constant_iterator()</functionname>
+          </para>
+        </description>
+      </class>
+
+      <!-- boost::compute::make_constant_iterator(value, index) -->
+      <function name="make_constant_iterator">
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+        <type><classname>constant_iterator</classname>&lt;T&gt;</type>
+        <parameter name="value">
+          <paramtype>const T&amp;</paramtype>
+        </parameter>
+        <parameter name="index">
+          <paramtype>size_t</paramtype>
+          <default>0</default>
+        </parameter>
+        <description>
+          <para>
+            Returns a new <classname>constant_iterator</classname> with
+            <code>value</code> at <code>index</code>.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/iterator/transform_iterator.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::transform_iterator<InputIterator, UnaryFunction> -->
+      <class name="transform_iterator">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="UnaryFunction"/>
+        </template>
+
+        <purpose>A transform iterator adaptor</purpose>
+
+        <description>
+          <para>
+            The <code>transform_iterator</code> class provides an adaptor for
+            an input iterator which transforms each value with a unary function
+            when dereferenced.
+          </para>
+          <para>
+            See also: <functionname>make_transform_iterator()</functionname>
+          </para>
+        </description>
+      </class>
+
+      <!-- boost::compute::make_transform_iterator(iterator, function) -->
+      <function name="make_transform_iterator">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="UnaryFunction"/>
+        </template>
+        <type><classname>transform_iterator</classname>&lt;InputIterator, UnaryFunction&gt;</type>
+        <parameter name="iterator">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="function">
+          <paramtype>UnaryFunction</paramtype>
+        </parameter>
+        <description>
+          <para>
+            Returns a new <classname>transform_iterator</classname> with
+            <code>iterator</code> and <code>transform</code>.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/command_queue.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::command_queue -->
+      <class name="command_queue">
+        <purpose>A command queue</purpose>
+
+        <description>
+          <para>
+            Command queues provide the interface for interacting with compute
+            devices. The <classname>command_queue</classname> class provides
+            methods to copy data to and from a compute device as well as
+            execute compute kernels.
+          </para>
+          <para>
+            Command queues are created for one or more compute devices within a
+            compute context. For example, to create a queue for the default GPU
+            on the system:
+<programlisting>
+// get the default GPU device
+<classname>boost::compute::device</classname> gpu = <methodname>boost::compute::system::default_gpu_device()</methodname>;
+
+// create a context for the GPU device
+<classname>boost::compute::context</classname> context(gpu);
+
+// create a command queue for the GPU device
+<classname>boost::compute::command_queue</classname> queue(context, gpu);
+</programlisting>
+          </para>
+          <para>
+            The command_queue class provides the low-level methods for
+            controlling a compute device. The high-level STL-style algorithms
+            provide an easier to use interface for much of this functionality.
+            <itemizedlist>
+              <listitem><functionname>copy()</functionname></listitem>
+              <listitem><functionname>fill()</functionname></listitem>
+            </itemizedlist>
+          </para>
+          <para>
+            See also: <classname>context</classname>,
+                      <classname>device</classname>,
+                      <classname>buffer</classname>,
+                      <classname>kernel</classname>
+          </para>
+        </description>
+
+        <!-- command_queue::command_queue(const context&, const device&, cl_command_queue_properties) -->
+        <constructor>
+          <parameter name="context">
+            <paramtype>const <classname>context</classname>&amp;</paramtype>
+          </parameter>
+          <parameter name="device">
+            <paramtype>const <classname>device</classname>&amp;</paramtype>
+          </parameter>
+          <parameter name="properties">
+            <paramtype>const cl_command_queue_properties*</paramtype>
+            <default>0</default>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new command queue object in <code>context</code> for
+              <code>device</code> with <code>properties</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- command_queue::command_queue(const command_queue&) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype>const <classname>command_queue</classname> &amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new command queue object as a copy of
+              <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
+        <!-- operator=(const command_queue&) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype>const <classname>command_queue</classname> &amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Copies the command queue from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- command_queue::~command_queue() -->
+        <destructor>
+          <description>
+            <para>
+              Destroys the command queue object.
+            </para>
+          </description>
+        </destructor>
+
+        <method-group name="public member functions">
+
+          <!-- command_queue::get_device() -->
+          <method name="get_device" cv="const">
+            <type><classname>device</classname></type>
+
+            <description>
+              <para>
+                Returns the device that the command queue issues instructions
+                to.
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::get_context() -->
+          <method name="get_context" cv="const">
+            <type><classname>context</classname></type>
+
+            <description>
+              <para>
+                Returns the context for the command queue.
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::get_properties() -->
+          <method name="get_properties" cv="const">
+            <type>cl_command_queue_properties</type>
+
+            <description>
+              <para>
+                Returns the properties for the command queue.
+              </para>
+              <para>
+                The returned <code>cl_command_queue_properties</code> type is
+                a bitfield containing the state of each property flag.
+              </para>
+              <para>
+                For example, to check if the command queue supports event
+                profiling:
+<programlisting>
+if(queue.get_properties() &amp; command_queue::enable_profiling){
+    // use event profiling info
+}
+</programlisting>
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::get_info<T>(cl_command_queue_info) -->
+          <method name="get_info" cv="const">
+            <template>
+              <template-type-parameter name="T"/>
+            </template>
+
+            <type>T</type>
+
+            <parameter name="info">
+              <paramtype>cl_command_queue_info</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Returns information about the command queue.
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::enqueue_read_buffer(buffer, offset, size, host_ptr) -->
+          <method name="enqueue_read_buffer">
+            <type>void</type>
+
+            <parameter name="buffer">
+              <paramtype>const <classname>buffer</classname>&amp;</paramtype>
+            </parameter>
+            <parameter name="offset">
+              <paramtype>size_t</paramtype>
+            </parameter>
+            <parameter name="size">
+              <paramtype>size_t</paramtype>
+            </parameter>
+            <parameter name="host_ptr">
+              <paramtype>void *</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Enqueues a command to read from a device buffer to host memory.
+              </para>
+              <para>
+                See also: <functionname>copy()</functionname>
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::enqueue_write_buffer(buffer, offset, size, host_ptr) -->
+          <method name="enqueue_write_buffer">
+            <type>void</type>
+
+            <parameter name="buffer">
+              <paramtype>const <classname>buffer</classname>&amp;</paramtype>
+            </parameter>
+            <parameter name="offset">
+              <paramtype>size_t</paramtype>
+            </parameter>
+            <parameter name="size">
+              <paramtype>size_t</paramtype>
+            </parameter>
+            <parameter name="host_ptr">
+              <paramtype>const void *</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Enqueues a command to write to a device buffer from host memory.
+              </para>
+              <para>
+                See also: <functionname>copy()</functionname>
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::enqueue_copy_buffer(src_buffer, dst_buffer, src_offset, dst_offset, size) -->
+          <method name="enqueue_copy_buffer">
+            <type>void</type>
+
+            <parameter name="src_buffer">
+              <paramtype>const <classname>buffer</classname>&amp;</paramtype>
+            </parameter>
+            <parameter name="dst_buffer">
+              <paramtype>const <classname>buffer</classname>&amp;</paramtype>
+            </parameter>
+            <parameter name="src_offset">
+              <paramtype>size_t</paramtype>
+            </parameter>
+            <parameter name="dst_offset">
+              <paramtype>size_t</paramtype>
+            </parameter>
+            <parameter name="size">
+              <paramtype>size_t</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Enqueues a command to copy data from <code>src_buffer</code>
+                to <code>dst_buffer</code>.
+              </para>
+              <para>
+                See also: <functionname>copy()</functionname>
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::enqueue_nd_range_kernel(const kernel&,
+                                                      size_t,
+                                                      const size_t*,
+                                                      const size_t*,
+                                                      const size_t*) -->
+          <method name="enqueue_nd_range_kernel">
+            <type>void</type>
+
+            <parameter name="kernel">
+              <paramtype>const <classname>kernel</classname>&amp;</paramtype>
+            </parameter>
+            <parameter name="work_dim">
+              <paramtype>size_t</paramtype>
+            </parameter>
+            <parameter name="global_work_offset">
+              <paramtype>const size_t*</paramtype>
+            </parameter>
+            <parameter name="global_work_size">
+              <paramtype>const size_t*</paramtype>
+            </parameter>
+            <parameter name="local_work_size">
+              <paramtype>const size_t*</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Enqueues <code>kernel</code> for execution on the device.
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::enqueue_task(const kernel&) -->
+          <method name="enqueue_task">
+            <type>void</type>
+
+            <parameter name="kernel">
+              <paramtype>const <classname>kernel</classname>&amp;</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Enqueues <code>kernel</code> for serial execution on the
+                device using a single work-item.
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::flush() -->
+          <method name="flush">
+            <type>void</type>
+
+            <description>
+              <para>
+                Flushes the command queue.
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::finish() -->
+          <method name="finish">
+            <type>void</type>
+
+            <description>
+              <para>
+                Blocks until all outstanding operations are completed.
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::enqueue_barrier() -->
+          <method name="enqueue_barrier">
+            <type>void</type>
+
+            <description>
+              <para>
+                Enqueues a barrier in the command queue.
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::enqueue_marker() -->
+          <method name="enqueue_marker">
+            <type><classname>event</classname></type>
+
+            <description>
+              <para>
+                Enqueues a marker in the command queue.
+              </para>
+            </description>
+          </method>
+
+          <!-- command_queue::enqueue_wait_for_event() -->
+          <method name="enqueue_wait_for_event">
+            <type>void</type>
+
+            <parameter name="event">
+              <paramtype>const <classname>event</classname>&amp;</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Enqueues a wait for <code>event</code> to complete before
+                executing any future commands.
+              </para>
+            </description>
+          </method>
+        </method-group>
+      </class>
+    </namespace>
+  </namespace>
+</header>

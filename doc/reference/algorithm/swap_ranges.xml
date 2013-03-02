@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/swap_ranges.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::swap_ranges(first1, last1, first2, queue) -->
+      <function name="swap_ranges">
+        <template>
+          <template-type-parameter name="Iterator1"/>
+          <template-type-parameter name="Iterator2"/>
+        </template>
+
+        <type>Iterator2</type>
+
+        <parameter name="first1">
+          <paramtype>Iterator1</paramtype>
+        </parameter>
+        <parameter name="last1">
+          <paramtype>Iterator1</paramtype>
+        </parameter>
+        <parameter name="first2">
+          <paramtype>Iterator2</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <returns>
+          An iterator pointing to the end of the second range.
+        </returns>
+
+        <description>
+          <para>
+            Swaps the elements in the range [<code>first1</code>,
+            <code>last1</code>) with the elements in the range beginning at
+            <code>first2</code>.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

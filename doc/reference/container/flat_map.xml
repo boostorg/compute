@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/container/flat_map.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::flat_map<T> -->
+      <class name="flat_map">
+        <purpose>A map of keys to values</purpose>
+
+        <template>
+          <template-type-parameter name="Key">
+            <purpose>key type</purpose>
+          </template-type-parameter>
+          <template-type-parameter name="T">
+            <purpose>value type</purpose>
+          </template-type-parameter>
+        </template>
+
+        <description>
+          <para>
+            See also: <classname>flat_set</classname>
+          </para>
+        </description>
+      </class>
+    </namespace>
+  </namespace>
+</header>

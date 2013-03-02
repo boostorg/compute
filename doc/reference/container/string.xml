@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/container/string.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::string -->
+      <typedef name="string">
+        <type><classname>basic_string</classname>&lt;char&gt;</type>
+        <description>
+          <para>
+            Typedef for a string containing ASCII characters.
+          </para>
+        </description>
+      </typedef>
+    </namespace>
+  </namespace>
+</header>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/count.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::count(first, last, value, queue) -->
+      <function name="count">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <type>size_t</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="value">
+          <paramtype>const T&amp;</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <returns>
+          The number of occurrences of <code>value</code>.
+        </returns>
+
+        <description>
+          <para>
+            Returns the number of occurrences of <code>value</code> in the
+            range [<code>first</code>, <code>last</code>).
+          </para>
+          <para>
+            See also: <functionname>count_if()</functionname>
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/find.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::find(first, last, value, queue) -->
+      <function name="find">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <type>InputIterator</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="value">
+          <paramtype>const T&amp;</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <description>
+          <para>
+            Returns an iterator pointing to the first element in the range
+            [<code>first</code>, <code>last</code>) that equals
+            <code>value</code>.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

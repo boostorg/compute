@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/copy_n.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::copy_n(first, count, result, queue) -->
+      <function name="copy_n">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="Size"/>
+          <template-type-parameter name="OutputIterator"/>
+        </template>
+
+        <type>OutputIterator</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="count">
+          <paramtype>Size</paramtype>
+        </parameter>
+        <parameter name="result">
+          <paramtype>OutputIterator</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <returns>
+          An iterator pointing to the end of the result range.
+        </returns>
+
+        <description>
+          <para>
+            Copies the values from the range [<code>first</code>,
+            <code>first + count</code>) to the range beginning at
+            <code>result</code>.
+          </para>
+          <para>
+            See also: <functionname>copy()</functionname>
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

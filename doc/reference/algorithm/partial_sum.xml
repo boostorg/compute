@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/partial_sum.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::partial_sum(first, last, result, queue) -->
+      <function name="partial_sum">
+        <template>
+          <template-type-parameter name="InputIterator"/>
+          <template-type-parameter name="OutputIterator"/>
+        </template>
+
+        <type>OutputIterator</type>
+
+        <parameter name="first">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="last">
+          <paramtype>InputIterator</paramtype>
+        </parameter>
+        <parameter name="result">
+          <paramtype>OutputIterator</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <returns>
+          An iterator pointing to the end of the result range.
+        </returns>
+
+        <description>
+          <para>
+            Calculates the partial sum of the elements in the range
+            [<code>first</code>, <code>last</code>) and writes the resulting
+            values to the range starting at at <code>result</code>.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

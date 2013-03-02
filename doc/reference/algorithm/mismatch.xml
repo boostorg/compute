@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/algorithm/mismatch.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::mismatch(first1, last1, first2, queue) -->
+      <function name="mismatch">
+        <template>
+          <template-type-parameter name="InputIterator1"/>
+          <template-type-parameter name="InputIterator2"/>
+        </template>
+
+        <type></type>
+        <type>std::pair&lt;InputIterator1, InputIterator2&gt;</type>
+
+        <parameter name="first1">
+          <paramtype>InputIterator1</paramtype>
+        </parameter>
+        <parameter name="last1">
+          <paramtype>InputIterator1</paramtype>
+        </parameter>
+        <parameter name="first2">
+          <paramtype>InputIterator2</paramtype>
+        </parameter>
+        <parameter name="queue">
+          <paramtype>command_queue &amp;</paramtype>
+        </parameter>
+
+        <description>
+          <para>
+            Returns a pair of iterators pointing to the first position where
+            the range [<code>first1</code>, <code>last1</code>) and the range
+            starting at <code>first2</code> differ.
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>
