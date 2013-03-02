@@ -1,0 +1,100 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Function template copy</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
+<link rel="up" href="../../compute/reference.html#header.boost.compute.algorithm.copy_hpp" title="Header &lt;boost/compute/algorithm/copy.hpp&gt;">
+<link rel="prev" href="binary_search.html" title="Function template binary_search">
+<link rel="next" href="copy_async.html" title="Function template copy_async">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr><td valign="top"></td></tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="binary_search.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.algorithm.copy_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="copy_async.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+<div class="refentry">
+<a name="boost.compute.copy"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Function template copy</span></h2>
+<p>boost::compute::copy</p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../compute/reference.html#header.boost.compute.algorithm.copy_hpp" title="Header &lt;boost/compute/algorithm/copy.hpp&gt;">boost/compute/algorithm/copy.hpp</a>&gt;
+
+</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator<span class="special">,</span> <span class="keyword">typename</span> OutputIterator<span class="special">&gt;</span> 
+  <span class="identifier">OutputIterator</span> 
+  <span class="identifier">copy</span><span class="special">(</span><span class="identifier">InputIterator</span> first<span class="special">,</span> <span class="identifier">InputIterator</span> last<span class="special">,</span> <span class="identifier">OutputIterator</span> result<span class="special">,</span> 
+       <span class="identifier">command_queue</span> <span class="special">&amp;</span> queue<span class="special">)</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="idp7771104"></a><h2>Description</h2>
+<p>
+            Copies the values from the range [<code class="computeroutput">first</code>,
+            <code class="computeroutput">last</code>) to the range beginning at <code class="computeroutput">result</code>.
+          </p>
+<p>
+            The copy() function is one of the few Boost.Compute algorithms
+            which can take both device and host iterators as arguments. For
+            example, to copy values from a vector on the host to a vector on
+            the device:
+</p>
+<pre class="programlisting">
+std::vector&lt;int&gt; host_vector = ...
+<code class="computeroutput"><a class="link" href="vector.html" title="Class template vector">boost::compute::vector</a></code>&lt;int&gt; device_vector = ...
+
+// copy all values in host_vector to device_vector
+<code class="computeroutput"><a class="link" href="copy.html" title="Function template copy">boost::compute::copy</a></code>(host_vector.begin(),
+                     host_vector.end(),
+                     device_vector.begin());
+</pre>
+<p>
+          </p>
+<p>
+            The generic <code class="computeroutput">copy()</code> function can be used for a variety
+            of data transfer tasks and provides a standard interface to the
+            following OpenCL functions:
+              </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><code class="computeroutput">clEnqueueReadBuffer()</code></li>
+<li class="listitem"><code class="computeroutput">clEnqueueWriteBuffer()</code></li>
+<li class="listitem"><code class="computeroutput">clEnqueueCopyBuffer()</code></li>
+</ul></div>
+<p>
+            Unlike the aforementioned OpenCL functions, <code class="computeroutput">copy()</code>
+            will also work with non-contiguous data-structures (e.g.
+            <code class="computeroutput">std::list&lt;T&gt;</code>) as well as with "fancy"
+            iterators (e.g. <code class="computeroutput"><a class="link" href="transform_iterator.html" title="Class template transform_iterator">transform_iterator</a></code>).
+          </p>
+<p>
+            See also: <code class="computeroutput"><a class="link" href="copy_n.html" title="Function template copy_n">copy_n()</a></code>,
+                      <code class="computeroutput"><a class="link" href="copy_if.html" title="Function template copy_if">copy_if()</a></code>,
+                      <code class="computeroutput"><a class="link" href="copy_async.html" title="Function template copy_async">copy_async()</a></code>
+          </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td>
+          An iterator pointing to the end of the result range.
+        </td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2013 Kyle Lutz<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="binary_search.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.algorithm.copy_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="copy_async.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

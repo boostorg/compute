@@ -1,0 +1,88 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Getting Started</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
+<link rel="prev" href="../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
+<link rel="next" href="tutorial.html" title="Tutorial">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr><td valign="top"></td></tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../index.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="tutorial.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="boost_compute.gettingstarted"></a><a class="link" href="gettingstarted.html" title="Getting Started">Getting Started</a>
+</h2></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="gettingstarted.html#boost_compute.gettingstarted.compilation_and_usage">Compilation
+      and Usage</a></span></dt>
+<dt><span class="section"><a href="gettingstarted.html#boost_compute.gettingstarted.architecture">Architecture</a></span></dt>
+</dl></div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_compute.gettingstarted.compilation_and_usage"></a><a class="link" href="gettingstarted.html#boost_compute.gettingstarted.compilation_and_usage" title="Compilation and Usage">Compilation
+      and Usage</a>
+</h3></div></div></div>
+<p>
+        Boost.Compute is a header-only library, so no linking is required. All of
+        the Boost.Compute headers can be included with the following directive:
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">compute</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+      </p>
+<p>
+        All of the classes and functions in Boost.Compute live in the <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span></code> namespace and can be brought into
+        global scope with:
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">;</span>
+</pre>
+<p>
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_compute.gettingstarted.architecture"></a><a class="link" href="gettingstarted.html#boost_compute.gettingstarted.architecture" title="Architecture">Architecture</a>
+</h3></div></div></div>
+<p>
+        The Boost Compute library consists of several different components. The core
+        component provides a C++ wrapper over the OpenCL C API.
+      </p>
+<p>
+        On top of the core layer is a partial implementation of the C++ standard
+        library providing common containers (e.g. <code class="computeroutput"><a class="link" href="../boost/compute/vector.html" title="Class template vector">vector&lt;T&gt;</a></code>,
+        <code class="computeroutput"><a class="link" href="../boost/compute/array.html" title="Class template array">array&lt;T, N&gt;</a></code>) along
+        with common algorithms (e.g. <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp8575888.html" title="Function template transform">transform()</a></code>
+        and <code class="computeroutput"><a class="link" href="../boost/compute/sort_idp8538224.html" title="Function template sort">sort()</a></code>).
+      </p>
+<p>
+        The library also provides number of "fancy" iterators (e.g. <code class="computeroutput"><a class="link" href="../boost/compute/transform_iterator.html" title="Class template transform_iterator">transform_iterator</a></code> and
+        <code class="computeroutput"><a class="link" href="../boost/compute/permutation_iterator.html" title="Class template permutation_iterator">permutation_iterator</a></code>)
+        which enhance the functionality of the standard algorithms.
+      </p>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2013 Kyle Lutz<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../index.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="tutorial.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

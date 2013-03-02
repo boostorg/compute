@@ -1,0 +1,119 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Class event</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
+<link rel="up" href="../../compute/reference.html#header.boost.compute.event_hpp" title="Header &lt;boost/compute/event.hpp&gt;">
+<link rel="prev" href="device.html" title="Class device">
+<link rel="next" href="future.html" title="Class template future">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr><td valign="top"></td></tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="device.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.event_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="future.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+<div class="refentry">
+<a name="boost.compute.event"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class event</span></h2>
+<p>boost::compute::event &#8212; An event</p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../compute/reference.html#header.boost.compute.event_hpp" title="Header &lt;boost/compute/event.hpp&gt;">boost/compute/event.hpp</a>&gt;
+
+</span>
+<span class="keyword">class</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// <a class="link" href="event.html#boost.compute.eventconstruct-copy-destruct">construct/copy/destruct</a></span>
+  <span class="keyword">explicit</span> <a class="link" href="event.html#idp7583104-bb"><span class="identifier">event</span></a><span class="special">(</span><span class="identifier">cl_event</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="event.html#idp7586144-bb"><span class="identifier">event</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  event&amp; <a class="link" href="event.html#idp7589328-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="event.html#idp7592512-bb"><span class="special">~</span><span class="identifier">event</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="event.html#idp7593664-bb">public member functions</a></span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="event.html#idp7594416-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_event_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="event.html#idp7598576-bb"><span class="identifier">get_profiling_info</span></a><span class="special">(</span><span class="identifier">cl_profiling_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="idp6525984"></a><h2>Description</h2>
+<p>
+            The <code class="computeroutput">event</code> class represents an OpenCL event.
+          </p>
+<div class="refsect2">
+<a name="idp6527696"></a><h3>
+<a name="boost.compute.eventconstruct-copy-destruct"></a><code class="computeroutput">event</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp7583104-bb"></a><span class="identifier">event</span><span class="special">(</span><span class="identifier">cl_event</span> event<span class="special">)</span><span class="special">;</span></pre>
+<p>
+              Creates a new compute event for <code class="computeroutput">event</code>.
+            </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a name="idp7586144-bb"></a><span class="identifier">event</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<p>
+              Creates a new event object as a copy of <code class="computeroutput">other</code>.
+            </p>
+</li>
+<li class="listitem">
+<pre class="literallayout">event&amp; <a name="idp7589328-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<p>
+              Copies the event from <code class="computeroutput">other</code>.
+            </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a name="idp7592512-bb"></a><span class="special">~</span><span class="identifier">event</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>
+              Destroys the event object.
+            </p>
+</li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="idp6554864"></a><h3>
+<a name="idp7593664-bb"></a><code class="computeroutput">event</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7594416-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_event_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns information about the event.
+              </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7598576-bb"></a><span class="identifier">get_profiling_info</span><span class="special">(</span><span class="identifier">cl_profiling_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns profiling information for the event.
+              </p>
+<p>
+                For example, to get the time when the command referred to by
+                the event was completed:
+</p>
+<pre class="programlisting">
+cl_ulong end_time = e.get_profiling_info&lt;cl_ulong&gt;(event::profiling_command_end);
+</pre>
+<p>
+              </p>
+</li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2013 Kyle Lutz<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="device.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.event_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="future.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

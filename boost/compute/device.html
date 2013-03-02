@@ -1,0 +1,209 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Class device</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
+<link rel="up" href="../../compute/reference.html#header.boost.compute.device_hpp" title="Header &lt;boost/compute/device.hpp&gt;">
+<link rel="prev" href="context.html" title="Class context">
+<link rel="next" href="event.html" title="Class event">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr><td valign="top"></td></tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="context.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.device_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="event.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+<div class="refentry">
+<a name="boost.compute.device"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class device</span></h2>
+<p>boost::compute::device &#8212; A compute device</p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../compute/reference.html#header.boost.compute.device_hpp" title="Header &lt;boost/compute/device.hpp&gt;">boost/compute/device.hpp</a>&gt;
+
+</span>
+<span class="keyword">class</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// <a class="link" href="device.html#boost.compute.deviceconstruct-copy-destruct">construct/copy/destruct</a></span>
+  <a class="link" href="device.html#idp7534816-bb"><span class="identifier">device</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="device.html#idp7536224-bb"><span class="identifier">device</span></a><span class="special">(</span><span class="identifier">cl_device_id</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="device.html#idp7539264-bb"><span class="identifier">device</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  device&amp; <a class="link" href="device.html#idp7542448-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="device.html#idp7545632-bb"><span class="special">~</span><span class="identifier">device</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="device.html#idp7546784-bb">public member functions</a></span>
+  <span class="identifier">cl_device_id</span> <a class="link" href="device.html#idp7547536-bb"><span class="identifier">id</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">cl_device_type</span> <a class="link" href="device.html#idp7549808-bb"><span class="identifier">type</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="device.html#idp7552080-bb"><span class="identifier">name</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="device.html#idp7554352-bb"><span class="identifier">vendor</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">uint_</span> <a class="link" href="device.html#idp7556624-bb"><span class="identifier">address_bits</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">ulong_</span> <a class="link" href="device.html#idp7558896-bb"><span class="identifier">global_memory_size</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">ulong_</span> <a class="link" href="device.html#idp7561168-bb"><span class="identifier">local_memory_size</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">uint_</span> <a class="link" href="device.html#idp7563440-bb"><span class="identifier">clock_frequency</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">uint_</span> <a class="link" href="device.html#idp7565712-bb"><span class="identifier">compute_units</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">size_t</span> <a class="link" href="device.html#idp7567984-bb"><span class="identifier">profiling_timer_resolution</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="device.html#idp7570256-bb"><span class="identifier">preferred_vector_width</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="device.html#idp7573792-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_device_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="idp6355792"></a><h2>Description</h2>
+<p>
+            Typical compute devices include GPUs and multi-core CPUs. A list
+            of all compute devices available on a platform can be obtained via
+            the <a class="link" href="platform.html#idp7709840-bb">platform::devices()</a> method.
+          </p>
+<p>
+            A default device can be easily created with the one of the
+            following convenience methods:
+              </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><a class="link" href="system.html#idp7770544-bb">system::default_device()</a></li>
+<li class="listitem"><a class="link" href="system.html#idp7776560-bb">system::default_cpu_device()</a></li>
+<li class="listitem"><a class="link" href="system.html#idp7773696-bb">system::default_gpu_device()</a></li>
+</ul></div>
+<p>
+          </p>
+<p>
+            For example, to get the default GPU device on the system:
+</p>
+<pre class="programlisting">
+<span class="comment">// get the default GPU device</span>
+<a class="link" href="device.html" title="Class device">boost::compute::device</a> <span class="identifier">gpu</span> <span class="special">=</span> <a class="link" href="system.html#idp7773696-bb">boost::compute::system::default_gpu_device()</a><span class="special">;</span>
+</pre>
+<p>
+          </p>
+<div class="refsect2">
+<a name="idp6367008"></a><h3>
+<a name="boost.compute.deviceconstruct-copy-destruct"></a><code class="computeroutput">device</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><a name="idp7534816-bb"></a><span class="identifier">device</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>
+              Creates a null device object.
+            </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp7536224-bb"></a><span class="identifier">device</span><span class="special">(</span><span class="identifier">cl_device_id</span> id<span class="special">)</span><span class="special">;</span></pre>
+<p>
+              Creates a new device object for <code class="computeroutput">id</code>.
+            </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a name="idp7539264-bb"></a><span class="identifier">device</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<p>
+              Creates a new device object as a copy of <code class="computeroutput">other</code>.
+            </p>
+</li>
+<li class="listitem">
+<pre class="literallayout">device&amp; <a name="idp7542448-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<p>
+              Copies the device from <code class="computeroutput">other</code>.
+            </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a name="idp7545632-bb"></a><span class="special">~</span><span class="identifier">device</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>
+              Destroys the device object.
+            </p>
+</li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="idp6397808"></a><h3>
+<a name="idp7546784-bb"></a><code class="computeroutput">device</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">cl_device_id</span> <a name="idp7547536-bb"></a><span class="identifier">id</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns the device's ID.
+              </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">cl_device_type</span> <a name="idp7549808-bb"></a><span class="identifier">type</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns the type of the device.
+              </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp7552080-bb"></a><span class="identifier">name</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns the name of the device.
+              </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp7554352-bb"></a><span class="identifier">vendor</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns the name of the vendor of the device.
+              </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">uint_</span> <a name="idp7556624-bb"></a><span class="identifier">address_bits</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns the device's address size in bits.
+              </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">ulong_</span> <a name="idp7558896-bb"></a><span class="identifier">global_memory_size</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns the size of the global memory in bytes.
+              </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">ulong_</span> <a name="idp7561168-bb"></a><span class="identifier">local_memory_size</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns the size of the local memory in bytes.
+              </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">uint_</span> <a name="idp7563440-bb"></a><span class="identifier">clock_frequency</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns the clock frequency for the device.
+              </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">uint_</span> <a name="idp7565712-bb"></a><span class="identifier">compute_units</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns the number of compute units.
+              </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">size_t</span> <a name="idp7567984-bb"></a><span class="identifier">profiling_timer_resolution</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns the profiling timer resolution in nanoseconds.
+              </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7570256-bb"></a><span class="identifier">preferred_vector_width</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns the preferred vector width for type <code class="computeroutput">T</code>.
+              </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7573792-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_device_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>
+                Returns information about the device.
+              </p>
+</li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2013 Kyle Lutz<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="context.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.device_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="event.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
