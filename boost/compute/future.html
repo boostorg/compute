@@ -29,49 +29,49 @@
 <span class="keyword">class</span> <a class="link" href="future.html" title="Class template future">future</a> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="future.html#boost.compute.futureconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="future.html#idp7610176-bb"><span class="identifier">future</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="future.html#idp7611584-bb"><span class="identifier">future</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="future.html" title="Class template future">future&lt;T&gt;</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  future&amp; <a class="link" href="future.html#idp7614848-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="future.html" title="Class template future">future&lt;T&gt;</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="future.html#idp7618032-bb"><span class="special">~</span><span class="identifier">future</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="future.html#idp7292912-bb"><span class="identifier">future</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="future.html#idp7294320-bb"><span class="identifier">future</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="future.html" title="Class template future">future&lt;T&gt;</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  future&amp; <a class="link" href="future.html#idp7297504-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="future.html" title="Class template future">future&lt;T&gt;</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="future.html#idp7300688-bb"><span class="special">~</span><span class="identifier">future</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="future.html#idp7619184-bb">public member functions</a></span>
-  <span class="identifier">T</span> <a class="link" href="future.html#idp7619936-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">bool</span> <a class="link" href="future.html#idp7622144-bb"><span class="identifier">valid</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="future.html#idp7624800-bb"><span class="identifier">wait</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <a class="link" href="event.html" title="Class event">event</a> <a class="link" href="future.html#idp7627168-bb"><span class="identifier">get_event</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="future.html#idp7301840-bb">public member functions</a></span>
+  <span class="identifier">T</span> <a class="link" href="future.html#idp7302592-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="future.html#idp7304800-bb"><span class="identifier">valid</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="future.html#idp7307456-bb"><span class="identifier">wait</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <a class="link" href="event.html" title="Class event">event</a> <a class="link" href="future.html#idp7309728-bb"><span class="identifier">get_event</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp6635872"></a><h2>Description</h2>
+<a name="idp6628384"></a><h2>Description</h2>
 <p>
             The <code class="computeroutput">future</code> class represents the result of an
             asynchronous computation.
           </p>
 <div class="refsect2">
-<a name="idp6637520"></a><h3>
+<a name="idp6630032"></a><h3>
 <a name="boost.compute.futureconstruct-copy-destruct"></a><code class="computeroutput">future</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp7610176-bb"></a><span class="identifier">future</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7292912-bb"></a><span class="identifier">future</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
               Creates a null future.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7611584-bb"></a><span class="identifier">future</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="future.html" title="Class template future">future&lt;T&gt;</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7294320-bb"></a><span class="identifier">future</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="future.html" title="Class template future">future&lt;T&gt;</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Creates a new future object as a copy of <code class="computeroutput">other</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout">future&amp; <a name="idp7614848-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="future.html" title="Class template future">future&lt;T&gt;</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout">future&amp; <a name="idp7297504-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="future.html" title="Class template future">future&lt;T&gt;</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Copies the future from <code class="computeroutput">other</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7618032-bb"></a><span class="special">~</span><span class="identifier">future</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7300688-bb"></a><span class="special">~</span><span class="identifier">future</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
               Destroys the future object.
             </p>
@@ -79,30 +79,30 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp6662512"></a><h3>
-<a name="idp7619184-bb"></a><code class="computeroutput">future</code> public member functions</h3>
+<a name="idp6654960"></a><h3>
+<a name="idp7301840-bb"></a><code class="computeroutput">future</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">T</span> <a name="idp7619936-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">T</span> <a name="idp7302592-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Returns the result stored in the future. This will block until
                 the computation is completed and the result is ready.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">bool</span> <a name="idp7622144-bb"></a><span class="identifier">valid</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">bool</span> <a name="idp7304800-bb"></a><span class="identifier">valid</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns <code class="computeroutput">true</code> if the future is valid.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp7624800-bb"></a><span class="identifier">wait</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp7307456-bb"></a><span class="identifier">wait</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Blocks until the asynchronous computation is complete.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="event.html" title="Class event">event</a> <a name="idp7627168-bb"></a><span class="identifier">get_event</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><a class="link" href="event.html" title="Class event">event</a> <a name="idp7309728-bb"></a><span class="identifier">get_event</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns the event associated with the future.
               </p>
