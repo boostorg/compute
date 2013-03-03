@@ -77,7 +77,7 @@ boost::compute::count_if(vector.begin(), vector.end(), _1 % 2 == 1);
 To multiply each value in a vector by three and subtract four:
 
 ``
-boost::compute::transform(vector.begin(), vector.end(), vector.begin(), _1 * 3 + 4);
+boost::compute::transform(vector.begin(), vector.end(), vector.begin(), _1 * 3 - 4);
 ``
 
 [endsect] [/ lambda expressions]
