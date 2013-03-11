@@ -8,7 +8,7 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#define BOOST_TEST_MODULE TestSort
+#define BOOST_TEST_MODULE TestInsertionSort
 #include <boost/test/unit_test.hpp>
 
 #include <boost/compute/system.hpp>
