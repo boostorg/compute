@@ -50,6 +50,7 @@
   <xi:include href="reference/algorithm/iter_swap.xml"/>
   <xi:include href="reference/algorithm/lower_bound.xml"/>
   <xi:include href="reference/algorithm/max_element.xml"/>
+  <xi:include href="reference/algorithm/merge.xml"/>
   <xi:include href="reference/algorithm/min_element.xml"/>
   <xi:include href="reference/algorithm/minmax_element.xml"/>
   <xi:include href="reference/algorithm/mismatch.xml"/>
