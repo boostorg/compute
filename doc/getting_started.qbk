@@ -1,9 +1,28 @@
 [section:gettingstarted Getting Started]
 
+[section Downloading]
+
+Boost.Compute is not yet an offical Boost library and therefore is not
+packaged with the standard Boost distribution. To download the library use the
+following command:
+
+[endsect]
+
+``
+git clone git://github.com/kylelutz/compute.git
+``
+
 [section Compilation and Usage]
 
-Boost.Compute is a header-only library, so no linking is required. All
-of the Boost.Compute headers can be included with the following directive:
+Boost.Compute is a header-only library, so no linking is required. To use the
+library just add the include directory to the compilation flags and link with
+the system's OpenCL library. For example, with GCC:
+
+``
+g++ -I/path/to/compute/include main.cpp -lOpenCL
+``
+
+All of the Boost.Compute headers can be included with the following directive:
 
 ``
 #include <boost/compute.hpp>
