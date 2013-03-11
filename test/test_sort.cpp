@@ -306,3 +306,55 @@ BOOST_AUTO_TEST_CASE(reverse_sort_int_vector)
     BOOST_CHECK_EQUAL(data[6], -456);
     BOOST_CHECK_EQUAL(data[7], -5000);
 }
+
+BOOST_AUTO_TEST_CASE(sort_vectors_by_length)
+{
+    using boost::compute::float2_;
+    using boost::compute::lambda::_1;
+    using boost::compute::lambda::_2;
+
+    boost::compute::device gpu = boost::compute::system::default_device();
+    boost::compute::context context(gpu);
+    boost::compute::command_queue queue(context, gpu);
+
+    float data[] = { 1.0f, 0.2f,
+                     1.3f, 1.0f,
+                     6.7f, 0.0f,
+                     5.2f, 3.4f,
+                     1.4f, 1.4f };
+
+    // create vector on device containing vectors
+    boost::compute::vector<float2_> vector(
+        reinterpret_cast<float2_ *>(data),
+        reinterpret_cast<float2_ *>(data) + 5,
+        context
+    );
+
+    // sort vectors by length
+    boost::compute::sort(
+        vector.begin(),
+        vector.end(),
+        length(_1) < length(_2),
+        queue
+    );
+
+    // copy sorted values back to host
+    boost::compute::copy(
+        vector.begin(),
+        vector.end(),
+        reinterpret_cast<float2_ *>(data),
+        queue
+    );
+
+    // check values
+    BOOST_CHECK_EQUAL(data[0], 1.0f);
+    BOOST_CHECK_EQUAL(data[1], 0.2f);
+    BOOST_CHECK_EQUAL(data[2], 1.3f);
+    BOOST_CHECK_EQUAL(data[3], 1.0f);
+    BOOST_CHECK_EQUAL(data[4], 1.4f);
+    BOOST_CHECK_EQUAL(data[5], 1.4f);
+    BOOST_CHECK_EQUAL(data[6], 5.2f);
+    BOOST_CHECK_EQUAL(data[7], 3.4f);
+    BOOST_CHECK_EQUAL(data[8], 6.7f);
+    BOOST_CHECK_EQUAL(data[9], 0.0f);
+}
