@@ -28,46 +28,46 @@
 <span class="keyword">class</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="event.html#boost.compute.eventconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <span class="keyword">explicit</span> <a class="link" href="event.html#idp7265840-bb"><span class="identifier">event</span></a><span class="special">(</span><span class="identifier">cl_event</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="event.html#idp7268880-bb"><span class="identifier">event</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  event&amp; <a class="link" href="event.html#idp7272064-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="event.html#idp7275248-bb"><span class="special">~</span><span class="identifier">event</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="event.html#idp7301776-bb"><span class="identifier">event</span></a><span class="special">(</span><span class="identifier">cl_event</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="event.html#idp7304816-bb"><span class="identifier">event</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  event&amp; <a class="link" href="event.html#idp7308000-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="event.html#idp7311184-bb"><span class="special">~</span><span class="identifier">event</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="event.html#idp7276400-bb">public member functions</a></span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="event.html#idp7277152-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_event_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="event.html#idp7281312-bb"><span class="identifier">get_profiling_info</span></a><span class="special">(</span><span class="identifier">cl_profiling_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="event.html#idp7312336-bb">public member functions</a></span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="event.html#idp7313088-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_event_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="event.html#idp7317248-bb"><span class="identifier">get_profiling_info</span></a><span class="special">(</span><span class="identifier">cl_profiling_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp6518864"></a><h2>Description</h2>
+<a name="idp36254128"></a><h2>Description</h2>
 <p>
             The <code class="computeroutput">event</code> class represents an OpenCL event.
           </p>
 <div class="refsect2">
-<a name="idp6520576"></a><h3>
+<a name="idp36255840"></a><h3>
 <a name="boost.compute.eventconstruct-copy-destruct"></a><code class="computeroutput">event</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp7265840-bb"></a><span class="identifier">event</span><span class="special">(</span><span class="identifier">cl_event</span> event<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp7301776-bb"></a><span class="identifier">event</span><span class="special">(</span><span class="identifier">cl_event</span> event<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Creates a new compute event for <code class="computeroutput">event</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7268880-bb"></a><span class="identifier">event</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7304816-bb"></a><span class="identifier">event</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Creates a new event object as a copy of <code class="computeroutput">other</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout">event&amp; <a name="idp7272064-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout">event&amp; <a name="idp7308000-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="event.html" title="Class event">event</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Copies the event from <code class="computeroutput">other</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7275248-bb"></a><span class="special">~</span><span class="identifier">event</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7311184-bb"></a><span class="special">~</span><span class="identifier">event</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
               Destroys the event object.
             </p>
@@ -75,17 +75,17 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp6547680"></a><h3>
-<a name="idp7276400-bb"></a><code class="computeroutput">event</code> public member functions</h3>
+<a name="idp36282880"></a><h3>
+<a name="idp7312336-bb"></a><code class="computeroutput">event</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7277152-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_event_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7313088-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_event_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns information about the event.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7281312-bb"></a><span class="identifier">get_profiling_info</span><span class="special">(</span><span class="identifier">cl_profiling_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7317248-bb"></a><span class="identifier">get_profiling_info</span><span class="special">(</span><span class="identifier">cl_profiling_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns profiling information for the event.
               </p>

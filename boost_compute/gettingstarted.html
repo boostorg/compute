@@ -20,18 +20,45 @@
 <a name="boost_compute.gettingstarted"></a><a class="link" href="gettingstarted.html" title="Getting Started">Getting Started</a>
 </h2></div></div></div>
 <div class="toc"><dl>
+<dt><span class="section"><a href="gettingstarted.html#boost_compute.gettingstarted.downloading">Downloading</a></span></dt>
 <dt><span class="section"><a href="gettingstarted.html#boost_compute.gettingstarted.compilation_and_usage">Compilation
       and Usage</a></span></dt>
 <dt><span class="section"><a href="gettingstarted.html#boost_compute.gettingstarted.architecture">Architecture</a></span></dt>
 </dl></div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
+<a name="boost_compute.gettingstarted.downloading"></a><a class="link" href="gettingstarted.html#boost_compute.gettingstarted.downloading" title="Downloading">Downloading</a>
+</h3></div></div></div>
+<p>
+        Boost.Compute is not yet an offical Boost library and therefore is not packaged
+        with the standard Boost distribution. To download the library use the following
+        command:
+      </p>
+</div>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">git</span> <span class="identifier">clone</span> <span class="identifier">git</span><span class="special">://</span><span class="identifier">github</span><span class="special">.</span><span class="identifier">com</span><span class="special">/</span><span class="identifier">kylelutz</span><span class="special">/</span><span class="identifier">compute</span><span class="special">.</span><span class="identifier">git</span>
+</pre>
+<p>
+    </p>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
 <a name="boost_compute.gettingstarted.compilation_and_usage"></a><a class="link" href="gettingstarted.html#boost_compute.gettingstarted.compilation_and_usage" title="Compilation and Usage">Compilation
       and Usage</a>
 </h3></div></div></div>
 <p>
-        Boost.Compute is a header-only library, so no linking is required. All of
-        the Boost.Compute headers can be included with the following directive:
+        Boost.Compute is a header-only library, so no linking is required. To use
+        the library just add the include directory to the compilation flags and link
+        with the system's OpenCL library. For example, with GCC:
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">g</span><span class="special">++</span> <span class="special">-</span><span class="identifier">I</span><span class="special">/</span><span class="identifier">path</span><span class="special">/</span><span class="identifier">to</span><span class="special">/</span><span class="identifier">compute</span><span class="special">/</span><span class="identifier">include</span> <span class="identifier">main</span><span class="special">.</span><span class="identifier">cpp</span> <span class="special">-</span><span class="identifier">lOpenCL</span>
+</pre>
+<p>
+      </p>
+<p>
+        All of the Boost.Compute headers can be included with the following directive:
       </p>
 <p>
 </p>
@@ -62,8 +89,8 @@
         On top of the core layer is a partial implementation of the C++ standard
         library providing common containers (e.g. <code class="computeroutput"><a class="link" href="../boost/compute/vector.html" title="Class template vector">vector&lt;T&gt;</a></code>,
         <code class="computeroutput"><a class="link" href="../boost/compute/array.html" title="Class template array">array&lt;T, N&gt;</a></code>) along
-        with common algorithms (e.g. <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp8267120.html" title="Function template transform">transform()</a></code>
-        and <code class="computeroutput"><a class="link" href="../boost/compute/sort_idp8229456.html" title="Function template sort">sort()</a></code>).
+        with common algorithms (e.g. <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp8321376.html" title="Function template transform">transform()</a></code>
+        and <code class="computeroutput"><a class="link" href="../boost/compute/sort_idp8283712.html" title="Function template sort">sort()</a></code>).
       </p>
 <p>
         The library also provides number of "fancy" iterators (e.g. <code class="computeroutput"><a class="link" href="../boost/compute/transform_iterator.html" title="Class template transform_iterator">transform_iterator</a></code> and
