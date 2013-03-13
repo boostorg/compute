@@ -144,6 +144,7 @@ public:
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(size <= buffer.size());
         BOOST_ASSERT(buffer.get_context() == this->get_context());
+        BOOST_ASSERT(host_ptr != 0);
 
         cl_int ret = clEnqueueReadBuffer(m_queue,
                                          buffer.get_mem(),
@@ -169,6 +170,7 @@ public:
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(size <= buffer.size());
         BOOST_ASSERT(buffer.get_context() == this->get_context());
+        BOOST_ASSERT(host_ptr != 0);
 
         cl_event event_;
 
@@ -201,6 +203,7 @@ public:
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(buffer.get_context() == this->get_context());
+        BOOST_ASSERT(host_ptr != 0);
 
         cl_int ret = clEnqueueReadBufferRect(m_queue,
                                              buffer.get_mem(),
@@ -244,6 +247,7 @@ public:
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(size <= buffer.size());
         BOOST_ASSERT(buffer.get_context() == this->get_context());
+        BOOST_ASSERT(host_ptr != 0);
 
         cl_int ret = clEnqueueWriteBuffer(m_queue,
                                           buffer.get_mem(),
@@ -269,6 +273,7 @@ public:
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(size <= buffer.size());
         BOOST_ASSERT(buffer.get_context() == this->get_context());
+        BOOST_ASSERT(host_ptr != 0);
 
         cl_event event_;
 
@@ -301,6 +306,7 @@ public:
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(buffer.get_context() == this->get_context());
+        BOOST_ASSERT(host_ptr != 0);
 
         cl_int ret = clEnqueueWriteBufferRect(m_queue,
                                               buffer.get_mem(),
