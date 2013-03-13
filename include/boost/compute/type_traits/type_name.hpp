@@ -21,13 +21,7 @@ namespace compute {
 namespace detail {
 
 template<class T>
-struct type_name_trait
-{
-    static const char* value()
-    {
-        return 0;
-    }
-};
+struct type_name_trait;
 
 #define BOOST_COMPUTE_DEFINE_SCALAR_TYPE_NAME_FUNCTION(type) \
     template<> \
