@@ -35,6 +35,7 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
         v3.begin(),
         queue
     );
+    queue.finish();
 
     BOOST_CHECK_EQUAL(int(v3[0]), 1);
     BOOST_CHECK_EQUAL(int(v3[1]), 2);
@@ -52,6 +53,7 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
         v3.begin(),
         queue
     );
+    queue.finish();
 
     BOOST_CHECK_EQUAL(int(v3[0]), 1);
     BOOST_CHECK_EQUAL(int(v3[1]), 2);
@@ -69,6 +71,7 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
         v3.begin(),
         queue
     );
+    queue.finish();
 
     BOOST_CHECK_EQUAL(int(v3[0]), 1);
     BOOST_CHECK_EQUAL(int(v3[1]), 1);
@@ -86,6 +89,7 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
         v3.begin(),
         queue
     );
+    queue.finish();
 
     BOOST_CHECK_EQUAL(int(v3[0]), 2);
     BOOST_CHECK_EQUAL(int(v3[1]), 2);
@@ -103,6 +107,7 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
         v3.begin(),
         queue
     );
+    queue.finish();
 
     BOOST_CHECK_EQUAL(int(v3[0]), 1);
     BOOST_CHECK_EQUAL(int(v3[1]), 3);
@@ -116,6 +121,7 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
         v3.begin(),
         queue
     );
+    queue.finish();
 
     BOOST_CHECK_EQUAL(int(v3[0]), 2);
     BOOST_CHECK_EQUAL(int(v3[1]), 4);
