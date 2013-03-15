@@ -27,6 +27,7 @@ BOOST_AUTO_TEST_CASE(fill_uint)
     boost::compute::vector<uint_> vector(10, context);
 
     rng.fill(vector.begin(), vector.end(), queue);
+    queue.finish();
 
     BOOST_CHECK_EQUAL(uint_(vector[0]), uint_(3499211612));
     BOOST_CHECK_EQUAL(uint_(vector[1]), uint_(581869302));
