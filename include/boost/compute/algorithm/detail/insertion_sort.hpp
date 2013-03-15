@@ -65,7 +65,7 @@ inline void serial_insertion_sort(Iterator first,
 
     const context &context = queue.get_context();
     ::boost::compute::kernel kernel = k.compile(context);
-    kernel.set_arg(local_data_arg, static_cast<uint_>(count), 0);
+    kernel.set_arg(local_data_arg, static_cast<uint_>(count * sizeof(T)), 0);
     kernel.set_arg(count_arg, static_cast<uint_>(count));
 
     queue.enqueue_task(kernel);
