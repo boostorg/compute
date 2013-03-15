@@ -30,6 +30,7 @@ BOOST_AUTO_TEST_CASE(sum_int)
                                            vector.end(),
                                            boost::compute::plus<int>(),
                                            queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(int(vector[0]), int(33));
 
     boost::compute::copy(data, data + 8, vector.begin(), queue);
@@ -38,6 +39,7 @@ BOOST_AUTO_TEST_CASE(sum_int)
                                            vector.end(),
                                            boost::compute::plus<int>(),
                                            queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(int(vector[0]), int(36));
 }
 
@@ -54,6 +56,7 @@ BOOST_AUTO_TEST_CASE(multiply_int)
                                            vector.end(),
                                            boost::compute::multiplies<int>(),
                                            queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(int(vector[0]), int(24300));
 
     boost::compute::copy(data, data + 8, vector.begin(), queue);
@@ -62,6 +65,7 @@ BOOST_AUTO_TEST_CASE(multiply_int)
                                            vector.end(),
                                            boost::compute::multiplies<int>(),
                                            queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(int(vector[0]), int(72900));
 }
 
@@ -78,6 +82,7 @@ BOOST_AUTO_TEST_CASE(reduce_iota)
                                            vector.end(),
                                            boost::compute::plus<int>(),
                                            queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(int(vector[0]), int(0));
 
     // 1000 values
@@ -87,6 +92,7 @@ BOOST_AUTO_TEST_CASE(reduce_iota)
                                            vector.end(),
                                            boost::compute::plus<int>(),
                                            queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(int(vector[0]), int(499500));
 
     // 2499 values
@@ -96,6 +102,7 @@ BOOST_AUTO_TEST_CASE(reduce_iota)
                                            vector.end(),
                                            boost::compute::plus<int>(),
                                            queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(int(vector[0]), int(3121251));
 
     // 4096 values
@@ -105,6 +112,7 @@ BOOST_AUTO_TEST_CASE(reduce_iota)
                                            vector.end(),
                                            boost::compute::plus<int>(),
                                            queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(int(vector[0]), int(8386560));
 
     // 5000 values
@@ -114,5 +122,6 @@ BOOST_AUTO_TEST_CASE(reduce_iota)
                                            vector.end(),
                                            boost::compute::plus<int>(),
                                            queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(int(vector[0]), int(12497500));
 }
