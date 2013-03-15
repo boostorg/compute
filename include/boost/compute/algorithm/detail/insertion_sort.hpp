@@ -39,8 +39,6 @@ inline void serial_insertion_sort(Iterator first,
     size_t local_data_arg = k.add_arg<T *>("__local", "data");
     size_t count_arg = k.add_arg<uint_>("n");
 
-    ::boost::compute::less<T> op;
-
     k <<
         // copy data to local memory
         "for(uint i = 0; i < n; i++){\n" <<
