@@ -36,6 +36,7 @@
 #include <boost/compute/random.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/timer.hpp>
+#include <boost/compute/tuple.hpp>
 #include <boost/compute/types.hpp>
 #include <boost/compute/version.hpp>
 
