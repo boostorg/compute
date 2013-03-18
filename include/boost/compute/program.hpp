@@ -88,7 +88,7 @@ public:
         unsigned char *binary_ptr = &binary[0];
         cl_int error = clGetProgramInfo(m_program,
                                         CL_PROGRAM_BINARIES,
-                                        0,
+                                        sizeof(unsigned char **),
                                         &binary_ptr,
                                         0);
         if(error != CL_SUCCESS){
