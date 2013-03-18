@@ -22,5 +22,6 @@
 #include <boost/compute/iterator/pixel_input_iterator.hpp>
 #include <boost/compute/iterator/swizzle_iterator.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
+#include <boost/compute/iterator/zip_iterator.hpp>
 
 #endif // BOOST_COMPUTE_ITERATOR_HPP

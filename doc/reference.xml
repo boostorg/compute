@@ -92,6 +92,7 @@
   <xi:include href="reference/iterator/counting_iterator.xml"/>
   <xi:include href="reference/iterator/permutation_iterator.xml"/>
   <xi:include href="reference/iterator/transform_iterator.xml"/>
+  <xi:include href="reference/iterator/zip_iterator.xml"/>
 
   <xi:include href="reference/lambda.xml"/>
 </library-reference>
