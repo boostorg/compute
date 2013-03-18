@@ -251,12 +251,13 @@ public:
         const cl_device_id device = context.get_device().id();
 
         cl_int error = 0;
+        cl_int binary_status = 0;
         cl_program program_ = clCreateProgramWithBinary(context,
                                                         uint_(1),
                                                         &device,
                                                         &binary_size,
                                                         &binary,
-                                                        0,
+                                                        &binary_status,
                                                         &error);
         if(!program_){
             BOOST_THROW_EXCEPTION(runtime_exception(error));
