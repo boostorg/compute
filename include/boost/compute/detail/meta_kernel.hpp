@@ -198,6 +198,17 @@ struct meta_kernel_buffer_info
     size_t index;
 };
 
+class meta_kernel;
+
+template<class Type>
+struct inject_type_impl
+{
+    void operator()(meta_kernel &)
+    {
+        // default implementation does nothing
+    }
+};
+
 #define BOOST_COMPUTE_META_KERNEL_DECLARE_SCALAR_TYPE_STREAM_OPERATOR(type) \
     meta_kernel& operator<<(const type &x) \
     { \
@@ -429,19 +440,8 @@ public:
             stream << "*";
         }
 
-        // add necessary pragmas
-        if(boost::is_same<
-               typename scalar_type<Type>::type,
-               half_
-           >::value){
-            add_extension_pragma("cl_khr_fp16", "enable");
-        }
-        else if(boost::is_same<
-               typename scalar_type<Type>::type,
-               double_
-           >::value){
-            add_extension_pragma("cl_khr_fp64", "enable");
-        }
+        // inject type pragmas and/or definitions
+        inject_type<Type>();
 
         return stream.str();
     }
@@ -463,18 +463,24 @@ public:
     template<class T>
     detail::meta_kernel_variable<T> var(const std::string &name) const
     {
+        type<T>();
+
         return make_var<T>(name);
     }
 
     template<class T>
     detail::meta_kernel_literal<T> lit(const T &value) const
     {
+        type<T>();
+
         return detail::meta_kernel_literal<T>(value);
     }
 
     template<class T>
     detail::meta_kernel_variable<T> expr(const std::string &expr) const
     {
+        type<T>();
+
         return detail::meta_kernel_variable<T>(expr);
     }
 
@@ -644,25 +650,24 @@ public:
         m_external_function_source << source << "\n";
     }
 
-    template<class T1, class T2>
-    void add_pair_type()
+    template<class Type>
+    void add_type_declaration(const std::string &declaration)
     {
-        std::string t1_name = type_name<T1>();
-        std::string t2_name = type_name<T2>();
-        std::string pair_name = "_pair_" + t1_name + "_" + t2_name;
+        const char *name = type_name<Type>();
 
         // check if the type has already been declared
         std::string source = m_external_function_source.str();
-        if(source.find(pair_name) != std::string::npos){
+        if(source.find(name) != std::string::npos){
             return;
         }
 
-        std::string declaration = "typedef struct " + pair_name + "{ " +
-                                  t1_name + " first;" +
-                                  t2_name + " second;" +
-                                  "} " + pair_name + "_t;";
-
         m_external_function_source << declaration;
+    }
+
+    template<class Type>
+    void inject_type() const
+    {
+        inject_type_impl<Type>()(const_cast<meta_kernel &>(*this));
     }
 
 private:
@@ -694,8 +699,6 @@ template<class T1, class T2>
 inline meta_kernel& operator<<(meta_kernel &kernel,
                                const meta_kernel_literal<std::pair<T1, T2> > &literal)
 {
-    kernel.add_pair_type<T1, T2>();
-
     return kernel << literal.value();
 }
 
@@ -798,8 +801,6 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 {
     typedef std::pair<T1, T2> T;
 
-    kernel.add_pair_type<T1, T2>();
-
     if(expr.m_index == 0){
         return kernel <<
                    kernel.get_buffer_identifier<T>(expr.m_buffer) <<
@@ -828,6 +829,33 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 {
     return kernel << "!(" << expr.pred()(expr.expr1(), expr.expr2()) << ')';
 }
+
+template<>
+struct inject_type_impl<double_>
+{
+    void operator()(meta_kernel &kernel)
+    {
+        kernel.add_extension_pragma("cl_khr_fp64", "enable");
+    }
+};
+
+template<>
+struct inject_type_impl<half_>
+{
+    void operator()(meta_kernel &kernel)
+    {
+        kernel.add_extension_pragma("cl_khr_fp16", "enable");
+    }
+};
+
+template<class Scalar, size_t N>
+struct inject_type_impl<vector_type<Scalar, N> >
+{
+    void operator()(meta_kernel &kernel)
+    {
+        kernel.inject_type<Scalar>();
+    }
+};
 
 } // end detail namespace
 } // end compute namespace

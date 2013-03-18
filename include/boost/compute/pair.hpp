@@ -62,10 +62,31 @@ template<size_t N, class T1, class T2, class Arg>
 inline meta_kernel& operator<<(meta_kernel &kernel,
                                const invoked_pair_get<N, T1, T2, Arg> &expr)
 {
-    kernel.add_pair_type<T1, T2>();
+    kernel.inject_type<std::pair<T1, T2> >();
 
     return kernel << expr.m_arg << (N == 0 ? ".first" : ".second");
 }
+
+// inject_type() specialization for std::pair
+template<class T1, class T2>
+struct inject_type_impl<std::pair<T1, T2> >
+{
+    void operator()(meta_kernel &kernel)
+    {
+        typedef std::pair<T1, T2> pair_type;
+
+        kernel.inject_type<T1>();
+        kernel.inject_type<T2>();
+
+        std::stringstream declaration;
+        declaration << "typedef struct {\n"
+                    << "    " << type_name<T1>() << " first;\n"
+                    << "    " << type_name<T2>() << " second;\n"
+                    << "} " << type_name<pair_type>() << ";\n";
+
+        kernel.add_type_declaration<pair_type>(declaration.str());
+    }
+};
 
 } // end detail namespace
 
