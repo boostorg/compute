@@ -28,52 +28,52 @@
 <span class="keyword">class</span> <a class="link" href="program.html" title="Class program">program</a> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="program.html#boost.compute.programconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="program.html#idp7452096-bb"><span class="identifier">program</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="program.html#idp7453824-bb"><span class="identifier">program</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="program.html" title="Class program">program</a><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  program&amp; <a class="link" href="program.html#idp7457616-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="program.html" title="Class program">program</a><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="program.html#idp7461360-bb"><span class="special">~</span><span class="identifier">program</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="program.html#idp7489520-bb"><span class="identifier">program</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="program.html#idp7490928-bb"><span class="identifier">program</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="program.html" title="Class program">program</a><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  program&amp; <a class="link" href="program.html#idp7494112-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="program.html" title="Class program">program</a><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="program.html#idp7497296-bb"><span class="special">~</span><span class="identifier">program</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="program.html#idp7462752-bb">public member functions</a></span>
-  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="program.html#idp7463632-bb"><span class="identifier">source</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="program.html#idp7466368-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_program_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="program.html#idp7471264-bb"><span class="identifier">build</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span>
-   <a class="link" href="program.html#idp7475760-bb"><span class="keyword">operator</span> <span class="identifier">cl_program</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="program.html#idp7498448-bb">public member functions</a></span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="program.html#idp7499200-bb"><span class="identifier">source</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="program.html#idp7501568-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_program_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="program.html#idp7505728-bb"><span class="identifier">build</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span>
+   <a class="link" href="program.html#idp7509536-bb"><span class="keyword">operator</span> <span class="identifier">cl_program</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="program.html#idp7478288-bb">public static functions</a></span>
-  <span class="keyword">static</span> <a class="link" href="program.html" title="Class program">program</a> <a class="link" href="program.html#idp7479200-bb"><span class="identifier">create_with_source</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <a class="link" href="program.html" title="Class program">program</a> <a class="link" href="program.html#idp7485728-bb"><span class="identifier">create_with_source_file</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="program.html#idp7511680-bb">public static functions</a></span>
+  <span class="keyword">static</span> <a class="link" href="program.html" title="Class program">program</a> <a class="link" href="program.html#idp7512432-bb"><span class="identifier">create_with_source</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <a class="link" href="program.html" title="Class program">program</a> <a class="link" href="program.html#idp7518000-bb"><span class="identifier">create_with_source_file</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp36875664"></a><h2>Description</h2>
+<a name="idp36544864"></a><h2>Description</h2>
 <p>
             See also: <a class="link" href="kernel.html" title="Class kernel">kernel</a>
           </p>
 <div class="refsect2">
-<a name="idp36877424"></a><h3>
+<a name="idp36546624"></a><h3>
 <a name="boost.compute.programconstruct-copy-destruct"></a><code class="computeroutput">program</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp7452096-bb"></a><span class="identifier">program</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7489520-bb"></a><span class="identifier">program</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
               Creates a null program object.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7453824-bb"></a><span class="identifier">program</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="program.html" title="Class program">program</a><span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7490928-bb"></a><span class="identifier">program</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="program.html" title="Class program">program</a><span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Creates a new program object as a copy of <code class="computeroutput">other</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout">program&amp; <a name="idp7457616-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="program.html" title="Class program">program</a><span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout">program&amp; <a name="idp7494112-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="program.html" title="Class program">program</a><span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Copies the program from <code class="computeroutput">other</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7461360-bb"></a><span class="special">~</span><span class="identifier">program</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7497296-bb"></a><span class="special">~</span><span class="identifier">program</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
               Destroys the program object.
             </p>
@@ -81,29 +81,29 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp36902128"></a><h3>
-<a name="idp7462752-bb"></a><code class="computeroutput">program</code> public member functions</h3>
+<a name="idp36571328"></a><h3>
+<a name="idp7498448-bb"></a><code class="computeroutput">program</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp7463632-bb"></a><span class="identifier">source</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp7499200-bb"></a><span class="identifier">source</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns the source code for the program.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7466368-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_program_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7501568-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_program_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns information about the program.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp7471264-bb"></a><span class="identifier">build</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> options <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp7505728-bb"></a><span class="identifier">build</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> options <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Builds the program with <code class="computeroutput">options</code>.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"> <a name="idp7475760-bb"></a><span class="keyword">operator</span> <span class="identifier">cl_program</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"> <a name="idp7509536-bb"></a><span class="keyword">operator</span> <span class="identifier">cl_program</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Converts the program object to a <code class="computeroutput">cl_program</code>.
               </p>
@@ -111,12 +111,12 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp36937056"></a><h3>
-<a name="idp7478288-bb"></a><code class="computeroutput">program</code> public static functions</h3>
+<a name="idp36606192"></a><h3>
+<a name="idp7511680-bb"></a><code class="computeroutput">program</code> public static functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">static</span> <a class="link" href="program.html" title="Class program">program</a> 
-<a name="idp7479200-bb"></a><span class="identifier">create_with_source</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> source<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a><span class="special">&amp;</span> context<span class="special">)</span><span class="special">;</span></pre>
+<a name="idp7512432-bb"></a><span class="identifier">create_with_source</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> source<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a><span class="special">&amp;</span> context<span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Creates a new program object with <code class="computeroutput">source</code> in
                 <code class="computeroutput">context</code>.
@@ -124,7 +124,7 @@
 </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">static</span> <a class="link" href="program.html" title="Class program">program</a> 
-<a name="idp7485728-bb"></a><span class="identifier">create_with_source_file</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> file<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a><span class="special">&amp;</span> context<span class="special">)</span><span class="special">;</span></pre>
+<a name="idp7518000-bb"></a><span class="identifier">create_with_source_file</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> file<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a><span class="special">&amp;</span> context<span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Creates a new program object with <code class="computeroutput">file</code> in
                 <code class="computeroutput">context</code>.

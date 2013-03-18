@@ -15,8 +15,8 @@ boost/compute/platform.html
 boost/compute/program.html
 boost/compute/system.html
 boost/compute/timer.html
-boost/compute/accumulate_idp7552240.html
-boost/compute/accumulate_idp7562784.html
+boost/compute/accumulate_idp7575216.html
+boost/compute/accumulate_idp7584192.html
 boost/compute/adjacent_difference.html
 boost/compute/adjacent_find.html
 boost/compute/all_of.html
@@ -41,8 +41,8 @@ boost/compute/gather.html
 boost/compute/generate.html
 boost/compute/generate_n.html
 boost/compute/inclusive_scan.html
-boost/compute/inner_product_idp7924912.html
-boost/compute/inner_product_idp7937056.html
+boost/compute/inner_product_idp7940752.html
+boost/compute/inner_product_idp7952896.html
 boost/compute/iota.html
 boost/compute/is_partitioned.html
 boost/compute/is_sorted.html
@@ -66,13 +66,13 @@ boost/compute/replace_copy.html
 boost/compute/reverse.html
 boost/compute/reverse_copy.html
 boost/compute/scatter.html
-boost/compute/sort_idp8283712.html
-boost/compute/sort_idp8295472.html
+boost/compute/sort_idp8299552.html
+boost/compute/sort_idp8311312.html
 boost/compute/swap_ranges.html
-boost/compute/transform_idp8321376.html
-boost/compute/transform_idp8334160.html
-boost/compute/transform_reduce_idp8352448.html
-boost/compute/transform_reduce_idp8367200.html
+boost/compute/transform_idp8337216.html
+boost/compute/transform_idp8350000.html
+boost/compute/transform_reduce_idp8368288.html
+boost/compute/transform_reduce_idp8383040.html
 boost/compute/upper_bound.html
 boost/compute/allocator.html
 boost/compute/array.html
@@ -94,3 +94,5 @@ boost/compute/permutation_iterator.html
 boost/compute/make_permutation_iterator.html
 boost/compute/transform_iterator.html
 boost/compute/make_transform_iterator.html
+boost/compute/zip_iterator.html
+boost/compute/make_zip_iterator.html
