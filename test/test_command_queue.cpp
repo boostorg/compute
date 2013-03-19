@@ -38,3 +38,24 @@ BOOST_AUTO_TEST_CASE(event_profiling)
     event.get_profiling_info<cl_ulong>(bc::event::profiling_command_start);
     event.get_profiling_info<cl_ulong>(bc::event::profiling_command_end);
 }
+
+BOOST_AUTO_TEST_CASE(construct_from_cl_command_queue)
+{
+    boost::compute::device device = boost::compute::system::default_device();
+    boost::compute::context context(device);
+
+    // create cl_command_queue
+    cl_command_queue cl_queue =
+      clCreateCommandQueue(context, device.id(), 0, 0);
+    BOOST_VERIFY(cl_queue);
+
+    // create boost::compute::command_queue
+    boost::compute::command_queue queue(cl_queue);
+
+    // check queue
+    BOOST_CHECK(queue.get_context() == context);
+    BOOST_CHECK(cl_command_queue(queue) == cl_queue);
+
+    // cleanup cl_command_queue
+    clReleaseCommandQueue(cl_queue);
+}
