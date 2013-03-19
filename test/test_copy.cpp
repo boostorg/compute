@@ -21,7 +21,6 @@
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/iterator/transform_iterator.hpp>
 #include <boost/compute/iterator/swizzle_iterator.hpp>
 
 namespace bc = boost::compute;
@@ -104,27 +103,6 @@ BOOST_AUTO_TEST_CASE(copy_n_int)
     BOOST_CHECK_EQUAL(a[2], 3);
     BOOST_CHECK_EQUAL(a[3], 0);
     BOOST_CHECK_EQUAL(a[4], 5);
-}
-
-BOOST_AUTO_TEST_CASE(copy_transform_iterator)
-{
-    int data[] = { 1, -2, 3, -4, 5 };
-    bc::vector<int> a(data, data + 5);
-    BOOST_CHECK_EQUAL(a[0], 1);
-    BOOST_CHECK_EQUAL(a[1], -2);
-    BOOST_CHECK_EQUAL(a[2], 3);
-    BOOST_CHECK_EQUAL(a[3], -4);
-    BOOST_CHECK_EQUAL(a[4], 5);
-
-    bc::vector<int> b(5);
-    bc::copy(bc::make_transform_iterator(a.begin(), bc::abs<int>()),
-             bc::make_transform_iterator(a.end(), bc::abs<int>()),
-             b.begin());
-    BOOST_CHECK_EQUAL(b[0], 1);
-    BOOST_CHECK_EQUAL(b[1], 2);
-    BOOST_CHECK_EQUAL(b[2], 3);
-    BOOST_CHECK_EQUAL(b[3], 4);
-    BOOST_CHECK_EQUAL(b[4], 5);
 }
 
 BOOST_AUTO_TEST_CASE(copy_swizzle_iterator)
