@@ -45,3 +45,24 @@ BOOST_AUTO_TEST_CASE(equality_operator)
     BOOST_VERIFY(a == b);
     BOOST_VERIFY(!(a != b));
 }
+
+BOOST_AUTO_TEST_CASE(construct_from_cl_mem)
+{
+    boost::compute::context context =
+      boost::compute::system::default_context();
+
+    // create cl_mem
+    cl_mem mem = clCreateBuffer(context, CL_MEM_READ_WRITE, 16, 0, 0);
+    BOOST_VERIFY(mem);
+
+    // create boost::compute::buffer
+    boost::compute::buffer buffer(mem);
+
+    // check buffer
+    BOOST_CHECK(buffer.get_mem() == mem);
+    BOOST_CHECK(buffer.get_context() == context);
+    BOOST_CHECK_EQUAL(buffer.size(), size_t(16));
+
+    // cleanup cl_mem
+    clReleaseMemObject(mem);
+}
