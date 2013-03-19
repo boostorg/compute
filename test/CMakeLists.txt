@@ -77,6 +77,7 @@ add_compute_test("container.valarray" test_valarray.cpp)
 add_compute_test("container.vector" test_vector.cpp)
 
 add_compute_test("iterator.adjacent_transform_iterator" test_adjacent_transform_iterator.cpp)
+add_compute_test("iterator.constant_iterator" test_constant_iterator.cpp)
 add_compute_test("iterator.zip_iterator" test_zip_iterator.cpp)
 
 add_compute_test("random.mersenne_twister" test_mersenne_twister.cpp)
