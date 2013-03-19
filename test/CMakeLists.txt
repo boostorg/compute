@@ -17,6 +17,7 @@ endfunction()
 
 add_compute_test("core.buffer" test_buffer.cpp)
 add_compute_test("core.command_queue" test_command_queue.cpp)
+add_compute_test("core.context" test_context.cpp)
 add_compute_test("core.device" test_device.cpp)
 add_compute_test("core.image2d" test_image2d.cpp)
 add_compute_test("core.image3d" test_image3d.cpp)
