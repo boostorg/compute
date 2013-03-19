@@ -21,7 +21,6 @@
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/iterator/counting_iterator.hpp>
 #include <boost/compute/iterator/permutation_iterator.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
 #include <boost/compute/iterator/swizzle_iterator.hpp>
@@ -106,28 +105,6 @@ BOOST_AUTO_TEST_CASE(copy_n_int)
     BOOST_CHECK_EQUAL(a[2], 3);
     BOOST_CHECK_EQUAL(a[3], 0);
     BOOST_CHECK_EQUAL(a[4], 5);
-}
-
-BOOST_AUTO_TEST_CASE(copy_counting_iterator)
-{
-    bc::vector<int> vector(5);
-    bc::copy(bc::make_counting_iterator(0),
-             bc::make_counting_iterator(5),
-             vector.begin());
-    BOOST_CHECK_EQUAL(vector[0], 0);
-    BOOST_CHECK_EQUAL(vector[1], 1);
-    BOOST_CHECK_EQUAL(vector[2], 2);
-    BOOST_CHECK_EQUAL(vector[3], 3);
-    BOOST_CHECK_EQUAL(vector[4], 4);
-
-    bc::copy(bc::make_counting_iterator(5),
-             bc::make_counting_iterator(10),
-             vector.begin());
-    BOOST_CHECK_EQUAL(vector[0], 5);
-    BOOST_CHECK_EQUAL(vector[1], 6);
-    BOOST_CHECK_EQUAL(vector[2], 7);
-    BOOST_CHECK_EQUAL(vector[3], 8);
-    BOOST_CHECK_EQUAL(vector[4], 9);
 }
 
 BOOST_AUTO_TEST_CASE(copy_transform_iterator)

@@ -1,0 +1,90 @@
+//---------------------------------------------------------------------------//
+// Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//
+// See http://kylelutz.github.com/compute for more information.
+//---------------------------------------------------------------------------//
+
+#define BOOST_TEST_MODULE TestCountingIterator
+#include <boost/test/unit_test.hpp>
+
+#include <iterator>
+
+#include <boost/type_traits.hpp>
+#include <boost/static_assert.hpp>
+
+#include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/container/vector.hpp>
+#include <boost/compute/iterator/counting_iterator.hpp>
+
+BOOST_AUTO_TEST_CASE(value_type)
+{
+    BOOST_STATIC_ASSERT((
+        boost::is_same<
+            boost::compute::counting_iterator<int>::value_type,
+            int
+        >::value
+    ));
+    BOOST_STATIC_ASSERT((
+        boost::is_same<
+            boost::compute::counting_iterator<float>::value_type,
+            float
+        >::value
+    ));
+}
+
+BOOST_AUTO_TEST_CASE(distance)
+{
+    BOOST_CHECK_EQUAL(
+        std::distance(
+            boost::compute::make_counting_iterator(0),
+            boost::compute::make_counting_iterator(10)
+        ),
+        std::ptrdiff_t(10)
+    );
+    BOOST_CHECK_EQUAL(
+        std::distance(
+            boost::compute::make_counting_iterator(5),
+            boost::compute::make_counting_iterator(10)
+        ),
+        std::ptrdiff_t(5)
+    );
+    BOOST_CHECK_EQUAL(
+        std::distance(
+            boost::compute::make_counting_iterator(-5),
+            boost::compute::make_counting_iterator(5)
+        ),
+        std::ptrdiff_t(10)
+    );
+}
+
+BOOST_AUTO_TEST_CASE(copy)
+{
+    boost::compute::device device = boost::compute::system::default_device();
+    boost::compute::context context(device);
+    boost::compute::command_queue queue(context, device);
+
+    boost::compute::vector<int> vector(10, context);
+
+    boost::compute::copy(
+        boost::compute::make_counting_iterator(1),
+        boost::compute::make_counting_iterator(11),
+        vector.begin(),
+        queue
+    );
+    queue.finish();
+
+    BOOST_CHECK_EQUAL(int(vector[0]), 1);
+    BOOST_CHECK_EQUAL(int(vector[1]), 2);
+    BOOST_CHECK_EQUAL(int(vector[2]), 3);
+    BOOST_CHECK_EQUAL(int(vector[3]), 4);
+    BOOST_CHECK_EQUAL(int(vector[4]), 5);
+    BOOST_CHECK_EQUAL(int(vector[5]), 6);
+    BOOST_CHECK_EQUAL(int(vector[6]), 7);
+    BOOST_CHECK_EQUAL(int(vector[7]), 8);
+    BOOST_CHECK_EQUAL(int(vector[8]), 9);
+    BOOST_CHECK_EQUAL(int(vector[9]), 10);
+}
