@@ -32,6 +32,11 @@ public:
     {
     }
 
+    buffer(const cl_mem &mem)
+        : memory_object(mem)
+    {
+    }
+
     buffer(const context &context,
            size_t size,
            cl_mem_flags flags = read_write,
@@ -105,12 +110,6 @@ public:
         return buf;
     }
     #endif // BOOST_COMPUTE_HAVE_GL
-
-protected:
-    buffer(const cl_mem &mem)
-        : memory_object(mem)
-    {
-    }
 };
 
 } // end compute namespace

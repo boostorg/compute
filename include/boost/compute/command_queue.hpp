@@ -51,6 +51,14 @@ public:
     {
     }
 
+    command_queue(cl_command_queue queue)
+        : m_queue(queue)
+    {
+        if(m_queue){
+            clRetainCommandQueue(m_queue);
+        }
+    }
+
     command_queue(const context &context,
                   const device &device,
                   cl_command_queue_properties properties = 0)
