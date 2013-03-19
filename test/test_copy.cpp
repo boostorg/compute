@@ -21,7 +21,6 @@
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/iterator/permutation_iterator.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
 #include <boost/compute/iterator/swizzle_iterator.hpp>
 
@@ -126,25 +125,6 @@ BOOST_AUTO_TEST_CASE(copy_transform_iterator)
     BOOST_CHECK_EQUAL(b[2], 3);
     BOOST_CHECK_EQUAL(b[3], 4);
     BOOST_CHECK_EQUAL(b[4], 5);
-}
-
-BOOST_AUTO_TEST_CASE(copy_permutation_iterator)
-{
-    int input_data[] = { 3, 4, 2, 1, 5 };
-    bc::vector<int> input(input_data, input_data + 5);
-
-    int map_data[] = { 3, 2, 0, 1, 4 };
-    bc::vector<int> map(map_data, map_data + 5);
-
-    bc::vector<int> output(5);
-    bc::copy(bc::make_permutation_iterator(input.begin(), map.begin()),
-             bc::make_permutation_iterator(input.end(), map.end()),
-             output.begin());
-    BOOST_CHECK_EQUAL(output[0], 1);
-    BOOST_CHECK_EQUAL(output[1], 2);
-    BOOST_CHECK_EQUAL(output[2], 3);
-    BOOST_CHECK_EQUAL(output[3], 4);
-    BOOST_CHECK_EQUAL(output[4], 5);
 }
 
 BOOST_AUTO_TEST_CASE(copy_swizzle_iterator)
