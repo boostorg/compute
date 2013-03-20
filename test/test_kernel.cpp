@@ -74,10 +74,8 @@ BOOST_AUTO_TEST_CASE(get_work_group_info)
 
     using boost::compute::ulong_;
 
-    // check local memory size
-    ulong_ local_memory_size =
-        kernel.get_work_group_info<ulong_>(device, CL_KERNEL_LOCAL_MEM_SIZE);
-    BOOST_CHECK(local_memory_size >= ulong_(16 * sizeof(float)));
+    // get local memory size
+    kernel.get_work_group_info<ulong_>(device, CL_KERNEL_LOCAL_MEM_SIZE);
 
     // check work group size
     size_t work_group_size =
