@@ -12,6 +12,7 @@
 #define BOOST_COMPUTE_ALGORITHM_REMOVE_IF_HPP
 
 #include <boost/compute/algorithm/copy_if.hpp>
+#include <boost/compute/container/vector.hpp>
 #include <boost/compute/functional/logical.hpp>
 #include <boost/compute/detail/default_queue_for_iterator.hpp>
 
@@ -24,10 +25,17 @@ inline Iterator remove_if(Iterator first,
                           Predicate predicate,
                           command_queue &queue)
 {
+    typedef typename std::iterator_traits<Iterator>::value_type value_type;
+
+    const context &context = queue.get_context();
+
+    // temporary storage for the input data
+    ::boost::compute::vector<value_type> tmp(first, last, context);
+
     ::boost::compute::unary_negate<Predicate> not_predicate(predicate);
 
-    return ::boost::compute::copy_if(first,
-                                     last,
+    return ::boost::compute::copy_if(tmp.begin(),
+                                     tmp.end(),
                                      first,
                                      not_predicate,
                                      queue);
