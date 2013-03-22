@@ -199,7 +199,11 @@ public:
 
         build(program_, options);
 
-        return program(program_);
+        // Avoid extra clRetainProgram:
+        program prg;
+        prg.m_program = program_;
+
+        return prg;
     }
 
     static program create_with_source_file(const std::string &file,
@@ -243,7 +247,11 @@ public:
 
         build(program_, options);
 
-        return program(program_);
+        // Avoid extra clRetainProgram:
+        program prg;
+        prg.m_program = program_;
+
+        return prg;
     }
 
     static program create_with_binary(const std::vector<unsigned char> &binary,
