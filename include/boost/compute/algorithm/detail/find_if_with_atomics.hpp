@@ -47,7 +47,9 @@ inline InputIterator find_if_with_atomics(InputIterator first,
     atomic_min<uint_> atomic_min_uint;
 
     k << k.decl<const uint_>("i") << " = get_global_id(0);\n"
-      << "if(" << predicate(first[k.var<const uint_>("i")]) << "){\n"
+      << k.decl<const value_type>("value") << "="
+      <<     first[k.var<const uint_>("i")] << ";\n"
+      << "if(" << predicate(k.var<const value_type>("value")) << "){\n"
       << "    " << atomic_min_uint(k.var<uint_ *>("index"), k.var<uint_>("i")) << ";\n"
       << "}\n";
 

@@ -40,11 +40,14 @@ public:
                   InputIterator last,
                   Predicate predicate)
     {
+        typedef typename std::iterator_traits<InputIterator>::value_type T;
+
         m_count = detail::iterator_range_size(first, last);
 
         atomic_inc<uint_> atomic_inc_uint;
 
-        *this << if_(predicate(first[get_global_id(0)])) << "{\n"
+        *this << decl<const T>("value") << "=" << first[get_global_id(0)] << ";\n"
+              << if_(predicate(var<const T>("value"))) << "{\n"
               << "    " << atomic_inc_uint(expr<uint_>("count")) << ";\n"
               << "}\n";
     }

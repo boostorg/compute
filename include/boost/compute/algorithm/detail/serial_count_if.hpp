@@ -40,7 +40,9 @@ inline size_t serial_count_if(InputIterator first,
     k <<
         "uint count = 0;\n" <<
         "for(uint i = 0; i < size; i++){\n" <<
-            "if(" << predicate(first[k.var<uint_>("i")]) << "){\n" <<
+            k.decl<const value_type>("value") << "="
+                << first[k.var<uint_>("i")] << ";\n" <<
+            "if(" << predicate(k.var<const value_type>("value")) << "){\n" <<
                 "count++;\n" <<
             "}\n"
         "}\n"

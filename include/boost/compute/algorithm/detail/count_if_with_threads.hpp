@@ -38,6 +38,8 @@ public:
                   Predicate predicate)
 
     {
+        typedef typename std::iterator_traits<InputIterator>::value_type T;
+
         m_size = detail::iterator_range_size(first, last);
 
         m_size_arg = add_arg<const ulong_>("size");
@@ -57,7 +59,9 @@ public:
             // count values
             "uint count = 0;\n" <<
             "for(uint i = start; i < end; i++){\n" <<
-                if_(predicate(first[expr<uint_>("i")])) << "{\n" <<
+                decl<const T>("value") << "="
+                    << first[expr<uint_>("i")] << ";\n" <<
+                if_(predicate(var<const T>("value"))) << "{\n" <<
                     "count++;\n" <<
                 "}\n" <<
             "}\n" <<
