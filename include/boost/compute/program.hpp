@@ -133,36 +133,6 @@ public:
         return detail::get_object_info<T>(clGetProgramInfo, m_program, info);
     }
 
-    cl_int build(const std::string &options = std::string())
-    {
-        const char *options_string = 0;
-
-        if(!options.empty()){
-            options_string = options.c_str();
-        }
-
-        cl_int ret = clBuildProgram(m_program, 0, 0, options_string, 0, 0);
-
-        #ifdef BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION
-        if(ret != CL_SUCCESS){
-            // print the error, source code and build log
-            std::cerr << "Boost.Compute: "
-                      << "kernel compilation failed (" << ret << ")\n"
-                      << "--- source ---\n"
-                      << source()
-                      << "\n--- build log ---\n"
-                      << build_log()
-                      << std::endl;
-        }
-        #endif
-
-        if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
-        }
-
-        return ret;
-    }
-
     std::string build_log() const
     {
         device device = get_devices()[0];
@@ -211,7 +181,9 @@ public:
     }
 
     static program create_with_source(const std::string &source,
-                                      const context &context)
+                                      const context &context,
+                                      const std::string &options = std::string()
+                                      )
     {
         const char *source_string = source.c_str();
 
@@ -225,11 +197,15 @@ public:
             BOOST_THROW_EXCEPTION(runtime_exception(error));
         }
 
+        build(program_, options);
+
         return program(program_);
     }
 
     static program create_with_source_file(const std::string &file,
-                                           const context &context)
+                                           const context &context,
+                                           const std::string &options = std::string()
+                                           )
     {
         // open file stream
         std::ifstream stream(file.c_str());
@@ -241,12 +217,14 @@ public:
         );
 
         // create program
-        return create_with_source(source, context);
+        return create_with_source(source, context, options);
     }
 
     static program create_with_binary(const unsigned char *binary,
                                       size_t binary_size,
-                                      const context &context)
+                                      const context &context,
+                                      const std::string &options = std::string()
+                                      )
     {
         const cl_device_id device = context.get_device().id();
 
@@ -263,17 +241,23 @@ public:
             BOOST_THROW_EXCEPTION(runtime_exception(error));
         }
 
+        build(program_, options);
+
         return program(program_);
     }
 
     static program create_with_binary(const std::vector<unsigned char> &binary,
-                                      const context &context)
+                                      const context &context,
+                                      const std::string &options = std::string()
+                                      )
     {
-        return create_with_binary(&binary[0], binary.size(), context);
+        return create_with_binary(&binary[0], binary.size(), context, options);
     }
 
     static program create_with_binary_file(const std::string &file,
-                                           const context &context)
+                                           const context &context,
+                                           const std::string &options = std::string()
+                                           )
     {
         // open file stream
         std::ifstream stream(file.c_str(), std::ios::in | std::ios::binary);
@@ -285,11 +269,42 @@ public:
         );
 
         // create program
-        return create_with_binary(&binary[0], binary.size(), context);
+        return create_with_binary(&binary[0], binary.size(), context, options);
     }
 
 private:
     cl_program m_program;
+
+    static cl_int build(cl_program prg, const std::string &options = std::string())
+    {
+        const char *options_string = 0;
+
+        if(!options.empty()){
+            options_string = options.c_str();
+        }
+
+        cl_int ret = clBuildProgram(prg, 0, 0, options_string, 0, 0);
+
+        if(ret != CL_SUCCESS){
+            #ifdef BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION
+            program p(prg);
+
+            // print the error, source code and build log
+            std::cerr << "Boost.Compute: "
+                      << "kernel compilation failed (" << ret << ")\n"
+                      << "--- source ---\n"
+                      << p.source()
+                      << "\n--- build log ---\n"
+                      << p.build_log()
+                      << std::endl;
+            #endif
+
+            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+        }
+
+        return ret;
+    }
+
 };
 
 } // end compute namespace

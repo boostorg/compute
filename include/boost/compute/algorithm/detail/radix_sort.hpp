@@ -201,8 +201,6 @@ inline void radix_sort(Iterator first,
     }
 
     // setup kernels
-    program radix_sort_program =
-        program::create_with_source(radix_sort_source, context);
     std::stringstream options;
     options << "-DK=" << k;
     options << " -DT=" << type_name<sort_type>();
@@ -216,7 +214,8 @@ inline void radix_sort(Iterator first,
         options << " -DIS_SIGNED";
     }
 
-    radix_sort_program.build(options.str());
+    program radix_sort_program =
+        program::create_with_source(radix_sort_source, context, options.str());
 
     kernel count_kernel(radix_sort_program, "count");
     kernel scan_kernel(radix_sort_program, "scan");
