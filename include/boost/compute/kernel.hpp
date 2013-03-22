@@ -197,16 +197,11 @@ public:
 
     static kernel create_with_source(const std::string &source,
                                      const std::string &name,
-                                     const context &context)
+                                     const context &context,
+                                     const std::string &options = std::string()
+                                     )
     {
-        program program_ = program::create_with_source(source, context);
-
-        cl_int ret = program_.build();
-        if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
-        }
-
-        return program_.create_kernel(name);
+        return program::create_with_source(source, context, options).create_kernel(name);
     }
 
 private:

@@ -48,9 +48,6 @@ int main()
     boost::compute::program program =
         boost::compute::program::create_with_source(source, context);
 
-    // compile the program
-    program.build();
-
     // create the kernel
     boost::compute::kernel kernel(program, "add");
 

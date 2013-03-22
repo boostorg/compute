@@ -43,7 +43,6 @@ int main()
 
     boost::compute::program program =
         boost::compute::program::create_with_source(source, context);
-    program.build();
 
     boost::compute::vector<uint_> count(1, context);
     count[0] = 0;

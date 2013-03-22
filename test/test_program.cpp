@@ -28,9 +28,6 @@ BOOST_AUTO_TEST_CASE(get_program_info)
     boost::compute::program program =
         boost::compute::program::create_with_source(source, context);
 
-    // build program
-    program.build();
-
     // check program info
     BOOST_CHECK(program.source().empty() == false);
     BOOST_CHECK(program.get_context() == context);
@@ -43,7 +40,6 @@ BOOST_AUTO_TEST_CASE(create_kernel)
 
     boost::compute::program program =
         boost::compute::program::create_with_source(source, context);
-    program.build();
 
     boost::compute::kernel foo = program.create_kernel("foo");
     boost::compute::kernel bar = program.create_kernel("bar");
@@ -57,7 +53,6 @@ BOOST_AUTO_TEST_CASE(create_with_binary)
     // create program from source
     boost::compute::program source_program =
         boost::compute::program::create_with_source(source, context);
-    source_program.build();
 
     // create kernels in source program
     boost::compute::kernel source_foo_kernel = source_program.create_kernel("foo");
@@ -73,7 +68,6 @@ BOOST_AUTO_TEST_CASE(create_with_binary)
     // create program from binary
     boost::compute::program binary_program =
         boost::compute::program::create_with_binary(binary, context);
-    binary_program.build();
 
     // create kernels in binary program
     boost::compute::kernel binary_foo_kernel = binary_program.create_kernel("foo");

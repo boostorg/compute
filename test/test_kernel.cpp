@@ -68,8 +68,6 @@ BOOST_AUTO_TEST_CASE(get_work_group_info)
     boost::compute::program program =
         boost::compute::program::create_with_source(source, context);
 
-    program.build();
-
     boost::compute::kernel kernel = program.create_kernel("sum");
 
     using boost::compute::ulong_;

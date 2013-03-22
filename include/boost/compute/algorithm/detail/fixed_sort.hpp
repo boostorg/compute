@@ -37,8 +37,9 @@ inline void sort2(const buffer &buffer, command_queue &queue)
         "    }\n"
         "}\n";
 
-    program sort2_program = program::create_with_source(source, context);
-    sort2_program.build(std::string("-DT=") + type_name<T>());
+    program sort2_program = program::create_with_source(
+            source, context, std::string("-DT=") + type_name<T>()
+            );
     kernel sort2_kernel = sort2_program.create_kernel("sort2");
     sort2_kernel.set_arg(0, buffer);
     queue.enqueue_task(sort2_kernel);
@@ -87,8 +88,9 @@ inline void sort3(const buffer &buffer, command_queue &queue)
         "    }\n"
         "}\n";
 
-    program sort3_program = program::create_with_source(source, context);
-    sort3_program.build(std::string("-DT=") + type_name<T>());
+    program sort3_program = program::create_with_source(
+            source, context, std::string("-DT=") + type_name<T>()
+            );
     kernel sort3_kernel = sort3_program.create_kernel("sort3");
     sort3_kernel.set_arg(0, buffer);
     queue.enqueue_task(sort3_kernel);

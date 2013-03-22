@@ -161,7 +161,6 @@ private:
             "}\n";
 
         m_program = program::create_with_source(source, m_context);
-        m_program.build();
     }
 
 private:
