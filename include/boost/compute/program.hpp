@@ -35,10 +35,10 @@ public:
     {
     }
 
-    explicit program(cl_program program)
+    explicit program(cl_program program, bool retain = true)
         : m_program(program)
     {
-        if(m_program){
+        if(m_program && retain){
             clRetainProgram(m_program);
         }
     }
@@ -225,7 +225,7 @@ public:
             BOOST_THROW_EXCEPTION(runtime_exception(error));
         }
 
-        return program(program_);
+        return program(program_, false);
     }
 
     static program create_with_source_file(const std::string &file,
@@ -263,7 +263,7 @@ public:
             BOOST_THROW_EXCEPTION(runtime_exception(error));
         }
 
-        return program(program_);
+        return program(program_, false);
     }
 
     static program create_with_binary(const std::vector<unsigned char> &binary,
