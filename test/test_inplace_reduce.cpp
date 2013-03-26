@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(sum_int)
     queue.finish();
     BOOST_CHECK_EQUAL(int(vector[0]), int(33));
 
-    boost::compute::copy(data, data + 8, vector.begin(), queue);
+    vector.assign(data, data + 8);
     vector.push_back(3);
     boost::compute::detail::inplace_reduce(vector.begin(),
                                            vector.end(),
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(multiply_int)
     queue.finish();
     BOOST_CHECK_EQUAL(int(vector[0]), int(24300));
 
-    boost::compute::copy(data, data + 8, vector.begin(), queue);
+    vector.assign(data, data + 8);
     vector.push_back(3);
     boost::compute::detail::inplace_reduce(vector.begin(),
                                            vector.end(),
