@@ -80,7 +80,7 @@ public:
     static device find_device(const std::string &name)
     {
         BOOST_FOREACH(const device &device, devices()){
-            if(device.name() == name){
+            if(device.name().find(name) != std::string::npos){
                 return device;
             }
         }
