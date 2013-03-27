@@ -30,7 +30,14 @@ BOOST_AUTO_TEST_CASE(event_profiling)
     bc::context context(device);
     bc::command_queue queue(context, device, bc::command_queue::enable_profiling);
 
-    bc::event event = queue.enqueue_marker();
+    int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    bc::buffer buffer(context, sizeof(data));
+
+    bc::event event =
+        queue.enqueue_write_buffer_async(buffer,
+                                         0,
+                                         sizeof(data),
+                                         static_cast<const void *>(data));
     queue.finish();
 
     event.get_profiling_info<cl_ulong>(bc::event::profiling_command_queued);
