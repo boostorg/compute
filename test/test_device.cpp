@@ -43,3 +43,15 @@ BOOST_AUTO_TEST_CASE(get_gpu_name)
         BOOST_CHECK(!gpu.name().empty());
     }
 }
+
+BOOST_AUTO_TEST_CASE(get_max_work_item_sizes)
+{
+    boost::compute::device device = boost::compute::system::default_device();
+
+    std::vector<size_t> max_work_item_sizes =
+        device.get_info<std::vector<size_t> >(CL_DEVICE_MAX_WORK_ITEM_SIZES);
+    BOOST_CHECK_GE(max_work_item_sizes.size(), size_t(3));
+    BOOST_CHECK_GE(max_work_item_sizes[0], size_t(1));
+    BOOST_CHECK_GE(max_work_item_sizes[1], size_t(1));
+    BOOST_CHECK_GE(max_work_item_sizes[2], size_t(1));
+}

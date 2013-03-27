@@ -12,6 +12,7 @@
 #define BOOST_COMPUTE_DETAIL_GET_OBJECT_INFO_HPP
 
 #include <string>
+#include <vector>
 
 #include <boost/throw_exception.hpp>
 
@@ -88,6 +89,36 @@ struct _get_object_info_impl<std::string, Function, Object, Info>
         }
 
         return value;
+    }
+};
+
+// specialization for std::vector<T>
+template<class T, class Function, class Object, class Info>
+struct _get_object_info_impl<std::vector<T>, Function, Object, Info>
+{
+    std::vector<T> operator()(Function function, Object object, Info info)
+    {
+        size_t size = 0;
+        cl_int ret = function(object,
+                              static_cast<cl_uint>(info),
+                              0,
+                              0,
+                              &size);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+        }
+
+        std::vector<T> vector(size / sizeof(T));
+        ret = function(object,
+                       static_cast<cl_uint>(info),
+                       size,
+                       &vector[0],
+                       0);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+        }
+
+        return vector;
     }
 };
 
