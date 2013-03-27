@@ -55,3 +55,91 @@ BOOST_AUTO_TEST_CASE(get_max_work_item_sizes)
     BOOST_CHECK_GE(max_work_item_sizes[1], size_t(1));
     BOOST_CHECK_GE(max_work_item_sizes[2], size_t(1));
 }
+
+#ifdef CL_VERSION_1_2
+BOOST_AUTO_TEST_CASE(partition_device_equally)
+{
+    // get default device and ensure it has at least two compute units
+    boost::compute::device device = boost::compute::system::default_device();
+    if(device.compute_units() < 2){
+        std::cout << "skipping test: "
+                  << "device does not have enough compute units"
+                  << std::endl;
+        return;
+    }
+
+    // partition default device into sub-devices with two compute units each
+    std::vector<boost::compute::device>
+        sub_devices = device.partition_equally(2);
+    BOOST_CHECK_EQUAL(sub_devices.size(), size_t(device.compute_units() / 2));
+
+    // verify each of the sub-devices
+    for(size_t i = 0; i < sub_devices.size(); i++){
+        const boost::compute::device &sub_device = sub_devices[i];
+
+        // ensure parent device id is correct
+        cl_device_id parent_id =
+            sub_device.get_info<cl_device_id>(CL_DEVICE_PARENT_DEVICE);
+        BOOST_CHECK(parent_id == device.id());
+
+        // check number of compute units
+        BOOST_CHECK_EQUAL(sub_device.compute_units(), size_t(2));
+    }
+}
+
+BOOST_AUTO_TEST_CASE(partition_by_counts)
+{
+    // get default device and ensure it has at least four compute units
+    boost::compute::device device = boost::compute::system::default_device();
+    if(device.compute_units() < 4){
+        std::cout << "skipping test: "
+                  << "device does not have enough compute units"
+                  << std::endl;
+        return;
+    }
+
+    // create vector of sub-device compute unit counts
+    std::vector<size_t> counts;
+    counts.push_back(2);
+    counts.push_back(1);
+    counts.push_back(1);
+
+    // partition default device into sub-devices according to counts
+    std::vector<boost::compute::device>
+        sub_devices = device.partition_by_counts(counts);
+    BOOST_CHECK_EQUAL(sub_devices.size(), size_t(3));
+
+    // verify each of the sub-devices
+    BOOST_CHECK_EQUAL(sub_devices[0].compute_units(), size_t(2));
+    BOOST_CHECK_EQUAL(sub_devices[1].compute_units(), size_t(1));
+    BOOST_CHECK_EQUAL(sub_devices[2].compute_units(), size_t(1));
+}
+
+BOOST_AUTO_TEST_CASE(partition_by_affinity_domain)
+{
+    // get default device and ensure it has at least two compute units
+    boost::compute::device device = boost::compute::system::default_device();
+    if(device.compute_units() < 2){
+        std::cout << "skipping test: "
+                  << "device does not have enough compute units"
+                  << std::endl;
+        return;
+    }
+
+    // check that the device supports splitting by affinity domains
+    cl_device_affinity_domain supported_domains =
+        device.get_info<cl_device_affinity_domain>(
+            CL_DEVICE_PARTITION_AFFINITY_DOMAIN);
+    if(!(supported_domains & CL_DEVICE_AFFINITY_DOMAIN_NEXT_PARTITIONABLE)){
+        std::cout << "skipping test: "
+                  << "device does not support partitioning by affinity domain"
+                  << std::endl;
+        return;
+    }
+
+    std::vector<boost::compute::device> sub_devices =
+        device.partition_by_affinity_domain(
+            CL_DEVICE_AFFINITY_DOMAIN_NEXT_PARTITIONABLE);
+    BOOST_CHECK(sub_devices.size() > 0);
+}
+#endif // CL_VERSION_1_2
