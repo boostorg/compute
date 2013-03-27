@@ -839,15 +839,6 @@ struct inject_type_impl<double_>
     }
 };
 
-template<>
-struct inject_type_impl<half_>
-{
-    void operator()(meta_kernel &kernel)
-    {
-        kernel.add_extension_pragma("cl_khr_fp16", "enable");
-    }
-};
-
 template<class Scalar, size_t N>
 struct inject_type_impl<vector_type<Scalar, N> >
 {

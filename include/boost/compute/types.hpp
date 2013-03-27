@@ -30,7 +30,6 @@ typedef cl_int int_;
 typedef cl_uint uint_;
 typedef cl_long long_;
 typedef cl_ulong ulong_;
-typedef cl_half half_;
 typedef cl_float float_;
 typedef cl_double double_;
 
