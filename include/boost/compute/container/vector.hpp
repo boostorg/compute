@@ -115,6 +115,7 @@ public:
           m_size(vector.m_size),
           m_allocator(std::move(vector.m_allocator))
     {
+        vector.m_size = 0;
     }
     #endif // !defined(BOOST_NO_RVALUE_REFERENCES)
 
@@ -148,7 +149,9 @@ public:
 
     ~vector()
     {
-        m_allocator.deallocate(m_data, m_size);
+        if(m_size){
+            m_allocator.deallocate(m_data, m_size);
+        }
     }
 
     vector<T>& operator=(const vector<T> &other)
