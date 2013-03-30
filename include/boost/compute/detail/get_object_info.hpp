@@ -124,7 +124,7 @@ struct _get_object_info_impl<std::vector<T>, Function, Object, Info>
 
 // returns the value (of type T) from the given clGet*Info() function call.
 template<class T, class Function, class Object, class Info>
-T get_object_info(Function f, Object o, Info i)
+inline T get_object_info(Function f, Object o, Info i)
 {
     return _get_object_info_impl<T, Function, Object, Info>()(f, o, i);
 }
