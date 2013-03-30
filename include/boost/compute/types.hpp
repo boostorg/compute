@@ -118,8 +118,9 @@ protected:
                                             size, \
                                             BOOST_PP_CAT(BOOST_PP_CAT(scalar, size), _)) \
     \
-    std::ostream& operator<<(std::ostream &s, \
-                             const BOOST_COMPUTE_MAKE_VECTOR_TYPE(scalar, size) &v) \
+    inline std::ostream& operator<<( \
+        std::ostream &s, \
+        const BOOST_COMPUTE_MAKE_VECTOR_TYPE(scalar, size) &v) \
     { \
         s << BOOST_PP_STRINGIZE(BOOST_PP_CAT(scalar, size)) << "("; \
         for(size_t i = 0; i < size; i++){\
