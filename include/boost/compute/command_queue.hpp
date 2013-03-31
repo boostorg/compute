@@ -960,7 +960,11 @@ public:
     {
         BOOST_ASSERT(m_queue != 0);
 
+        #ifdef CL_VERSION_1_2
+        clEnqueueBarrierWithWaitList(m_queue, 0, 0, 0);
+        #else
         clEnqueueBarrier(m_queue);
+        #endif
     }
 
     event enqueue_marker()
