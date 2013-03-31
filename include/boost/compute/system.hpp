@@ -146,11 +146,6 @@ public:
     {
         return clUnloadCompiler();
     }
-
-    static void* get_extension_function_address(const char *function_name)
-    {
-        return clGetExtensionFunctionAddress(function_name);
-    }
 };
 
 } // end compute namespace

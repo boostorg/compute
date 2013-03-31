@@ -127,6 +127,16 @@ public:
         return detail::get_object_info<T>(clGetPlatformInfo, m_platform, info);
     }
 
+    void* get_extension_function_address(const char *function_name)
+    {
+        #ifdef CL_VERSION_1_2
+        return clGetExtensionFunctionAddressForPlatform(m_platform,
+                                                        function_name);
+        #else
+        return clGetExtensionFunctionAddress(function_name);
+        #endif
+    }
+
 private:
     cl_platform_id m_platform;
 };
