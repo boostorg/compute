@@ -85,6 +85,13 @@ public:
         case CL_INVALID_BUFFER_SIZE: return "Invalid Buffer Size";
         case CL_INVALID_MIP_LEVEL: return "Invalid MIP Level";
         case CL_INVALID_GLOBAL_WORK_SIZE: return "Invalid Global Work Size";
+        #ifdef CL_VERSION_1_2
+        case CL_INVALID_PROPERTY: return "Invalid Property";
+        case CL_INVALID_IMAGE_DESCRIPTOR: return "Invalid Image Descriptor";
+        case CL_INVALID_COMPILER_OPTIONS: return "Invalid Compiler Options";
+        case CL_INVALID_LINKER_OPTIONS: return "Invalid Linker Options";
+        case CL_INVALID_DEVICE_PARTITION_COUNT: return "Invalid Device Partition Count";
+        #endif // CL_VERSION_1_2
         default: return "Unknown Error Code";
         }
     }
