@@ -974,15 +974,6 @@ public:
         return event(event_);
     }
 
-    void enqueue_wait_for_event(const event &event)
-    {
-        cl_event event_ = event;
-        cl_int ret = clEnqueueWaitForEvents(m_queue, 1, &event_);
-        if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
-        }
-    }
-
     operator cl_command_queue() const
     {
         return m_queue;

@@ -346,22 +346,6 @@ if(queue.get_properties() &amp; command_queue::enable_profiling){
               </para>
             </description>
           </method>
-
-          <!-- command_queue::enqueue_wait_for_event() -->
-          <method name="enqueue_wait_for_event">
-            <type>void</type>
-
-            <parameter name="event">
-              <paramtype>const <classname>event</classname>&amp;</paramtype>
-            </parameter>
-
-            <description>
-              <para>
-                Enqueues a wait for <code>event</code> to complete before
-                executing any future commands.
-              </para>
-            </description>
-          </method>
         </method-group>
       </class>
     </namespace>
