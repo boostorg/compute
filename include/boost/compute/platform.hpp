@@ -137,6 +137,15 @@ public:
         #endif
     }
 
+    void unload_compiler()
+    {
+        #ifdef CL_VERSION_1_2
+        clUnloadPlatformCompiler(m_platform);
+        #else
+        clUnloadCompiler();
+        #endif
+    }
+
 private:
     cl_platform_id m_platform;
 };

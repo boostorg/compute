@@ -48,6 +48,7 @@
     [[`clGetDeviceIDs()`] [[memberref boost::compute::platform::devices platform::devices()]]]
     [[`clGetPlatformInfo()`] [[memberref boost::compute::platform::get_info platform::get_info<T>()]]]
     [[`clGetExtensionFunctionAddress()`] [[memberref boost::compute::platform::get_extension_function_address platform::get_extension_function_address()]]]
+    [[`clUnloadCompiler()`] [[memberref boost::compute::platform::unload_compiler platform::unload_compiler()]]]
 
     [[*Programs*]]
     [[`clCreateProgramWithSource()`] [[memberref boost::compute::program::create_with_source program::create_with_source()]]]
@@ -58,7 +59,6 @@
 
     [[*System*]]
     [[`clGetPlatformIDs()`] [[memberref boost::compute::system::platforms system::platforms()]]]
-    [[`clUnloadCompiler()`] [[memberref boost::compute::system::unload_compiler system::unload_compiler()]]]
 ]
 
 [endsect] [/ opencl c api]

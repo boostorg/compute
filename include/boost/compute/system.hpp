@@ -141,11 +141,6 @@ public:
         clGetPlatformIDs(0, 0, &count);
         return static_cast<size_t>(count);
     }
-
-    static int unload_compiler()
-    {
-        return clUnloadCompiler();
-    }
 };
 
 } // end compute namespace
