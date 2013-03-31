@@ -970,7 +970,13 @@ public:
     event enqueue_marker()
     {
         cl_event event_;
+
+        #ifdef CL_VERSION_1_2
+        cl_int ret = clEnqueueMarkerWithWaitList(m_queue, 0, 0, &event_);
+        #else
         cl_int ret = clEnqueueMarker(m_queue, &event_);
+        #endif
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
