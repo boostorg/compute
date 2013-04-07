@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestDevice
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/device.hpp>
 #include <boost/compute/system.hpp>
 
