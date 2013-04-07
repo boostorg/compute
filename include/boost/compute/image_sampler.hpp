@@ -53,6 +53,14 @@ public:
         }
     }
 
+    explicit image_sampler(cl_sampler sampler, bool retain = true)
+        : m_sampler(sampler)
+    {
+        if(m_sampler && retain){
+            clRetainSampler(m_sampler);
+        }
+    }
+
     image_sampler(const image_sampler &other)
         : m_sampler(other.m_sampler)
     {

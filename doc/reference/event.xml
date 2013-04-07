@@ -39,6 +39,25 @@
           </description>
         </constructor>
 
+        <!-- event::event(cl_event, bool) -->
+        <constructor specifiers="explicit">
+          <parameter name="event">
+            <paramtype>cl_event</paramtype>
+          </parameter>
+          <parameter name="retain">
+            <paramtype>bool</paramtype>
+            <default>true</default>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new event object for <code>event</code>. If
+              <code>retain</code> is <code>true</code> (the default) the
+              reference count for <code>event</code> will be incremented.
+            </para>
+          </description>
+        </constructor>
+
         <!-- operator=(other) -->
         <copy-assignment>
           <parameter name="other">

@@ -30,6 +30,25 @@
           </description>
         </constructor>
 
+        <!-- context::context(cl_context, bool) -->
+        <constructor specifiers="explicit">
+          <parameter name="context">
+            <paramtype>cl_context</paramtype>
+          </parameter>
+          <parameter name="retain">
+            <paramtype>bool</paramtype>
+            <default>true</default>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new context object for <code>context</code>. If
+              <code>retain</code> is <code>true</code> (the default) the
+              reference count for <code>context</code> will be incremented.
+            </para>
+          </description>
+        </constructor>
+
         <!-- context::context(const context&) -->
         <constructor>
           <parameter name="other">

@@ -51,10 +51,10 @@ public:
     {
     }
 
-    command_queue(cl_command_queue queue)
+    explicit command_queue(cl_command_queue queue, bool retain = true)
         : m_queue(queue)
     {
-        if(m_queue){
+        if(m_queue && retain){
             clRetainCommandQueue(m_queue);
         }
     }

@@ -43,6 +43,25 @@
           </description>
         </constructor>
 
+        <!-- buffer::buffer(cl_buffer, bool) -->
+        <constructor specifiers="explicit">
+          <parameter name="buffer">
+            <paramtype>cl_buffer</paramtype>
+          </parameter>
+          <parameter name="retain">
+            <paramtype>bool</paramtype>
+            <default>true</default>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new buffer object for <code>buffer</code>. If
+              <code>retain</code> is <code>true</code> (the default) the
+              reference count for <code>buffer</code> will be incremented.
+            </para>
+          </description>
+        </constructor>
+
         <!-- buffer::buffer(other) -->
         <constructor>
           <parameter name="other">

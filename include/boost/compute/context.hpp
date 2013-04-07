@@ -44,10 +44,10 @@ public:
         }
     }
 
-    explicit context(cl_context context)
+    explicit context(cl_context context, bool retain = true)
         : m_context(context)
     {
-        if(m_context){
+        if(m_context && retain){
             clRetainContext(m_context);
         }
     }

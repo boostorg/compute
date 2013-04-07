@@ -43,6 +43,25 @@
           </description>
         </constructor>
 
+        <!-- kernel::kernel(cl_kernel, bool) -->
+        <constructor specifiers="explicit">
+          <parameter name="kernel">
+            <paramtype>cl_kernel</paramtype>
+          </parameter>
+          <parameter name="retain">
+            <paramtype>bool</paramtype>
+            <default>true</default>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new kernel object for <code>kernel</code>. If
+              <code>retain</code> is <code>true</code> (the default) the
+              reference count for <code>kernel</code> will be incremented.
+            </para>
+          </description>
+        </constructor>
+
         <!-- kernel::kernel(other) -->
         <constructor>
           <parameter name="other">

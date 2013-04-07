@@ -77,10 +77,15 @@ public:
     }
 
 protected:
-    memory_object(const cl_mem &mem = cl_mem())
+    memory_object()
+        : m_mem(0)
+    {
+    }
+
+    explicit memory_object(cl_mem mem, bool retain = true)
         : m_mem(mem)
     {
-        if(m_mem){
+        if(m_mem && retain){
             clRetainMemObject(m_mem);
         }
     }

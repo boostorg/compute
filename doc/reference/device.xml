@@ -40,11 +40,15 @@
           </description>
         </constructor>
 
-        <!-- device::device(cl_device) -->
+        <!-- device::device(cl_device, bool) -->
         <constructor specifiers="explicit">
           <parameter name="id">
             <paramtype>cl_device_id</paramtype>
           </parameter>
+          <parameter name="retain">
+	    <paramtype>bool</paramtype>
+	    <default>true</default>
+	  </parameter>
 
           <description>
             <para>

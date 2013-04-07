@@ -23,6 +23,7 @@
 #include <boost/compute/cl.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/exception.hpp>
+#include <boost/compute/detail/program_create_kernel_result.hpp>
 
 namespace boost {
 namespace compute {
@@ -192,7 +193,8 @@ public:
         return value;
     }
 
-    cl_kernel create_kernel(const std::string &name) const
+    detail::program_create_kernel_result
+    create_kernel(const std::string &name) const
     {
         cl_int error = 0;
         cl_kernel kernel = clCreateKernel(m_program,
@@ -202,7 +204,7 @@ public:
             BOOST_THROW_EXCEPTION(runtime_exception(error));
         }
 
-        return kernel;
+        return detail::program_create_kernel_result(kernel);
     }
 
     operator cl_program() const

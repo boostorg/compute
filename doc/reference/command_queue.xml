@@ -67,6 +67,25 @@
           </description>
         </constructor>
 
+        <!-- command_queue::command_queue(cl_command_queue, bool) -->
+        <constructor specifiers="explicit">
+          <parameter name="queue">
+            <paramtype>cl_command_queue</paramtype>
+          </parameter>
+          <parameter name="retain">
+            <paramtype>bool</paramtype>
+            <default>true</default>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new command queue object for <code>queue</code>. If
+              <code>retain</code> is <code>true</code> (the default) the
+              reference count for <code>queue</code> will be incremented.
+            </para>
+          </description>
+        </constructor>
+
         <!-- command_queue::command_queue(const command_queue&) -->
         <constructor>
           <parameter name="other">

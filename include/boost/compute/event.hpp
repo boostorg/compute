@@ -66,10 +66,12 @@ public:
     {
     }
 
-    explicit event(cl_event event)
+    explicit event(cl_event event, bool retain = true)
         : m_event(event)
     {
-        clRetainEvent(event);
+        if(m_event && retain){
+            clRetainEvent(event);
+        }
     }
 
     event(const event &other)

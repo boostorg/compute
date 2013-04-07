@@ -22,6 +22,25 @@
           </description>
         </constructor>
 
+        <!-- program::program(cl_program, bool) -->
+        <constructor specifiers="explicit">
+          <parameter name="program">
+            <paramtype>cl_program</paramtype>
+          </parameter>
+          <parameter name="retain">
+            <paramtype>bool</paramtype>
+            <default>true</default>
+          </parameter>
+
+          <description>
+            <para>
+              Creates a new program object for <code>program</code>. If
+              <code>retain</code> is <code>true</code> (the default) the
+              reference count for <code>program</code> will be incremented.
+            </para>
+          </description>
+        </constructor>
+
         <!-- program::program(const program&) -->
         <constructor>
           <parameter name="other">

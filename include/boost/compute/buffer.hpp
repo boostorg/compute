@@ -32,8 +32,8 @@ public:
     {
     }
 
-    buffer(const cl_mem &mem)
-        : memory_object(mem)
+    explicit buffer(cl_mem mem, bool retain = true)
+        : memory_object(mem, retain)
     {
     }
 

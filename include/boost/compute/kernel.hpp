@@ -24,6 +24,7 @@
 #include <boost/compute/exception.hpp>
 #include <boost/compute/image_sampler.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
+#include <boost/compute/detail/program_create_kernel_result.hpp>
 
 namespace boost {
 namespace compute {
@@ -36,17 +37,26 @@ public:
     {
     }
 
-    kernel(cl_kernel kernel)
+    explicit kernel(cl_kernel kernel, bool retain = true)
         : m_kernel(kernel)
     {
-        if(m_kernel){
+        if(m_kernel && retain){
             clRetainKernel(m_kernel);
         }
     }
 
+    // see 'detail/program_create_kernel_result.hpp' for documentation
+    kernel(const detail::program_create_kernel_result &result)
+        : m_kernel(result.kernel)
+    {
+    }
+
     kernel(const program &program, const std::string &name)
     {
-        m_kernel = program.create_kernel(name);
+        detail::program_create_kernel_result
+            result = program.create_kernel(name);
+
+        m_kernel = result.kernel;
     }
 
     kernel(const kernel &other)
