@@ -113,11 +113,11 @@ public:
     {
         T value;
         cl_int ret = clGetKernelArgInfo(m_kernel,
-                                              index,
-                                              info,
-                                              sizeof(T),
-                                              &value,
-                                              0);
+                                        index,
+                                        info,
+                                        sizeof(T),
+                                        &value,
+                                        0);
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
