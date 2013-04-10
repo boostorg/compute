@@ -22,6 +22,7 @@
 #include <boost/compute/functional.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/is_device_iterator.hpp>
+#include <boost/compute/iterator/detail/get_base_iterator_buffer.hpp>
 
 namespace boost {
 namespace compute {
@@ -175,13 +176,9 @@ public:
         return m_iterator1.get_index();
     }
 
-    const buffer& get_buffer(typename boost::enable_if_c<
-                                 detail::is_buffer_iterator<
-                                     InputIterator1
-                                 >::value
-                             >::type* = 0) const
+    const buffer& get_buffer() const
     {
-        return m_iterator1.get_buffer();
+        return detail::get_base_iterator_buffer(*this);
     }
 
     template<class IndexExpression>

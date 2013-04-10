@@ -24,6 +24,7 @@
 #include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
 #include <boost/compute/detail/default_queue_for_iterator.hpp>
+#include <boost/compute/iterator/detail/get_base_iterator_buffer.hpp>
 
 namespace boost {
 namespace compute {
@@ -142,13 +143,9 @@ public:
         return super_type::base().get_index();
     }
 
-    const buffer& get_buffer(typename boost::enable_if_c<
-                                 detail::is_buffer_iterator<
-                                     InputIterator
-                                 >::value
-                             >::type* = 0) const
+    const buffer& get_buffer() const
     {
-        return super_type::base().get_buffer();
+        return detail::get_base_iterator_buffer(*this);
     }
 
     template<class IndexExpression>
