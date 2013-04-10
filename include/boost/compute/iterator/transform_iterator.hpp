@@ -41,7 +41,7 @@ struct make_transform_iterator_value_type
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
-    typedef typename boost::result_of<UnaryFunction(value_type)>::type type;
+    typedef typename boost::tr1_result_of<UnaryFunction(value_type)>::type type;
 };
 
 // helper class which defines the iterator_adaptor super-class

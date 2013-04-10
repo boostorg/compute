@@ -214,7 +214,7 @@ namespace detail {
 template<class Expr, class Arg>
 struct invoked_unary_expression
 {
-    typedef typename ::boost::result_of<Expr(Arg)>::type result_type;
+    typedef typename ::boost::tr1_result_of<Expr(Arg)>::type result_type;
 
     invoked_unary_expression(const std::string &expr, const Arg &arg)
         : m_expr(expr),
@@ -256,7 +256,7 @@ operator<<(boost::compute::detail::meta_kernel &kernel,
 template<class Expr, class Arg1, class Arg2>
 struct invoked_binary_expression
 {
-    typedef typename ::boost::result_of<Expr(Arg1, Arg2)>::type result_type;
+    typedef typename ::boost::tr1_result_of<Expr(Arg1, Arg2)>::type result_type;
 
     invoked_binary_expression(const std::string &expr,
                               const Arg1 &arg1,
@@ -357,11 +357,13 @@ struct expression : proto::extends<Expr, expression<Expr>, domain>
     };
 
     ::boost::compute::detail::meta_kernel_variable<
-        typename ::boost::result_of<expression<Expr>()>::type
+        typename ::boost::tr1_result_of<expression<Expr>()>::type
     >
     operator()() const
     {
-        typedef typename ::boost::result_of<expression<Expr>()>::type result_type;
+        typedef typename
+            ::boost::tr1_result_of<expression<Expr>()>::type
+            result_type;
 
         context ctx;
         proto::eval(*this, ctx);

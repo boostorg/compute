@@ -41,7 +41,7 @@ size_t reduce(InputIterator first,
         std::iterator_traits<InputIterator>::value_type
         input_type;
     typedef typename
-        boost::result_of<BinaryFunction(input_type, input_type)>::type
+        boost::tr1_result_of<BinaryFunction(input_type, input_type)>::type
         result_type;
 
     const context &context = queue.get_context();
@@ -120,7 +120,7 @@ size_t reduce(InputIterator first,
 
 template<class InputIterator, class BinaryFunction>
 inline vector<
-    typename boost::result_of<
+    typename boost::tr1_result_of<
         BinaryFunction(
             typename std::iterator_traits<InputIterator>::value_type,
             typename std::iterator_traits<InputIterator>::value_type
@@ -137,7 +137,7 @@ block_reduce(InputIterator first,
         std::iterator_traits<InputIterator>::value_type
         input_type;
     typedef typename
-        boost::result_of<BinaryFunction(input_type, input_type)>::type
+        boost::tr1_result_of<BinaryFunction(input_type, input_type)>::type
         result_type;
 
     const context &context = queue.get_context();
@@ -163,7 +163,7 @@ inline T reduce(InputIterator first,
         std::iterator_traits<InputIterator>::value_type
         input_type;
     typedef typename
-        boost::result_of<BinaryFunction(input_type, input_type)>::type
+        boost::tr1_result_of<BinaryFunction(input_type, input_type)>::type
         result_type;
 
     size_t count = detail::iterator_range_size(first, last);

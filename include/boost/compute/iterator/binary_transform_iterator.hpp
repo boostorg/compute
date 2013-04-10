@@ -40,7 +40,9 @@ struct make_binary_transform_iterator_value_type
     typedef typename std::iterator_traits<InputIterator1>::value_type value_type1;
     typedef typename std::iterator_traits<InputIterator2>::value_type value_type2;
 
-    typedef typename boost::result_of<BinaryFunction(value_type1, value_type2)>::type type;
+    typedef typename
+        boost::tr1_result_of<BinaryFunction(value_type1, value_type2)>::type
+        type;
 };
 
 // helper class which defines the iterator_facade super-class
