@@ -17,6 +17,7 @@
 #include <boost/compute/functional.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/iterator/counting_iterator.hpp>
 
 namespace bc = boost::compute;
 
@@ -256,4 +257,45 @@ BOOST_AUTO_TEST_CASE(transform_popcount)
     BOOST_CHECK_EQUAL(uint_(output[7]), uint_(5));
     BOOST_CHECK_EQUAL(uint_(output[8]), uint_(5));
     BOOST_CHECK_EQUAL(uint_(output[9]), uint_(10));
+}
+
+// generates the first 25 fibonacci numbers in parallel using the
+// rounding-based fibonacci formula
+BOOST_AUTO_TEST_CASE(generate_fibonacci_sequence)
+{
+    using boost::compute::uint_;
+
+    boost::compute::device device = boost::compute::system::default_device();
+    boost::compute::context context(device);
+    boost::compute::command_queue queue(context, device);
+
+    boost::compute::vector<uint_> sequence(25, context);
+
+    const char nth_fibonacci_source[] =
+        "inline uint nth_fibonacci(const uint n)\n"
+        "{\n"
+        "    const float golden_ratio = (1.f + sqrt(5.f)) / 2.f;\n"
+        "    return floor(pown(golden_ratio, n) / sqrt(5.f) + 0.5f);\n"
+        "}\n";
+
+    boost::compute::function<uint_(const uint_)> nth_fibonacci =
+        boost::compute::make_function_from_source<uint_(const uint_)>(
+            "nth_fibonacci", nth_fibonacci_source);
+
+    boost::compute::transform(
+        boost::compute::make_counting_iterator(uint_(0)),
+        boost::compute::make_counting_iterator(uint_(sequence.size())),
+        sequence.begin(),
+        nth_fibonacci,
+        queue
+    );
+    queue.finish();
+
+    BOOST_CHECK_EQUAL(uint_(sequence[0]), 0);
+    BOOST_CHECK_EQUAL(uint_(sequence[1]), 1);
+    BOOST_CHECK_EQUAL(uint_(sequence[2]), 1);
+    BOOST_CHECK_EQUAL(uint_(sequence[5]), 5);
+    BOOST_CHECK_EQUAL(uint_(sequence[9]), 34);
+    BOOST_CHECK_EQUAL(uint_(sequence[15]), 610);
+    BOOST_CHECK_EQUAL(uint_(sequence[24]), 46368);
 }
