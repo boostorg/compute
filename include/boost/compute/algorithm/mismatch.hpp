@@ -17,7 +17,7 @@
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/find.hpp>
-#include <boost/compute/iterator/binary_transform_iterator.hpp>
+#include <boost/compute/iterator/detail/binary_transform_iterator.hpp>
 #include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
@@ -38,8 +38,8 @@ mismatch(InputIterator1 first1,
 
     InputIterator1 iter =
         ::boost::compute::find(
-            ::boost::compute::make_binary_transform_iterator(first1, first2, op),
-            ::boost::compute::make_binary_transform_iterator(last1, last2, op),
+            detail::make_binary_transform_iterator(first1, first2, op),
+            detail::make_binary_transform_iterator(last1, last2, op),
             false,
             queue
         ).base();

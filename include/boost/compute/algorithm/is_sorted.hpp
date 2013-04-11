@@ -14,7 +14,7 @@
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/find.hpp>
-#include <boost/compute/iterator/binary_transform_iterator.hpp>
+#include <boost/compute/iterator/detail/binary_transform_iterator.hpp>
 #include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
@@ -28,12 +28,12 @@ inline bool is_sorted(InputIterator first,
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
     return ::boost::compute::find(
-               ::boost::compute::make_binary_transform_iterator(
+               detail::make_binary_transform_iterator(
                    first,
                    first + 1,
                    ::boost::compute::less_equal<value_type>()
                ),
-               ::boost::compute::make_binary_transform_iterator(
+               detail::make_binary_transform_iterator(
                    last - 1,
                    last,
                    ::boost::compute::less_equal<value_type>()

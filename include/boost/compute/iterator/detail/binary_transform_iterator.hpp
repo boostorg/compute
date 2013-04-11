@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ITERATOR_BINARY_TRANSFORM_ITERATOR_HPP
-#define BOOST_COMPUTE_ITERATOR_BINARY_TRANSFORM_ITERATOR_HPP
+#ifndef BOOST_COMPUTE_ITERATOR_DETAIL_BINARY_TRANSFORM_ITERATOR_HPP
+#define BOOST_COMPUTE_ITERATOR_DETAIL_BINARY_TRANSFORM_ITERATOR_HPP
 
 #include <string>
 #include <cstddef>
@@ -26,12 +26,11 @@
 
 namespace boost {
 namespace compute {
+namespace detail {
 
 // forward declaration for binary_transform_iterator
 template<class InputIterator1, class InputIterator2, class BinaryFunction>
 class binary_transform_iterator;
-
-namespace detail {
 
 // meta-function returning the value_type for a binary_transform_iterator
 template<class InputIterator1, class InputIterator2, class BinaryFunction>
@@ -52,9 +51,9 @@ class binary_transform_iterator_base
 {
 public:
     typedef ::boost::iterator_facade<
-        ::boost::compute::binary_transform_iterator<InputIterator1,
-                                                    InputIterator2,
-                                                    BinaryFunction>,
+        binary_transform_iterator<
+            InputIterator1, InputIterator2, BinaryFunction
+        >,
         typename make_binary_transform_iterator_value_type<
                      InputIterator1,
                      InputIterator2,
@@ -114,19 +113,17 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
                                            expr.m_input_iter2[expr.m_index_expr]);
 }
 
-} // end detail namespace
-
 template<class InputIterator1, class InputIterator2, class BinaryFunction>
 class binary_transform_iterator :
-    public detail::binary_transform_iterator_base<InputIterator1,
-                                                  InputIterator2,
-                                                  BinaryFunction>::type
+    public binary_transform_iterator_base<
+               InputIterator1, InputIterator2, BinaryFunction
+           >::type
 {
 public:
     typedef typename
-        detail::binary_transform_iterator_base<InputIterator1,
-                                               InputIterator2,
-                                               BinaryFunction>::type super_type;
+        binary_transform_iterator_base<
+            InputIterator1, InputIterator2, BinaryFunction
+        >::type super_type;
     typedef typename super_type::difference_type difference_type;
     typedef typename super_type::reference reference;
     typedef InputIterator1 base_type;
@@ -180,23 +177,24 @@ public:
 
     const buffer& get_buffer() const
     {
-        return detail::get_base_iterator_buffer(*this);
+        return get_base_iterator_buffer(*this);
     }
 
     template<class IndexExpression>
-    detail::binary_transform_iterator_index_expr<InputIterator1,
-                                                 InputIterator2,
-                                                 BinaryFunction,
-                                                 IndexExpression>
+    binary_transform_iterator_index_expr<
+        InputIterator1,
+        InputIterator2,
+        BinaryFunction,
+        IndexExpression
+    >
     operator[](const IndexExpression &expr) const
     {
-        return detail::binary_transform_iterator_index_expr<InputIterator1,
-                                                            InputIterator2,
-                                                            BinaryFunction,
-                                                            IndexExpression>(m_iterator1,
-                                                                             m_iterator2,
-                                                                             m_transform,
-                                                                             expr);
+        return binary_transform_iterator_index_expr<
+                   InputIterator1,
+                   InputIterator2,
+                   BinaryFunction,
+                   IndexExpression
+               >(m_iterator1, m_iterator2, m_transform, expr);
     }
 
     const base_type& base() const
@@ -279,8 +277,6 @@ make_binary_transform_iterator(InputIterator1 iterator1,
                                                      transform);
 }
 
-namespace detail {
-
 // is_device_iterator specialization for binary_transform_iterator
 template<class Iterator>
 struct is_device_iterator<
@@ -296,8 +292,7 @@ struct is_device_iterator<
 > : public boost::true_type {};
 
 } // end detail namespace
-
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_ITERATOR_BINARY_TRANSFORM_ITERATOR_HPP
+#endif // BOOST_COMPUTE_ITERATOR_DETAIL_BINARY_TRANSFORM_ITERATOR_HPP
