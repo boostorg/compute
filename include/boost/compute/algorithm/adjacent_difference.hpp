@@ -15,7 +15,7 @@
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
-#include <boost/compute/iterator/adjacent_transform_iterator.hpp>
+#include <boost/compute/iterator/detail/adjacent_transform_iterator.hpp>
 #include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
@@ -32,8 +32,8 @@ inline OutputIterator adjacent_difference(InputIterator first,
     ::boost::compute::minus<value_type> op;
 
     return ::boost::compute::copy(
-               ::boost::compute::make_adjacent_transform_iterator(first, op),
-               ::boost::compute::make_adjacent_transform_iterator(last, op),
+               detail::make_adjacent_transform_iterator(first, op),
+               detail::make_adjacent_transform_iterator(last, op),
                result,
                queue
            );

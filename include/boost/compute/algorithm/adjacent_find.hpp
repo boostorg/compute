@@ -15,7 +15,7 @@
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/find.hpp>
-#include <boost/compute/iterator/adjacent_transform_iterator.hpp>
+#include <boost/compute/iterator/detail/adjacent_transform_iterator.hpp>
 #include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
@@ -31,8 +31,8 @@ inline InputIterator adjacent_find(InputIterator first,
     ::boost::compute::equal_to<value_type> eq;
 
     return ::boost::compute::find(
-               ::boost::compute::make_adjacent_transform_iterator(first, eq),
-               ::boost::compute::make_adjacent_transform_iterator(last, eq),
+               detail::make_adjacent_transform_iterator(first, eq),
+               detail::make_adjacent_transform_iterator(last, eq),
                true,
                queue
            ).base() - 1;

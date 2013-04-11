@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ITERATOR_ADJACENT_TRANSFORM_ITERATOR_HPP
-#define BOOST_COMPUTE_ITERATOR_ADJACENT_TRANSFORM_ITERATOR_HPP
+#ifndef BOOST_COMPUTE_ITERATOR_DETAIL_ADJACENT_TRANSFORM_ITERATOR_HPP
+#define BOOST_COMPUTE_ITERATOR_DETAIL_ADJACENT_TRANSFORM_ITERATOR_HPP
 
 #include <cstddef>
 #include <iterator>
@@ -26,12 +26,11 @@
 
 namespace boost {
 namespace compute {
+namespace detail {
 
 // forward declaration for transform_iterator
 template<class InputIterator, class BinaryFunction>
 class adjacent_transform_iterator;
-
-namespace detail {
 
 // meta-function returning the value_type for an adjacent_transform_iterator
 template<class InputIterator, class BinaryFunction>
@@ -51,7 +50,7 @@ class adjacent_transform_iterator_base
 {
 public:
     typedef ::boost::iterator_adaptor<
-        ::boost::compute::adjacent_transform_iterator<InputIterator, BinaryFunction>,
+        adjacent_transform_iterator<InputIterator, BinaryFunction>,
         InputIterator,
         typename make_adjacent_transform_iterator_value_type<InputIterator, BinaryFunction>::type,
         typename std::iterator_traits<InputIterator>::iterator_category,
@@ -122,17 +121,14 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
     return kernel;
 }
 
-} // end detail namespace
-
 template<class InputIterator, class BinaryFunction>
 class adjacent_transform_iterator :
-    public detail::adjacent_transform_iterator_base<InputIterator,
-                                                    BinaryFunction>::type
+    public adjacent_transform_iterator_base<InputIterator, BinaryFunction>::type
 {
 public:
     typedef typename
-        detail::adjacent_transform_iterator_base<InputIterator,
-                                                 BinaryFunction>::type super_type;
+        adjacent_transform_iterator_base<InputIterator, BinaryFunction>::type
+        super_type;
     typedef typename super_type::value_type value_type;
     typedef typename super_type::reference reference;
     typedef typename super_type::base_type base_type;
@@ -154,7 +150,7 @@ public:
 
     adjacent_transform_iterator<InputIterator, BinaryFunction>&
     operator=(const adjacent_transform_iterator<InputIterator,
-                                       BinaryFunction> &other)
+                                                BinaryFunction> &other)
     {
         if(this != &other){
             super_type::operator=(other);
@@ -176,18 +172,22 @@ public:
 
     const buffer& get_buffer() const
     {
-        return detail::get_base_iterator_buffer(*this);
+        return get_base_iterator_buffer(*this);
     }
 
     template<class IndexExpression>
-    detail::adjacent_transform_iterator_index_expr<InputIterator, BinaryFunction, IndexExpression>
+    adjacent_transform_iterator_index_expr<
+        InputIterator,
+        BinaryFunction,
+        IndexExpression
+    >
     operator[](const IndexExpression &expr) const
     {
-        return detail::adjacent_transform_iterator_index_expr<InputIterator,
-                                                              BinaryFunction,
-                                                              IndexExpression>(super_type::base(),
-                                                                               m_transform,
-                                                                               expr);
+        return adjacent_transform_iterator_index_expr<
+                   InputIterator,
+                   BinaryFunction,
+                   IndexExpression
+               >(super_type::base(), m_transform, expr);
     }
 
 private:
@@ -210,8 +210,6 @@ make_adjacent_transform_iterator(InputIterator iterator, BinaryFunction transfor
                                        BinaryFunction>(iterator, transform);
 }
 
-namespace detail {
-
 // is_device_iterator specialization for adjacent_transform_iterator
 template<class Iterator>
 struct is_device_iterator<
@@ -229,4 +227,4 @@ struct is_device_iterator<
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_ITERATOR_ADJACENT_TRANSFORM_ITERATOR_HPP
+#endif // BOOST_COMPUTE_ITERATOR_DETAIL_ADJACENT_TRANSFORM_ITERATOR_HPP

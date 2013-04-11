@@ -11,7 +11,6 @@
 #ifndef BOOST_COMPUTE_ITERATOR_HPP
 #define BOOST_COMPUTE_ITERATOR_HPP
 
-#include <boost/compute/iterator/adjacent_transform_iterator.hpp>
 #include <boost/compute/iterator/binary_transform_iterator.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/iterator/constant_iterator.hpp>

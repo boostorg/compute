@@ -15,7 +15,7 @@
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/max_element.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/iterator/adjacent_transform_iterator.hpp>
+#include <boost/compute/iterator/detail/adjacent_transform_iterator.hpp>
 
 BOOST_AUTO_TEST_CASE(copy)
 {
@@ -27,8 +27,8 @@ BOOST_AUTO_TEST_CASE(copy)
     boost::compute::minus<int> minus_op;
 
     boost::compute::copy(
-        boost::compute::make_adjacent_transform_iterator(input.begin(), minus_op),
-        boost::compute::make_adjacent_transform_iterator(input.end(), minus_op),
+        boost::compute::detail::make_adjacent_transform_iterator(input.begin(), minus_op),
+        boost::compute::detail::make_adjacent_transform_iterator(input.end(), minus_op),
         output.begin()
     );
     BOOST_CHECK_EQUAL(int(output[0]), int(1));
@@ -48,8 +48,8 @@ BOOST_AUTO_TEST_CASE(find_largest_gap)
 
     boost::compute::vector<float>::iterator iter =
         boost::compute::max_element(
-            boost::compute::make_adjacent_transform_iterator(vector.begin(), minus_op),
-            boost::compute::make_adjacent_transform_iterator(vector.end(), minus_op)
+            boost::compute::detail::make_adjacent_transform_iterator(vector.begin(), minus_op),
+            boost::compute::detail::make_adjacent_transform_iterator(vector.end(), minus_op)
         ).base() - 1;
     BOOST_VERIFY(iter == vector.begin() + 1);
 }
