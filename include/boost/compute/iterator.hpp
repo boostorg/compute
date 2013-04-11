@@ -17,7 +17,6 @@
 #include <boost/compute/iterator/counting_iterator.hpp>
 #include <boost/compute/iterator/function_input_iterator.hpp>
 #include <boost/compute/iterator/permutation_iterator.hpp>
-#include <boost/compute/iterator/swizzle_iterator.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
 #include <boost/compute/iterator/zip_iterator.hpp>
 

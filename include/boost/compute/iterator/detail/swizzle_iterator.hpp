@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ITERATOR_SWIZZLE_ITERATOR_HPP
-#define BOOST_COMPUTE_ITERATOR_SWIZZLE_ITERATOR_HPP
+#ifndef BOOST_COMPUTE_ITERATOR_DETAIL_SWIZZLE_ITERATOR_HPP
+#define BOOST_COMPUTE_ITERATOR_DETAIL_SWIZZLE_ITERATOR_HPP
 
 #include <string>
 #include <cstddef>
@@ -30,12 +30,11 @@
 
 namespace boost {
 namespace compute {
+namespace detail {
 
 // forward declaration for swizzle_iterator
 template<class InputIterator, size_t Size>
 class swizzle_iterator;
-
-namespace detail {
 
 // meta-function returing the value_type for a swizzle_iterator
 template<class InputIterator, size_t Size>
@@ -57,7 +56,7 @@ class swizzle_iterator_base
 {
 public:
     typedef ::boost::iterator_adaptor<
-        ::boost::compute::swizzle_iterator<InputIterator, Size>,
+        swizzle_iterator<InputIterator, Size>,
         InputIterator,
         typename make_swizzle_iterator_value_type<InputIterator, Size>::type,
         typename std::iterator_traits<InputIterator>::iterator_category,
@@ -94,14 +93,14 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
                   << "." << expr.m_components;
 }
 
-} // end detail namespace
-
 template<class InputIterator, size_t Size>
 class swizzle_iterator :
-    public detail::swizzle_iterator_base<InputIterator, Size>::type
+    public swizzle_iterator_base<InputIterator, Size>::type
 {
 public:
-    typedef typename detail::swizzle_iterator_base<InputIterator, Size>::type super_type;
+    typedef typename
+        swizzle_iterator_base<InputIterator, Size>::type
+        super_type;
     typedef typename super_type::value_type value_type;
     typedef typename super_type::reference reference;
     typedef typename super_type::base_type base_type;
@@ -146,18 +145,18 @@ public:
 
     const buffer& get_buffer() const
     {
-        return detail::get_base_iterator_buffer(*this);
+        return get_base_iterator_buffer(*this);
     }
 
     template<class IndexExpression>
-    detail::swizzle_iterator_index_expr<InputIterator, Size, IndexExpression>
+    swizzle_iterator_index_expr<InputIterator, Size, IndexExpression>
     operator[](const IndexExpression &expr) const
     {
-        return detail::swizzle_iterator_index_expr<InputIterator,
-                                                   Size,
-                                                   IndexExpression>(super_type::base(),
-                                                                    expr,
-                                                                    m_components);
+        return swizzle_iterator_index_expr<InputIterator,
+                                           Size,
+                                           IndexExpression>(super_type::base(),
+                                                            expr,
+                                                            m_components);
     }
 
 private:
@@ -179,8 +178,6 @@ make_swizzle_iterator(InputIterator iterator, const std::string &components)
     return swizzle_iterator<InputIterator, Size>(iterator, components);
 }
 
-namespace detail {
-
 // is_device_iterator specialization for swizzle_iterator
 template<class Iterator>
 struct is_device_iterator<
@@ -197,7 +194,6 @@ struct is_device_iterator<
 > : public boost::true_type {};
 
 } // end detail namespace
-
 } // end compute namespace
 } // end boost namespace
 

@@ -21,7 +21,7 @@
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/iterator/swizzle_iterator.hpp>
+#include <boost/compute/iterator/detail/swizzle_iterator.hpp>
 
 namespace bc = boost::compute;
 
@@ -125,8 +125,8 @@ BOOST_AUTO_TEST_CASE(copy_swizzle_iterator)
 
     bc::vector<int4_> output4(4);
     bc::copy(
-        bc::make_swizzle_iterator<4>(input.begin(), "wzyx"),
-        bc::make_swizzle_iterator<4>(input.end(), "wzyx"),
+        bc::detail::make_swizzle_iterator<4>(input.begin(), "wzyx"),
+        bc::detail::make_swizzle_iterator<4>(input.end(), "wzyx"),
         output4.begin()
     );
     BOOST_CHECK_EQUAL(output4[0], int4_(4, 3, 2, 1));
@@ -136,8 +136,8 @@ BOOST_AUTO_TEST_CASE(copy_swizzle_iterator)
 
     bc::vector<int2_> output2(4);
     bc::copy(
-        bc::make_swizzle_iterator<2>(input.begin(), "xz"),
-        bc::make_swizzle_iterator<2>(input.end(), "xz"),
+        bc::detail::make_swizzle_iterator<2>(input.begin(), "xz"),
+        bc::detail::make_swizzle_iterator<2>(input.end(), "xz"),
         output2.begin()
     );
     BOOST_CHECK_EQUAL(output2[0], int2_(1, 3));
@@ -147,8 +147,8 @@ BOOST_AUTO_TEST_CASE(copy_swizzle_iterator)
 
     bc::vector<int> output1(4);
     bc::copy(
-        bc::make_swizzle_iterator<1>(input.begin(), "y"),
-        bc::make_swizzle_iterator<1>(input.end(), "y"),
+        bc::detail::make_swizzle_iterator<1>(input.begin(), "y"),
+        bc::detail::make_swizzle_iterator<1>(input.end(), "y"),
         output1.begin()
     );
     BOOST_CHECK_EQUAL(output1[0], int(2));
