@@ -38,6 +38,8 @@ get_base_iterator_buffer(const Iterator &iter,
                              >
                          >::type* = 0)
 {
+    (void) iter;
+
     static buffer null_buffer;
 
     return null_buffer;
