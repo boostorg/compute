@@ -15,7 +15,7 @@
 #include <boost/compute/image2d.hpp>
 #include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/algorithm/count.hpp>
-#include <boost/compute/iterator/pixel_input_iterator.hpp>
+#include <boost/compute/iterator/detail/pixel_input_iterator.hpp>
 
 namespace bc = boost::compute;
 
@@ -77,28 +77,28 @@ BOOST_AUTO_TEST_CASE(count_with_pixel_iterator)
     );
 
     BOOST_CHECK_EQUAL(
-        bc::count(bc::make_pixel_input_iterator<float>(image, 0),
-                  bc::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
+        bc::count(bc::detail::make_pixel_input_iterator<float>(image, 0),
+                  bc::detail::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
                   bc::float4_(0, 0, 0, 0)),
         size_t(1));
     BOOST_CHECK_EQUAL(
-        bc::count(bc::make_pixel_input_iterator<float>(image, 0),
-                  bc::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
+        bc::count(bc::detail::make_pixel_input_iterator<float>(image, 0),
+                  bc::detail::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
                   bc::float4_(1, 0, 0, 0)),
         size_t(2));
     BOOST_CHECK_EQUAL(
-        bc::count(bc::make_pixel_input_iterator<float>(image, 0),
-                  bc::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
+        bc::count(bc::detail::make_pixel_input_iterator<float>(image, 0),
+                  bc::detail::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
                   bc::float4_(1, 0, 0, 1)),
         size_t(3));
     BOOST_CHECK_EQUAL(
-        bc::count(bc::make_pixel_input_iterator<float>(image, 0),
-                  bc::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
+        bc::count(bc::detail::make_pixel_input_iterator<float>(image, 0),
+                  bc::detail::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
                   bc::float4_(1, 1, 0, 0)),
         size_t(1));
     BOOST_CHECK_EQUAL(
-        bc::count(bc::make_pixel_input_iterator<float>(image, 0),
-                  bc::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
+        bc::count(bc::detail::make_pixel_input_iterator<float>(image, 0),
+                  bc::detail::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
                   bc::float4_(1, 0, 1, 1)),
         size_t(1));
 }
@@ -125,9 +125,9 @@ BOOST_AUTO_TEST_CASE(find_with_pixel_iterator)
     );
     BOOST_CHECK_EQUAL(
         std::distance(
-            bc::make_pixel_input_iterator<float>(image),
-            bc::find(bc::make_pixel_input_iterator<float>(image, 0),
-                     bc::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
+            bc::detail::make_pixel_input_iterator<float>(image),
+            bc::find(bc::detail::make_pixel_input_iterator<float>(image, 0),
+                     bc::detail::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
                      bc::float4_(1, 0, 1, 1))
             ),
         ptrdiff_t(3));

@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ITERATOR_PIXEL_INPUT_ITERATOR_HPP
-#define BOOST_COMPUTE_ITERATOR_PIXEL_INPUT_ITERATOR_HPP
+#ifndef BOOST_COMPUTE_ITERATOR_DETAIL_PIXEL_INPUT_ITERATOR_HPP
+#define BOOST_COMPUTE_ITERATOR_DETAIL_PIXEL_INPUT_ITERATOR_HPP
 
 #include <cstddef>
 #include <iterator>
@@ -28,11 +28,10 @@
 
 namespace boost {
 namespace compute {
+namespace detail {
 
 // forward declaration for pixel_input_iterator<T>
 template<class T> class pixel_input_iterator;
-
-namespace detail {
 
 // helper class which defines the iterator_facade super-class
 // type for pixel_input_iterator<T>
@@ -41,7 +40,7 @@ class pixel_input_iterator_base
 {
 public:
     typedef ::boost::iterator_facade<
-        ::boost::compute::pixel_input_iterator<T>,
+        pixel_input_iterator<T>,
         typename ::boost::compute::make_vector_type<T, 4>::type,
         ::std::random_access_iterator_tag
     > type;
@@ -92,13 +91,11 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
                   << expr.m_expr << " / get_image_width(" << image << ")))";
 }
 
-} // end detail namespace
-
 template<class T>
-class pixel_input_iterator : public detail::pixel_input_iterator_base<T>::type
+class pixel_input_iterator : public pixel_input_iterator_base<T>::type
 {
 public:
-    typedef typename detail::pixel_input_iterator_base<T>::type super_type;
+    typedef typename pixel_input_iterator_base<T>::type super_type;
     typedef typename super_type::reference reference;
     typedef typename super_type::difference_type difference_type;
 
@@ -145,10 +142,10 @@ public:
     }
 
     template<class Expr>
-    detail::pixel_input_iterator_index_expr<T, Expr>
+    pixel_input_iterator_index_expr<T, Expr>
     operator[](const Expr &expr) const
     {
-        return detail::pixel_input_iterator_index_expr<T, Expr>(*m_image, expr);
+        return pixel_input_iterator_index_expr<T, Expr>(*m_image, expr);
     }
 
 private:
@@ -196,8 +193,6 @@ make_pixel_input_iterator(const image2d &image, size_t index = 0)
     return pixel_input_iterator<T>(image, index);
 }
 
-namespace detail {
-
 // is_device_iterator specialization for pixel_input_iterator
 template<class Iterator>
 struct is_device_iterator<
@@ -211,8 +206,7 @@ struct is_device_iterator<
 > : public boost::true_type {};
 
 } // end detail namespace
-
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_ITERATOR_PIXEL_INPUT_ITERATOR_HPP
+#endif // BOOST_COMPUTE_ITERATOR_DETAIL_PIXEL_INPUT_ITERATOR_HPP
