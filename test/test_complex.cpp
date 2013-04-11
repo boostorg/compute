@@ -130,3 +130,34 @@ BOOST_AUTO_TEST_CASE(complex_type_name)
         ) == 0
     );
 }
+
+BOOST_AUTO_TEST_CASE(transform_multiply)
+{
+    boost::compute::device device = boost::compute::system::default_device();
+    boost::compute::context context(device);
+    boost::compute::command_queue queue(context, device);
+
+    boost::compute::vector<std::complex<float> > x(context);
+    x.push_back(std::complex<float>(1.0f, 2.0f));
+    x.push_back(std::complex<float>(-2.0f, 5.0f));
+
+    boost::compute::vector<std::complex<float> > y(context);
+    y.push_back(std::complex<float>(3.0f, 4.0f));
+    y.push_back(std::complex<float>(2.0f, -1.0f));
+
+    boost::compute::vector<std::complex<float> > z(2, context);
+
+    // z = x * y
+    boost::compute::transform(
+        x.begin(),
+        x.end(),
+        y.begin(),
+        z.begin(),
+        boost::compute::multiplies<std::complex<float> >(),
+        queue
+    );
+    queue.finish();
+
+    BOOST_CHECK_EQUAL(std::complex<float>(z[0]), std::complex<float>(-5.0f, 10.0f));
+    BOOST_CHECK_EQUAL(std::complex<float>(z[1]), std::complex<float>(1.0f, 12.0f));
+}

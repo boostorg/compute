@@ -66,6 +66,36 @@ struct imag
 
 namespace detail {
 
+template<class Arg1, class Arg2, class T>
+struct invoked_complex_multiplies
+{
+    typedef typename std::complex<T> result_type;
+
+    invoked_complex_multiplies(const Arg1 &x, const Arg2 &y)
+        : m_x(x),
+          m_y(y)
+    {
+    }
+
+    Arg1 m_x;
+    Arg2 m_y;
+};
+
+template<class Arg1, class Arg2, class T>
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const invoked_complex_multiplies<Arg1, Arg2, T> &expr)
+{
+    typedef typename std::complex<T> value_type;
+
+    kernel << "(" << type_name<value_type>() << ")"
+           << "(" << expr.m_x << ".x*" << expr.m_y << ".x-"
+                  << expr.m_x << ".y*" << expr.m_y << ".y,"
+                  << expr.m_x << ".y*" << expr.m_y << ".x+"
+                  << expr.m_x << ".x*" << expr.m_y << ".y" << ")";
+
+    return kernel;
+}
+
 template<class Arg, class T>
 struct invoked_complex_conj
 {
@@ -92,6 +122,27 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 }
 
 } // end detail namespace
+
+// specialization for multiplies<T>
+template<class T>
+class multiplies<std::complex<T> > :
+    public function<std::complex<T> (std::complex<T>, std::complex<T>)>
+{
+public:
+    multiplies() :
+        function<
+            std::complex<T> (std::complex<T>, std::complex<T>)
+        >("complex_multiplies")
+    {
+    }
+
+    template<class Arg1, class Arg2>
+    detail::invoked_complex_multiplies<Arg1, Arg2, T>
+    operator()(const Arg1 &x, const Arg2 &y) const
+    {
+        return detail::invoked_complex_multiplies<Arg1, Arg2, T>(x, y);
+    }
+};
 
 // returns the complex conjugate of a complex<T>
 template<class T>
