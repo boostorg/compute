@@ -153,6 +153,7 @@ public:
         return static_cast<size_t>(count);
     }
 
+private:
     static platform device_platform(const device &device) {
         return platform( device.get_info<cl_platform_id>(CL_DEVICE_PLATFORM) );
     }
