@@ -15,12 +15,12 @@
 
 int main()
 {
-    // get the default GPU device
-    boost::compute::device gpu =
-        boost::compute::system::default_gpu_device();
+    // get the default device
+    boost::compute::device device =
+        boost::compute::system::default_device();
 
-    // print the GPU's name
-    std::cout << "hello from " << gpu.name() << std::endl;
+    // print the device's name
+    std::cout << "hello from " << device.name() << std::endl;
 
     return 0;
 }

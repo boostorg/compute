@@ -31,10 +31,21 @@ public:
     static device default_device()
     {
         // check for device from environment variable
-        const char *name = std::getenv("BOOST_COMPUTE_DEFAULT_DEVICE");
-        if(name){
-            device device = find_device(name);
-            if(device.id()){
+        const char *name     = std::getenv("BOOST_COMPUTE_DEFAULT_DEVICE");
+        const char *platform = std::getenv("BOOST_COMPUTE_DEFAULT_PLATFORM");
+        const char *vendor   = std::getenv("BOOST_COMPUTE_DEFAULT_VENDOR");
+
+        if(name || platform || vendor){
+            BOOST_FOREACH(const device &device, devices()){
+                if (name && !matches(device.name(), name))
+                    continue;
+
+                if (platform && !matches(device_platform(device).name(), platform))
+                    continue;
+
+                if (vendor && !matches(device.vendor(), vendor))
+                    continue;
+
                 return device;
             }
         }
@@ -140,6 +151,17 @@ public:
         cl_uint count = 0;
         clGetPlatformIDs(0, 0, &count);
         return static_cast<size_t>(count);
+    }
+
+private:
+    static platform device_platform(const device &device)
+    {
+        return platform(device.get_info<cl_platform_id>(CL_DEVICE_PLATFORM));
+    }
+
+    static bool matches(const std::string &str, const std::string &pattern)
+    {
+        return str.find(pattern) != std::string::npos;
     }
 };
 
