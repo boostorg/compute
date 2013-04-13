@@ -936,17 +936,19 @@ public:
                                        local_work_size ? &local_work_size : 0);
     }
 
-    cl_int enqueue_task(const kernel &kernel)
+    event enqueue_task(const kernel &kernel)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(kernel.get_context() == this->get_context());
 
-        cl_int ret = clEnqueueTask(m_queue, kernel, 0, 0, 0);
+        event event_;
+
+        cl_int ret = clEnqueueTask(m_queue, kernel, 0, 0, &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
     void flush()

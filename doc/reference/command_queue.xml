@@ -308,7 +308,7 @@ if(queue.get_properties() &amp; command_queue::enable_profiling){
 
           <!-- command_queue::enqueue_task(const kernel&) -->
           <method name="enqueue_task">
-            <type>void</type>
+            <type><classname>event</classname></type>
 
             <parameter name="kernel">
               <paramtype>const <classname>kernel</classname>&amp;</paramtype>
