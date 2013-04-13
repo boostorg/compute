@@ -66,3 +66,14 @@ BOOST_AUTO_TEST_CASE(construct_from_cl_mem)
     // cleanup cl_mem
     clReleaseMemObject(mem);
 }
+
+BOOST_AUTO_TEST_CASE(reference_count)
+{
+    using boost::compute::uint_;
+
+    boost::compute::context context =
+        boost::compute::system::default_context();
+
+    boost::compute::buffer buf(context, 16);
+    BOOST_CHECK_GE(buf.reference_count(), uint_(1));
+}

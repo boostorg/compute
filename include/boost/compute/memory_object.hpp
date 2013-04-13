@@ -60,6 +60,11 @@ public:
         return get_memory_info<void *>(CL_MEM_HOST_PTR);
     }
 
+    uint_ reference_count() const
+    {
+        return get_memory_info<uint_>(CL_MEM_REFERENCE_COUNT);
+    }
+
     template<class T>
     T get_memory_info(cl_mem_info info) const
     {
