@@ -47,12 +47,12 @@
 
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
-    <span class="comment">// get the default GPU device</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">device</span> <span class="identifier">gpu</span> <span class="special">=</span>
-        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">default_gpu_device</span><span class="special">();</span>
+    <span class="comment">// get the default device</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">device</span> <span class="identifier">device</span> <span class="special">=</span>
+        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">default_device</span><span class="special">();</span>
 
-    <span class="comment">// print the GPU's name</span>
-    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"hello from "</span> <span class="special">&lt;&lt;</span> <span class="identifier">gpu</span><span class="special">.</span><span class="identifier">name</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="comment">// print the device's name</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"hello from "</span> <span class="special">&lt;&lt;</span> <span class="identifier">device</span><span class="special">.</span><span class="identifier">name</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 
     <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">}</span>
@@ -120,7 +120,7 @@
 <p>
         The following example shows how to calculate the square-root of a vector
         of <code class="computeroutput"><span class="keyword">float</span></code>s on a compute device
-        using the <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp8337216.html" title="Function template transform">transform()</a></code>
+        using the <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp8766528.html" title="Function template transform">transform()</a></code>
         function.
       </p>
 <p>
@@ -178,7 +178,7 @@
         The following example shows how to transfer a set of 3D points stored as
         an array of <code class="computeroutput"><span class="keyword">float</span></code>s on the host
         the device and then calculate the sum of the point coordinates using the
-        <code class="computeroutput"><a class="link" href="../boost/compute/accumulate_idp7575216.html" title="Function template accumulate">accumulate()</a></code>
+        <code class="computeroutput"><a class="link" href="../boost/compute/accumulate_idp7997392.html" title="Function template accumulate">accumulate()</a></code>
         function. The sum is transferred to the host and the centroid computed by
         dividing by the total number of points.
       </p>

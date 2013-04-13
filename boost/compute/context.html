@@ -28,27 +28,28 @@
 <span class="keyword">class</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="context.html#boost.compute.contextconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <span class="keyword">explicit</span> <a class="link" href="context.html#idp7270224-bb"><span class="identifier">context</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="device.html" title="Class device">device</a><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">cl_context_properties</span><span class="special">*</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="context.html#idp7275424-bb"><span class="identifier">context</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  context&amp; <a class="link" href="context.html#idp7278608-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="context.html#idp7281792-bb"><span class="special">~</span><span class="identifier">context</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="context.html#idp7651056-bb"><span class="identifier">context</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="device.html" title="Class device">device</a><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">cl_context_properties</span><span class="special">*</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="context.html#idp7656256-bb"><span class="identifier">context</span></a><span class="special">(</span><span class="identifier">cl_context</span><span class="special">,</span> <span class="keyword">bool</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="context.html#idp7661840-bb"><span class="identifier">context</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  context&amp; <a class="link" href="context.html#idp7665024-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="context.html#idp7668208-bb"><span class="special">~</span><span class="identifier">context</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="context.html#idp7282944-bb">public member functions</a></span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="context.html#idp7283696-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_context_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="context.html#idp7669360-bb">public member functions</a></span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="context.html#idp7670112-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_context_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp35610000"></a><h2>Description</h2>
+<a name="idp6304384"></a><h2>Description</h2>
 <p>
             The <code class="computeroutput">context</code> class represents a compute context.
           </p>
 <div class="refsect2">
-<a name="idp35611520"></a><h3>
+<a name="idp6306096"></a><h3>
 <a name="boost.compute.contextconstruct-copy-destruct"></a><code class="computeroutput">context</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp7270224-bb"></a><span class="identifier">context</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="device.html" title="Class device">device</a><span class="special">&amp;</span> device<span class="special">,</span> 
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp7651056-bb"></a><span class="identifier">context</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="device.html" title="Class device">device</a><span class="special">&amp;</span> device<span class="special">,</span> 
                  <span class="keyword">const</span> <span class="identifier">cl_context_properties</span><span class="special">*</span> properties <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
               Creates a new context object for <code class="computeroutput">device</code> with
@@ -56,28 +57,36 @@
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7275424-bb"></a><span class="identifier">context</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp7656256-bb"></a><span class="identifier">context</span><span class="special">(</span><span class="identifier">cl_context</span> context<span class="special">,</span> <span class="keyword">bool</span> retain <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span></pre>
+<p>
+              Creates a new context object for <code class="computeroutput">context</code>. If
+              <code class="computeroutput">retain</code> is <code class="computeroutput">true</code> (the default) the
+              reference count for <code class="computeroutput">context</code> will be incremented.
+            </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a name="idp7661840-bb"></a><span class="identifier">context</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Creates a new context object as a copy of <code class="computeroutput">other</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout">context&amp; <a name="idp7278608-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout">context&amp; <a name="idp7665024-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Copies the context from <code class="computeroutput">other</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7281792-bb"></a><span class="special">~</span><span class="identifier">context</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7668208-bb"></a><span class="special">~</span><span class="identifier">context</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>Destroys the context object.</p>
 </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp35640560"></a><h3>
-<a name="idp7282944-bb"></a><code class="computeroutput">context</code> public member functions</h3>
+<a name="idp6349792"></a><h3>
+<a name="idp7669360-bb"></a><code class="computeroutput">context</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7283696-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_context_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7670112-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_context_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns information about the context.
               </p>

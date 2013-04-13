@@ -28,54 +28,54 @@
 <span class="keyword">class</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="platform.html#boost.compute.platformconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <span class="keyword">explicit</span> <a class="link" href="platform.html#idp7448560-bb"><span class="identifier">platform</span></a><span class="special">(</span><span class="identifier">cl_platform_id</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="platform.html#idp7451600-bb"><span class="identifier">platform</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  platform&amp; <a class="link" href="platform.html#idp7454784-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="platform.html#idp7457968-bb"><span class="special">~</span><span class="identifier">platform</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="platform.html#idp7847536-bb"><span class="identifier">platform</span></a><span class="special">(</span><span class="identifier">cl_platform_id</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="platform.html#idp7850576-bb"><span class="identifier">platform</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  platform&amp; <a class="link" href="platform.html#idp7853760-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="platform.html#idp7856944-bb"><span class="special">~</span><span class="identifier">platform</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="platform.html#idp7459120-bb">public member functions</a></span>
-  <span class="identifier">cl_platform_id</span> <a class="link" href="platform.html#idp7459872-bb"><span class="identifier">id</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="platform.html#idp7462144-bb"><span class="identifier">name</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="platform.html#idp7464416-bb"><span class="identifier">vendor</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="platform.html#idp7466688-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_platform_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="device.html" title="Class device">device</a><span class="special">&gt;</span> <a class="link" href="platform.html#idp7470848-bb"><span class="identifier">devices</span></a><span class="special">(</span><span class="identifier">cl_device_type</span> <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">size_t</span> <a class="link" href="platform.html#idp7474896-bb"><span class="identifier">device_count</span></a><span class="special">(</span><span class="identifier">cl_device_type</span> <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="platform.html#idp7858096-bb">public member functions</a></span>
+  <span class="identifier">cl_platform_id</span> <a class="link" href="platform.html#idp7858848-bb"><span class="identifier">id</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="platform.html#idp7861120-bb"><span class="identifier">name</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="platform.html#idp7863392-bb"><span class="identifier">vendor</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="platform.html#idp7865664-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_platform_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="device.html" title="Class device">device</a><span class="special">&gt;</span> <a class="link" href="platform.html#idp7869824-bb"><span class="identifier">devices</span></a><span class="special">(</span><span class="identifier">cl_device_type</span> <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">size_t</span> <a class="link" href="platform.html#idp7873872-bb"><span class="identifier">device_count</span></a><span class="special">(</span><span class="identifier">cl_device_type</span> <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="platform.html#idp7478432-bb">public static functions</a></span>
-  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="platform.html" title="Class platform">platform</a><span class="special">&gt;</span> <a class="link" href="platform.html#idp7479184-bb"><span class="identifier">platforms</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <span class="identifier">size_t</span> <a class="link" href="platform.html#idp7481968-bb"><span class="identifier">platform_count</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="platform.html#idp7877792-bb">public static functions</a></span>
+  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="platform.html" title="Class platform">platform</a><span class="special">&gt;</span> <a class="link" href="platform.html#idp7878688-bb"><span class="identifier">platforms</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="identifier">size_t</span> <a class="link" href="platform.html#idp7881904-bb"><span class="identifier">platform_count</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp36369152"></a><h2>Description</h2>
+<a name="idp7118720"></a><h2>Description</h2>
 <p>
             The platform class provides an interface to an OpenCL platform.
           </p>
 <div class="refsect2">
-<a name="idp36370176"></a><h3>
+<a name="idp7119648"></a><h3>
 <a name="boost.compute.platformconstruct-copy-destruct"></a><code class="computeroutput">platform</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp7448560-bb"></a><span class="identifier">platform</span><span class="special">(</span><span class="identifier">cl_platform_id</span> id<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp7847536-bb"></a><span class="identifier">platform</span><span class="special">(</span><span class="identifier">cl_platform_id</span> id<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Creates a new platform object for <code class="computeroutput">id</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7451600-bb"></a><span class="identifier">platform</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7850576-bb"></a><span class="identifier">platform</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Creates a new platform object as a copy of <code class="computeroutput">other</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout">platform&amp; <a name="idp7454784-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout">platform&amp; <a name="idp7853760-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Copies the platform from <code class="computeroutput">other</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7457968-bb"></a><span class="special">~</span><span class="identifier">platform</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7856944-bb"></a><span class="special">~</span><span class="identifier">platform</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
               Destroys the platform object.
             </p>
@@ -83,41 +83,41 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp36397264"></a><h3>
-<a name="idp7459120-bb"></a><code class="computeroutput">platform</code> public member functions</h3>
+<a name="idp7146672"></a><h3>
+<a name="idp7858096-bb"></a><code class="computeroutput">platform</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">cl_platform_id</span> <a name="idp7459872-bb"></a><span class="identifier">id</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">cl_platform_id</span> <a name="idp7858848-bb"></a><span class="identifier">id</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns the ID of the platform.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp7462144-bb"></a><span class="identifier">name</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp7861120-bb"></a><span class="identifier">name</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns the name of the platform.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp7464416-bb"></a><span class="identifier">vendor</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp7863392-bb"></a><span class="identifier">vendor</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns the name of the vendor of the platform.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7466688-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_platform_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7865664-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_platform_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns information about the platform.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="device.html" title="Class device">device</a><span class="special">&gt;</span> <a name="idp7470848-bb"></a><span class="identifier">devices</span><span class="special">(</span><span class="identifier">cl_device_type</span> type <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="device.html" title="Class device">device</a><span class="special">&gt;</span> <a name="idp7869824-bb"></a><span class="identifier">devices</span><span class="special">(</span><span class="identifier">cl_device_type</span> type <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns a vector of devices for the platform.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">size_t</span> <a name="idp7474896-bb"></a><span class="identifier">device_count</span><span class="special">(</span><span class="identifier">cl_device_type</span> type <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">size_t</span> <a name="idp7873872-bb"></a><span class="identifier">device_count</span><span class="special">(</span><span class="identifier">cl_device_type</span> type <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns the number of devices on the platform.
               </p>
@@ -125,18 +125,18 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp36443392"></a><h3>
-<a name="idp7478432-bb"></a><code class="computeroutput">platform</code> public static functions</h3>
+<a name="idp7192864"></a><h3>
+<a name="idp7877792-bb"></a><code class="computeroutput">platform</code> public static functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="platform.html" title="Class platform">platform</a><span class="special">&gt;</span> <a name="idp7479184-bb"></a><span class="identifier">platforms</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="platform.html" title="Class platform">platform</a><span class="special">&gt;</span> <a name="idp7878688-bb"></a><span class="identifier">platforms</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Returns a vector of all the OpenCL platforms available on the
                 system.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">size_t</span> <a name="idp7481968-bb"></a><span class="identifier">platform_count</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">size_t</span> <a name="idp7881904-bb"></a><span class="identifier">platform_count</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Returns the total number of OpenCL platforms available on the
                 system.

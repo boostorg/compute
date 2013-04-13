@@ -28,25 +28,25 @@
 <span class="keyword">class</span> <a class="link" href="system.html" title="Class system">system</a> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
 
-  <span class="comment">// <a class="link" href="system.html#idp7528176-bb">public static functions</a></span>
-  <span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a class="link" href="system.html#idp7528928-bb"><span class="identifier">default_device</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a class="link" href="system.html#idp7531712-bb"><span class="identifier">default_gpu_device</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a class="link" href="system.html#idp7534208-bb"><span class="identifier">default_cpu_device</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="system.html#idp7536704-bb"><span class="identifier">default_context</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="platform.html" title="Class platform">platform</a><span class="special">&gt;</span> <a class="link" href="system.html#idp7539200-bb"><span class="identifier">platforms</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <span class="identifier">size_t</span> <a class="link" href="system.html#idp7541984-bb"><span class="identifier">platform_count</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="system.html#idp7942672-bb">public static functions</a></span>
+  <span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a class="link" href="system.html#idp7943568-bb"><span class="identifier">default_device</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a class="link" href="system.html#idp7946720-bb"><span class="identifier">default_gpu_device</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a class="link" href="system.html#idp7949584-bb"><span class="identifier">default_cpu_device</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="system.html#idp7952448-bb"><span class="identifier">default_context</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="platform.html" title="Class platform">platform</a><span class="special">&gt;</span> <a class="link" href="system.html#idp7955296-bb"><span class="identifier">platforms</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="identifier">size_t</span> <a class="link" href="system.html#idp7958512-bb"><span class="identifier">platform_count</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp36682160"></a><h2>Description</h2>
+<a name="idp7449472"></a><h2>Description</h2>
 <p>
             The system class provides an interface to an OpenCL system.
           </p>
 <div class="refsect2">
-<a name="idp36683088"></a><h3>
-<a name="idp7528176-bb"></a><code class="computeroutput">system</code> public static functions</h3>
+<a name="idp7450496"></a><h3>
+<a name="idp7942672-bb"></a><code class="computeroutput">system</code> public static functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a name="idp7528928-bb"></a><span class="identifier">default_device</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a name="idp7943568-bb"></a><span class="identifier">default_device</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Returns the default compute device for the system. The default
                 device returned is the first GPU device found. If no GPU devices
@@ -56,32 +56,32 @@
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a name="idp7531712-bb"></a><span class="identifier">default_gpu_device</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a name="idp7946720-bb"></a><span class="identifier">default_gpu_device</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Returns the default GPU compute device for the system.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a name="idp7534208-bb"></a><span class="identifier">default_cpu_device</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a name="idp7949584-bb"></a><span class="identifier">default_cpu_device</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Returns the default CPU compute device for the system.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="context.html" title="Class context">context</a> <a name="idp7536704-bb"></a><span class="identifier">default_context</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="context.html" title="Class context">context</a> <a name="idp7952448-bb"></a><span class="identifier">default_context</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Returns the default compute context for the system.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="platform.html" title="Class platform">platform</a><span class="special">&gt;</span> <a name="idp7539200-bb"></a><span class="identifier">platforms</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="platform.html" title="Class platform">platform</a><span class="special">&gt;</span> <a name="idp7955296-bb"></a><span class="identifier">platforms</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Returns a vector of all the OpenCL platforms available on the
                 system.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">size_t</span> <a name="idp7541984-bb"></a><span class="identifier">platform_count</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">size_t</span> <a name="idp7958512-bb"></a><span class="identifier">platform_count</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Returns the total number of OpenCL platforms available on the
                 system.

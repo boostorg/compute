@@ -28,30 +28,31 @@
 <span class="keyword">class</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="kernel.html#boost.compute.kernelconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="kernel.html#idp7399744-bb"><span class="identifier">kernel</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="program.html" title="Class program">program</a><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="kernel.html#idp7404320-bb"><span class="identifier">kernel</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  kernel&amp; <a class="link" href="kernel.html#idp7407504-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="kernel.html#idp7410688-bb"><span class="special">~</span><span class="identifier">kernel</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="kernel.html#idp7793136-bb"><span class="identifier">kernel</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="program.html" title="Class program">program</a><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="kernel.html#idp7797712-bb"><span class="identifier">kernel</span></a><span class="special">(</span><span class="identifier">cl_kernel</span><span class="special">,</span> <span class="keyword">bool</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="kernel.html#idp7803296-bb"><span class="identifier">kernel</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  kernel&amp; <a class="link" href="kernel.html#idp7806480-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="kernel.html#idp7809664-bb"><span class="special">~</span><span class="identifier">kernel</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="kernel.html#idp7411840-bb">public member functions</a></span>
-  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="kernel.html#idp7412592-bb"><span class="identifier">name</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">size_t</span> <a class="link" href="kernel.html#idp7414864-bb"><span class="identifier">num_args</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <a class="link" href="program.html" title="Class program">program</a> <a class="link" href="kernel.html#idp7417264-bb"><span class="identifier">get_program</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="kernel.html#idp7419664-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="kernel.html#idp7422064-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_kernel_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="kernel.html#idp7427728-bb"><span class="identifier">set_arg</span></a><span class="special">(</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span><span class="special">*</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">void</span> <a class="link" href="kernel.html#idp7433936-bb"><span class="identifier">set_arg</span></a><span class="special">(</span><span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-   <a class="link" href="kernel.html#idp7439632-bb"><span class="keyword">operator</span> <span class="identifier">cl_kernel</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="kernel.html#idp7810816-bb">public member functions</a></span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="kernel.html#idp7811568-bb"><span class="identifier">name</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">size_t</span> <a class="link" href="kernel.html#idp7813840-bb"><span class="identifier">num_args</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <a class="link" href="program.html" title="Class program">program</a> <a class="link" href="kernel.html#idp7816240-bb"><span class="identifier">get_program</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="kernel.html#idp7818640-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="kernel.html#idp7821040-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_kernel_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="kernel.html#idp7826704-bb"><span class="identifier">set_arg</span></a><span class="special">(</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span><span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">void</span> <a class="link" href="kernel.html#idp7832912-bb"><span class="identifier">set_arg</span></a><span class="special">(</span><span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+   <a class="link" href="kernel.html#idp7838608-bb"><span class="keyword">operator</span> <span class="identifier">cl_kernel</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp36172992"></a><h2>Description</h2>
+<a name="idp6912064"></a><h2>Description</h2>
 <p>
             Once created, kernels are executed on a compute device using one
             of the following methods:
               </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><a class="link" href="command_queue.html#idp7241248-bb">command_queue::enqueue_nd_range_kernel()</a></li>
-<li class="listitem"><a class="link" href="command_queue.html#idp7249088-bb">command_queue::enqueue_task()</a></li>
+<li class="listitem"><a class="link" href="command_queue.html#idp7628544-bb">command_queue::enqueue_nd_range_kernel()</a></li>
+<li class="listitem"><a class="link" href="command_queue.html#idp7636512-bb">command_queue::enqueue_task()</a></li>
 </ul></div>
 <p>
           </p>
@@ -60,32 +61,40 @@
                       <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a>
           </p>
 <div class="refsect2">
-<a name="idp36179008"></a><h3>
+<a name="idp6918080"></a><h3>
 <a name="boost.compute.kernelconstruct-copy-destruct"></a><code class="computeroutput">kernel</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp7399744-bb"></a><span class="identifier">kernel</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="program.html" title="Class program">program</a><span class="special">&amp;</span> program<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> name<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7793136-bb"></a><span class="identifier">kernel</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="program.html" title="Class program">program</a><span class="special">&amp;</span> program<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> name<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Creates a new kernel object from <code class="computeroutput">program</code> with
               <code class="computeroutput">name</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7404320-bb"></a><span class="identifier">kernel</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp7797712-bb"></a><span class="identifier">kernel</span><span class="special">(</span><span class="identifier">cl_kernel</span> kernel<span class="special">,</span> <span class="keyword">bool</span> retain <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span></pre>
+<p>
+              Creates a new kernel object for <code class="computeroutput">kernel</code>. If
+              <code class="computeroutput">retain</code> is <code class="computeroutput">true</code> (the default) the
+              reference count for <code class="computeroutput">kernel</code> will be incremented.
+            </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a name="idp7803296-bb"></a><span class="identifier">kernel</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Creates a new kernel object as a copy of <code class="computeroutput">other</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout">kernel&amp; <a name="idp7407504-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout">kernel&amp; <a name="idp7806480-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
 <p>
               Copies the kernel from <code class="computeroutput">other</code>.
             </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7410688-bb"></a><span class="special">~</span><span class="identifier">kernel</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp7809664-bb"></a><span class="special">~</span><span class="identifier">kernel</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>
               Destroys the kernel object.
             </p>
@@ -93,42 +102,42 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp36211216"></a><h3>
-<a name="idp7411840-bb"></a><code class="computeroutput">kernel</code> public member functions</h3>
+<a name="idp6960912"></a><h3>
+<a name="idp7810816-bb"></a><code class="computeroutput">kernel</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp7412592-bb"></a><span class="identifier">name</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp7811568-bb"></a><span class="identifier">name</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns the name of the kernel.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">size_t</span> <a name="idp7414864-bb"></a><span class="identifier">num_args</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">size_t</span> <a name="idp7813840-bb"></a><span class="identifier">num_args</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns the number of arguments that the kernel function
                 expects.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="program.html" title="Class program">program</a> <a name="idp7417264-bb"></a><span class="identifier">get_program</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><a class="link" href="program.html" title="Class program">program</a> <a name="idp7816240-bb"></a><span class="identifier">get_program</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns the program for the kernel.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="context.html" title="Class context">context</a> <a name="idp7419664-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><a class="link" href="context.html" title="Class context">context</a> <a name="idp7818640-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns the context for the kernel.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7422064-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_kernel_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7821040-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_kernel_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Returns information about the kernel.
               </p>
 <p>
                 For example, to get the name of the kernel (without using the
-                <code class="computeroutput"><a class="link" href="kernel.html#idp7412592-bb">name()</a></code> method):
+                <code class="computeroutput"><a class="link" href="kernel.html#idp7811568-bb">name()</a></code> method):
 </p>
 <pre class="programlisting">
 std::string function_name = kernel.get_info&lt;std::string&gt;(CL_KERNEL_FUNCTION_NAME);
@@ -137,20 +146,20 @@ std::string function_name = kernel.get_info&lt;std::string&gt;(CL_KERNEL_FUNCTIO
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp7427728-bb"></a><span class="identifier">set_arg</span><span class="special">(</span><span class="identifier">size_t</span> index<span class="special">,</span> <span class="identifier">size_t</span> size<span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span><span class="special">*</span> value<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp7826704-bb"></a><span class="identifier">set_arg</span><span class="special">(</span><span class="identifier">size_t</span> index<span class="special">,</span> <span class="identifier">size_t</span> size<span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span><span class="special">*</span> value<span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Sets the argument at <code class="computeroutput">index</code> to <code class="computeroutput">value</code>
                 with <code class="computeroutput">size</code>.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">void</span> <a name="idp7433936-bb"></a><span class="identifier">set_arg</span><span class="special">(</span><span class="identifier">size_t</span> index<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> value<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">void</span> <a name="idp7832912-bb"></a><span class="identifier">set_arg</span><span class="special">(</span><span class="identifier">size_t</span> index<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> value<span class="special">)</span><span class="special">;</span></pre>
 <p>
                 Sets the argument at <code class="computeroutput">index</code> to <code class="computeroutput">value</code>.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"> <a name="idp7439632-bb"></a><span class="keyword">operator</span> <span class="identifier">cl_kernel</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"> <a name="idp7838608-bb"></a><span class="keyword">operator</span> <span class="identifier">cl_kernel</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 Converts the kernel object to a <code class="computeroutput">cl_kernel</code>.
               </p>
