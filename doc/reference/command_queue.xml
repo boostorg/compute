@@ -281,7 +281,7 @@ if(queue.get_properties() &amp; command_queue::enable_profiling){
                                                       const size_t*,
                                                       const size_t*) -->
           <method name="enqueue_nd_range_kernel">
-            <type>void</type>
+            <type><classname>event</classname></type>
 
             <parameter name="kernel">
               <paramtype>const <classname>kernel</classname>&amp;</paramtype>

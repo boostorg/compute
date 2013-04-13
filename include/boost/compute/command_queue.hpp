@@ -885,15 +885,17 @@ public:
     }
     #endif // CL_VERSION_1_2
 
-    cl_int enqueue_nd_range_kernel(const kernel &kernel,
-                                   size_t work_dim,
-                                   const size_t *global_work_offset,
-                                   const size_t *global_work_size,
-                                   const size_t *local_work_size = 0)
+    event enqueue_nd_range_kernel(const kernel &kernel,
+                                  size_t work_dim,
+                                  const size_t *global_work_offset,
+                                  const size_t *global_work_size,
+                                  const size_t *local_work_size = 0)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(kernel.get_context() == this->get_context());
         BOOST_ASSERT(work_dim > 0 && work_dim <= CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS);
+
+        event event_;
 
         cl_int ret = clEnqueueNDRangeKernel(m_queue,
                                             kernel,
@@ -903,17 +905,17 @@ public:
                                             local_work_size ? local_work_size : 0,
                                             0,
                                             0,
-                                            0);
+                                            &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
-    cl_int enqueue_1d_range_kernel(const kernel &kernel,
-                                   size_t global_work_offset,
-                                   size_t global_work_size)
+    event enqueue_1d_range_kernel(const kernel &kernel,
+                                  size_t global_work_offset,
+                                  size_t global_work_size)
     {
         return enqueue_nd_range_kernel(kernel,
                                        1,
@@ -922,10 +924,10 @@ public:
                                        0);
     }
 
-    cl_int enqueue_1d_range_kernel(const kernel &kernel,
-                                   size_t global_work_offset,
-                                   size_t global_work_size,
-                                   size_t local_work_size)
+    event enqueue_1d_range_kernel(const kernel &kernel,
+                                  size_t global_work_offset,
+                                  size_t global_work_size,
+                                  size_t local_work_size)
     {
         return enqueue_nd_range_kernel(kernel,
                                        1,
