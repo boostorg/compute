@@ -106,6 +106,11 @@ public:
         }
     }
 
+    cl_event& get() const
+    {
+        return const_cast<cl_event &>(m_event);
+    }
+
     cl_int get_status() const
     {
         return get_info<cl_int>(CL_EVENT_COMMAND_EXECUTION_STATUS);

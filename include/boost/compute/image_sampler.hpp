@@ -93,6 +93,11 @@ public:
         }
     }
 
+    cl_sampler& get() const
+    {
+        return const_cast<cl_sampler &>(m_sampler);
+    }
+
     context get_context() const
     {
         return context(get_info<cl_context>(CL_SAMPLER_CONTEXT));

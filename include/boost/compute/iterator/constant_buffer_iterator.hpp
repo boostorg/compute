@@ -99,7 +99,7 @@ public:
     operator[](const Expr &expr) const
     {
         BOOST_ASSERT(m_buffer);
-        BOOST_ASSERT(m_buffer->get_mem());
+        BOOST_ASSERT(m_buffer->get());
 
         return detail::buffer_iterator_index_expr<T, Expr>(*m_buffer,
                                                            m_index,

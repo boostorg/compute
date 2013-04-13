@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(construct_from_cl_mem)
     boost::compute::buffer buffer(mem);
 
     // check buffer
-    BOOST_CHECK(buffer.get_mem() == mem);
+    BOOST_CHECK(buffer.get() == mem);
     BOOST_CHECK(buffer.get_context() == context);
     BOOST_CHECK_EQUAL(buffer.size(), size_t(16));
 

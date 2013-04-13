@@ -393,7 +393,7 @@ public:
 
     void set_arg(size_t index, const memory_object &mem)
     {
-        set_arg<cl_mem>(index, mem.get_mem());
+        set_arg<cl_mem>(index, mem.get());
     }
 
     void set_arg(size_t index, const image_sampler &sampler)
@@ -574,7 +574,7 @@ public:
         for(size_t i = 0; i < m_stored_buffers.size(); i++){
             const detail::meta_kernel_buffer_info &bi = m_stored_buffers[i];
 
-            if(bi.m_buffer->get_mem() == buffer.get_mem() &&
+            if(bi.m_buffer->get() == buffer.get() &&
                bi.address_space == address_space){
                 return bi.identifier;
             }

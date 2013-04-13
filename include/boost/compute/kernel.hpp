@@ -91,6 +91,11 @@ public:
         }
     }
 
+    cl_kernel& get() const
+    {
+        return const_cast<cl_kernel &>(m_kernel);
+    }
+
     std::string name() const
     {
         return get_info<std::string>(CL_KERNEL_FUNCTION_NAME);
@@ -173,13 +178,11 @@ public:
     }
 
     // specialization for buffer, image2d and image3d
-    void set_arg(size_t index, const memory_object &memory_object)
+    void set_arg(size_t index, const memory_object &mem)
     {
-        BOOST_ASSERT(memory_object.get_context() == this->get_context());
+        BOOST_ASSERT(mem.get_context() == this->get_context());
 
-        cl_mem mem = memory_object.get_mem();
-
-        set_arg(index, sizeof(cl_mem), static_cast<const void *>(&mem));
+        set_arg(index, sizeof(cl_mem), static_cast<const void *>(&mem.get()));
     }
 
     // specialization for image samplers

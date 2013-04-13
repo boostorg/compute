@@ -84,6 +84,11 @@ public:
         }
     }
 
+    cl_context& get() const
+    {
+        return const_cast<cl_context &>(m_context);
+    }
+
     device get_device() const
     {
         size_t count = 0;

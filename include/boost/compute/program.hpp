@@ -76,6 +76,11 @@ public:
         }
     }
 
+    cl_program& get() const
+    {
+        return const_cast<cl_program &>(m_program);
+    }
+
     std::string source() const
     {
         return get_info<std::string>(CL_PROGRAM_SOURCE);

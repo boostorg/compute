@@ -166,7 +166,7 @@ public:
     operator[](const Expr &expr) const
     {
         BOOST_ASSERT(m_buffer);
-        BOOST_ASSERT(m_buffer->get_mem());
+        BOOST_ASSERT(m_buffer->get());
 
         return detail::device_ptr_index_expr<T, Expr>(*m_buffer,
                                                       uint_(m_index),

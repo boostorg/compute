@@ -30,9 +30,9 @@ public:
         copy_host_ptr = CL_MEM_COPY_HOST_PTR
     };
 
-    cl_mem get_mem() const
+    cl_mem& get() const
     {
-        return m_mem;
+        return const_cast<cl_mem &>(m_mem);
     }
 
     size_t get_memory_size() const

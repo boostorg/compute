@@ -111,6 +111,11 @@ public:
         }
     }
 
+    cl_command_queue& get() const
+    {
+        return const_cast<cl_command_queue &>(m_queue);
+    }
+
     device get_device() const
     {
         return device(get_info<cl_device_id>(CL_QUEUE_DEVICE));
@@ -155,7 +160,7 @@ public:
         BOOST_ASSERT(host_ptr != 0);
 
         cl_int ret = clEnqueueReadBuffer(m_queue,
-                                         buffer.get_mem(),
+                                         buffer.get(),
                                          true,
                                          offset,
                                          size,
@@ -180,22 +185,22 @@ public:
         BOOST_ASSERT(buffer.get_context() == this->get_context());
         BOOST_ASSERT(host_ptr != 0);
 
-        cl_event event_;
+        event event_;
 
         cl_int ret = clEnqueueReadBuffer(m_queue,
-                                         buffer.get_mem(),
+                                         buffer.get(),
                                          true,
                                          offset,
                                          size,
                                          host_ptr,
                                          0,
                                          0,
-                                         &event_);
+                                         &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return event(event_);
+        return event_;
     }
 
     #ifdef CL_VERSION_1_1
@@ -214,7 +219,7 @@ public:
         BOOST_ASSERT(host_ptr != 0);
 
         cl_int ret = clEnqueueReadBufferRect(m_queue,
-                                             buffer.get_mem(),
+                                             buffer.get(),
                                              CL_TRUE,
                                              buffer_origin,
                                              host_origin,
@@ -258,7 +263,7 @@ public:
         BOOST_ASSERT(host_ptr != 0);
 
         cl_int ret = clEnqueueWriteBuffer(m_queue,
-                                          buffer.get_mem(),
+                                          buffer.get(),
                                           CL_TRUE,
                                           offset,
                                           size,
@@ -283,22 +288,22 @@ public:
         BOOST_ASSERT(buffer.get_context() == this->get_context());
         BOOST_ASSERT(host_ptr != 0);
 
-        cl_event event_;
+        event event_;
 
         cl_int ret = clEnqueueWriteBuffer(m_queue,
-                                          buffer.get_mem(),
+                                          buffer.get(),
                                           CL_FALSE,
                                           offset,
                                           size,
                                           host_ptr,
                                           0,
                                           0,
-                                          &event_);
+                                          &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return event(event_);
+        return event_;
     }
 
     #ifdef CL_VERSION_1_1
@@ -317,7 +322,7 @@ public:
         BOOST_ASSERT(host_ptr != 0);
 
         cl_int ret = clEnqueueWriteBufferRect(m_queue,
-                                              buffer.get_mem(),
+                                              buffer.get(),
                                               CL_TRUE,
                                               buffer_origin,
                                               host_origin,
@@ -351,8 +356,8 @@ public:
         BOOST_ASSERT(dst_buffer.get_context() == this->get_context());
 
         cl_int ret = clEnqueueCopyBuffer(m_queue,
-                                         src_buffer.get_mem(),
-                                         dst_buffer.get_mem(),
+                                         src_buffer.get(),
+                                         dst_buffer.get(),
                                          src_offset,
                                          dst_offset,
                                          size,
@@ -382,8 +387,8 @@ public:
         BOOST_ASSERT(dst_buffer.get_context() == this->get_context());
 
         cl_int ret = clEnqueueCopyBufferRect(m_queue,
-                                             src_buffer.get_mem(),
-                                             dst_buffer.get_mem(),
+                                             src_buffer.get(),
+                                             dst_buffer.get(),
                                              src_origin,
                                              dst_origin,
                                              region,
@@ -414,7 +419,7 @@ public:
         BOOST_ASSERT(buffer.get_context() == this->get_context());
 
         cl_int ret = clEnqueueFillBuffer(m_queue,
-                                         buffer.get_mem(),
+                                         buffer.get(),
                                          pattern,
                                          pattern_size,
                                          offset,
@@ -441,7 +446,7 @@ public:
 
         cl_int ret = 0;
         void *pointer = clEnqueueMapBuffer(m_queue,
-                                           buffer.get_mem(),
+                                           buffer.get(),
                                            CL_TRUE,
                                            flags,
                                            offset,
@@ -461,7 +466,7 @@ public:
     {
         BOOST_ASSERT(buffer.get_context() == this->get_context());
 
-        return enqueue_unmap_mem_object(buffer.get_mem(), mapped_ptr);
+        return enqueue_unmap_mem_object(buffer.get(), mapped_ptr);
     }
 
     cl_int enqueue_unmap_mem_object(cl_mem mem, void *mapped_ptr)
@@ -494,7 +499,7 @@ public:
         const size_t region3[3] = { region[0], region[1], size_t(1) };
 
         cl_int ret = clEnqueueReadImage(m_queue,
-                                        image.get_mem(),
+                                        image.get(),
                                         CL_TRUE,
                                         origin3,
                                         region3,
@@ -522,7 +527,7 @@ public:
         BOOST_ASSERT(image.get_context() == this->get_context());
 
         cl_int ret = clEnqueueReadImage(m_queue,
-                                        image.get_mem(),
+                                        image.get(),
                                         CL_TRUE,
                                         origin,
                                         region,
@@ -552,7 +557,7 @@ public:
         const size_t region3[3] = { region[0], region[1], size_t(1) };
 
         cl_int ret = clEnqueueWriteImage(m_queue,
-                                         image.get_mem(),
+                                         image.get(),
                                          CL_TRUE,
                                          origin3,
                                          region3,
@@ -580,7 +585,7 @@ public:
         BOOST_ASSERT(image.get_context() == this->get_context());
 
         cl_int ret = clEnqueueWriteImage(m_queue,
-                                         image.get_mem(),
+                                         image.get(),
                                          CL_TRUE,
                                          origin,
                                          region,
@@ -614,8 +619,8 @@ public:
         const size_t region3[3] = { region[0], region[1], size_t(1) };
 
         cl_int ret = clEnqueueCopyImage(m_queue,
-                                        src_image.get_mem(),
-                                        dst_image.get_mem(),
+                                        src_image.get(),
+                                        dst_image.get(),
                                         src_origin3,
                                         dst_origin3,
                                         region3,
@@ -645,8 +650,8 @@ public:
         const size_t region3[3] = { region[0], region[1], size_t(1) };
 
         cl_int ret = clEnqueueCopyImage(m_queue,
-                                        src_image.get_mem(),
-                                        dst_image.get_mem(),
+                                        src_image.get(),
+                                        dst_image.get(),
                                         src_origin3,
                                         dst_origin,
                                         region3,
@@ -676,8 +681,8 @@ public:
         const size_t region3[3] = { region[0], region[1], size_t(1) };
 
         cl_int ret = clEnqueueCopyImage(m_queue,
-                                        src_image.get_mem(),
-                                        dst_image.get_mem(),
+                                        src_image.get(),
+                                        dst_image.get(),
                                         src_origin,
                                         dst_origin3,
                                         region3,
@@ -704,8 +709,8 @@ public:
                          "Source and destination image formats must match.");
 
         cl_int ret = clEnqueueCopyImage(m_queue,
-                                        src_image.get_mem(),
-                                        dst_image.get_mem(),
+                                        src_image.get(),
+                                        dst_image.get(),
                                         src_origin,
                                         dst_origin,
                                         region,
@@ -733,8 +738,8 @@ public:
         const size_t region3[3] = { region[0], region[1], size_t(1) };
 
         cl_int ret = clEnqueueCopyImageToBuffer(m_queue,
-                                                src_image.get_mem(),
-                                                dst_buffer.get_mem(),
+                                                src_image.get(),
+                                                dst_buffer.get(),
                                                 src_origin3,
                                                 region3,
                                                 dst_offset,
@@ -759,8 +764,8 @@ public:
         BOOST_ASSERT(dst_buffer.get_context() == this->get_context());
 
         cl_int ret = clEnqueueCopyImageToBuffer(m_queue,
-                                                src_image.get_mem(),
-                                                dst_buffer.get_mem(),
+                                                src_image.get(),
+                                                dst_buffer.get(),
                                                 src_origin,
                                                 region,
                                                 dst_offset,
@@ -788,8 +793,8 @@ public:
         const size_t region3[3] = { region[0], region[1], size_t(1) };
 
         cl_int ret = clEnqueueCopyBufferToImage(m_queue,
-                                                src_buffer.get_mem(),
-                                                dst_image.get_mem(),
+                                                src_buffer.get(),
+                                                dst_image.get(),
                                                 src_offset,
                                                 dst_origin3,
                                                 region3,
@@ -814,8 +819,8 @@ public:
         BOOST_ASSERT(dst_image.get_context() == this->get_context());
 
         cl_int ret = clEnqueueCopyBufferToImage(m_queue,
-                                                src_buffer.get_mem(),
-                                                dst_image.get_mem(),
+                                                src_buffer.get(),
+                                                dst_image.get(),
                                                 src_offset,
                                                 dst_origin,
                                                 region,
@@ -842,7 +847,7 @@ public:
         const size_t region3[3] = { region[0], region[1], size_t(1) };
 
         cl_int ret = clEnqueueFillImage(m_queue,
-                                        image.get_mem(),
+                                        image.get(),
                                         fill_color,
                                         origin3,
                                         region3,
@@ -865,7 +870,7 @@ public:
         BOOST_ASSERT(image.get_context() == this->get_context());
 
         cl_int ret = clEnqueueFillImage(m_queue,
-                                        image.get_mem(),
+                                        image.get(),
                                         fill_color,
                                         origin,
                                         region,
@@ -969,19 +974,19 @@ public:
 
     event enqueue_marker()
     {
-        cl_event event_;
+        event event_;
 
         #ifdef CL_VERSION_1_2
-        cl_int ret = clEnqueueMarkerWithWaitList(m_queue, 0, 0, &event_);
+        cl_int ret = clEnqueueMarkerWithWaitList(m_queue, 0, 0, &event_.get());
         #else
-        cl_int ret = clEnqueueMarker(m_queue, &event_);
+        cl_int ret = clEnqueueMarker(m_queue, &event_.get());
         #endif
 
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return event(event_);
+        return event_;
     }
 
     operator cl_command_queue() const
@@ -1010,9 +1015,7 @@ public:
     {
         BOOST_ASSERT(buffer.get_context() == this->get_context());
 
-        cl_mem mem = buffer.get_mem();
-
-        enqueue_acquire_gl_objects(1, &mem);
+        enqueue_acquire_gl_objects(1, &buffer.get());
     }
 
     void enqueue_release_gl_objects(size_t num_objects,
@@ -1035,9 +1038,7 @@ public:
     {
         BOOST_ASSERT(buffer.get_context() == this->get_context());
 
-        cl_mem mem = buffer.get_mem();
-
-        enqueue_release_gl_objects(1, &mem);
+        enqueue_release_gl_objects(1, &buffer.get());
     }
     #endif // BOOST_COMPUTE_HAVE_GL
 
