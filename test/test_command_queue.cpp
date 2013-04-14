@@ -134,3 +134,40 @@ BOOST_AUTO_TEST_CASE(construct_from_cl_command_queue)
     // cleanup cl_command_queue
     clReleaseCommandQueue(cl_queue);
 }
+
+#ifdef CL_VERSION_1_1
+BOOST_AUTO_TEST_CASE(write_buffer_rect)
+{
+    boost::compute::device device = boost::compute::system::default_device();
+    boost::compute::context context(device);
+    boost::compute::command_queue queue(context, device);
+
+    int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    boost::compute::buffer buffer(context, 8 * sizeof(int));
+
+    // copy every other value to the buffer
+    size_t buffer_origin[] = { 0, 0, 0 };
+    size_t host_origin[] = { 0, 0, 0 };
+    size_t region[] = { sizeof(int), sizeof(int), 1 };
+
+    queue.enqueue_write_buffer_rect(
+        buffer,
+        buffer_origin,
+        host_origin,
+        region,
+        sizeof(int),
+        0,
+        2 * sizeof(int),
+        0,
+        data
+    );
+
+    // check output values
+    int output[4];
+    queue.enqueue_read_buffer(buffer, 4 * sizeof(int), output);
+    BOOST_CHECK_EQUAL(output[0], 1);
+    BOOST_CHECK_EQUAL(output[1], 3);
+    BOOST_CHECK_EQUAL(output[2], 5);
+    BOOST_CHECK_EQUAL(output[3], 7);
+}
+#endif // CL_VERSION_1_1
