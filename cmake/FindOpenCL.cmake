@@ -11,8 +11,15 @@ if ("${OpenCL_ROOT_DIR}" STREQUAL "")
   find_package(CUDA)
   if (CUDA_FOUND)
     set(OpenCL_ROOT_DIR ${CUDA_TOOLKIT_ROOT_DIR})
-  endif ()
+  else()
+    if (DEFINED ENV{AMDAPPSDKROOT})
+      set(OpenCL_ROOT_DIR $ENV{AMDAPPSDKROOT})
+    endif()
+  endif()
 endif()
+message(STATUS)
+message(STATUS "Searching for OpenCL library with OpenCL_ROOT_DIR=${OpenCL_ROOT_DIR}")
+message(STATUS)
 find_library(
   OpenCL_LIBRARY
   OpenCL
