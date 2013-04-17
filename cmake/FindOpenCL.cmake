@@ -24,8 +24,8 @@ find_library(
   OpenCL_LIBRARY
   OpenCL
   DOC "OpenCL library"
-  PATH ${OpenCL_ROOT_DIR}
-  PATH_SUFFIXES "lib64;lib/x64;lib"
+  PATHS ${OpenCL_ROOT_DIR}
+  PATH_SUFFIXES "lib/x64" "lib64" "lib"
 )
 
 # find OpenCL include directory
@@ -38,7 +38,7 @@ find_path(
   OpenCL_INCLUDE_DIR
   "${OpenCL_HEADERS}"
   DOC "OpenCL include path"
-  PATH "${OpenCL_ROOT_DIR}/include"
+  PATHS "${OpenCL_ROOT_DIR}/include"
 )
 
 # check for the cl_ext.h header
