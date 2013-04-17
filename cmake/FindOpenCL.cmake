@@ -7,29 +7,32 @@
 #   OpenCL_INCLUDE_DIR  - Include path for OpenCL
 
 # find OpenCL library
+if ("${OpenCL_ROOT_DIR}" STREQUAL "")
+  find_package(CUDA)
+  if (CUDA_FOUND)
+    set(OpenCL_ROOT_DIR ${CUDA_TOOLKIT_ROOT_DIR})
+  endif ()
+endif()
 find_library(
   OpenCL_LIBRARY
   OpenCL
   DOC "OpenCL library"
+  PATH ${OpenCL_ROOT_DIR}
+  PATH_SUFFIXES "lib64;lib/x64;lib"
 )
 
 # find OpenCL include directory
-if(APPLE)
-  find_path(
-    OpenCL_INCLUDE_DIR
-    OpenCL/cl.h
-    DOC "OpenCL include path"
-  )
-else()
-  find_path(
-    OpenCL_INCLUDE_DIR
-    CL/cl.h
-    DOC "OpenCL include path"
-    /usr/include/nvidia-current
-    /usr/include/nvidia-experimental-310/
-    /opt/nvidia/cuda/include
-  )
-endif()
+if (APPLE)
+  set(OpenCL_HEADERS "OpenCL/opencl.h")
+else ()
+  set(OpenCL_HEADERS "CL/cl.h")
+endif ()
+find_path(
+  OpenCL_INCLUDE_DIR
+  "${OpenCL_HEADERS}"
+  DOC "OpenCL include path"
+  PATH "${OpenCL_ROOT_DIR}/include"
+)
 
 # check for the cl_ext.h header
 if(EXISTS "${OpenCL_INCLUDE_DIR}/CL/cl_ext.h")
