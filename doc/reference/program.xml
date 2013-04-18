@@ -54,6 +54,19 @@
           </description>
         </constructor>
 
+        <!-- program::program(program&&) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype><classname>program</classname> &amp;&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Move-constructs a new program object from <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
         <!-- operator=(const program&) -->
         <copy-assignment>
           <parameter name="other">
@@ -63,6 +76,19 @@
           <description>
             <para>
               Copies the program from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- operator=(program&&) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype><classname>program</classname> &amp;&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Transfers the ownership of the program from <code>other</code>.
             </para>
           </description>
         </copy-assignment>

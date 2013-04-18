@@ -15,6 +15,7 @@
 
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
+#include <boost/move/move.hpp>
 
 #include <boost/compute/cl.hpp>
 #include <boost/compute/buffer.hpp>
@@ -67,6 +68,12 @@ public:
         }
     }
 
+    kernel(BOOST_RV_REF(kernel) other)
+        : m_kernel(other.m_kernel)
+    {
+        other.m_kernel = 0;
+    }
+
     kernel& operator=(const kernel &other)
     {
         if(this != &other){
@@ -79,6 +86,20 @@ public:
             if(m_kernel){
                 clRetainKernel(m_kernel);
             }
+        }
+
+        return *this;
+    }
+
+    kernel& operator=(BOOST_RV_REF(kernel) other)
+    {
+        if(this != &other){
+            if(m_kernel){
+                clReleaseKernel(m_kernel);
+            }
+
+            m_kernel = other.m_kernel;
+            other.m_kernel = 0;
         }
 
         return *this;
@@ -238,6 +259,8 @@ private:
     #endif // BOOST_NO_VARIADIC_TEMPLATES
 
 private:
+    BOOST_COPYABLE_AND_MOVABLE(kernel)
+
     cl_kernel m_kernel;
 };
 

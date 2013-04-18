@@ -11,6 +11,8 @@
 #ifndef BOOST_COMPUTE_BUFFER_HPP
 #define BOOST_COMPUTE_BUFFER_HPP
 
+#include <boost/move/move.hpp>
+
 #include <boost/compute/cl.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/exception.hpp>
@@ -58,17 +60,26 @@ public:
     {
     }
 
-    #if !defined(BOOST_NO_RVALUE_REFERENCES)
-    buffer(buffer &&other)
-        : memory_object(other)
+    buffer(BOOST_RV_REF(buffer) other)
+        : memory_object(boost::move(static_cast<memory_object &>(other)))
     {
     }
-    #endif // !defined(BOOST_NO_RVALUE_REFERENCES)
 
     buffer& operator=(const buffer &other)
     {
         if(this != &other){
             memory_object::operator=(other);
+        }
+
+        return *this;
+    }
+
+    buffer& operator=(BOOST_RV_REF(buffer) other)
+    {
+        if(this != &other){
+            memory_object::operator=(
+                boost::move(static_cast<memory_object &>(other))
+            );
         }
 
         return *this;
@@ -110,6 +121,9 @@ public:
         return buf;
     }
     #endif // BOOST_COMPUTE_HAVE_GL
+
+private:
+    BOOST_COPYABLE_AND_MOVABLE(buffer)
 };
 
 } // end compute namespace

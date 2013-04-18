@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 
+#include <boost/move/move.hpp>
 #include <boost/range/algorithm.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -61,6 +62,12 @@ public:
         #endif
     }
 
+    device(BOOST_RV_REF(device) other)
+        : m_id(other.m_id)
+    {
+        other.m_id = 0;
+    }
+
     device& operator=(const device &other)
     {
         if(this != &other){
@@ -77,6 +84,22 @@ public:
                 clRetainDevice(m_id);
             }
             #endif
+        }
+
+        return *this;
+    }
+
+    device& operator=(BOOST_RV_REF(device) other)
+    {
+        if(this != &other){
+            #ifdef CL_VERSION_1_2
+            if(m_id){
+                clReleaseDevice(m_id);
+            }
+            #endif
+
+            m_id = other.m_id;
+            other.m_id = 0;
         }
 
         return *this;
@@ -264,6 +287,8 @@ public:
     #endif // CL_VERSION_1_2
 
 private:
+    BOOST_COPYABLE_AND_MOVABLE(device)
+
     cl_device_id m_id;
 };
 

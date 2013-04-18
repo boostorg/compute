@@ -61,6 +61,19 @@
           </description>
         </constructor>
 
+        <!-- context::context(context&&) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype><classname>context</classname> &amp;&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Move-constructs a new context object from <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
         <!-- operator=(const context&) -->
         <copy-assignment>
           <parameter name="other">
@@ -69,6 +82,19 @@
           <description>
             <para>
               Copies the context from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- operator=(context&&) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype><classname>context</classname> &amp;&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Transfers the ownership of the context from <code>other</code>.
             </para>
           </description>
         </copy-assignment>

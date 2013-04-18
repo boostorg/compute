@@ -100,6 +100,20 @@
           </description>
         </constructor>
 
+        <!-- command_queue::command_queue(command_queue&&) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype><classname>command_queue</classname> &amp;&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Move-constructs a new command queue object from
+              <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
         <!-- operator=(const command_queue&) -->
         <copy-assignment>
           <parameter name="other">
@@ -109,6 +123,20 @@
           <description>
             <para>
               Copies the command queue from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- operator=(command_queue&&) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype><classname>command_queue</classname> &amp;&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Transfers the ownership of the command queue from
+              <code>other</code>.
             </para>
           </description>
         </copy-assignment>

@@ -11,6 +11,7 @@
 #ifndef BOOST_COMPUTE_IMAGE_SAMPLER_HPP
 #define BOOST_COMPUTE_IMAGE_SAMPLER_HPP
 
+#include <boost/move/move.hpp>
 #include <boost/throw_exception.hpp>
 
 #include <boost/compute/cl.hpp>
@@ -69,6 +70,12 @@ public:
         }
     }
 
+    image_sampler(BOOST_RV_REF(image_sampler) other)
+        : m_sampler(other.m_sampler)
+    {
+        other.m_sampler = 0;
+    }
+
     image_sampler& operator=(const image_sampler &other)
     {
         if(this != &other){
@@ -81,6 +88,20 @@ public:
             if(m_sampler){
                 clRetainSampler(m_sampler);
             }
+        }
+
+        return *this;
+    }
+
+    image_sampler& operator=(BOOST_RV_REF(image_sampler) other)
+    {
+        if(this != &other){
+            if(m_sampler){
+                clReleaseSampler(m_sampler);
+            }
+
+            m_sampler = other.m_sampler;
+            other.m_sampler = 0;
         }
 
         return *this;
@@ -115,6 +136,8 @@ public:
     }
 
 private:
+    BOOST_COPYABLE_AND_MOVABLE(image_sampler)
+
     cl_sampler m_sampler;
 };
 

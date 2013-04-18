@@ -46,9 +46,9 @@
             <paramtype>cl_device_id</paramtype>
           </parameter>
           <parameter name="retain">
-	    <paramtype>bool</paramtype>
-	    <default>true</default>
-	  </parameter>
+            <paramtype>bool</paramtype>
+            <default>true</default>
+          </parameter>
 
           <description>
             <para>
@@ -70,6 +70,19 @@
           </description>
         </constructor>
 
+        <!-- device::device(device&&) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype><classname>device</classname> &amp;&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Move-constructs a new device object from <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
         <!-- operator=(const device&) -->
         <copy-assignment>
           <parameter name="other">
@@ -79,6 +92,19 @@
           <description>
             <para>
               Copies the device from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- operator=(device&&) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype><classname>device</classname> &amp;&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Transfers the ownership of the device from <code>other</code>.
             </para>
           </description>
         </copy-assignment>
@@ -193,7 +219,7 @@
             </description>
           </method>
 
-	  <!-- device::profiling_timer_resolution() -->
+          <!-- device::profiling_timer_resolution() -->
           <method name="profiling_timer_resolution" cv="const">
             <type>size_t</type>
 

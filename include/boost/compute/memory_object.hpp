@@ -11,6 +11,8 @@
 #ifndef BOOST_COMPUTE_MEMORY_OBJECT_HPP
 #define BOOST_COMPUTE_MEMORY_OBJECT_HPP
 
+#include <boost/move/move.hpp>
+
 #include <boost/compute/cl.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
@@ -103,13 +105,11 @@ protected:
         }
     }
 
-    #if !defined(BOOST_NO_RVALUE_REFERENCES)
-    memory_object(memory_object &&other)
+    memory_object(BOOST_RV_REF(memory_object) other)
         : m_mem(other.m_mem)
     {
         other.m_mem = 0;
     }
-    #endif // !defined(BOOST_NO_RVALUE_REFERENCES)
 
     memory_object& operator=(const memory_object &other)
     {
@@ -128,12 +128,29 @@ protected:
         return *this;
     }
 
+    memory_object& operator=(BOOST_RV_REF(memory_object) other)
+    {
+        if(this != &other){
+            if(m_mem){
+                clReleaseMemObject(m_mem);
+            }
+
+            m_mem = other.m_mem;
+            other.m_mem = 0;
+        }
+
+        return *this;
+    }
+
     ~memory_object()
     {
         if(m_mem){
             clReleaseMemObject(m_mem);
         }
     }
+
+private:
+    BOOST_COPYABLE_AND_MOVABLE(memory_object)
 
 protected:
     cl_mem m_mem;

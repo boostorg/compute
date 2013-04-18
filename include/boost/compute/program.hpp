@@ -20,6 +20,8 @@
 #include <iostream>
 #endif
 
+#include <boost/move/move.hpp>
+
 #include <boost/compute/cl.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/exception.hpp>
@@ -52,6 +54,12 @@ public:
         }
     }
 
+    program(BOOST_RV_REF(program) other)
+        : m_program(other.m_program)
+    {
+        other.m_program = 0;
+    }
+
     program& operator=(const program &other)
     {
         if(this != &other){
@@ -64,6 +72,20 @@ public:
             if(m_program){
                 clRetainProgram(m_program);
             }
+        }
+
+        return *this;
+    }
+
+    program& operator=(BOOST_RV_REF(program) other)
+    {
+        if(this != &other){
+            if(m_program){
+                clReleaseProgram(m_program);
+            }
+
+            m_program = other.m_program;
+            other.m_program = 0;
         }
 
         return *this;
@@ -296,6 +318,8 @@ public:
     }
 
 private:
+    BOOST_COPYABLE_AND_MOVABLE(program)
+
     cl_program m_program;
 };
 

@@ -75,6 +75,19 @@
           </description>
         </constructor>
 
+        <!-- buffer::buffer(buffer&&) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype><classname>buffer</classname> &amp;&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Move-constructs a new buffer object from <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
         <!-- operator=(other) -->
         <copy-assignment>
           <parameter name="other">
@@ -84,6 +97,19 @@
           <description>
             <para>
               Copies the buffer from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- operator=(buffer&&) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype><classname>buffer</classname> &amp;&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Transfers the ownership of the buffer from <code>other</code>.
             </para>
           </description>
         </copy-assignment>

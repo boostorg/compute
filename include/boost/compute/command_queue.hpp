@@ -14,6 +14,7 @@
 #include <cstddef>
 
 #include <boost/assert.hpp>
+#include <boost/move/move.hpp>
 
 #include <boost/compute/cl.hpp>
 #include <boost/compute/event.hpp>
@@ -83,6 +84,12 @@ public:
         }
     }
 
+    command_queue(BOOST_RV_REF(command_queue) other)
+        : m_queue(other.m_queue)
+    {
+        other.m_queue = 0;
+    }
+
     command_queue& operator=(const command_queue &other)
     {
         if(this != &other){
@@ -95,6 +102,20 @@ public:
             if(m_queue){
                 clRetainCommandQueue(m_queue);
             }
+        }
+
+        return *this;
+    }
+
+    command_queue& operator=(BOOST_RV_REF(command_queue) other)
+    {
+        if(this != &other){
+            if(m_queue){
+                clReleaseCommandQueue(m_queue);
+            }
+
+            m_queue = other.m_queue;
+            other.m_queue = 0;
         }
 
         return *this;
@@ -1047,6 +1068,8 @@ public:
     #endif // BOOST_COMPUTE_HAVE_GL
 
 private:
+    BOOST_COPYABLE_AND_MOVABLE(command_queue)
+
     cl_command_queue m_queue;
 };
 

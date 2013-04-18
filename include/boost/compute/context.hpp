@@ -11,6 +11,8 @@
 #ifndef BOOST_COMPUTE_CONTEXT_HPP
 #define BOOST_COMPUTE_CONTEXT_HPP
 
+#include <boost/move/move.hpp>
+
 #include <boost/compute/cl.hpp>
 #include <boost/compute/device.hpp>
 
@@ -60,6 +62,12 @@ public:
         }
     }
 
+    context(BOOST_RV_REF(context) other)
+        : m_context(other.m_context)
+    {
+        other.m_context = 0;
+    }
+
     context& operator=(const context &other)
     {
         if(this != &other){
@@ -72,6 +80,20 @@ public:
             if(m_context){
                 clRetainContext(m_context);
             }
+        }
+
+        return *this;
+    }
+
+    context& operator=(BOOST_RV_REF(context) other)
+    {
+        if(this != &other){
+            if(m_context){
+                clReleaseContext(m_context);
+            }
+
+            m_context = other.m_context;
+            other.m_context = 0;
         }
 
         return *this;
@@ -136,6 +158,8 @@ public:
     }
 
 private:
+    BOOST_COPYABLE_AND_MOVABLE(context)
+
     cl_context m_context;
 };
 

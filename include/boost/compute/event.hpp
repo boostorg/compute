@@ -11,6 +11,8 @@
 #ifndef BOOST_COMPUTE_EVENT_HPP
 #define BOOST_COMPUTE_EVENT_HPP
 
+#include <boost/move/move.hpp>
+
 #include <boost/compute/cl.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
@@ -82,6 +84,12 @@ public:
         }
     }
 
+    event(BOOST_RV_REF(event) other)
+        : m_event(other.m_event)
+    {
+        other.m_event = 0;
+    }
+
     event& operator=(const event &other)
     {
         if(this != &other){
@@ -94,6 +102,20 @@ public:
             if(m_event){
                 clRetainEvent(m_event);
             }
+        }
+
+        return *this;
+    }
+
+    event& operator=(BOOST_RV_REF(event) other)
+    {
+        if(this != &other){
+            if(m_event){
+                clReleaseEvent(m_event);
+            }
+
+            m_event = other.m_event;
+            other.m_event = 0;
         }
 
         return *this;
@@ -154,6 +176,8 @@ public:
     }
 
 private:
+    BOOST_COPYABLE_AND_MOVABLE(event)
+
     cl_event m_event;
 };
 

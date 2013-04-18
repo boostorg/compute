@@ -75,6 +75,19 @@
           </description>
         </constructor>
 
+        <!-- kernel::kernel(kernel&&) -->
+        <constructor>
+          <parameter name="other">
+            <paramtype><classname>kernel</classname> &amp;&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Move-constructs a new kernel object from <code>other</code>.
+            </para>
+          </description>
+        </constructor>
+
         <!-- operator=(other) -->
         <copy-assignment>
           <parameter name="other">
@@ -84,6 +97,19 @@
           <description>
             <para>
               Copies the kernel from <code>other</code>.
+            </para>
+          </description>
+        </copy-assignment>
+
+        <!-- operator=(kernel&&) -->
+        <copy-assignment>
+          <parameter name="other">
+            <paramtype><classname>kernel</classname> &amp;&amp;</paramtype>
+          </parameter>
+
+          <description>
+            <para>
+              Transfers the ownership of the kernel from <code>other</code>.
             </para>
           </description>
         </copy-assignment>
