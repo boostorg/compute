@@ -22,6 +22,8 @@
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(vector_tuple_int_float)
 {
     boost::compute::vector<boost::tuple<int, float> > vector;
@@ -33,9 +35,6 @@ BOOST_AUTO_TEST_CASE(vector_tuple_int_float)
 
 BOOST_AUTO_TEST_CASE(copy_vector_tuple)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-
     // create vector of tuples on device
     boost::compute::vector<boost::tuple<char, int, float> > input(context);
     input.push_back(boost::make_tuple('a', 1, 2.3f));
@@ -65,3 +64,5 @@ BOOST_AUTO_TEST_CASE(copy_vector_tuple)
     BOOST_CHECK_EQUAL(host_output[1], boost::make_tuple('c', 3, 4.5f));
     BOOST_CHECK_EQUAL(host_output[2], boost::make_tuple('f', 6, 7.8f));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

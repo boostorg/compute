@@ -21,13 +21,12 @@
 #include <boost/compute/iterator/counting_iterator.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(inclusive_scan_int)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-
     int data[] = { 1, 2, 1, 2, 3 };
     bc::vector<int> vector(data, data + 5, context);
     BOOST_CHECK_EQUAL(vector.size(), size_t(5));
@@ -60,9 +59,6 @@ BOOST_AUTO_TEST_CASE(inclusive_scan_int)
 
 BOOST_AUTO_TEST_CASE(exclusive_scan_int)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-
     int data[] = { 1, 2, 1, 2, 3 };
     bc::vector<int> vector(data, data + 5, context);
     BOOST_CHECK_EQUAL(vector.size(), size_t(5));
@@ -118,9 +114,6 @@ BOOST_AUTO_TEST_CASE(inclusive_scan_int2)
 
 BOOST_AUTO_TEST_CASE(inclusive_scan_counting_iterator)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-
     bc::vector<int> result(10, context);
     bc::inclusive_scan(bc::make_counting_iterator(1),
                        bc::make_counting_iterator(11),
@@ -139,9 +132,6 @@ BOOST_AUTO_TEST_CASE(inclusive_scan_counting_iterator)
 
 BOOST_AUTO_TEST_CASE(exclusive_scan_counting_iterator)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-
     bc::vector<int> result(10, context);
     bc::exclusive_scan(bc::make_counting_iterator(1),
                        bc::make_counting_iterator(11),
@@ -160,9 +150,6 @@ BOOST_AUTO_TEST_CASE(exclusive_scan_counting_iterator)
 
 BOOST_AUTO_TEST_CASE(inclusive_scan_transform_iterator)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-
     float data[] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f };
     bc::vector<float> input(data, data + 5, context);
     bc::vector<float> output(5, context);
@@ -187,3 +174,5 @@ BOOST_AUTO_TEST_CASE(inclusive_scan_transform_iterator)
     BOOST_CHECK_CLOSE(float(output[3]), 30.0f, 1e-4);
     BOOST_CHECK_CLOSE(float(output[4]), 55.0f, 1e-4);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

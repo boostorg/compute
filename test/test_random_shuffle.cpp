@@ -18,14 +18,12 @@
 #include <boost/compute/algorithm/random_shuffle.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(shuffle_int_vector)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     bc::vector<int> vector(context);
     vector.push_back(1);
     vector.push_back(9);
@@ -47,3 +45,5 @@ BOOST_AUTO_TEST_CASE(shuffle_int_vector)
     BOOST_CHECK_EQUAL(shuffled_values.size(), size_t(4));
     BOOST_VERIFY(original_values == shuffled_values);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

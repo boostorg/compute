@@ -18,6 +18,8 @@
 #include <boost/compute/algorithm/equal_range.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(equal_range_int)
 {
     int data[] = { 1, 2, 2, 2, 3, 3, 4, 5 };
@@ -67,3 +69,5 @@ BOOST_AUTO_TEST_CASE(equal_range_int)
     BOOST_CHECK(range6.second == vector.end());
     BOOST_CHECK_EQUAL(std::distance(range6.first, range6.second), ptrdiff_t(0));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

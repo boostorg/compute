@@ -15,6 +15,8 @@
 #include <boost/compute/container/string.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(equal_int)
 {
     int data1[] = { 1, 2, 3, 4, 5, 6 };
@@ -37,3 +39,5 @@ BOOST_AUTO_TEST_CASE(equal_string)
     BOOST_CHECK(boost::compute::equal(a.begin(), a.end(), b.begin()) == true);
     BOOST_CHECK(boost::compute::equal(a.begin(), a.end(), c.begin()) == false);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

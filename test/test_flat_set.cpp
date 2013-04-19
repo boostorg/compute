@@ -19,6 +19,8 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/container/flat_set.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(concept_check)
@@ -32,10 +34,6 @@ BOOST_AUTO_TEST_CASE(concept_check)
 
 BOOST_AUTO_TEST_CASE(insert)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     bc::flat_set<int> set(context);
     typedef bc::flat_set<int>::iterator iterator;
     std::pair<iterator, bool> location = set.insert(12);
@@ -67,10 +65,6 @@ BOOST_AUTO_TEST_CASE(insert)
 
 BOOST_AUTO_TEST_CASE(erase)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     bc::flat_set<int> set(context);
     typedef bc::flat_set<int>::iterator iterator;
     set.insert(1);
@@ -127,3 +121,5 @@ BOOST_AUTO_TEST_CASE(clear)
     BOOST_CHECK(set.empty() == true);
     BOOST_CHECK_EQUAL(set.size(), size_t(0));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

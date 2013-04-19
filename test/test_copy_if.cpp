@@ -15,6 +15,8 @@
 #include <boost/compute/algorithm/copy_if.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(copy_if_int)
@@ -106,3 +108,5 @@ BOOST_AUTO_TEST_CASE(clip_points_below_plane)
                     dot(_1 - plane_origin, plane_normal) > 0.0f);
     BOOST_CHECK(iter == output.begin() + 2);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

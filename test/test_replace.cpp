@@ -19,6 +19,8 @@
 #include <boost/compute/algorithm/replace_copy.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(replace_int)
@@ -66,3 +68,5 @@ BOOST_AUTO_TEST_CASE(replace_copy_int)
     BOOST_CHECK_EQUAL(a[3], 3);
     BOOST_CHECK_EQUAL(a[4], 4);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

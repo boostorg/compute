@@ -14,6 +14,8 @@
 #include <boost/compute/algorithm/mismatch.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(mismatch_int)
 {
     int data1[] = { 1, 2, 3, 4, 5, 6 };
@@ -31,3 +33,5 @@ BOOST_AUTO_TEST_CASE(mismatch_int)
     BOOST_CHECK(location.second == vector2.begin() + 3);
     BOOST_CHECK_EQUAL(int(*location.second), int(7));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

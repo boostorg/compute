@@ -16,6 +16,8 @@
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 // test trivial sorting of zero and one element vectors
@@ -260,7 +262,6 @@ BOOST_AUTO_TEST_CASE(sort_float_vector)
 
 BOOST_AUTO_TEST_CASE(sort_double_vector)
 {
-    boost::compute::device device = boost::compute::system::default_device();
     if(!device.supports_extension("cl_khr_fp64")){
         std::cout << "skipping test: device does not support double" << std::endl;
         return;
@@ -313,10 +314,6 @@ BOOST_AUTO_TEST_CASE(sort_vectors_by_length)
     using boost::compute::lambda::_1;
     using boost::compute::lambda::_2;
 
-    boost::compute::device gpu = boost::compute::system::default_device();
-    boost::compute::context context(gpu);
-    boost::compute::command_queue queue(context, gpu);
-
     float data[] = { 1.0f, 0.2f,
                      1.3f, 1.0f,
                      6.7f, 0.0f,
@@ -358,3 +355,5 @@ BOOST_AUTO_TEST_CASE(sort_vectors_by_length)
     BOOST_CHECK_EQUAL(data[8], 6.7f);
     BOOST_CHECK_EQUAL(data[9], 0.0f);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

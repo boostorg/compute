@@ -16,12 +16,10 @@
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/blas/gemm.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(gemm_float3x3)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     float a[9] = { 1.0f, 2.0f, 3.0f,
                    4.0f, 5.0f, 6.0f,
                    7.0f, 8.0f, 9.0f };
@@ -96,10 +94,6 @@ BOOST_AUTO_TEST_CASE(gemm_float3x3)
 
 BOOST_AUTO_TEST_CASE(gemm_float2x3)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     float a[6] = { 2.0f, 1.0f,
                    4.0f, 3.0f,
                    6.0f, 5.0f };
@@ -231,3 +225,5 @@ BOOST_AUTO_TEST_CASE(gemm_float2x3)
     BOOST_CHECK_CLOSE(c[2], 198.0f, 1e-4);
     BOOST_CHECK_CLOSE(c[3], 153.0f, 1e-4);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

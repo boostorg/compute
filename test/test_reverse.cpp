@@ -20,6 +20,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/counting_iterator.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(reverse_int)
@@ -130,3 +132,5 @@ BOOST_AUTO_TEST_CASE(reverse_copy_counting_iterator)
     BOOST_CHECK_EQUAL(vector[3], 2);
     BOOST_CHECK_EQUAL(vector[4], 1);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

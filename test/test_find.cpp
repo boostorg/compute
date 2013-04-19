@@ -19,6 +19,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/constant_buffer_iterator.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(find_int)
@@ -75,3 +77,5 @@ BOOST_AUTO_TEST_CASE(find_if_not_int)
     BOOST_CHECK(iter == vector.begin() + 1);
     BOOST_CHECK_EQUAL(*iter, 4);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

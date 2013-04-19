@@ -15,6 +15,8 @@
 #include <boost/compute/algorithm/fill_n.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(fill_int)
@@ -88,3 +90,5 @@ BOOST_AUTO_TEST_CASE(fill_n_float)
     BOOST_CHECK_EQUAL(vector[2], 0.0f);
     BOOST_CHECK_EQUAL(vector[3], 0.0f);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

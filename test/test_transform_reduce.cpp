@@ -16,14 +16,12 @@
 #include <boost/compute/algorithm/transform_reduce.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(sum_abs_int)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     int data[] = { 1, -2, -3, -4, 5 };
     bc::vector<int> vector(data, data + 5, context);
 
@@ -39,10 +37,6 @@ BOOST_AUTO_TEST_CASE(sum_abs_int)
 
 BOOST_AUTO_TEST_CASE(multiply_vector_length)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     float data[] = { 2.0f, 0.0f, 0.0f, 0.0f,
                      0.0f, 3.0f, 0.0f, 0.0f,
                      0.0f, 0.0f, 4.0f, 0.0f };
@@ -59,3 +53,5 @@ BOOST_AUTO_TEST_CASE(multiply_vector_length)
                              queue);
     BOOST_CHECK_CLOSE(product, 24.0f, 1e-4);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

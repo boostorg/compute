@@ -15,6 +15,8 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/container/valarray.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(size)
 {
     boost::compute::valarray<float> array;
@@ -55,3 +57,5 @@ BOOST_AUTO_TEST_CASE(sum)
 
     BOOST_CHECK_EQUAL(array.sum(), int(10));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

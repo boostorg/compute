@@ -15,14 +15,12 @@
 #include <boost/compute/algorithm/inner_product.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(inner_product_int)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     int data1[] = { 1, 2, 3, 4 };
     bc::vector<int> input1(data1, data1 + 4, context);
 
@@ -36,3 +34,5 @@ BOOST_AUTO_TEST_CASE(inner_product_int)
                                     queue);
     BOOST_CHECK_EQUAL(product, 300);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

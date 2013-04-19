@@ -15,12 +15,10 @@
 #include <boost/compute/blas/norm2.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(norm2_float)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     float data[] = { 1.0f, 2.0f, 4.0f, 8.0f, 16.0f };
     boost::compute::device_ptr<float> X =
         boost::compute::malloc<float>(5, context);
@@ -33,3 +31,5 @@ BOOST_AUTO_TEST_CASE(norm2_float)
     norm = boost::compute::blas::norm2(5, &vector[0], 1, queue);
     BOOST_CHECK_CLOSE(norm, 18.466185312619388f, 1e-4);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

@@ -16,20 +16,17 @@
 #include <boost/compute/program.hpp>
 #include <boost/compute/command_queue.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(get_context)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
     BOOST_VERIFY(queue.get_context() == context);
 }
 
 BOOST_AUTO_TEST_CASE(event_profiling)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
     bc::command_queue queue(context, device, bc::command_queue::enable_profiling);
 
     int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
@@ -50,9 +47,6 @@ BOOST_AUTO_TEST_CASE(event_profiling)
 
 BOOST_AUTO_TEST_CASE(kernel_profiling)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-
     // create queue with profiling enabled
     boost::compute::command_queue queue(
         context, device, boost::compute::command_queue::enable_profiling
@@ -116,9 +110,6 @@ BOOST_AUTO_TEST_CASE(kernel_profiling)
 
 BOOST_AUTO_TEST_CASE(construct_from_cl_command_queue)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-
     // create cl_command_queue
     cl_command_queue cl_queue =
       clCreateCommandQueue(context, device.id(), 0, 0);
@@ -138,10 +129,6 @@ BOOST_AUTO_TEST_CASE(construct_from_cl_command_queue)
 #ifdef CL_VERSION_1_1
 BOOST_AUTO_TEST_CASE(write_buffer_rect)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
     boost::compute::buffer buffer(context, 8 * sizeof(int));
 
@@ -171,3 +158,5 @@ BOOST_AUTO_TEST_CASE(write_buffer_rect)
     BOOST_CHECK_EQUAL(output[3], 7);
 }
 #endif // CL_VERSION_1_1
+
+BOOST_AUTO_TEST_SUITE_END()

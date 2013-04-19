@@ -15,6 +15,8 @@
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(squared_plus_one)
@@ -152,3 +154,5 @@ BOOST_AUTO_TEST_CASE(make_function_from_lamdba)
     BOOST_CHECK_EQUAL(int(vector[3]), int(19));
     BOOST_CHECK_EQUAL(int(vector[4]), int(23));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

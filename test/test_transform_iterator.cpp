@@ -23,6 +23,8 @@
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(value_type)
 {
     using boost::compute::float4_;
@@ -49,10 +51,6 @@ BOOST_AUTO_TEST_CASE(value_type)
 
 BOOST_AUTO_TEST_CASE(copy)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     int data[] = { 1, -2, 3, -4, 5 };
     boost::compute::vector<int> a(data, data + 5, context);
 
@@ -77,3 +75,5 @@ BOOST_AUTO_TEST_CASE(copy)
     BOOST_CHECK_EQUAL(int(b[3]), 4);
     BOOST_CHECK_EQUAL(int(b[4]), 5);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

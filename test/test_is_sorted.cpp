@@ -16,6 +16,8 @@
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(is_sorted_int)
@@ -45,3 +47,5 @@ BOOST_AUTO_TEST_CASE(is_sorted_ones)
     bc::fill(vector.begin(), vector.end(), int(1));
     BOOST_VERIFY(bc::is_sorted(vector.begin(), vector.end()) == true);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

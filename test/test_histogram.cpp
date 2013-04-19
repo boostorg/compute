@@ -15,6 +15,8 @@
 #include <boost/compute/algorithm/detail/histogram.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(histogram_uchar)
 {
     using boost::compute::uchar_;
@@ -47,3 +49,5 @@ BOOST_AUTO_TEST_CASE(histogram_uchar)
     BOOST_CHECK_EQUAL(uint_(result[8]), uint_(3));
     BOOST_CHECK_EQUAL(uint_(result[9]), uint_(4));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

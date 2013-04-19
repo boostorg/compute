@@ -17,12 +17,12 @@
 #include <boost/compute/algorithm/count.hpp>
 #include <boost/compute/iterator/detail/pixel_input_iterator.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(image2d_get_supported_formats)
 {
-    bc::context context = bc::system::default_context();
-
     std::vector<bc::image_format> formats =
         bc::image2d::get_supported_formats(context, bc::image2d::read_only);
     BOOST_CHECK(!formats.empty());
@@ -30,8 +30,6 @@ BOOST_AUTO_TEST_CASE(image2d_get_supported_formats)
 
 BOOST_AUTO_TEST_CASE(get_info)
 {
-    bc::context context = bc::system::default_context();
-
     bc::image2d image(
         context,
         bc::image2d::read_only,
@@ -57,8 +55,6 @@ BOOST_AUTO_TEST_CASE(get_info)
 
 BOOST_AUTO_TEST_CASE(count_with_pixel_iterator)
 {
-    bc::context context = bc::system::default_context();
-
     unsigned int data[] = { 0x00000000, 0x000000ff, 0xff0000ff,
                             0xffff00ff, 0x000000ff, 0xff0000ff,
                             0xff0000ff, 0x00ff00ff, 0x0000ffff };
@@ -105,8 +101,6 @@ BOOST_AUTO_TEST_CASE(count_with_pixel_iterator)
 
 BOOST_AUTO_TEST_CASE(find_with_pixel_iterator)
 {
-    bc::context context = bc::system::default_context();
-
     unsigned int data[] = { 0x00000000, 0x000000ff, 0xff0000ff,
                             0xffff00ff, 0x000000ff, 0xff0000ff,
                             0xff0000ff, 0x00ff00ff, 0x0000ffff };
@@ -143,3 +137,5 @@ BOOST_AUTO_TEST_CASE(complex_type_name)
         ) == 0
     );
 }
+
+BOOST_AUTO_TEST_SUITE_END()

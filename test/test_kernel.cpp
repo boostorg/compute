@@ -14,11 +14,12 @@
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/system.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(name)
 {
-    bc::context context = bc::system::default_context();
     bc::kernel foo = bc::kernel::create_with_source("__kernel void foo(int x) { }",
                                                     "foo",
                                                     context);
@@ -32,7 +33,6 @@ BOOST_AUTO_TEST_CASE(name)
 
 BOOST_AUTO_TEST_CASE(num_args)
 {
-    bc::context context = bc::system::default_context();
     bc::kernel foo = bc::kernel::create_with_source("__kernel void foo(int x) { }",
                                                     "foo",
                                                     context);
@@ -51,9 +51,6 @@ BOOST_AUTO_TEST_CASE(num_args)
 
 BOOST_AUTO_TEST_CASE(get_work_group_info)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-
     const char source[] =
     "__kernel void sum(__global const float *input,\n"
     "                  __global float *output)\n"
@@ -86,8 +83,6 @@ BOOST_AUTO_TEST_CASE(get_work_group_info)
 #ifndef BOOST_NO_VARIADIC_TEMPLATES
 BOOST_AUTO_TEST_CASE(kernel_set_args)
 {
-    bc::context context = bc::system::default_context();
-
     bc::kernel k =
         bc::kernel::create_with_source(
             "__kernel void test(int x, float y, char z) { }",
@@ -98,3 +93,5 @@ BOOST_AUTO_TEST_CASE(kernel_set_args)
     k.set_args(4, 2.4f, 'a');
 }
 #endif
+
+BOOST_AUTO_TEST_SUITE_END()
