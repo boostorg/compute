@@ -16,5 +16,5 @@ set(EXAMPLES
 
 foreach(EXAMPLE ${EXAMPLES})
   add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
-  target_link_libraries(${EXAMPLE} ${OpenCL_LIBRARY})
+  target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES})
 endforeach()
