@@ -85,6 +85,7 @@ add_compute_test("iterator.zip_iterator" test_zip_iterator.cpp)
 
 add_compute_test("random.mersenne_twister" test_mersenne_twister.cpp)
 
+add_compute_test("blas.axpy" test_blas_axpy.cpp)
 add_compute_test("blas.gemm" test_blas_gemm.cpp)
 add_compute_test("blas.gemv" test_blas_gemv.cpp)
 add_compute_test("blas.iamax" test_blas_iamax.cpp)
