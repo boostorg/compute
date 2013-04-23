@@ -13,5 +13,5 @@ set(BENCHMARKS
 foreach(BENCHMARK ${BENCHMARKS})
   set(PERF_TARGET perf_${BENCHMARK})
   add_executable(${PERF_TARGET} perf_${BENCHMARK}.cpp)
-  target_link_libraries(${PERF_TARGET} ${OpenCL_LIBRARY})
+  target_link_libraries(${PERF_TARGET} ${OPENCL_LIBRARIES})
 endforeach()
