@@ -108,6 +108,12 @@
 <dt><span class="section"><a href="reference.html#header.boost.compute.iterator.transform_iterator_hpp">Header &lt;boost/compute/iterator/transform_iterator.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.iterator.zip_iterator_hpp">Header &lt;boost/compute/iterator/zip_iterator.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.lambda_hpp">Header &lt;boost/compute/lambda.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.type_traits_hpp">Header &lt;boost/compute/type_traits.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.type_traits.is_vector_type_hpp">Header &lt;boost/compute/type_traits/is_vector_type.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.type_traits.make_vector_type_hpp">Header &lt;boost/compute/type_traits/make_vector_type.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.type_traits.scalar_type_hpp">Header &lt;boost/compute/type_traits/scalar_type.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.type_traits.type_name_hpp">Header &lt;boost/compute/type_traits/type_name.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.type_traits.vector_size_hpp">Header &lt;boost/compute/type_traits/vector_size.hpp&gt;</a></span></dt>
 </dl></div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
@@ -249,9 +255,9 @@
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator<span class="special">,</span> <span class="keyword">typename</span> T<span class="special">&gt;</span> 
-      <span class="identifier">T</span> <a class="link" href="../boost/compute/accumulate_idp7997392.html" title="Function template accumulate"><span class="identifier">accumulate</span></a><span class="special">(</span><span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+      <span class="identifier">T</span> <a class="link" href="../boost/compute/accumulate_idp8093520.html" title="Function template accumulate"><span class="identifier">accumulate</span></a><span class="special">(</span><span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator<span class="special">,</span> <span class="keyword">typename</span> T<span class="special">,</span> <span class="keyword">typename</span> BinaryFunction<span class="special">&gt;</span> 
-      <span class="identifier">T</span> <a class="link" href="../boost/compute/accumulate_idp8007936.html" title="Function template accumulate"><span class="identifier">accumulate</span></a><span class="special">(</span><span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">BinaryFunction</span><span class="special">,</span> 
+      <span class="identifier">T</span> <a class="link" href="../boost/compute/accumulate_idp8104064.html" title="Function template accumulate"><span class="identifier">accumulate</span></a><span class="special">(</span><span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">BinaryFunction</span><span class="special">,</span> 
                    <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
@@ -522,12 +528,12 @@
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator1<span class="special">,</span> <span class="keyword">typename</span> InputIterator2<span class="special">,</span> <span class="keyword">typename</span> T<span class="special">&gt;</span> 
-      <span class="identifier">T</span> <a class="link" href="../boost/compute/inner_product_idp8370064.html" title="Function template inner_product"><span class="identifier">inner_product</span></a><span class="special">(</span><span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator2</span><span class="special">,</span> <span class="identifier">T</span><span class="special">,</span> 
+      <span class="identifier">T</span> <a class="link" href="../boost/compute/inner_product_idp8466192.html" title="Function template inner_product"><span class="identifier">inner_product</span></a><span class="special">(</span><span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator2</span><span class="special">,</span> <span class="identifier">T</span><span class="special">,</span> 
                       <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator1<span class="special">,</span> <span class="keyword">typename</span> InputIterator2<span class="special">,</span> <span class="keyword">typename</span> T<span class="special">,</span> 
              <span class="keyword">typename</span> BinaryAccumulateFunction<span class="special">,</span> 
              <span class="keyword">typename</span> BinaryTransformFunction<span class="special">&gt;</span> 
-      <span class="identifier">T</span> <a class="link" href="../boost/compute/inner_product_idp8382208.html" title="Function template inner_product"><span class="identifier">inner_product</span></a><span class="special">(</span><span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator2</span><span class="special">,</span> <span class="identifier">T</span><span class="special">,</span> 
+      <span class="identifier">T</span> <a class="link" href="../boost/compute/inner_product_idp8478336.html" title="Function template inner_product"><span class="identifier">inner_product</span></a><span class="special">(</span><span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator2</span><span class="special">,</span> <span class="identifier">T</span><span class="special">,</span> 
                       <span class="identifier">BinaryAccumulateFunction</span><span class="special">,</span> <span class="identifier">BinaryTransformFunction</span><span class="special">,</span> 
                       <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
@@ -788,7 +794,7 @@
 <a name="header.boost.compute.algorithm.sort_hpp"></a>Header &lt;<a href="../../../boost/compute/algorithm/sort.hpp" target="_top">boost/compute/algorithm/sort.hpp</a>&gt;</h3></div></div></div>
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Iterator<span class="special">&gt;</span> <span class="keyword">void</span> <a class="link" href="../boost/compute/sort_idp8728864.html" title="Function template sort"><span class="identifier">sort</span></a><span class="special">(</span><span class="identifier">Iterator</span><span class="special">,</span> <span class="identifier">Iterator</span><span class="special">,</span> <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Iterator<span class="special">&gt;</span> <span class="keyword">void</span> <a class="link" href="../boost/compute/sort_idp8824992.html" title="Function template sort"><span class="identifier">sort</span></a><span class="special">(</span><span class="identifier">Iterator</span><span class="special">,</span> <span class="identifier">Iterator</span><span class="special">,</span> <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -797,7 +803,7 @@
 <a name="header.boost.compute.algorithm.stable_sort_hpp"></a>Header &lt;<a href="../../../boost/compute/algorithm/stable_sort.hpp" target="_top">boost/compute/algorithm/stable_sort.hpp</a>&gt;</h3></div></div></div>
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Iterator<span class="special">&gt;</span> <span class="keyword">void</span> <a class="link" href="../boost/compute/sort_idp8740624.html" title="Function template sort"><span class="identifier">sort</span></a><span class="special">(</span><span class="identifier">Iterator</span><span class="special">,</span> <span class="identifier">Iterator</span><span class="special">,</span> <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Iterator<span class="special">&gt;</span> <span class="keyword">void</span> <a class="link" href="../boost/compute/sort_idp8836752.html" title="Function template sort"><span class="identifier">sort</span></a><span class="special">(</span><span class="identifier">Iterator</span><span class="special">,</span> <span class="identifier">Iterator</span><span class="special">,</span> <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -819,12 +825,12 @@
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator<span class="special">,</span> <span class="keyword">typename</span> OutputIterator<span class="special">,</span> 
              <span class="keyword">typename</span> UnaryOperator<span class="special">&gt;</span> 
       <span class="identifier">OutputIterator</span> 
-      <a class="link" href="../boost/compute/transform_idp8766528.html" title="Function template transform"><span class="identifier">transform</span></a><span class="special">(</span><span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">UnaryOperator</span><span class="special">,</span> 
+      <a class="link" href="../boost/compute/transform_idp8862656.html" title="Function template transform"><span class="identifier">transform</span></a><span class="special">(</span><span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">UnaryOperator</span><span class="special">,</span> 
                 <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator1<span class="special">,</span> <span class="keyword">typename</span> InputIterator2<span class="special">,</span> 
              <span class="keyword">typename</span> OutputIterator<span class="special">,</span> <span class="keyword">typename</span> BinaryOperator<span class="special">&gt;</span> 
       <span class="identifier">OutputIterator</span> 
-      <a class="link" href="../boost/compute/transform_idp8779312.html" title="Function template transform"><span class="identifier">transform</span></a><span class="special">(</span><span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator2</span><span class="special">,</span> 
+      <a class="link" href="../boost/compute/transform_idp8875440.html" title="Function template transform"><span class="identifier">transform</span></a><span class="special">(</span><span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator2</span><span class="special">,</span> 
                 <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">BinaryOperator</span><span class="special">,</span> <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
@@ -836,12 +842,12 @@
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator<span class="special">,</span> <span class="keyword">typename</span> UnaryTransformFunction<span class="special">,</span> 
              <span class="keyword">typename</span> T<span class="special">,</span> <span class="keyword">typename</span> BinaryReduceFunction<span class="special">&gt;</span> 
-      <span class="identifier">T</span> <a class="link" href="../boost/compute/transform_reduce_idp8797600.html" title="Function template transform_reduce"><span class="identifier">transform_reduce</span></a><span class="special">(</span><span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">UnaryTransformFunction</span><span class="special">,</span> 
+      <span class="identifier">T</span> <a class="link" href="../boost/compute/transform_reduce_idp8893728.html" title="Function template transform_reduce"><span class="identifier">transform_reduce</span></a><span class="special">(</span><span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">UnaryTransformFunction</span><span class="special">,</span> 
                          <span class="identifier">T</span><span class="special">,</span> <span class="identifier">BinaryReduceFunction</span><span class="special">,</span> <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator1<span class="special">,</span> <span class="keyword">typename</span> InputIterator2<span class="special">,</span> 
              <span class="keyword">typename</span> BinaryTransformFunction<span class="special">,</span> <span class="keyword">typename</span> T<span class="special">,</span> 
              <span class="keyword">typename</span> BinaryReduceFunction<span class="special">&gt;</span> 
-      <span class="identifier">T</span> <a class="link" href="../boost/compute/transform_reduce_idp8812352.html" title="Function template transform_reduce"><span class="identifier">transform_reduce</span></a><span class="special">(</span><span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator2</span><span class="special">,</span> 
+      <span class="identifier">T</span> <a class="link" href="../boost/compute/transform_reduce_idp8908480.html" title="Function template transform_reduce"><span class="identifier">transform_reduce</span></a><span class="special">(</span><span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator1</span><span class="special">,</span> <span class="identifier">InputIterator2</span><span class="special">,</span> 
                          <span class="identifier">BinaryTransformFunction</span><span class="special">,</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">BinaryReduceFunction</span><span class="special">,</span> 
                          <span class="identifier">command_queue</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
@@ -1047,6 +1053,58 @@
     Meta-header to include all Boost.Compute lambda headers.
   
   
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="header.boost.compute.type_traits_hpp"></a>Header &lt;<a href="../../../boost/compute/type_traits.hpp" target="_top">boost/compute/type_traits.hpp</a>&gt;</h3></div></div></div>
+  
+    Meta-header to include all Boost.Compute type-traits headers.
+  
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="header.boost.compute.type_traits.is_vector_type_hpp"></a>Header &lt;<a href="../../../boost/compute/type_traits/is_vector_type.hpp" target="_top">boost/compute/type_traits/is_vector_type.hpp</a>&gt;</h3></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">struct</span> <a class="link" href="../boost/compute/is_vector_type.html" title="Struct template is_vector_type">is_vector_type</a><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="header.boost.compute.type_traits.make_vector_type_hpp"></a>Header &lt;<a href="../../../boost/compute/type_traits/make_vector_type.hpp" target="_top">boost/compute/type_traits/make_vector_type.hpp</a>&gt;</h3></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Scalar<span class="special">,</span> <span class="identifier">size_t</span> Size<span class="special">&gt;</span> <span class="keyword">struct</span> <a class="link" href="../boost/compute/make_vector_type.html" title="Struct template make_vector_type">make_vector_type</a><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="header.boost.compute.type_traits.scalar_type_hpp"></a>Header &lt;<a href="../../../boost/compute/type_traits/scalar_type.hpp" target="_top">boost/compute/type_traits/scalar_type.hpp</a>&gt;</h3></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">struct</span> <a class="link" href="../boost/compute/scalar_type.html" title="Struct template scalar_type">scalar_type</a><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="header.boost.compute.type_traits.type_name_hpp"></a>Header &lt;<a href="../../../boost/compute/type_traits/type_name.hpp" target="_top">boost/compute/type_traits/type_name.hpp</a>&gt;</h3></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <a class="link" href="../boost/compute/type_name.html" title="Function template type_name"><span class="identifier">type_name</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="header.boost.compute.type_traits.vector_size_hpp"></a>Header &lt;<a href="../../../boost/compute/type_traits/vector_size.hpp" target="_top">boost/compute/type_traits/vector_size.hpp</a>&gt;</h3></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">struct</span> <a class="link" href="../boost/compute/vector_size.html" title="Struct template vector_size">vector_size</a><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
