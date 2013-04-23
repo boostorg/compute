@@ -150,6 +150,17 @@
               </para>
             </description>
           </method>
+
+          <!-- platform::unload_compiler() -->
+          <method name="unload_compiler">
+            <type>void</type>
+
+            <description>
+              <para>
+                Instructs the implementation to unload any compiler resources.
+              </para>
+            </description>
+          </method>
         </method-group>
       </class>
     </namespace>
