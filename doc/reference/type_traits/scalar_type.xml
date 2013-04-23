@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/type_traits/scalar_type.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::scalar_type<T> -->
+      <struct name="scalar_type">
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <description>
+          <para>
+            The <code>scalar_type</code> meta-function returns the scalar type
+            for a vector type <code>T</code>.
+          </para>
+          <para>
+            Examples:
+            <itemizedlist>
+              <listitem><code>scalar_type&lt;int2_&gt;::type == int</code></listitem>
+              <listitem><code>scalar_type&lt;float4_&gt;::value == float</code></listitem>
+            </itemizedlist>
+          </para>
+        </description>
+      </struct>
+    </namespace>
+  </namespace>
+</header>

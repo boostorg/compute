@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/type_traits/type_name.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::type_name<T> -->
+      <function name="type_name">
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <type>const char*</type>
+
+        <description>
+          <para>
+            The <code>type_name</code> function returns the name of an OpenCL
+            type as a string.
+          </para>
+          <para>
+            Examples:
+            <itemizedlist>
+              <listitem><code>type_name&lt;float&gt;() == "float"</code></listitem>
+              <listitem><code>type_name&lt;float4_&gt;() == "float4"</code></listitem>
+            </itemizedlist>
+          </para>
+        </description>
+      </function>
+    </namespace>
+  </namespace>
+</header>

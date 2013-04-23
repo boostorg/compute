@@ -95,4 +95,12 @@
   <xi:include href="reference/iterator/zip_iterator.xml"/>
 
   <xi:include href="reference/lambda.xml"/>
+
+  <xi:include href="reference/type_traits.xml"/>
+  <xi:include href="reference/type_traits/is_vector_type.xml"/>
+  <xi:include href="reference/type_traits/make_vector_type.xml"/>
+  <xi:include href="reference/type_traits/scalar_type.xml"/>
+  <xi:include href="reference/type_traits/type_name.xml"/>
+  <xi:include href="reference/type_traits/vector_size.xml"/>
+
 </library-reference>
