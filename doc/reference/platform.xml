@@ -133,6 +133,23 @@
               </para>
             </description>
           </method>
+
+          <!-- platform::get_extension_function_address(const char*) -->
+          <method name="get_extension_function_address">
+            <type>void*</type>
+
+            <parameter name="function_name">
+              <paramtype>const char*</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Returns the address of the extension function with
+                <code>function_name</code>. Returns <code>0</code> if no
+                function with the given name exists.
+              </para>
+            </description>
+          </method>
         </method-group>
       </class>
     </namespace>
