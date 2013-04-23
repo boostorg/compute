@@ -134,31 +134,6 @@
             </description>
           </method>
         </method-group>
-
-        <method-group name="public static functions">
-
-          <!-- platform::platform_count() -->
-          <method name="platforms" specifiers="static">
-            <type>std::vector&lt;<classname>platform</classname>&gt;</type>
-            <description>
-              <para>
-                Returns a vector of all the OpenCL platforms available on the
-                system.
-              </para>
-            </description>
-          </method>
-
-          <!-- platform::platform_count() -->
-          <method name="platform_count" specifiers="static">
-            <type>size_t</type>
-            <description>
-              <para>
-                Returns the total number of OpenCL platforms available on the
-                system.
-              </para>
-            </description>
-          </method>
-        </method-group>
       </class>
     </namespace>
   </namespace>
