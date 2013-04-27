@@ -15,6 +15,8 @@
 #include <boost/compute/algorithm/adjacent_find.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(adjacent_find_int)
 {
     int data[] = { 1, 3, 5, 5, 6, 7, 7, 8 };
@@ -24,3 +26,5 @@ BOOST_AUTO_TEST_CASE(adjacent_find_int)
         boost::compute::adjacent_find(vector.begin(), vector.end());
     BOOST_VERIFY(iter == vector.begin() + 2);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

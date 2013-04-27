@@ -17,6 +17,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/permutation_iterator.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(iota_int)
@@ -64,3 +66,5 @@ BOOST_AUTO_TEST_CASE(iota_permutation_iterator)
     BOOST_CHECK_EQUAL(output[3], 5);
     BOOST_CHECK_EQUAL(output[4], 4);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

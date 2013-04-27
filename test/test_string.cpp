@@ -14,6 +14,8 @@
 #include <boost/compute/container/string.hpp>
 #include <boost/compute/container/basic_string.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(empty)
 {
     boost::compute::string str;
@@ -27,3 +29,5 @@ BOOST_AUTO_TEST_CASE(size)
     BOOST_CHECK_EQUAL(str.size(), 6);
     BOOST_CHECK_EQUAL(str.length(), 6);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

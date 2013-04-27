@@ -16,6 +16,8 @@
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(sort_int_vector)
 {
     int data[] = { -4, 152, -5000, 963, 75321, -456, 0, 1112 };
@@ -36,3 +38,5 @@ BOOST_AUTO_TEST_CASE(sort_int_vector)
     BOOST_CHECK_EQUAL(data[6], 1112);
     BOOST_CHECK_EQUAL(data[7], 75321);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

@@ -17,6 +17,8 @@
 #include <boost/compute/algorithm/none_of.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(any_all_none_of)
@@ -35,3 +37,5 @@ BOOST_AUTO_TEST_CASE(any_all_none_of)
     BOOST_CHECK(bc::all_of(v.begin(), v.end(), _1 < 6) == false);
     BOOST_CHECK(bc::all_of(v.begin(), v.end(), _1 >= 1) == true);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

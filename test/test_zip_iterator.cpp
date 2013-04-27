@@ -22,6 +22,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/zip_iterator.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(value_type)
 {
     BOOST_STATIC_ASSERT((
@@ -39,9 +41,6 @@ BOOST_AUTO_TEST_CASE(value_type)
 
 BOOST_AUTO_TEST_CASE(distance)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-
     boost::compute::vector<char> char_vector(5, context);
     boost::compute::vector<int> int_vector(5, context);
 
@@ -102,9 +101,6 @@ BOOST_AUTO_TEST_CASE(distance)
 
 BOOST_AUTO_TEST_CASE(copy)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-
     // create three separate vectors of three different types
     char char_data[] = { 'x', 'y', 'z' };
     boost::compute::vector<char> char_vector(char_data, char_data + 3, context);
@@ -150,3 +146,5 @@ BOOST_AUTO_TEST_CASE(copy)
     BOOST_CHECK_EQUAL(host_vector[1], boost::make_tuple('y', 7, 4.5f));
     BOOST_CHECK_EQUAL(host_vector[2], boost::make_tuple('z', 9, 7.6f));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

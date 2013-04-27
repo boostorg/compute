@@ -19,14 +19,12 @@
 #include <boost/compute/algorithm/is_partitioned.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(partition_float_vector)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     bc::vector<float> vector(context);
     vector.push_back(1.0f);
     vector.push_back(2.0f);
@@ -68,10 +66,6 @@ BOOST_AUTO_TEST_CASE(partition_float_vector)
 
 BOOST_AUTO_TEST_CASE(partition_small_vector)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     bc::vector<float> vector(context);
     bc::partition(vector.begin(), vector.end(), bc::signbit_<float>(), queue);
 
@@ -86,3 +80,5 @@ BOOST_AUTO_TEST_CASE(partition_small_vector)
     BOOST_CHECK_EQUAL(vector[0], -1.0f);
     BOOST_CHECK_EQUAL(vector[1], 1.0f);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

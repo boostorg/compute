@@ -20,6 +20,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/constant_iterator.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(value_type)
 {
     BOOST_STATIC_ASSERT((
@@ -56,10 +58,6 @@ BOOST_AUTO_TEST_CASE(distance)
 
 BOOST_AUTO_TEST_CASE(copy)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     boost::compute::vector<int> vector(10, context);
 
     boost::compute::copy(
@@ -81,3 +79,5 @@ BOOST_AUTO_TEST_CASE(copy)
     BOOST_CHECK_EQUAL(int(vector[8]), 42);
     BOOST_CHECK_EQUAL(int(vector[9]), 42);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

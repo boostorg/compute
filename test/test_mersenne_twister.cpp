@@ -14,12 +14,10 @@
 #include <boost/compute/random/mersenne_twister.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(fill_uint)
 {
-    boost::compute::device gpu = boost::compute::system::default_device();
-    boost::compute::context context(gpu);
-    boost::compute::command_queue queue(context, gpu);
-
     using boost::compute::uint_;
 
     boost::compute::mt19937 rng(context);
@@ -40,3 +38,5 @@ BOOST_AUTO_TEST_CASE(fill_uint)
     BOOST_CHECK_EQUAL(uint_(vector[8]), uint_(2715962298));
     BOOST_CHECK_EQUAL(uint_(vector[9]), uint_(1323567403));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

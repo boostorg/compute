@@ -20,14 +20,12 @@
 #include <boost/compute/iterator/counting_iterator.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(reduce_int)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     int data[] = { 1, 5, 9, 13, 17 };
     bc::vector<int> vector(data, data + 5, context);
     int sum = bc::reduce(vector.begin(),
@@ -47,10 +45,6 @@ BOOST_AUTO_TEST_CASE(reduce_int)
 
 BOOST_AUTO_TEST_CASE(reduce_int_min_max)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     int data[] = { 11, 5, 92, 13, 42 };
     bc::vector<int> vector(data, data + 5, context);
     BOOST_CHECK_EQUAL(
@@ -76,10 +70,6 @@ BOOST_AUTO_TEST_CASE(reduce_int_min_max)
 
 BOOST_AUTO_TEST_CASE(reduce_int2)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     std::vector<bc::int2_> data;
     for(int i = 0; i < 6; i++){
         bc::int2_ value;
@@ -102,7 +92,7 @@ BOOST_AUTO_TEST_CASE(reduce_pinned_vector)
     int data[] = { 2, 5, 8, 11, 15 };
     std::vector<int> vector(data, data + 5);
 
-    bc::buffer buffer(bc::system::default_context(),
+    bc::buffer buffer(context,
                       vector.size() * sizeof(int),
                       bc::buffer::read_only | bc::buffer::use_host_ptr,
                       &vector[0]);
@@ -116,10 +106,6 @@ BOOST_AUTO_TEST_CASE(reduce_pinned_vector)
 
 BOOST_AUTO_TEST_CASE(reduce_constant_iterator)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     BOOST_CHECK_EQUAL(
         bc::reduce(bc::make_constant_iterator(1, 0),
                    bc::make_constant_iterator(1, 5),
@@ -148,10 +134,6 @@ BOOST_AUTO_TEST_CASE(reduce_constant_iterator)
 
 BOOST_AUTO_TEST_CASE(reduce_counting_iterator)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     BOOST_CHECK_EQUAL(
         bc::reduce(bc::make_counting_iterator(1),
                    bc::make_counting_iterator(10),
@@ -173,10 +155,6 @@ BOOST_AUTO_TEST_CASE(reduce_counting_iterator)
 BOOST_AUTO_TEST_CASE(reduce_transform_iterator)
 {
     using ::boost::compute::_1;
-
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
 
     int data[] = { 1, 3, 5, 7, 9 };
     bc::vector<int> vector(data, data + 5, context);
@@ -208,3 +186,5 @@ BOOST_AUTO_TEST_CASE(reduce_transform_iterator)
         int(165)
     );
 }
+
+BOOST_AUTO_TEST_SUITE_END()

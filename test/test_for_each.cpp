@@ -16,13 +16,12 @@
 #include <boost/compute/algorithm/for_each.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(for_each_nop)
 {
-    bc::context context = bc::system::default_context();
-    bc::command_queue queue(context, context.get_device());
-
     bc::vector<int> vector(4, context);
     bc::iota(vector.begin(), vector.end(), 0);
 
@@ -30,3 +29,5 @@ BOOST_AUTO_TEST_CASE(for_each_nop)
         bc::make_function_from_source<void (int)>("nop", "void nop(int x) { }");
     bc::for_each(vector.begin(), vector.end(), nop, queue);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

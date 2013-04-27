@@ -15,14 +15,12 @@
 #include <boost/compute/algorithm/gather.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(gather_int)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     int input_data[] = { 1, 2, 3, 4, 5 };
     bc::vector<int> input(input_data, input_data + 5, context);
 
@@ -37,3 +35,5 @@ BOOST_AUTO_TEST_CASE(gather_int)
     BOOST_CHECK_EQUAL(output[3], 4);
     BOOST_CHECK_EQUAL(output[4], 3);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

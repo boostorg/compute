@@ -15,6 +15,8 @@
 #include <boost/compute/algorithm/remove_if.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(remove_int)
@@ -61,3 +63,5 @@ BOOST_AUTO_TEST_CASE(remove_int)
     iter = bc::remove(vector.begin(), vector.begin() + 2, 3);
     BOOST_VERIFY(iter == vector.begin());
 }
+
+BOOST_AUTO_TEST_SUITE_END()

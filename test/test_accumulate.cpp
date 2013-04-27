@@ -17,6 +17,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/counting_iterator.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(sum_int)
 {
     int data[] = { 2, 4, 6, 8 };
@@ -39,10 +41,6 @@ BOOST_AUTO_TEST_CASE(sum_int)
 
 BOOST_AUTO_TEST_CASE(quotient_int)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     int data[] = { 2, 8, 16 };
     boost::compute::vector<int> vector(data, data + 3, context);
     BOOST_CHECK_EQUAL(
@@ -58,10 +56,6 @@ BOOST_AUTO_TEST_CASE(quotient_int)
 
 BOOST_AUTO_TEST_CASE(sum_counting_iterator)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     // sum 0 -> 9
     BOOST_CHECK_EQUAL(
         boost::compute::accumulate(
@@ -125,10 +119,6 @@ BOOST_AUTO_TEST_CASE(sum_counting_iterator)
 
 BOOST_AUTO_TEST_CASE(sum_iota)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     // size 0
     boost::compute::vector<int> vector(0, context);
 
@@ -184,3 +174,5 @@ BOOST_AUTO_TEST_CASE(sum_iota)
         524802
     );
 }
+
+BOOST_AUTO_TEST_SUITE_END()

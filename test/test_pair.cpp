@@ -18,6 +18,8 @@
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(vector_pair_int_float)
 {
     boost::compute::vector<std::pair<int, float> > vector;
@@ -127,3 +129,5 @@ BOOST_AUTO_TEST_CASE(find_vector_pair)
         ).base() == vector.begin() + 2
     );
 }
+
+BOOST_AUTO_TEST_SUITE_END()

@@ -16,6 +16,8 @@
 #include <boost/compute/container/array.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(concept_check)
 {
     BOOST_CONCEPT_ASSERT((boost::Container<boost::compute::array<int, 3> >));
@@ -47,8 +49,6 @@ BOOST_AUTO_TEST_CASE(at)
 
 BOOST_AUTO_TEST_CASE(copy_from_vector)
 {
-    boost::compute::context context = boost::compute::system::default_context();
-
     int data[] = { 3, 6, 9, 12 };
     boost::compute::vector<int> vector(data, data + 4, context);
 
@@ -62,10 +62,6 @@ BOOST_AUTO_TEST_CASE(copy_from_vector)
 
 BOOST_AUTO_TEST_CASE(fill)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     boost::compute::array<int, 4> array(context);
     array.fill(0);
     BOOST_CHECK_EQUAL(array[0], 0);
@@ -82,10 +78,6 @@ BOOST_AUTO_TEST_CASE(fill)
 
 BOOST_AUTO_TEST_CASE(swap)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     int data[] = { 1, 2, 6, 9 };
     boost::compute::array<int, 4> a(context);
     boost::compute::copy(data, data + 4, a.begin());
@@ -111,3 +103,5 @@ BOOST_AUTO_TEST_CASE(swap)
     BOOST_CHECK_EQUAL(b[2], 6);
     BOOST_CHECK_EQUAL(b[3], 9);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

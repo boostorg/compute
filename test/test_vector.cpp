@@ -21,6 +21,8 @@
 #include <boost/compute/algorithm/remove.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(concept_check)
@@ -248,8 +250,6 @@ BOOST_AUTO_TEST_CASE(initializer_list_ctor)
 
 BOOST_AUTO_TEST_CASE(vector_double)
 {
-    bc::device device = bc::system::default_device();
-
     if(!device.supports_extension("cl_khr_fp64")){
         return;
     }
@@ -322,3 +322,5 @@ BOOST_AUTO_TEST_CASE(vector_erase_remove)
     BOOST_CHECK_EQUAL(vector[1], 5);
     BOOST_CHECK_EQUAL(vector[2], 1);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

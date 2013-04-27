@@ -15,15 +15,14 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/program.hpp>
 
+#include "context_setup.hpp"
+
 const char source[] =
     "__kernel void foo(__global float *x, const uint n) { }\n"
     "__kernel void bar(__global int *x, __global int *y) { }\n";
 
 BOOST_AUTO_TEST_CASE(get_program_info)
 {
-    boost::compute::context context =
-        boost::compute::system::default_context();
-
     // create program
     boost::compute::program program =
         boost::compute::program::create_with_source(source, context);
@@ -38,9 +37,6 @@ BOOST_AUTO_TEST_CASE(get_program_info)
 
 BOOST_AUTO_TEST_CASE(create_kernel)
 {
-    boost::compute::context context =
-        boost::compute::system::default_context();
-
     boost::compute::program program =
         boost::compute::program::create_with_source(source, context);
     program.build();
@@ -51,9 +47,6 @@ BOOST_AUTO_TEST_CASE(create_kernel)
 
 BOOST_AUTO_TEST_CASE(create_with_binary)
 {
-    boost::compute::context context =
-        boost::compute::system::default_context();
-
     // create program from source
     boost::compute::program source_program =
         boost::compute::program::create_with_source(source, context);
@@ -83,3 +76,5 @@ BOOST_AUTO_TEST_CASE(create_with_binary)
     BOOST_CHECK_EQUAL(binary_foo_kernel.name(), std::string("foo"));
     BOOST_CHECK_EQUAL(binary_bar_kernel.name(), std::string("bar"));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

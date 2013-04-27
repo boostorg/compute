@@ -15,12 +15,10 @@
 #include <boost/compute/algorithm/merge.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(simple_merge_int)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     int data1[] = { 1, 3, 5, 7 };
     int data2[] = { 2, 4, 6, 8 };
 
@@ -128,3 +126,5 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
     BOOST_CHECK_EQUAL(int(v3[2]), 6);
     BOOST_CHECK_EQUAL(int(v3[3]), 8);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

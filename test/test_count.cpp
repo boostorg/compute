@@ -20,6 +20,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/constant_iterator.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(count_int)
@@ -36,10 +38,6 @@ BOOST_AUTO_TEST_CASE(count_int)
 
 BOOST_AUTO_TEST_CASE(count_constant_int_range)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     BOOST_CHECK_EQUAL(
         bc::count(bc::make_constant_iterator(18, 0),
                   bc::make_constant_iterator(18, 5),
@@ -109,3 +107,5 @@ BOOST_AUTO_TEST_CASE(count_int4)
         size_t(0)
     );
 }
+
+BOOST_AUTO_TEST_SUITE_END()

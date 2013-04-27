@@ -19,6 +19,8 @@
 #include <boost/compute/algorithm/upper_bound.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(binary_search_int)
 {
     int data[] = { 1, 2, 2, 2, 4, 4, 5, 7 };
@@ -61,3 +63,5 @@ BOOST_AUTO_TEST_CASE(range_bounds_int)
     BOOST_CHECK(boost::compute::lower_bound(vector.begin(), vector.end(), int(6)) == vector.end());
     BOOST_CHECK(boost::compute::upper_bound(vector.begin(), vector.end(), int(6)) == vector.end());
 }
+
+BOOST_AUTO_TEST_SUITE_END()

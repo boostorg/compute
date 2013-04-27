@@ -17,6 +17,8 @@
 
 #include <boost/compute/container/flat_map.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(concept_check)
 {
     BOOST_CONCEPT_ASSERT((boost::Container<boost::compute::flat_map<int, float> >));
@@ -92,3 +94,5 @@ BOOST_AUTO_TEST_CASE(simple_histogram)
     BOOST_CHECK_EQUAL(int(map[8]), int(1));
     BOOST_CHECK_EQUAL(int(map[9]), int(4));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

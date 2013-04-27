@@ -17,6 +17,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/detail/adjacent_transform_iterator.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(copy)
 {
     int data[] = { 1, 2, 4, 7, 11, 16 };
@@ -53,3 +55,5 @@ BOOST_AUTO_TEST_CASE(find_largest_gap)
         ).base() - 1;
     BOOST_VERIFY(iter == vector.begin() + 1);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

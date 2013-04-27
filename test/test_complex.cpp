@@ -18,6 +18,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 
+#include "context_setup.hpp"
+
 // copies a vector of complex<float>'s on the host to the device
 BOOST_AUTO_TEST_CASE(copy_complex_vector)
 {
@@ -133,10 +135,6 @@ BOOST_AUTO_TEST_CASE(complex_type_name)
 
 BOOST_AUTO_TEST_CASE(transform_multiply)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     boost::compute::vector<std::complex<float> > x(context);
     x.push_back(std::complex<float>(1.0f, 2.0f));
     x.push_back(std::complex<float>(-2.0f, 5.0f));
@@ -161,3 +159,5 @@ BOOST_AUTO_TEST_CASE(transform_multiply)
     BOOST_CHECK_EQUAL(std::complex<float>(z[0]), std::complex<float>(-5.0f, 10.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(z[1]), std::complex<float>(1.0f, 12.0f));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

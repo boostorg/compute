@@ -14,12 +14,12 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/image3d.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(image3d_get_supported_formats)
 {
-    bc::context context = bc::system::default_context();
-
     std::vector<bc::image_format> formats =
         bc::image3d::get_supported_formats(context, bc::image3d::read_only);
 }
@@ -34,3 +34,5 @@ BOOST_AUTO_TEST_CASE(complex_type_name)
         ) == 0
     );
 }
+
+BOOST_AUTO_TEST_SUITE_END()

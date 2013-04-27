@@ -17,12 +17,10 @@
 #include <boost/compute/algorithm/detail/inplace_reduce.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(sum_int)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     int data[] = { 1, 5, 3, 4, 9, 3, 5, 3 };
     boost::compute::vector<int> vector(data, data + 8, context);
 
@@ -45,10 +43,6 @@ BOOST_AUTO_TEST_CASE(sum_int)
 
 BOOST_AUTO_TEST_CASE(multiply_int)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     int data[] = { 1, 5, 3, 4, 9, 3, 5, 3 };
     boost::compute::vector<int> vector(data, data + 8, context);
 
@@ -71,10 +65,6 @@ BOOST_AUTO_TEST_CASE(multiply_int)
 
 BOOST_AUTO_TEST_CASE(reduce_iota)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     // 1 value
     boost::compute::vector<int> vector(1, context);
     boost::compute::iota(vector.begin(), vector.end(), int(0), queue);
@@ -125,3 +115,5 @@ BOOST_AUTO_TEST_CASE(reduce_iota)
     queue.finish();
     BOOST_CHECK_EQUAL(int(vector[0]), int(12497500));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

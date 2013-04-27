@@ -21,6 +21,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
 
+#include "context_setup.hpp"
+
 BOOST_AUTO_TEST_CASE(int_min_max)
 {
     int data[] = { 9, 15, 1, 4 };
@@ -167,3 +169,5 @@ BOOST_AUTO_TEST_CASE(max_bits_set)
     BOOST_CHECK(iter == vector.begin() + 7);
     BOOST_CHECK_EQUAL(uint_(*iter), uint_(7));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

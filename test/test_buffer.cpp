@@ -14,26 +14,25 @@
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/system.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(size)
 {
-    bc::context context = bc::system::default_context();
     bc::buffer buffer(context, 100);
     BOOST_CHECK_EQUAL(buffer.size(), size_t(100));
     BOOST_VERIFY(buffer.max_size() > buffer.size());
 }
 
-BOOST_AUTO_TEST_CASE(context)
+BOOST_AUTO_TEST_CASE(cl_context)
 {
-    bc::context context = bc::system::default_context();
     bc::buffer buffer(context, 100);
     BOOST_VERIFY(buffer.get_context() == context);
 }
 
 BOOST_AUTO_TEST_CASE(equality_operator)
 {
-    bc::context context = bc::system::default_context();
     bc::buffer a(context, 10);
     bc::buffer b(context, 10);
     BOOST_VERIFY(a == a);
@@ -48,9 +47,6 @@ BOOST_AUTO_TEST_CASE(equality_operator)
 
 BOOST_AUTO_TEST_CASE(construct_from_cl_mem)
 {
-    boost::compute::context context =
-      boost::compute::system::default_context();
-
     // create cl_mem
     cl_mem mem = clCreateBuffer(context, CL_MEM_READ_WRITE, 16, 0, 0);
     BOOST_VERIFY(mem);
@@ -71,18 +67,12 @@ BOOST_AUTO_TEST_CASE(reference_count)
 {
     using boost::compute::uint_;
 
-    boost::compute::context context =
-        boost::compute::system::default_context();
-
     boost::compute::buffer buf(context, 16);
     BOOST_CHECK_GE(buf.reference_count(), uint_(1));
 }
 
 BOOST_AUTO_TEST_CASE(move_constructor)
 {
-    boost::compute::context context =
-        boost::compute::system::default_context();
-
     boost::compute::buffer buffer1(context, 16);
     BOOST_CHECK(buffer1.get() != 0);
     BOOST_CHECK_EQUAL(buffer1.size(), size_t(16));
@@ -92,3 +82,5 @@ BOOST_AUTO_TEST_CASE(move_constructor)
     BOOST_CHECK(buffer2.get() != 0);
     BOOST_CHECK_EQUAL(buffer2.size(), size_t(16));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

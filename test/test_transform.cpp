@@ -19,6 +19,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/counting_iterator.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(transform_int_abs)
@@ -156,9 +158,6 @@ BOOST_AUTO_TEST_CASE(transform_custom_function)
 
 BOOST_AUTO_TEST_CASE(extract_vector_component)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-
     int data[] = { 1, 2,
                    3, 4,
                    5, 6,
@@ -197,10 +196,6 @@ BOOST_AUTO_TEST_CASE(transform_pinned_vector)
     int data[] = { 2, -3, 4, -5, 6, -7 };
     std::vector<int> vector(data, data + 6);
 
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     bc::buffer buffer(context,
                       vector.size() * sizeof(int),
                       bc::buffer::read_write | bc::buffer::use_host_ptr,
@@ -228,10 +223,6 @@ BOOST_AUTO_TEST_CASE(transform_pinned_vector)
 
 BOOST_AUTO_TEST_CASE(transform_popcount)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     using boost::compute::uint_;
 
     uint_ data[] = { 0, 1, 2, 3, 4, 45, 127, 5000, 789, 15963 };
@@ -265,10 +256,6 @@ BOOST_AUTO_TEST_CASE(generate_fibonacci_sequence)
 {
     using boost::compute::uint_;
 
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     boost::compute::vector<uint_> sequence(25, context);
 
     const char nth_fibonacci_source[] =
@@ -299,3 +286,5 @@ BOOST_AUTO_TEST_CASE(generate_fibonacci_sequence)
     BOOST_CHECK_EQUAL(uint_(sequence[15]), 610);
     BOOST_CHECK_EQUAL(uint_(sequence[24]), 46368);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

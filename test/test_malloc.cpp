@@ -14,6 +14,8 @@
 #include <boost/compute/malloc.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(malloc_int)
@@ -34,3 +36,5 @@ BOOST_AUTO_TEST_CASE(malloc_int)
 
     bc::free(ptr);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

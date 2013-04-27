@@ -16,15 +16,13 @@
 #include <boost/compute/algorithm/detail/insertion_sort.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(sort_char_vector)
 {
     using boost::compute::char_;
-
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
 
     char_ data[] = { 'c', 'a', '0', '7', 'B', 'F', '\0', '$' };
     boost::compute::vector<char_> vector(data, data + 8, context);
@@ -49,10 +47,6 @@ BOOST_AUTO_TEST_CASE(sort_uchar_vector)
 {
     using boost::compute::uchar_;
 
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     uchar_ data[] = { 0x12, 0x00, 0xFF, 0xB4, 0x80, 0x32, 0x64, 0xA2 };
     boost::compute::vector<uchar_> vector(data, data + 8, context);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
@@ -75,10 +69,6 @@ BOOST_AUTO_TEST_CASE(sort_uchar_vector)
 BOOST_AUTO_TEST_CASE(sort_short_vector)
 {
     using boost::compute::short_;
-
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
 
     short_ data[] = { -4, 152, -94, 963, 31002, -456, 0, -2113 };
     boost::compute::vector<short_> vector(data, data + 8, context);
@@ -103,10 +93,6 @@ BOOST_AUTO_TEST_CASE(sort_ushort_vector)
 {
     using boost::compute::ushort_;
 
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     ushort_ data[] = { 4, 152, 94, 963, 63202, 34560, 0, 2113 };
     boost::compute::vector<ushort_> vector(data, data + 8, context);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
@@ -128,10 +114,6 @@ BOOST_AUTO_TEST_CASE(sort_ushort_vector)
 
 BOOST_AUTO_TEST_CASE(sort_int_vector)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     int data[] = { -4, 152, -5000, 963, 75321, -456, 0, 1112 };
     boost::compute::vector<int> vector(data, data + 8, context);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
@@ -154,10 +136,6 @@ BOOST_AUTO_TEST_CASE(sort_int_vector)
 BOOST_AUTO_TEST_CASE(sort_uint_vector)
 {
     using boost::compute::uint_;
-
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
 
     uint_ data[] = { 500, 1988, 123456, 562, 0, 4000000, 9852, 102030 };
     boost::compute::vector<uint_> vector(data, data + 8, context);
@@ -182,10 +160,6 @@ BOOST_AUTO_TEST_CASE(sort_long_vector)
 {
     using boost::compute::long_;
 
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     long_ data[] = { 500, 1988, 123456, 562, 0, 4000000, 9852, 102030 };
     boost::compute::vector<long_> vector(data, data + 8, context);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
@@ -209,10 +183,6 @@ BOOST_AUTO_TEST_CASE(sort_ulong_vector)
 {
     using boost::compute::ulong_;
 
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     ulong_ data[] = { 500, 1988, 123456, 562, 0, 4000000, 9852, 102030 };
     boost::compute::vector<ulong_> vector(data, data + 8, context);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
@@ -234,10 +204,6 @@ BOOST_AUTO_TEST_CASE(sort_ulong_vector)
 
 BOOST_AUTO_TEST_CASE(sort_float_vector)
 {
-    boost::compute::device device = boost::compute::system::default_device();
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
-
     float data[] = { -6023.0f, 152.5f, -63.0f, 1234567.0f, 11.2f,
                      -5000.1f, 0.0f, 14.0f, -8.25f, -0.0f };
     boost::compute::vector<float> vector(data, data + 10, context);
@@ -262,14 +228,10 @@ BOOST_AUTO_TEST_CASE(sort_float_vector)
 
 BOOST_AUTO_TEST_CASE(sort_double_vector)
 {
-    boost::compute::device device = boost::compute::system::default_device();
     if(!device.supports_extension("cl_khr_fp64")){
         std::cout << "skipping test: device does not support double" << std::endl;
         return;
     }
-
-    boost::compute::context context(device);
-    boost::compute::command_queue queue(context, device);
 
     double data[] = { -6023.0, 152.5, -63.0, 1234567.0, 11.2,
                      -5000.1, 0.0, 14.0, -8.25, -0.0 };
@@ -292,3 +254,5 @@ BOOST_AUTO_TEST_CASE(sort_double_vector)
     BOOST_CHECK_EQUAL(data[8], 152.5);
     BOOST_CHECK_EQUAL(data[9], 1234567.0);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

@@ -20,6 +20,8 @@
 #include <boost/compute/algorithm/partial_sum.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(partial_sum_int)
@@ -42,3 +44,5 @@ BOOST_AUTO_TEST_CASE(partial_sum_int)
     BOOST_CHECK_EQUAL(b[6], 25);
     BOOST_CHECK_EQUAL(b[7], 27);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

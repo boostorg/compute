@@ -18,13 +18,12 @@
 #include <boost/compute/algorithm/adjacent_difference.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(adjacent_difference_int)
 {
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-
     bc::vector<int> a(5, context);
     bc::iota(a.begin(), a.end(), 0);
     BOOST_CHECK_EQUAL(a[0], 0);
@@ -59,3 +58,5 @@ BOOST_AUTO_TEST_CASE(adjacent_difference_int)
     BOOST_CHECK_EQUAL(b[3], 12);
     BOOST_CHECK_EQUAL(b[4], 33);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

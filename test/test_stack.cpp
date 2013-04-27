@@ -13,6 +13,8 @@
 
 #include <boost/compute/container/stack.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(size)
@@ -44,3 +46,5 @@ BOOST_AUTO_TEST_CASE(push_and_pop)
     stack.pop();
     BOOST_CHECK_EQUAL(stack.size(), size_t(0));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

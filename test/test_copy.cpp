@@ -23,6 +23,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/detail/swizzle_iterator.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(copy_on_device)
@@ -159,11 +161,6 @@ BOOST_AUTO_TEST_CASE(copy_swizzle_iterator)
 
 BOOST_AUTO_TEST_CASE(copy_int_async)
 {
-    // setup context and queue
-    bc::device device = bc::system::default_device();
-    bc::context context(device);
-    bc::command_queue queue(context, device);
-
     // setup host data
     int host_data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
     typedef int* host_iterator;
@@ -211,3 +208,5 @@ BOOST_AUTO_TEST_CASE(copy_int_async)
     BOOST_CHECK_EQUAL(host_data[7], int(8));
     BOOST_VERIFY(device_to_host_future.get() == host_data + 8);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

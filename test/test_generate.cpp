@@ -16,6 +16,8 @@
 #include <boost/compute/algorithm/generate_n.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(generate4)
@@ -33,3 +35,5 @@ BOOST_AUTO_TEST_CASE(generate4)
     BOOST_CHECK_EQUAL(vector[1], 4);
     BOOST_CHECK_EQUAL(vector[2], 4);
 }
+
+BOOST_AUTO_TEST_SUITE_END()
