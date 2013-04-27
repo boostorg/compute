@@ -15,35 +15,35 @@
 #include <boost/compute/algorithm/detail/clamp_range.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "context_setup.hpp"
+
 namespace compute = boost::compute;
 
-BOOST_AUTO_TEST_CASE(clamp_int_range)
+BOOST_AUTO_TEST_CASE(clamp_float_range)
 {
-    compute::device device = compute::system::default_device();
-    compute::context context(device);
-    compute::command_queue queue(context, device);
+    float data[] = { 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f };
+    compute::vector<float> input(data, data + 8, context);
 
-    int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-    compute::vector<int> input(data, data + 8, context);
-
-    compute::vector<int> result(8, context);
+    compute::vector<float> result(8, context);
     compute::detail::clamp_range(
         input.begin(),
         input.end(),
         result.begin(),
-        3, // low
-        6, // high
+        3.f, // low
+        6.f, // high
         queue
     );
 
     compute::copy(result.begin(), result.end(), data, queue);
 
-    BOOST_CHECK_EQUAL(data[0], 3);
-    BOOST_CHECK_EQUAL(data[1], 3);
-    BOOST_CHECK_EQUAL(data[2], 3);
-    BOOST_CHECK_EQUAL(data[3], 4);
-    BOOST_CHECK_EQUAL(data[4], 5);
-    BOOST_CHECK_EQUAL(data[5], 6);
-    BOOST_CHECK_EQUAL(data[6], 6);
-    BOOST_CHECK_EQUAL(data[7], 6);
+    BOOST_CHECK_EQUAL(data[0], 3.f);
+    BOOST_CHECK_EQUAL(data[1], 3.f);
+    BOOST_CHECK_EQUAL(data[2], 3.f);
+    BOOST_CHECK_EQUAL(data[3], 4.f);
+    BOOST_CHECK_EQUAL(data[4], 5.f);
+    BOOST_CHECK_EQUAL(data[5], 6.f);
+    BOOST_CHECK_EQUAL(data[6], 6.f);
+    BOOST_CHECK_EQUAL(data[7], 6.f);
 }
+
+BOOST_AUTO_TEST_SUITE_END()
