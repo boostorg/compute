@@ -30,7 +30,6 @@
 #include <boost/compute/context.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
-#include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/fill_n.hpp>
 #include <boost/compute/container/allocator.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
@@ -242,17 +241,9 @@ public:
         return m_allocator.max_size();
     }
 
-    void resize(size_type size, T value = T())
+    void resize(size_type size)
     {
         if(size < capacity()){
-            if(size < m_size){
-                ::boost::compute::fill(
-                    begin() + static_cast<difference_type>(size),
-                    begin() + static_cast<difference_type>(m_size),
-                    value
-                );
-            }
-
             m_size = size;
         }
         else {
@@ -271,9 +262,6 @@ public:
 
             // copy old values to the new buffer
             ::boost::compute::copy(m_data, m_data + m_size, new_data, queue);
-
-            // fill the rest of the new vector with value
-            ::boost::compute::fill(new_data + m_size, new_data + size, value, queue);
 
             // free old memory
             m_allocator.deallocate(m_data, m_size);

@@ -16,6 +16,16 @@
             <purpose>allocator type</purpose>
           </template-type-parameter>
         </template>
+
+        <description>
+          <para>
+            Note: Unlike <code>std::vector</code>,
+            <code>boost::compute::vector</code> does not initialize values
+            when the created or resized. If initialization is needed you must
+            explicitly call <functionname>fill()</functionname> on the newly
+            allocated values.
+          </para>
+        </description>
       </class>
     </namespace>
   </namespace>
