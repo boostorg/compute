@@ -29,6 +29,11 @@ namespace compute {
 class image2d : public memory_object
 {
 public:
+    image2d()
+        : memory_object()
+    {
+    }
+
     image2d(const context &context,
             cl_mem_flags flags,
             const image_format &format,

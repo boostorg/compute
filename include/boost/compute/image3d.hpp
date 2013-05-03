@@ -29,6 +29,11 @@ namespace compute {
 class image3d : public memory_object
 {
 public:
+    image3d()
+        : memory_object()
+    {
+    }
+
     image3d(const context &context,
             cl_mem_flags flags,
             const image_format &format,
