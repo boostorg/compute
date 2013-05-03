@@ -21,7 +21,7 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-size_t pick_copy_work_group_size(size_t n, const device &device)
+inline size_t pick_copy_work_group_size(size_t n, const device &device)
 {
     (void) device;
 
