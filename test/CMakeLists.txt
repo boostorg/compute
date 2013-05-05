@@ -65,6 +65,7 @@ add_compute_test("algorithm.scatter" test_scatter.cpp)
 add_compute_test("algorithm.sort" test_sort.cpp)
 add_compute_test("algorithm.stable_sort" test_stable_sort.cpp)
 add_compute_test("algorithm.transform" test_transform.cpp)
+add_compute_test("algorithm.transform_if" test_transform_if.cpp)
 add_compute_test("algorithm.transform_reduce" test_transform_reduce.cpp)
 
 add_compute_test("container.allocator" test_allocator.cpp)
