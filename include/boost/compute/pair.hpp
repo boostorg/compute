@@ -14,6 +14,7 @@
 #include <string>
 #include <utility>
 
+#include <boost/compute/functional/get.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 
@@ -28,43 +29,6 @@ meta_kernel& operator<<(meta_kernel &kernel, const std::pair<T1, T2> &x)
            << "{" << x.first << ", " << x.second << "}";
 
     return kernel;
-}
-
-template<size_t N, class T1, class T2>
-struct make_pair_get_result_type;
-
-template<class T1, class T2>
-struct make_pair_get_result_type<0, T1, T2>
-{
-    typedef T1 type;
-};
-
-template<class T1, class T2>
-struct make_pair_get_result_type<1, T1, T2>
-{
-    typedef T2 type;
-};
-
-template<size_t N, class T1, class T2, class Arg>
-struct invoked_pair_get
-{
-    typedef typename make_pair_get_result_type<N, T1, T2>::type result_type;
-
-    invoked_pair_get(const Arg &arg)
-        : m_arg(arg)
-    {
-    }
-
-    Arg m_arg;
-};
-
-template<size_t N, class T1, class T2, class Arg>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_pair_get<N, T1, T2, Arg> &expr)
-{
-    kernel.inject_type<std::pair<T1, T2> >();
-
-    return kernel << expr.m_arg << (N == 0 ? ".first" : ".second");
 }
 
 // inject_type() specialization for std::pair
@@ -88,20 +52,30 @@ struct inject_type_impl<std::pair<T1, T2> >
     }
 };
 
-} // end detail namespace
-
-template<size_t N, class T1, class T2>
-struct get_pair
+// get<N>() result type specialization for std::pair<>
+template<class T1, class T2>
+struct get_result_type<0, std::pair<T1, T2> >
 {
-    typedef typename detail::make_pair_get_result_type<N, T1, T2>::type result_type;
-
-    template<class Arg>
-    detail::invoked_pair_get<N, T1, T2, Arg>
-    operator()(const Arg &x) const
-    {
-        return detail::invoked_pair_get<N, T1, T2, Arg>(x);
-    }
+    typedef T1 type;
 };
+
+template<class T1, class T2>
+struct get_result_type<1, std::pair<T1, T2> >
+{
+    typedef T2 type;
+};
+
+// get<N>() specialization for std::pair<>
+template<size_t N, class Arg, class T1, class T2>
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const invoked_get<N, Arg, std::pair<T1, T2> > &expr)
+{
+    kernel.inject_type<std::pair<T1, T2> >();
+
+    return kernel << expr.m_arg << (N == 0 ? ".first" : ".second");
+}
+
+} // end detail namespace
 
 namespace detail {
 

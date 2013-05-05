@@ -16,6 +16,7 @@
 
 #include <boost/tuple/tuple.hpp>
 
+#include <boost/compute/functional/get.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 
@@ -159,6 +160,71 @@ struct type_name_trait<boost::tuple<T1, T2, T3> >
         return name.c_str();
     }
 };
+
+// get<N>() result type specialization for boost::tuple<>
+template<size_t N, class T1>
+struct get_result_type<N, boost::tuple<T1> >
+{
+    typedef typename boost::tuple<T1> T;
+
+    typedef typename boost::tuples::element<N, T>::type type;
+};
+
+template<size_t N, class T1, class T2>
+struct get_result_type<N, boost::tuple<T1, T2> >
+{
+    typedef typename boost::tuple<T1, T2> T;
+
+    typedef typename boost::tuples::element<N, T>::type type;
+};
+
+template<size_t N, class T1, class T2, class T3>
+struct get_result_type<N, boost::tuple<T1, T2, T3> >
+{
+    typedef typename boost::tuple<T1, T2, T3> T;
+
+    typedef typename boost::tuples::element<N, T>::type type;
+};
+
+// get<N>() specialization for boost::tuple<>
+template<size_t N, class Arg, class T1>
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const invoked_get<N, Arg, boost::tuple<T1> > &expr)
+{
+    typedef typename boost::tuple<T1> T;
+
+    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<T>::value));
+
+    kernel.inject_type<T>();
+
+    return kernel << expr.m_arg << ".v" << N;
+}
+
+template<size_t N, class Arg, class T1, class T2>
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const invoked_get<N, Arg, boost::tuple<T1, T2> > &expr)
+{
+    typedef typename boost::tuple<T1, T2> T;
+
+    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<T>::value));
+
+    kernel.inject_type<T>();
+
+    return kernel << expr.m_arg << ".v" << N;
+}
+
+template<size_t N, class Arg, class T1, class T2, class T3>
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const invoked_get<N, Arg, boost::tuple<T1, T2, T3> > &expr)
+{
+    typedef typename boost::tuple<T1, T2, T3> T;
+
+    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<T>::value));
+
+    kernel.inject_type<T>();
+
+    return kernel << expr.m_arg << ".v" << N;
+}
 
 } // end detail namespace
 } // end compute namespace

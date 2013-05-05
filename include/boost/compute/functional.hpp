@@ -13,11 +13,11 @@
 
 #include <boost/compute/functional/atomic.hpp>
 #include <boost/compute/functional/common.hpp>
+#include <boost/compute/functional/get.hpp>
 #include <boost/compute/functional/math.hpp>
 #include <boost/compute/functional/integer.hpp>
 #include <boost/compute/functional/geometry.hpp>
 #include <boost/compute/functional/relational.hpp>
-#include <boost/compute/functional/vector.hpp>
 #include <boost/compute/functional/operator.hpp>
 #include <boost/compute/functional/logical.hpp>
 

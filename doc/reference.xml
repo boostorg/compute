@@ -86,6 +86,9 @@
   <xi:include href="reference/container/valarray.xml"/>
   <xi:include href="reference/container/vector.xml"/>
 
+  <xi:include href="reference/functional.xml"/>
+  <xi:include href="reference/functional/get.xml"/>
+
   <xi:include href="reference/iterator.xml"/>
   <xi:include href="reference/iterator/buffer_iterator.xml"/>
   <xi:include href="reference/iterator/constant_iterator.xml"/>

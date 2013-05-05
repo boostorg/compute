@@ -34,6 +34,23 @@ meta_kernel& operator<<(meta_kernel &kernel, const std::complex<T> &x)
     return kernel;
 }
 
+// get<N>() result type specialization for std::complex<>
+template<size_t N, class T>
+struct get_result_type<N, std::complex<T> >
+{
+    typedef T type;
+};
+
+// get<N>() specialization for std::complex<>
+template<size_t N, class Arg, class T>
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const invoked_get<N, Arg, std::complex<T> > &expr)
+{
+    BOOST_STATIC_ASSERT(N < 2);
+
+    return kernel << expr.m_arg << (N == 0 ? ".x" : ".y");
+}
+
 } // end detail namespace
 
 // returns the real component of a complex<T>
@@ -43,10 +60,10 @@ struct real
     typedef T result_type;
 
     template<class Arg>
-    detail::invoked_vector_component_function<Arg, 0, result_type>
+    detail::invoked_get<0, Arg, std::complex<T> >
     operator()(const Arg &x) const
     {
-        return detail::invoked_vector_component_function<Arg, 0, result_type>(x);
+        return detail::invoked_get<0, Arg, std::complex<T> >(x);
     }
 };
 
@@ -57,10 +74,10 @@ struct imag
     typedef T result_type;
 
     template<class Arg>
-    detail::invoked_vector_component_function<Arg, 1, result_type>
+    detail::invoked_get<1, Arg, std::complex<T> >
     operator()(const Arg &x) const
     {
-        return detail::invoked_vector_component_function<Arg, 1, result_type>(x);
+        return detail::invoked_get<1, Arg, std::complex<T> >(x);
     }
 };
 

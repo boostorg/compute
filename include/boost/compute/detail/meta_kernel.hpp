@@ -761,24 +761,6 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
                   << "(" << expr.arg2() << "))";
 }
 
-template<class Arg, size_t N, class Result>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_vector_component_function<Arg,
-                                                                       N,
-                                                                       Result> &expr)
-{
-    BOOST_STATIC_ASSERT(N < 16);
-
-    if(N < 10){
-        return kernel << expr.arg() << ".s" << uint_(N);
-    }
-    else if(N < 16){
-        return kernel << expr.arg() << ".s" << char('a' + (N - 10));
-    }
-
-    return kernel;
-}
-
 template<class T, class IndexExpr>
 inline meta_kernel& operator<<(meta_kernel &kernel,
                                const device_ptr_index_expr<T, IndexExpr> &expr)
@@ -828,6 +810,23 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
                                                                     Arg2> &expr)
 {
     return kernel << "!(" << expr.pred()(expr.expr1(), expr.expr2()) << ')';
+}
+
+// get<N>() for vector types
+template<size_t N, class Arg, class T>
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const invoked_get<N, Arg, T> &expr)
+{
+    BOOST_STATIC_ASSERT(N < 16);
+
+    if(N < 10){
+        return kernel << expr.m_arg << ".s" << uint_(N);
+    }
+    else if(N < 16){
+        return kernel << expr.m_arg << ".s" << char('a' + (N - 10));
+    }
+
+    return kernel;
 }
 
 template<>

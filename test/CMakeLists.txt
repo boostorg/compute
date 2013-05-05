@@ -93,6 +93,7 @@ add_compute_test("blas.iamax" test_blas_iamax.cpp)
 add_compute_test("blas.norm2" test_blas_norm2.cpp)
 
 add_compute_test("ext.complex" test_complex.cpp)
+add_compute_test("ext.get" test_get.cpp)
 add_compute_test("ext.lambda" test_lambda.cpp)
 add_compute_test("ext.malloc" test_malloc.cpp)
 add_compute_test("ext.pair" test_pair.cpp)

@@ -24,6 +24,7 @@
 #include <boost/compute/algorithm/lower_bound.hpp>
 #include <boost/compute/algorithm/upper_bound.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/functional/get.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
 #include <boost/compute/detail/buffer_value.hpp>
 
@@ -205,7 +206,7 @@ public:
 
     iterator find(const key_type &value)
     {
-        ::boost::compute::get_pair<0, key_type, mapped_type> get_key;
+        ::boost::compute::get<0> get_key;
 
         return ::boost::compute::find(
                    ::boost::compute::make_transform_iterator(begin(), get_key),
@@ -216,7 +217,7 @@ public:
 
     const_iterator find(const key_type &value) const
     {
-        ::boost::compute::get_pair<0, key_type, mapped_type> get_key;
+        ::boost::compute::get<0> get_key;
 
         return ::boost::compute::find(
                    ::boost::compute::make_transform_iterator(begin(), get_key),
@@ -232,7 +233,7 @@ public:
 
     iterator lower_bound(const key_type &value)
     {
-        ::boost::compute::get_pair<0, key_type, mapped_type> get_key;
+        ::boost::compute::get<0> get_key;
 
         return ::boost::compute::lower_bound(
                    ::boost::compute::make_transform_iterator(begin(), get_key),
@@ -243,7 +244,7 @@ public:
 
     const_iterator lower_bound(const key_type &value) const
     {
-        ::boost::compute::get_pair<0, key_type, mapped_type> get_key;
+        ::boost::compute::get<0> get_key;
 
         return ::boost::compute::lower_bound(
                    ::boost::compute::make_transform_iterator(begin(), get_key),
@@ -254,7 +255,7 @@ public:
 
     iterator upper_bound(const key_type &value)
     {
-        ::boost::compute::get_pair<0, key_type, mapped_type> get_key;
+        ::boost::compute::get<0> get_key;
 
         return ::boost::compute::upper_bound(
                    ::boost::compute::make_transform_iterator(begin(), get_key),
@@ -265,7 +266,7 @@ public:
 
     const_iterator upper_bound(const key_type &value) const
     {
-        ::boost::compute::get_pair<0, key_type, mapped_type> get_key;
+        ::boost::compute::get<0> get_key;
 
         return ::boost::compute::upper_bound(
                    ::boost::compute::make_transform_iterator(begin(), get_key),

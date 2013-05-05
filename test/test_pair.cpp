@@ -17,6 +17,7 @@
 #include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/functional/get.hpp>
 
 #include "context_setup.hpp"
 
@@ -73,7 +74,7 @@ BOOST_AUTO_TEST_CASE(transform_pair_get)
         input.begin(),
         input.end(),
         first_output.begin(),
-        ::boost::compute::get_pair<0, int, float>()
+        ::boost::compute::get<0>()
     );
     BOOST_CHECK_EQUAL(int(first_output[0]), int(1));
     BOOST_CHECK_EQUAL(int(first_output[1]), int(3));
@@ -85,7 +86,7 @@ BOOST_AUTO_TEST_CASE(transform_pair_get)
         input.begin(),
         input.end(),
         second_output.begin(),
-        ::boost::compute::get_pair<1, int, float>()
+        ::boost::compute::get<1>()
     );
     BOOST_CHECK_EQUAL(float(second_output[0]), float(2.0f));
     BOOST_CHECK_EQUAL(float(second_output[1]), float(4.0f));
@@ -105,11 +106,11 @@ BOOST_AUTO_TEST_CASE(find_vector_pair)
         boost::compute::find(
             boost::compute::make_transform_iterator(
                 vector.begin(),
-                boost::compute::get_pair<0, int, float>()
+                boost::compute::get<0>()
             ),
             boost::compute::make_transform_iterator(
                 vector.end(),
-                boost::compute::get_pair<0, int, float>()
+                boost::compute::get<0>()
             ),
             int(2)
         ).base() == vector.begin() + 1
@@ -119,11 +120,11 @@ BOOST_AUTO_TEST_CASE(find_vector_pair)
         boost::compute::find(
             boost::compute::make_transform_iterator(
                 vector.begin(),
-                boost::compute::get_pair<1, int, float>()
+                boost::compute::get<1>()
             ),
             boost::compute::make_transform_iterator(
                 vector.end(),
-                boost::compute::get_pair<1, int, float>()
+                boost::compute::get<1>()
             ),
             float(3.3f)
         ).base() == vector.begin() + 2

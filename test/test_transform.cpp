@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE(extract_vector_component)
     bc::transform(vector.begin(),
                   vector.end(),
                   x_components.begin(),
-                  bc::vector_component<bc::int2_, 0>());
+                  bc::get<0>());
     BOOST_CHECK_EQUAL(x_components[0], 1);
     BOOST_CHECK_EQUAL(x_components[1], 3);
     BOOST_CHECK_EQUAL(x_components[2], 5);
@@ -184,7 +184,7 @@ BOOST_AUTO_TEST_CASE(extract_vector_component)
     bc::transform(vector.begin(),
                   vector.end(),
                   y_components.begin(),
-                  bc::vector_component<bc::int2_, 1>());
+                  bc::get<1>());
     BOOST_CHECK_EQUAL(y_components[0], 2);
     BOOST_CHECK_EQUAL(y_components[1], 4);
     BOOST_CHECK_EQUAL(y_components[2], 6);

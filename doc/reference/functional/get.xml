@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<header name="boost/compute/functional/get.hpp">
+  <namespace name="boost">
+    <namespace name="compute">
+
+      <!-- boost::compute::get<N> -->
+      <struct name="get">
+        <template>
+          <template-nontype-parameter name="N">
+            <type>size_t</type>
+          </template-nontype-parameter>
+        </template>
+
+        <description>
+          <para>
+            The <code>get</code> function returns the <code>N</code>'th
+            element of an aggregate type (e.g. vector type, pair, tuple).
+          </para>
+        </description>
+      </struct>
+    </namespace>
+  </namespace>
+</header>
