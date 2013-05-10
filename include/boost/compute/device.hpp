@@ -254,8 +254,11 @@ public:
 
     std::vector<device> partition_equally(size_t count) const
     {
-        cl_device_partition_property properties[] =
-            { CL_DEVICE_PARTITION_EQUALLY, count, 0 };
+        cl_device_partition_property properties[] = {
+            CL_DEVICE_PARTITION_EQUALLY,
+            static_cast<cl_device_partition_property>(count),
+            0
+        };
 
         return partition(properties);
     }
@@ -279,8 +282,11 @@ public:
     std::vector<device>
     partition_by_affinity_domain(cl_device_affinity_domain domain) const
     {
-        cl_device_partition_property properties[] =
-            { CL_DEVICE_PARTITION_BY_AFFINITY_DOMAIN, domain, 0 };
+        cl_device_partition_property properties[] = {
+            CL_DEVICE_PARTITION_BY_AFFINITY_DOMAIN,
+            static_cast<cl_device_partition_property>(domain),
+            0
+        };
 
         return partition(properties);
     }
