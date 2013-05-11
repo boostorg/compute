@@ -197,7 +197,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
     kernel.inject_type<T>();
 
-    return kernel << expr.m_arg << ".v" << N;
+    return kernel << expr.m_arg << ".v" << uint_(N);
 }
 
 template<size_t N, class Arg, class T1, class T2>
@@ -210,7 +210,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
     kernel.inject_type<T>();
 
-    return kernel << expr.m_arg << ".v" << N;
+    return kernel << expr.m_arg << ".v" << uint_(N);
 }
 
 template<size_t N, class Arg, class T1, class T2, class T3>
@@ -223,7 +223,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
     kernel.inject_type<T>();
 
-    return kernel << expr.m_arg << ".v" << N;
+    return kernel << expr.m_arg << ".v" << uint_(N);
 }
 
 } // end detail namespace
