@@ -16,17 +16,17 @@
           </para>
           <para>
             Command queues are created for one or more compute devices within a
-            compute context. For example, to create a queue for the default GPU
-            on the system:
+            compute context. For example, to create a queue for the default
+            compute device on the system:
 <programlisting>
-// get the default GPU device
-<classname>boost::compute::device</classname> gpu = <methodname>boost::compute::system::default_gpu_device()</methodname>;
+// get the default compute device
+<classname>boost::compute::device</classname> device = <methodname>boost::compute::system::default_device()</methodname>;
 
-// create a context for the GPU device
-<classname>boost::compute::context</classname> context(gpu);
+// create a context for the device
+<classname>boost::compute::context</classname> context(device);
 
-// create a command queue for the GPU device
-<classname>boost::compute::command_queue</classname> queue(context, gpu);
+// create a command queue for the device
+<classname>boost::compute::command_queue</classname> queue(context, device);
 </programlisting>
           </para>
           <para>

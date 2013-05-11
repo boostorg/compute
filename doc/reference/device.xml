@@ -14,19 +14,14 @@
             the <methodname>platform::devices()</methodname> method.
           </para>
           <para>
-            A default device can be easily created with the one of the
-            following convenience methods:
-              <itemizedlist>
-                <listitem><methodname>system::default_device()</methodname></listitem>
-                <listitem><methodname>system::default_cpu_device()</methodname></listitem>
-                <listitem><methodname>system::default_gpu_device()</methodname></listitem>
-              </itemizedlist>
+            A default device can be easily created with the
+            <methodname>system::default_device()</methodname> method.
           </para>
           <para>
-            For example, to get the default GPU device on the system:
+            For example, to get the default compute device on the system:
 <programlisting>
-// get the default GPU device
-<classname>boost::compute::device</classname> gpu = <methodname>boost::compute::system::default_gpu_device()</methodname>;
+// get the default compute device
+<classname>boost::compute::device</classname> device = <methodname>boost::compute::system::default_device()</methodname>;
 </programlisting>
           </para>
         </description>

@@ -30,28 +30,6 @@
             </description>
           </method>
 
-          <!-- system::default_gpu_device() -->
-          <method name="default_gpu_device" specifiers="static">
-            <type><classname>device</classname></type>
-
-            <description>
-              <para>
-                Returns the default GPU compute device for the system.
-              </para>
-            </description>
-          </method>
-
-          <!-- system::default_cpu_device() -->
-          <method name="default_cpu_device" specifiers="static">
-            <type><classname>device</classname></type>
-
-            <description>
-              <para>
-                Returns the default CPU compute device for the system.
-              </para>
-            </description>
-          </method>
-
           <!-- system::default_context() -->
           <method name="default_context" specifiers="static">
             <type><classname>context</classname></type>

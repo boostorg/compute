@@ -15,9 +15,9 @@
 // implementation to add two vectors on the GPU
 int main()
 {
-    // get the default GPU device
+    // get the default device
     boost::compute::device gpu =
-        boost::compute::system::default_gpu_device();
+        boost::compute::system::default_device();
 
     // create a context for the device
     boost::compute::context context(gpu);

@@ -22,25 +22,9 @@ BOOST_AUTO_TEST_CASE(null_device)
     BOOST_CHECK(null.id() == cl_device_id());
 }
 
-BOOST_AUTO_TEST_CASE(get_gpu_type)
+BOOST_AUTO_TEST_CASE(get_device_name)
 {
-    boost::compute::device gpu = boost::compute::system::default_gpu_device();
-    if(gpu.id()){
-        BOOST_CHECK(gpu.type() == boost::compute::device::gpu);
-    }
-}
-
-BOOST_AUTO_TEST_CASE(get_cpu_type)
-{
-    boost::compute::device cpu = boost::compute::system::default_cpu_device();
-    if(cpu.id()){
-        BOOST_CHECK(cpu.type() == boost::compute::device::cpu);
-    }
-}
-
-BOOST_AUTO_TEST_CASE(get_gpu_name)
-{
-    boost::compute::device gpu = boost::compute::system::default_gpu_device();
+    boost::compute::device gpu = boost::compute::system::default_device();
     if(gpu.id()){
         BOOST_CHECK(!gpu.name().empty());
     }

@@ -3,7 +3,7 @@
 [section Hello World]
 
 The hello world example gives a simple application that prints the name of
-the default GPU compute device on the system.
+the default compute device on the system.
 
 Compute devices are represented with the
 [classref boost::compute::device device] class.
