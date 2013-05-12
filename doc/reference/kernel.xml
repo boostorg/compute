@@ -136,8 +136,8 @@
             </description>
           </method>
 
-          <!-- kernel::num_args() -->
-          <method name="num_args" cv="const">
+          <!-- kernel::arity() -->
+          <method name="arity" cv="const">
             <type>size_t</type>
 
             <description>

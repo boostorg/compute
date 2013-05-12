@@ -122,7 +122,7 @@ public:
         return get_info<std::string>(CL_KERNEL_FUNCTION_NAME);
     }
 
-    size_t num_args() const
+    size_t arity() const
     {
         return get_info<cl_uint>(CL_KERNEL_NUM_ARGS);
     }
@@ -181,7 +181,7 @@ public:
 
     void set_arg(size_t index, size_t size, const void *value)
     {
-        BOOST_ASSERT(index < num_args());
+        BOOST_ASSERT(index < arity());
 
         cl_int ret = clSetKernelArg(m_kernel,
                                     static_cast<cl_uint>(index),
@@ -218,7 +218,7 @@ public:
     template<class... T>
     void set_args(T&&... args)
     {
-        BOOST_ASSERT(sizeof...(T) <= num_args());
+        BOOST_ASSERT(sizeof...(T) <= arity());
 
         _set_args<0>(args...);
     }

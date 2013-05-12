@@ -31,22 +31,22 @@ BOOST_AUTO_TEST_CASE(name)
     BOOST_CHECK_EQUAL(bar.name(), "bar");
 }
 
-BOOST_AUTO_TEST_CASE(num_args)
+BOOST_AUTO_TEST_CASE(arity)
 {
     bc::kernel foo = bc::kernel::create_with_source("__kernel void foo(int x) { }",
                                                     "foo",
                                                     context);
-    BOOST_CHECK_EQUAL(foo.num_args(), size_t(1));
+    BOOST_CHECK_EQUAL(foo.arity(), size_t(1));
 
     bc::kernel bar = bc::kernel::create_with_source("__kernel void bar(float x, float y) { }",
                                                     "bar",
                                                     context);
-    BOOST_CHECK_EQUAL(bar.num_args(), size_t(2));
+    BOOST_CHECK_EQUAL(bar.arity(), size_t(2));
 
     bc::kernel baz = bc::kernel::create_with_source("__kernel void baz(char x, char y, char z) { }",
                                                     "baz",
                                                     context);
-    BOOST_CHECK_EQUAL(baz.num_args(), size_t(3));
+    BOOST_CHECK_EQUAL(baz.arity(), size_t(3));
 }
 
 BOOST_AUTO_TEST_CASE(get_work_group_info)
