@@ -23,7 +23,7 @@ int main()
 
         std::vector<boost::compute::device> devices = platform.devices();
         for(size_t j = 0; j < devices.size(); j++){
-            const boost::compute::device &device = devices[i];
+            const boost::compute::device &device = devices[j];
 
             std::string type;
             if(device.type() == boost::compute::device::gpu)
