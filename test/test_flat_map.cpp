@@ -71,28 +71,4 @@ BOOST_AUTO_TEST_CASE(index_operator)
     BOOST_CHECK_EQUAL(float(map[4]), float(4.4f));
 }
 
-BOOST_AUTO_TEST_CASE(simple_histogram)
-{
-    int data[] = { 1, 5, 2, 9, 3, 2, 6, 4, 7, 4,
-                   9, 0, 2, 1, 3, 5, 6, 2, 9, 1,
-                   1, 4, 2, 3, 4, 6, 7, 8, 9, 2 };
-
-    boost::compute::flat_map<int, int> map;
-
-    for(size_t i = 0; i < 30; i++){
-        map[data[i]]++;
-    }
-
-    BOOST_CHECK_EQUAL(int(map[0]), int(1));
-    BOOST_CHECK_EQUAL(int(map[1]), int(4));
-    BOOST_CHECK_EQUAL(int(map[2]), int(6));
-    BOOST_CHECK_EQUAL(int(map[3]), int(3));
-    BOOST_CHECK_EQUAL(int(map[4]), int(4));
-    BOOST_CHECK_EQUAL(int(map[5]), int(2));
-    BOOST_CHECK_EQUAL(int(map[6]), int(3));
-    BOOST_CHECK_EQUAL(int(map[7]), int(2));
-    BOOST_CHECK_EQUAL(int(map[8]), int(1));
-    BOOST_CHECK_EQUAL(int(map[9]), int(4));
-}
-
 BOOST_AUTO_TEST_SUITE_END()
