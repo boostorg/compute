@@ -12,8 +12,6 @@
 #define BOOST_COMPUTE_ALGORITHM_TRANSFORM_REDUCE_HPP
 
 #include <boost/compute/algorithm/reduce.hpp>
-#include <boost/compute/algorithm/transform.hpp>
-#include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
 #include <boost/compute/iterator/detail/binary_transform_iterator.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
