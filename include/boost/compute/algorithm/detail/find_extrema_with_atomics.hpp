@@ -12,12 +12,11 @@
 #define BOOST_COMPUTE_ALGORITHM_DETAIL_FIND_EXTREMA_WITH_ATOMICS_HPP
 
 #include <boost/compute/types.hpp>
-#include <boost/compute/buffer.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/container/detail/scalar.hpp>
 #include <boost/compute/functional/atomic.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/read_write_single_value.hpp>
 
 namespace boost {
 namespace compute {
@@ -56,21 +55,18 @@ inline InputIterator find_extrema_with_atomics(InputIterator first,
     kernel kernel = k.compile(context);
 
     // setup index buffer
-    buffer index_buffer(context, sizeof(uint_));
-    kernel.set_arg(index_arg_index, index_buffer);
+    scalar<uint_> index(context);
+    kernel.set_arg(index_arg_index, index.get_buffer());
 
     // initialize index
-    uint_ index = 0;
-    queue.enqueue_write_buffer(index_buffer, &index);
+    index.write(0, queue);
 
     // run kernel
     size_t count = iterator_range_size(first, last);
     queue.enqueue_1d_range_kernel(kernel, 0, count, 0);
 
-    // read index
-    index = detail::read_single_value<uint_>(index_buffer, queue);
-
-    return first + static_cast<difference_type>(index);
+    // read index and return iterator
+    return first + static_cast<difference_type>(index.read(queue));
 }
 
 } // end detail namespace

@@ -22,7 +22,6 @@
 #include <boost/compute/algorithm/detail/inplace_reduce.hpp>
 #include <boost/compute/algorithm/detail/serial_reduce.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/read_write_single_value.hpp>
 #include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {

@@ -16,11 +16,11 @@
 #include <boost/compute/types.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/container/detail/scalar.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/read_write_single_value.hpp>
 
 namespace boost {
 namespace compute {
@@ -55,19 +55,16 @@ inline InputIterator find_if_with_atomics(InputIterator first,
 
     kernel kernel = k.compile(context);
 
-    buffer index_buffer(context, sizeof(uint_));
-    kernel.set_arg(index_arg, index_buffer);
+    scalar<uint_> index(context);
+    kernel.set_arg(index_arg, index.get_buffer());
 
     // initialize index to the last iterator's index
-    uint_ index = static_cast<uint_>(count);
-    queue.enqueue_write_buffer(index_buffer, &index);
+    index.write(static_cast<uint_>(count), queue);
 
     queue.enqueue_1d_range_kernel(kernel, 0, count, 0);
 
-    // read index
-    index = detail::read_single_value<uint_>(index_buffer, queue);
-
-    return first + static_cast<difference_type>(index);
+    // read index and return iterator
+    return first + static_cast<difference_type>(index.read(queue));
 }
 
 } // end detail namespace

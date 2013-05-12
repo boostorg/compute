@@ -13,6 +13,7 @@
 
 #include <iterator>
 
+#include <boost/compute/container/detail/scalar.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 
@@ -51,14 +52,14 @@ inline size_t serial_count_if(InputIterator first,
     kernel kernel = k.compile(context);
 
     // setup result buffer
-    buffer result_buffer(context, sizeof(uint_));
-    kernel.set_arg(result_arg, result_buffer);
+    scalar<uint_> result(context);
+    kernel.set_arg(result_arg, result.get_buffer());
 
     // run kernel
     queue.enqueue_task(kernel);
 
     // read index
-    return detail::read_single_value<uint_>(result_buffer, queue);
+    return result.read(queue);
 }
 
 } // end detail namespace

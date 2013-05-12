@@ -13,10 +13,10 @@
 
 #include <iterator>
 
+#include <boost/compute/container/detail/scalar.hpp>
 #include <boost/compute/functional/atomic.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/read_write_single_value.hpp>
 
 namespace boost {
 namespace compute {
@@ -57,18 +57,17 @@ public:
         const context &context = queue.get_context();
 
         // setup count buffer
-        buffer count_buffer(context, sizeof(uint_));
-        set_arg(m_count_arg_index, count_buffer);
+        scalar<uint_> count(context);
+        set_arg(m_count_arg_index, count.get_buffer());
 
         // initialize count to zero
-        uint_ count = 0;
-        queue.enqueue_write_buffer(count_buffer, &count);
+        count.write(0, queue);
 
         // execute kernel
         exec_1d(queue, 0, m_count);
 
         // read and return count
-        return detail::read_single_value<uint_>(count_buffer, queue);
+        return count.read(queue);
     }
 
 private:

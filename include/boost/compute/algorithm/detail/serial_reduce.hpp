@@ -11,9 +11,10 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_REDUCE_HPP
 #define BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_REDUCE_HPP
 
-#include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/container/detail/scalar.hpp>
 
 namespace boost {
 namespace compute {
@@ -47,15 +48,15 @@ inline T serial_reduce(InputIterator first,
 
     kernel kernel = k.compile(context);
 
-    buffer output_buffer(context, sizeof(T));
+    scalar<T> output(context);
 
     kernel.set_arg(init_arg, init);
     kernel.set_arg(count_arg, static_cast<cl_uint>(count));
-    kernel.set_arg(output_arg, output_buffer);
+    kernel.set_arg(output_arg, output.get_buffer());
 
     queue.enqueue_task(kernel);
 
-    return detail::read_single_value<T>(output_buffer, queue);
+    return output.read(queue);
 }
 
 } // end detail namespace

@@ -12,11 +12,10 @@
 #define BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_FIND_EXTREMA_HPP
 
 #include <boost/compute/types.hpp>
-#include <boost/compute/buffer.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/read_write_single_value.hpp>
+#include <boost/compute/container/detail/scalar.hpp>
 
 namespace boost {
 namespace compute {
@@ -54,8 +53,8 @@ inline InputIterator serial_find_extrema(InputIterator first,
     kernel kernel = k.compile(context);
 
     // setup index buffer
-    buffer index_buffer(context, sizeof(uint_));
-    kernel.set_arg(index_arg_index, index_buffer);
+    scalar<uint_> index(context);
+    kernel.set_arg(index_arg_index, index.get_buffer());
 
     // setup count
     size_t count = iterator_range_size(first, last);
@@ -64,10 +63,8 @@ inline InputIterator serial_find_extrema(InputIterator first,
     // run kernel
     queue.enqueue_task(kernel);
 
-    // read index
-    uint_ index = detail::read_single_value<uint_>(index_buffer, queue);
-
-    return first + static_cast<difference_type>(index);
+    // read index and return iterator
+    return first + static_cast<difference_type>(index.read(queue));
 }
 
 } // end detail namespace
