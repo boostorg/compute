@@ -27,37 +27,42 @@ public:
     typedef T value_type;
 
     buffer_value()
-        : m_buffer(0)
     {
     }
 
     buffer_value(const value_type &value)
-        : m_buffer(0),
-          m_value(value)
+        : m_value(value)
     {
     }
 
     // creates a reference for the value in buffer at index (in bytes).
     buffer_value(const buffer &buffer, size_t index)
-        : m_buffer(&buffer),
+        : m_buffer(buffer.get(), false),
           m_index(index)
     {
     }
 
     buffer_value(const buffer_value<T> &other)
-        : m_buffer(other.m_buffer),
+        : m_buffer(other.m_buffer.get(), false),
           m_index(other.m_index)
     {
     }
 
+    ~buffer_value()
+    {
+        // set buffer to null so that its reference count will
+        // not be decremented when its destructor is called
+        m_buffer.get() = 0;
+    }
+
     operator value_type() const
     {
-        if(m_buffer){
-            const context &context = m_buffer->get_context();
+        if(m_buffer.get()){
+            const context &context = m_buffer.get_context();
             const device &device = context.get_device();
             command_queue queue(context, device);
 
-            return detail::read_single_value<T>(*m_buffer, m_index / sizeof(T), queue);
+            return detail::read_single_value<T>(m_buffer, m_index / sizeof(T), queue);
         }
         else {
             return m_value;
@@ -96,11 +101,11 @@ public:
 
     bool operator==(const buffer_value<T> &other) const
     {
-        if(m_buffer != other.m_buffer){
+        if(m_buffer.get() != other.m_buffer.get()){
             return false;
         }
 
-        if(m_buffer){
+        if(m_buffer.get()){
             return m_index == other.m_index;
         }
         else {
@@ -115,11 +120,11 @@ public:
 
     buffer_value<T>& operator=(const T &value)
     {
-        if(m_buffer){
-            const context &context = m_buffer->get_context();
+        if(m_buffer.get()){
+            const context &context = m_buffer.get_context();
             command_queue queue(context, context.get_device());
 
-            detail::write_single_value<T>(value, *m_buffer, m_index / sizeof(T), queue);
+            detail::write_single_value<T>(value, m_buffer, m_index / sizeof(T), queue);
 
             return *this;
         }
@@ -136,12 +141,12 @@ public:
 
     device_ptr<T> operator&() const
     {
-        return device_ptr<T>(*m_buffer, m_index);
+        return device_ptr<T>(m_buffer, m_index);
     }
 
     buffer_value<T>& operator++()
     {
-        if(m_buffer){
+        if(m_buffer.get()){
             T value = T(*this);
             value++;
             *this = value;
@@ -161,7 +166,7 @@ public:
     }
 
 private:
-    const buffer *m_buffer;
+    const buffer m_buffer;
     size_t m_index;
     value_type m_value;
 };

@@ -105,19 +105,18 @@ public:
     typedef typename super_type::difference_type difference_type;
 
     buffer_iterator()
-        : m_buffer(0),
-          m_index(0)
+        : m_index(0)
     {
     }
 
     buffer_iterator(const buffer &buffer, size_t index)
-        : m_buffer(&buffer),
+        : m_buffer(buffer.get(), false),
           m_index(index)
     {
     }
 
     buffer_iterator(const buffer_iterator<T> &other)
-        : m_buffer(other.m_buffer),
+        : m_buffer(other.m_buffer.get(), false),
           m_index(other.m_index)
     {
     }
@@ -125,7 +124,7 @@ public:
     buffer_iterator<T>& operator=(const buffer_iterator<T> &other)
     {
         if(this != &other){
-            m_buffer = other.m_buffer;
+            m_buffer.get() = other.m_buffer.get();
             m_index = other.m_index;
         }
 
@@ -134,11 +133,14 @@ public:
 
     ~buffer_iterator()
     {
+        // set buffer to null so that its reference count will
+        // not be decremented when its destructor is called
+        m_buffer.get() = 0;
     }
 
     const buffer& get_buffer() const
     {
-        return *m_buffer;
+        return m_buffer;
     }
 
     size_t get_index() const
@@ -150,10 +152,9 @@ public:
     detail::buffer_iterator_index_expr<T, Expr>
     operator[](const Expr &expr) const
     {
-        BOOST_ASSERT(m_buffer);
-        BOOST_ASSERT(m_buffer->get());
+        BOOST_ASSERT(m_buffer.get());
 
-        return detail::buffer_iterator_index_expr<T, Expr>(*m_buffer,
+        return detail::buffer_iterator_index_expr<T, Expr>(m_buffer,
                                                            m_index,
                                                            "__global",
                                                            expr);
@@ -164,12 +165,13 @@ private:
 
     reference dereference() const
     {
-        return detail::buffer_value<T>(*m_buffer, m_index * sizeof(T));
+        return detail::buffer_value<T>(m_buffer, m_index * sizeof(T));
     }
 
     bool equal(const buffer_iterator<T> &other) const
     {
-        return m_buffer == other.m_buffer && m_index == other.m_index;
+        return m_buffer.get() == other.m_buffer.get() &&
+               m_index == other.m_index;
     }
 
     void increment()
@@ -193,7 +195,7 @@ private:
     }
 
 private:
-    const buffer *m_buffer;
+    const buffer m_buffer;
     size_t m_index;
 };
 

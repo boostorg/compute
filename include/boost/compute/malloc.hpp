@@ -23,7 +23,9 @@ template<class T>
 inline device_ptr<T>
 malloc(std::size_t size, const context &context = system::default_context())
 {
-    return device_ptr<T>(buffer(context, size * sizeof(T)));
+    buffer buf(context, size * sizeof(T));
+    clRetainMemObject(buf.get());
+    return device_ptr<T>(buf);
 }
 
 inline device_ptr<char>
@@ -35,12 +37,7 @@ malloc(std::size_t size, const context &context = system::default_context())
 template<class T>
 inline void free(device_ptr<T> &ptr)
 {
-    const buffer *buffer = ptr.get_buffer_ptr();
-    if(buffer){
-        delete buffer;
-    }
-
-    ptr = device_ptr<T>();
+    clReleaseMemObject(ptr.get_buffer().get());
 }
 
 } // end compute namespace

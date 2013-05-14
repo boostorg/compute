@@ -44,6 +44,8 @@ struct device_ptr_index_expr
         BOOST_STATIC_ASSERT_MSG(boost::is_integral<IndexExpr>::value,
                                 "Index expression must be integral");
 
+        BOOST_ASSERT(m_buffer.get());
+
         const context &context = m_buffer.get_context();
         const device &device = context.get_device();
         command_queue queue(context, device);
@@ -70,19 +72,18 @@ public:
     typedef T& reference;
 
     device_ptr()
-        : m_buffer(0),
-          m_index(0)
+        : m_index(0)
     {
     }
 
     device_ptr(const buffer &buffer, size_t index = 0)
-        : m_buffer(new ::boost::compute::buffer(buffer)),
+        : m_buffer(buffer.get(), false),
           m_index(index)
     {
     }
 
     device_ptr(const device_ptr<T> &other)
-        : m_buffer(other.m_buffer),
+        : m_buffer(other.m_buffer.get(), false),
           m_index(other.m_index)
     {
     }
@@ -90,7 +91,7 @@ public:
     device_ptr<T>& operator=(const device_ptr<T> &other)
     {
         if(this != &other){
-            m_buffer = other.m_buffer;
+            m_buffer.get() = other.m_buffer.get();
             m_index = other.m_index;
         }
 
@@ -99,6 +100,9 @@ public:
 
     ~device_ptr()
     {
+        // set buffer to null so that its reference count will
+        // not be decremented when its destructor is called
+        m_buffer.get() = 0;
     }
 
     size_type get_index() const
@@ -108,30 +112,23 @@ public:
 
     const buffer& get_buffer() const
     {
-        BOOST_ASSERT(m_buffer != 0);
-
-        return *m_buffer;
-    }
-
-    const buffer* get_buffer_ptr() const
-    {
         return m_buffer;
     }
 
     template<class OT>
     device_ptr<OT> cast() const
     {
-        return device_ptr<OT>(*m_buffer, m_index);
+        return device_ptr<OT>(m_buffer, m_index);
     }
 
     device_ptr<T> operator+(difference_type n) const
     {
-        return device_ptr<T>(*m_buffer, m_index + n);
+        return device_ptr<T>(m_buffer, m_index + n);
     }
 
     device_ptr<T> operator+(const device_ptr<T> &other) const
     {
-        return device_ptr<T>(*m_buffer, m_index + other.m_index);
+        return device_ptr<T>(m_buffer, m_index + other.m_index);
     }
 
     device_ptr<T>& operator+=(difference_type n)
@@ -153,7 +150,8 @@ public:
 
     bool operator==(const device_ptr<T> &other) const
     {
-        return *m_buffer == *other.m_buffer && m_index == other.m_index;
+        return m_buffer.get() == other.m_buffer.get() &&
+               m_index == other.m_index;
     }
 
     bool operator!=(const device_ptr<T> &other) const
@@ -165,16 +163,15 @@ public:
     detail::device_ptr_index_expr<T, Expr>
     operator[](const Expr &expr) const
     {
-        BOOST_ASSERT(m_buffer);
-        BOOST_ASSERT(m_buffer->get());
+        BOOST_ASSERT(m_buffer.get());
 
-        return detail::device_ptr_index_expr<T, Expr>(*m_buffer,
+        return detail::device_ptr_index_expr<T, Expr>(m_buffer,
                                                       uint_(m_index),
                                                       expr);
     }
 
 private:
-    const buffer *m_buffer;
+    const buffer m_buffer;
     size_t m_index;
 };
 

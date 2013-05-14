@@ -185,14 +185,14 @@ struct meta_kernel_buffer_info
                             const std::string &id,
                             const std::string &addr_space,
                             size_t i)
-      : m_buffer(&buffer),
+      : m_mem(buffer.get()),
         identifier(id),
         address_space(addr_space),
         index(i)
     {
     }
 
-    const buffer *m_buffer;
+    cl_mem m_mem;
     std::string identifier;
     std::string address_space;
     size_t index;
@@ -336,7 +336,7 @@ public:
         for(size_t i = 0; i < m_stored_buffers.size(); i++){
             const detail::meta_kernel_buffer_info &bi = m_stored_buffers[i];
 
-            kernel.set_arg(bi.index, *bi.m_buffer);
+            kernel.set_arg(bi.index, bi.m_mem);
         }
 
         return kernel;
@@ -574,7 +574,7 @@ public:
         for(size_t i = 0; i < m_stored_buffers.size(); i++){
             const detail::meta_kernel_buffer_info &bi = m_stored_buffers[i];
 
-            if(bi.m_buffer->get() == buffer.get() &&
+            if(bi.m_mem == buffer.get() &&
                bi.address_space == address_space){
                 return bi.identifier;
             }

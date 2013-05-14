@@ -56,7 +56,9 @@ public:
 
     pointer allocate(size_type n)
     {
-        return device_ptr<T>(buffer(m_context, n * sizeof(T), m_mem_flags));
+        buffer buf(m_context, n * sizeof(T), m_mem_flags);
+        clRetainMemObject(buf.get());
+        return device_ptr<T>(buf);
     }
 
     void deallocate(pointer p, size_type n)
@@ -65,7 +67,7 @@ public:
 
         (void) n;
 
-        delete p.get_buffer_ptr();
+        clReleaseMemObject(p.get_buffer().get());
     }
 
     size_type max_size() const
