@@ -16,6 +16,7 @@
 #include <boost/compute/algorithm/generate_n.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -24,16 +25,12 @@ BOOST_AUTO_TEST_CASE(generate4)
 {
     bc::vector<int> vector(4);
     bc::fill(vector.begin(), vector.end(), 2);
-    BOOST_CHECK_EQUAL(vector[0], 2);
-    BOOST_CHECK_EQUAL(vector[1], 2);
-    BOOST_CHECK_EQUAL(vector[2], 2);
+    CHECK_RANGE_EQUAL(int, 4, vector, (2, 2, 2, 2));
 
     bc::function<int (void)> ret4 =
         bc::make_function_from_source<int ()>("ret4", "int ret4() { return 4; }");
     bc::generate(vector.begin(), vector.end(), ret4);
-    BOOST_CHECK_EQUAL(vector[0], 4);
-    BOOST_CHECK_EQUAL(vector[1], 4);
-    BOOST_CHECK_EQUAL(vector[2], 4);
+    CHECK_RANGE_EQUAL(int, 4, vector, (4, 4, 4, 4));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

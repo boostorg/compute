@@ -19,6 +19,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/functional/get.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 BOOST_AUTO_TEST_CASE(vector_pair_int_float)
@@ -76,10 +77,7 @@ BOOST_AUTO_TEST_CASE(transform_pair_get)
         first_output.begin(),
         ::boost::compute::get<0>()
     );
-    BOOST_CHECK_EQUAL(int(first_output[0]), int(1));
-    BOOST_CHECK_EQUAL(int(first_output[1]), int(3));
-    BOOST_CHECK_EQUAL(int(first_output[2]), int(5));
-    BOOST_CHECK_EQUAL(int(first_output[3]), int(7));
+    CHECK_RANGE_EQUAL(int, 4, first_output, (1, 3, 5, 7));
 
     boost::compute::vector<float> second_output(4);
     boost::compute::transform(
@@ -88,10 +86,7 @@ BOOST_AUTO_TEST_CASE(transform_pair_get)
         second_output.begin(),
         ::boost::compute::get<1>()
     );
-    BOOST_CHECK_EQUAL(float(second_output[0]), float(2.0f));
-    BOOST_CHECK_EQUAL(float(second_output[1]), float(4.0f));
-    BOOST_CHECK_EQUAL(float(second_output[2]), float(6.0f));
-    BOOST_CHECK_EQUAL(float(second_output[3]), float(8.0f));
+    CHECK_RANGE_EQUAL(float, 4, second_output, (2.0f, 4.0f, 6.0f, 8.0f));
 }
 
 BOOST_AUTO_TEST_CASE(find_vector_pair)

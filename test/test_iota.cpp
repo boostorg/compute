@@ -17,6 +17,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/permutation_iterator.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -25,28 +26,16 @@ BOOST_AUTO_TEST_CASE(iota_int)
 {
     bc::vector<int> vector(4);
     bc::iota(vector.begin(), vector.end(), 0);
-    BOOST_CHECK_EQUAL(vector[0], 0);
-    BOOST_CHECK_EQUAL(vector[1], 1);
-    BOOST_CHECK_EQUAL(vector[2], 2);
-    BOOST_CHECK_EQUAL(vector[3], 3);
+    CHECK_RANGE_EQUAL(int, 4, vector, (0, 1, 2, 3));
 
     bc::iota(vector.begin(), vector.end(), 10);
-    BOOST_CHECK_EQUAL(vector[0], 10);
-    BOOST_CHECK_EQUAL(vector[1], 11);
-    BOOST_CHECK_EQUAL(vector[2], 12);
-    BOOST_CHECK_EQUAL(vector[3], 13);
+    CHECK_RANGE_EQUAL(int, 4, vector, (10, 11, 12, 13));
 
     bc::iota(vector.begin() + 2, vector.end(), -5);
-    BOOST_CHECK_EQUAL(vector[0], 10);
-    BOOST_CHECK_EQUAL(vector[1], 11);
-    BOOST_CHECK_EQUAL(vector[2], -5);
-    BOOST_CHECK_EQUAL(vector[3], -4);
+    CHECK_RANGE_EQUAL(int, 4, vector, (10, 11, -5, -4));
 
     bc::iota(vector.begin(), vector.end() - 2, 4);
-    BOOST_CHECK_EQUAL(vector[0], 4);
-    BOOST_CHECK_EQUAL(vector[1], 5);
-    BOOST_CHECK_EQUAL(vector[2], -5);
-    BOOST_CHECK_EQUAL(vector[3], -4);
+    CHECK_RANGE_EQUAL(int, 4, vector, (4, 5, -5, -4));
 }
 
 BOOST_AUTO_TEST_CASE(iota_permutation_iterator)
@@ -60,11 +49,7 @@ BOOST_AUTO_TEST_CASE(iota_permutation_iterator)
     bc::iota(bc::make_permutation_iterator(output.begin(), map.begin()),
              bc::make_permutation_iterator(output.end(), map.end()),
              1);
-    BOOST_CHECK_EQUAL(output[0], 2);
-    BOOST_CHECK_EQUAL(output[1], 3);
-    BOOST_CHECK_EQUAL(output[2], 1);
-    BOOST_CHECK_EQUAL(output[3], 5);
-    BOOST_CHECK_EQUAL(output[4], 4);
+    CHECK_RANGE_EQUAL(int, 5, output, (2, 3, 1, 5, 4));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -20,6 +20,7 @@
 #include <boost/compute/algorithm/partial_sum.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -33,16 +34,8 @@ BOOST_AUTO_TEST_CASE(partial_sum_int)
     bc::vector<int> b(a.size());
     bc::vector<int>::iterator iter =
         bc::partial_sum(a.begin(), a.end(), b.begin());
-
     BOOST_CHECK(iter == b.end());
-    BOOST_CHECK_EQUAL(b[0], 1);
-    BOOST_CHECK_EQUAL(b[1], 3);
-    BOOST_CHECK_EQUAL(b[2], 8);
-    BOOST_CHECK_EQUAL(b[3], 11);
-    BOOST_CHECK_EQUAL(b[4], 20);
-    BOOST_CHECK_EQUAL(b[5], 21);
-    BOOST_CHECK_EQUAL(b[6], 25);
-    BOOST_CHECK_EQUAL(b[7], 27);
+    CHECK_RANGE_EQUAL(int, 8, b, (1, 3, 8, 11, 20, 21, 25, 27));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

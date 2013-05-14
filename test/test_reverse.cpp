@@ -20,6 +20,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/counting_iterator.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -28,93 +29,45 @@ BOOST_AUTO_TEST_CASE(reverse_int)
 {
     bc::vector<int> vector(5);
     bc::iota(vector.begin(), vector.end(), 0);
-    BOOST_CHECK_EQUAL(vector[0], 0);
-    BOOST_CHECK_EQUAL(vector[1], 1);
-    BOOST_CHECK_EQUAL(vector[2], 2);
-    BOOST_CHECK_EQUAL(vector[3], 3);
-    BOOST_CHECK_EQUAL(vector[4], 4);
+    CHECK_RANGE_EQUAL(int, 5, vector, (0, 1, 2, 3, 4));
 
     bc::reverse(vector.begin(), vector.end());
-    BOOST_CHECK_EQUAL(vector[0], 4);
-    BOOST_CHECK_EQUAL(vector[1], 3);
-    BOOST_CHECK_EQUAL(vector[2], 2);
-    BOOST_CHECK_EQUAL(vector[3], 1);
-    BOOST_CHECK_EQUAL(vector[4], 0);
+    CHECK_RANGE_EQUAL(int, 5, vector, (4, 3, 2, 1, 0));
 
     bc::reverse(vector.begin() + 1, vector.end());
-    BOOST_CHECK_EQUAL(vector[0], 4);
-    BOOST_CHECK_EQUAL(vector[1], 0);
-    BOOST_CHECK_EQUAL(vector[2], 1);
-    BOOST_CHECK_EQUAL(vector[3], 2);
-    BOOST_CHECK_EQUAL(vector[4], 3);
+    CHECK_RANGE_EQUAL(int, 5, vector, (4, 0, 1, 2, 3));
 
     bc::reverse(vector.begin() + 1, vector.end() - 1);
-    BOOST_CHECK_EQUAL(vector[0], 4);
-    BOOST_CHECK_EQUAL(vector[1], 2);
-    BOOST_CHECK_EQUAL(vector[2], 1);
-    BOOST_CHECK_EQUAL(vector[3], 0);
-    BOOST_CHECK_EQUAL(vector[4], 3);
+    CHECK_RANGE_EQUAL(int, 5, vector, (4, 2, 1, 0, 3));
 
     bc::reverse(vector.begin(), vector.end() - 2);
-    BOOST_CHECK_EQUAL(vector[0], 1);
-    BOOST_CHECK_EQUAL(vector[1], 2);
-    BOOST_CHECK_EQUAL(vector[2], 4);
-    BOOST_CHECK_EQUAL(vector[3], 0);
-    BOOST_CHECK_EQUAL(vector[4], 3);
+    CHECK_RANGE_EQUAL(int, 5, vector, (1, 2, 4, 0, 3));
 
     vector.resize(6);
     bc::iota(vector.begin(), vector.end(), 10);
-    BOOST_CHECK_EQUAL(vector[0], 10);
-    BOOST_CHECK_EQUAL(vector[1], 11);
-    BOOST_CHECK_EQUAL(vector[2], 12);
-    BOOST_CHECK_EQUAL(vector[3], 13);
-    BOOST_CHECK_EQUAL(vector[4], 14);
-    BOOST_CHECK_EQUAL(vector[5], 15);
+    CHECK_RANGE_EQUAL(int, 6, vector, (10, 11, 12, 13, 14, 15));
 
     bc::reverse(vector.begin(), vector.end());
-    BOOST_CHECK_EQUAL(vector[0], 15);
-    BOOST_CHECK_EQUAL(vector[1], 14);
-    BOOST_CHECK_EQUAL(vector[2], 13);
-    BOOST_CHECK_EQUAL(vector[3], 12);
-    BOOST_CHECK_EQUAL(vector[4], 11);
-    BOOST_CHECK_EQUAL(vector[5], 10);
+    CHECK_RANGE_EQUAL(int, 6, vector, (15, 14, 13, 12, 11, 10));
 
     bc::reverse(vector.begin() + 3, vector.end());
-    BOOST_CHECK_EQUAL(vector[0], 15);
-    BOOST_CHECK_EQUAL(vector[1], 14);
-    BOOST_CHECK_EQUAL(vector[2], 13);
-    BOOST_CHECK_EQUAL(vector[3], 10);
-    BOOST_CHECK_EQUAL(vector[4], 11);
-    BOOST_CHECK_EQUAL(vector[5], 12);
+    CHECK_RANGE_EQUAL(int, 6, vector, (15, 14, 13, 10, 11, 12));
 
     bc::reverse(vector.begin() + 1, vector.end() - 2);
-    BOOST_CHECK_EQUAL(vector[0], 15);
-    BOOST_CHECK_EQUAL(vector[1], 10);
-    BOOST_CHECK_EQUAL(vector[2], 13);
-    BOOST_CHECK_EQUAL(vector[3], 14);
-    BOOST_CHECK_EQUAL(vector[4], 11);
-    BOOST_CHECK_EQUAL(vector[5], 12);
+    CHECK_RANGE_EQUAL(int, 6, vector, (15, 10, 13, 14, 11, 12));
 }
 
 BOOST_AUTO_TEST_CASE(reverse_copy_int)
 {
     bc::vector<int> a(5);
     bc::iota(a.begin(), a.end(), 0);
-    BOOST_CHECK_EQUAL(a[0], 0);
-    BOOST_CHECK_EQUAL(a[1], 1);
-    BOOST_CHECK_EQUAL(a[2], 2);
-    BOOST_CHECK_EQUAL(a[3], 3);
-    BOOST_CHECK_EQUAL(a[4], 4);
+    CHECK_RANGE_EQUAL(int, 5, a, (0, 1, 2, 3, 4));
 
     bc::vector<int> b(5);
     bc::vector<int>::iterator iter =
         bc::reverse_copy(a.begin(), a.end(), b.begin());
     BOOST_CHECK(iter == b.end());
-    BOOST_CHECK_EQUAL(b[0], 4);
-    BOOST_CHECK_EQUAL(b[1], 3);
-    BOOST_CHECK_EQUAL(b[2], 2);
-    BOOST_CHECK_EQUAL(b[3], 1);
-    BOOST_CHECK_EQUAL(b[4], 0);
+    CHECK_RANGE_EQUAL(int, 5, b, (4, 3, 2, 1, 0));
 }
 
 BOOST_AUTO_TEST_CASE(reverse_copy_counting_iterator)
@@ -125,12 +78,7 @@ BOOST_AUTO_TEST_CASE(reverse_copy_counting_iterator)
         bc::make_counting_iterator(6),
         vector.begin()
     );
-
-    BOOST_CHECK_EQUAL(vector[0], 5);
-    BOOST_CHECK_EQUAL(vector[1], 4);
-    BOOST_CHECK_EQUAL(vector[2], 3);
-    BOOST_CHECK_EQUAL(vector[3], 2);
-    BOOST_CHECK_EQUAL(vector[4], 1);
+    CHECK_RANGE_EQUAL(int, 5, vector, (5, 4, 3, 2, 1));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

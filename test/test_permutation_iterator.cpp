@@ -22,6 +22,7 @@
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/iterator/permutation_iterator.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 BOOST_AUTO_TEST_CASE(value_type)
@@ -63,13 +64,7 @@ BOOST_AUTO_TEST_CASE(copy)
         output.begin(),
         queue
     );
-    queue.finish();
-
-    BOOST_CHECK_EQUAL(int(output[0]), 1);
-    BOOST_CHECK_EQUAL(int(output[1]), 2);
-    BOOST_CHECK_EQUAL(int(output[2]), 3);
-    BOOST_CHECK_EQUAL(int(output[3]), 4);
-    BOOST_CHECK_EQUAL(int(output[4]), 5);
+    CHECK_RANGE_EQUAL(int, 5, output, (1, 2, 3, 4, 5));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

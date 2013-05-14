@@ -19,6 +19,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/constant_buffer_iterator.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -51,19 +52,21 @@ BOOST_AUTO_TEST_CASE(find_int)
 
 BOOST_AUTO_TEST_CASE(find_int2)
 {
+    using bc::int2_;
+
     int data[] = { 1, 2, 4, 5, 7, 8 };
-    bc::vector<bc::int2_> vector(reinterpret_cast<bc::int2_ *>(data),
-                                 reinterpret_cast<bc::int2_ *>(data) + 3);
-    BOOST_CHECK_EQUAL(vector[0], bc::int2_(1, 2));
-    BOOST_CHECK_EQUAL(vector[1], bc::int2_(4, 5));
-    BOOST_CHECK_EQUAL(vector[2], bc::int2_(7, 8));
+    bc::vector<int2_> vector(
+        reinterpret_cast<int2_ *>(data),
+        reinterpret_cast<int2_ *>(data) + 3
+    );
+    CHECK_RANGE_EQUAL(int2_, 3, vector, (int2_(1, 2), int2_(4, 5), int2_(7, 8)));
 
-    bc::vector<bc::int2_>::iterator iter =
-        bc::find(vector.begin(), vector.end(), bc::int2_(4, 5));
+    bc::vector<int2_>::iterator iter =
+        bc::find(vector.begin(), vector.end(), int2_(4, 5));
     BOOST_CHECK(iter == vector.begin() + 1);
-    BOOST_CHECK_EQUAL(*iter, bc::int2_(4, 5));
+    BOOST_CHECK_EQUAL(*iter, int2_(4, 5));
 
-    iter = bc::find(vector.begin(), vector.end(), bc::int2_(10, 11));
+    iter = bc::find(vector.begin(), vector.end(), int2_(10, 11));
     BOOST_CHECK(iter == vector.end());
 }
 

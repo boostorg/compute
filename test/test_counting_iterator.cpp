@@ -20,6 +20,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/counting_iterator.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 BOOST_AUTO_TEST_CASE(value_type)
@@ -73,18 +74,10 @@ BOOST_AUTO_TEST_CASE(copy)
         vector.begin(),
         queue
     );
-    queue.finish();
-
-    BOOST_CHECK_EQUAL(int(vector[0]), 1);
-    BOOST_CHECK_EQUAL(int(vector[1]), 2);
-    BOOST_CHECK_EQUAL(int(vector[2]), 3);
-    BOOST_CHECK_EQUAL(int(vector[3]), 4);
-    BOOST_CHECK_EQUAL(int(vector[4]), 5);
-    BOOST_CHECK_EQUAL(int(vector[5]), 6);
-    BOOST_CHECK_EQUAL(int(vector[6]), 7);
-    BOOST_CHECK_EQUAL(int(vector[7]), 8);
-    BOOST_CHECK_EQUAL(int(vector[8]), 9);
-    BOOST_CHECK_EQUAL(int(vector[9]), 10);
+    CHECK_RANGE_EQUAL(
+        int, 10, vector,
+        (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

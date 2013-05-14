@@ -16,6 +16,7 @@
 #include <boost/compute/container/array.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 BOOST_AUTO_TEST_CASE(concept_check)
@@ -54,26 +55,17 @@ BOOST_AUTO_TEST_CASE(copy_from_vector)
 
     boost::compute::array<int, 4> array(context);
     boost::compute::copy(vector.begin(), vector.end(), array.begin());
-    BOOST_CHECK_EQUAL(array[0], 3);
-    BOOST_CHECK_EQUAL(array[1], 6);
-    BOOST_CHECK_EQUAL(array[2], 9);
-    BOOST_CHECK_EQUAL(array[3], 12);
+    CHECK_RANGE_EQUAL(int, 4, array, (3, 6, 9, 12));
 }
 
 BOOST_AUTO_TEST_CASE(fill)
 {
     boost::compute::array<int, 4> array(context);
     array.fill(0);
-    BOOST_CHECK_EQUAL(array[0], 0);
-    BOOST_CHECK_EQUAL(array[1], 0);
-    BOOST_CHECK_EQUAL(array[2], 0);
-    BOOST_CHECK_EQUAL(array[3], 0);
+    CHECK_RANGE_EQUAL(int, 4, array, (0, 0, 0, 0));
 
     array.fill(17);
-    BOOST_CHECK_EQUAL(array[0], 17);
-    BOOST_CHECK_EQUAL(array[1], 17);
-    BOOST_CHECK_EQUAL(array[2], 17);
-    BOOST_CHECK_EQUAL(array[3], 17);
+    CHECK_RANGE_EQUAL(int, 4, array, (17, 17, 17, 17));
 }
 
 BOOST_AUTO_TEST_CASE(swap)
@@ -81,27 +73,15 @@ BOOST_AUTO_TEST_CASE(swap)
     int data[] = { 1, 2, 6, 9 };
     boost::compute::array<int, 4> a(context);
     boost::compute::copy(data, data + 4, a.begin());
-    BOOST_CHECK_EQUAL(a[0], 1);
-    BOOST_CHECK_EQUAL(a[1], 2);
-    BOOST_CHECK_EQUAL(a[2], 6);
-    BOOST_CHECK_EQUAL(a[3], 9);
+    CHECK_RANGE_EQUAL(int, 4, a, (1, 2, 6, 9));
 
     boost::compute::array<int, 4> b(context);
     b.fill(3);
-    BOOST_CHECK_EQUAL(b[0], 3);
-    BOOST_CHECK_EQUAL(b[1], 3);
-    BOOST_CHECK_EQUAL(b[2], 3);
-    BOOST_CHECK_EQUAL(b[3], 3);
+    CHECK_RANGE_EQUAL(int, 4, b, (3, 3, 3, 3));
 
     a.swap(b);
-    BOOST_CHECK_EQUAL(a[0], 3);
-    BOOST_CHECK_EQUAL(a[1], 3);
-    BOOST_CHECK_EQUAL(a[2], 3);
-    BOOST_CHECK_EQUAL(a[3], 3);
-    BOOST_CHECK_EQUAL(b[0], 1);
-    BOOST_CHECK_EQUAL(b[1], 2);
-    BOOST_CHECK_EQUAL(b[2], 6);
-    BOOST_CHECK_EQUAL(b[3], 9);
+    CHECK_RANGE_EQUAL(int, 4, a, (3, 3, 3, 3));
+    CHECK_RANGE_EQUAL(int, 4, b, (1, 2, 6, 9));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

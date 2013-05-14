@@ -17,6 +17,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/detail/adjacent_transform_iterator.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 BOOST_AUTO_TEST_CASE(copy)
@@ -33,12 +34,7 @@ BOOST_AUTO_TEST_CASE(copy)
         boost::compute::detail::make_adjacent_transform_iterator(input.end(), minus_op),
         output.begin()
     );
-    BOOST_CHECK_EQUAL(int(output[0]), int(1));
-    BOOST_CHECK_EQUAL(int(output[1]), int(1));
-    BOOST_CHECK_EQUAL(int(output[2]), int(2));
-    BOOST_CHECK_EQUAL(int(output[3]), int(3));
-    BOOST_CHECK_EQUAL(int(output[4]), int(4));
-    BOOST_CHECK_EQUAL(int(output[5]), int(5));
+    CHECK_RANGE_EQUAL(int, 6, output, (1, 1, 2, 3, 4, 5));
 }
 
 BOOST_AUTO_TEST_CASE(find_largest_gap)

@@ -14,6 +14,7 @@
 #include <boost/compute/random/mersenne_twister.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 BOOST_AUTO_TEST_CASE(fill_uint)
@@ -25,18 +26,20 @@ BOOST_AUTO_TEST_CASE(fill_uint)
     boost::compute::vector<uint_> vector(10, context);
 
     rng.fill(vector.begin(), vector.end(), queue);
-    queue.finish();
 
-    BOOST_CHECK_EQUAL(uint_(vector[0]), uint_(3499211612));
-    BOOST_CHECK_EQUAL(uint_(vector[1]), uint_(581869302));
-    BOOST_CHECK_EQUAL(uint_(vector[2]), uint_(3890346734));
-    BOOST_CHECK_EQUAL(uint_(vector[3]), uint_(3586334585));
-    BOOST_CHECK_EQUAL(uint_(vector[4]), uint_(545404204));
-    BOOST_CHECK_EQUAL(uint_(vector[5]), uint_(4161255391));
-    BOOST_CHECK_EQUAL(uint_(vector[6]), uint_(3922919429));
-    BOOST_CHECK_EQUAL(uint_(vector[7]), uint_(949333985));
-    BOOST_CHECK_EQUAL(uint_(vector[8]), uint_(2715962298));
-    BOOST_CHECK_EQUAL(uint_(vector[9]), uint_(1323567403));
+    CHECK_RANGE_EQUAL(
+        uint_, 10, vector,
+        (uint_(3499211612),
+         uint_(581869302),
+         uint_(3890346734),
+         uint_(3586334585),
+         uint_(545404204),
+         uint_(4161255391),
+         uint_(3922919429),
+         uint_(949333985),
+         uint_(2715962298),
+         uint_(1323567403))
+    );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

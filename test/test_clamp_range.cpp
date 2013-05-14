@@ -15,6 +15,7 @@
 #include <boost/compute/algorithm/detail/clamp_range.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace compute = boost::compute;
@@ -33,17 +34,10 @@ BOOST_AUTO_TEST_CASE(clamp_float_range)
         6.f, // high
         queue
     );
-
-    compute::copy(result.begin(), result.end(), data, queue);
-
-    BOOST_CHECK_EQUAL(data[0], 3.f);
-    BOOST_CHECK_EQUAL(data[1], 3.f);
-    BOOST_CHECK_EQUAL(data[2], 3.f);
-    BOOST_CHECK_EQUAL(data[3], 4.f);
-    BOOST_CHECK_EQUAL(data[4], 5.f);
-    BOOST_CHECK_EQUAL(data[5], 6.f);
-    BOOST_CHECK_EQUAL(data[6], 6.f);
-    BOOST_CHECK_EQUAL(data[7], 6.f);
+    CHECK_RANGE_EQUAL(
+        float, 8, result,
+        (3.f, 3.f, 3.f, 4.f, 5.f, 6.f, 6.f, 6.f)
+    );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

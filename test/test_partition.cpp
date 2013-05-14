@@ -19,6 +19,7 @@
 #include <boost/compute/algorithm/is_partitioned.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -71,14 +72,11 @@ BOOST_AUTO_TEST_CASE(partition_small_vector)
 
     vector.push_back(1.0f);
     bc::partition(vector.begin(), vector.end(), bc::signbit_<float>(), queue);
-    queue.finish();
-    BOOST_CHECK_EQUAL(vector[0], 1.0f);
+    CHECK_RANGE_EQUAL(float, 1, vector, (1.0f));
 
     vector.push_back(-1.0f);
     bc::partition(vector.begin(), vector.end(), bc::signbit_<float>(), queue);
-    queue.finish();
-    BOOST_CHECK_EQUAL(vector[0], -1.0f);
-    BOOST_CHECK_EQUAL(vector[1], 1.0f);
+    CHECK_RANGE_EQUAL(float, 2, vector, (-1.0f, 1.0f));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

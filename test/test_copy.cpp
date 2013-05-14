@@ -23,6 +23,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/detail/swizzle_iterator.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -32,23 +33,14 @@ BOOST_AUTO_TEST_CASE(copy_on_device)
     float data[] = { 6.1f, 10.2f, 19.3f, 25.4f };
     bc::vector<float> a(4);
     bc::copy(data, data + 4, a.begin());
-    BOOST_CHECK_EQUAL(a[0], 6.1f);
-    BOOST_CHECK_EQUAL(a[1], 10.2f);
-    BOOST_CHECK_EQUAL(a[2], 19.3f);
-    BOOST_CHECK_EQUAL(a[3], 25.4f);
+    CHECK_RANGE_EQUAL(float, 4, a, (6.1f, 10.2f, 19.3f, 25.4f));
 
     bc::vector<float> b(4);
     bc::fill(b.begin(), b.end(), 0);
-    BOOST_CHECK_EQUAL(b[0], 0.0f);
-    BOOST_CHECK_EQUAL(b[1], 0.0f);
-    BOOST_CHECK_EQUAL(b[2], 0.0f);
-    BOOST_CHECK_EQUAL(b[3], 0.0f);
+    CHECK_RANGE_EQUAL(float, 4, b, (0.0f, 0.0f, 0.0f, 0.0f));
 
     bc::copy(a.begin(), a.end(), b.begin());
-    BOOST_CHECK_EQUAL(b[0], 6.1f);
-    BOOST_CHECK_EQUAL(b[1], 10.2f);
-    BOOST_CHECK_EQUAL(b[2], 19.3f);
-    BOOST_CHECK_EQUAL(b[3], 25.4f);
+    CHECK_RANGE_EQUAL(float, 4, b, (6.1f, 10.2f, 19.3f, 25.4f));
 }
 
 BOOST_AUTO_TEST_CASE(copy)
@@ -56,10 +48,7 @@ BOOST_AUTO_TEST_CASE(copy)
     int data[] = { 1, 2, 5, 6 };
     bc::vector<int> vector(4);
     bc::copy(data, data + 4, vector.begin());
-    BOOST_CHECK_EQUAL(vector[0], 1);
-    BOOST_CHECK_EQUAL(vector[1], 2);
-    BOOST_CHECK_EQUAL(vector[2], 5);
-    BOOST_CHECK_EQUAL(vector[3], 6);
+    CHECK_RANGE_EQUAL(int, 4, vector, (1, 2, 5, 6));
 
     std::vector<int> host_vector(4);
     bc::copy(vector.begin(), vector.end(), host_vector.begin());
@@ -79,10 +68,7 @@ BOOST_AUTO_TEST_CASE(copy_from_host_list)
 
     bc::vector<int> vector(4);
     bc::copy(host_list.begin(), host_list.end(), vector.begin());
-    BOOST_CHECK_EQUAL(vector[0], -4);
-    BOOST_CHECK_EQUAL(vector[1], 12);
-    BOOST_CHECK_EQUAL(vector[2], 9);
-    BOOST_CHECK_EQUAL(vector[3], 0);
+    CHECK_RANGE_EQUAL(int, 4, vector, (-4, 12, 9, 0));
 }
 
 BOOST_AUTO_TEST_CASE(copy_n_int)
@@ -93,18 +79,10 @@ BOOST_AUTO_TEST_CASE(copy_n_int)
     bc::vector<int> b(5);
     bc::fill(b.begin(), b.end(), 0);
     bc::copy_n(a.begin(), 3, b.begin());
-    BOOST_CHECK_EQUAL(b[0], 1);
-    BOOST_CHECK_EQUAL(b[1], 2);
-    BOOST_CHECK_EQUAL(b[2], 3);
-    BOOST_CHECK_EQUAL(b[3], 0);
-    BOOST_CHECK_EQUAL(b[4], 0);
+    CHECK_RANGE_EQUAL(int, 5, b, (1, 2, 3, 0, 0));
 
     bc::copy_n(b.begin(), 4, a.begin());
-    BOOST_CHECK_EQUAL(a[0], 1);
-    BOOST_CHECK_EQUAL(a[1], 2);
-    BOOST_CHECK_EQUAL(a[2], 3);
-    BOOST_CHECK_EQUAL(a[3], 0);
-    BOOST_CHECK_EQUAL(a[4], 5);
+    CHECK_RANGE_EQUAL(int, 5, a, (1, 2, 3, 0, 5));
 }
 
 BOOST_AUTO_TEST_CASE(copy_swizzle_iterator)
@@ -120,10 +98,12 @@ BOOST_AUTO_TEST_CASE(copy_swizzle_iterator)
     bc::vector<int4_> input(reinterpret_cast<int4_*>(data),
                             reinterpret_cast<int4_*>(data) + 4);
     BOOST_CHECK_EQUAL(input.size(), size_t(4));
-    BOOST_CHECK_EQUAL(input[0], int4_(1, 2, 3, 4));
-    BOOST_CHECK_EQUAL(input[1], int4_(5, 6, 7, 8));
-    BOOST_CHECK_EQUAL(input[2], int4_(9, 1, 2, 3));
-    BOOST_CHECK_EQUAL(input[3], int4_(4, 5, 6, 7));
+    CHECK_RANGE_EQUAL(int4_, 4, input,
+        (int4_(1, 2, 3, 4),
+         int4_(5, 6, 7, 8),
+         int4_(9, 1, 2, 3),
+         int4_(4, 5, 6, 7))
+    );
 
     bc::vector<int4_> output4(4);
     bc::copy(
@@ -131,10 +111,12 @@ BOOST_AUTO_TEST_CASE(copy_swizzle_iterator)
         bc::detail::make_swizzle_iterator<4>(input.end(), "wzyx"),
         output4.begin()
     );
-    BOOST_CHECK_EQUAL(output4[0], int4_(4, 3, 2, 1));
-    BOOST_CHECK_EQUAL(output4[1], int4_(8, 7, 6, 5));
-    BOOST_CHECK_EQUAL(output4[2], int4_(3, 2, 1, 9));
-    BOOST_CHECK_EQUAL(output4[3], int4_(7, 6, 5, 4));
+    CHECK_RANGE_EQUAL(int4_, 4, output4,
+        (int4_(4, 3, 2, 1),
+         int4_(8, 7, 6, 5),
+         int4_(3, 2, 1, 9),
+         int4_(7, 6, 5, 4))
+    );
 
     bc::vector<int2_> output2(4);
     bc::copy(
@@ -142,10 +124,12 @@ BOOST_AUTO_TEST_CASE(copy_swizzle_iterator)
         bc::detail::make_swizzle_iterator<2>(input.end(), "xz"),
         output2.begin()
     );
-    BOOST_CHECK_EQUAL(output2[0], int2_(1, 3));
-    BOOST_CHECK_EQUAL(output2[1], int2_(5, 7));
-    BOOST_CHECK_EQUAL(output2[2], int2_(9, 2));
-    BOOST_CHECK_EQUAL(output2[3], int2_(4, 6));
+    CHECK_RANGE_EQUAL(int2_, 4, output2,
+        (int2_(1, 3),
+         int2_(5, 7),
+         int2_(9, 2),
+         int2_(4, 6))
+    );
 
     bc::vector<int> output1(4);
     bc::copy(
@@ -153,10 +137,7 @@ BOOST_AUTO_TEST_CASE(copy_swizzle_iterator)
         bc::detail::make_swizzle_iterator<1>(input.end(), "y"),
         output1.begin()
     );
-    BOOST_CHECK_EQUAL(output1[0], int(2));
-    BOOST_CHECK_EQUAL(output1[1], int(6));
-    BOOST_CHECK_EQUAL(output1[2], int(1));
-    BOOST_CHECK_EQUAL(output1[3], int(5));
+    CHECK_RANGE_EQUAL(int, 4, output1, (2, 6, 1, 5));
 }
 
 BOOST_AUTO_TEST_CASE(copy_int_async)
@@ -177,14 +158,7 @@ BOOST_AUTO_TEST_CASE(copy_int_async)
     host_to_device_future.wait();
 
     // check results
-    BOOST_CHECK_EQUAL(device_data[0], int(1));
-    BOOST_CHECK_EQUAL(device_data[1], int(2));
-    BOOST_CHECK_EQUAL(device_data[2], int(3));
-    BOOST_CHECK_EQUAL(device_data[3], int(4));
-    BOOST_CHECK_EQUAL(device_data[4], int(5));
-    BOOST_CHECK_EQUAL(device_data[5], int(6));
-    BOOST_CHECK_EQUAL(device_data[6], int(7));
-    BOOST_CHECK_EQUAL(device_data[7], int(8));
+    CHECK_RANGE_EQUAL(int, 8, device_data, (1, 2, 3, 4, 5, 6, 7, 8));
     BOOST_VERIFY(host_to_device_future.get() == device_data.end());
 
     // fill host data with zeros

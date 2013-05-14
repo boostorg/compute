@@ -21,6 +21,7 @@
 #include <boost/compute/iterator/counting_iterator.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -36,25 +37,12 @@ BOOST_AUTO_TEST_CASE(inclusive_scan_int)
 
     // inclusive scan
     bc::inclusive_scan(vector.begin(), vector.end(), result.begin());
-    BOOST_CHECK_EQUAL(result[0], 1);
-    BOOST_CHECK_EQUAL(result[1], 3);
-    BOOST_CHECK_EQUAL(result[2], 4);
-    BOOST_CHECK_EQUAL(result[3], 6);
-    BOOST_CHECK_EQUAL(result[4], 9);
+    CHECK_RANGE_EQUAL(int, 5, result, (1, 3, 4, 6, 9));
 
     // in-place inclusive scan
-    BOOST_CHECK_EQUAL(vector[0], 1);
-    BOOST_CHECK_EQUAL(vector[1], 2);
-    BOOST_CHECK_EQUAL(vector[2], 1);
-    BOOST_CHECK_EQUAL(vector[3], 2);
-    BOOST_CHECK_EQUAL(vector[4], 3);
-
+    CHECK_RANGE_EQUAL(int, 5, vector, (1, 2, 1, 2, 3));
     bc::inclusive_scan(vector.begin(), vector.end(), vector.begin());
-    BOOST_CHECK_EQUAL(vector[0], 1);
-    BOOST_CHECK_EQUAL(vector[1], 3);
-    BOOST_CHECK_EQUAL(vector[2], 4);
-    BOOST_CHECK_EQUAL(vector[3], 6);
-    BOOST_CHECK_EQUAL(vector[4], 9);
+    CHECK_RANGE_EQUAL(int, 5, vector, (1, 3, 4, 6, 9));
 }
 
 BOOST_AUTO_TEST_CASE(exclusive_scan_int)
@@ -68,25 +56,12 @@ BOOST_AUTO_TEST_CASE(exclusive_scan_int)
 
     // exclusive scan
     bc::exclusive_scan(vector.begin(), vector.end(), result.begin());
-    BOOST_CHECK_EQUAL(result[0], 0);
-    BOOST_CHECK_EQUAL(result[1], 1);
-    BOOST_CHECK_EQUAL(result[2], 3);
-    BOOST_CHECK_EQUAL(result[3], 4);
-    BOOST_CHECK_EQUAL(result[4], 6);
+    CHECK_RANGE_EQUAL(int, 5, result, (0, 1, 3, 4, 6));
 
     // in-place exclusive scan
-    BOOST_CHECK_EQUAL(vector[0], 1);
-    BOOST_CHECK_EQUAL(vector[1], 2);
-    BOOST_CHECK_EQUAL(vector[2], 1);
-    BOOST_CHECK_EQUAL(vector[3], 2);
-    BOOST_CHECK_EQUAL(vector[4], 3);
-
+    CHECK_RANGE_EQUAL(int, 5, vector, (1, 2, 1, 2, 3));
     bc::exclusive_scan(vector.begin(), vector.end(), vector.begin());
-    BOOST_CHECK_EQUAL(vector[0], 0);
-    BOOST_CHECK_EQUAL(vector[1], 1);
-    BOOST_CHECK_EQUAL(vector[2], 3);
-    BOOST_CHECK_EQUAL(vector[3], 4);
-    BOOST_CHECK_EQUAL(vector[4], 6);
+    CHECK_RANGE_EQUAL(int, 5, vector, (0, 1, 3, 4, 6));
 }
 
 BOOST_AUTO_TEST_CASE(inclusive_scan_int2)
@@ -105,11 +80,10 @@ BOOST_AUTO_TEST_CASE(inclusive_scan_int2)
 
     boost::compute::vector<int2_> output(5);
     boost::compute::inclusive_scan(input.begin(), input.end(), output.begin());
-    BOOST_CHECK_EQUAL(int2_(output[0]), int2_(1, 2));
-    BOOST_CHECK_EQUAL(int2_(output[1]), int2_(4, 6));
-    BOOST_CHECK_EQUAL(int2_(output[2]), int2_(9, 12));
-    BOOST_CHECK_EQUAL(int2_(output[3]), int2_(16, 20));
-    BOOST_CHECK_EQUAL(int2_(output[4]), int2_(25, 20));
+    CHECK_RANGE_EQUAL(
+        int2_, 5, output,
+        (int2_(1, 2), int2_(4, 6), int2_(9, 12), int2_(16, 20), int2_(25, 20))
+    );
 }
 
 BOOST_AUTO_TEST_CASE(inclusive_scan_counting_iterator)
@@ -118,16 +92,7 @@ BOOST_AUTO_TEST_CASE(inclusive_scan_counting_iterator)
     bc::inclusive_scan(bc::make_counting_iterator(1),
                        bc::make_counting_iterator(11),
                        result.begin());
-    BOOST_CHECK_EQUAL(result[0], 1);
-    BOOST_CHECK_EQUAL(result[1], 3);
-    BOOST_CHECK_EQUAL(result[2], 6);
-    BOOST_CHECK_EQUAL(result[3], 10);
-    BOOST_CHECK_EQUAL(result[4], 15);
-    BOOST_CHECK_EQUAL(result[5], 21);
-    BOOST_CHECK_EQUAL(result[6], 28);
-    BOOST_CHECK_EQUAL(result[7], 36);
-    BOOST_CHECK_EQUAL(result[8], 45);
-    BOOST_CHECK_EQUAL(result[9], 55);
+    CHECK_RANGE_EQUAL(int, 10, result, (1, 3, 6, 10, 15, 21, 28, 36, 45, 55));
 }
 
 BOOST_AUTO_TEST_CASE(exclusive_scan_counting_iterator)
@@ -136,16 +101,7 @@ BOOST_AUTO_TEST_CASE(exclusive_scan_counting_iterator)
     bc::exclusive_scan(bc::make_counting_iterator(1),
                        bc::make_counting_iterator(11),
                        result.begin());
-    BOOST_CHECK_EQUAL(result[0], 0);
-    BOOST_CHECK_EQUAL(result[1], 1);
-    BOOST_CHECK_EQUAL(result[2], 3);
-    BOOST_CHECK_EQUAL(result[3], 6);
-    BOOST_CHECK_EQUAL(result[4], 10);
-    BOOST_CHECK_EQUAL(result[5], 15);
-    BOOST_CHECK_EQUAL(result[6], 21);
-    BOOST_CHECK_EQUAL(result[7], 28);
-    BOOST_CHECK_EQUAL(result[8], 36);
-    BOOST_CHECK_EQUAL(result[9], 45);
+    CHECK_RANGE_EQUAL(int, 10, result, (0, 1, 3, 6, 10, 15, 21, 28, 36, 45));
 }
 
 BOOST_AUTO_TEST_CASE(inclusive_scan_transform_iterator)

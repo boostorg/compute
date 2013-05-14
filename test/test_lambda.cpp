@@ -15,6 +15,7 @@
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -33,12 +34,7 @@ BOOST_AUTO_TEST_CASE(squared_plus_one)
                   vector.end(),
                   vector.begin(),
                   (bc::_1 * bc::_1) + 1);
-
-    BOOST_CHECK_EQUAL(vector[0], 2);
-    BOOST_CHECK_EQUAL(vector[1], 5);
-    BOOST_CHECK_EQUAL(vector[2], 10);
-    BOOST_CHECK_EQUAL(vector[3], 17);
-    BOOST_CHECK_EQUAL(vector[4], 26);
+    CHECK_RANGE_EQUAL(int, 5, vector, (2, 5, 10, 17, 26));
 }
 
 BOOST_AUTO_TEST_CASE(abs_int)
@@ -54,12 +50,7 @@ BOOST_AUTO_TEST_CASE(abs_int)
                   vector.end(),
                   vector.begin(),
                   abs(bc::_1));
-
-    BOOST_CHECK_EQUAL(vector[0], 1);
-    BOOST_CHECK_EQUAL(vector[1], 2);
-    BOOST_CHECK_EQUAL(vector[2], 3);
-    BOOST_CHECK_EQUAL(vector[3], 4);
-    BOOST_CHECK_EQUAL(vector[4], 5);
+    CHECK_RANGE_EQUAL(int, 5, vector, (1, 2, 3, 4, 5));
 }
 
 template<class Result, class Expr>
@@ -148,11 +139,7 @@ BOOST_AUTO_TEST_CASE(make_function_from_lamdba)
                               vector.end(),
                               vector.begin(),
                               boost::compute::make_function_from_lambda<int(int)>(_1 * 2 + 3));
-    BOOST_CHECK_EQUAL(int(vector[0]), int(7));
-    BOOST_CHECK_EQUAL(int(vector[1]), int(11));
-    BOOST_CHECK_EQUAL(int(vector[2]), int(15));
-    BOOST_CHECK_EQUAL(int(vector[3]), int(19));
-    BOOST_CHECK_EQUAL(int(vector[4]), int(23));
+    CHECK_RANGE_EQUAL(int, 5, vector, (7, 11, 15, 19, 23));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

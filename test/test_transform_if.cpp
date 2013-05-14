@@ -16,6 +16,7 @@
 #include <boost/compute/algorithm/transform_if.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace compute = boost::compute;
@@ -38,18 +39,8 @@ BOOST_AUTO_TEST_CASE(abs_if_odd)
         queue
     );
 
-    // copy data back to host
-    compute::copy(vector.begin(), vector.end(), data, queue);
-    queue.finish();
-
-    BOOST_CHECK_EQUAL(data[0], -2);
-    BOOST_CHECK_EQUAL(data[1], +3);
-    BOOST_CHECK_EQUAL(data[2], -4);
-    BOOST_CHECK_EQUAL(data[3], +5);
-    BOOST_CHECK_EQUAL(data[4], -6);
-    BOOST_CHECK_EQUAL(data[5], +7);
-    BOOST_CHECK_EQUAL(data[6], -8);
-    BOOST_CHECK_EQUAL(data[7], +9);
+    // check transformed values
+    CHECK_RANGE_EQUAL(int, 8, vector, (-2, +3, -4, +5, -6, +7, -8, +9));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

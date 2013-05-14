@@ -15,6 +15,7 @@
 #include <boost/compute/algorithm/gather.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -29,11 +30,7 @@ BOOST_AUTO_TEST_CASE(gather_int)
 
     bc::vector<int> output(5, context);
     bc::gather(input.begin(), input.end(), map.begin(), output.begin());
-    BOOST_CHECK_EQUAL(output[0], 1);
-    BOOST_CHECK_EQUAL(output[1], 5);
-    BOOST_CHECK_EQUAL(output[2], 2);
-    BOOST_CHECK_EQUAL(output[3], 4);
-    BOOST_CHECK_EQUAL(output[4], 3);
+    CHECK_RANGE_EQUAL(int, 5, output, (1, 5, 2, 4, 3));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

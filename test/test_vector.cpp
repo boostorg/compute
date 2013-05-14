@@ -21,6 +21,7 @@
 #include <boost/compute/algorithm/remove.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -61,15 +62,13 @@ BOOST_AUTO_TEST_CASE(array_operator)
 {
     bc::vector<int> vector(10);
     bc::fill(vector.begin(), vector.end(), 0);
-    BOOST_CHECK_EQUAL(vector[0], 0);
-    BOOST_CHECK_EQUAL(vector[9], 0);
+    CHECK_RANGE_EQUAL(int, 10, vector, (0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 
     bc::fill(vector.begin(), vector.end(), 42);
-    BOOST_CHECK_EQUAL(vector[0], 42);
-    BOOST_CHECK_EQUAL(vector[9], 42);
+    CHECK_RANGE_EQUAL(int, 10, vector, (42, 42, 42, 42, 42, 42, 42, 42, 42, 42));
 
     vector[0] = 9;
-    BOOST_CHECK_EQUAL(vector[0], 9);
+    CHECK_RANGE_EQUAL(int, 10, vector, (9, 42, 42, 42, 42, 42, 42, 42, 42, 42));
 }
 
 BOOST_AUTO_TEST_CASE(front_and_back)
@@ -100,26 +99,17 @@ BOOST_AUTO_TEST_CASE(host_iterator_constructor)
     host_vector.push_back(40);
 
     bc::vector<int> device_vector(host_vector.begin(), host_vector.end());
-    BOOST_CHECK_EQUAL(device_vector[0], 10);
-    BOOST_CHECK_EQUAL(device_vector[1], 20);
-    BOOST_CHECK_EQUAL(device_vector[2], 30);
-    BOOST_CHECK_EQUAL(device_vector[3], 40);
+    CHECK_RANGE_EQUAL(int, 4, device_vector, (10, 20, 30, 40));
 }
 
 BOOST_AUTO_TEST_CASE(device_iterator_constructor)
 {
     int data[] = { 1, 5, 10, 15 };
     bc::vector<int> a(data, data + 4);
-    BOOST_CHECK_EQUAL(a[0], 1);
-    BOOST_CHECK_EQUAL(a[1], 5);
-    BOOST_CHECK_EQUAL(a[2], 10);
-    BOOST_CHECK_EQUAL(a[3], 15);
+    CHECK_RANGE_EQUAL(int, 4, a, (1, 5, 10, 15));
 
     bc::vector<int> b(a.begin(), a.end());
-    BOOST_CHECK_EQUAL(b[0], 1);
-    BOOST_CHECK_EQUAL(b[1], 5);
-    BOOST_CHECK_EQUAL(b[2], 10);
-    BOOST_CHECK_EQUAL(b[3], 15);
+    CHECK_RANGE_EQUAL(int, 4, b, (1, 5, 10, 15));
 }
 
 BOOST_AUTO_TEST_CASE(push_back)
@@ -130,18 +120,15 @@ BOOST_AUTO_TEST_CASE(push_back)
     vector.push_back(12);
     BOOST_VERIFY(!vector.empty());
     BOOST_CHECK_EQUAL(vector.size(), size_t(1));
-    BOOST_CHECK_EQUAL(vector[0], 12);
+    CHECK_RANGE_EQUAL(int, 1, vector, (12));
 
     vector.push_back(24);
     BOOST_CHECK_EQUAL(vector.size(), size_t(2));
-    BOOST_CHECK_EQUAL(vector[0], 12);
-    BOOST_CHECK_EQUAL(vector[1], 24);
+    CHECK_RANGE_EQUAL(int, 2, vector, (12, 24));
 
     vector.push_back(36);
     BOOST_CHECK_EQUAL(vector.size(), size_t(3));
-    BOOST_CHECK_EQUAL(vector[0], 12);
-    BOOST_CHECK_EQUAL(vector[1], 24);
-    BOOST_CHECK_EQUAL(vector[2], 36);
+    CHECK_RANGE_EQUAL(int, 3, vector, (12, 24, 36));
 
     for(int i = 0; i < 100; i++){
         vector.push_back(i);
@@ -197,15 +184,11 @@ BOOST_AUTO_TEST_CASE(erase)
 
     vector.erase(vector.begin() + 1);
     BOOST_CHECK_EQUAL(vector.size(), 4);
-    BOOST_CHECK_EQUAL(vector[0], 1);
-    BOOST_CHECK_EQUAL(vector[1], 5);
-    BOOST_CHECK_EQUAL(vector[2], 7);
-    BOOST_CHECK_EQUAL(vector[3], 9);
+    CHECK_RANGE_EQUAL(int, 4, vector, (1, 5, 7, 9));
 
     vector.erase(vector.begin() + 2, vector.end());
     BOOST_CHECK_EQUAL(vector.size(), 2);
-    BOOST_CHECK_EQUAL(vector[0], 1);
-    BOOST_CHECK_EQUAL(vector[1], 5);
+    CHECK_RANGE_EQUAL(int, 2, vector, (1, 5));
 }
 
 BOOST_AUTO_TEST_CASE(max_size)
@@ -221,17 +204,11 @@ BOOST_AUTO_TEST_CASE(move_ctor)
       int data[] = { 11, 12, 13, 14 };
       bc::vector<int> a(data, data + 4);
       BOOST_CHECK_EQUAL(a.size(), size_t(4));
-      BOOST_CHECK_EQUAL(a[0], 11);
-      BOOST_CHECK_EQUAL(a[1], 12);
-      BOOST_CHECK_EQUAL(a[2], 13);
-      BOOST_CHECK_EQUAL(a[3], 14);
+      CHECK_RANGE_EQUAL(int, 4, a, (11, 12, 13, 14));
 
       bc::vector<int> b(std::move(a));
       BOOST_CHECK_EQUAL(b.size(), size_t(4));
-      BOOST_CHECK_EQUAL(b[0], 11);
-      BOOST_CHECK_EQUAL(b[1], 12);
-      BOOST_CHECK_EQUAL(b[2], 13);
-      BOOST_CHECK_EQUAL(b[3], 14);
+      CHECK_RANGE_EQUAL(int, 4, b, (11, 12, 13, 14));
 }
 #endif // !defined(BOOST_NO_RVALUE_REFERENCES)
 
@@ -241,10 +218,7 @@ BOOST_AUTO_TEST_CASE(initializer_list_ctor)
 {
     bc::vector<int> vector = { 2, 4, 6, 8 };
     BOOST_CHECK_EQUAL(vector.size(), size_t(4));
-    BOOST_CHECK_EQUAL(vector[0], 2);
-    BOOST_CHECK_EQUAL(vector[1], 4);
-    BOOST_CHECK_EQUAL(vector[2], 6);
-    BOOST_CHECK_EQUAL(vector[3], 8);
+    CHECK_RANGE_EQUAL(int, 4, vector, (2, 4, 6, 8));
 }
 #endif // !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 
@@ -259,19 +233,13 @@ BOOST_AUTO_TEST_CASE(vector_double)
     vector.push_back(3.14);
     vector.push_back(7.89);
     BOOST_CHECK_EQUAL(vector.size(), size_t(3));
-    BOOST_CHECK_EQUAL(vector[0], 1.21);
-    BOOST_CHECK_EQUAL(vector[1], 3.14);
-    BOOST_CHECK_EQUAL(vector[2], 7.89);
+    CHECK_RANGE_EQUAL(double, 3, vector, (1.21, 3.14, 7.89));
 
     bc::vector<double> other = vector;
-    BOOST_CHECK_EQUAL(other[0], 1.21);
-    BOOST_CHECK_EQUAL(other[1], 3.14);
-    BOOST_CHECK_EQUAL(other[2], 7.89);
+    CHECK_RANGE_EQUAL(double, 3, other, (1.21, 3.14, 7.89));
 
     bc::fill(other.begin(), other.end(), 8.95);
-    BOOST_CHECK_EQUAL(other[0], 8.95);
-    BOOST_CHECK_EQUAL(other[1], 8.95);
-    BOOST_CHECK_EQUAL(other[2], 8.95);
+    CHECK_RANGE_EQUAL(double, 3, other, (8.95, 8.95, 8.95));
 }
 
 BOOST_AUTO_TEST_CASE(vector_iterator)
@@ -318,9 +286,7 @@ BOOST_AUTO_TEST_CASE(vector_erase_remove)
     BOOST_VERIFY(bc::find(vector.begin(), vector.end(), 6) == vector.end());
 
     // check the rest of the values
-    BOOST_CHECK_EQUAL(vector[0], 3);
-    BOOST_CHECK_EQUAL(vector[1], 5);
-    BOOST_CHECK_EQUAL(vector[2], 1);
+    CHECK_RANGE_EQUAL(int, 3, vector, (3, 5, 1));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

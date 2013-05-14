@@ -15,6 +15,7 @@
 #include <boost/compute/algorithm/merge.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 BOOST_AUTO_TEST_CASE(simple_merge_int)
@@ -33,16 +34,7 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
         v3.begin(),
         queue
     );
-    queue.finish();
-
-    BOOST_CHECK_EQUAL(int(v3[0]), 1);
-    BOOST_CHECK_EQUAL(int(v3[1]), 2);
-    BOOST_CHECK_EQUAL(int(v3[2]), 3);
-    BOOST_CHECK_EQUAL(int(v3[3]), 4);
-    BOOST_CHECK_EQUAL(int(v3[4]), 5);
-    BOOST_CHECK_EQUAL(int(v3[5]), 6);
-    BOOST_CHECK_EQUAL(int(v3[6]), 7);
-    BOOST_CHECK_EQUAL(int(v3[7]), 8);
+    CHECK_RANGE_EQUAL(int, 8, v3, (1, 2, 3, 4, 5, 6, 7, 8));
 
     // merge v2 with v1 into v3
     boost::compute::merge(
@@ -51,16 +43,7 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
         v3.begin(),
         queue
     );
-    queue.finish();
-
-    BOOST_CHECK_EQUAL(int(v3[0]), 1);
-    BOOST_CHECK_EQUAL(int(v3[1]), 2);
-    BOOST_CHECK_EQUAL(int(v3[2]), 3);
-    BOOST_CHECK_EQUAL(int(v3[3]), 4);
-    BOOST_CHECK_EQUAL(int(v3[4]), 5);
-    BOOST_CHECK_EQUAL(int(v3[5]), 6);
-    BOOST_CHECK_EQUAL(int(v3[6]), 7);
-    BOOST_CHECK_EQUAL(int(v3[7]), 8);
+    CHECK_RANGE_EQUAL(int, 8, v3, (1, 2, 3, 4, 5, 6, 7, 8));
 
     // merge v1 with v1 into v3
     boost::compute::merge(
@@ -69,16 +52,7 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
         v3.begin(),
         queue
     );
-    queue.finish();
-
-    BOOST_CHECK_EQUAL(int(v3[0]), 1);
-    BOOST_CHECK_EQUAL(int(v3[1]), 1);
-    BOOST_CHECK_EQUAL(int(v3[2]), 3);
-    BOOST_CHECK_EQUAL(int(v3[3]), 3);
-    BOOST_CHECK_EQUAL(int(v3[4]), 5);
-    BOOST_CHECK_EQUAL(int(v3[5]), 5);
-    BOOST_CHECK_EQUAL(int(v3[6]), 7);
-    BOOST_CHECK_EQUAL(int(v3[7]), 7);
+    CHECK_RANGE_EQUAL(int, 8, v3, (1, 1, 3, 3, 5, 5, 7, 7));
 
     // merge v2 with v2 into v3
     boost::compute::merge(
@@ -87,16 +61,7 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
         v3.begin(),
         queue
     );
-    queue.finish();
-
-    BOOST_CHECK_EQUAL(int(v3[0]), 2);
-    BOOST_CHECK_EQUAL(int(v3[1]), 2);
-    BOOST_CHECK_EQUAL(int(v3[2]), 4);
-    BOOST_CHECK_EQUAL(int(v3[3]), 4);
-    BOOST_CHECK_EQUAL(int(v3[4]), 6);
-    BOOST_CHECK_EQUAL(int(v3[5]), 6);
-    BOOST_CHECK_EQUAL(int(v3[6]), 8);
-    BOOST_CHECK_EQUAL(int(v3[7]), 8);
+    CHECK_RANGE_EQUAL(int, 8, v3, (2, 2, 4, 4, 6, 6, 8, 8));
 
     // merge v1 with empty range into v3
     boost::compute::merge(
@@ -105,12 +70,7 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
         v3.begin(),
         queue
     );
-    queue.finish();
-
-    BOOST_CHECK_EQUAL(int(v3[0]), 1);
-    BOOST_CHECK_EQUAL(int(v3[1]), 3);
-    BOOST_CHECK_EQUAL(int(v3[2]), 5);
-    BOOST_CHECK_EQUAL(int(v3[3]), 7);
+    CHECK_RANGE_EQUAL(int, 4, v3, (1, 3, 5, 7));
 
     // merge v2 with empty range into v3
     boost::compute::merge(
@@ -119,12 +79,7 @@ BOOST_AUTO_TEST_CASE(simple_merge_int)
         v3.begin(),
         queue
     );
-    queue.finish();
-
-    BOOST_CHECK_EQUAL(int(v3[0]), 2);
-    BOOST_CHECK_EQUAL(int(v3[1]), 4);
-    BOOST_CHECK_EQUAL(int(v3[2]), 6);
-    BOOST_CHECK_EQUAL(int(v3[3]), 8);
+    CHECK_RANGE_EQUAL(int, 4, v3, (2, 4, 6, 8));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

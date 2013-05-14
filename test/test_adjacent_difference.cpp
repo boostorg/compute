@@ -18,6 +18,7 @@
 #include <boost/compute/algorithm/adjacent_difference.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -26,37 +27,21 @@ BOOST_AUTO_TEST_CASE(adjacent_difference_int)
 {
     bc::vector<int> a(5, context);
     bc::iota(a.begin(), a.end(), 0);
-    BOOST_CHECK_EQUAL(a[0], 0);
-    BOOST_CHECK_EQUAL(a[1], 1);
-    BOOST_CHECK_EQUAL(a[2], 2);
-    BOOST_CHECK_EQUAL(a[3], 3);
-    BOOST_CHECK_EQUAL(a[4], 4);
+    CHECK_RANGE_EQUAL(int, 5, a, (0, 1, 2, 3, 4));
 
     bc::vector<int> b(5, context);
     bc::vector<int>::iterator iter =
         bc::adjacent_difference(a.begin(), a.end(), b.begin());
     BOOST_CHECK(iter == b.end());
-    BOOST_CHECK_EQUAL(b[0], 0);
-    BOOST_CHECK_EQUAL(b[1], 1);
-    BOOST_CHECK_EQUAL(b[2], 1);
-    BOOST_CHECK_EQUAL(b[3], 1);
-    BOOST_CHECK_EQUAL(b[4], 1);
+    CHECK_RANGE_EQUAL(int, 5, b, (0, 1, 1, 1, 1));
 
     int data[] = { 1, 9, 36, 48, 81 };
     bc::copy(data, data + 5, a.begin());
-    BOOST_CHECK_EQUAL(a[0], 1);
-    BOOST_CHECK_EQUAL(a[1], 9);
-    BOOST_CHECK_EQUAL(a[2], 36);
-    BOOST_CHECK_EQUAL(a[3], 48);
-    BOOST_CHECK_EQUAL(a[4], 81);
+    CHECK_RANGE_EQUAL(int, 5, a, (1, 9, 36, 48, 81));
 
     iter = bc::adjacent_difference(a.begin(), a.end(), b.begin());
     BOOST_CHECK(iter == b.end());
-    BOOST_CHECK_EQUAL(b[0], 1);
-    BOOST_CHECK_EQUAL(b[1], 8);
-    BOOST_CHECK_EQUAL(b[2], 27);
-    BOOST_CHECK_EQUAL(b[3], 12);
-    BOOST_CHECK_EQUAL(b[4], 33);
+    CHECK_RANGE_EQUAL(int, 5, b, (1, 8, 27, 12, 33));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

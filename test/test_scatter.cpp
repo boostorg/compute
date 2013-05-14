@@ -16,6 +16,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/constant_buffer_iterator.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -30,11 +31,7 @@ BOOST_AUTO_TEST_CASE(scatter_int)
 
     bc::vector<int> output(5, context);
     bc::scatter(input.begin(), input.end(), map.begin(), output.begin());
-    BOOST_CHECK_EQUAL(output[0], 1);
-    BOOST_CHECK_EQUAL(output[1], 3);
-    BOOST_CHECK_EQUAL(output[2], 5);
-    BOOST_CHECK_EQUAL(output[3], 4);
-    BOOST_CHECK_EQUAL(output[4], 2);
+    CHECK_RANGE_EQUAL(int, 5, output, (1, 3, 5, 4, 2));
 }
 
 BOOST_AUTO_TEST_CASE(scatter_constant_indices)
@@ -53,11 +50,7 @@ BOOST_AUTO_TEST_CASE(scatter_constant_indices)
                 input.end(),
                 bc::make_constant_buffer_iterator<int>(map_buffer, 0),
                 output.begin());
-    BOOST_CHECK_EQUAL(output[0], 1);
-    BOOST_CHECK_EQUAL(output[1], 3);
-    BOOST_CHECK_EQUAL(output[2], 5);
-    BOOST_CHECK_EQUAL(output[3], 4);
-    BOOST_CHECK_EQUAL(output[4], 2);
+    CHECK_RANGE_EQUAL(int, 5, output, (1, 3, 5, 4, 2));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

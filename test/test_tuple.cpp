@@ -22,6 +22,7 @@
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace compute = boost::compute;
@@ -78,37 +79,19 @@ BOOST_AUTO_TEST_CASE(extract_tuple_elements)
     compute::transform(
         vector.begin(), vector.end(), chars.begin(), compute::get<0>(), queue
     );
+    CHECK_RANGE_EQUAL(char, 3, chars, ('a', 'c', 'f'));
 
     compute::vector<int> ints(3, context);
     compute::transform(
         vector.begin(), vector.end(), ints.begin(), compute::get<1>(), queue
     );
+    CHECK_RANGE_EQUAL(int, 3, ints, (1, 3, 6));
 
     compute::vector<float> floats(3, context);
     compute::transform(
         vector.begin(), vector.end(), floats.begin(), compute::get<2>(), queue
     );
-
-    char chars_data[3];
-    compute::copy(chars.begin(), chars.end(), chars_data, queue);
-    queue.finish();
-    BOOST_CHECK_EQUAL(chars_data[0], 'a');
-    BOOST_CHECK_EQUAL(chars_data[1], 'c');
-    BOOST_CHECK_EQUAL(chars_data[2], 'f');
-
-    int ints_data[3];
-    compute::copy(ints.begin(), ints.end(), ints_data, queue);
-    queue.finish();
-    BOOST_CHECK_EQUAL(ints_data[0], 1);
-    BOOST_CHECK_EQUAL(ints_data[1], 3);
-    BOOST_CHECK_EQUAL(ints_data[2], 6);
-
-    float floats_data[3];
-    compute::copy(floats.begin(), floats.end(), floats_data, queue);
-    queue.finish();
-    BOOST_CHECK_EQUAL(floats_data[0], 2.3f);
-    BOOST_CHECK_EQUAL(floats_data[1], 4.5f);
-    BOOST_CHECK_EQUAL(floats_data[2], 7.8f);
+    CHECK_RANGE_EQUAL(float, 3, floats, (2.3f, 4.5f, 7.8f));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

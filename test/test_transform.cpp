@@ -19,6 +19,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/counting_iterator.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -27,31 +28,20 @@ BOOST_AUTO_TEST_CASE(transform_int_abs)
 {
     int data[] = { 1, -2, -3, -4, 5 };
     bc::vector<int> vector(data, data + 5);
-    BOOST_CHECK_EQUAL(vector[0], 1);
-    BOOST_CHECK_EQUAL(vector[1], -2);
-    BOOST_CHECK_EQUAL(vector[2], -3);
-    BOOST_CHECK_EQUAL(vector[3], -4);
-    BOOST_CHECK_EQUAL(vector[4], 5);
+    CHECK_RANGE_EQUAL(int, 5, vector, (1, -2, -3, -4, 5));
 
     bc::transform(vector.begin(),
                   vector.end(),
                   vector.begin(),
                   bc::abs<int>());
-    BOOST_CHECK_EQUAL(vector[0], 1);
-    BOOST_CHECK_EQUAL(vector[1], 2);
-    BOOST_CHECK_EQUAL(vector[2], 3);
-    BOOST_CHECK_EQUAL(vector[3], 4);
-    BOOST_CHECK_EQUAL(vector[4], 5);
+    CHECK_RANGE_EQUAL(int, 5, vector, (1, 2, 3, 4, 5));
 }
 
 BOOST_AUTO_TEST_CASE(transform_float_sqrt)
 {
     float data[] = { 1.0f, 4.0f, 9.0f, 16.0f };
     bc::vector<float> vector(data, data + 4);
-    BOOST_CHECK_EQUAL(float(vector[0]), 1.0f);
-    BOOST_CHECK_EQUAL(float(vector[1]), 4.0f);
-    BOOST_CHECK_EQUAL(float(vector[2]), 9.0f);
-    BOOST_CHECK_EQUAL(float(vector[3]), 16.0f);
+    CHECK_RANGE_EQUAL(float, 4, vector, (1.0f, 4.0f, 9.0f, 16.0f));
 
     bc::transform(vector.begin(),
                   vector.end(),
@@ -67,22 +57,13 @@ BOOST_AUTO_TEST_CASE(transform_float_clamp)
 {
     float data[] = { 10.f, 20.f, 30.f, 40.f, 50.f };
     bc::vector<float> vector(data, data + 5);
-    BOOST_CHECK_EQUAL(float(vector[0]), 10.f);
-    BOOST_CHECK_EQUAL(float(vector[1]), 20.f);
-    BOOST_CHECK_EQUAL(float(vector[2]), 30.f);
-    BOOST_CHECK_EQUAL(float(vector[3]), 40.f);
-    BOOST_CHECK_EQUAL(float(vector[4]), 50.f);
+    CHECK_RANGE_EQUAL(float, 5, vector, (10.0f, 20.0f, 30.0f, 40.0f, 50.0f));
 
     bc::transform(vector.begin(),
                   vector.end(),
                   vector.begin(),
                   clamp(bc::_1, 15.f, 45.f));
-
-    BOOST_CHECK_EQUAL(float(vector[0]), 15.f);
-    BOOST_CHECK_EQUAL(float(vector[1]), 20.f);
-    BOOST_CHECK_EQUAL(float(vector[2]), 30.f);
-    BOOST_CHECK_EQUAL(float(vector[3]), 40.f);
-    BOOST_CHECK_EQUAL(float(vector[4]), 45.f);
+    CHECK_RANGE_EQUAL(float, 5, vector, (15.0f, 20.0f, 30.0f, 40.0f, 45.0f));
 }
 
 BOOST_AUTO_TEST_CASE(transform_add_int)
@@ -99,30 +80,21 @@ BOOST_AUTO_TEST_CASE(transform_add_int)
                   input2.begin(),
                   output.begin(),
                   bc::plus<int>());
-    BOOST_CHECK_EQUAL(output[0], 11);
-    BOOST_CHECK_EQUAL(output[1], 22);
-    BOOST_CHECK_EQUAL(output[2], 33);
-    BOOST_CHECK_EQUAL(output[3], 44);
+    CHECK_RANGE_EQUAL(int, 4, output, (11, 22, 33, 44));
 
     bc::transform(input1.begin(),
                   input1.end(),
                   input2.begin(),
                   output.begin(),
                   bc::multiplies<int>());
-    BOOST_CHECK_EQUAL(output[0], 10);
-    BOOST_CHECK_EQUAL(output[1], 40);
-    BOOST_CHECK_EQUAL(output[2], 90);
-    BOOST_CHECK_EQUAL(output[3], 160);
+    CHECK_RANGE_EQUAL(int, 4, output, (10, 40, 90, 160));
 }
 
 BOOST_AUTO_TEST_CASE(transform_pow4)
 {
     float data[] = { 1.0f, 2.0f, 3.0f, 4.0f };
     bc::vector<float> vector(data, data + 4);
-    BOOST_CHECK_EQUAL(float(vector[0]), 1.0f);
-    BOOST_CHECK_EQUAL(float(vector[1]), 2.0f);
-    BOOST_CHECK_EQUAL(float(vector[2]), 3.0f);
-    BOOST_CHECK_EQUAL(float(vector[3]), 4.0f);
+    CHECK_RANGE_EQUAL(float, 4, vector, (1.0f, 2.0f, 3.0f, 4.0f));
 
     bc::vector<float> result(4);
     bc::transform(vector.begin(),
@@ -158,37 +130,35 @@ BOOST_AUTO_TEST_CASE(transform_custom_function)
 
 BOOST_AUTO_TEST_CASE(extract_vector_component)
 {
+    using bc::int2_;
+
     int data[] = { 1, 2,
                    3, 4,
                    5, 6,
                    7, 8 };
-    bc::vector<bc::int2_> vector(reinterpret_cast<bc::int2_ *>(data),
-                                 reinterpret_cast<bc::int2_ *>(data) + 4,
-                                 context);
-    BOOST_CHECK_EQUAL(vector[0], bc::int2_(1, 2));
-    BOOST_CHECK_EQUAL(vector[1], bc::int2_(3, 4));
-    BOOST_CHECK_EQUAL(vector[2], bc::int2_(5, 6));
-    BOOST_CHECK_EQUAL(vector[3], bc::int2_(7, 8));
+    bc::vector<int2_> vector(
+        reinterpret_cast<int2_ *>(data),
+        reinterpret_cast<int2_ *>(data) + 4,
+        context
+    );
+    CHECK_RANGE_EQUAL(
+        int2_, 4, vector,
+        (int2_(1, 2), int2_(3, 4), int2_(5, 6), int2_(7, 8))
+    );
 
     bc::vector<int> x_components(4, context);
     bc::transform(vector.begin(),
                   vector.end(),
                   x_components.begin(),
                   bc::get<0>());
-    BOOST_CHECK_EQUAL(x_components[0], 1);
-    BOOST_CHECK_EQUAL(x_components[1], 3);
-    BOOST_CHECK_EQUAL(x_components[2], 5);
-    BOOST_CHECK_EQUAL(x_components[3], 7);
+    CHECK_RANGE_EQUAL(int, 4, x_components, (1, 3, 5, 7));
 
     bc::vector<int> y_components(4, context);
     bc::transform(vector.begin(),
                   vector.end(),
                   y_components.begin(),
                   bc::get<1>());
-    BOOST_CHECK_EQUAL(y_components[0], 2);
-    BOOST_CHECK_EQUAL(y_components[1], 4);
-    BOOST_CHECK_EQUAL(y_components[2], 6);
-    BOOST_CHECK_EQUAL(y_components[3], 8);
+    CHECK_RANGE_EQUAL(int, 4, y_components, (2, 4, 6, 8));
 }
 
 BOOST_AUTO_TEST_CASE(transform_pinned_vector)
@@ -236,18 +206,7 @@ BOOST_AUTO_TEST_CASE(transform_popcount)
         bc::popcount<uint_>(),
         queue
     );
-    queue.finish();
-
-    BOOST_CHECK_EQUAL(uint_(output[0]), uint_(0));
-    BOOST_CHECK_EQUAL(uint_(output[1]), uint_(1));
-    BOOST_CHECK_EQUAL(uint_(output[2]), uint_(1));
-    BOOST_CHECK_EQUAL(uint_(output[3]), uint_(2));
-    BOOST_CHECK_EQUAL(uint_(output[4]), uint_(1));
-    BOOST_CHECK_EQUAL(uint_(output[5]), uint_(4));
-    BOOST_CHECK_EQUAL(uint_(output[6]), uint_(7));
-    BOOST_CHECK_EQUAL(uint_(output[7]), uint_(5));
-    BOOST_CHECK_EQUAL(uint_(output[8]), uint_(5));
-    BOOST_CHECK_EQUAL(uint_(output[9]), uint_(10));
+    CHECK_RANGE_EQUAL(uint_, 10, output, (0, 1, 1, 2, 1, 4, 7, 5, 5, 10));
 }
 
 // generates the first 25 fibonacci numbers in parallel using the
@@ -276,15 +235,11 @@ BOOST_AUTO_TEST_CASE(generate_fibonacci_sequence)
         nth_fibonacci,
         queue
     );
-    queue.finish();
-
-    BOOST_CHECK_EQUAL(uint_(sequence[0]), 0);
-    BOOST_CHECK_EQUAL(uint_(sequence[1]), 1);
-    BOOST_CHECK_EQUAL(uint_(sequence[2]), 1);
-    BOOST_CHECK_EQUAL(uint_(sequence[5]), 5);
-    BOOST_CHECK_EQUAL(uint_(sequence[9]), 34);
-    BOOST_CHECK_EQUAL(uint_(sequence[15]), 610);
-    BOOST_CHECK_EQUAL(uint_(sequence[24]), 46368);
+    CHECK_RANGE_EQUAL(
+        uint_, 25, sequence,
+        (0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610,
+         987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368)
+    );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

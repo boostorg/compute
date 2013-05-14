@@ -16,6 +16,7 @@
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 BOOST_AUTO_TEST_CASE(sort_int_vector)
@@ -27,16 +28,7 @@ BOOST_AUTO_TEST_CASE(sort_int_vector)
 
     boost::compute::stable_sort(vector.begin(), vector.end());
     BOOST_CHECK(boost::compute::is_sorted(vector.begin(), vector.end()) == true);
-
-    boost::compute::copy(vector.begin(), vector.end(), data);
-    BOOST_CHECK_EQUAL(data[0], -5000);
-    BOOST_CHECK_EQUAL(data[1], -456);
-    BOOST_CHECK_EQUAL(data[2], -4);
-    BOOST_CHECK_EQUAL(data[3], 0);
-    BOOST_CHECK_EQUAL(data[4], 152);
-    BOOST_CHECK_EQUAL(data[5], 963);
-    BOOST_CHECK_EQUAL(data[6], 1112);
-    BOOST_CHECK_EQUAL(data[7], 75321);
+    CHECK_RANGE_EQUAL(int, 8, vector, (-5000, -456, -4, 0, 152, 963, 1112, 75321));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
