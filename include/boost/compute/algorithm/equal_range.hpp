@@ -13,10 +13,10 @@
 
 #include <utility>
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/lower_bound.hpp>
 #include <boost/compute/algorithm/upper_bound.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -26,23 +26,12 @@ inline std::pair<InputIterator, InputIterator>
 equal_range(InputIterator first,
             InputIterator last,
             const T &value,
-            command_queue &queue)
+            command_queue &queue = system::default_queue())
 {
     return std::make_pair(
                ::boost::compute::lower_bound(first, last, value, queue),
                ::boost::compute::upper_bound(first, last, value, queue)
            );
-}
-
-template<class InputIterator, class T>
-inline std::pair<InputIterator, InputIterator>
-equal_range(InputIterator first,
-            InputIterator last,
-            const T &value)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::equal_range(first, last, value, queue);
 }
 
 } // end compute namespace

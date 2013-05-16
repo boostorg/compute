@@ -13,12 +13,12 @@
 
 #include <iterator>
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/detail/fixed_sort.hpp>
 #include <boost/compute/algorithm/detail/radix_sort.hpp>
 #include <boost/compute/algorithm/detail/insertion_sort.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -27,7 +27,7 @@ template<class Iterator, class Compare>
 inline void sort(Iterator first,
                  Iterator last,
                  Compare compare,
-                 command_queue &queue)
+                 command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<Iterator>::value_type T;
 
@@ -42,20 +42,10 @@ inline void sort(Iterator first,
                                                            queue);
 }
 
-template<class Iterator, class Compare>
-inline void sort(Iterator first,
-                 Iterator last,
-                 Compare compare)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    ::boost::compute::sort(first, last, compare, queue);
-}
-
 template<class Iterator>
 inline void sort(Iterator first,
                  Iterator last,
-                 command_queue &queue)
+                 command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<Iterator>::value_type T;
 
@@ -75,15 +65,6 @@ inline void sort(Iterator first,
     else {
         ::boost::compute::detail::radix_sort(first, last, queue);
     }
-}
-
-template<class Iterator>
-inline void sort(Iterator first,
-                 Iterator last)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    ::boost::compute::sort(first, last, queue);
 }
 
 } // end compute namespace

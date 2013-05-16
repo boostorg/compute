@@ -11,10 +11,10 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_IOTA_HPP
 #define BOOST_COMPUTE_ALGORITHM_IOTA_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/iterator/counting_iterator.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -23,7 +23,7 @@ template<class BufferIterator, class T>
 inline void iota(BufferIterator first,
                  BufferIterator last,
                  const T &value,
-                 command_queue &queue)
+                 command_queue &queue = system::default_queue())
 {
     T count = static_cast<T>(detail::iterator_range_size(first, last));
 
@@ -33,16 +33,6 @@ inline void iota(BufferIterator first,
         first,
         queue
     );
-}
-
-template<class BufferIterator, class T>
-inline void iota(BufferIterator first,
-                 BufferIterator last,
-                 const T &value)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    iota(first, last, value, queue);
 }
 
 } // end compute namespace

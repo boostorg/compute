@@ -15,6 +15,7 @@
 
 #include <boost/utility/result_of.hpp>
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/command_queue.hpp>
@@ -22,7 +23,6 @@
 #include <boost/compute/algorithm/detail/inplace_reduce.hpp>
 #include <boost/compute/algorithm/detail/serial_reduce.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -156,7 +156,7 @@ inline T reduce(InputIterator first,
                 InputIterator last,
                 T init,
                 BinaryFunction function,
-                command_queue &queue)
+                command_queue &queue = system::default_queue())
 {
     typedef typename
         std::iterator_traits<InputIterator>::value_type
@@ -197,17 +197,6 @@ inline T reduce(InputIterator first,
                                      function,
                                      queue);
     }
-}
-
-template<class InputIterator, class T, class BinaryFunction>
-inline T reduce(InputIterator first,
-                InputIterator last,
-                T init,
-                BinaryFunction function)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::reduce(first, last, init, function, queue);
 }
 
 } // end compute namespace

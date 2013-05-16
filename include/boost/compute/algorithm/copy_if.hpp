@@ -12,13 +12,13 @@
 #define BOOST_COMPUTE_ALGORITHM_COPY_IF_HPP
 
 #include <boost/compute/cl.hpp>
-#include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/count.hpp>
 #include <boost/compute/algorithm/exclusive_scan.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -28,7 +28,7 @@ inline OutputIterator copy_if(InputIterator first,
                               InputIterator last,
                               OutputIterator result,
                               Predicate predicate,
-                              command_queue &queue)
+                              command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<OutputIterator>::difference_type difference_type;
 
@@ -66,17 +66,6 @@ inline OutputIterator copy_if(InputIterator first,
     k2.exec_1d(queue, 0, count);
 
     return result + static_cast<difference_type>(copied_element_count);
-}
-
-template<class InputIterator, class OutputIterator, class Predicate>
-inline OutputIterator copy_if(InputIterator first,
-                              InputIterator last,
-                              OutputIterator result,
-                              Predicate predicate)
-{
-    command_queue queue = detail::default_queue_for_iterator(result);
-
-    return ::boost::compute::copy_if(first, last, result, predicate, queue);
 }
 
 } // end compute namespace

@@ -35,6 +35,7 @@ BOOST_AUTO_TEST_CASE(copy_complex_vector)
         host_vector.end(),
         device_vector.begin()
     );
+    boost::compute::system::finish();
     BOOST_CHECK_EQUAL(std::complex<float>(device_vector[0]), std::complex<float>(1.0f, 2.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(device_vector[1]), std::complex<float>(-2.0f, 1.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(device_vector[2]), std::complex<float>(1.0f, -2.0f));
@@ -50,6 +51,7 @@ BOOST_AUTO_TEST_CASE(fill_complex_vector)
         vector.end(),
         std::complex<float>(2.0f, 5.0f)
     );
+    boost::compute::system::finish();
     BOOST_CHECK_EQUAL(std::complex<float>(vector[0]), std::complex<float>(2.0f, 5.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(vector[1]), std::complex<float>(2.0f, 5.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(vector[2]), std::complex<float>(2.0f, 5.0f));
@@ -77,6 +79,7 @@ BOOST_AUTO_TEST_CASE(extract_real_and_imag)
         reals.begin(),
         boost::compute::real<float>()
     );
+    boost::compute::system::finish();
     BOOST_CHECK_EQUAL(float(reals[0]), float(1.0f));
     BOOST_CHECK_EQUAL(float(reals[1]), float(3.0f));
     BOOST_CHECK_EQUAL(float(reals[2]), float(5.0f));
@@ -90,6 +93,7 @@ BOOST_AUTO_TEST_CASE(extract_real_and_imag)
         imags.begin(),
         boost::compute::imag<float>()
     );
+    boost::compute::system::finish();
     BOOST_CHECK_EQUAL(float(imags[0]), float(3.0f));
     BOOST_CHECK_EQUAL(float(imags[1]), float(1.0f));
     BOOST_CHECK_EQUAL(float(imags[2]), float(-1.0f));
@@ -115,6 +119,7 @@ BOOST_AUTO_TEST_CASE(complex_conj)
         output.begin(),
         boost::compute::conj<float>()
     );
+    boost::compute::system::finish();
     BOOST_CHECK_EQUAL(std::complex<float>(output[0]), std::complex<float>(1.0f, -3.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(output[1]), std::complex<float>(3.0f, -1.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(output[2]), std::complex<float>(5.0f, 1.0f));

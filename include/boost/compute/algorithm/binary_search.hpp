@@ -11,9 +11,9 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_BINARY_SEARCH_HPP
 #define BOOST_COMPUTE_ALGORITHM_BINARY_SEARCH_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/find.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -22,19 +22,9 @@ template<class InputIterator, class T>
 inline bool binary_search(InputIterator first,
                           InputIterator last,
                           const T &value,
-                          command_queue &queue)
+                          command_queue &queue = system::default_queue())
 {
     return ::boost::compute::find(first, last, value, queue) != last;
-}
-
-template<class InputIterator, class T>
-inline bool binary_search(InputIterator first,
-                          InputIterator last,
-                          const T &value)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::binary_search(first, last, value, queue);
 }
 
 } // end compute namespace

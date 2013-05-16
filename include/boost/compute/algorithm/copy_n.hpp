@@ -11,9 +11,9 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_COPY_N_HPP
 #define BOOST_COMPUTE_ALGORITHM_COPY_N_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -22,7 +22,7 @@ template<class InputIterator, class Size, class OutputIterator>
 inline OutputIterator copy_n(InputIterator first,
                              Size count,
                              OutputIterator result,
-                             command_queue &queue)
+                             command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<InputIterator>::difference_type difference_type;
 
@@ -30,18 +30,6 @@ inline OutputIterator copy_n(InputIterator first,
                                   first + static_cast<difference_type>(count),
                                   result,
                                   queue);
-}
-
-template<class InputIterator, class Size, class OutputIterator>
-inline OutputIterator copy_n(InputIterator first,
-                             Size count,
-                             OutputIterator result)
-{
-    typedef typename std::iterator_traits<InputIterator>::difference_type difference_type;
-
-    return ::boost::compute::copy(first,
-                                  first + static_cast<difference_type>(count),
-                                  result);
 }
 
 } // end compute namespace

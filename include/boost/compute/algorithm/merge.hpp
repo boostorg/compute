@@ -11,10 +11,10 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_MERGE_HPP
 #define BOOST_COMPUTE_ALGORITHM_MERGE_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/detail/serial_merge.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -25,7 +25,7 @@ inline OutputIterator merge(InputIterator1 first1,
                             InputIterator2 first2,
                             InputIterator2 last2,
                             OutputIterator result,
-                            command_queue &queue)
+                            command_queue &queue = system::default_queue())
 {
     size_t size1 = detail::iterator_range_size(first1, last1);
     size_t size2 = detail::iterator_range_size(first2, last2);
@@ -42,18 +42,6 @@ inline OutputIterator merge(InputIterator1 first1,
     }
 
     return detail::serial_merge(first1, last1, first2, last2, result, queue);
-}
-
-template<class InputIterator1, class InputIterator2, class OutputIterator>
-inline OutputIterator merge(InputIterator1 first1,
-                            InputIterator1 last1,
-                            InputIterator2 first2,
-                            InputIterator2 last2,
-                            OutputIterator result)
-{
-    command_queue queue = detail::default_queue_for_iterator(result);
-
-    return merge(first1, last1, first2, last2, result, queue);
 }
 
 } // end compute namespace

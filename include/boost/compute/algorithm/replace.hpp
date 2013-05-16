@@ -11,10 +11,10 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_REPLACE_HPP
 #define BOOST_COMPUTE_ALGORITHM_REPLACE_HPP
 
-#include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -71,7 +71,7 @@ inline void replace(Iterator first,
                     Iterator last,
                     const T &old_value,
                     const T &new_value,
-                    command_queue &queue)
+                    command_queue &queue = system::default_queue())
 {
     detail::replace_kernel<Iterator, T> kernel;
 
@@ -80,17 +80,6 @@ inline void replace(Iterator first,
     kernel.set_new_value(new_value);
 
     kernel.exec(queue);
-}
-
-template<class Iterator, class T>
-inline void replace(Iterator first,
-                    Iterator last,
-                    const T &old_value,
-                    const T &new_value)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    ::boost::compute::replace(first, last, old_value, new_value, queue);
 }
 
 } // end compute namespace

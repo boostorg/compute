@@ -11,11 +11,11 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_GENERATE_HPP
 #define BOOST_COMPUTE_ALGORITHM_GENERATE_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/iterator/function_input_iterator.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -24,7 +24,7 @@ template<class OutputIterator, class Generator>
 inline void generate(OutputIterator first,
                      OutputIterator last,
                      Generator generator,
-                     command_queue &queue)
+                     command_queue &queue = system::default_queue())
 {
     size_t count = detail::iterator_range_size(first, last);
     if(count == 0){
@@ -39,16 +39,6 @@ inline void generate(OutputIterator first,
         first,
         queue
     );
-}
-
-template<class OutputIterator, class Generator>
-inline void generate(OutputIterator first,
-                     OutputIterator last,
-                     Generator generator)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    ::boost::compute::generate(first, last, generator, queue);
 }
 
 } // end compute namespace

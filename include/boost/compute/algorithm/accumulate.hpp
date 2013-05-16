@@ -11,10 +11,10 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_ACCUMULATE_HPP
 #define BOOST_COMPUTE_ALGORITHM_ACCUMULATE_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/reduce.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 #include <boost/compute/algorithm/detail/serial_reduce.hpp>
 
 namespace boost {
@@ -24,19 +24,9 @@ template<class InputIterator, class T>
 inline T accumulate(InputIterator first,
                     InputIterator last,
                     T init,
-                    command_queue &queue)
+                    command_queue &queue = system::default_queue())
 {
     return ::boost::compute::reduce(first, last, init, plus<T>(), queue);
-}
-
-template<class InputIterator, class T>
-inline T accumulate(InputIterator first,
-                    InputIterator last,
-                    T init)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::accumulate(first, last, init, queue);
 }
 
 template<class InputIterator, class T, class BinaryFunction>
@@ -44,20 +34,9 @@ inline T accumulate(InputIterator first,
                     InputIterator last,
                     T init,
                     BinaryFunction function,
-                    command_queue &queue)
+                    command_queue &queue = system::default_queue())
 {
     return detail::serial_reduce(first, last, init, function, queue);
-}
-
-template<class InputIterator, class T, class BinaryFunction>
-inline T accumulate(InputIterator first,
-                    InputIterator last,
-                    T init,
-                    BinaryFunction function)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::accumulate(first, last, init, function, queue);
 }
 
 } // end compute namespace

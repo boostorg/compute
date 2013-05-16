@@ -13,19 +13,20 @@
 
 #include <iterator>
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/iterator/detail/adjacent_transform_iterator.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
 
 template<class InputIterator, class OutputIterator>
-inline OutputIterator adjacent_difference(InputIterator first,
-                                          InputIterator last,
-                                          OutputIterator result,
-                                          command_queue &queue)
+inline OutputIterator
+adjacent_difference(InputIterator first,
+                    InputIterator last,
+                    OutputIterator result,
+                    command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
@@ -37,16 +38,6 @@ inline OutputIterator adjacent_difference(InputIterator first,
                result,
                queue
            );
-}
-
-template<class InputIterator, class OutputIterator>
-inline OutputIterator adjacent_difference(InputIterator first,
-                                          InputIterator last,
-                                          OutputIterator result)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::adjacent_difference(first, last, result, queue);
 }
 
 } // end compute namespace

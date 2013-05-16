@@ -11,7 +11,7 @@ struct Context {
     Context() :
         device ( boost::compute::system::default_device() ),
         context( boost::compute::system::default_context() ),
-        queue  ( context, device )
+        queue  ( boost::compute::system::default_queue() )
     {}
 };
 

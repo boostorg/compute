@@ -11,10 +11,10 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_PARTITION_COPY_HPP
 #define BOOST_COMPUTE_ALGORITHM_PARTITION_COPY_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy_if.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -29,7 +29,7 @@ partition_copy(InputIterator first,
                OutputIterator1 first_true,
                OutputIterator2 first_false,
                UnaryPredicate predicate,
-               command_queue &queue)
+               command_queue &queue = system::default_queue())
 {
     // copy true values
     OutputIterator1 last_true =
@@ -49,27 +49,6 @@ partition_copy(InputIterator first,
 
     // return iterators to the end of the true and the false ranges
     return std::make_pair(last_true, last_false);
-}
-
-template<class InputIterator,
-         class OutputIterator1,
-         class OutputIterator2,
-         class UnaryPredicate>
-inline std::pair<OutputIterator1, OutputIterator2>
-partition_copy(InputIterator first,
-               InputIterator last,
-               OutputIterator1 first_true,
-               OutputIterator2 first_false,
-               UnaryPredicate predicate)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::partition_copy(first,
-                                            last,
-                                            first_true,
-                                            first_false,
-                                            predicate,
-                                            queue);
 }
 
 } // end compute namespace

@@ -23,7 +23,6 @@
 #include <boost/compute/detail/is_buffer_iterator.hpp>
 #include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 #include <boost/compute/iterator/detail/get_base_iterator_buffer.hpp>
 
 namespace boost {
@@ -165,6 +164,7 @@ private:
     reference dereference() const
     {
         const context &context = super_type::base().get_buffer().get_context();
+        command_queue queue(context, context.get_device());
 
         detail::meta_kernel k("read");
         size_t output_arg = k.add_arg<value_type *>("__global", "output");
@@ -176,8 +176,6 @@ private:
         buffer output_buffer(context, sizeof(value_type));
 
         kernel.set_arg(output_arg, output_buffer);
-
-        command_queue queue = detail::default_queue_for_iterator(super_type::base());
 
         queue.enqueue_task(kernel);
 

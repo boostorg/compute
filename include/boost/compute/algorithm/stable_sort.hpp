@@ -13,9 +13,9 @@
 
 #include <iterator>
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/detail/insertion_sort.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -24,7 +24,7 @@ template<class Iterator, class Compare>
 inline void stable_sort(Iterator first,
                         Iterator last,
                         Compare compare,
-                        command_queue &queue)
+                        command_queue &queue = system::default_queue())
 {
     return ::boost::compute::detail::serial_insertion_sort(first,
                                                            last,
@@ -32,35 +32,16 @@ inline void stable_sort(Iterator first,
                                                            queue);
 }
 
-template<class Iterator, class Compare>
-inline void stable_sort(Iterator first,
-                        Iterator last,
-                        Compare compare)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    ::boost::compute::stable_sort(first, last, compare, queue);
-}
-
 template<class Iterator>
 inline void stable_sort(Iterator first,
                         Iterator last,
-                        command_queue &queue)
+                        command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<Iterator>::value_type value_type;
 
     ::boost::compute::less<value_type> less;
 
     return ::boost::compute::stable_sort(first, last, less, queue);
-}
-
-template<class Iterator>
-inline void stable_sort(Iterator first,
-                        Iterator last)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    ::boost::compute::stable_sort(first, last, queue);
 }
 
 } // end compute namespace

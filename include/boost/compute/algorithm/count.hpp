@@ -13,10 +13,10 @@
 
 #include <boost/compute/types.hpp>
 #include <boost/compute/lambda.hpp>
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/count_if.hpp>
 #include <boost/compute/type_traits/vector_size.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -25,7 +25,7 @@ template<class InputIterator, class T>
 inline size_t count(InputIterator first,
                     InputIterator last,
                     const T &value,
-                    command_queue &queue)
+                    command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
@@ -44,16 +44,6 @@ inline size_t count(InputIterator first,
                                           all(_1 == value),
                                           queue);
     }
-}
-
-template<class InputIterator, class T>
-inline size_t count(InputIterator first,
-                    InputIterator last,
-                    const T &value)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::count(first, last, value, queue);
 }
 
 } // end compute namespace

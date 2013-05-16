@@ -12,18 +12,19 @@
 #define BOOST_COMPUTE_ALGORITHM_LOWER_BOUND_HPP
 
 #include <boost/compute/lambda.hpp>
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/find_if.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
 
 template<class InputIterator, class T>
-inline InputIterator lower_bound(InputIterator first,
-                                 InputIterator last,
-                                 const T &value,
-                                 command_queue &queue)
+inline InputIterator
+lower_bound(InputIterator first,
+            InputIterator last,
+            const T &value,
+            command_queue &queue = system::default_queue())
 {
     using ::boost::compute::_1;
 
@@ -31,16 +32,6 @@ inline InputIterator lower_bound(InputIterator first,
         ::boost::compute::find_if(first, last, _1 >= value, queue);
 
     return position;
-}
-
-template<class InputIterator, class T>
-inline InputIterator lower_bound(InputIterator first,
-                                 InputIterator last,
-                                 const T &value)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::lower_bound(first, last, value, queue);
 }
 
 } // end compute namespace

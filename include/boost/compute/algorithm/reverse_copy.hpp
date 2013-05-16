@@ -13,19 +13,20 @@
 
 #include <iterator>
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/reverse.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
 
 template<class InputIterator, class OutputIterator>
-inline OutputIterator reverse_copy(InputIterator first,
-                                   InputIterator last,
-                                   OutputIterator result,
-                                   command_queue &queue)
+inline OutputIterator
+reverse_copy(InputIterator first,
+             InputIterator last,
+             OutputIterator result,
+             command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<OutputIterator>::difference_type difference_type;
 
@@ -39,16 +40,6 @@ inline OutputIterator reverse_copy(InputIterator first,
 
     // return iterator to the end of result
     return result + count;
-}
-
-template<class InputIterator, class OutputIterator>
-inline OutputIterator reverse_copy(InputIterator first,
-                                   InputIterator last,
-                                   OutputIterator result)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::reverse_copy(first, last, result, queue);
 }
 
 } // end compute namespace

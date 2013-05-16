@@ -13,21 +13,22 @@
 
 #include <iterator>
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/replace.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
 
 template<class InputIterator, class OutputIterator, class T>
-inline OutputIterator replace_copy(InputIterator first,
-                                   InputIterator last,
-                                   OutputIterator result,
-                                   const T &old_value,
-                                   const T &new_value,
-                                   command_queue &queue)
+inline OutputIterator
+replace_copy(InputIterator first,
+             InputIterator last,
+             OutputIterator result,
+             const T &old_value,
+             const T &new_value,
+             command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<OutputIterator>::difference_type difference_type;
 
@@ -48,23 +49,6 @@ inline OutputIterator replace_copy(InputIterator first,
 
     // return iterator to the end of result
     return result + count;
-}
-
-template<class InputIterator, class OutputIterator, class T>
-inline OutputIterator replace_copy(InputIterator first,
-                                   InputIterator last,
-                                   OutputIterator result,
-                                   const T &old_value,
-                                   const T &new_value)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::replace_copy(first,
-                                          last,
-                                          result,
-                                          old_value,
-                                          new_value,
-                                          queue);
 }
 
 } // end compute namespace

@@ -76,16 +76,19 @@ BOOST_AUTO_TEST_CASE(front_and_back)
     int int_data[] = { 1, 2, 3, 4, 5 };
     bc::vector<int> int_vector(5);
     bc::copy(int_data, int_data + 5, int_vector.begin());
+    bc::system::finish();
     BOOST_CHECK_EQUAL(int_vector.front(), 1);
     BOOST_CHECK_EQUAL(int_vector.back(), 5);
 
     bc::fill(int_vector.begin(), int_vector.end(), 10);
+    bc::system::finish();
     BOOST_CHECK_EQUAL(int_vector.front(), 10);
     BOOST_CHECK_EQUAL(int_vector.back(), 10);
 
     float float_data[] = { 1.1f, 2.2f, 3.3f, 4.4f, 5.5f };
     bc::vector<float> float_vector(5);
     bc::copy(float_data, float_data + 5, float_vector.begin());
+    bc::system::finish();
     BOOST_CHECK_EQUAL(float_vector.front(), 1.1f);
     BOOST_CHECK_EQUAL(float_vector.back(), 5.5f);
 }

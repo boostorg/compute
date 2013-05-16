@@ -23,7 +23,6 @@
 #include <boost/compute/detail/is_buffer_iterator.hpp>
 #include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 #include <boost/compute/iterator/detail/get_base_iterator_buffer.hpp>
 
 namespace boost {

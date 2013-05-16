@@ -18,6 +18,7 @@
 
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/future.hpp>
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/detail/is_device_iterator.hpp>
@@ -26,7 +27,6 @@
 #include <boost/compute/algorithm/detail/copy_to_host.hpp>
 #include <boost/compute/algorithm/detail/copy_on_device.hpp>
 #include <boost/compute/algorithm/detail/copy_to_device.hpp>
-#include <boost/compute/algorithm/detail/default_queue_for_copy.hpp>
 
 namespace boost {
 namespace compute {
@@ -195,26 +195,17 @@ template<class InputIterator, class OutputIterator>
 inline OutputIterator copy(InputIterator first,
                            InputIterator last,
                            OutputIterator result,
-                           command_queue &queue)
+                           command_queue &queue = system::default_queue())
 {
     return detail::dispatch_copy(first, last, result, queue);
 }
 
 template<class InputIterator, class OutputIterator>
-inline OutputIterator copy(InputIterator first,
-                           InputIterator last,
-                           OutputIterator result)
-{
-    command_queue queue = detail::default_queue_for_copy(first, result);
-
-    return copy(first, last, result, queue);
-}
-
-template<class InputIterator, class OutputIterator>
-inline future<OutputIterator> copy_async(InputIterator first,
-                                         InputIterator last,
-                                         OutputIterator result,
-                                         command_queue &queue)
+inline future<OutputIterator>
+copy_async(InputIterator first,
+           InputIterator last,
+           OutputIterator result,
+           command_queue &queue = system::default_queue())
 {
     return detail::dispatch_copy_async(first, last, result, queue);
 }

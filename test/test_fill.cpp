@@ -24,14 +24,17 @@ BOOST_AUTO_TEST_CASE(fill_int)
 {
     bc::vector<int> vector(1000);
     bc::fill(vector.begin(), vector.end(), 0);
+    bc::system::finish();
     BOOST_CHECK_EQUAL(vector.front(), 0);
     BOOST_CHECK_EQUAL(vector.back(), 0);
 
     bc::fill(vector.begin(), vector.end(), 100);
+    bc::system::finish();
     BOOST_CHECK_EQUAL(vector.front(), 100);
     BOOST_CHECK_EQUAL(vector.back(), 100);
 
     bc::fill(vector.begin() + 500, vector.end(), 42);
+    bc::system::finish();
     BOOST_CHECK_EQUAL(vector.front(), 100);
     BOOST_CHECK_EQUAL(vector[499], 100);
     BOOST_CHECK_EQUAL(vector[500], 42);

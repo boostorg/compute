@@ -23,6 +23,9 @@
         </parameter>
         <parameter name="queue">
           <paramtype>command_queue &amp;</paramtype>
+          <default>
+            <methodname>system::default_queue()</methodname>
+          </default>
         </parameter>
 
         <returns>
@@ -91,6 +94,9 @@ std::vector&lt;int&gt; host_vector = ...
         </parameter>
         <parameter name="queue">
           <paramtype>command_queue &amp;</paramtype>
+          <default>
+            <methodname>system::default_queue()</methodname>
+          </default>
         </parameter>
 
         <returns>

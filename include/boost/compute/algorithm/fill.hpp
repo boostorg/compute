@@ -16,12 +16,12 @@
 #include <boost/utility/enable_if.hpp>
 
 #include <boost/compute/cl.hpp>
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/iterator/constant_iterator.hpp>
 #include <boost/compute/detail/is_buffer_iterator.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -89,21 +89,11 @@ template<class BufferIterator, class T>
 inline void fill(BufferIterator first,
                  BufferIterator last,
                  const T &value,
-                 command_queue &queue)
+                 command_queue &queue = system::default_queue())
 {
     size_t count = detail::iterator_range_size(first, last);
 
     detail::dispatch_fill(first, count, value, queue);
-}
-
-template<class BufferIterator, class T>
-inline void fill(BufferIterator first,
-                 BufferIterator last,
-                 const T &value)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    fill(first, last, value, queue);
 }
 
 } // end compute namespace

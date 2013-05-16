@@ -13,10 +13,10 @@
 
 #include <utility>
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/max_element.hpp>
 #include <boost/compute/algorithm/min_element.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -25,7 +25,7 @@ template<class InputIterator>
 inline std::pair<InputIterator, InputIterator>
 minmax_element(InputIterator first,
                InputIterator last,
-               command_queue &queue)
+               command_queue &queue = system::default_queue())
 {
     if(first == last){
         // empty range
@@ -34,16 +34,6 @@ minmax_element(InputIterator first,
 
     return std::make_pair(min_element(first, last, queue),
                           max_element(first, last, queue));
-}
-
-template<class InputIterator>
-inline std::pair<InputIterator, InputIterator>
-minmax_element(InputIterator first,
-               InputIterator last)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::minmax_element(first, last, queue);
 }
 
 } // end compute namespace

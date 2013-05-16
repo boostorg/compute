@@ -32,6 +32,7 @@ BOOST_AUTO_TEST_CASE(at)
     boost::compute::valarray<int> array(data, 5);
     BOOST_CHECK_EQUAL(array.size(), size_t(5));
 
+    boost::compute::system::finish();
     BOOST_CHECK_EQUAL(int(array[0]), int(1));
     BOOST_CHECK_EQUAL(int(array[1]), int(2));
     BOOST_CHECK_EQUAL(int(array[2]), int(3));

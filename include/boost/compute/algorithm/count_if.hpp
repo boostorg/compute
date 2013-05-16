@@ -12,6 +12,7 @@
 #define BOOST_COMPUTE_ALGORITHM_COUNT_IF_HPP
 
 #include <boost/compute/device.hpp>
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/detail/count_if_with_atomics.hpp>
 #include <boost/compute/algorithm/detail/count_if_with_ballot.hpp>
@@ -19,7 +20,6 @@
 #include <boost/compute/algorithm/detail/count_if_with_threads.hpp>
 #include <boost/compute/algorithm/detail/serial_count_if.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -28,7 +28,7 @@ template<class InputIterator, class Predicate>
 inline size_t count_if(InputIterator first,
                        InputIterator last,
                        Predicate predicate,
-                       command_queue &queue)
+                       command_queue &queue = system::default_queue())
 {
     const device &device = queue.get_device();
 
@@ -53,16 +53,6 @@ inline size_t count_if(InputIterator first,
             return detail::count_if_with_atomics(first, last, predicate, queue);
         }
     }
-}
-
-template<class InputIterator, class Predicate>
-inline size_t count_if(InputIterator first,
-                       InputIterator last,
-                       Predicate predicate)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::count_if(first, last, predicate, queue);
 }
 
 } // end compute namespace

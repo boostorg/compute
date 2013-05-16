@@ -11,11 +11,11 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_IS_SORTED_HPP
 #define BOOST_COMPUTE_ALGORITHM_IS_SORTED_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/iterator/detail/binary_transform_iterator.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -23,7 +23,7 @@ namespace compute {
 template<class InputIterator>
 inline bool is_sorted(InputIterator first,
                       InputIterator last,
-                      command_queue &queue)
+                      command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
@@ -41,15 +41,6 @@ inline bool is_sorted(InputIterator first,
                false,
                queue
            ).base() == last - 1;
-}
-
-template<class InputIterator>
-inline bool is_sorted(InputIterator first,
-                      InputIterator last)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::is_sorted(first, last, queue);
 }
 
 } // end compute namespace

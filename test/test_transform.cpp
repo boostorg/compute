@@ -47,6 +47,7 @@ BOOST_AUTO_TEST_CASE(transform_float_sqrt)
                   vector.end(),
                   vector.begin(),
                   bc::sqrt<float>());
+    bc::system::finish();
     BOOST_CHECK_CLOSE(float(vector[0]), 1.0f, 1e-4);
     BOOST_CHECK_CLOSE(float(vector[1]), 2.0f, 1e-4);
     BOOST_CHECK_CLOSE(float(vector[2]), 3.0f, 1e-4);
@@ -101,6 +102,7 @@ BOOST_AUTO_TEST_CASE(transform_pow4)
                   vector.end(),
                   result.begin(),
                   pown(bc::_1, 4));
+    bc::system::finish();
     BOOST_CHECK_CLOSE(float(result[0]), 1.0f, 1e-4);
     BOOST_CHECK_CLOSE(float(result[1]), 16.0f, 1e-4);
     BOOST_CHECK_CLOSE(float(result[2]), 81.0f, 1e-4);
@@ -122,6 +124,7 @@ BOOST_AUTO_TEST_CASE(transform_custom_function)
                   vector.end(),
                   result.begin(),
                   pow3add4);
+    bc::system::finish();
     BOOST_CHECK_CLOSE(float(result[0]), 733.0f, 1e-4);
     BOOST_CHECK_CLOSE(float(result[1]), 347.0f, 1e-4);
     BOOST_CHECK_CLOSE(float(result[2]), 129.0f, 1e-4);

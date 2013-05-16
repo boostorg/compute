@@ -13,12 +13,12 @@
 
 #include <boost/algorithm/string/replace.hpp>
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -55,7 +55,7 @@ inline void scatter(InputIterator first,
                     InputIterator last,
                     MapIterator map,
                     OutputIterator result,
-                    command_queue &queue)
+                    command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<InputIterator>::value_type input_value_type;
     typedef typename std::iterator_traits<MapIterator>::value_type map_value_type;
@@ -81,17 +81,6 @@ inline void scatter(InputIterator first,
     kernel.set_arg(4, static_cast<cl_uint>(result.get_index()));
 
     queue.enqueue_1d_range_kernel(kernel, 0, count);
-}
-
-template<class InputIterator, class MapIterator, class OutputIterator>
-inline void scatter(InputIterator first,
-                    InputIterator last,
-                    MapIterator map,
-                    OutputIterator result)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    ::boost::compute::scatter(first, last, map, result, queue);
 }
 
 } // end compute namespace

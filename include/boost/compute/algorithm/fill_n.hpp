@@ -11,9 +11,9 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_FILL_N_HPP
 #define BOOST_COMPUTE_ALGORITHM_FILL_N_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/fill.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -22,19 +22,9 @@ template<class BufferIterator, class Size, class T>
 inline void fill_n(BufferIterator first,
                    Size count,
                    const T &value,
-                   command_queue &queue)
+                   command_queue &queue = system::default_queue())
 {
     ::boost::compute::fill(first, first + count, value, queue);
-}
-
-template<class BufferIterator, class Size, class T>
-inline void fill_n(BufferIterator first,
-                   Size count,
-                   const T &value)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    ::boost::compute::fill_n(first, count, value, queue);
 }
 
 } // end compute namespace

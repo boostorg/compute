@@ -21,6 +21,7 @@
 #include <boost/compute/device.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/platform.hpp>
+#include <boost/compute/command_queue.hpp>
 
 namespace boost {
 namespace compute {
@@ -75,6 +76,18 @@ public:
         static context default_context(default_device());
 
         return default_context;
+    }
+
+    static command_queue& default_queue()
+    {
+        static command_queue queue(default_context(), default_device());
+
+        return queue;
+    }
+
+    static void finish()
+    {
+        default_queue().finish();
     }
 
     static std::vector<platform> platforms()

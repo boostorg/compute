@@ -11,6 +11,7 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_TRANSFORM_HPP
 #define BOOST_COMPUTE_ALGORITHM_TRANSFORM_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
@@ -24,7 +25,7 @@ inline OutputIterator transform(InputIterator first,
                                 InputIterator last,
                                 OutputIterator result,
                                 UnaryOperator op,
-                                command_queue &queue)
+                                command_queue &queue = system::default_queue())
 {
     return copy(
                ::boost::compute::make_transform_iterator(first, op),
@@ -32,17 +33,6 @@ inline OutputIterator transform(InputIterator first,
                result,
                queue
            );
-}
-
-template<class InputIterator, class OutputIterator, class UnaryOperator>
-inline OutputIterator transform(InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                UnaryOperator op)
-{
-    command_queue queue = detail::default_queue_for_iterator(result);
-
-    return ::boost::compute::transform(first, last, result, op, queue);
 }
 
 template<class InputIterator1,
@@ -54,7 +44,7 @@ inline OutputIterator transform(InputIterator1 first1,
                                 InputIterator2 first2,
                                 OutputIterator result,
                                 BinaryOperator op,
-                                command_queue &queue)
+                                command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<InputIterator1>::difference_type difference_type;
 
@@ -66,21 +56,6 @@ inline OutputIterator transform(InputIterator1 first1,
                result,
                queue
            );
-}
-
-template<class InputIterator1,
-         class InputIterator2,
-         class OutputIterator,
-         class BinaryOperator>
-inline OutputIterator transform(InputIterator1 first1,
-                                InputIterator1 last1,
-                                InputIterator2 first2,
-                                OutputIterator result,
-                                BinaryOperator op)
-{
-    command_queue queue = detail::default_queue_for_iterator(result);
-
-    return ::boost::compute::transform(first1, last1, first2, result, op, queue);
 }
 
 } // end compute namespace

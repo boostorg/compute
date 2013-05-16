@@ -45,6 +45,7 @@ BOOST_AUTO_TEST_CASE(copy_pair_vector)
 
     boost::compute::vector<std::pair<int, float> > output(4);
     boost::compute::copy(input.begin(), input.end(), output.begin());
+    boost::compute::system::finish();
     BOOST_CHECK(output[0] == std::make_pair(1, 2.0f));
     BOOST_CHECK(output[1] == std::make_pair(3, 4.0f));
     BOOST_CHECK(output[2] == std::make_pair(5, 6.0f));
@@ -55,6 +56,7 @@ BOOST_AUTO_TEST_CASE(fill_pair_vector)
 {
     boost::compute::vector<std::pair<int, float> > vector(5);
     boost::compute::fill(vector.begin(), vector.end(), std::make_pair(4, 2.0f));
+    boost::compute::system::finish();
     BOOST_CHECK(vector[0] == std::make_pair(4, 2.0f));
     BOOST_CHECK(vector[1] == std::make_pair(4, 2.0f));
     BOOST_CHECK(vector[2] == std::make_pair(4, 2.0f));

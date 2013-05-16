@@ -41,6 +41,19 @@
             </description>
           </method>
 
+          <!-- system::default_queue() -->
+          <method name="default_queue" specifiers="static">
+            <type><classname>command_queue</classname>&amp;</type>
+
+            <description>
+              <para>
+                Returns the default command queue for the system. The default
+                command queue is created for the default compute device in the
+                default context.
+              </para>
+            </description>
+          </method>
+
           <!-- system::platforms() -->
           <method name="platforms" specifiers="static">
             <type>std::vector&lt;<classname>platform</classname>&gt;</type>

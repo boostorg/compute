@@ -16,12 +16,12 @@
 
 #include <boost/range/algorithm_ext/iota.hpp>
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/algorithm/scatter.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -29,7 +29,7 @@ namespace compute {
 template<class Iterator>
 inline void random_shuffle(Iterator first,
                            Iterator last,
-                           command_queue &queue)
+                           command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<Iterator>::value_type value_type;
 
@@ -64,15 +64,6 @@ inline void random_shuffle(Iterator first,
                               indices.begin(),
                               first,
                               queue);
-}
-
-template<class Iterator>
-inline void random_shuffle(Iterator first,
-                           Iterator last)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    ::boost::compute::random_shuffle(first, last, queue);
 }
 
 } // end compute namespace

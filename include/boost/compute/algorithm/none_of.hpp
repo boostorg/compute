@@ -11,8 +11,8 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_NONE_OF_HPP
 #define BOOST_COMPUTE_ALGORITHM_NONE_OF_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/find_if.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -21,19 +21,9 @@ template<class InputIterator, class UnaryPredicate>
 inline bool none_of(InputIterator first,
                     InputIterator last,
                     UnaryPredicate predicate,
-                    command_queue &queue)
+                    command_queue &queue = system::default_queue())
 {
     return ::boost::compute::find_if(first, last, predicate, queue) == last;
-}
-
-template<class InputIterator, class UnaryPredicate>
-inline bool none_of(InputIterator first,
-                    InputIterator last,
-                    UnaryPredicate predicate)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::none_of(first, last, predicate, queue);
 }
 
 } // end compute namespace

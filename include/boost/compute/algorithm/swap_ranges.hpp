@@ -11,10 +11,10 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_SWAP_RANGES_HPP
 #define BOOST_COMPUTE_ALGORITHM_SWAP_RANGES_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -23,7 +23,7 @@ template<class Iterator1, class Iterator2>
 inline Iterator2 swap_ranges(Iterator1 first1,
                              Iterator1 last1,
                              Iterator2 first2,
-                             command_queue &queue)
+                             command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<Iterator1>::value_type value_type;
     typedef typename std::iterator_traits<Iterator1>::difference_type difference_type;
@@ -38,16 +38,6 @@ inline Iterator2 swap_ranges(Iterator1 first1,
     ::boost::compute::copy(tmp.begin(), tmp.end(), first2, queue);
 
     return last2;
-}
-
-template<class Iterator1, class Iterator2>
-inline Iterator2 swap_ranges(Iterator1 first1,
-                             Iterator1 last1,
-                             Iterator2 first2)
-{
-    command_queue queue = detail::default_queue_for_iterator(first1);
-
-    return ::boost::compute::swap_ranges(first1, last1, first2, queue);
 }
 
 } // end compute namespace

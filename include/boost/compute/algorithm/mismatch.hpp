@@ -14,11 +14,11 @@
 #include <iterator>
 #include <utility>
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/iterator/detail/binary_transform_iterator.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -28,7 +28,7 @@ inline std::pair<InputIterator1, InputIterator2>
 mismatch(InputIterator1 first1,
          InputIterator1 last1,
          InputIterator2 first2,
-         command_queue &queue)
+         command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<InputIterator1>::value_type value_type;
 
@@ -45,17 +45,6 @@ mismatch(InputIterator1 first1,
         ).base();
 
     return std::make_pair(iter, first2 + std::distance(first1, iter));
-}
-
-template<class InputIterator1, class InputIterator2>
-inline std::pair<InputIterator1, InputIterator2>
-mismatch(InputIterator1 first1,
-         InputIterator1 last1,
-         InputIterator2 first2)
-{
-    command_queue queue = detail::default_queue_for_iterator(first1);
-
-    return ::boost::compute::mismatch(first1, last1, first2, queue);
 }
 
 } // end compute namespace

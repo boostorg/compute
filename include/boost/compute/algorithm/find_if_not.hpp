@@ -11,10 +11,10 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_FIND_IF_NOT_HPP
 #define BOOST_COMPUTE_ALGORITHM_FIND_IF_NOT_HPP
 
+#include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/find_if.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -23,7 +23,7 @@ template<class InputIterator, class UnaryPredicate>
 inline InputIterator find_if_not(InputIterator first,
                                  InputIterator last,
                                  UnaryPredicate predicate,
-                                 command_queue &queue)
+                                 command_queue &queue = system::default_queue())
 {
     ::boost::compute::unary_negate<UnaryPredicate> not_predicate(predicate);
 
@@ -33,16 +33,6 @@ inline InputIterator find_if_not(InputIterator first,
                not_predicate,
                queue
            );
-}
-
-template<class InputIterator, class UnaryPredicate>
-inline InputIterator find_if_not(InputIterator first,
-                                 InputIterator last,
-                                 UnaryPredicate predicate)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::find_if_not(first, last, predicate, queue);
 }
 
 } // end compute namespace

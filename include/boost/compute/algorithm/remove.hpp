@@ -12,9 +12,9 @@
 #define BOOST_COMPUTE_ALGORITHM_REMOVE_HPP
 
 #include <boost/compute/lambda.hpp>
+#include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/remove_if.hpp>
 #include <boost/compute/type_traits/vector_size.hpp>
-#include <boost/compute/detail/default_queue_for_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -23,7 +23,7 @@ template<class Iterator, class T>
 inline Iterator remove(Iterator first,
                        Iterator last,
                        const T &value,
-                       command_queue &queue)
+                       command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<Iterator>::value_type value_type;
 
@@ -42,14 +42,6 @@ inline Iterator remove(Iterator first,
                                            all(_1 == value),
                                            queue);
     }
-}
-
-template<class Iterator, class T>
-inline Iterator remove(Iterator first, Iterator last, const T &value)
-{
-    command_queue queue = detail::default_queue_for_iterator(first);
-
-    return ::boost::compute::remove(first, last, value, queue);
 }
 
 } // end compute namespace
