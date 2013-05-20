@@ -12,6 +12,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <set>
+#include <iterator>
 
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
@@ -39,9 +40,12 @@ BOOST_AUTO_TEST_CASE(shuffle_int_vector)
     bc::random_shuffle(vector.begin(), vector.end(), queue);
 
     std::set<int> shuffled_values;
-    for(size_t i = 0; i < vector.size(); i++){
-        shuffled_values.insert(vector[i]);
-    }
+    bc::copy(
+        vector.begin(),
+        vector.end(),
+        std::inserter(shuffled_values, shuffled_values.begin()),
+        queue
+    );
     BOOST_CHECK_EQUAL(shuffled_values.size(), size_t(4));
     BOOST_VERIFY(original_values == shuffled_values);
 }

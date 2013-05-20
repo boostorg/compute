@@ -92,6 +92,8 @@ BOOST_AUTO_TEST_CASE(is_contiguous_iterator)
     BOOST_STATIC_ASSERT(is_contiguous_iterator<std::vector<int>::const_iterator>::value == true);
     BOOST_STATIC_ASSERT(is_contiguous_iterator<std::list<int>::iterator>::value == false);
     BOOST_STATIC_ASSERT(is_contiguous_iterator<std::set<int>::iterator>::value == false);
+    BOOST_STATIC_ASSERT(is_contiguous_iterator<std::insert_iterator<std::set<int> > >::value == false);
+    BOOST_STATIC_ASSERT(is_contiguous_iterator<std::back_insert_iterator<std::vector<int> > >::value == false);
 }
 
 BOOST_AUTO_TEST_CASE(is_buffer_iterator)

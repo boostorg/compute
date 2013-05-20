@@ -18,6 +18,7 @@
 #include <boost/compute/future.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/detail/iterator_plus_distance.hpp>
 
 namespace boost {
 namespace compute {
@@ -32,9 +33,6 @@ inline HostIterator copy_to_host(DeviceIterator first,
     typedef typename
         std::iterator_traits<DeviceIterator>::value_type
         value_type;
-    typedef typename
-        std::iterator_traits<HostIterator>::difference_type
-        difference_type;
 
     size_t count = iterator_range_size(first, last);
     if(count == 0){
@@ -49,7 +47,7 @@ inline HostIterator copy_to_host(DeviceIterator first,
                               count * sizeof(value_type),
                               ::boost::addressof(*result));
 
-    return result + static_cast<difference_type>(count);
+    return iterator_plus_distance(result, count);
 }
 
 template<class DeviceIterator, class HostIterator>
@@ -79,7 +77,7 @@ inline future<HostIterator> copy_to_host_async(DeviceIterator first,
                                         count * sizeof(value_type),
                                         ::boost::addressof(*result));
 
-    return make_future(result + static_cast<difference_type>(count), event_);
+    return make_future(iterator_plus_distance(result, count), event_);
 }
 
 } // end detail namespace

@@ -20,6 +20,7 @@
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/fill.hpp>
+#include <boost/compute/algorithm/iota.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/detail/swizzle_iterator.hpp>
 
@@ -27,6 +28,7 @@
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(copy_on_device)
 {
@@ -181,6 +183,27 @@ BOOST_AUTO_TEST_CASE(copy_int_async)
     BOOST_CHECK_EQUAL(host_data[6], int(7));
     BOOST_CHECK_EQUAL(host_data[7], int(8));
     BOOST_VERIFY(device_to_host_future.get() == host_data + 8);
+}
+
+BOOST_AUTO_TEST_CASE(copy_to_back_inserter)
+{
+    compute::vector<int> device_vector(5, context);
+    compute::iota(device_vector.begin(), device_vector.end(), 10, queue);
+
+    std::vector<int> host_vector;
+    compute::copy(
+        device_vector.begin(),
+        device_vector.end(),
+        std::back_inserter(host_vector),
+        queue
+    );
+
+    BOOST_CHECK_EQUAL(host_vector.size(), size_t(5));
+    BOOST_CHECK_EQUAL(host_vector[0], 10);
+    BOOST_CHECK_EQUAL(host_vector[1], 11);
+    BOOST_CHECK_EQUAL(host_vector[2], 12);
+    BOOST_CHECK_EQUAL(host_vector[3], 13);
+    BOOST_CHECK_EQUAL(host_vector[4], 14);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
