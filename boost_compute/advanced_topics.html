@@ -32,19 +32,6 @@
       Timing</a></span></dt>
 <dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.opencl_c_api_interoperability">OpenCL
       C API Interoperability</a></span></dt>
-<dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.fancy_iterators">Fancy
-      Iterators</a></span></dt>
-<dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.custom_kernels">Custom
-      Kernels</a></span></dt>
-<dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.random_values">Random Values</a></span></dt>
-<dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.malloc_interface">Malloc
-      Interface</a></span></dt>
-<dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.opengl_interoperability">OpenGL
-      Interoperability</a></span></dt>
-<dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.type_traits">Type Traits</a></span></dt>
-<dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.event_profiling">Event
-      Profiling</a></span></dt>
-<dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.pinned_memory">Pinned Memory</a></span></dt>
 </dl></div>
 <p>
       The following topics show advanced features of the Boost Compute library.
@@ -61,7 +48,7 @@
       </p>
 <p>
         The Boost Compute library provides a few different ways to create custom
-        functions that can be passed to the provided algorithms such as <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp8558304.html" title="Function template transform">transform()</a></code> and <code class="computeroutput"><a class="link" href="../boost/compute/reduce.html" title="Function template reduce">reduce()</a></code>.
+        functions that can be passed to the provided algorithms such as <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp8626464.html" title="Function template transform">transform()</a></code> and <code class="computeroutput"><a class="link" href="../boost/compute/reduce.html" title="Function template reduce">reduce()</a></code>.
       </p>
 <p>
         The most basic method is to provide the raw source code for a function:
@@ -206,7 +193,7 @@
       Timing</a>
 </h3></div></div></div>
 <p>
-        The <code class="computeroutput"><a class="link" href="../boost/compute/timer.html" title="Class timer">boost::compute::timer</a></code>
+        The <code class="computeroutput">boost::compute::timer</code>
         class provides a simple way to measure performance using the event timers
         on a compute device.
       </p>
@@ -222,38 +209,55 @@
 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">compute</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
+<span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">;</span>
+
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="comment">// get the default device</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">device</span> <span class="identifier">gpu</span> <span class="special">=</span>
-        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">default_device</span><span class="special">();</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">device</span> <span class="identifier">gpu</span> <span class="special">=</span> <span class="identifier">compute</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">default_device</span><span class="special">();</span>
 
     <span class="comment">// create context for default device</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">context</span><span class="special">(</span><span class="identifier">gpu</span><span class="special">);</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">context</span><span class="special">(</span><span class="identifier">gpu</span><span class="special">);</span>
 
     <span class="comment">// create command queue with profiling enabled</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">command_queue</span> <span class="identifier">queue</span><span class="special">(</span><span class="identifier">context</span><span class="special">,</span>
-                                        <span class="identifier">gpu</span><span class="special">,</span>
-                                        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">command_queue</span><span class="special">::</span><span class="identifier">enable_profiling</span><span class="special">);</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">command_queue</span> <span class="identifier">queue</span><span class="special">(</span><span class="identifier">context</span><span class="special">,</span>
+                                 <span class="identifier">gpu</span><span class="special">,</span>
+                                 <span class="identifier">compute</span><span class="special">::</span><span class="identifier">command_queue</span><span class="special">::</span><span class="identifier">enable_profiling</span><span class="special">);</span>
 
     <span class="comment">// generate random data on the host</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">host_vector</span><span class="special">(</span><span class="number">100000</span><span class="special">);</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">generate</span><span class="special">(</span><span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">rand</span><span class="special">);</span>
 
     <span class="comment">// create a vector on the device</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">device_vector</span><span class="special">(</span><span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">size</span><span class="special">(),</span> <span class="identifier">context</span><span class="special">);</span>
-
-    <span class="comment">// create a timer</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">timer</span> <span class="identifier">t</span><span class="special">(</span><span class="identifier">queue</span><span class="special">);</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">device_vector</span><span class="special">(</span><span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">size</span><span class="special">(),</span> <span class="identifier">context</span><span class="special">);</span>
 
     <span class="comment">// copy data from the host to the device</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
-                         <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
-                         <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
-                         <span class="identifier">queue</span><span class="special">);</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">future</span><span class="special">&lt;</span><span class="keyword">void</span><span class="special">&gt;</span> <span class="identifier">future</span> <span class="special">=</span>
+        <span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy_async</span><span class="special">(</span>
+            <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
+            <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
+            <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
+            <span class="identifier">queue</span>
+        <span class="special">);</span>
+
+    <span class="comment">// wait for copy to finish</span>
+    <span class="identifier">future</span><span class="special">.</span><span class="identifier">wait</span><span class="special">();</span>
+
+    <span class="keyword">using</span> <span class="identifier">compute</span><span class="special">::</span><span class="identifier">ulong_</span><span class="special">;</span>
+
+    <span class="comment">// get elapsed time from event profiling information</span>
+    <span class="identifier">ulong_</span> <span class="identifier">start_time</span> <span class="special">=</span>
+        <span class="identifier">future</span><span class="special">.</span><span class="identifier">get_event</span><span class="special">().</span><span class="identifier">get_profiling_info</span><span class="special">&lt;</span><span class="identifier">ulong_</span><span class="special">&gt;(</span>
+            <span class="identifier">compute</span><span class="special">::</span><span class="identifier">event</span><span class="special">::</span><span class="identifier">profiling_command_start</span>
+        <span class="special">);</span>
+    <span class="identifier">ulong_</span> <span class="identifier">end_time</span> <span class="special">=</span>
+        <span class="identifier">future</span><span class="special">.</span><span class="identifier">get_event</span><span class="special">().</span><span class="identifier">get_profiling_info</span><span class="special">&lt;</span><span class="identifier">ulong_</span><span class="special">&gt;(</span>
+            <span class="identifier">compute</span><span class="special">::</span><span class="identifier">event</span><span class="special">::</span><span class="identifier">profiling_command_end</span>
+        <span class="special">);</span>
+    <span class="identifier">ulong_</span> <span class="identifier">elapsed</span> <span class="special">=</span> <span class="identifier">end_time</span> <span class="special">-</span> <span class="identifier">start_time</span><span class="special">;</span>
 
     <span class="comment">// print elapsed time in milliseconds</span>
-    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"time: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">t</span><span class="special">.</span><span class="identifier">elapsed</span><span class="special">()</span> <span class="special">/</span> <span class="number">1e6</span> <span class="special">&lt;&lt;</span> <span class="string">" ms"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"time: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">elapsed</span> <span class="special">/</span> <span class="number">1e6</span> <span class="special">&lt;&lt;</span> <span class="string">" ms"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 
     <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">}</span>
@@ -285,35 +289,6 @@
 <p>
       </p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title">
-<a name="boost_compute.advanced_topics.fancy_iterators"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.fancy_iterators" title="Fancy Iterators">Fancy
-      Iterators</a>
-</h3></div></div></div></div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title">
-<a name="boost_compute.advanced_topics.custom_kernels"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.custom_kernels" title="Custom Kernels">Custom
-      Kernels</a>
-</h3></div></div></div></div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title">
-<a name="boost_compute.advanced_topics.random_values"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.random_values" title="Random Values">Random Values</a>
-</h3></div></div></div></div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title">
-<a name="boost_compute.advanced_topics.malloc_interface"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.malloc_interface" title="Malloc Interface">Malloc
-      Interface</a>
-</h3></div></div></div></div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title">
-<a name="boost_compute.advanced_topics.opengl_interoperability"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.opengl_interoperability" title="OpenGL Interoperability">OpenGL
-      Interoperability</a>
-</h3></div></div></div></div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title">
-<a name="boost_compute.advanced_topics.type_traits"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.type_traits" title="Type Traits">Type Traits</a>
-</h3></div></div></div></div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title">
-<a name="boost_compute.advanced_topics.event_profiling"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.event_profiling" title="Event Profiling">Event
-      Profiling</a>
-</h3></div></div></div></div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title">
-<a name="boost_compute.advanced_topics.pinned_memory"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.pinned_memory" title="Pinned Memory">Pinned Memory</a>
-</h3></div></div></div></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

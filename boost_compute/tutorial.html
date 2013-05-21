@@ -45,11 +45,12 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">compute</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
+<span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">;</span>
+
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="comment">// get the default device</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">device</span> <span class="identifier">device</span> <span class="special">=</span>
-        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">default_device</span><span class="special">();</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">device</span> <span class="identifier">device</span> <span class="special">=</span> <span class="identifier">compute</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">default_device</span><span class="special">();</span>
 
     <span class="comment">// print the device's name</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"hello from "</span> <span class="special">&lt;&lt;</span> <span class="identifier">device</span><span class="special">.</span><span class="identifier">name</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
@@ -85,26 +86,28 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">vector</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">compute</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
+<span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">;</span>
+
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="comment">// create data array on host</span>
     <span class="keyword">int</span> <span class="identifier">host_data</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">1</span><span class="special">,</span> <span class="number">3</span><span class="special">,</span> <span class="number">5</span><span class="special">,</span> <span class="number">7</span><span class="special">,</span> <span class="number">9</span> <span class="special">};</span>
 
     <span class="comment">// create vector on device</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">device_vector</span><span class="special">(</span><span class="number">5</span><span class="special">);</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">device_vector</span><span class="special">(</span><span class="number">5</span><span class="special">);</span>
 
     <span class="comment">// copy from host to device</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">host_data</span><span class="special">,</span>
-                         <span class="identifier">host_data</span> <span class="special">+</span> <span class="number">5</span><span class="special">,</span>
-                         <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">());</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">host_data</span><span class="special">,</span>
+                  <span class="identifier">host_data</span> <span class="special">+</span> <span class="number">5</span><span class="special">,</span>
+                  <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">());</span>
 
     <span class="comment">// create vector on host</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">host_vector</span><span class="special">(</span><span class="number">5</span><span class="special">);</span>
 
     <span class="comment">// copy data back to host</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
-                         <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
-                         <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">());</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
+                  <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
+                  <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">());</span>
 
     <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">}</span>
@@ -120,7 +123,7 @@
 <p>
         The following example shows how to calculate the square-root of a vector
         of <code class="computeroutput"><span class="keyword">float</span></code>s on a compute device
-        using the <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp8558304.html" title="Function template transform">transform()</a></code>
+        using the <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp8626464.html" title="Function template transform">transform()</a></code>
         function.
       </p>
 <p>
@@ -129,6 +132,8 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">algorithm</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">compute</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
+<span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">;</span>
+
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="comment">// generate random data on the host</span>
@@ -136,18 +141,18 @@
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">generate</span><span class="special">(</span><span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">rand</span><span class="special">);</span>
 
     <span class="comment">// create a vector on the device and transfer data from the host</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">device_vector</span> <span class="special">=</span> <span class="identifier">host_vector</span><span class="special">;</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">device_vector</span> <span class="special">=</span> <span class="identifier">host_vector</span><span class="special">;</span>
 
     <span class="comment">// calculate sqrt of each element in-place</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
-                              <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
-                              <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
-                              <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">sqrt</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;());</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
+                       <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
+                       <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
+                       <span class="identifier">compute</span><span class="special">::</span><span class="identifier">sqrt</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;());</span>
 
     <span class="comment">// copy values back to the host</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
-                         <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
-                         <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">());</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span><span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
+                  <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
+                  <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">());</span>
 
     <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">}</span>
@@ -178,7 +183,7 @@
         The following example shows how to transfer a set of 3D points stored as
         an array of <code class="computeroutput"><span class="keyword">float</span></code>s on the host
         the device and then calculate the sum of the point coordinates using the
-        <code class="computeroutput"><a class="link" href="../boost/compute/accumulate_idp7789168.html" title="Function template accumulate">accumulate()</a></code>
+        <code class="computeroutput"><a class="link" href="../boost/compute/accumulate_idp7842544.html" title="Function template accumulate">accumulate()</a></code>
         function. The sum is transferred to the host and the centroid computed by
         dividing by the total number of points.
       </p>
@@ -190,11 +195,13 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">compute</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
+<span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">;</span>
+
 <span class="comment">// the point centroid example calculates and displays the</span>
 <span class="comment">// centroid of a set of 3D points stored as float4's</span>
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
-    <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">float4_</span><span class="special">;</span>
+    <span class="keyword">using</span> <span class="identifier">compute</span><span class="special">::</span><span class="identifier">float4_</span><span class="special">;</span>
 
     <span class="comment">// point coordinates</span>
     <span class="keyword">float</span> <span class="identifier">points</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">1.0f</span><span class="special">,</span> <span class="number">2.0f</span><span class="special">,</span> <span class="number">3.0f</span><span class="special">,</span> <span class="number">0.0f</span><span class="special">,</span>
@@ -204,19 +211,19 @@
                        <span class="number">3.0f</span><span class="special">,</span> <span class="number">4.0f</span><span class="special">,</span> <span class="special">-</span><span class="number">5.0f</span><span class="special">,</span> <span class="number">0.0f</span> <span class="special">};</span>
 
     <span class="comment">// create vector for five points</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">float4_</span><span class="special">&gt;</span> <span class="identifier">vector</span><span class="special">(</span><span class="number">5</span><span class="special">);</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">float4_</span><span class="special">&gt;</span> <span class="identifier">vector</span><span class="special">(</span><span class="number">5</span><span class="special">);</span>
 
     <span class="comment">// copy point data to the device</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span>
         <span class="keyword">reinterpret_cast</span><span class="special">&lt;</span><span class="identifier">float4_</span> <span class="special">*&gt;(</span><span class="identifier">points</span><span class="special">),</span>
         <span class="keyword">reinterpret_cast</span><span class="special">&lt;</span><span class="identifier">float4_</span> <span class="special">*&gt;(</span><span class="identifier">points</span><span class="special">)</span> <span class="special">+</span> <span class="number">5</span><span class="special">,</span>
         <span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">()</span>
     <span class="special">);</span>
 
     <span class="comment">// calculate sum</span>
-    <span class="identifier">float4_</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">accumulate</span><span class="special">(</span><span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
-                                             <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
-                                             <span class="identifier">float4_</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span><span class="special">));</span>
+    <span class="identifier">float4_</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="identifier">compute</span><span class="special">::</span><span class="identifier">accumulate</span><span class="special">(</span><span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
+                                      <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
+                                      <span class="identifier">float4_</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span><span class="special">));</span>
 
     <span class="comment">// calculate centroid</span>
     <span class="identifier">float4_</span> <span class="identifier">centroid</span><span class="special">;</span>
