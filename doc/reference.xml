@@ -44,6 +44,7 @@
   <xi:include href="reference/algorithm/generate_n.xml"/>
   <xi:include href="reference/algorithm/inclusive_scan.xml"/>
   <xi:include href="reference/algorithm/inner_product.xml"/>
+  <xi:include href="reference/algorithm/inplace_merge.xml"/>
   <xi:include href="reference/algorithm/iota.xml"/>
   <xi:include href="reference/algorithm/is_partitioned.xml"/>
   <xi:include href="reference/algorithm/is_sorted.xml"/>
