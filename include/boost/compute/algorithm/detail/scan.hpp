@@ -275,7 +275,9 @@ inline InputIterator dispatch_scan(InputIterator first,
         const context &context = queue.get_context();
 
         // make a temporary copy the input
-        vector<value_type> tmp(first, last, context);
+        size_t count = iterator_range_size(first, last);
+        vector<value_type> tmp(count, context);
+        copy(first, last, tmp.begin(), queue);
 
         // scan from temporary values
         return scan_impl(tmp.begin(), tmp.end(), first, exclusive, queue);
