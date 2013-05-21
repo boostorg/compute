@@ -13,6 +13,9 @@
 
 #include <list>
 #include <vector>
+#include <string>
+#include <sstream>
+#include <iterator>
 
 #include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
@@ -204,6 +207,22 @@ BOOST_AUTO_TEST_CASE(copy_to_back_inserter)
     BOOST_CHECK_EQUAL(host_vector[2], 12);
     BOOST_CHECK_EQUAL(host_vector[3], 13);
     BOOST_CHECK_EQUAL(host_vector[4], 14);
+}
+
+BOOST_AUTO_TEST_CASE(copy_to_stringstream)
+{
+    std::stringstream stream;
+
+    int data[] = { 2, 3, 4, 5, 6, 7, 8, 9 };
+    compute::vector<int> vector(data, data + 8, context);
+
+    compute::copy(
+        vector.begin(),
+        vector.end(),
+        std::ostream_iterator<int>(stream, " "),
+        queue
+    );
+    BOOST_CHECK_EQUAL(stream.str(), std::string("2 3 4 5 6 7 8 9 "));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
