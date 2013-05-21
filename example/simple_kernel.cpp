@@ -11,16 +11,17 @@
 #include <iostream>
 #include <boost/compute.hpp>
 
+namespace compute = boost::compute;
+
 // this example demonstrates how to use the Boost.Compute classes to
 // setup and run a simple vector addition kernel on the GPU
 int main()
 {
     // get the default device
-    boost::compute::device gpu =
-        boost::compute::system::default_device();
+    compute::device device = compute::system::default_device();
 
     // create a context for the device
-    boost::compute::context context(gpu);
+    compute::context context(device);
 
     // setup input arrays
     float a[] = { 1, 2, 3, 4 };
@@ -30,9 +31,9 @@ int main()
     float c[] = { 0, 0, 0, 0 };
 
     // create memory buffers for the input and output
-    boost::compute::buffer buffer_a(context, 4 * sizeof(float));
-    boost::compute::buffer buffer_b(context, 4 * sizeof(float));
-    boost::compute::buffer buffer_c(context, 4 * sizeof(float));
+    compute::buffer buffer_a(context, 4 * sizeof(float));
+    compute::buffer buffer_b(context, 4 * sizeof(float));
+    compute::buffer buffer_c(context, 4 * sizeof(float));
 
     // source code for the add kernel
     const char source[] =
@@ -45,14 +46,14 @@ int main()
         "}";
 
     // create the program with the source
-    boost::compute::program program =
-        boost::compute::program::create_with_source(source, context);
+    compute::program program =
+        compute::program::create_with_source(source, context);
 
     // compile the program
     program.build();
 
     // create the kernel
-    boost::compute::kernel kernel(program, "add");
+    compute::kernel kernel(program, "add");
 
     // set the kernel arguments
     kernel.set_arg(0, buffer_a);
@@ -60,7 +61,7 @@ int main()
     kernel.set_arg(2, buffer_c);
 
     // create a command queue
-    boost::compute::command_queue queue(context, gpu);
+    compute::command_queue queue(context, device);
 
     // write the data from 'a' and 'b' to the device
     queue.enqueue_write_buffer(buffer_a, a);

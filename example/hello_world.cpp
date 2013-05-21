@@ -13,11 +13,12 @@
 #include <iostream>
 #include <boost/compute.hpp>
 
+namespace compute = boost::compute;
+
 int main()
 {
     // get the default device
-    boost::compute::device device =
-        boost::compute::system::default_device();
+    compute::device device = compute::system::default_device();
 
     // print the device's name
     std::cout << "hello from " << device.name() << std::endl;

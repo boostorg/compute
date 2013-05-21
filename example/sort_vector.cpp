@@ -14,6 +14,8 @@
 
 #include <boost/compute.hpp>
 
+namespace compute = boost::compute;
+
 int rand_int()
 {
     return rand() % 100;
@@ -38,15 +40,15 @@ int main()
     std::cout << " ]" << std::endl;
 
     // transfer the values to the device
-    boost::compute::vector<int> device_vector = host_vector;
+    compute::vector<int> device_vector = host_vector;
 
     // sort the values on the device
-    boost::compute::sort(device_vector.begin(), device_vector.end());
+    compute::sort(device_vector.begin(), device_vector.end());
 
     // transfer the values back to the host
-    boost::compute::copy(device_vector.begin(),
-                         device_vector.end(),
-                         host_vector.begin());
+    compute::copy(device_vector.begin(),
+                  device_vector.end(),
+                  host_vector.begin());
 
     // print out the sorted vector
     std::cout << "output: [ ";

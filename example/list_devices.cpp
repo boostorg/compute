@@ -11,26 +11,27 @@
 #include <iostream>
 #include <boost/compute.hpp>
 
+namespace compute = boost::compute;
+
 int main()
 {
-    std::vector<boost::compute::platform>
-        platforms = boost::compute::system::platforms();
+    std::vector<compute::platform> platforms = compute::system::platforms();
 
     for(size_t i = 0; i < platforms.size(); i++){
-        const boost::compute::platform &platform = platforms[i];
+        const compute::platform &platform = platforms[i];
 
         std::cout << "Platform '" << platform.name() << "'" << std::endl;
 
-        std::vector<boost::compute::device> devices = platform.devices();
+        std::vector<compute::device> devices = platform.devices();
         for(size_t j = 0; j < devices.size(); j++){
-            const boost::compute::device &device = devices[j];
+            const compute::device &device = devices[j];
 
             std::string type;
-            if(device.type() == boost::compute::device::gpu)
+            if(device.type() == compute::device::gpu)
                 type = "GPU Device";
-            else if(device.type() == boost::compute::device::cpu)
+            else if(device.type() == compute::device::cpu)
                 type = "CPU Device";
-            else if(device.type() == boost::compute::device::accelerator)
+            else if(device.type() == compute::device::accelerator)
                 type = "Accelerator Device";
             else
                 type = "Unknown Device";

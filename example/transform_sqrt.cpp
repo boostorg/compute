@@ -14,6 +14,8 @@
 #include <algorithm>
 #include <boost/compute.hpp>
 
+namespace compute = boost::compute;
+
 int main()
 {
     // generate random data on the host
@@ -21,18 +23,18 @@ int main()
     std::generate(host_vector.begin(), host_vector.end(), rand);
 
     // create a vector on the device and transfer data from the host
-    boost::compute::vector<float> device_vector = host_vector;
+    compute::vector<float> device_vector = host_vector;
 
     // calculate sqrt of each element in-place
-    boost::compute::transform(device_vector.begin(),
-                              device_vector.end(),
-                              device_vector.begin(),
-                              boost::compute::sqrt<float>());
+    compute::transform(device_vector.begin(),
+                       device_vector.end(),
+                       device_vector.begin(),
+                       compute::sqrt<float>());
 
     // copy values back to the host
-    boost::compute::copy(device_vector.begin(),
-                         device_vector.end(),
-                         host_vector.begin());
+    compute::copy(device_vector.begin(),
+                  device_vector.end(),
+                  host_vector.begin());
 
     return 0;
 }

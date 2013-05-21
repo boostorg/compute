@@ -11,6 +11,8 @@
 #include <iostream>
 #include <boost/compute.hpp>
 
+namespace compute = boost::compute;
+
 // this example demonstrates how to use Boost.Compute's STL
 // implementation to add two vectors on the GPU
 int main()
@@ -23,21 +25,23 @@ int main()
     float c[] = { 0, 0, 0, 0 };
 
     // create vectors and transfer data for the input arrays 'a' and 'b'
-    boost::compute::vector<float> vector_a(a, a + 4);
-    boost::compute::vector<float> vector_b(b, b + 4);
+    compute::vector<float> vector_a(a, a + 4);
+    compute::vector<float> vector_b(b, b + 4);
 
     // create vector for the output array
-    boost::compute::vector<float> vector_c(4);
+    compute::vector<float> vector_c(4);
 
     // add the vectors together
-    boost::compute::transform(vector_a.begin(),
-                              vector_a.end(),
-                              vector_b.begin(),
-                              vector_c.begin(),
-                              boost::compute::plus<float>());
+    compute::transform(
+        vector_a.begin(),
+        vector_a.end(),
+        vector_b.begin(),
+        vector_c.begin(),
+        compute::plus<float>()
+    );
 
     // transfer results back to the host array 'c'
-    boost::compute::copy(vector_c.begin(), vector_c.end(), c);
+    compute::copy(vector_c.begin(), vector_c.end(), c);
 
     // print out results in 'c'
     std::cout << "c: [" << c[0] << ", "

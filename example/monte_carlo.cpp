@@ -11,21 +11,23 @@
 #include <iostream>
 #include <boost/compute.hpp>
 
+namespace compute = boost::compute;
+
 int main()
 {
-    boost::compute::device gpu = boost::compute::system::default_device();
-    boost::compute::context context(gpu);
-    boost::compute::command_queue queue(context, gpu);
+    compute::device gpu = compute::system::default_device();
+    compute::context context(gpu);
+    compute::command_queue queue(context, gpu);
 
     std::cout << "device: " << gpu.name() << std::endl;
 
-    using boost::compute::uint_;
+    using compute::uint_;
 
     size_t n = 2500;
 
     // generate random numbers
-    boost::compute::default_random_engine rng(context);
-    boost::compute::vector<uint_> vector(n * 2, context);
+    compute::default_random_engine rng(context);
+    compute::vector<uint_> vector(n * 2, context);
     rng.fill(vector.begin(), vector.end(), queue);
 
     // compile program
@@ -41,14 +43,14 @@ int main()
         "    if((x*x + y*y) < 1.0f) atomic_inc(count);\n"
         "}\n";
 
-    boost::compute::program program =
-        boost::compute::program::create_with_source(source, context);
+    compute::program program =
+        compute::program::create_with_source(source, context);
     program.build();
 
-    boost::compute::vector<uint_> count(1, context);
+    compute::vector<uint_> count(1, context);
     count[0] = 0;
 
-    boost::compute::kernel count_kernel(program, "count_in_circle");
+    compute::kernel count_kernel(program, "count_in_circle");
     count_kernel.set_arg(0, count.get_buffer());
     count_kernel.set_arg(1, vector.get_buffer());
 
