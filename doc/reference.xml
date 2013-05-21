@@ -16,7 +16,6 @@
   <xi:include href="reference/platform.xml"/>
   <xi:include href="reference/program.xml"/>
   <xi:include href="reference/system.xml"/>
-  <xi:include href="reference/timer.xml"/>
 
   <xi:include href="reference/algorithm.xml"/>
   <xi:include href="reference/algorithm/accumulate.xml"/>

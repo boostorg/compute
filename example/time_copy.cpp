@@ -38,17 +38,33 @@ int main()
     // create a vector on the device
     compute::vector<int> device_vector(host_vector.size(), context);
 
-    // create a timer
-    compute::timer t(queue);
-
     // copy data from the host to the device
-    compute::copy(host_vector.begin(),
-                  host_vector.end(),
-                  device_vector.begin(),
-                  queue);
+    compute::future<void> future =
+        compute::copy_async(
+            host_vector.begin(),
+            host_vector.end(),
+            device_vector.begin(),
+            queue
+        );
+
+    // wait for copy to finish
+    future.wait();
+
+    using compute::ulong_;
+
+    // get elapsed time from event profiling information
+    ulong_ start_time =
+        future.get_event().get_profiling_info<ulong_>(
+            compute::event::profiling_command_start
+        );
+    ulong_ end_time =
+        future.get_event().get_profiling_info<ulong_>(
+            compute::event::profiling_command_end
+        );
+    ulong_ elapsed = end_time - start_time;
 
     // print elapsed time in milliseconds
-    std::cout << "time: " << t.elapsed() / 1e6 << " ms" << std::endl;
+    std::cout << "time: " << elapsed / 1e6 << " ms" << std::endl;
 
     return 0;
 }

@@ -14,6 +14,7 @@
 
 #include <boost/compute.hpp>
 #include <boost/compute/blas/axpy.hpp>
+#include <boost/compute/detail/timer.hpp>
 
 float rand_float()
 {
@@ -41,11 +42,7 @@ int main(int argc, char *argv[])
     boost::compute::device device = boost::compute::system::default_device();
 
     boost::compute::context context(device);
-    boost::compute::command_queue queue(
-        context,
-        device,
-        boost::compute::command_queue::enable_profiling
-    );
+    boost::compute::command_queue queue(context, device);
 
     // create vector of random numbers on the host
     std::vector<float> host_x(size);
@@ -57,9 +54,10 @@ int main(int argc, char *argv[])
     boost::compute::vector<float> device_x(host_x.begin(), host_x.end(), context);
     boost::compute::vector<float> device_y(host_y.begin(), host_y.end(), context);
 
-    boost::compute::timer t(queue);
+    boost::compute::detail::timer t;
     boost::compute::blas::axpy(size, 2.5f, &device_x[0], 1, &device_y[0], 1, queue);
-    std::cout << "time: " << t.elapsed() / 1e6 << " ms" << std::endl;
+    queue.finish();
+    std::cout << "time: " << t.elapsed() << " ms" << std::endl;
 
     // perform saxpy on host
     serial_saxpy(size, 2.5f, &host_x[0], &host_y[0]);

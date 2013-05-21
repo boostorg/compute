@@ -18,6 +18,12 @@ if(${OpenCL_HEADER_CL_EXT_FOUND})
   add_definitions(-DBOOST_COMPUTE_HAVE_HDR_CL_EXT)
 endif()
 
+option(BOOST_COMPUTE_TIMER_USE_STD_CHRONO "Use std::chrono for timer" OFF)
+mark_as_advanced(BOOST_COMPUTE_TIMER_USE_STD_CHRONO)
+if(${BOOST_COMPUTE_TIMER_USE_STD_CHRONO})
+  add_definitions(-DBOOST_COMPUTE_TIMER_USE_STD_CHRONO)
+endif()
+
 option(BOOST_COMPUTE_BUILD_EXAMPLES "Build the Boost.Compute examples" OFF)
 if(${BOOST_COMPUTE_BUILD_EXAMPLES})
   add_subdirectory(example)

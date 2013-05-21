@@ -33,13 +33,26 @@ int main(int argc, char *argv[])
 
     boost::compute::vector<int> device_vector(host_vector.size(), context);
 
-    boost::compute::timer t(queue);
-    boost::compute::copy(host_vector.begin(),
-                         host_vector.end(),
-                         device_vector.begin(),
-                         queue);
+    boost::compute::future<void> future =
+        boost::compute::copy_async(host_vector.begin(),
+                                   host_vector.end(),
+                                   device_vector.begin(),
+                                   queue);
 
-    size_t elapsed = t.elapsed();
+    // wait for copy to finish
+    future.wait();
+
+    using boost::compute::ulong_;
+
+    ulong_ start_time =
+        future.get_event().get_profiling_info<ulong_>(
+            boost::compute::event::profiling_command_start
+        );
+    ulong_ end_time =
+        future.get_event().get_profiling_info<ulong_>(
+            boost::compute::event::profiling_command_end
+        );
+    size_t elapsed = end_time - start_time;
     std::cout << "time: " << elapsed / 1e6 << " ms" << std::endl;
 
     float rate = (float(size * sizeof(int)) / elapsed) * 1000.f;

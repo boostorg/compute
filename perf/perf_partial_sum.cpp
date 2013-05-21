@@ -13,6 +13,7 @@
 #include <vector>
 
 #include <boost/compute.hpp>
+#include <boost/compute/detail/timer.hpp>
 
 int rand_int()
 {
@@ -31,11 +32,7 @@ int main(int argc, char *argv[])
     // setup context and queue for the default device
     boost::compute::device device = boost::compute::system::default_device();
     boost::compute::context context(device);
-    boost::compute::command_queue queue(
-        context,
-        device,
-        boost::compute::command_queue::enable_profiling
-    );
+    boost::compute::command_queue queue(context, device);
 
     // create vector of random numbers on the host
     std::vector<int> host_vector(size);
@@ -51,19 +48,18 @@ int main(int argc, char *argv[])
     );
 
     // sum vector
-    boost::compute::timer t(queue);
+    boost::compute::detail::timer t;
     boost::compute::partial_sum(device_vector.begin(),
                                 device_vector.end(),
                                 device_vector.begin(),
                                 queue);
-    std::cout << "time: " << t.elapsed() / 1e6 << " ms" << std::endl;
+    queue.finish();
+    std::cout << "time: " << t.elapsed() << " ms" << std::endl;
 
     // verify sum is correct
-    boost::compute::timer t1(queue);
     std::partial_sum(host_vector.begin(),
                      host_vector.end(),
                      host_vector.begin());
-    std::cout << "host time: " << t1.elapsed() / 1e6 << " ms" << std::endl;
 
     int device_sum = device_vector.back();
     int host_sum = host_vector.back();
