@@ -2,7 +2,7 @@
 <header name="boost/compute/iterator/constant_iterator.hpp">
   <namespace name="boost">
     <namespace name="compute">
-      
+
       <!-- boost::compute::constant_iterator<T> -->
       <class name="constant_iterator">
         <template>

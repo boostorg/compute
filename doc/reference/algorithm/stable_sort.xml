@@ -4,7 +4,7 @@
     <namespace name="compute">
 
       <!-- boost::compute::stable_sort(first, last, queue) -->
-      <function name="sort">
+      <function name="stable_sort">
         <template>
           <template-type-parameter name="Iterator"/>
         </template>

@@ -151,28 +151,4 @@ std::cout << "num_devices: " << num_devices << std::endl;
 
 [endsect] [/ opencl c api interoperability]
 
-[section Fancy Iterators]
-[endsect] [/ fancy iterators]
-
-[section Custom Kernels]
-[endsect] [/ custom kernels]
-
-[section Random Values]
-[endsect] [/ random values]
-
-[section Malloc Interface]
-[endsect] [/ malloc interface]
-
-[section OpenGL Interoperability]
-[endsect] [/ opengl interoperability]
-
-[section Type Traits]
-[endsect] [/ type traits]
-
-[section Event Profiling]
-[endsect] [/ event profiling]
-
-[section Pinned Memory]
-[endsect] [/ pinned memory]
-
 [endsect] [/ advanced topics]

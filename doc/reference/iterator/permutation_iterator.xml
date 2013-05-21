@@ -2,7 +2,7 @@
 <header name="boost/compute/iterator/permutation_iterator.hpp">
   <namespace name="boost">
     <namespace name="compute">
-      
+
       <!-- boost::compute::permutation_iterator<ElementIterator, IndexIterator> -->
       <class name="permutation_iterator">
         <template>

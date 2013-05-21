@@ -199,6 +199,47 @@
               </para>
             </description>
           </method>
+
+          <!-- program::create_with_binary(binary, size, context) -->
+          <method name="create_with_binary" specifiers="static">
+            <type><classname>program</classname></type>
+
+            <parameter name="binary">
+              <paramtype>const unsigned char*</paramtype>
+            </parameter>
+            <parameter name="binary_size">
+              <paramtype>size_t</paramtype>
+            </parameter>
+            <parameter name="context">
+              <paramtype>const <classname>context</classname>&amp;</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Creates a new program object with <code>binary</code> of
+                <code>binary_size</code> bytes in <code>context</code>.
+              </para>
+            </description>
+          </method>
+
+          <!-- program::create_with_binary_file(file, context) -->
+          <method name="create_with_binary_file" specifiers="static">
+            <type><classname>program</classname></type>
+
+            <parameter name="file">
+              <paramtype>const std::string&amp;</paramtype>
+            </parameter>
+            <parameter name="context">
+              <paramtype>const <classname>context</classname>&amp;</paramtype>
+            </parameter>
+
+            <description>
+              <para>
+                Creates a new program object with <code>file</code> in
+                <code>context</code>.
+              </para>
+            </description>
+          </method>
         </method-group>
       </class>
     </namespace>

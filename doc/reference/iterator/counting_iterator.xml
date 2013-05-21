@@ -2,7 +2,7 @@
 <header name="boost/compute/iterator/counting_iterator.hpp">
   <namespace name="boost">
     <namespace name="compute">
-      
+
       <!-- boost::compute::counting_iterator<T> -->
       <class name="counting_iterator">
         <template>
@@ -33,7 +33,7 @@
         </parameter>
         <description>
           <para>
-            Returns a new <classname>counting_iterator</classname> starting 
+            Returns a new <classname>counting_iterator</classname> starting
             at <code>init</code>.
           </para>
         </description>

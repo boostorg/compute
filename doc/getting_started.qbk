@@ -37,6 +37,13 @@ using namespace boost::compute;
 
 [endsect]
 
+[section Support]
+
+Bugs and issues can be reported to the
+[@https://github.com/kylelutz/compute/issues?state=open issue tracker].
+
+[endsect] [/ support]
+
 [section Architecture]
 
 The Boost Compute library consists of several different components. The core

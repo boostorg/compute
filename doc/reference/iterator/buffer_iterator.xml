@@ -2,7 +2,7 @@
 <header name="boost/compute/iterator/buffer_iterator.hpp">
   <namespace name="boost">
     <namespace name="compute">
-      
+
       <!-- boost::compute::buffer_iterator<T> -->
       <class name="buffer_iterator">
         <template>
