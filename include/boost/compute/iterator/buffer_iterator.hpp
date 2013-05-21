@@ -54,7 +54,7 @@ struct buffer_iterator_index_expr
     typedef T result_type;
 
     buffer_iterator_index_expr(const buffer &buffer,
-                               uint_ index,
+                               size_t index,
                                const std::string &address_space,
                                const IndexExpr &expr)
         : m_buffer(buffer),
@@ -73,7 +73,7 @@ struct buffer_iterator_index_expr
     }
 
     const buffer &m_buffer;
-    uint_ m_index;
+    size_t m_index;
     std::string m_address_space;
     IndexExpr m_expr;
 };
@@ -90,7 +90,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
     else {
         return kernel <<
                    kernel.get_buffer_identifier<T>(expr.m_buffer, expr.m_address_space) <<
-                   '[' << expr.m_index << "+(" << expr.m_expr << ")]";
+                   '[' << uint_(expr.m_index) << "+(" << expr.m_expr << ")]";
     }
 }
 
