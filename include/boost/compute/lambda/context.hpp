@@ -27,6 +27,7 @@
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/lambda/result_of.hpp>
+#include <boost/compute/lambda/functional.hpp>
 
 namespace boost {
 namespace compute {
@@ -88,7 +89,8 @@ struct placeholder
     }
 
 // lambda expression context
-struct context : proto::callable_context<context>
+template<class Args = mpl::vector<> >
+struct context : proto::callable_context<context<Args> >
 {
     typedef void result_type;
 
@@ -128,14 +130,12 @@ struct context : proto::callable_context<context>
     }
 
     // handle functions
-    template<class F, class Args>
+    template<class F, class Arg>
     void operator()(proto::tag::function,
                     const F &function,
-                    const Args &args)
+                    const Arg &arg)
     {
-        stream << proto::value(function).function_name() << '(';
-        proto::eval(args, *this);
-        stream << ')';
+        apply_function(proto::value(function), arg);
     }
 
     template<class F, class Arg1, class Arg2>
@@ -165,6 +165,32 @@ struct context : proto::callable_context<context>
         stream << ',';
         proto::eval(arg3, *this);
         stream << ')';
+    }
+
+    template<class F, class Arg>
+    void apply_function(const F &function, const Arg &arg)
+    {
+        stream << function.function_name() << '(';
+        proto::eval(arg, *this);
+        stream << ')';
+    }
+
+    template<size_t N, class Arg>
+    void apply_function(const detail::get_func<N> &, const Arg &arg)
+    {
+        typedef typename
+            boost::remove_cv<
+                typename boost::compute::lambda::result_of<Arg, Args>::type
+            >::type T;
+
+        apply_get_function<N, T>(arg);
+    }
+
+    template<size_t N, class T, class Arg>
+    void apply_get_function(const Arg &arg)
+    {
+        proto::eval(arg, *this);
+        stream << detail::get_func_suffix<N, T>::value();
     }
 
     // operators
@@ -365,7 +391,7 @@ struct expression : proto::extends<Expr, expression<Expr>, domain>
             ::boost::tr1_result_of<expression<Expr>()>::type
             result_type;
 
-        context ctx;
+        context<> ctx;
         proto::eval(*this, ctx);
 
         return ::boost::compute::detail::meta_kernel::make_expr<result_type>(ctx.stream.str());
@@ -375,7 +401,7 @@ struct expression : proto::extends<Expr, expression<Expr>, domain>
     detail::invoked_unary_expression<expression<Expr>, Arg>
     operator()(const Arg &x) const
     {
-        context ctx;
+        context<mpl::vector<Arg> > ctx;
         proto::eval(*this, ctx);
         std::string expr = ctx.stream.str();
 
@@ -386,7 +412,7 @@ struct expression : proto::extends<Expr, expression<Expr>, domain>
     detail::invoked_binary_expression<expression<Expr>, Arg1, Arg2>
     operator()(const Arg1 &x, const Arg2 &y) const
     {
-        context ctx;
+        context<mpl::vector<Arg1, Arg2> > ctx;
         proto::eval(*this, ctx);
         std::string expr = ctx.stream.str();
 

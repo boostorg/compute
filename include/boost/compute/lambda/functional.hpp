@@ -11,6 +11,8 @@
 #ifndef BOOST_COMPUTE_LAMBDA_FUNCTIONAL_HPP
 #define BOOST_COMPUTE_LAMBDA_FUNCTIONAL_HPP
 
+#include <boost/tuple/tuple.hpp>
+
 #include <boost/proto/core.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/stringize.hpp>
@@ -210,6 +212,90 @@ struct dot_func
     }
 };
 
+// function wrapper for get<N>() in lambda expressions
+template<size_t N>
+struct get_func
+{
+    template<class Expr, class Args>
+    struct lambda_result
+    {
+        typedef typename proto::result_of::child_c<Expr, 1>::type Arg;
+        typedef typename ::boost::compute::lambda::result_of<Arg, Args>::type T;
+        typedef typename ::boost::compute::detail::get_result_type<N, T>::type type;
+    };
+};
+
+// returns the suffix string for get<N>() in lambda expressions
+// (e.g. ".x" for get<0>() with float4)
+template<size_t N, class T>
+struct get_func_suffix
+{
+    static std::string value()
+    {
+        BOOST_STATIC_ASSERT(N < 16);
+
+        std::stringstream stream;
+
+        if(N < 10){
+            stream << ".s" << uint_(N);
+        }
+        else if(N < 16){
+            stream << ".s" << char('a' + (N - 10));
+        }
+
+        return stream.str();
+    }
+};
+
+template<size_t N, class T1, class T2>
+struct get_func_suffix<N, std::pair<T1, T2> >
+{
+    static std::string value()
+    {
+        BOOST_STATIC_ASSERT(N < 2);
+
+        if(N == 0){
+            return ".first";
+        }
+        else {
+            return ".second";
+        }
+    };
+};
+
+template<size_t N, class T1>
+struct get_func_suffix<N, boost::tuple<T1> >
+{
+    static std::string value()
+    {
+        BOOST_STATIC_ASSERT(N < 1);
+
+        return ".v" + boost::lexical_cast<std::string>(N);
+    }
+};
+
+template<size_t N, class T1, class T2>
+struct get_func_suffix<N, boost::tuple<T1, T2> >
+{
+    static std::string value()
+    {
+        BOOST_STATIC_ASSERT(N < 2);
+
+        return ".v" + boost::lexical_cast<std::string>(N);
+    }
+};
+
+template<size_t N, class T1, class T2, class T3>
+struct get_func_suffix<N, boost::tuple<T1, T2, T3> >
+{
+    static std::string value()
+    {
+        BOOST_STATIC_ASSERT(N < 3);
+
+        return ".v" + boost::lexical_cast<std::string>(N);
+    }
+};
+
 } // end detail namespace
 
 template<class Arg1, class Arg2>
@@ -225,6 +311,21 @@ dot(const Arg1 &arg1, const Arg2 &arg2)
                detail::dot_func(),
                ::boost::ref(arg1),
                ::boost::ref(arg2)
+           );
+}
+
+// get<N>()
+template<size_t N, class Arg>
+typename proto::result_of::make_expr<
+             proto::tag::function,
+             detail::get_func<N>,
+             const Arg&
+         >::type const
+get(const Arg &arg)
+{
+    return proto::make_expr<proto::tag::function>(
+               detail::get_func<N>(),
+               ::boost::ref(arg)
            );
 }
 

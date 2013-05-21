@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestLambda
 #include <boost/test/unit_test.hpp>
 
+#include <boost/compute/pair.hpp>
+#include <boost/compute/tuple.hpp>
 #include <boost/compute/lambda.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
@@ -19,6 +21,7 @@
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(squared_plus_one)
 {
@@ -140,6 +143,125 @@ BOOST_AUTO_TEST_CASE(make_function_from_lamdba)
                               vector.begin(),
                               boost::compute::make_function_from_lambda<int(int)>(_1 * 2 + 3));
     CHECK_RANGE_EQUAL(int, 5, vector, (7, 11, 15, 19, 23));
+}
+
+BOOST_AUTO_TEST_CASE(lambda_get_vector)
+{
+    using boost::compute::_1;
+    using boost::compute::int2_;
+    using boost::compute::lambda::get;
+
+    int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    compute::vector<int2_> vector(4, context);
+
+    compute::copy(
+        reinterpret_cast<int2_ *>(data),
+        reinterpret_cast<int2_ *>(data) + 4,
+        vector.begin(),
+        queue
+    );
+
+    // extract first component of each vector
+    compute::vector<int> first_component(4, context);
+    compute::transform(
+        vector.begin(),
+        vector.end(),
+        first_component.begin(),
+        get<0>(_1),
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, first_component, (1, 3, 5, 7));
+
+    // extract second component of each vector
+    compute::vector<int> second_component(4, context);
+    compute::transform(
+        vector.begin(),
+        vector.end(),
+        first_component.begin(),
+        get<1>(_1),
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, first_component, (2, 4, 6, 8));
+}
+
+BOOST_AUTO_TEST_CASE(lambda_get_pair)
+{
+    using boost::compute::_1;
+    using boost::compute::lambda::get;
+
+    compute::vector<std::pair<int, float> > vector(context);
+    vector.push_back(std::make_pair(1, 1.2f));
+    vector.push_back(std::make_pair(3, 3.4f));
+    vector.push_back(std::make_pair(5, 5.6f));
+    vector.push_back(std::make_pair(7, 7.8f));
+
+    // extract first compoenent of each pair
+    compute::vector<int> first_component(4, context);
+    compute::transform(
+        vector.begin(),
+        vector.end(),
+        first_component.begin(),
+        get<0>(_1),
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, first_component, (1, 3, 5, 7));
+
+    // extract second compoenent of each pair
+    compute::vector<float> second_component(4, context);
+    compute::transform(
+        vector.begin(),
+        vector.end(),
+        second_component.begin(),
+        get<1>(_1),
+        queue
+    );
+    CHECK_RANGE_EQUAL(float, 4, second_component, (1.2f, 3.4f, 5.6f, 7.8f));
+}
+
+BOOST_AUTO_TEST_CASE(lambda_get_tuple)
+{
+    using boost::compute::_1;
+    using boost::compute::lambda::get;
+
+    compute::vector<boost::tuple<int, char, float> > vector(context);
+
+    vector.push_back(boost::make_tuple(1, 'a', 1.2f));
+    vector.push_back(boost::make_tuple(3, 'b', 3.4f));
+    vector.push_back(boost::make_tuple(5, 'c', 5.6f));
+    vector.push_back(boost::make_tuple(7, 'd', 7.8f));
+
+    // extract first compoenent of each tuple
+    compute::vector<int> first_component(4, context);
+    compute::transform(
+        vector.begin(),
+        vector.end(),
+        first_component.begin(),
+        get<0>(_1),
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, first_component, (1, 3, 5, 7));
+
+    // extract second compoenent of each tuple
+    compute::vector<char> second_component(4, context);
+    compute::transform(
+        vector.begin(),
+        vector.end(),
+        second_component.begin(),
+        get<1>(_1),
+        queue
+    );
+    CHECK_RANGE_EQUAL(char, 4, second_component, ('a', 'b', 'c', 'd'));
+
+    // extract third compoenent of each tuple
+    compute::vector<float> third_component(4, context);
+    compute::transform(
+        vector.begin(),
+        vector.end(),
+        third_component.begin(),
+        get<2>(_1),
+        queue
+    );
+    CHECK_RANGE_EQUAL(float, 4, third_component, (1.2f, 3.4f, 5.6f, 7.8f));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
