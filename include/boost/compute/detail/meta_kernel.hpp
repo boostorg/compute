@@ -695,6 +695,49 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
     return kernel << literal.value();
 }
 
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const meta_kernel_literal<char> &literal)
+{
+    const char c = literal.value();
+
+    switch(c){
+    // control characters
+    case '\0':
+        return kernel << "'\\0'";
+    case '\a':
+        return kernel << "'\\a'";
+    case '\b':
+        return kernel << "'\\b'";
+    case '\t':
+        return kernel << "'\\t'";
+    case '\n':
+        return kernel << "'\\n'";
+    case '\v':
+        return kernel << "'\\v'";
+    case '\f':
+        return kernel << "'\\f'";
+    case '\r':
+        return kernel << "'\\r'";
+
+    // characters which need escaping
+    case '\"':
+    case '\'':
+    case '\?':
+    case '\\':
+        return kernel << "'\\" << c << "'";
+
+    // all other characters
+    default:
+        return kernel << "'" << c << "'";
+    }
+}
+
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const meta_kernel_literal<unsigned char> &literal)
+{
+    return kernel << uint_(literal.value());
+}
+
 template<class T1, class T2>
 inline meta_kernel& operator<<(meta_kernel &kernel,
                                const meta_kernel_literal<std::pair<T1, T2> > &literal)
