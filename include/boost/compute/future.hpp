@@ -101,6 +101,13 @@ public:
     template<class T>
     future<void> &operator=(const future<T> &other)
     {
+        m_event = other.get_event();
+
+        return *this;
+    }
+
+    future<void> &operator=(const future<void> &other)
+    {
         if(this != &other){
             m_event = other.m_event;
         }
