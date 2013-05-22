@@ -64,6 +64,19 @@ BOOST_AUTO_TEST_CASE(fill_pair_vector)
     BOOST_CHECK(vector[4] == std::make_pair(4, 2.0f));
 }
 
+BOOST_AUTO_TEST_CASE(fill_char_pair_vector)
+{
+    std::pair<char, unsigned char> value('c', static_cast<unsigned char>(127));
+    boost::compute::vector<std::pair<char, unsigned char> > vector(5);
+    boost::compute::fill(vector.begin(), vector.end(), value);
+    boost::compute::system::finish();
+    BOOST_CHECK(vector[0] == value);
+    BOOST_CHECK(vector[1] == value);
+    BOOST_CHECK(vector[2] == value);
+    BOOST_CHECK(vector[3] == value);
+    BOOST_CHECK(vector[4] == value);
+}
+
 BOOST_AUTO_TEST_CASE(transform_pair_get)
 {
     boost::compute::vector<std::pair<int, float> > input;
