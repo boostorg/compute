@@ -24,13 +24,13 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-// meta_kernel operators for boost::tuple
+// meta_kernel operators for boost::tuple literals
 template<class T1>
 meta_kernel& operator<<(meta_kernel &kernel,
                         const boost::tuple<T1> &x)
 {
     kernel << "(" << type_name<boost::tuple<T1> >() << ")"
-           << "{" << boost::get<0>(x) << "}";
+           << "{" << kernel.make_lit(boost::get<0>(x)) << "}";
 
     return kernel;
 }
@@ -40,8 +40,8 @@ meta_kernel& operator<<(meta_kernel &kernel,
                         const boost::tuple<T1, T2> &x)
 {
     kernel << "(" << type_name<boost::tuple<T1, T2> >() << ")"
-           << "{" << boost::get<0>(x) << ", "
-                  << boost::get<1>(x) << "}";
+           << "{" << kernel.make_lit(boost::get<0>(x)) << ", "
+                  << kernel.make_lit(boost::get<1>(x)) << "}";
 
     return kernel;
 }
@@ -51,9 +51,9 @@ meta_kernel& operator<<(meta_kernel &kernel,
                         const boost::tuple<T1, T2, T3> &x)
 {
     kernel << "(" << type_name<boost::tuple<T1, T2, T3> >() << ")"
-           << "{" << boost::get<0>(x) << ", "
-                  << boost::get<1>(x) << ", "
-                  << boost::get<2>(x) << "}";
+           << "{" << kernel.make_lit(boost::get<0>(x)) << ", "
+                  << kernel.make_lit(boost::get<1>(x)) << ", "
+                  << kernel.make_lit(boost::get<2>(x)) << "}";
 
     return kernel;
 }

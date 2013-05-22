@@ -94,4 +94,18 @@ BOOST_AUTO_TEST_CASE(extract_tuple_elements)
     CHECK_RANGE_EQUAL(float, 3, floats, (2.3f, 4.5f, 7.8f));
 }
 
+BOOST_AUTO_TEST_CASE(fill_tuple_vector)
+{
+    compute::vector<boost::tuple<char, int, float> > vector(5, context);
+    compute::fill(vector.begin(), vector.end(), boost::make_tuple('z', 4, 3.14f));
+
+    std::vector<boost::tuple<char, int, float> > host_output(5);
+    compute::copy(vector.begin(), vector.end(), host_output.begin());
+    BOOST_CHECK_EQUAL(host_output[0], boost::make_tuple('z', 4, 3.14f));
+    BOOST_CHECK_EQUAL(host_output[1], boost::make_tuple('z', 4, 3.14f));
+    BOOST_CHECK_EQUAL(host_output[2], boost::make_tuple('z', 4, 3.14f));
+    BOOST_CHECK_EQUAL(host_output[3], boost::make_tuple('z', 4, 3.14f));
+    BOOST_CHECK_EQUAL(host_output[4], boost::make_tuple('z', 4, 3.14f));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
