@@ -19,6 +19,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/functional/get.hpp>
 
+#include "quirks.hpp"
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
@@ -54,6 +55,11 @@ BOOST_AUTO_TEST_CASE(copy_pair_vector)
 
 BOOST_AUTO_TEST_CASE(fill_pair_vector)
 {
+    if(bug_in_struct_assignment(device)){
+        std::cerr << "skipping fill_pair_vector test" << std::endl;
+        return;
+    }
+
     boost::compute::vector<std::pair<int, float> > vector(5);
     boost::compute::fill(vector.begin(), vector.end(), std::make_pair(4, 2.0f));
     boost::compute::system::finish();

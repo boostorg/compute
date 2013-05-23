@@ -22,6 +22,7 @@
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "quirks.hpp"
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
@@ -96,6 +97,11 @@ BOOST_AUTO_TEST_CASE(extract_tuple_elements)
 
 BOOST_AUTO_TEST_CASE(fill_tuple_vector)
 {
+    if(bug_in_struct_assignment(device)){
+        std::cerr << "skipping fill_tuple_vector test" << std::endl;
+        return;
+    }
+
     compute::vector<boost::tuple<char, int, float> > vector(5, context);
     compute::fill(vector.begin(), vector.end(), boost::make_tuple('z', 4, 3.14f));
 
