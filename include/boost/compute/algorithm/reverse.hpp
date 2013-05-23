@@ -55,6 +55,11 @@ inline void reverse(Iterator first,
                     Iterator last,
                     command_queue &queue = system::default_queue())
 {
+    size_t count = detail::iterator_range_size(first, last);
+    if(count < 2){
+        return;
+    }
+
     detail::reverse_kernel<Iterator> kernel(first, last);
 
     kernel.exec(queue);
