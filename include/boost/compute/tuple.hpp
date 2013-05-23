@@ -26,8 +26,8 @@ namespace detail {
 
 // meta_kernel operators for boost::tuple literals
 template<class T1>
-meta_kernel& operator<<(meta_kernel &kernel,
-                        const boost::tuple<T1> &x)
+inline meta_kernel&
+operator<<(meta_kernel &kernel, const boost::tuple<T1> &x)
 {
     kernel << "(" << type_name<boost::tuple<T1> >() << ")"
            << "{" << kernel.make_lit(boost::get<0>(x)) << "}";
@@ -36,8 +36,8 @@ meta_kernel& operator<<(meta_kernel &kernel,
 }
 
 template<class T1, class T2>
-meta_kernel& operator<<(meta_kernel &kernel,
-                        const boost::tuple<T1, T2> &x)
+inline meta_kernel&
+operator<<(meta_kernel &kernel, const boost::tuple<T1, T2> &x)
 {
     kernel << "(" << type_name<boost::tuple<T1, T2> >() << ")"
            << "{" << kernel.make_lit(boost::get<0>(x)) << ", "
@@ -47,8 +47,8 @@ meta_kernel& operator<<(meta_kernel &kernel,
 }
 
 template<class T1, class T2, class T3>
-meta_kernel& operator<<(meta_kernel &kernel,
-                        const boost::tuple<T1, T2, T3> &x)
+inline meta_kernel&
+operator<<(meta_kernel &kernel, const boost::tuple<T1, T2, T3> &x)
 {
     kernel << "(" << type_name<boost::tuple<T1, T2, T3> >() << ")"
            << "{" << kernel.make_lit(boost::get<0>(x)) << ", "
