@@ -24,7 +24,8 @@ namespace detail {
 
 // meta_kernel operator for std::pair literals
 template<class T1, class T2>
-meta_kernel& operator<<(meta_kernel &kernel, const std::pair<T1, T2> &x)
+inline meta_kernel&
+operator<<(meta_kernel &kernel, const std::pair<T1, T2> &x)
 {
     kernel << "(" << type_name<std::pair<T1, T2> >() << ")"
            << "{" << kernel.make_lit(x.first) << ", "
