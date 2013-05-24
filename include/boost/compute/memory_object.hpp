@@ -16,6 +16,7 @@
 #include <boost/compute/cl.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
+#include <boost/compute/detail/assert_cl_success.hpp>
 
 namespace boost {
 namespace compute {
@@ -145,7 +146,9 @@ protected:
     ~memory_object()
     {
         if(m_mem){
-            clReleaseMemObject(m_mem);
+            BOOST_COMPUTE_ASSERT_CL_SUCCESS(
+                clReleaseMemObject(m_mem)
+            );
         }
     }
 

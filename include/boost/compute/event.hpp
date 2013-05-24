@@ -16,6 +16,7 @@
 #include <boost/compute/cl.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
+#include <boost/compute/detail/assert_cl_success.hpp>
 
 namespace boost {
 namespace compute {
@@ -124,7 +125,9 @@ public:
     ~event()
     {
         if(m_event){
-            clReleaseEvent(m_event);
+            BOOST_COMPUTE_ASSERT_CL_SUCCESS(
+                clReleaseEvent(m_event)
+            );
         }
     }
 

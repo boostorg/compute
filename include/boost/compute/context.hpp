@@ -15,6 +15,7 @@
 
 #include <boost/compute/cl.hpp>
 #include <boost/compute/device.hpp>
+#include <boost/compute/detail/assert_cl_success.hpp>
 
 namespace boost {
 namespace compute {
@@ -102,7 +103,9 @@ public:
     ~context()
     {
         if(m_context){
-            clReleaseContext(m_context);
+            BOOST_COMPUTE_ASSERT_CL_SUCCESS(
+                clReleaseContext(m_context)
+            );
         }
     }
 

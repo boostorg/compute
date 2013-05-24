@@ -19,6 +19,7 @@
 #include <boost/compute/exception.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
+#include <boost/compute/detail/assert_cl_success.hpp>
 
 namespace boost {
 namespace compute {
@@ -110,7 +111,9 @@ public:
     ~image_sampler()
     {
         if(m_sampler){
-            clReleaseSampler(m_sampler);
+            BOOST_COMPUTE_ASSERT_CL_SUCCESS(
+                clReleaseSampler(m_sampler)
+            );
         }
     }
 

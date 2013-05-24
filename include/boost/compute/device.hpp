@@ -22,6 +22,7 @@
 #include <boost/compute/types.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
+#include <boost/compute/detail/assert_cl_success.hpp>
 
 namespace boost {
 namespace compute {
@@ -109,7 +110,9 @@ public:
     {
         #ifdef CL_VERSION_1_2
         if(m_id){
-            clReleaseDevice(m_id);
+            BOOST_COMPUTE_ASSERT_CL_SUCCESS(
+                clReleaseDevice(m_id)
+            );
         }
         #endif
     }

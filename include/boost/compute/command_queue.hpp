@@ -26,6 +26,7 @@
 #include <boost/compute/image3d.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
+#include <boost/compute/detail/assert_cl_success.hpp>
 
 #ifdef BOOST_COMPUTE_HAVE_GL
 #include <boost/compute/cl_gl.hpp>
@@ -128,7 +129,9 @@ public:
             finish();
 
             // release the memory for the command queue
-            clReleaseCommandQueue(m_queue);
+            BOOST_COMPUTE_ASSERT_CL_SUCCESS(
+                clReleaseCommandQueue(m_queue)
+            );
         }
     }
 

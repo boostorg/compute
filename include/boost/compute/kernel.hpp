@@ -25,6 +25,7 @@
 #include <boost/compute/exception.hpp>
 #include <boost/compute/image_sampler.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
+#include <boost/compute/detail/assert_cl_success.hpp>
 #include <boost/compute/detail/program_create_kernel_result.hpp>
 
 namespace boost {
@@ -108,7 +109,9 @@ public:
     ~kernel()
     {
         if(m_kernel){
-            clReleaseKernel(m_kernel);
+            BOOST_COMPUTE_ASSERT_CL_SUCCESS(
+                clReleaseKernel(m_kernel)
+            );
         }
     }
 

@@ -25,6 +25,7 @@
 #include <boost/compute/cl.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/exception.hpp>
+#include <boost/compute/detail/assert_cl_success.hpp>
 #include <boost/compute/detail/program_create_kernel_result.hpp>
 
 namespace boost {
@@ -94,7 +95,9 @@ public:
     ~program()
     {
         if(m_program){
-            clReleaseProgram(m_program);
+            BOOST_COMPUTE_ASSERT_CL_SUCCESS(
+                clReleaseProgram(m_program)
+            );
         }
     }
 
