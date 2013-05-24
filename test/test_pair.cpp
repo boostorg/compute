@@ -72,6 +72,11 @@ BOOST_AUTO_TEST_CASE(fill_pair_vector)
 
 BOOST_AUTO_TEST_CASE(fill_char_pair_vector)
 {
+    if(bug_in_struct_assignment(device)){
+        std::cerr << "skipping fill_char_pair_vector test" << std::endl;
+        return;
+    }
+
     std::pair<char, unsigned char> value('c', static_cast<unsigned char>(127));
     boost::compute::vector<std::pair<char, unsigned char> > vector(5);
     boost::compute::fill(vector.begin(), vector.end(), value);
