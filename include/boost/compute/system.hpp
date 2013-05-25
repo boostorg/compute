@@ -116,13 +116,19 @@ public:
 private:
     static device find_default_device()
     {
+        // get a list of all devices on the system
+        const std::vector<device> devices_ = devices();
+        if(devices_.empty()){
+            return device();
+        }
+
         // check for device from environment variable
         const char *name     = std::getenv("BOOST_COMPUTE_DEFAULT_DEVICE");
         const char *platform = std::getenv("BOOST_COMPUTE_DEFAULT_PLATFORM");
         const char *vendor   = std::getenv("BOOST_COMPUTE_DEFAULT_VENDOR");
 
         if(name || platform || vendor){
-            BOOST_FOREACH(const device &device, devices()){
+            BOOST_FOREACH(const device &device, devices_){
                 if (name && !matches(device.name(), name))
                     continue;
 
@@ -137,20 +143,21 @@ private:
         }
 
         // find the first gpu device
-        BOOST_FOREACH(const device &device, devices()){
+        BOOST_FOREACH(const device &device, devices_){
             if(device.type() == device::gpu){
                 return device;
             }
         }
 
         // find the first cpu device
-        BOOST_FOREACH(const device &device, devices()){
+        BOOST_FOREACH(const device &device, devices_){
             if(device.type() == device::cpu){
                 return device;
             }
         }
 
-        return device();
+        // return the first device found
+        return devices_[0];
     }
 
     static platform device_platform(const device &device)
