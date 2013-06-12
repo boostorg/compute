@@ -14,6 +14,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <iomanip>
 #include <sstream>
 #include <utility>
 
@@ -493,8 +494,19 @@ public:
     BOOST_COMPUTE_META_KERNEL_DECLARE_TYPE_STREAM_OPERATORS(uint)
     BOOST_COMPUTE_META_KERNEL_DECLARE_TYPE_STREAM_OPERATORS(long)
     BOOST_COMPUTE_META_KERNEL_DECLARE_TYPE_STREAM_OPERATORS(ulong)
-    BOOST_COMPUTE_META_KERNEL_DECLARE_TYPE_STREAM_OPERATORS(float)
     BOOST_COMPUTE_META_KERNEL_DECLARE_TYPE_STREAM_OPERATORS(double)
+
+    // define stream operators for float scalar and vector types
+    meta_kernel& operator<<(const float &x)
+    {
+        m_source << std::showpoint << x << 'f';
+        return *this;
+    }
+
+    BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float2_)
+    BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float4_)
+    BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float8_)
+    BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float16_)
 
     // define stream operators for strings
     meta_kernel& operator<<(char ch)
