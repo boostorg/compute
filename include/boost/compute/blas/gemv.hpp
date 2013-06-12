@@ -43,10 +43,10 @@ inline void gemv(const matrix_order order,
     (void) lda;
 
     ::boost::compute::detail::meta_kernel kernel("gemv");
-    kernel.add_arg<Scalar>("alpha", alpha);
-    kernel.add_arg<Scalar>("beta", beta);
-    kernel.add_arg<const cl_uint>("M", static_cast<const cl_uint>(M));
-    kernel.add_arg<const cl_uint>("N", static_cast<const cl_uint>(N));
+    kernel.add_set_arg<Scalar>("alpha", alpha);
+    kernel.add_set_arg<Scalar>("beta", beta);
+    kernel.add_set_arg<const cl_uint>("M", static_cast<const cl_uint>(M));
+    kernel.add_set_arg<const cl_uint>("N", static_cast<const cl_uint>(N));
     size_t a_index = kernel.add_arg<const Scalar *>("__global", "A");
     size_t x_index = kernel.add_arg<const Scalar *>("__global", "X");
     size_t y_index = kernel.add_arg<Scalar *>("__global", "Y");

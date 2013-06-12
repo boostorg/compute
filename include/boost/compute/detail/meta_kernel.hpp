@@ -357,14 +357,6 @@ public:
     }
 
     template<class T>
-    size_t add_arg(const std::string &name, const T &value)
-    {
-        size_t index = add_arg<T>(name);
-        set_arg<T>(index, value);
-        return index;
-    }
-
-    template<class T>
     size_t add_arg(const std::string &qualifiers, const std::string &name)
     {
         size_t index = add_arg<T>(name);
@@ -400,6 +392,14 @@ public:
     void set_arg(size_t index, const image_sampler &sampler)
     {
         set_arg<cl_sampler>(index, cl_sampler(sampler));
+    }
+
+    template<class T>
+    size_t add_set_arg(const std::string &name, const T &value)
+    {
+        size_t index = add_arg<T>(name);
+        set_arg<T>(index, value);
+        return index;
     }
 
     void add_extension_pragma(const std::string &extension,

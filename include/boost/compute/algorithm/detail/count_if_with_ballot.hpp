@@ -57,7 +57,7 @@ inline size_t count_if_with_ballot(InputIterator first,
             counts.begin()[k.var<uint_>("get_group_id(0)") ]
                 << " = " << popc(k.var<uint_>("bits")) << ";\n";
 
-    k.add_arg<const uint_>("count", count);
+    k.add_set_arg<const uint_>("count", count);
 
     k.exec_1d(queue, 0, block_size * block_count, block_size);
 

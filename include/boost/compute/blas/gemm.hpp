@@ -43,14 +43,14 @@ inline void gemm(const matrix_order order,
     (void) trans_b;
 
     ::boost::compute::detail::meta_kernel k("gemm");
-    k.add_arg<Scalar>("alpha", alpha);
-    k.add_arg<Scalar>("beta", beta);
-    k.add_arg<const cl_uint>("M", static_cast<const cl_uint>(M));
-    k.add_arg<const cl_uint>("N", static_cast<const cl_uint>(N));
-    k.add_arg<const cl_uint>("K", static_cast<const cl_uint>(K));
-    k.add_arg<const cl_uint>("lda", static_cast<const cl_uint>(lda));
-    k.add_arg<const cl_uint>("ldb", static_cast<const cl_uint>(ldb));
-    k.add_arg<const cl_uint>("ldc", static_cast<const cl_uint>(ldc));
+    k.add_set_arg<Scalar>("alpha", alpha);
+    k.add_set_arg<Scalar>("beta", beta);
+    k.add_set_arg<const cl_uint>("M", static_cast<const cl_uint>(M));
+    k.add_set_arg<const cl_uint>("N", static_cast<const cl_uint>(N));
+    k.add_set_arg<const cl_uint>("K", static_cast<const cl_uint>(K));
+    k.add_set_arg<const cl_uint>("lda", static_cast<const cl_uint>(lda));
+    k.add_set_arg<const cl_uint>("ldb", static_cast<const cl_uint>(ldb));
+    k.add_set_arg<const cl_uint>("ldc", static_cast<const cl_uint>(ldc));
     size_t a_index = k.add_arg<const Scalar *>("__global", "A");
     size_t b_index = k.add_arg<const Scalar *>("__global", "B");
     size_t c_index = k.add_arg<Scalar *>("__global", "C");

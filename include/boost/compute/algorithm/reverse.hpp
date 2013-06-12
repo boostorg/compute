@@ -30,7 +30,7 @@ struct reverse_kernel : public meta_kernel
 
         // store size of the range
         m_size = detail::iterator_range_size(first, last);
-        add_arg<const cl_uint>("size", static_cast<const cl_uint>(m_size));
+        add_set_arg<const cl_uint>("size", static_cast<const cl_uint>(m_size));
 
         *this <<
             decl<cl_uint>("i") << " = get_global_id(0);\n" <<

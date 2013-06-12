@@ -42,12 +42,12 @@ public:
 
     void set_old_value(const T &old_value)
     {
-        add_arg<T>("old_value", old_value);
+        add_set_arg<T>("old_value", old_value);
     }
 
     void set_new_value(const T &new_value)
     {
-        add_arg<T>("new_value", new_value);
+        add_set_arg<T>("new_value", new_value);
     }
 
     void exec(command_queue &queue)

@@ -43,8 +43,8 @@ inline OutputIterator serial_merge(InputIterator1 first1,
     std::ptrdiff_t size2 = std::distance(first2, last2);
 
     meta_kernel k("serial_merge");
-    k.add_arg<uint_>("size1", static_cast<uint_>(size1));
-    k.add_arg<uint_>("size2", static_cast<uint_>(size2));
+    k.add_set_arg<uint_>("size1", static_cast<uint_>(size1));
+    k.add_set_arg<uint_>("size2", static_cast<uint_>(size2));
 
     k <<
         "uint i = 0;\n" << // index in result range
