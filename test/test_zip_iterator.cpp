@@ -19,10 +19,14 @@
 #include <boost/compute/tuple.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/zip_iterator.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
+
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(value_type)
 {
@@ -145,6 +149,62 @@ BOOST_AUTO_TEST_CASE(copy)
     BOOST_CHECK_EQUAL(host_vector[0], boost::make_tuple('x', 4, 3.2f));
     BOOST_CHECK_EQUAL(host_vector[1], boost::make_tuple('y', 7, 4.5f));
     BOOST_CHECK_EQUAL(host_vector[2], boost::make_tuple('z', 9, 7.6f));
+}
+
+BOOST_AUTO_TEST_CASE(zip_iterator_get)
+{
+    int data1[] = { 0, 2, 4, 6, 8 };
+    int data2[] = { 1, 3, 5, 7, 9 };
+
+    compute::vector<int> input1(5, context);
+    compute::copy(data1, data1 + 5, input1.begin(), queue);
+
+    compute::vector<int> input2(5, context);
+    compute::copy(data2, data2 + 5, input2.begin(), queue);
+
+    compute::vector<int> output(5, context);
+
+    // extract first component from (input1)
+    compute::transform(
+        compute::make_zip_iterator(
+            boost::make_tuple(input1.begin())
+        ),
+        compute::make_zip_iterator(
+            boost::make_tuple(input1.end())
+        ),
+        output.begin(),
+        compute::get<0>(),
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 5, output, (0, 2, 4, 6, 8));
+
+    // extract first component from (input2, input1)
+    compute::transform(
+        compute::make_zip_iterator(
+            boost::make_tuple(input2.begin(), input1.begin())
+        ),
+        compute::make_zip_iterator(
+            boost::make_tuple(input2.end(), input1.end())
+        ),
+        output.begin(),
+        compute::get<0>(),
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 5, output, (1, 3, 5, 7, 9));
+
+    // extract second component from (input1, input2, input1)
+    compute::transform(
+        compute::make_zip_iterator(
+            boost::make_tuple(input1.begin(), input2.begin(), input1.begin())
+        ),
+        compute::make_zip_iterator(
+            boost::make_tuple(input1.end(), input2.end(), input1.end())
+        ),
+        output.begin(),
+        compute::get<1>(),
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 5, output, (1, 3, 5, 7, 9));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

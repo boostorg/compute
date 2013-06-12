@@ -303,6 +303,64 @@ struct is_device_iterator<
     >::type
 > : public boost::true_type {};
 
+// get<N>() specialization for zip_iterator
+template<size_t N, class IteratorTuple, class IndexExpr, class T1>
+inline meta_kernel&
+operator<<(meta_kernel &kernel,
+           const invoked_get<
+               N,
+               zip_iterator_index_expr<IteratorTuple, IndexExpr>,
+               boost::tuple<T1>
+            > &expr)
+{
+    typedef typename boost::tuple<T1> Tuple;
+    typedef typename boost::tuples::element<N, Tuple>::type T;
+
+    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<Tuple>::value));
+
+    kernel.inject_type<T>();
+
+    return kernel << boost::get<N>(expr.m_arg.m_iterators)[expr.m_arg.m_index_expr];
+}
+
+template<size_t N, class IteratorTuple, class IndexExpr, class T1, class T2>
+inline meta_kernel&
+operator<<(meta_kernel &kernel,
+           const invoked_get<
+               N,
+               zip_iterator_index_expr<IteratorTuple, IndexExpr>,
+               boost::tuple<T1, T2>
+            > &expr)
+{
+    typedef typename boost::tuple<T1, T2> Tuple;
+    typedef typename boost::tuples::element<N, Tuple>::type T;
+
+    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<Tuple>::value));
+
+    kernel.inject_type<T>();
+
+    return kernel << boost::get<N>(expr.m_arg.m_iterators)[expr.m_arg.m_index_expr];
+}
+
+template<size_t N, class IteratorTuple, class IndexExpr, class T1, class T2, class T3>
+inline meta_kernel&
+operator<<(meta_kernel &kernel,
+           const invoked_get<
+               N,
+               zip_iterator_index_expr<IteratorTuple, IndexExpr>,
+               boost::tuple<T1, T2, T3>
+            > &expr)
+{
+    typedef typename boost::tuple<T1, T2, T3> Tuple;
+    typedef typename boost::tuples::element<N, Tuple>::type T;
+
+    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<Tuple>::value));
+
+    kernel.inject_type<T>();
+
+    return kernel << boost::get<N>(expr.m_arg.m_iterators)[expr.m_arg.m_index_expr];
+}
+
 } // end detail namespace
 } // end compute namespace
 } // end boost namespace
