@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestAnyAllNoneOf
 #include <boost/test/unit_test.hpp>
 
+#include <cmath>
+
 #include <boost/compute/lambda.hpp>
 #include <boost/compute/algorithm/all_of.hpp>
 #include <boost/compute/algorithm/any_of.hpp>
@@ -20,6 +22,7 @@
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(any_all_none_of)
 {
@@ -36,6 +39,27 @@ BOOST_AUTO_TEST_CASE(any_all_none_of)
     BOOST_CHECK(bc::all_of(v.begin(), v.end(), _1 < 9) == true);
     BOOST_CHECK(bc::all_of(v.begin(), v.end(), _1 < 6) == false);
     BOOST_CHECK(bc::all_of(v.begin(), v.end(), _1 >= 1) == true);
+}
+
+BOOST_AUTO_TEST_CASE(any_nan_inf)
+{
+    using ::boost::compute::_1;
+    using ::boost::compute::lambda::isinf;
+    using ::boost::compute::lambda::isnan;
+
+    float nan = std::sqrt(-1.f);
+    float inf = 1.f / 0.f;
+
+    float data[] = { 1.2f, 2.3f, nan, nan, 3.4f, inf, 4.5f, inf };
+    compute::vector<float> vector(data, data + 8);
+
+    BOOST_CHECK(compute::any_of(vector.begin(), vector.end(), isinf(_1) || isnan(_1)) == true);
+    BOOST_CHECK(compute::any_of(vector.begin(), vector.end(), isfinite(_1)) == true);
+    BOOST_CHECK(compute::all_of(vector.begin(), vector.end(), isfinite(_1)) == false);
+    BOOST_CHECK(compute::all_of(vector.begin(), vector.begin() + 2, isfinite(_1)) == true);
+    BOOST_CHECK(compute::all_of(vector.begin() + 2, vector.begin() + 4, isnan(_1)) == true);
+    BOOST_CHECK(compute::none_of(vector.begin(), vector.end(), isinf(_1)) == false);
+    BOOST_CHECK(compute::none_of(vector.begin(), vector.begin() + 4, isinf(_1)) == true);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
