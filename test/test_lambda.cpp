@@ -14,8 +14,10 @@
 #include <boost/compute/pair.hpp>
 #include <boost/compute/tuple.hpp>
 #include <boost/compute/lambda.hpp>
+#include <boost/compute/algorithm/for_each.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/iterator/zip_iterator.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"
@@ -74,7 +76,7 @@ void check_unary_lambda_result(const Expr &, const Arg1 &)
         boost::is_same<
             typename ::boost::compute::lambda::result_of<
                 Expr,
-                typename boost::mpl::vector<Arg1>
+                typename boost::tuple<Arg1>
             >::type,
             Result
         >::value
@@ -88,7 +90,7 @@ void check_binary_lambda_result(const Expr &, const Arg1 &, const Arg2 &)
         boost::is_same<
             typename ::boost::compute::lambda::result_of<
                 Expr,
-                typename boost::mpl::vector<Arg1, Arg2>
+                typename boost::tuple<Arg1, Arg2>
             >::type,
             Result
         >::value
@@ -262,6 +264,31 @@ BOOST_AUTO_TEST_CASE(lambda_get_tuple)
         queue
     );
     CHECK_RANGE_EQUAL(float, 4, third_component, (1.2f, 3.4f, 5.6f, 7.8f));
+}
+
+BOOST_AUTO_TEST_CASE(lambda_get_zip_iterator)
+{
+    using boost::compute::_1;
+    using boost::compute::lambda::get;
+
+    float data[] = { 1.2f, 2.3f, 3.4f, 4.5f, 5.6f, 6.7f, 7.8f, 9.0f };
+    compute::vector<float> input(8, context);
+    compute::copy(data, data + 8, input.begin());
+
+    compute::vector<float> output(8, context);
+
+    compute::for_each(
+        compute::make_zip_iterator(
+            boost::make_tuple(input.begin(), output.begin())
+        ),
+        compute::make_zip_iterator(
+            boost::make_tuple(input.end(), output.end())
+        ),
+        get<1>(_1) = get<0>(_1)
+    );
+    CHECK_RANGE_EQUAL(float, 8, output,
+        (1.2f, 2.3f, 3.4f, 4.5f, 5.6f, 6.7f, 7.8f, 9.0f)
+    );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

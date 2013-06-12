@@ -11,23 +11,14 @@
 #ifndef BOOST_COMPUTE_LAMBDA_CONTEXT_HPP
 #define BOOST_COMPUTE_LAMBDA_CONTEXT_HPP
 
-#include <cmath>
-#include <string>
-#include <iomanip>
-#include <sstream>
-
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string.hpp>
-
-#include <boost/mpl/vector.hpp>
 #include <boost/proto/core.hpp>
 #include <boost/proto/context.hpp>
 #include <boost/type_traits.hpp>
 
 #include <boost/compute/type_traits/type_name.hpp>
-#include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/lambda/result_of.hpp>
 #include <boost/compute/lambda/functional.hpp>
+#include <boost/compute/detail/meta_kernel.hpp>
 
 namespace boost {
 namespace compute {
@@ -41,27 +32,6 @@ template<int I>
 struct placeholder
 {
 };
-
-#define BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATOR(scalar, n) \
-    void operator()(proto::tag::terminal, \
-                    const BOOST_COMPUTE_MAKE_VECTOR_TYPE(scalar, n) &x) \
-    { \
-        typedef BOOST_COMPUTE_MAKE_VECTOR_TYPE(scalar, n) type; \
-        stream << '(' << type_name<type>() << ")("; \
-        for(size_t i = 0; i < n; i++){ \
-            stream << x[i]; \
-            if(i != n - 1){ \
-                stream << ','; \
-            } \
-        } \
-        stream << ')'; \
-    }
-
-#define BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATORS(scalar) \
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATOR(scalar, 2) \
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATOR(scalar, 4) \
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATOR(scalar, 8) \
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATOR(scalar, 16)
 
 #define BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_BINARY_OPERATOR(tag, op) \
     template<class LHS, class RHS> \
@@ -89,10 +59,17 @@ struct placeholder
     }
 
 // lambda expression context
-template<class Args = mpl::vector<> >
+template<class Args>
 struct context : proto::callable_context<context<Args> >
 {
     typedef void result_type;
+
+    context(boost::compute::detail::meta_kernel &kernel,
+            const Args &args)
+        : stream(kernel),
+          m_args(args)
+    {
+    }
 
     ~context()
     {
@@ -105,28 +82,23 @@ struct context : proto::callable_context<context<Args> >
         stream << x;
     }
 
-    void operator()(proto::tag::terminal, const float &x)
+    template<class T>
+    void operator()(proto::tag::terminal, char_ x)
     {
-        stream << std::showpoint << x << "f";
+        stream << stream.lit(x);
     }
 
-    // handle vector terminals
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATORS(char)
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATORS(uchar)
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATORS(short)
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATORS(ushort)
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATORS(int)
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATORS(uint)
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATORS(long)
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATORS(ulong)
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATORS(float)
-    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_VECTOR_TERMINAL_OPERATORS(double)
+    template<class T>
+    void operator()(proto::tag::terminal, uchar_ x)
+    {
+        stream << stream.lit(x);
+    }
 
     // handle placeholders
     template<int I>
     void operator()(proto::tag::terminal, placeholder<I>)
     {
-        stream << "$" << I + 1;
+        stream << boost::get<I>(m_args);
     }
 
     // handle functions
@@ -176,21 +148,40 @@ struct context : proto::callable_context<context<Args> >
     }
 
     template<size_t N, class Arg>
-    void apply_function(const detail::get_func<N> &, const Arg &arg)
+    void apply_function(detail::get_func<N>, const Arg &arg)
     {
         typedef typename
             boost::remove_cv<
                 typename boost::compute::lambda::result_of<Arg, Args>::type
             >::type T;
 
-        apply_get_function<N, T>(arg);
+        apply_get_function<N, T>(arg, typename proto::tag_of<Arg>::type());
     }
 
-    template<size_t N, class T, class Arg>
-    void apply_get_function(const Arg &arg)
+    template<size_t N, class T, class Arg, class Tag>
+    void apply_get_function(const Arg &arg, Tag)
     {
         proto::eval(arg, *this);
         stream << detail::get_func_suffix<N, T>::value();
+    }
+
+    template<size_t N, class T, class Arg>
+    void apply_get_function(const Arg &arg, proto::tag::terminal)
+    {
+        apply_get_terminal_function<N, T>(arg, proto::value(arg));
+    }
+
+    template<size_t N, class T, class Arg, class ArgValue>
+    void apply_get_terminal_function(const Arg &arg, ArgValue)
+    {
+        proto::eval(arg, *this);
+        stream << detail::get_func_suffix<N, T>::value();
+    }
+
+    template<size_t N, class T, class Arg, int I>
+    void apply_get_terminal_function(Arg, placeholder<I>)
+    {
+        stream << ::boost::compute::get<N>()(::boost::get<I>(m_args));
     }
 
     // operators
@@ -210,6 +201,7 @@ struct context : proto::callable_context<context<Args> >
     BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_BINARY_OPERATOR(proto::tag::bitwise_and, '&')
     BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_BINARY_OPERATOR(proto::tag::bitwise_or, '|')
     BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_BINARY_OPERATOR(proto::tag::bitwise_xor, '^')
+    BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_BINARY_OPERATOR(proto::tag::assign, '=')
 
     // subscript operator
     template<class LHS, class RHS>
@@ -232,7 +224,8 @@ struct context : proto::callable_context<context<Args> >
         proto::eval(y);
     }
 
-    std::stringstream stream;
+    boost::compute::detail::meta_kernel &stream;
+    Args m_args;
 };
 
 namespace detail {
@@ -242,13 +235,13 @@ struct invoked_unary_expression
 {
     typedef typename ::boost::tr1_result_of<Expr(Arg)>::type result_type;
 
-    invoked_unary_expression(const std::string &expr, const Arg &arg)
+    invoked_unary_expression(const Expr &expr, const Arg &arg)
         : m_expr(expr),
           m_arg(arg)
     {
     }
 
-    std::string m_expr;
+    Expr m_expr;
     Arg m_arg;
 };
 
@@ -257,24 +250,8 @@ boost::compute::detail::meta_kernel&
 operator<<(boost::compute::detail::meta_kernel &kernel,
            const invoked_unary_expression<Expr, Arg> &expr)
 {
-    std::string s = expr.m_expr;
-    const size_t token_length = 2;
-
-    size_t i = 0;
-    while(true){
-        size_t a1 = s.find("$1", i);
-
-        if(a1 == std::string::npos){
-            // reached end of string
-            kernel << s.substr(i, a1);
-            break;
-        }
-        else {
-            kernel << s.substr(i, (a1 - i));
-            kernel << expr.m_arg;
-            i = a1 + token_length;
-        }
-    }
+    context<boost::tuple<Arg> > ctx(kernel, boost::make_tuple(expr.m_arg));
+    proto::eval(expr.m_expr, ctx);
 
     return kernel;
 }
@@ -284,7 +261,7 @@ struct invoked_binary_expression
 {
     typedef typename ::boost::tr1_result_of<Expr(Arg1, Arg2)>::type result_type;
 
-    invoked_binary_expression(const std::string &expr,
+    invoked_binary_expression(const Expr &expr,
                               const Arg1 &arg1,
                               const Arg2 &arg2)
         : m_expr(expr),
@@ -293,7 +270,7 @@ struct invoked_binary_expression
     {
     }
 
-    std::string m_expr;
+    Expr m_expr;
     Arg1 m_arg1;
     Arg2 m_arg2;
 };
@@ -303,30 +280,11 @@ boost::compute::detail::meta_kernel&
 operator<<(boost::compute::detail::meta_kernel &kernel,
            const invoked_binary_expression<Expr, Arg1, Arg2> &expr)
 {
-    std::string s = expr.m_expr;
-    const size_t token_length = 2;
-
-    size_t i = 0;
-    while(true){
-        size_t a1 = s.find("$1", i);
-        size_t a2 = s.find("$2", i);
-
-        if(a1 == std::string::npos && a2 == std::string::npos){
-            // reached end of string
-            kernel << s.substr(i, a1);
-            break;
-        }
-        else if(a1 < a2){
-            kernel << s.substr(i, (a1 - i));
-            kernel << expr.m_arg1;
-            i = a1 + token_length;
-        }
-        else if(a2 < a1){
-            kernel << s.substr(i, (a2 - i));
-            kernel << expr.m_arg2;
-            i = a2 + token_length;
-        }
-    }
+    context<boost::tuple<Arg1, Arg2> > ctx(
+        kernel,
+        boost::make_tuple(expr.m_arg1, expr.m_arg2)
+    );
+    proto::eval(expr.m_expr, ctx);
 
     return kernel;
 }
@@ -368,7 +326,7 @@ struct expression : proto::extends<Expr, expression<Expr>, domain>
         typedef
             typename ::boost::compute::lambda::result_of<
                 Expr,
-                typename mpl::vector<Arg>
+                typename boost::tuple<Arg>
             >::type type;
     };
 
@@ -378,47 +336,26 @@ struct expression : proto::extends<Expr, expression<Expr>, domain>
         typedef typename
             ::boost::compute::lambda::result_of<
                 Expr,
-                typename mpl::vector<Arg1, Arg2>
+                typename boost::tuple<Arg1, Arg2>
             >::type type;
     };
-
-    ::boost::compute::detail::meta_kernel_variable<
-        typename ::boost::tr1_result_of<expression<Expr>()>::type
-    >
-    operator()() const
-    {
-        typedef typename
-            ::boost::tr1_result_of<expression<Expr>()>::type
-            result_type;
-
-        context<> ctx;
-        proto::eval(*this, ctx);
-
-        return ::boost::compute::detail::meta_kernel::make_expr<result_type>(ctx.stream.str());
-    }
 
     template<class Arg>
     detail::invoked_unary_expression<expression<Expr>, Arg>
     operator()(const Arg &x) const
     {
-        context<mpl::vector<Arg> > ctx;
-        proto::eval(*this, ctx);
-        std::string expr = ctx.stream.str();
-
-        return detail::invoked_unary_expression<expression<Expr>, Arg>(expr, x);
+        return detail::invoked_unary_expression<expression<Expr>, Arg>(*this, x);
     }
 
     template<class Arg1, class Arg2>
     detail::invoked_binary_expression<expression<Expr>, Arg1, Arg2>
     operator()(const Arg1 &x, const Arg2 &y) const
     {
-        context<mpl::vector<Arg1, Arg2> > ctx;
-        proto::eval(*this, ctx);
-        std::string expr = ctx.stream.str();
-
-        return detail::invoked_binary_expression<expression<Expr>,
-                                                 Arg1,
-                                                 Arg2>(expr, x, y);
+        return detail::invoked_binary_expression<
+                   expression<Expr>,
+                   Arg1,
+                   Arg2
+                >(*this, x, y);
     }
 };
 

@@ -12,11 +12,13 @@
 #define BOOST_COMPUTE_LAMBDA_FUNCTIONAL_HPP
 
 #include <boost/tuple/tuple.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <boost/proto/core.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/stringize.hpp>
 
+#include <boost/compute/functional/get.hpp>
 #include <boost/compute/lambda/result_of.hpp>
 
 namespace boost {

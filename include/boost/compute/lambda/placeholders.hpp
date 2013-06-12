@@ -58,7 +58,7 @@ struct terminal_type
 template<class Args>
 struct result_of<expression<proto::terminal<placeholder<0> >::type>, Args, proto::tag::terminal>
 {
-    typedef typename mpl::at_c<Args, 0>::type arg_type;
+    typedef typename boost::tuples::element<0, Args>::type arg_type;
 
     typedef typename detail::terminal_type<arg_type>::type type;
 };
@@ -66,7 +66,7 @@ struct result_of<expression<proto::terminal<placeholder<0> >::type>, Args, proto
 template<class Args>
 struct result_of<expression<proto::terminal<placeholder<1> >::type>, Args, proto::tag::terminal>
 {
-    typedef typename mpl::at_c<Args, 1>::type arg_type;
+    typedef typename boost::tuples::element<1, Args>::type arg_type;
 
     typedef typename detail::terminal_type<arg_type>::type type;
 };

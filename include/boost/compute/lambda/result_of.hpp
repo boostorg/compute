@@ -75,6 +75,18 @@ BOOST_COMPUTE_LAMBDA_RESULT_OF_BINARY_OPERATOR(proto::tag::bitwise_and)
 BOOST_COMPUTE_LAMBDA_RESULT_OF_BINARY_OPERATOR(proto::tag::bitwise_or)
 BOOST_COMPUTE_LAMBDA_RESULT_OF_BINARY_OPERATOR(proto::tag::bitwise_xor)
 
+// assignment operator
+template<class Expr, class Args>
+struct result_of<Expr, Args, proto::tag::assign>
+{
+    typedef typename proto::result_of::child_c<Expr, 0>::type left;
+    typedef typename proto::result_of::child_c<Expr, 1>::type right;
+
+    typedef typename ::boost::compute::lambda::result_of<
+        right, Args, typename proto::tag_of<right>::type
+    >::type type;
+};
+
 // functions
 template<class Expr, class Args>
 struct result_of<Expr, Args, proto::tag::function>
