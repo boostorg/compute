@@ -56,10 +56,10 @@ struct get
 
     template<class Arg>
     detail::invoked_get<
-        N, Arg, typename Arg::result_type
+        N, Arg, typename boost::remove_cv<typename Arg::result_type>::type
     > operator()(const Arg &arg) const
     {
-        typedef typename Arg::result_type T;
+        typedef typename boost::remove_cv<typename Arg::result_type>::type T;
 
         return detail::invoked_get<N, Arg, T>(arg);
     }
