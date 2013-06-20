@@ -74,6 +74,7 @@ BOOST_AUTO_TEST_CASE(type_name)
     BOOST_CHECK(std::strcmp(bc::type_name<bc::ulong_>(), "ulong") == 0);
     BOOST_CHECK(std::strcmp(bc::type_name<bc::float_>(), "float") == 0);
     BOOST_CHECK(std::strcmp(bc::type_name<bc::double_>(), "double") == 0);
+    BOOST_CHECK(std::strcmp(bc::type_name<bool>(), "bool") == 0);
 
     // vector types
     BOOST_CHECK(std::strcmp(bc::type_name<bc::char16_>(), "char16") == 0);

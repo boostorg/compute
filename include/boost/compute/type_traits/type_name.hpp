@@ -61,6 +61,16 @@ BOOST_COMPUTE_DEFINE_TYPE_NAME_FUNCTIONS(ulong)
 BOOST_COMPUTE_DEFINE_TYPE_NAME_FUNCTIONS(float)
 BOOST_COMPUTE_DEFINE_TYPE_NAME_FUNCTIONS(double)
 
+// define type_name() for bool
+template<>
+struct type_name_trait<bool>
+{
+    static const char* value()
+    {
+        return "bool";
+    }
+};
+
 // define type_name() for char (which is *not* synonymous with char_)
 template<>
 struct type_name_trait<char>
