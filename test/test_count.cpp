@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestCount
 #include <boost/test/unit_test.hpp>
 
+#include <string>
+
 #include <boost/compute/lambda.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
@@ -23,6 +25,7 @@
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(count_int)
 {
@@ -104,6 +107,48 @@ BOOST_AUTO_TEST_CASE(count_int4)
     );
     BOOST_CHECK_EQUAL(
         bc::count(vector.begin(), vector.end(), bc::int4_(1, 9, 8, 7)),
+        size_t(0)
+    );
+}
+
+BOOST_AUTO_TEST_CASE(count_newlines)
+{
+    std::string string = "abcdefg\nhijklmn\nopqrs\ntuv\nwxyz\n";
+    compute::vector<char> data(string.size());
+    compute::copy(string.begin(), string.end(), data.begin());
+
+    BOOST_CHECK_EQUAL(
+        compute::count(data.begin(), data.end(), '\n'),
+        size_t(5)
+    );
+}
+
+BOOST_AUTO_TEST_CASE(count_uchar)
+{
+    using boost::compute::uchar_;
+
+    unsigned char data[] = { 0x00, 0x10, 0x2F, 0x10, 0x01, 0x00, 0x01, 0x00 };
+    compute::vector<uchar_> vector(8);
+    compute::copy(data, data + 8, vector.begin());
+
+    BOOST_CHECK_EQUAL(
+        compute::count(vector.begin(), vector.end(), 0x00),
+        size_t(3)
+    );
+    BOOST_CHECK_EQUAL(
+        compute::count(vector.begin(), vector.end(), 0x10),
+        size_t(2)
+    );
+    BOOST_CHECK_EQUAL(
+        compute::count(vector.begin(), vector.end(), 0x2F),
+        size_t(1)
+    );
+    BOOST_CHECK_EQUAL(
+        compute::count(vector.begin(), vector.end(), 0x01),
+        size_t(2)
+    );
+    BOOST_CHECK_EQUAL(
+        compute::count(vector.begin(), vector.end(), 0xFF),
         size_t(0)
     );
 }

@@ -708,6 +708,12 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 }
 
 inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const meta_kernel_literal<bool> &literal)
+{
+    return kernel << (literal.value() ? "true" : "false");
+}
+
+inline meta_kernel& operator<<(meta_kernel &kernel,
                                const meta_kernel_literal<char> &literal)
 {
     const char c = literal.value();

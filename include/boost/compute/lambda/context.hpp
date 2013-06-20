@@ -79,18 +79,7 @@ struct context : proto::callable_context<context<Args> >
     template<class T>
     void operator()(proto::tag::terminal, const T &x)
     {
-        stream << x;
-    }
-
-    template<class T>
-    void operator()(proto::tag::terminal, char_ x)
-    {
-        stream << stream.lit(x);
-    }
-
-    template<class T>
-    void operator()(proto::tag::terminal, uchar_ x)
-    {
+        // terminal values in lambda expressions are always literals
         stream << stream.lit(x);
     }
 
