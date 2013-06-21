@@ -451,8 +451,8 @@ public:
     }
 
 private:
-    BOOST_CONSTEXPR size_type _minimum_capacity() { return 4; }
-    BOOST_CONSTEXPR float _growth_factor() { return 1.5; }
+    BOOST_CONSTEXPR size_type _minimum_capacity() const { return 4; }
+    BOOST_CONSTEXPR float _growth_factor() const { return 1.5; }
 
 private:
     pointer m_data;
