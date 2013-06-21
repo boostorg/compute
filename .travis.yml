@@ -1,0 +1,10 @@
+language: cpp
+compiler:
+    - gcc
+    - clang
+before_install:
+    - sudo apt-get update -qq
+    - sudo apt-get install -qq fglrx opencl-headers libboost-chrono1.48-dev libboost-date-time1.48-dev libboost-test1.48-dev
+script:
+    - mkdir -p build && (cd build && cmake -DBOOST_COMPUTE_BUILD_TESTS=ON .. && make)
+    - (cd build && ctest --verbose)
