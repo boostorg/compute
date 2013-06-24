@@ -195,7 +195,7 @@ inline void radix_sort(Iterator first,
     const uint_ k2 = 1 << k;
     const uint_ block_size = 128;
 
-    uint_ block_count = count / block_size;
+    uint_ block_count = static_cast<uint_>(count / block_size);
     if(block_count * block_size != count){
         block_count++;
     }

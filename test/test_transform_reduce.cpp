@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(multiply_vector_length)
                              1.0f,
                              bc::multiplies<float>(),
                              queue);
-    BOOST_CHECK_CLOSE(product, 24.0f, 1e-4);
+    BOOST_CHECK_CLOSE(product, 24.0f, 1e-4f);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

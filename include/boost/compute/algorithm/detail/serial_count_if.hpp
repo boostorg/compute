@@ -35,7 +35,7 @@ inline size_t serial_count_if(InputIterator first,
     size_t size = iterator_range_size(first, last);
 
     meta_kernel k("serial_count_if");
-    k.add_set_arg<const uint_>("size", size);
+    k.add_set_arg("size", static_cast<uint_>(size));
     size_t result_arg = k.add_arg<uint_ *>("__global", "result");
 
     k <<

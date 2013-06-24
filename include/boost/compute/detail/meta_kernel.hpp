@@ -884,7 +884,14 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
         return kernel << expr.m_arg << ".s" << uint_(N);
     }
     else if(N < 16){
+#ifdef _MSC_VER
+#  pragma warning(push)
+#  pragma warning(disable: 4307)
+#endif
         return kernel << expr.m_arg << ".s" << char('a' + (N - 10));
+#ifdef _MSC_VER
+#  pragma warning(pop)
+#endif
     }
 
     return kernel;

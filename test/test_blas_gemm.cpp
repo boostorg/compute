@@ -56,15 +56,15 @@ BOOST_AUTO_TEST_CASE(gemm_float3x3)
     );
 
     boost::compute::copy(C, C + 9, c, queue);
-    BOOST_CHECK_CLOSE(c[0], 30.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[1], 36.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[2], 42.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[3], 66.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[4], 81.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[5], 96.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[6], 102.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[7], 126.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[8], 150.0f, 1e-4);
+    BOOST_CHECK_CLOSE(c[0], 30.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[1], 36.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[2], 42.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[3], 66.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[4], 81.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[5], 96.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[6], 102.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[7], 126.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[8], 150.0f, 1e-4f);
 
     // C = A * B
     boost::compute::blas::gemm(
@@ -81,15 +81,15 @@ BOOST_AUTO_TEST_CASE(gemm_float3x3)
     );
 
     boost::compute::copy(C, C + 9, c, queue);
-    BOOST_CHECK_CLOSE(c[0], 169.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[1], 176.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[2], 183.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[3], 382.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[4], 401.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[5], 420.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[6], 595.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[7], 626.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[8], 657.0f, 1e-4);
+    BOOST_CHECK_CLOSE(c[0], 169.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[1], 176.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[2], 183.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[3], 382.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[4], 401.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[5], 420.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[6], 595.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[7], 626.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[8], 657.0f, 1e-4f);
 }
 
 BOOST_AUTO_TEST_CASE(gemm_float2x3)
@@ -129,15 +129,15 @@ BOOST_AUTO_TEST_CASE(gemm_float2x3)
     );
 
     boost::compute::copy(C, C + 9, c, queue);
-    BOOST_CHECK_CLOSE(c[0], 6.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[1], 9.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[2], 12.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[3], 16.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[4], 23.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[5], 30.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[6], 26.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[7], 37.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[8], 48.0f, 1e-4);
+    BOOST_CHECK_CLOSE(c[0], 6.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[1], 9.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[2], 12.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[3], 16.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[4], 23.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[5], 30.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[6], 26.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[7], 37.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[8], 48.0f, 1e-4f);
 
     // C = B * A
     boost::compute::blas::gemm(
@@ -154,10 +154,10 @@ BOOST_AUTO_TEST_CASE(gemm_float2x3)
     );
 
     boost::compute::copy(C, C + 4, c, queue);
-    BOOST_CHECK_CLOSE(c[0], 28.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[1], 22.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[2], 64.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[3], 49.0f, 1e-4);
+    BOOST_CHECK_CLOSE(c[0], 28.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[1], 22.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[2], 64.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[3], 49.0f, 1e-4f);
 
     // C = B * A (with alpha = 2)
     boost::compute::blas::gemm(
@@ -174,10 +174,10 @@ BOOST_AUTO_TEST_CASE(gemm_float2x3)
     );
 
     boost::compute::copy(C, C + 4, c, queue);
-    BOOST_CHECK_CLOSE(c[0], 56.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[1], 44.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[2], 128.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[3], 98.0f, 1e-4);
+    BOOST_CHECK_CLOSE(c[0], 56.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[1], 44.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[2], 128.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[3], 98.0f, 1e-4f);
 
     // fill C with 4's
     boost::compute::fill(C, C + 4, 4.0f, queue);
@@ -197,10 +197,10 @@ BOOST_AUTO_TEST_CASE(gemm_float2x3)
     );
 
     boost::compute::copy(C, C + 4, c, queue);
-    BOOST_CHECK_CLOSE(c[0], 40.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[1], 34.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[2], 76.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[3], 61.0f, 1e-4);
+    BOOST_CHECK_CLOSE(c[0], 40.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[1], 34.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[2], 76.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[3], 61.0f, 1e-4f);
 
     // fill C with 3's
     boost::compute::fill(C, C + 4, 3.0f, queue);
@@ -220,10 +220,10 @@ BOOST_AUTO_TEST_CASE(gemm_float2x3)
     );
 
     boost::compute::copy(C, C + 4, c, queue);
-    BOOST_CHECK_CLOSE(c[0], 90.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[1], 72.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[2], 198.0f, 1e-4);
-    BOOST_CHECK_CLOSE(c[3], 153.0f, 1e-4);
+    BOOST_CHECK_CLOSE(c[0], 90.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[1], 72.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[2], 198.0f, 1e-4f);
+    BOOST_CHECK_CLOSE(c[3], 153.0f, 1e-4f);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
