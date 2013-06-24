@@ -50,14 +50,14 @@ BOOST_AUTO_TEST_CASE(saxpy)
     queue.finish();
 
     // check result values
-    BOOST_CHECK_CLOSE(result[0], 4.f, 1e-4);
-    BOOST_CHECK_CLOSE(result[1], 6.f, 1e-4);
-    BOOST_CHECK_CLOSE(result[2], 11.f, 1e-4);
-    BOOST_CHECK_CLOSE(result[3], 12.f, 1e-4);
-    BOOST_CHECK_CLOSE(result[4], 18.f, 1e-4);
-    BOOST_CHECK_CLOSE(result[5], 18.f, 1e-4);
-    BOOST_CHECK_CLOSE(result[6], 25.f, 1e-4);
-    BOOST_CHECK_CLOSE(result[7], 24.f, 1e-4);
+    BOOST_CHECK_CLOSE(result[0], 4.f, 1e-4f);
+    BOOST_CHECK_CLOSE(result[1], 6.f, 1e-4f);
+    BOOST_CHECK_CLOSE(result[2], 11.f, 1e-4f);
+    BOOST_CHECK_CLOSE(result[3], 12.f, 1e-4f);
+    BOOST_CHECK_CLOSE(result[4], 18.f, 1e-4f);
+    BOOST_CHECK_CLOSE(result[5], 18.f, 1e-4f);
+    BOOST_CHECK_CLOSE(result[6], 25.f, 1e-4f);
+    BOOST_CHECK_CLOSE(result[7], 24.f, 1e-4f);
 
     // free device memory
     compute::free(x);

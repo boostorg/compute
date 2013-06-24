@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 
     // sum vector
     boost::compute::detail::timer t;
-    int count = boost::compute::count(device_vector.begin(),
+    size_t count = boost::compute::count(device_vector.begin(),
                                       device_vector.end(),
                                       4,
                                       queue);
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     std::cout << "time: " << t.elapsed() << " ms" << std::endl;
 
     // verify count is correct
-    int host_count = std::count(host_vector.begin(),
+    size_t host_count = std::count(host_vector.begin(),
                                 host_vector.end(),
                                 4);
     if(count != host_count){
