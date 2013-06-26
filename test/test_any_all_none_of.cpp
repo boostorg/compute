@@ -11,6 +11,7 @@
 #define BOOST_TEST_MODULE TestAnyAllNoneOf
 #include <boost/test/unit_test.hpp>
 
+#include <limits>
 #include <cmath>
 
 #include <boost/compute/lambda.hpp>
@@ -48,7 +49,7 @@ BOOST_AUTO_TEST_CASE(any_nan_inf)
     using ::boost::compute::lambda::isnan;
 
     float nan = std::sqrt(-1.f);
-    float inf = 1.f / 0.f;
+    float inf = std::numeric_limits<float>::infinity();
 
     float data[] = { 1.2f, 2.3f, nan, nan, 3.4f, inf, 4.5f, inf };
     compute::vector<float> vector(data, data + 8);

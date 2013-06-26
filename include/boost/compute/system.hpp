@@ -123,9 +123,16 @@ private:
         }
 
         // check for device from environment variable
+#ifdef _MSC_VER
+#  pragma warning(push)
+#  pragma warning(disable: 4996)
+#endif
         const char *name     = std::getenv("BOOST_COMPUTE_DEFAULT_DEVICE");
         const char *platform = std::getenv("BOOST_COMPUTE_DEFAULT_PLATFORM");
         const char *vendor   = std::getenv("BOOST_COMPUTE_DEFAULT_VENDOR");
+#ifdef _MSC_VER
+#  pragma warning(pop)
+#endif
 
         if(name || platform || vendor){
             BOOST_FOREACH(const device &device, devices_){

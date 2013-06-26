@@ -25,11 +25,11 @@ BOOST_AUTO_TEST_CASE(norm2_float)
     boost::compute::copy(data, data + 5, X, queue);
 
     float norm = boost::compute::blas::norm2(5, X, 1, queue);
-    BOOST_CHECK_CLOSE(norm, 18.466185312619388f, 1e-4);
+    BOOST_CHECK_CLOSE(norm, 18.466185312619388f, 1e-4f);
 
     boost::compute::vector<float> vector(data, data + 5, context);
     norm = boost::compute::blas::norm2(5, &vector[0], 1, queue);
-    BOOST_CHECK_CLOSE(norm, 18.466185312619388f, 1e-4);
+    BOOST_CHECK_CLOSE(norm, 18.466185312619388f, 1e-4f);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

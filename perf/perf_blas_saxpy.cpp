@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     boost::compute::vector<float> device_y(host_y.begin(), host_y.end(), context);
 
     boost::compute::detail::timer t;
-    boost::compute::blas::axpy(size, 2.5f, &device_x[0], 1, &device_y[0], 1, queue);
+    boost::compute::blas::axpy(static_cast<int>(size), 2.5f, &device_x[0], 1, &device_y[0], 1, queue);
     queue.finish();
     std::cout << "time: " << t.elapsed() << " ms" << std::endl;
 

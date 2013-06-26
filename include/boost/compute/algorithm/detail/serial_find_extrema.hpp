@@ -58,7 +58,7 @@ inline InputIterator serial_find_extrema(InputIterator first,
 
     // setup count
     size_t count = iterator_range_size(first, last);
-    kernel.set_arg<uint_>(size_arg_index, count);
+    kernel.set_arg(size_arg_index, static_cast<uint_>(count));
 
     // run kernel
     queue.enqueue_task(kernel);

@@ -48,9 +48,9 @@ BOOST_AUTO_TEST_CASE(gemv_float)
 
     float output_vector[3];
     boost::compute::copy(Y, Y + 3, output_vector, queue);
-    BOOST_CHECK_CLOSE(output_vector[0], 14.0f, 1e-3);
-    BOOST_CHECK_CLOSE(output_vector[1], 32.0f, 1e-3);
-    BOOST_CHECK_CLOSE(output_vector[2], 50.0f, 1e-3);
+    BOOST_CHECK_CLOSE(output_vector[0], 14.0f, 1e-3f);
+    BOOST_CHECK_CLOSE(output_vector[1], 32.0f, 1e-3f);
+    BOOST_CHECK_CLOSE(output_vector[2], 50.0f, 1e-3f);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
