@@ -19,6 +19,7 @@
 #include <boost/utility/enable_if.hpp>
 
 #include <boost/compute/cl.hpp>
+#include <boost/compute/future.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
@@ -31,6 +32,36 @@ namespace compute {
 namespace detail {
 
 namespace mpl = boost::mpl;
+
+// fills the range [first, first + count) with value using copy()
+template<class BufferIterator, class T>
+inline void fill_with_copy(BufferIterator first,
+                           size_t count,
+                           const T &value,
+                           command_queue &queue)
+{
+    ::boost::compute::copy(
+        ::boost::compute::make_constant_iterator(value, 0),
+        ::boost::compute::make_constant_iterator(value, count),
+        first,
+        queue
+    );
+}
+
+// fills the range [first, first + count) with value using copy_async()
+template<class BufferIterator, class T>
+inline future<void> fill_async_with_copy(BufferIterator first,
+                                         size_t count,
+                                         const T &value,
+                                         command_queue &queue)
+{
+    return ::boost::compute::copy_async(
+               ::boost::compute::make_constant_iterator(value, 0),
+               ::boost::compute::make_constant_iterator(value, count),
+               first,
+               queue
+           );
+}
 
 #if defined(CL_VERSION_1_2)
 
@@ -61,13 +92,14 @@ struct is_valid_fill_buffer_iterator :
 
 // specialization which uses clEnqueueFillBuffer for buffer iterators
 template<class BufferIterator, class T>
-void dispatch_fill(BufferIterator first,
-                   size_t count,
-                   const T &value,
-                   command_queue &queue,
-                   typename boost::enable_if<
-                      is_valid_fill_buffer_iterator<BufferIterator>
-                   >::type* = 0)
+inline void
+dispatch_fill(BufferIterator first,
+              size_t count,
+              const T &value,
+              command_queue &queue,
+              typename boost::enable_if<
+                 is_valid_fill_buffer_iterator<BufferIterator>
+              >::type* = 0)
 {
     typedef typename std::iterator_traits<BufferIterator>::value_type value_type;
 
@@ -81,36 +113,74 @@ void dispatch_fill(BufferIterator first,
                               count * sizeof(value_type));
 }
 
-// default implementation
 template<class BufferIterator, class T>
-void dispatch_fill(BufferIterator first,
-                   size_t count,
-                   const T &value,
-                   command_queue &queue,
-                   typename boost::disable_if<
+inline future<void>
+dispatch_fill_async(BufferIterator first,
+                    size_t count,
+                    const T &value,
+                    command_queue &queue,
+                    typename boost::enable_if<
                        is_valid_fill_buffer_iterator<BufferIterator>
-                   >::type* = 0)
+                    >::type* = 0)
 {
-    ::boost::compute::copy(
-        ::boost::compute::make_constant_iterator(value, 0),
-        ::boost::compute::make_constant_iterator(value, count),
-        first,
-        queue
-    );
+    typedef typename std::iterator_traits<BufferIterator>::value_type value_type;
+
+    value_type pattern = static_cast<value_type>(value);
+    size_t offset = static_cast<size_t>(first.get_index());
+
+    event event_ =
+        queue.enqueue_fill_buffer(first.get_buffer(),
+                                  &pattern,
+                                  sizeof(value_type),
+                                  offset * sizeof(value_type),
+                                  count * sizeof(value_type));
+
+    return future<void>(event_);
+}
+
+// default implementations
+template<class BufferIterator, class T>
+inline void
+dispatch_fill(BufferIterator first,
+              size_t count,
+              const T &value,
+              command_queue &queue,
+              typename boost::disable_if<
+                  is_valid_fill_buffer_iterator<BufferIterator>
+              >::type* = 0)
+{
+    fill_with_copy(first, count, value, queue);
+}
+
+template<class BufferIterator, class T>
+inline future<void>
+dispatch_fill_async(BufferIterator first,
+                    size_t count,
+                    const T &value,
+                    command_queue &queue,
+                    typename boost::disable_if<
+                        is_valid_fill_buffer_iterator<BufferIterator>
+                    >::type* = 0)
+{
+    return fill_async_with_copy(first, count, value, queue);
 }
 #else
 template<class BufferIterator, class T>
-void dispatch_fill(BufferIterator first,
-                   size_t count,
-                   const T &value,
-                   command_queue &queue)
+inline void dispatch_fill(BufferIterator first,
+                          size_t count,
+                          const T &value,
+                          command_queue &queue)
 {
-    ::boost::compute::copy(
-        ::boost::compute::make_constant_iterator(value, 0),
-        ::boost::compute::make_constant_iterator(value, count),
-        first,
-        queue
-    );
+    fill_with_copy(first, count, value, queue);
+}
+
+template<class BufferIterator, class T>
+inline future<void> dispatch_fill_async(BufferIterator first,
+                                        size_t count,
+                                        const T &value,
+                                        command_queue &queue)
+{
+    return fill_async_with_copy(first, count, value, queue);
 }
 #endif // !defined(CL_VERSION_1_2)
 
@@ -125,6 +195,17 @@ inline void fill(BufferIterator first,
     size_t count = detail::iterator_range_size(first, last);
 
     detail::dispatch_fill(first, count, value, queue);
+}
+
+template<class BufferIterator, class T>
+inline future<void> fill_async(BufferIterator first,
+                               BufferIterator last,
+                               const T &value,
+                               command_queue &queue = system::default_queue())
+{
+    size_t count = detail::iterator_range_size(first, last);
+
+    return detail::dispatch_fill_async(first, count, value, queue);
 }
 
 } // end compute namespace
