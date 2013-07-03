@@ -11,6 +11,7 @@
 #define BOOST_TEST_MODULE TestFill
 #include <boost/test/unit_test.hpp>
 
+#include <boost/compute/future.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/fill_n.hpp>
 #include <boost/compute/container/vector.hpp>
@@ -19,6 +20,7 @@
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(fill_int)
 {
@@ -89,6 +91,24 @@ BOOST_AUTO_TEST_CASE(fill_n_float)
 
     bc::fill_n(vector.begin(), 4, 0.0f);
     CHECK_RANGE_EQUAL(float, 4, vector, (0.0f, 0.0f, 0.0f, 0.0f));
+}
+
+BOOST_AUTO_TEST_CASE(check_fill_type)
+{
+    compute::vector<int> vector(5, context);
+    compute::future<void> future =
+        compute::fill_async(vector.begin(), vector.end(), 42, queue);
+    future.wait();
+
+    #ifdef CL_VERSION_1_2
+    BOOST_CHECK(
+        future.get_event().get_command_type() == CL_COMMAND_FILL_BUFFER
+    );
+    #else
+    BOOST_CHECK(
+        future.get_event().get_command_type() == CL_COMMAND_NDRANGE_KERNEL
+    );
+    #endif
 }
 
 BOOST_AUTO_TEST_SUITE_END()
