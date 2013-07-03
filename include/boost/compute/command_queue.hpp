@@ -907,6 +907,24 @@ public:
 
         return ret;
     }
+
+    void enqueue_migrate_memory_objects(uint_ num_mem_objects,
+                                        const cl_mem *mem_objects,
+                                        cl_mem_migration_flags flags)
+    {
+        BOOST_ASSERT(m_queue != 0);
+
+        cl_int ret = clEnqueueMigrateMemObjects(m_queue,
+                                                num_mem_objects,
+                                                mem_objects,
+                                                flags,
+                                                0,
+                                                0,
+                                                0);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+        }
+    }
     #endif // CL_VERSION_1_2
 
     event enqueue_nd_range_kernel(const kernel &kernel,
