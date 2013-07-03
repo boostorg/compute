@@ -367,17 +367,19 @@ public:
     }
     #endif // CL_VERSION_1_1
 
-    cl_int enqueue_copy_buffer(const buffer &src_buffer,
-                               const buffer &dst_buffer,
-                               size_t src_offset,
-                               size_t dst_offset,
-                               size_t size)
+    event enqueue_copy_buffer(const buffer &src_buffer,
+                              const buffer &dst_buffer,
+                              size_t src_offset,
+                              size_t dst_offset,
+                              size_t size)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_offset + size <= src_buffer.size());
         BOOST_ASSERT(dst_offset + size <= dst_buffer.size());
         BOOST_ASSERT(src_buffer.get_context() == this->get_context());
         BOOST_ASSERT(dst_buffer.get_context() == this->get_context());
+
+        event event_;
 
         cl_int ret = clEnqueueCopyBuffer(m_queue,
                                          src_buffer.get(),
@@ -387,12 +389,12 @@ public:
                                          size,
                                          0,
                                          0,
-                                         0);
+                                         &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
     #ifdef CL_VERSION_1_1
@@ -432,15 +434,17 @@ public:
     #endif // CL_VERSION_1_1
 
     #ifdef CL_VERSION_1_2
-    cl_int enqueue_fill_buffer(const buffer &buffer,
-                               const void *pattern,
-                               size_t pattern_size,
-                               size_t offset,
-                               size_t size)
+    event enqueue_fill_buffer(const buffer &buffer,
+                              const void *pattern,
+                              size_t pattern_size,
+                              size_t offset,
+                              size_t size)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(offset + size <= buffer.size());
         BOOST_ASSERT(buffer.get_context() == this->get_context());
+
+        event event_;
 
         cl_int ret = clEnqueueFillBuffer(m_queue,
                                          buffer.get(),
@@ -450,12 +454,12 @@ public:
                                          size,
                                          0,
                                          0,
-                                         0);
+                                         &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
     #endif // CL_VERSION_1_2
 
