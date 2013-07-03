@@ -141,6 +141,11 @@ public:
         return get_info<cl_int>(CL_EVENT_COMMAND_EXECUTION_STATUS);
     }
 
+    cl_command_type get_command_type() const
+    {
+        return get_info<cl_command_type>(CL_EVENT_COMMAND_TYPE);
+    }
+
     template<class T>
     T get_info(cl_event_info info) const
     {
