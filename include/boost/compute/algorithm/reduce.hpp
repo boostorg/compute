@@ -44,9 +44,9 @@ size_t reduce(InputIterator first,
         result_type;
 
     const context &context = queue.get_context();
-    size_t block_count = count / block_size;
+    size_t block_count = count / 2 / block_size;
     size_t total_block_count =
-        static_cast<size_t>(std::ceil(float(count) / float(block_size)));
+        static_cast<size_t>(std::ceil(float(count) / 2.f / float(block_size)));
 
     if(block_count != 0){
         meta_kernel k("block_reduce");
@@ -58,18 +58,19 @@ size_t reduce(InputIterator first,
             "const uint lid = get_local_id(0);\n" <<
 
             // copy values to local memory
-            "block[lid] = " << first[k.make_var<uint_>("gid")] << ";\n" <<
-            "barrier(CLK_LOCAL_MEM_FENCE);\n" <<
+            "block[lid] = " <<
+                function(first[k.make_var<uint_>("gid*2+0")],
+                         first[k.make_var<uint_>("gid*2+1")]) << ";\n" <<
 
             // perform reduction
-            "for(uint i = 1; i < get_local_size(0); i <<= 1){\n" <<
+            "for(uint i = 1; i < " << uint_(block_size) << "; i <<= 1){\n" <<
+            "    barrier(CLK_LOCAL_MEM_FENCE);\n" <<
             "    uint mask = (i << 1) - 1;\n" <<
             "    if((lid & mask) == 0){\n" <<
             "        block[lid] = " <<
                          function(k.expr<input_type>("block[lid]"),
                                   k.expr<input_type>("block[lid+i]")) << ";\n" <<
             "    }\n" <<
-            "    barrier(CLK_LOCAL_MEM_FENCE);\n" <<
             "}\n" <<
 
             // write block result to global output
@@ -87,8 +88,8 @@ size_t reduce(InputIterator first,
     }
 
     // serially reduce any leftovers
-    if(block_count * block_size < count){
-        size_t last_block_start = block_count * block_size;
+    if(block_count * block_size * 2 < count){
+        size_t last_block_start = block_count * block_size * 2;
 
         meta_kernel k("extra_serial_reduce");
         size_t count_arg = k.add_arg<uint_>("count");
@@ -141,7 +142,7 @@ block_reduce(InputIterator first,
 
     const context &context = queue.get_context();
     size_t total_block_count =
-        static_cast<size_t>(std::ceil(float(count) / float(block_size)));
+        static_cast<size_t>(std::ceil(float(count) / 2.f / float(block_size)));
     vector<result_type> result_vector(total_block_count, context);
 
     reduce(first, count, result_vector.begin(), block_size, function, queue);
@@ -175,7 +176,7 @@ inline T reduce(InputIterator first,
         return detail::serial_reduce(first, last, init, function, queue);
     }
     else {
-        size_t block_size = 128;
+        size_t block_size = 256;
 
         // first pass
         vector<result_type> results = detail::block_reduce(first,

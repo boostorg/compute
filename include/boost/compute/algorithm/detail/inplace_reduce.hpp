@@ -75,10 +75,10 @@ inline void inplace_reduce(Iterator first,
             "}\n" <<
             "scratch[lid] = sum;\n" <<
         "}\n" <<
-        "barrier(CLK_LOCAL_MEM_FENCE);\n" <<
 
         // local reduce
         "for(uint i = 1; i < get_local_size(0); i <<= 1){\n" <<
+        "    barrier(CLK_LOCAL_MEM_FENCE);\n" <<
         "    uint mask = (i << 1) - 1;\n" <<
         "    uint next_index = (gid + i) * values_per_thread;\n"
         "    if((lid & mask) == 0 && next_index < input_size){\n" <<
@@ -86,7 +86,6 @@ inline void inplace_reduce(Iterator first,
                      function(k.var<value_type>("scratch[lid]"),
                               k.var<value_type>("scratch[lid+i]")) << ";\n" <<
         "    }\n" <<
-        "    barrier(CLK_LOCAL_MEM_FENCE);\n" <<
         "}\n" <<
 
         // write output for block
