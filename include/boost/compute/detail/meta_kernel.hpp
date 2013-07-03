@@ -545,25 +545,27 @@ public:
         return detail::meta_kernel_variable<T>(expr);
     }
 
-    void exec(command_queue &queue)
+    event exec(command_queue &queue)
     {
         return exec_1d(queue, 0, 1);
     }
 
-    void exec_1d(command_queue &queue,
-                 size_t global_work_offset,
-                 size_t global_work_size)
+    event exec_1d(command_queue &queue,
+                  size_t global_work_offset,
+                  size_t global_work_size)
     {
         const context &context = queue.get_context();
 
         ::boost::compute::kernel kernel = compile(context);
 
-        queue.enqueue_1d_range_kernel(kernel,
-                                      global_work_offset,
-                                      global_work_size);
+        return queue.enqueue_1d_range_kernel(
+                   kernel,
+                   global_work_offset,
+                   global_work_size
+               );
     }
 
-    void exec_1d(command_queue &queue,
+    event exec_1d(command_queue &queue,
                  size_t global_work_offset,
                  size_t global_work_size,
                  size_t local_work_size)
@@ -572,10 +574,12 @@ public:
 
         ::boost::compute::kernel kernel = compile(context);
 
-        queue.enqueue_1d_range_kernel(kernel,
-                                      global_work_offset,
-                                      global_work_size,
-                                      local_work_size);
+        return queue.enqueue_1d_range_kernel(
+                   kernel,
+                   global_work_offset,
+                   global_work_size,
+                   local_work_size
+               );
     }
 
     template<class T>
