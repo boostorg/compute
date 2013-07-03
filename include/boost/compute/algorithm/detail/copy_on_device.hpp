@@ -13,8 +13,9 @@
 
 #include <iterator>
 
-#include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/future.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 
 namespace boost {
@@ -55,17 +56,17 @@ public:
         m_count = detail::iterator_range_size(first, last);
     }
 
-    void exec(command_queue &queue)
+    event exec(command_queue &queue)
     {
         if(m_count == 0){
             // nothing to do
-            return;
+            return event();
         }
 
         const device &device = queue.get_device();
         size_t work_group_size = pick_copy_work_group_size(m_count, device);
 
-        exec_1d(queue, 0, m_count, work_group_size);
+        return exec_1d(queue, 0, m_count, work_group_size);
     }
 
 private:
@@ -84,6 +85,20 @@ inline OutputIterator copy_on_device(InputIterator first,
     kernel.exec(queue);
 
     return result + std::distance(first, last);
+}
+
+template<class InputIterator, class OutputIterator>
+inline future<OutputIterator> copy_on_device_async(InputIterator first,
+                                                   InputIterator last,
+                                                   OutputIterator result,
+                                                   command_queue &queue)
+{
+    copy_kernel<InputIterator, OutputIterator> kernel;
+
+    kernel.set_range(first, last, result);
+    event event_ = kernel.exec(queue);
+
+    return make_future(result + std::distance(first, last), event_);
 }
 
 } // end detail namespace
