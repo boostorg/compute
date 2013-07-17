@@ -44,6 +44,10 @@ public:
 
 } // end detail namespace
 
+/// \class constant_iterator
+/// \brief An iterator with a constant value.
+///
+/// \see make_constant_iterator()
 template<class T>
 class constant_iterator : public detail::constant_iterator_base<T>::type
 {
@@ -83,6 +87,7 @@ public:
         return m_index;
     }
 
+    /// \internal_
     template<class Expr>
     detail::meta_kernel_literal<T> operator[](const Expr &expr) const
     {
@@ -94,31 +99,37 @@ public:
 private:
     friend class ::boost::iterator_core_access;
 
+    /// \internal_
     reference dereference() const
     {
         return m_value;
     }
 
+    /// \internal_
     bool equal(const constant_iterator<T> &other) const
     {
         return m_value == other.m_value;
     }
 
+    /// \internal_
     void increment()
     {
         m_index++;
     }
 
+    /// \internal_
     void decrement()
     {
         m_index--;
     }
 
+    /// \internal_
     void advance(difference_type n)
     {
         m_index = static_cast<size_t>(static_cast<difference_type>(m_index) + n);
     }
 
+    /// \internal_
     difference_type distance_to(const constant_iterator<T> &other) const
     {
         return static_cast<difference_type>(other.m_index - m_index);
@@ -129,6 +140,7 @@ private:
     size_t m_index;
 };
 
+/// Returns a new constant iterator with \p value at \p index.
 template<class T>
 inline constant_iterator<T>
 make_constant_iterator(const T &value, size_t index = 0)

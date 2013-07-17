@@ -26,19 +26,30 @@
 namespace boost {
 namespace compute {
 
+/// \class buffer
+/// \brief A memory buffer on a compute device.
+///
+/// The buffer class represents a memory buffer on a compute device.
+///
+/// \see vector
 class buffer : public memory_object
 {
 public:
+    /// Creates a null buffer object.
     buffer()
         : memory_object()
     {
     }
 
+    /// Creates a buffer object for \p mem. If \p retain is \c true, the
+    /// reference count for \p mem will be incremented.
     explicit buffer(cl_mem mem, bool retain = true)
         : memory_object(mem, retain)
     {
     }
 
+    /// Create a new memory buffer in of \p size with \p flags in
+    /// \p context.
     buffer(const context &context,
            size_t size,
            cl_mem_flags flags = read_write,
@@ -55,6 +66,7 @@ public:
         }
     }
 
+    /// Creates a new buffer object as a copy of \p other.
     buffer(const buffer &other)
         : memory_object(other)
     {
@@ -85,20 +97,26 @@ public:
         return *this;
     }
 
+    /// Destroys the buffer object.
     ~buffer()
     {
     }
 
+    /// Returns the size of the buffer in bytes.
     size_t size() const
     {
         return get_memory_size();
     }
 
+    /// \internal_
     size_t max_size() const
     {
         return get_context().get_device().max_memory_alloc_size();
     }
 
+    /// Returns information about the buffer.
+    ///
+    /// \see_opencl_ref{clGetMemObjectInfo}
     template<class T>
     T get_info(cl_mem_info info) const
     {

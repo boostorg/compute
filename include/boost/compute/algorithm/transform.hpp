@@ -20,6 +20,9 @@
 namespace boost {
 namespace compute {
 
+/// Transforms the elements in the range [\p first, \p last) using
+/// \p transform and stores the results in the range beginning at
+/// \p result.
 template<class InputIterator, class OutputIterator, class UnaryOperator>
 inline OutputIterator transform(InputIterator first,
                                 InputIterator last,
@@ -35,6 +38,9 @@ inline OutputIterator transform(InputIterator first,
            );
 }
 
+/// Transforms the elements in the range [\p first1, \p last1) and
+/// \p first2 using \p op and stores the results in the range beginning
+/// at \p result.
 template<class InputIterator1,
          class InputIterator2,
          class OutputIterator,

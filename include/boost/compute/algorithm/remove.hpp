@@ -19,6 +19,10 @@
 namespace boost {
 namespace compute {
 
+/// Removes each element equal to \p value in the range [\p first,
+/// \p last).
+///
+/// \see remove_if()
 template<class Iterator, class T>
 inline Iterator remove(Iterator first,
                        Iterator last,

@@ -19,6 +19,10 @@
 namespace boost {
 namespace compute {
 
+/// Removes each element for which \p predicate returns \c true in the
+/// range [\p first, \p last).
+///
+/// \see remove()
 template<class Iterator, class Predicate>
 inline Iterator remove_if(Iterator first,
                           Iterator last,

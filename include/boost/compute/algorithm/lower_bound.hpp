@@ -19,6 +19,10 @@
 namespace boost {
 namespace compute {
 
+/// Returns an iterator pointing to the first element in the sorted
+/// range [\p first, \p last) that is not less than \p value.
+///
+/// \see upper_bound()
 template<class InputIterator, class T>
 inline InputIterator
 lower_bound(InputIterator first,

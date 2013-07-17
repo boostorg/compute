@@ -23,6 +23,8 @@
 namespace boost {
 namespace compute {
 
+/// Copies each element in the range [\p first, \p last) for which
+/// \p predicate returns \c true to the range beginning at \p result.
 template<class InputIterator, class OutputIterator, class Predicate>
 inline OutputIterator copy_if(InputIterator first,
                               InputIterator last,

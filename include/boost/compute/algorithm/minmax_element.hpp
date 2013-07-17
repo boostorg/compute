@@ -21,6 +21,11 @@
 namespace boost {
 namespace compute {
 
+/// Returns a pair of iterators with the first pointing to the minimum
+/// element and the second pointing to the maximum element in the range
+/// [\p first, \p last).
+///
+/// \see max_element(), min_element()
 template<class InputIterator>
 inline std::pair<InputIterator, InputIterator>
 minmax_element(InputIterator first,

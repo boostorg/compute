@@ -27,6 +27,22 @@
 namespace boost {
 namespace compute {
 
+/// \class device
+/// \brief A compute device.
+///
+/// Typical compute devices include GPUs and multi-core CPUs. A list
+/// of all compute devices available on a platform can be obtained
+/// via the platform::devices() method.
+///
+/// The default compute device for the system can be obtained with
+/// the system::default_device() method.
+///
+/// For example:
+/// \code
+/// boost::compute::device gpu = boost::compute::system::default_device();
+/// \endcode
+///
+/// \see platform, context, command_queue
 class device
 {
 public:
@@ -36,11 +52,14 @@ public:
         accelerator = CL_DEVICE_TYPE_ACCELERATOR
     };
 
+    /// Creates a null device object.
     device()
         : m_id(0)
     {
     }
 
+    /// Creates a new device object for \p id. If \p retain is \c true,
+    /// the reference count for the device will be incremented.
     explicit device(cl_device_id id, bool retain = true)
         : m_id(id)
     {
@@ -53,6 +72,7 @@ public:
         #endif
     }
 
+    /// Creates a new device object as a copy of \p other.
     device(const device &other)
         : m_id(other.m_id)
     {
@@ -106,6 +126,7 @@ public:
         return *this;
     }
 
+    /// Destroys the device object.
     ~device()
     {
         #ifdef CL_VERSION_1_2
@@ -117,41 +138,49 @@ public:
         #endif
     }
 
+    /// Returns the id for the device.
     cl_device_id id() const
     {
         return m_id;
     }
 
+    /// Returns the type of the device.
     cl_device_type type() const
     {
         return get_info<cl_device_type>(CL_DEVICE_TYPE);
     }
 
+    /// Returns the name of the device.
     std::string name() const
     {
         return get_info<std::string>(CL_DEVICE_NAME);
     }
 
+    /// Returns the name of the vendor for the device.
     std::string vendor() const
     {
         return get_info<std::string>(CL_DEVICE_VENDOR);
     }
 
+    /// Returns the device profile string.
     std::string profile() const
     {
         return get_info<std::string>(CL_DEVICE_PROFILE);
     }
 
+    /// Returns the device version string.
     std::string version() const
     {
         return get_info<std::string>(CL_DEVICE_VERSION);
     }
 
+    /// Returns the driver version string.
     std::string driver_version() const
     {
         return get_info<std::string>(CL_DRIVER_VERSION);
     }
 
+    /// Returns a list of extensions supported by the device.
     std::vector<std::string> extensions() const
     {
         std::string extensions_string =
@@ -164,6 +193,8 @@ public:
         return extensions_vector;
     }
 
+    /// Returns \c true if the device supports the extension with
+    /// \p name.
     bool supports_extension(const std::string &name) const
     {
         const std::vector<std::string> extensions = this->extensions();
@@ -171,64 +202,81 @@ public:
         return boost::find(extensions, name) != extensions.end();
     }
 
+    /// Returns the number of address bits.
     uint_ address_bits() const
     {
         return get_info<uint_>(CL_DEVICE_ADDRESS_BITS);
     }
 
+    /// Returns the global memory size in bytes.
     ulong_ global_memory_size() const
     {
         return get_info<ulong_>(CL_DEVICE_GLOBAL_MEM_SIZE);
     }
 
+    /// Returns the local memory size in bytes.
     ulong_ local_memory_size() const
     {
         return get_info<ulong_>(CL_DEVICE_LOCAL_MEM_SIZE);
     }
 
+    /// Returns the clock frequency for the device's compute units.
     uint_ clock_frequency() const
     {
         return get_info<uint_>(CL_DEVICE_MAX_CLOCK_FREQUENCY);
     }
 
+    /// Returns the number of compute units in the device.
     uint_ compute_units() const
     {
         return get_info<uint_>(CL_DEVICE_MAX_COMPUTE_UNITS);
     }
 
+    /// \internal_
     ulong_ max_memory_alloc_size() const
     {
         return get_info<ulong_>(CL_DEVICE_MAX_MEM_ALLOC_SIZE);
     }
 
+    /// \internal_
     size_t max_work_group_size() const
     {
         return get_info<size_t>(CL_DEVICE_MAX_WORK_GROUP_SIZE);
     }
 
+    /// \internal_
     uint_ max_work_item_dimensions() const
     {
         return get_info<uint_>(CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS);
     }
 
+    /// Returns the preferred vector width for type \c T.
     template<class T>
     uint_ preferred_vector_width() const
     {
         return 0;
     }
 
+    /// Returns the profiling timer resolution in nanoseconds.
     size_t profiling_timer_resolution() const
     {
         return get_info<size_t>(CL_DEVICE_PROFILING_TIMER_RESOLUTION);
     }
 
+    /// Returns information about the device.
+    ///
+    /// \see_opencl_ref{clGetDeviceInfo}
     template<class T>
     T get_info(cl_device_info info) const
     {
         return detail::get_object_info<T>(clGetDeviceInfo, m_id, info);
     }
 
-    #ifdef CL_VERSION_1_2
+    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Partitions the device into multiple sub-devices according to
+    /// \p properties.
+    ///
+    /// \opencl_version_warning{1,2}
     std::vector<device>
     partition(const cl_device_partition_property *properties) const
     {
@@ -255,6 +303,7 @@ public:
         return devices;
     }
 
+    /// \opencl_version_warning{1,2}
     std::vector<device> partition_equally(size_t count) const
     {
         cl_device_partition_property properties[] = {
@@ -266,6 +315,7 @@ public:
         return partition(properties);
     }
 
+    /// \opencl_version_warning{1,2}
     std::vector<device>
     partition_by_counts(const std::vector<size_t> &counts) const
     {
@@ -282,6 +332,7 @@ public:
         return partition(&properties[0]);
     }
 
+    /// \opencl_version_warning{1,2}
     std::vector<device>
     partition_by_affinity_domain(cl_device_affinity_domain domain) const
     {
@@ -301,30 +352,35 @@ private:
     cl_device_id m_id;
 };
 
+/// \internal_
 template<>
 inline uint_ device::preferred_vector_width<short_>() const
 {
     return get_info<uint_>(CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT);
 }
 
+/// \internal_
 template<>
 inline uint_ device::preferred_vector_width<int_>() const
 {
     return get_info<uint_>(CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT);
 }
 
+/// \internal_
 template<>
 inline uint_ device::preferred_vector_width<long_>() const
 {
     return get_info<uint_>(CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG);
 }
 
+/// \internal_
 template<>
 inline uint_ device::preferred_vector_width<float_>() const
 {
     return get_info<uint_>(CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT);
 }
 
+/// \internal_
 template<>
 inline uint_ device::preferred_vector_width<double_>() const
 {

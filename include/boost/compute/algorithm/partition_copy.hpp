@@ -19,6 +19,12 @@
 namespace boost {
 namespace compute {
 
+/// Copies all of the elements in the range [\p first, \p last) for which
+/// \p predicate returns \c true to the range beginning at \p first_true
+/// and all of the elements for which \p predicate returns \c false to
+/// the range beginning at \p first_false.
+///
+/// \see partition()
 template<class InputIterator,
          class OutputIterator1,
          class OutputIterator2,

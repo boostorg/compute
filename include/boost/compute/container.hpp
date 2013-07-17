@@ -11,6 +11,10 @@
 #ifndef BOOST_COMPUTE_CONTAINER_HPP
 #define BOOST_COMPUTE_CONTAINER_HPP
 
+/// \file
+///
+/// Meta-header to include all Boost.Compute container headers.
+
 #include <boost/compute/container/allocator.hpp>
 #include <boost/compute/container/array.hpp>
 #include <boost/compute/container/basic_string.hpp>

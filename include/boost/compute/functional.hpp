@@ -11,6 +11,10 @@
 #ifndef BOOST_COMPUTE_FUNCTIONAL_HPP
 #define BOOST_COMPUTE_FUNCTIONAL_HPP
 
+/// \file
+///
+/// Meta-header to include all Boost.Compute functional headers.
+
 #include <boost/compute/functional/atomic.hpp>
 #include <boost/compute/functional/common.hpp>
 #include <boost/compute/functional/get.hpp>

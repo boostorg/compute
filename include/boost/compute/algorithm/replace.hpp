@@ -66,6 +66,8 @@ private:
 
 } // end detail namespace
 
+/// Replaces each instance of \p old_value in the range [\p first,
+/// \p last) with \p new_value.
 template<class Iterator, class T>
 inline void replace(Iterator first,
                     Iterator last,

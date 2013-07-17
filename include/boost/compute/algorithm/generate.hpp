@@ -20,6 +20,8 @@
 namespace boost {
 namespace compute {
 
+/// Stores the result of \p generator for each element in the range
+/// [\p first, \p last).
 template<class OutputIterator, class Generator>
 inline void generate(OutputIterator first,
                      OutputIterator last,

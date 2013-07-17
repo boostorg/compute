@@ -18,6 +18,8 @@
 namespace boost {
 namespace compute {
 
+/// Returns \c true if \p value is in the sorted range [\p first,
+/// \p last).
 template<class InputIterator, class T>
 inline bool binary_search(InputIterator first,
                           InputIterator last,

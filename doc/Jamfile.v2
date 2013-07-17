@@ -1,5 +1,6 @@
 import quickbook ;
 import boostbook ;
+import doxygen ;
 import modules ;
 
 xml compute
@@ -8,9 +9,69 @@ xml compute
   :
   ;
 
+doxygen autodoc
+  :
+    ../include/boost/compute.hpp
+    ../include/boost/compute/buffer.hpp
+    ../include/boost/compute/cl.hpp
+    ../include/boost/compute/command_queue.hpp
+    ../include/boost/compute/config.hpp
+    ../include/boost/compute/context.hpp
+    ../include/boost/compute/device.hpp
+    ../include/boost/compute/event.hpp
+    ../include/boost/compute/future.hpp
+    ../include/boost/compute/kernel.hpp
+    ../include/boost/compute/memory_object.hpp
+    ../include/boost/compute/platform.hpp
+    ../include/boost/compute/program.hpp
+    ../include/boost/compute/system.hpp
+    ../include/boost/compute/version.hpp
+
+    ../include/boost/compute/algorithm.hpp
+    [ glob ../include/boost/compute/algorithm/*.hpp ]
+
+    ../include/boost/compute/container.hpp
+    [ glob ../include/boost/compute/container/*.hpp ]
+
+    ../include/boost/compute/exception.hpp
+    [ glob ../include/boost/compute/exception/*.hpp ]
+
+    ../include/boost/compute/functional.hpp
+    ../include/boost/compute/functional/get.hpp
+
+    ../include/boost/compute/iterator.hpp
+    [ glob ../include/boost/compute/iterator/*.hpp ]
+
+    ../include/boost/compute/random.hpp
+    [ glob ../include/boost/compute/random/*.hpp ]
+
+    ../include/boost/compute/type_traits.hpp
+    [ glob ../include/boost/compute/type_traits/*.hpp ]
+  :
+    <doxygen:param>QUIET=YES
+    <doxygen:param>WARNINGS=YES
+    <doxygen:param>WARN_IF_DOC_ERROR=YES
+    <doxygen:param>EXTRACT_ALL=NO
+    <doxygen:param>EXTRACT_PRIVATE=NO
+    <doxygen:param>HIDE_UNDOC_MEMBERS=YES
+    <doxygen:param>HIDE_UNDOC_CLASSES=YES
+    <doxygen:param>EXPAND_ONLY_PREDEF=YES
+    <doxygen:param>SORT_MEMBER_DOCS=NO
+    <doxygen:param>TAB_SIZE=4
+    <doxygen:param>PREDEFINED=BOOST_COMPUTE_DOXYGEN_INVOKED
+    <doxygen:param>"ALIASES= \\
+      internal_=\"INTERNAL ONLY\" \\
+      opencl_ref{1}=\"<a href=\"http://www.khronos.org/registry/cl/sdk/1.2/docs/man/xhtml/\\1.html\">\\1()</a>\" \\
+      see_opencl_ref{1}=\"See the documentation for \\opencl_ref{\\1} for more information.\" \\
+      opencl_version_warning{2}=\"\\warning This method is only available if the OpenCL version is \\1.\\2 or later.\" \\
+      "
+    <xsl:param>"boost.doxygen.reftitle=Header Reference"
+  ;
+
 boostbook standalone
     :
       compute
     :
       <xsl:param>html.stylesheet=boostbook.css
+      <dependency>autodoc
     ;

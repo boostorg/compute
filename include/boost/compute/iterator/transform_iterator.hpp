@@ -92,6 +92,8 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
 } // end detail namespace
 
+/// \class transform_iterator
+/// \brief A transform iterator adaptor.
 template<class InputIterator, class UnaryFunction>
 class transform_iterator :
     public detail::transform_iterator_base<InputIterator,
@@ -186,6 +188,7 @@ private:
     UnaryFunction m_transform;
 };
 
+/// Returns a transform iterator for \p iterator with \p transform.
 template<class InputIterator, class UnaryFunction>
 inline transform_iterator<InputIterator, UnaryFunction>
 make_transform_iterator(InputIterator iterator, UnaryFunction transform)

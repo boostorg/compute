@@ -20,6 +20,8 @@
 namespace boost {
 namespace compute {
 
+/// Returns the sum of the elements in the range [\p first, \p last)
+/// plus \p init.
 template<class InputIterator, class T>
 inline T accumulate(InputIterator first,
                     InputIterator last,
@@ -29,6 +31,8 @@ inline T accumulate(InputIterator first,
     return ::boost::compute::reduce(first, last, init, plus<T>(), queue);
 }
 
+/// Returns the result of applying \p function to the elements in the
+/// range [\p first, \p last) and \p init.
 template<class InputIterator, class T, class BinaryFunction>
 inline T accumulate(InputIterator first,
                     InputIterator last,

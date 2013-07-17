@@ -18,12 +18,20 @@
 namespace boost {
 namespace compute {
 
+/// Meta-function returning the scalar type for a vector type.
+///
+/// For example,
+/// \code
+/// scalar_type<float4_>::type == float
+/// \endcode
 template<class Vector>
 struct scalar_type
 {
+    /// \internal_
     typedef void type;
 };
 
+/// \internal_
 #define BOOST_COMPUTE_DECLARE_SCALAR_TYPE_FUNCTION(scalar) \
     template<> \
     struct scalar_type<BOOST_PP_CAT(scalar, _)> \
@@ -31,6 +39,7 @@ struct scalar_type
         typedef BOOST_PP_CAT(scalar, _) type; \
     };
 
+/// \internal_
 #define BOOST_COMPUTE_DECLARE_VECTOR_SCALAR_TYPE_FUNCTION(scalar, size) \
     template<> \
     struct scalar_type<BOOST_PP_CAT(BOOST_PP_CAT(scalar, size), _)> \
@@ -38,6 +47,7 @@ struct scalar_type
         typedef BOOST_PP_CAT(scalar, _) type; \
     };
 
+/// \internal_
 #define BOOST_COMPUTE_DECLARE_SCALAR_TYPE_FUNCTIONS(scalar) \
     BOOST_COMPUTE_DECLARE_SCALAR_TYPE_FUNCTION(scalar) \
     BOOST_COMPUTE_DECLARE_VECTOR_SCALAR_TYPE_FUNCTION(scalar, 2) \

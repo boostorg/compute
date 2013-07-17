@@ -20,6 +20,8 @@
 namespace boost {
 namespace compute {
 
+/// Returns \c true if the values in the range [\p first, \p last)
+/// are in sorted order.
 template<class InputIterator>
 inline bool is_sorted(InputIterator first,
                       InputIterator last,

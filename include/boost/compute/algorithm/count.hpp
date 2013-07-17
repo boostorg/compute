@@ -21,6 +21,10 @@
 namespace boost {
 namespace compute {
 
+/// Returns the number of occurrences of \p value in the range
+/// [\p first, \p last).
+///
+/// \see count_if()
 template<class InputIterator, class T>
 inline size_t count(InputIterator first,
                     InputIterator last,

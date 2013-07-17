@@ -261,6 +261,22 @@ dispatch_copy_async(InputIterator first,
 
 } // end detail namespace
 
+/// Copies the values in the range [\p first, \p last) to the range
+/// beginning at \p result.
+///
+/// The generic copy() function can be used for a variety of data
+/// transfer tasks and provides a standard interface to the following
+/// OpenCL functions:
+///
+/// \li \c clEnqueueReadBuffer()
+/// \li \c clEnqueueWriteBuffer()
+/// \li \c clEnqueueCopyBuffer()
+///
+/// Unlike the aforementioned OpenCL functions, copy() will also work
+/// with non-contiguous data-structures (e.g. \c std::list<T>) as
+/// well as with "fancy" iterators (e.g. transform_iterator).
+///
+/// \see copy_n(), copy_if(), copy_async()
 template<class InputIterator, class OutputIterator>
 inline OutputIterator copy(InputIterator first,
                            InputIterator last,
@@ -270,6 +286,10 @@ inline OutputIterator copy(InputIterator first,
     return detail::dispatch_copy(first, last, result, queue);
 }
 
+/// Copies the values in the range [\p first, \p last) to the range
+/// beginning at \p result. The copy is performed asynchronously.
+///
+/// \see copy()
 template<class InputIterator, class OutputIterator>
 inline future<OutputIterator>
 copy_async(InputIterator first,

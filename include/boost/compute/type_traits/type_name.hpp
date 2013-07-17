@@ -23,6 +23,7 @@ namespace detail {
 template<class T>
 struct type_name_trait;
 
+/// \internal_
 #define BOOST_COMPUTE_DEFINE_SCALAR_TYPE_NAME_FUNCTION(type) \
     template<> \
     struct type_name_trait<BOOST_PP_CAT(type, _)> \
@@ -33,6 +34,7 @@ struct type_name_trait;
         } \
     };
 
+/// \internal_
 #define BOOST_COMPUTE_DEFINE_VECTOR_TYPE_NAME_FUNCTION(scalar, n) \
     template<> \
     struct type_name_trait<BOOST_PP_CAT(BOOST_PP_CAT(scalar, n), _)> \
@@ -43,6 +45,7 @@ struct type_name_trait;
         } \
     };
 
+/// \internal_
 #define BOOST_COMPUTE_DEFINE_TYPE_NAME_FUNCTIONS(scalar) \
     BOOST_COMPUTE_DEFINE_SCALAR_TYPE_NAME_FUNCTION(scalar) \
     BOOST_COMPUTE_DEFINE_VECTOR_TYPE_NAME_FUNCTION(scalar, 2) \
@@ -83,6 +86,13 @@ struct type_name_trait<char>
 
 } // end detail namespace
 
+/// Returns the OpenCL type name for the type \p T as a string.
+///
+/// For example:
+/// \code
+/// type_name<float>() == "float"
+/// type_name<float4_>() == "float4"
+/// \endcode
 template<class T>
 const char* type_name()
 {

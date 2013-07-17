@@ -19,6 +19,8 @@
 namespace boost {
 namespace compute {
 
+/// Swaps the elements in the range [\p first1, \p last1) with the
+/// elements in the range beginning at \p first2.
 template<class Iterator1, class Iterator2>
 inline Iterator2 swap_ranges(Iterator1 first1,
                              Iterator1 last1,

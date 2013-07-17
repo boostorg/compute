@@ -21,6 +21,8 @@
 namespace boost {
 namespace compute {
 
+/// Stores the difference of each pair of consecutive values in the
+/// range [\p first, \p last) to the range beginning at \p result.
 template<class InputIterator, class OutputIterator>
 inline OutputIterator
 adjacent_difference(InputIterator first,

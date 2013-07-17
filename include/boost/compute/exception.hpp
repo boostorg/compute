@@ -11,6 +11,10 @@
 #ifndef BOOST_COMPUTE_EXCEPTION_HPP
 #define BOOST_COMPUTE_EXCEPTION_HPP
 
+/// \file
+///
+/// Meta-header to include all Boost.Compute exception headers.
+
 #include <boost/compute/exception/runtime_exception.hpp>
 
 #endif // BOOST_COMPUTE_EXCEPTION_HPP

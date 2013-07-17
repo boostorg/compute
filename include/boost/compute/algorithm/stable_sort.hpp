@@ -20,6 +20,10 @@
 namespace boost {
 namespace compute {
 
+/// Sorts the values in the range [\p first, \p last) according to
+/// \p compare. The relative order of identical values is preserved.
+///
+/// \see sort(), is_sorted()
 template<class Iterator, class Compare>
 inline void stable_sort(Iterator first,
                         Iterator last,
@@ -32,6 +36,10 @@ inline void stable_sort(Iterator first,
                                                            queue);
 }
 
+/// Sorts the values in the range [\p first, \p last). The relative
+/// order of identical values is preserved.
+///
+/// \see sort(), is_sorted()
 template<class Iterator>
 inline void stable_sort(Iterator first,
                         Iterator last,

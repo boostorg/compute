@@ -24,6 +24,8 @@
 namespace boost {
 namespace compute {
 
+/// Returns the number of elements in the range [\p first, \p last)
+/// for which \p predicate returns \c true.
 template<class InputIterator, class Predicate>
 inline size_t count_if(InputIterator first,
                        InputIterator last,

@@ -21,6 +21,9 @@
 namespace boost {
 namespace compute {
 
+/// Returns the inner product of the elements in the range
+/// [\p first1, \p last1) with the elements in the range beginning
+/// at \p first2.
 template<class InputIterator1, class InputIterator2, class T>
 inline T inner_product(InputIterator1 first1,
                        InputIterator1 last1,
@@ -40,6 +43,10 @@ inline T inner_product(InputIterator1 first1,
                                               queue);
 }
 
+/// Returns the inner product of the elements in the range
+/// [\p first1, \p last1) with the elements in the range beginning
+/// at \p first2 using \p accumulate_function and
+/// \p transform_function.
 template<class InputIterator1,
          class InputIterator2,
          class T,

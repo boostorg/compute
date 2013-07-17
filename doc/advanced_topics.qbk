@@ -121,9 +121,6 @@ boost::compute::sort(device_vector.begin(), device_vector.end(), queue);
 
 [section Performance Timing]
 
-The [classref boost::compute::timer] class provides a simple way to measure
-performance using the event timers on a compute device.
-
 For example, to measure the time to copy a vector of data from the host to the
 device:
 

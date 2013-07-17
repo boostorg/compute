@@ -152,6 +152,12 @@ block_reduce(InputIterator first,
 
 } // end detail namespace
 
+/// Returns the result of applying \p function to the elements in the
+/// range [\p first, \p last) and \p init.
+///
+/// The difference between the reduce() function and the accumulate()
+/// function is that reduce() requires the binary operator to be
+/// commutative.
 template<class InputIterator, class T, class BinaryFunction>
 inline T reduce(InputIterator first,
                 InputIterator last,

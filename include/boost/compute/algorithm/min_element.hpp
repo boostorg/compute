@@ -18,6 +18,10 @@
 namespace boost {
 namespace compute {
 
+/// Returns an iterator pointing to the element in range
+/// [\p first, \p last) with the minumum value.
+///
+/// \see max_element()
 template<class InputIterator>
 inline InputIterator
 min_element(InputIterator first,

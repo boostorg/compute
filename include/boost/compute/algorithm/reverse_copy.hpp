@@ -21,6 +21,8 @@
 namespace boost {
 namespace compute {
 
+/// Copies the elements in the range [\p first, \p last) in reversed
+/// order to the range beginning at \p result.
 template<class InputIterator, class OutputIterator>
 inline OutputIterator
 reverse_copy(InputIterator first,

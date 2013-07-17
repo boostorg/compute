@@ -96,6 +96,10 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
 } // end detail namespace
 
+/// \class buffer_iterator
+/// \brief An iterator for values in a buffer.
+///
+/// \see make_buffer_iterator()
 template<class T>
 class buffer_iterator : public detail::buffer_iterator_base<T>::type
 {
@@ -148,6 +152,7 @@ public:
         return m_index;
     }
 
+    /// \internal_
     template<class Expr>
     detail::buffer_iterator_index_expr<T, Expr>
     operator[](const Expr &expr) const
@@ -163,32 +168,38 @@ public:
 private:
     friend class ::boost::iterator_core_access;
 
+    /// \internal_
     reference dereference() const
     {
         return detail::buffer_value<T>(m_buffer, m_index * sizeof(T));
     }
 
+    /// \internal_
     bool equal(const buffer_iterator<T> &other) const
     {
         return m_buffer.get() == other.m_buffer.get() &&
                m_index == other.m_index;
     }
 
+    /// \internal_
     void increment()
     {
         m_index++;
     }
 
+    /// \internal_
     void decrement()
     {
         m_index--;
     }
 
+    /// \internal_
     void advance(difference_type n)
     {
         m_index = static_cast<size_t>(static_cast<difference_type>(m_index) + n);
     }
 
+    /// \internal_
     difference_type distance_to(const buffer_iterator<T> &other) const
     {
         return static_cast<difference_type>(other.m_index - m_index);
@@ -199,6 +210,7 @@ private:
     size_t m_index;
 };
 
+/// Creates a new buffer_iterator for \p buffer at \p index.
 template<class T>
 inline buffer_iterator<T>
 make_buffer_iterator(const buffer &buffer, size_t index = 0)

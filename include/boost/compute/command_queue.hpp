@@ -35,6 +35,18 @@
 namespace boost {
 namespace compute {
 
+/// \class command_queue
+/// \brief A command queue.
+///
+/// Command queues provide the interface for interacting with compute
+/// devices. The command_queue class provides methods to copy data to
+/// and from a compute device as well as execute compute kernels.
+///
+/// Command queues are created for a compute device within a compute
+/// context.
+///
+/// The default command queue for the system can be obtained with the
+/// system::default_queue() method.
 class command_queue
 {
 public:
@@ -48,6 +60,7 @@ public:
         map_write = CL_MAP_WRITE
     };
 
+    /// Creates a null command queue.
     command_queue()
         : m_queue(0)
     {
@@ -61,6 +74,8 @@ public:
         }
     }
 
+    /// Creates a command queue in \p context for \p device with
+    /// \p properties.
     command_queue(const context &context,
                   const device &device,
                   cl_command_queue_properties properties = 0)
@@ -77,6 +92,7 @@ public:
         }
     }
 
+    /// Creates a new command queue object as a copy of \p other.
     command_queue(const command_queue &other)
         : m_queue(other.m_queue)
     {
@@ -122,6 +138,7 @@ public:
         return *this;
     }
 
+    /// Destroys the command queue.
     ~command_queue()
     {
         if(m_queue){
@@ -135,37 +152,46 @@ public:
         }
     }
 
+    /// Returns the underlying OpenCL command queue.
     cl_command_queue& get() const
     {
         return const_cast<cl_command_queue &>(m_queue);
     }
 
+    /// Returns the device that the command queue issues commands to.
     device get_device() const
     {
         return device(get_info<cl_device_id>(CL_QUEUE_DEVICE));
     }
 
+    /// Returns the context for the command queue.
     context get_context() const
     {
         return context(get_info<cl_context>(CL_QUEUE_CONTEXT));
     }
 
+    /// Returns information about the command queue.
+    ///
+    /// \see_opencl_ref{clGetCommandQueueInfo}
     template<class T>
     T get_info(cl_command_queue_info info) const
     {
         return detail::get_object_info<T>(clGetCommandQueueInfo, m_queue, info);
     }
 
+    /// Returns the properties for the command queue.
     cl_command_queue_properties get_properties() const
     {
         return get_info<cl_command_queue_properties>(CL_QUEUE_PROPERTIES);
     }
 
+    /// \internal_
     cl_int enqueue_read_buffer(const buffer &buffer, void *host_ptr)
     {
         return enqueue_read_buffer(buffer, 0, buffer.size(), host_ptr);
     }
 
+    /// \internal_
     cl_int enqueue_read_buffer(const buffer &buffer,
                                size_t size,
                                void *host_ptr)
@@ -173,6 +199,9 @@ public:
         return enqueue_read_buffer(buffer, 0, size, host_ptr);
     }
 
+    /// Enqueues a command to read data from \p buffer to host memory.
+    ///
+    /// \see copy()
     cl_int enqueue_read_buffer(const buffer &buffer,
                                size_t offset,
                                size_t size,
@@ -199,6 +228,10 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to read data from \p buffer to host memory. The
+    /// copy will be performed asynchronously.
+    ///
+    /// \see copy_async()
     event enqueue_read_buffer_async(const buffer &buffer,
                                     size_t offset,
                                     size_t size,
@@ -227,7 +260,11 @@ public:
         return event_;
     }
 
-    #ifdef CL_VERSION_1_1
+    #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Enqueues a command to read a rectangular region from \p buffer to
+    /// host memory.
+    ///
+    /// \opencl_version_warning{1,1}
     cl_int enqueue_read_buffer_rect(const buffer &buffer,
                                     const size_t buffer_origin[3],
                                     const size_t host_origin[3],
@@ -264,11 +301,13 @@ public:
     }
     #endif // CL_VERSION_1_1
 
+    /// \internal_
     cl_int enqueue_write_buffer(const buffer &buffer, const void *host_ptr)
     {
         return enqueue_write_buffer(buffer, 0, buffer.size(), host_ptr);
     }
 
+    /// \internal_
     cl_int enqueue_write_buffer(const buffer &buffer,
                                 size_t size,
                                 const void *host_ptr)
@@ -276,6 +315,9 @@ public:
         return enqueue_write_buffer(buffer, 0, size, host_ptr);
     }
 
+    /// Enqueues a command to write data from host memory to \p buffer.
+    ///
+    /// \see copy()
     cl_int enqueue_write_buffer(const buffer &buffer,
                                 size_t offset,
                                 size_t size,
@@ -302,6 +344,10 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to write data from host memory to \p buffer.
+    /// The copy is performed asynchronously.
+    ///
+    /// \see copy_async()
     event enqueue_write_buffer_async(const buffer &buffer,
                                      size_t offset,
                                      size_t size,
@@ -330,7 +376,11 @@ public:
         return event_;
     }
 
-    #ifdef CL_VERSION_1_1
+    #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Enqueues a command to write a rectangular region from host memory
+    /// to \p buffer.
+    ///
+    /// \opencl_version_warning{1,1}
     cl_int enqueue_write_buffer_rect(const buffer &buffer,
                                      const size_t buffer_origin[3],
                                      const size_t host_origin[3],
@@ -367,6 +417,10 @@ public:
     }
     #endif // CL_VERSION_1_1
 
+    /// Enqueues a command to copy data from \p src_buffer to
+    /// \p dst_buffer.
+    ///
+    /// \see copy()
     event enqueue_copy_buffer(const buffer &src_buffer,
                               const buffer &dst_buffer,
                               size_t src_offset,
@@ -397,7 +451,11 @@ public:
         return event_;
     }
 
-    #ifdef CL_VERSION_1_1
+    #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Enqueues a command to copy a rectangular region from
+    /// \p src_buffer to \p dst_buffer.
+    ///
+    /// \opencl_version_warning{1,1}
     cl_int enqueue_copy_buffer_rect(const buffer &src_buffer,
                                     const buffer &dst_buffer,
                                     const size_t src_origin[3],
@@ -433,7 +491,12 @@ public:
     }
     #endif // CL_VERSION_1_1
 
-    #ifdef CL_VERSION_1_2
+    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Enqueues a command to fill \p buffer with \p pattern.
+    ///
+    /// \opencl_version_warning{1,2}
+    ///
+    /// \see fill()
     event enqueue_fill_buffer(const buffer &buffer,
                               const void *pattern,
                               size_t pattern_size,
@@ -862,7 +925,7 @@ public:
         return ret;
     }
 
-    #ifdef CL_VERSION_1_2
+    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     cl_int enqueue_fill_image(const image2d &image,
                               const void *fill_color,
                               const size_t origin[2],
@@ -931,6 +994,7 @@ public:
     }
     #endif // CL_VERSION_1_2
 
+    /// Enqueues a kernel for execution.
     event enqueue_nd_range_kernel(const kernel &kernel,
                                   size_t work_dim,
                                   const size_t *global_work_offset,
@@ -959,6 +1023,7 @@ public:
         return event_;
     }
 
+    /// \internal_
     event enqueue_1d_range_kernel(const kernel &kernel,
                                   size_t global_work_offset,
                                   size_t global_work_size)
@@ -970,6 +1035,7 @@ public:
                                        0);
     }
 
+    /// \internal_
     event enqueue_1d_range_kernel(const kernel &kernel,
                                   size_t global_work_offset,
                                   size_t global_work_size,
@@ -982,6 +1048,7 @@ public:
                                        local_work_size ? &local_work_size : 0);
     }
 
+    /// Enqueues a kernel to execute using a single work-item.
     event enqueue_task(const kernel &kernel)
     {
         BOOST_ASSERT(m_queue != 0);
@@ -997,6 +1064,7 @@ public:
         return event_;
     }
 
+    /// Flushes the command queue.
     void flush()
     {
         BOOST_ASSERT(m_queue != 0);
@@ -1004,6 +1072,7 @@ public:
         clFlush(m_queue);
     }
 
+    /// Blocks until all outstanding commands in the queue have finished.
     void finish()
     {
         BOOST_ASSERT(m_queue != 0);
@@ -1011,6 +1080,7 @@ public:
         clFinish(m_queue);
     }
 
+    /// Enqueues a barrier in the queue.
     void enqueue_barrier()
     {
         BOOST_ASSERT(m_queue != 0);
@@ -1022,6 +1092,8 @@ public:
         #endif
     }
 
+    /// Enqueues a marker in the queue and returns an event that can be
+    /// used to track its progress.
     event enqueue_marker()
     {
         event event_;
@@ -1039,6 +1111,7 @@ public:
         return event_;
     }
 
+    /// \internal_
     operator cl_command_queue() const
     {
         return m_queue;

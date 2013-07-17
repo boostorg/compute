@@ -19,6 +19,8 @@
 namespace boost {
 namespace compute {
 
+/// Returns \c true if the values in the range [\p first, \p last)
+/// are partitioned according to \p predicate.
 template<class InputIterator, class UnaryPredicate>
 inline bool is_partitioned(InputIterator first,
                            InputIterator last,

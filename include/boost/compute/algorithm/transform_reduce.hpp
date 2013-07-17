@@ -20,6 +20,9 @@
 namespace boost {
 namespace compute {
 
+/// Transforms each value in the range [\p first, \p last) with the unary
+/// \p transform_function and then reduces each transformed value and
+/// \p init with \p reduce_function.
 template<class InputIterator,
          class UnaryTransformFunction,
          class T,
@@ -39,6 +42,10 @@ inline T transform_reduce(InputIterator first,
                queue);
 }
 
+/// Transforms each value in the range [\p first1, \p last1) and the
+/// range beginning at \p first2 with the binary \p transform_function
+/// and then reduces each transformed value and \p init with
+/// \p reduce_function.
 template<class InputIterator1,
          class InputIterator2,
          class BinaryTransformFunction,

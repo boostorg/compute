@@ -18,6 +18,9 @@
 namespace boost {
 namespace compute {
 
+/// Copies \p count elements from \p first to \p result.
+///
+/// \see copy()
 template<class InputIterator, class Size, class OutputIterator>
 inline OutputIterator copy_n(InputIterator first,
                              Size count,

@@ -18,6 +18,8 @@
 namespace boost {
 namespace compute {
 
+/// Returns \c true if the range [\p first1, \p last1) and the range
+/// beginning at \p first2 are equal.
 template<class InputIterator1, class InputIterator2>
 inline bool equal(InputIterator1 first1,
                   InputIterator1 last1,

@@ -21,6 +21,8 @@
 namespace boost {
 namespace compute {
 
+/// Returns a pair of iterators containing the range of values equal
+/// to \p value in the sorted range [\p first, \p last).
 template<class InputIterator, class T>
 inline std::pair<InputIterator, InputIterator>
 equal_range(InputIterator first,

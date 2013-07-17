@@ -18,6 +18,9 @@
 namespace boost {
 namespace compute {
 
+/// Calculates the cumulative sum of the elements in the range [\p first,
+/// \p last) and writes the resulting values to the range beginning at
+/// \p result.
 template<class InputIterator, class OutputIterator>
 inline OutputIterator
 partial_sum(InputIterator first,

@@ -21,9 +21,12 @@
 namespace boost {
 namespace compute {
 
+/// \class event
+/// \brief An event on a compute device.
 class event
 {
 public:
+    /// \internal_
     enum execution_status {
         complete = CL_COMPLETE,
         running = CL_RUNNING,
@@ -31,6 +34,7 @@ public:
         queued = CL_QUEUED
     };
 
+    /// \internal_
     enum command_type {
         ndrange_kernel = CL_COMMAND_NDRANGE_KERNEL,
         task = CL_COMMAND_TASK,
@@ -57,6 +61,7 @@ public:
         #endif
     };
 
+    /// \internal_
     enum profiling_info {
         profiling_command_queued = CL_PROFILING_COMMAND_QUEUED,
         profiling_command_submit = CL_PROFILING_COMMAND_SUBMIT,
@@ -64,6 +69,7 @@ public:
         profiling_command_end = CL_PROFILING_COMMAND_END
     };
 
+    /// Creates a null event object.
     event()
         : m_event(0)
     {
@@ -122,6 +128,7 @@ public:
         return *this;
     }
 
+    /// Destroys the event object.
     ~event()
     {
         if(m_event){
@@ -131,27 +138,36 @@ public:
         }
     }
 
+    /// Returns a reference to the underlying OpenCL event object.
     cl_event& get() const
     {
         return const_cast<cl_event &>(m_event);
     }
 
+    /// Returns the status of the event.
     cl_int get_status() const
     {
         return get_info<cl_int>(CL_EVENT_COMMAND_EXECUTION_STATUS);
     }
 
+    /// Returns the command type for the event.
     cl_command_type get_command_type() const
     {
         return get_info<cl_command_type>(CL_EVENT_COMMAND_TYPE);
     }
 
+    /// Returns information about the event.
+    ///
+    /// \see_opencl_ref{clGetEventInfo}
     template<class T>
     T get_info(cl_event_info info) const
     {
         return detail::get_object_info<T>(clGetEventInfo, m_event, info);
     }
 
+    /// Returns profiling information for the event.
+    ///
+    /// \see_opencl_ref{clGetEventProfilingInfo}
     template<class T>
     T get_profiling_info(cl_profiling_info info) const
     {
@@ -160,6 +176,8 @@ public:
                                           info);
     }
 
+    /// Blocks until the actions corresponding to the event have
+    /// completed.
     void wait()
     {
         cl_int ret = clWaitForEvents(1, &m_event);
@@ -168,16 +186,19 @@ public:
         }
     }
 
+    /// Returns \c true if the event is the same as \p other.
     bool operator==(const event &other) const
     {
         return m_event == other.m_event;
     }
 
+    /// Returns \c true if the event is different from \p other.
     bool operator!=(const event &other) const
     {
         return m_event != other.m_event;
     }
 
+    /// \internal_
     operator cl_event() const
     {
         return m_event;

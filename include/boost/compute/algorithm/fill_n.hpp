@@ -18,6 +18,9 @@
 namespace boost {
 namespace compute {
 
+/// Fills the range [\p first, \p first + count) with \p value.
+///
+/// \see fill()
 template<class BufferIterator, class Size, class T>
 inline void fill_n(BufferIterator first,
                    Size count,

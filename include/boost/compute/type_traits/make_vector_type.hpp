@@ -18,15 +18,28 @@
 namespace boost {
 namespace compute {
 
+/// Meta-function which returns a vector type for \p Scalar with \p Size.
+///
+/// For example,
+/// \code
+/// make_vector_type<int, 2>::type == int2_
+/// make_vector_type<float, 4>::type == float4_
+/// \endcode
+///
+/// \see is_vector_type
 template<class Scalar, size_t Size>
-struct make_vector_type;
+struct make_vector_type
+{
+};
 
+/// \internal_
 template<class Scalar>
 struct make_vector_type<Scalar, 1>
 {
     typedef Scalar type;
 };
 
+/// \internal_
 #define BOOST_COMPUTE_DECLARE_MAKE_VECTOR_TYPE_FUNCTION(scalar, size) \
     template<> \
     struct make_vector_type<BOOST_PP_CAT(scalar, _), size> \
@@ -34,6 +47,7 @@ struct make_vector_type<Scalar, 1>
         typedef BOOST_PP_CAT(BOOST_PP_CAT(scalar, size), _) type; \
     };
 
+/// \internal_
 #define BOOST_COMPUTE_DECLARE_MAKE_VECTOR_TYPE_FUNCTIONS(scalar) \
     BOOST_COMPUTE_DECLARE_MAKE_VECTOR_TYPE_FUNCTION(scalar, 2) \
     BOOST_COMPUTE_DECLARE_MAKE_VECTOR_TYPE_FUNCTION(scalar, 4) \

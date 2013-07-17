@@ -21,6 +21,10 @@
 namespace boost {
 namespace compute {
 
+/// Partitions the elements in the range [\p first, \p last) according to
+/// \p predicate.
+///
+/// \see is_partitioned()
 template<class Iterator, class UnaryPredicate>
 inline Iterator partition(Iterator first,
                           Iterator last,

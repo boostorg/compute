@@ -39,6 +39,8 @@
 namespace boost {
 namespace compute {
 
+/// \class vector
+/// \brief A resizable array of values.
 template<class T, class Alloc = allocator<T> >
 class vector
 {
@@ -445,13 +447,17 @@ public:
         return m_allocator;
     }
 
+    /// Returns the buffer.
     const buffer& get_buffer() const
     {
         return m_data.get_buffer();
     }
 
 private:
+    /// \internal_
     BOOST_CONSTEXPR size_type _minimum_capacity() const { return 4; }
+
+    /// \internal_
     BOOST_CONSTEXPR float _growth_factor() const { return 1.5; }
 
 private:

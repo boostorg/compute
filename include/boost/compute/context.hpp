@@ -20,14 +20,22 @@
 namespace boost {
 namespace compute {
 
+/// \class context
+/// \brief A compute context.
+///
+/// The context class represents a compute context.
+///
+/// \see device, command_queue
 class context
 {
 public:
+    /// Create a null context object.
     context()
         : m_context(0)
     {
     }
 
+    /// Creates a new context for \p device with \p properties.
     explicit context(const device &device,
                      const cl_context_properties *properties = 0)
     {
@@ -47,6 +55,8 @@ public:
         }
     }
 
+    /// Creates a new context object for \p context. If \p retain is
+    /// \c true, the reference count for \p context will be incremented.
     explicit context(cl_context context, bool retain = true)
         : m_context(context)
     {
@@ -55,6 +65,7 @@ public:
         }
     }
 
+    /// Creates a new context object as a copy of \p other.
     context(const context &other)
         : m_context(other.m_context)
     {
@@ -100,6 +111,7 @@ public:
         return *this;
     }
 
+    /// Destroys the context object.
     ~context()
     {
         if(m_context){
@@ -109,6 +121,7 @@ public:
         }
     }
 
+    /// Returns the underlying OpenCL context.
     cl_context& get() const
     {
         return const_cast<cl_context &>(m_context);
@@ -139,22 +152,28 @@ public:
         return device(id);
     }
 
+    /// Returns information about the context.
+    ///
+    /// \see_opencl_ref{clGetContextInfo}
     template<class T>
     T get_info(cl_context_info info) const
     {
         return detail::get_object_info<T>(clGetContextInfo, m_context, info);
     }
 
+    /// Returns \c true if the context is the same at \p other.
     bool operator==(const context &other) const
     {
         return m_context == other.m_context;
     }
 
+    /// Returns \c true if the context is different from \p other.
     bool operator!=(const context &other) const
     {
         return m_context != other.m_context;
     }
 
+    /// \internal_
     operator cl_context() const
     {
         return m_context;

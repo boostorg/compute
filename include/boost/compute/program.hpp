@@ -31,14 +31,23 @@
 namespace boost {
 namespace compute {
 
+/// \class program
+/// \brief A compute program.
+///
+/// The program class represents a compute program.
+///
+/// \see kernel
 class program
 {
 public:
+    /// Creates a null program object.
     program()
         : m_program(0)
     {
     }
 
+    /// Creates a program object for \p program. If \p retain is \c true,
+    /// the reference count for \p program will be incremented.
     explicit program(cl_program program, bool retain = true)
         : m_program(program)
     {
@@ -47,6 +56,7 @@ public:
         }
     }
 
+    /// Creates a new program object as a copy of \p other.
     program(const program &other)
         : m_program(other.m_program)
     {
@@ -92,6 +102,7 @@ public:
         return *this;
     }
 
+    /// Destroys the program object.
     ~program()
     {
         if(m_program){
@@ -101,16 +112,19 @@ public:
         }
     }
 
+    /// Returns the underlying OpenCL program.
     cl_program& get() const
     {
         return const_cast<cl_program &>(m_program);
     }
 
+    /// Returns the source code for the program.
     std::string source() const
     {
         return get_info<std::string>(CL_PROGRAM_SOURCE);
     }
 
+    /// Returns the binary for the program.
     std::vector<unsigned char> binary() const
     {
         size_t binary_size = get_info<size_t>(CL_PROGRAM_BINARY_SIZES);
@@ -153,17 +167,22 @@ public:
         return devices;
     }
 
+    /// Returns the context for the program.
     context get_context() const
     {
         return context(get_info<cl_context>(CL_PROGRAM_CONTEXT));
     }
 
+    /// Returns information about the program.
+    ///
+    /// \see_opencl_ref{clGetProgramInfo}
     template<class T>
     T get_info(cl_program_info info) const
     {
         return detail::get_object_info<T>(clGetProgramInfo, m_program, info);
     }
 
+    /// Builds the program with \p options.
     cl_int build(const std::string &options = std::string())
     {
         const char *options_string = 0;
@@ -194,6 +213,7 @@ public:
         return ret;
     }
 
+    /// Returns the build log.
     std::string build_log() const
     {
         device device = get_devices()[0];
@@ -223,7 +243,12 @@ public:
         return value;
     }
 
+    /// Creates and returns a new kernel object for \p name.
+#ifndef BOOST_COMPUTE_DOXYGEN_INVOKED
     detail::program_create_kernel_result
+#else
+    kernel
+#endif
     create_kernel(const std::string &name) const
     {
         cl_int error = 0;
@@ -237,11 +262,13 @@ public:
         return detail::program_create_kernel_result(kernel);
     }
 
+    /// \internal_
     operator cl_program() const
     {
         return m_program;
     }
 
+    /// Creates a new program with \p source in \p context.
     static program create_with_source(const std::string &source,
                                       const context &context)
     {
@@ -260,6 +287,7 @@ public:
         return program(program_, false);
     }
 
+    /// Creates a new program with \p file in \p context.
     static program create_with_source_file(const std::string &file,
                                            const context &context)
     {
@@ -276,6 +304,8 @@ public:
         return create_with_source(source, context);
     }
 
+    /// Creates a new program with \p binary of \p binary_size in
+    /// \p context.
     static program create_with_binary(const unsigned char *binary,
                                       size_t binary_size,
                                       const context &context)
@@ -298,12 +328,14 @@ public:
         return program(program_, false);
     }
 
+    /// Creates a new program with \p binary in \p context.
     static program create_with_binary(const std::vector<unsigned char> &binary,
                                       const context &context)
     {
         return create_with_binary(&binary[0], binary.size(), context);
     }
 
+    /// Creates a new program with \p file in \p context.
     static program create_with_binary_file(const std::string &file,
                                            const context &context)
     {

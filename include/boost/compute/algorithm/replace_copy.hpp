@@ -21,6 +21,11 @@
 namespace boost {
 namespace compute {
 
+/// Copies the value in the range [\p first, \p last) to the range
+/// beginning at \p result while replacing each instance of \p old_value
+/// with \p new_value.
+///
+/// \see replace()
 template<class InputIterator, class OutputIterator, class T>
 inline OutputIterator
 replace_copy(InputIterator first,

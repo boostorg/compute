@@ -19,6 +19,9 @@
 namespace boost {
 namespace compute {
 
+/// Merges the sorted values in the range [\p first1, \p last1) with
+/// the sorted values in the range [\p first2, last2) and stores the
+/// result in the range beginning at \p result.
 template<class InputIterator1, class InputIterator2, class OutputIterator>
 inline OutputIterator merge(InputIterator1 first1,
                             InputIterator1 last1,

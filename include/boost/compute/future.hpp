@@ -16,6 +16,8 @@
 namespace boost {
 namespace compute {
 
+/// \class future
+/// \brief Holds the result of an asynchronous computation.
 template<class T>
 class future
 {
@@ -51,6 +53,8 @@ public:
     {
     }
 
+    /// Returns the result of the computation. This will block until
+    /// the result is ready.
     T get()
     {
         wait();
@@ -58,16 +62,19 @@ public:
         return m_result;
     }
 
+    /// Returns \c true if the future is valid.
     bool valid() const
     {
         return m_event != 0;
     }
 
+    /// Blocks until the computation is complete.
     void wait() const
     {
         const_cast<event &>(m_event).wait();
     }
 
+    /// Returns the underlying event object.
     event get_event() const
     {
         return m_event;
@@ -78,6 +85,7 @@ private:
     event m_event;
 };
 
+/// \internal_
 template<>
 class future<void>
 {
@@ -143,6 +151,7 @@ private:
     event m_event;
 };
 
+/// \internal_
 template<class Result>
 inline future<Result> make_future(const Result &result, const event &event)
 {

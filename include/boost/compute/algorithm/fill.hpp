@@ -186,6 +186,9 @@ inline future<void> dispatch_fill_async(BufferIterator first,
 
 } // end detail namespace
 
+/// Fills the range [\p first, \p last) with \p value.
+///
+/// \see fill_n()
 template<class BufferIterator, class T>
 inline void fill(BufferIterator first,
                  BufferIterator last,

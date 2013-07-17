@@ -18,12 +18,22 @@
 namespace boost {
 namespace compute {
 
-template<class Vector>
+/// Meta-function returning the size (number of components) of a vector type
+/// \p T. For scalar types this function returns \c 1.
+///
+/// For example,
+/// \code
+/// vector_size<float>::value == 1
+/// vector_size<float4_>::value == 4
+/// \endcode
+template<class T>
 struct vector_size
 {
+    /// \internal_
     BOOST_STATIC_CONSTANT(size_t, value = 1);
 };
 
+/// \internal_
 #define BOOST_COMPUTE_DECLARE_VECTOR_SIZE_FUNCTION(scalar, size) \
     template<> \
     struct vector_size<BOOST_PP_CAT(BOOST_PP_CAT(scalar, size), _)> \
@@ -31,6 +41,7 @@ struct vector_size
         BOOST_STATIC_CONSTANT(size_t, value = size); \
     };
 
+/// \internal_
 #define BOOST_COMPUTE_DECLARE_VECTOR_SIZE_FUNCTIONS(scalar) \
     BOOST_COMPUTE_DECLARE_VECTOR_SIZE_FUNCTION(scalar, 2) \
     BOOST_COMPUTE_DECLARE_VECTOR_SIZE_FUNCTION(scalar, 4) \

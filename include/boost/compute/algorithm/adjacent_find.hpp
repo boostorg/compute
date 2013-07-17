@@ -21,6 +21,8 @@
 namespace boost {
 namespace compute {
 
+/// Searches the range [\p first, \p last) for two identical adjacent
+/// elements and returns an iterator pointing to the first.
 template<class InputIterator>
 inline InputIterator
 adjacent_find(InputIterator first,

@@ -18,6 +18,11 @@
 namespace boost {
 namespace compute {
 
+/// Performs an exclusive scan on the elements in the range
+/// [\p first, \p last) and stores the results in the range
+/// beginning at \p result.
+///
+/// \see inclusive_scan()
 template<class InputIterator, class OutputIterator>
 inline OutputIterator
 exclusive_scan(InputIterator first,

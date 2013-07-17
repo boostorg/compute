@@ -50,6 +50,11 @@ struct scatter_kernel
 
 } // end detail namespace
 
+/// Copies the elements from the range [\p first, \p last) to the range
+/// beginning at \p result using the output indices from the range beginning
+/// at \p map.
+///
+/// \see gather()
 template<class InputIterator, class MapIterator, class OutputIterator>
 inline void scatter(InputIterator first,
                     InputIterator last,

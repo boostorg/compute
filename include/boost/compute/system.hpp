@@ -26,9 +26,14 @@
 namespace boost {
 namespace compute {
 
+/// \class system
+/// \brief Provides access to platforms and devices on the system.
+///
+/// \see platform, device, context
 class system
 {
 public:
+    /// Returns the default compute device for the system.
     static device default_device()
     {
         static device default_device = find_default_device();
@@ -36,6 +41,7 @@ public:
         return default_device;
     }
 
+    /// Returns the device with \p name.
     static device find_device(const std::string &name)
     {
         BOOST_FOREACH(const device &device, devices()){
@@ -47,6 +53,8 @@ public:
         return device();
     }
 
+    /// Returns a vector containing all of the compute devices on
+    /// the system.
     static std::vector<device> devices()
     {
         std::vector<device> devices;
@@ -60,6 +68,7 @@ public:
         return devices;
     }
 
+    /// Returns the number of compute devices on the system.
     static size_t device_count()
     {
         size_t count = 0;
@@ -71,6 +80,7 @@ public:
         return count;
     }
 
+    /// Returns the default context for the system.
     static context default_context()
     {
         static context default_context(default_device());
@@ -78,6 +88,7 @@ public:
         return default_context;
     }
 
+    /// Returns the default command queue for the system.
     static command_queue& default_queue()
     {
         static command_queue queue(default_context(), default_device());
@@ -85,11 +96,14 @@ public:
         return queue;
     }
 
+    /// Blocks until all outstanding computations on the default
+    /// command queue are complete.
     static void finish()
     {
         default_queue().finish();
     }
 
+    /// Returns a vector of all the compute platforms on the system.
     static std::vector<platform> platforms()
     {
         cl_uint count = 0;
@@ -106,6 +120,7 @@ public:
         return platforms;
     }
 
+    /// Returns the number of compute platforms on the system.
     static size_t platform_count()
     {
         cl_uint count = 0;
@@ -114,6 +129,7 @@ public:
     }
 
 private:
+    /// \internal_
     static device find_default_device()
     {
         // get a list of all devices on the system
@@ -167,11 +183,13 @@ private:
         return devices_[0];
     }
 
+    /// \internal_
     static platform device_platform(const device &device)
     {
         return platform(device.get_info<cl_platform_id>(CL_DEVICE_PLATFORM));
     }
 
+    /// \internal_
     static bool matches(const std::string &str, const std::string &pattern)
     {
         return str.find(pattern) != std::string::npos;

@@ -42,12 +42,15 @@ struct invoked_get
 
 } // end detail namespace
 
-// returns the n'th element of an aggregate type (scalarN, pair, tuple, etc.)
+/// Returns the \c N'th element of an aggregate type (e.g. scalarN,
+/// pair, tuple, etc.).
 template<size_t N>
 struct get
 {
+    /// \internal_
     template<class> struct result;
 
+    /// \internal_
     template<class F, class Arg>
     struct result<F(Arg)>
     {

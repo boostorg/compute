@@ -11,6 +11,10 @@
 #ifndef BOOST_COMPUTE_RANDOM_HPP
 #define BOOST_COMPUTE_RANDOM_HPP
 
+/// \file
+///
+/// Meta-header to include all Boost.Compute random headers.
+
 #include <boost/compute/random/default_random_engine.hpp>
 #include <boost/compute/random/mersenne_twister.hpp>
 

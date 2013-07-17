@@ -18,6 +18,8 @@
 namespace boost {
 namespace compute {
 
+/// Returns an iterator pointing to the first element in the range
+/// [\p first, \p last) for which \p predicate returns \c true.
 template<class InputIterator, class UnaryPredicate>
 inline InputIterator find_if(InputIterator first,
                              InputIterator last,

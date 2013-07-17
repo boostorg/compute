@@ -11,6 +11,10 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_HPP
 #define BOOST_COMPUTE_ALGORITHM_HPP
 
+/// \file
+///
+/// Meta-header to include all Boost.Compute algorithm headers.
+
 #include <boost/compute/algorithm/accumulate.hpp>
 #include <boost/compute/algorithm/adjacent_difference.hpp>
 #include <boost/compute/algorithm/adjacent_find.hpp>

@@ -18,6 +18,10 @@
 namespace boost {
 namespace compute {
 
+/// Returns an iterator pointing to the element in the range
+/// [\p first, \p last) with the maximum value.
+///
+/// \see min_element()
 template<class InputIterator>
 inline InputIterator
 max_element(InputIterator first,

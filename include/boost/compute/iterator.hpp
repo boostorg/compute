@@ -11,6 +11,10 @@
 #ifndef BOOST_COMPUTE_ITERATOR_HPP
 #define BOOST_COMPUTE_ITERATOR_HPP
 
+/// \file
+///
+/// Meta-header to include all Boost.Compute iterator headers.
+
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/iterator/constant_iterator.hpp>
 #include <boost/compute/iterator/constant_buffer_iterator.hpp>

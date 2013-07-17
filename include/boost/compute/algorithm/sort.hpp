@@ -23,6 +23,8 @@
 namespace boost {
 namespace compute {
 
+/// Sorts the values in the range [\p first, \p last) according to
+/// \p compare.
 template<class Iterator, class Compare>
 inline void sort(Iterator first,
                  Iterator last,
@@ -42,6 +44,7 @@ inline void sort(Iterator first,
                                                            queue);
 }
 
+/// Sorts the values in the range [\p first, \p last).
 template<class Iterator>
 inline void sort(Iterator first,
                  Iterator last,

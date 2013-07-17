@@ -19,6 +19,8 @@
 namespace boost {
 namespace compute {
 
+/// Fills the range [\p first, \p last) with sequential values starting at
+/// \p value.
 template<class BufferIterator, class T>
 inline void iota(BufferIterator first,
                  BufferIterator last,

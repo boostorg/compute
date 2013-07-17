@@ -17,6 +17,7 @@
 
 namespace boost {
 
+/// \internal_
 #define BOOST_COMPUTE_DECLARE_SCALAR_VECTOR_COMMON_TYPE(scalar, size) \
     template<> \
     struct common_type<BOOST_COMPUTE_MAKE_VECTOR_TYPE(scalar, size), \
@@ -31,6 +32,7 @@ namespace boost {
         typedef BOOST_COMPUTE_MAKE_VECTOR_TYPE(scalar, size) type; \
     };
 
+/// \internal_
 #define BOOST_COMPUTE_DECLARE_SCALAR_VECTOR_COMMON_TYPES(scalar) \
     BOOST_COMPUTE_DECLARE_SCALAR_VECTOR_COMMON_TYPE(scalar, 2) \
     BOOST_COMPUTE_DECLARE_SCALAR_VECTOR_COMMON_TYPE(scalar, 4) \

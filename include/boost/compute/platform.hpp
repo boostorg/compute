@@ -23,19 +23,31 @@
 namespace boost {
 namespace compute {
 
+/// \class platform
+/// \brief A compute platform.
+///
+/// The platform class provides an interface to an OpenCL platform.
+///
+/// To obtain a list of all platforms on the system use the
+/// system::platforms() method.
+///
+/// \see device, context
 class platform
 {
 public:
+    /// Creates a new platform object for \p id.
     explicit platform(cl_platform_id id)
         : m_platform(id)
     {
     }
 
+    /// Creates a new platform as a copy of \p other.
     platform(const platform &other)
         : m_platform(other.m_platform)
     {
     }
 
+    /// Copies the platform id from \p other.
     platform& operator=(const platform &other)
     {
         if(this != &other){
@@ -45,30 +57,36 @@ public:
         return *this;
     }
 
+    /// Destroys the platform object.
     ~platform()
     {
     }
 
+    /// Returns the name of the platform.
     std::string name() const
     {
         return get_info<std::string>(CL_PLATFORM_NAME);
     }
 
+    /// Returns the name of the vendor for the platform.
     std::string vendor() const
     {
         return get_info<std::string>(CL_PLATFORM_VENDOR);
     }
 
+    /// Returns the profile string for the platform.
     std::string profile() const
     {
         return get_info<std::string>(CL_PLATFORM_PROFILE);
     }
 
+    /// Returns the version string for the platform.
     std::string version() const
     {
         return get_info<std::string>(CL_PLATFORM_VERSION);
     }
 
+    /// Returns a list of extensions supported by the platform.
     std::vector<std::string> extensions() const
     {
         std::string extensions_string =
@@ -81,6 +99,8 @@ public:
         return extensions_vector;
     }
 
+    /// Returns \c true if the platform supports the extension with
+    /// \p name.
     bool supports_extension(const std::string &name) const
     {
         const std::vector<std::string> extensions = this->extensions();
@@ -88,6 +108,7 @@ public:
         return boost::find(extensions, name) != extensions.end();
     }
 
+    /// Returns a list of devices on the platform.
     std::vector<device> devices(cl_device_type type = CL_DEVICE_TYPE_ALL) const
     {
         size_t count = device_count(type);
@@ -110,6 +131,7 @@ public:
         return devices;
     }
 
+    /// Returns the number of devices on the platform.
     size_t device_count(cl_device_type type = CL_DEVICE_TYPE_ALL) const
     {
         cl_uint count = 0;
@@ -121,12 +143,17 @@ public:
         return count;
     }
 
+    /// Returns information about the platform.
+    ///
+    /// \see_opencl_ref{clGetPlatformInfo}
     template<class T>
     T get_info(cl_platform_info info) const
     {
         return detail::get_object_info<T>(clGetPlatformInfo, m_platform, info);
     }
 
+    /// Returns the address of the \p function_name extension
+    /// function. Returns \c 0 if \p function_name is invalid.
     void* get_extension_function_address(const char *function_name)
     {
         #ifdef CL_VERSION_1_2
@@ -137,6 +164,7 @@ public:
         #endif
     }
 
+    /// Requests that the platform unload any compiler resources.
     void unload_compiler()
     {
         #ifdef CL_VERSION_1_2

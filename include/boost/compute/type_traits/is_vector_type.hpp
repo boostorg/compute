@@ -16,9 +16,19 @@
 namespace boost {
 namespace compute {
 
+/// Meta-function returning \c true if \p T is a vector type.
+///
+/// For example,
+/// \code
+/// is_vector_type<int>::value == false
+/// is_vector_type<float4_>::value == true
+/// \endcode
+///
+/// \see make_vector_type, vector_size
 template<class T>
 struct is_vector_type
 {
+    /// \internal_
     BOOST_STATIC_CONSTANT(bool, value = (vector_size<T>::value != 1));
 };
 
