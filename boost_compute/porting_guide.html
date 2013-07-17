@@ -3,24 +3,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Porting Guide</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
 <link rel="prev" href="advanced_topics.html" title="Advanced Topics">
-<link rel="next" href="../index/s06.html" title="Reference">
+<link rel="next" href="../compute/reference.html" title="Reference">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%"><tr><td valign="top"></td></tr></table>
-<hr>
 <div class="spirit-nav">
-<a accesskey="p" href="advanced_topics.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="../index/s06.html"><img src="../images/next.png" alt="Next"></a>
+<a accesskey="p" href="advanced_topics.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="../compute/reference.html"><img src="../images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section boost_compute_porting_guide">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_compute.porting_guide"></a><a class="link" href="porting_guide.html" title="Porting Guide">Porting Guide</a>
 </h2></div></div></div>
 <div class="toc"><dl><dt><span class="section"><a href="porting_guide.html#boost_compute.porting_guide.opencl_c_api">OpenCL C API</a></span></dt></dl></div>
-<div class="section">
+<div class="section boost_compute_porting_guide_opencl_c_api">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_compute.porting_guide.opencl_c_api"></a><a class="link" href="porting_guide.html#boost_compute.porting_guide.opencl_c_api" title="OpenCL C API">OpenCL C API</a>
 </h3></div></div></div>
@@ -84,7 +82,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/buffer.html#idp7360256-bb">buffer::get_info&lt;T&gt;()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/buffer.html#idp8163648-bb">buffer::get_info&lt;T&gt;()</a></code>
                 </p>
               </td>
 </tr>
@@ -128,7 +126,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp7404656-bb">command_queue::get_info&lt;T&gt;()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp8196768-bb">command_queue::get_info&lt;T&gt;()</a></code>
                 </p>
               </td>
 </tr>
@@ -140,7 +138,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp7408816-bb">command_queue::enqueue_read_buffer()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp8202096-bb">command_queue::enqueue_read_buffer()</a></code>
                 </p>
               </td>
 </tr>
@@ -152,7 +150,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp7416144-bb">command_queue::enqueue_write_buffer()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp8224160-bb">command_queue::enqueue_write_buffer()</a></code>
                 </p>
               </td>
 </tr>
@@ -164,7 +162,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp7423584-bb">command_queue::enqueue_copy_buffer()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp8246240-bb">command_queue::enqueue_copy_buffer()</a></code>
                 </p>
               </td>
 </tr>
@@ -176,7 +174,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp7433296-bb">command_queue::enqueue_nd_range_kernel()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp8348400-bb">command_queue::enqueue_nd_range_kernel()</a></code>
                 </p>
               </td>
 </tr>
@@ -188,7 +186,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp7441264-bb">command_queue::enqueue_task()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp8353968-bb">command_queue::enqueue_task()</a></code>
                 </p>
               </td>
 </tr>
@@ -200,7 +198,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp7449376-bb">command_queue::enqueue_barrier()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp8359072-bb">command_queue::enqueue_barrier()</a></code>
                 </p>
               </td>
 </tr>
@@ -212,7 +210,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp7451408-bb">command_queue::enqueue_marker()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp8360336-bb">command_queue::enqueue_marker()</a></code>
                 </p>
               </td>
 </tr>
@@ -224,7 +222,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp7441264-bb">command_queue::flush()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp8353968-bb">command_queue::flush()</a></code>
                 </p>
               </td>
 </tr>
@@ -236,7 +234,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp7441264-bb">command_queue::finish()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/command_queue.html#idp8353968-bb">command_queue::finish()</a></code>
                 </p>
               </td>
 </tr>
@@ -280,7 +278,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/context.html#idp7483888-bb">context::get_info&lt;T&gt;()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/context.html#idp8783632-bb">context::get_info&lt;T&gt;()</a></code>
                 </p>
               </td>
 </tr>
@@ -300,7 +298,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/device.html#idp7542816-bb">device::get_info&lt;T&gt;()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/device.html#idp8840144-bb">device::get_info&lt;T&gt;()</a></code>
                 </p>
               </td>
 </tr>
@@ -332,7 +330,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/event.html#idp7576800-bb">event::get_info&lt;T&gt;()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/event.html#idp8873632-bb">event::get_info&lt;T&gt;()</a></code>
                 </p>
               </td>
 </tr>
@@ -344,7 +342,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/event.html#idp7581696-bb">event::get_profiling_info&lt;T&gt;()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/event.html#idp8877648-bb">event::get_profiling_info&lt;T&gt;()</a></code>
                 </p>
               </td>
 </tr>
@@ -388,7 +386,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/kernel.html#idp7667488-bb">kernel::get_info&lt;T&gt;()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/kernel.html#idp9113792-bb">kernel::get_info&lt;T&gt;()</a></code>
                 </p>
               </td>
 </tr>
@@ -400,7 +398,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput">kernel::get_arg_info&lt;T&gt;()</code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/kernel.html#idp9117808-bb">kernel::get_arg_info&lt;T&gt;()</a></code>
                 </p>
               </td>
 </tr>
@@ -412,7 +410,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput">kernel::get_work_group_info&lt;T&gt;()</code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/kernel.html#idp9123440-bb">kernel::get_work_group_info&lt;T&gt;()</a></code>
                 </p>
               </td>
 </tr>
@@ -424,7 +422,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/kernel.html#idp7674144-bb">kernel::set_arg()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/kernel.html#idp9129088-bb">kernel::set_arg()</a></code>
                 </p>
               </td>
 </tr>
@@ -444,7 +442,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/platform.html#idp7724944-bb">platform::devices()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/platform.html#idp9202752-bb">platform::devices()</a></code>
                 </p>
               </td>
 </tr>
@@ -456,7 +454,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/platform.html#idp7720048-bb">platform::get_info&lt;T&gt;()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/platform.html#idp9207712-bb">platform::get_info&lt;T&gt;()</a></code>
                 </p>
               </td>
 </tr>
@@ -468,7 +466,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/platform.html#idp7734128-bb">platform::get_extension_function_address()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/platform.html#idp9211728-bb">platform::get_extension_function_address()</a></code>
                 </p>
               </td>
 </tr>
@@ -480,7 +478,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/platform.html#idp7738736-bb">platform::unload_compiler()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/platform.html#idp9215184-bb">platform::unload_compiler()</a></code>
                 </p>
               </td>
 </tr>
@@ -500,7 +498,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/program.html#idp7788144-bb">program::create_with_source()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/program.html#idp9255872-bb">program::create_with_source()</a></code>
                 </p>
               </td>
 </tr>
@@ -512,7 +510,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/program.html#idp7801200-bb">program::create_with_binary()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/program.html#idp9264416-bb">program::create_with_binary()</a></code>
                 </p>
               </td>
 </tr>
@@ -536,7 +534,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/program.html#idp7775312-bb">program::get_info&lt;T&gt;()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/program.html#idp9233984-bb">program::get_info&lt;T&gt;()</a></code>
                 </p>
               </td>
 </tr>
@@ -548,7 +546,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/program.html#idp7780208-bb">program::build()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/program.html#idp9238000-bb">program::build()</a></code>
                 </p>
               </td>
 </tr>
@@ -568,7 +566,7 @@
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><a class="link" href="../boost/compute/system.html#idp7831184-bb">system::platforms()</a></code>
+                  <code class="computeroutput"><a class="link" href="../boost/compute/system.html#idp9318704-bb">system::platforms()</a></code>
                 </p>
               </td>
 </tr>
@@ -588,7 +586,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="advanced_topics.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="../index/s06.html"><img src="../images/next.png" alt="Next"></a>
+<a accesskey="p" href="advanced_topics.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="../compute/reference.html"><img src="../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

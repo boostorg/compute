@@ -3,270 +3,346 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Class command_queue</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
-<link rel="up" href="../../index/s06.html#header.boost.compute.command_queue_hpp" title="Header &lt;boost/compute/command_queue.hpp&gt;">
+<link rel="up" href="../../compute/reference.html#header.boost.compute.command_queue_hpp" title="Header &lt;boost/compute/command_queue.hpp&gt;">
 <link rel="prev" href="buffer.html" title="Class buffer">
-<link rel="next" href="context.html" title="Class context">
+<link rel="next" href="allocator.html" title="Class template allocator">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%"><tr><td valign="top"></td></tr></table>
-<hr>
 <div class="spirit-nav">
-<a accesskey="p" href="buffer.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../index/s06.html#header.boost.compute.command_queue_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="context.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="buffer.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.command_queue_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="allocator.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 <div class="refentry">
 <a name="boost.compute.command_queue"></a><div class="titlepage"></div>
 <div class="refnamediv">
 <h2><span class="refentrytitle">Class command_queue</span></h2>
-<p>boost::compute::command_queue &#8212; A command queue</p>
+<p>boost::compute::command_queue &#8212; A command queue. </p>
 </div>
 <h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
-<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../index/s06.html#header.boost.compute.command_queue_hpp" title="Header &lt;boost/compute/command_queue.hpp&gt;">boost/compute/command_queue.hpp</a>&gt;
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../compute/reference.html#header.boost.compute.command_queue_hpp" title="Header &lt;boost/compute/command_queue.hpp&gt;">boost/compute/command_queue.hpp</a>&gt;
 
 </span>
 <span class="keyword">class</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
-  <span class="comment">// <a class="link" href="command_queue.html#boost.compute.command_queueconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="command_queue.html#idp7368880-bb"><span class="identifier">command_queue</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="device.html" title="Class device">device</a><span class="special">&amp;</span><span class="special">,</span> 
-                <span class="keyword">const</span> <span class="identifier">cl_command_queue_properties</span><span class="special">*</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">explicit</span> <a class="link" href="command_queue.html#idp7375616-bb"><span class="identifier">command_queue</span></a><span class="special">(</span><span class="identifier">cl_command_queue</span><span class="special">,</span> <span class="keyword">bool</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="command_queue.html#idp7381200-bb"><span class="identifier">command_queue</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="command_queue.html#idp7384384-bb"><span class="identifier">command_queue</span></a><span class="special">(</span><a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;&amp;</span><span class="special">)</span><span class="special">;</span>
-  command_queue&amp; <a class="link" href="command_queue.html#idp7387440-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  command_queue&amp; <a class="link" href="command_queue.html#idp7390624-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="command_queue.html#idp7393680-bb"><span class="special">~</span><span class="identifier">command_queue</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="command_queue.html#idp7394832-bb">public member functions</a></span>
-  <a class="link" href="device.html" title="Class device">device</a> <a class="link" href="command_queue.html#idp7395584-bb"><span class="identifier">get_device</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="command_queue.html#idp7398112-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">cl_command_queue_properties</span> <a class="link" href="command_queue.html#idp7400512-bb"><span class="identifier">get_properties</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="command_queue.html#idp7404656-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_command_queue_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="command_queue.html#idp7408816-bb"><span class="identifier">enqueue_read_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a><span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="command_queue.html#idp7416144-bb"><span class="identifier">enqueue_write_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a><span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="command_queue.html#idp7423584-bb"><span class="identifier">enqueue_copy_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a><span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> 
-                           <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="event.html" title="Class event">event</a> <a class="link" href="command_queue.html#idp7433296-bb"><span class="identifier">enqueue_nd_range_kernel</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a><span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">*</span><span class="special">,</span> 
-                                <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">*</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">*</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="event.html" title="Class event">event</a> <a class="link" href="command_queue.html#idp7441264-bb"><span class="identifier">enqueue_task</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="command_queue.html#idp7445312-bb"><span class="identifier">flush</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="command_queue.html#idp7447344-bb"><span class="identifier">finish</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="command_queue.html#idp7449376-bb"><span class="identifier">enqueue_barrier</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="event.html" title="Class event">event</a> <a class="link" href="command_queue.html#idp7451408-bb"><span class="identifier">enqueue_marker</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">enum</span> <a name="boost.compute.command_queue.properties"></a>properties <span class="special">{</span> enable_profiling =  CL_QUEUE_PROFILING_ENABLE, 
+                    enable_out_of_order_execution =  CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE <span class="special">}</span><span class="special">;</span>
+
+  <span class="keyword">enum</span> <a name="boost.compute.command_queue.map_flags"></a>map_flags <span class="special">{</span> map_read =  CL_MAP_READ, map_write =  CL_MAP_WRITE <span class="special">}</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="command_queue.html#boost.compute.command_queueconstruct-copy-destruct">construct/copy/destruct</a></span>
+  <a class="link" href="command_queue.html#idp8361920-bb"><span class="identifier">command_queue</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="command_queue.html#idp8362352-bb"><span class="identifier">command_queue</span></a><span class="special">(</span><span class="identifier">cl_command_queue</span><span class="special">,</span> <span class="keyword">bool</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="command_queue.html#idp8364416-bb"><span class="identifier">command_queue</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">&amp;</span><span class="special">,</span> 
+                <span class="identifier">cl_command_queue_properties</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="command_queue.html#idp8369584-bb"><span class="identifier">command_queue</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="command_queue.html#idp8371616-bb"><span class="identifier">command_queue</span></a><span class="special">(</span><span class="identifier">BOOST_RV_REF</span><span class="special">(</span><a class="link" href="command_queue.html" title="Class command_queue">command_queue</a><span class="special">)</span><span class="special">)</span><span class="special">;</span>
+  command_queue&amp; <a class="link" href="command_queue.html#idp8372880-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  command_queue&amp; <a class="link" href="command_queue.html#idp8374144-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="identifier">BOOST_RV_REF</span><span class="special">(</span><a class="link" href="command_queue.html" title="Class command_queue">command_queue</a><span class="special">)</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="command_queue.html#idp8375408-bb"><span class="special">~</span><span class="identifier">command_queue</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="command_queue.html#idp8192256-bb">public member functions</a></span>
+  <span class="identifier">cl_command_queue</span> <span class="special">&amp;</span> <a class="link" href="command_queue.html#idp8192656-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <a class="link" href="device.html" title="Class device">device</a> <a class="link" href="command_queue.html#idp8193936-bb"><span class="identifier">get_device</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="command_queue.html#idp8195360-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="command_queue.html#idp8196768-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_command_queue_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">cl_command_queue_properties</span> <a class="link" href="command_queue.html#idp8200800-bb"><span class="identifier">get_properties</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8202096-bb"><span class="identifier">enqueue_read_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="event.html" title="Class event">event</a> <a class="link" href="command_queue.html#idp8208400-bb"><span class="identifier">enqueue_read_buffer_async</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8214896-bb"><span class="identifier">enqueue_read_buffer_rect</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                                  <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                                  <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8224160-bb"><span class="identifier">enqueue_write_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="event.html" title="Class event">event</a> <a class="link" href="command_queue.html#idp8230480-bb"><span class="identifier">enqueue_write_buffer_async</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                                   <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8236960-bb"><span class="identifier">enqueue_write_buffer_rect</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                                   <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                                   <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="event.html" title="Class event">event</a> <a class="link" href="command_queue.html#idp8246240-bb"><span class="identifier">enqueue_copy_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                            <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8254256-bb"><span class="identifier">enqueue_copy_buffer_rect</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> 
+                                  <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                                  <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="event.html" title="Class event">event</a> <a class="link" href="command_queue.html#idp8264416-bb"><span class="identifier">enqueue_fill_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                            <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <span class="special">*</span> <a class="link" href="command_queue.html#idp8272608-bb"><span class="identifier">enqueue_map_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">cl_map_flags</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8276768-bb"><span class="identifier">enqueue_unmap_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8279552-bb"><span class="identifier">enqueue_unmap_mem_object</span></a><span class="special">(</span><span class="identifier">cl_mem</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8281904-bb"><span class="identifier">enqueue_read_image</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                            <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8286304-bb"><span class="identifier">enqueue_read_image</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                            <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8291392-bb"><span class="identifier">enqueue_write_image</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                             <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8295792-bb"><span class="identifier">enqueue_write_image</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                             <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8300880-bb"><span class="identifier">enqueue_copy_image</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                            <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8305280-bb"><span class="identifier">enqueue_copy_image</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                            <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8309680-bb"><span class="identifier">enqueue_copy_image</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                            <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8314080-bb"><span class="identifier">enqueue_copy_image</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                            <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8318480-bb"><span class="identifier">enqueue_copy_image_to_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> 
+                                      <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8323344-bb"><span class="identifier">enqueue_copy_image_to_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> 
+                                      <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8328208-bb"><span class="identifier">enqueue_copy_buffer_to_image</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                                      <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8333072-bb"><span class="identifier">enqueue_copy_buffer_to_image</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                                      <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8337936-bb"><span class="identifier">enqueue_fill_image</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                            <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">cl_int</span> <a class="link" href="command_queue.html#idp8341648-bb"><span class="identifier">enqueue_fill_image</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">,</span> 
+                            <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="command_queue.html#idp8345360-bb"><span class="identifier">enqueue_migrate_memory_objects</span></a><span class="special">(</span><span class="identifier">uint_</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">cl_mem</span> <span class="special">*</span><span class="special">,</span> 
+                                      <span class="identifier">cl_mem_migration_flags</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="event.html" title="Class event">event</a> <a class="link" href="command_queue.html#idp8348400-bb"><span class="identifier">enqueue_nd_range_kernel</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> <span class="special">*</span><span class="special">,</span> 
+                                <span class="keyword">const</span> <span class="identifier">size_t</span> <span class="special">*</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> <span class="special">*</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="event.html" title="Class event">event</a> <a class="link" href="command_queue.html#idp8353968-bb"><span class="identifier">enqueue_task</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="command_queue.html#idp8356512-bb"><span class="identifier">flush</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="command_queue.html#idp8357776-bb"><span class="identifier">finish</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="command_queue.html#idp8359072-bb"><span class="identifier">enqueue_barrier</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="event.html" title="Class event">event</a> <a class="link" href="command_queue.html#idp8360336-bb"><span class="identifier">enqueue_marker</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp63565072"></a><h2>Description</h2>
-<p>
-            Command queues provide the interface for interacting with compute
-            devices. The <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> class provides
-            methods to copy data to and from a compute device as well as
-            execute compute kernels.
-          </p>
-<p>
-            Command queues are created for one or more compute devices within a
-            compute context. For example, to create a queue for the default
-            compute device on the system:
-</p>
-<pre class="programlisting">
-<span class="comment">// get the default compute device</span>
-<a class="link" href="device.html" title="Class device">boost::compute::device</a> <span class="identifier">device</span> <span class="special">=</span> <a class="link" href="system.html#idp7822032-bb">boost::compute::system::default_device()</a><span class="special">;</span>
-
-<span class="comment">// create a context for the device</span>
-<a class="link" href="context.html" title="Class context">boost::compute::context</a> <span class="identifier">context</span><span class="special">(</span><span class="identifier">device</span><span class="special">)</span><span class="special">;</span>
-
-<span class="comment">// create a command queue for the device</span>
-<a class="link" href="command_queue.html" title="Class command_queue">boost::compute::command_queue</a> <span class="identifier">queue</span><span class="special">(</span><span class="identifier">context</span><span class="special">,</span> <span class="identifier">device</span><span class="special">)</span><span class="special">;</span>
-</pre>
-<p>
-          </p>
-<p>
-            The command_queue class provides the low-level methods for
-            controlling a compute device. The high-level STL-style algorithms
-            provide an easier to use interface for much of this functionality.
-            </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><a class="link" href="copy.html" title="Function template copy">copy()</a></li>
-<li class="listitem"><a class="link" href="fill.html" title="Function template fill">fill()</a></li>
-</ul></div>
-<p>
-          </p>
-<p>
-            See also: <a class="link" href="context.html" title="Class context">context</a>,
-                      <a class="link" href="device.html" title="Class device">device</a>,
-                      <a class="link" href="buffer.html" title="Class buffer">buffer</a>,
-                      <a class="link" href="kernel.html" title="Class kernel">kernel</a>
-          </p>
+<a name="idp65626128"></a><h2>Description</h2>
+<p>Command queues provide the interface for interacting with compute devices. The <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> class provides methods to copy data to and from a compute device as well as execute compute kernels.</p>
+<p>Command queues are created for a compute device within a compute context.</p>
+<p>The default command queue for the system can be obtained with the system::default_queue() method. </p>
 <div class="refsect2">
-<a name="idp63589344"></a><h3>
+<a name="idp65628608"></a><h3>
 <a name="boost.compute.command_queueconstruct-copy-destruct"></a><code class="computeroutput">command_queue</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp7368880-bb"></a><span class="identifier">command_queue</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a><span class="special">&amp;</span> context<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="device.html" title="Class device">device</a><span class="special">&amp;</span> device<span class="special">,</span> 
-              <span class="keyword">const</span> <span class="identifier">cl_command_queue_properties</span><span class="special">*</span> properties <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span></pre>
-<p>
-              Creates a new command queue object in <code class="computeroutput">context</code> for
-              <code class="computeroutput">device</code> with <code class="computeroutput">properties</code>.
-            </p>
+<pre class="literallayout"><a name="idp8361920-bb"></a><span class="identifier">command_queue</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Creates a null command queue. </li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">explicit</span> <a name="idp8362352-bb"></a><span class="identifier">command_queue</span><span class="special">(</span><span class="identifier">cl_command_queue</span> queue<span class="special">,</span> <span class="keyword">bool</span> retain <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem">
+<pre class="literallayout"><a name="idp8364416-bb"></a><span class="identifier">command_queue</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> context<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">&amp;</span> device<span class="special">,</span> 
+              <span class="identifier">cl_command_queue_properties</span> properties <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Creates a command queue in <code class="computeroutput">context</code> for <code class="computeroutput">device</code> with <code class="computeroutput">properties</code>. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp7375616-bb"></a><span class="identifier">command_queue</span><span class="special">(</span><span class="identifier">cl_command_queue</span> queue<span class="special">,</span> <span class="keyword">bool</span> retain <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span></pre>
-<p>
-              Creates a new command queue object for <code class="computeroutput">queue</code>. If
-              <code class="computeroutput">retain</code> is <code class="computeroutput">true</code> (the default) the
-              reference count for <code class="computeroutput">queue</code> will be incremented.
-            </p>
-</li>
+<pre class="literallayout"><a name="idp8369584-bb"></a><span class="identifier">command_queue</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>Creates a new command queue object as a copy of <code class="computeroutput">other</code>. </li>
+<li class="listitem"><pre class="literallayout"><a name="idp8371616-bb"></a><span class="identifier">command_queue</span><span class="special">(</span><span class="identifier">BOOST_RV_REF</span><span class="special">(</span><a class="link" href="command_queue.html" title="Class command_queue">command_queue</a><span class="special">)</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout">command_queue&amp; <a name="idp8372880-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout">command_queue&amp; <a name="idp8374144-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="identifier">BOOST_RV_REF</span><span class="special">(</span><a class="link" href="command_queue.html" title="Class command_queue">command_queue</a><span class="special">)</span> other<span class="special">)</span><span class="special">;</span></pre></li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7381200-bb"></a><span class="identifier">command_queue</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
-<p>
-              Creates a new command queue object as a copy of
-              <code class="computeroutput">other</code>.
-            </p>
-</li>
-<li class="listitem">
-<pre class="literallayout"><a name="idp7384384-bb"></a><span class="identifier">command_queue</span><span class="special">(</span><a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
-<p>
-              Move-constructs a new command queue object from
-              <code class="computeroutput">other</code>.
-            </p>
-</li>
-<li class="listitem">
-<pre class="literallayout">command_queue&amp; <a name="idp7387440-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
-<p>
-              Copies the command queue from <code class="computeroutput">other</code>.
-            </p>
-</li>
-<li class="listitem">
-<pre class="literallayout">command_queue&amp; <a name="idp7390624-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
-<p>
-              Transfers the ownership of the command queue from
-              <code class="computeroutput">other</code>.
-            </p>
-</li>
-<li class="listitem">
-<pre class="literallayout"><a name="idp7393680-bb"></a><span class="special">~</span><span class="identifier">command_queue</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
-<p>
-              Destroys the command queue object.
-            </p>
-</li>
+<pre class="literallayout"><a name="idp8375408-bb"></a><span class="special">~</span><span class="identifier">command_queue</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the command queue. </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp63649168"></a><h3>
-<a name="idp7394832-bb"></a><code class="computeroutput">command_queue</code> public member functions</h3>
+<a name="idp65686288"></a><h3>
+<a name="idp8192256-bb"></a><code class="computeroutput">command_queue</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="device.html" title="Class device">device</a> <a name="idp7395584-bb"></a><span class="identifier">get_device</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<p>
-                Returns the device that the command queue issues instructions
-                to.
-              </p>
+<pre class="literallayout"><span class="identifier">cl_command_queue</span> <span class="special">&amp;</span> <a name="idp8192656-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the underlying OpenCL command queue. </li>
+<li class="listitem">
+<pre class="literallayout"><a class="link" href="device.html" title="Class device">device</a> <a name="idp8193936-bb"></a><span class="identifier">get_device</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the device that the command queue issues commands to. </li>
+<li class="listitem">
+<pre class="literallayout"><a class="link" href="context.html" title="Class context">context</a> <a name="idp8195360-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the context for the command queue. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp8196768-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_command_queue_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>Returns information about the command queue.</p>
+<p>See the documentation for <a href="http://www.khronos.org/registry/cl/sdk/1.2/docs/man/xhtml/clGetCommandQueueInfo.html" target="_top">clGetCommandQueueInfo()</a> for more information. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="context.html" title="Class context">context</a> <a name="idp7398112-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<p>
-                Returns the context for the command queue.
-              </p>
-</li>
+<pre class="literallayout"><span class="identifier">cl_command_queue_properties</span> <a name="idp8200800-bb"></a><span class="identifier">get_properties</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the properties for the command queue. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">cl_command_queue_properties</span> <a name="idp7400512-bb"></a><span class="identifier">get_properties</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8202096-bb"></a><span class="identifier">enqueue_read_buffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> <span class="identifier">size_t</span> offset<span class="special">,</span> <span class="identifier">size_t</span> size<span class="special">,</span> 
+                           <span class="keyword">void</span> <span class="special">*</span> host_ptr<span class="special">)</span><span class="special">;</span></pre>
+<p>Enqueues a command to read data from <code class="computeroutput">buffer</code> to host memory.</p>
+<p><span class="bold"><strong>See Also:</strong></span></p>
+<p>copy() </p>
 <p>
-                Returns the properties for the command queue.
-              </p>
-<p>
-                The returned <code class="computeroutput">cl_command_queue_properties</code> type is
-                a bitfield containing the state of each property flag.
-              </p>
-<p>
-                For example, to check if the command queue supports event
-                profiling:
 </p>
-<pre class="programlisting">
-if(queue.get_properties() &amp; command_queue::enable_profiling){
-    // use event profiling info
-}
-</pre>
-<p>
-              </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7404656-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_command_queue_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><a class="link" href="event.html" title="Class event">event</a> <a name="idp8208400-bb"></a><span class="identifier">enqueue_read_buffer_async</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> <span class="identifier">size_t</span> offset<span class="special">,</span> 
+                                <span class="identifier">size_t</span> size<span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span> host_ptr<span class="special">)</span><span class="special">;</span></pre>
+<p>Enqueues a command to read data from <code class="computeroutput">buffer</code> to host memory. The copy will be performed asynchronously.</p>
+<p><span class="bold"><strong>See Also:</strong></span></p>
+<p>copy_async() </p>
 <p>
-                Returns information about the command queue.
-              </p>
+</p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp7408816-bb"></a><span class="identifier">enqueue_read_buffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a><span class="special">&amp;</span> buffer<span class="special">,</span> <span class="identifier">size_t</span> offset<span class="special">,</span> <span class="identifier">size_t</span> size<span class="special">,</span> 
-                         <span class="keyword">void</span> <span class="special">*</span> host_ptr<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8214896-bb"></a><span class="identifier">enqueue_read_buffer_rect</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> 
+                                <span class="keyword">const</span> <span class="identifier">size_t</span> buffer_origin<span class="special">,</span> 
+                                <span class="keyword">const</span> <span class="identifier">size_t</span> host_origin<span class="special">,</span> 
+                                <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">,</span> <span class="identifier">size_t</span> buffer_row_pitch<span class="special">,</span> 
+                                <span class="identifier">size_t</span> buffer_slice_pitch<span class="special">,</span> 
+                                <span class="identifier">size_t</span> host_row_pitch<span class="special">,</span> 
+                                <span class="identifier">size_t</span> host_slice_pitch<span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span> host_ptr<span class="special">)</span><span class="special">;</span></pre>
+<p>Enqueues a command to read a rectangular region from <code class="computeroutput">buffer</code> to host memory.</p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>This method is only available if the OpenCL version is 1.1 or later. </p></td></tr>
+</table></div>
 <p>
-                Enqueues a command to read from a device buffer to host memory.
-              </p>
-<p>
-                See also: <code class="computeroutput"><a class="link" href="copy.html" title="Function template copy">copy()</a></code>
-              </p>
+</p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp7416144-bb"></a><span class="identifier">enqueue_write_buffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a><span class="special">&amp;</span> buffer<span class="special">,</span> <span class="identifier">size_t</span> offset<span class="special">,</span> <span class="identifier">size_t</span> size<span class="special">,</span> 
-                          <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span> host_ptr<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8224160-bb"></a><span class="identifier">enqueue_write_buffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> <span class="identifier">size_t</span> offset<span class="special">,</span> <span class="identifier">size_t</span> size<span class="special">,</span> 
+                            <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span> host_ptr<span class="special">)</span><span class="special">;</span></pre>
+<p>Enqueues a command to write data from host memory to <code class="computeroutput">buffer</code>.</p>
+<p><span class="bold"><strong>See Also:</strong></span></p>
+<p>copy() </p>
 <p>
-                Enqueues a command to write to a device buffer from host memory.
-              </p>
-<p>
-                See also: <code class="computeroutput"><a class="link" href="copy.html" title="Function template copy">copy()</a></code>
-              </p>
+</p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp7423584-bb"></a><span class="identifier">enqueue_copy_buffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a><span class="special">&amp;</span> src_buffer<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a><span class="special">&amp;</span> dst_buffer<span class="special">,</span> 
-                         <span class="identifier">size_t</span> src_offset<span class="special">,</span> <span class="identifier">size_t</span> dst_offset<span class="special">,</span> <span class="identifier">size_t</span> size<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a class="link" href="event.html" title="Class event">event</a> <a name="idp8230480-bb"></a><span class="identifier">enqueue_write_buffer_async</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> <span class="identifier">size_t</span> offset<span class="special">,</span> 
+                                 <span class="identifier">size_t</span> size<span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span> host_ptr<span class="special">)</span><span class="special">;</span></pre>
+<p>Enqueues a command to write data from host memory to <code class="computeroutput">buffer</code>. The copy is performed asynchronously.</p>
+<p><span class="bold"><strong>See Also:</strong></span></p>
+<p>copy_async() </p>
 <p>
-                Enqueues a command to copy data from <code class="computeroutput">src_buffer</code>
-                to <code class="computeroutput">dst_buffer</code>.
-              </p>
-<p>
-                See also: <code class="computeroutput"><a class="link" href="copy.html" title="Function template copy">copy()</a></code>
-              </p>
+</p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="event.html" title="Class event">event</a> <a name="idp7433296-bb"></a><span class="identifier">enqueue_nd_range_kernel</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a><span class="special">&amp;</span> kernel<span class="special">,</span> <span class="identifier">size_t</span> work_dim<span class="special">,</span> 
-                              <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">*</span> global_work_offset<span class="special">,</span> 
-                              <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">*</span> global_work_size<span class="special">,</span> 
-                              <span class="keyword">const</span> <span class="identifier">size_t</span><span class="special">*</span> local_work_size<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8236960-bb"></a><span class="identifier">enqueue_write_buffer_rect</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> 
+                                 <span class="keyword">const</span> <span class="identifier">size_t</span> buffer_origin<span class="special">,</span> 
+                                 <span class="keyword">const</span> <span class="identifier">size_t</span> host_origin<span class="special">,</span> 
+                                 <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">,</span> 
+                                 <span class="identifier">size_t</span> buffer_row_pitch<span class="special">,</span> 
+                                 <span class="identifier">size_t</span> buffer_slice_pitch<span class="special">,</span> 
+                                 <span class="identifier">size_t</span> host_row_pitch<span class="special">,</span> 
+                                 <span class="identifier">size_t</span> host_slice_pitch<span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span> host_ptr<span class="special">)</span><span class="special">;</span></pre>
+<p>Enqueues a command to write a rectangular region from host memory to <code class="computeroutput">buffer</code>.</p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>This method is only available if the OpenCL version is 1.1 or later. </p></td></tr>
+</table></div>
 <p>
-                Enqueues <code class="computeroutput">kernel</code> for execution on the device.
-              </p>
+</p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="event.html" title="Class event">event</a> <a name="idp7441264-bb"></a><span class="identifier">enqueue_task</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a><span class="special">&amp;</span> kernel<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a class="link" href="event.html" title="Class event">event</a> <a name="idp8246240-bb"></a><span class="identifier">enqueue_copy_buffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> src_buffer<span class="special">,</span> 
+                          <span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> dst_buffer<span class="special">,</span> <span class="identifier">size_t</span> src_offset<span class="special">,</span> 
+                          <span class="identifier">size_t</span> dst_offset<span class="special">,</span> <span class="identifier">size_t</span> size<span class="special">)</span><span class="special">;</span></pre>
+<p>Enqueues a command to copy data from <code class="computeroutput">src_buffer</code> to <code class="computeroutput">dst_buffer</code>.</p>
+<p><span class="bold"><strong>See Also:</strong></span></p>
+<p>copy() </p>
 <p>
-                Enqueues <code class="computeroutput">kernel</code> for serial execution on the
-                device using a single work-item.
-              </p>
+</p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp7445312-bb"></a><span class="identifier">flush</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8254256-bb"></a><span class="identifier">enqueue_copy_buffer_rect</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> src_buffer<span class="special">,</span> 
+                                <span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> dst_buffer<span class="special">,</span> 
+                                <span class="keyword">const</span> <span class="identifier">size_t</span> src_origin<span class="special">,</span> 
+                                <span class="keyword">const</span> <span class="identifier">size_t</span> dst_origin<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">,</span> 
+                                <span class="identifier">size_t</span> buffer_row_pitch<span class="special">,</span> 
+                                <span class="identifier">size_t</span> buffer_slice_pitch<span class="special">,</span> 
+                                <span class="identifier">size_t</span> host_row_pitch<span class="special">,</span> 
+                                <span class="identifier">size_t</span> host_slice_pitch<span class="special">)</span><span class="special">;</span></pre>
+<p>Enqueues a command to copy a rectangular region from <code class="computeroutput">src_buffer</code> to <code class="computeroutput">dst_buffer</code>.</p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>This method is only available if the OpenCL version is 1.1 or later. </p></td></tr>
+</table></div>
 <p>
-                Flushes the command queue.
-              </p>
+</p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp7447344-bb"></a><span class="identifier">finish</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a class="link" href="event.html" title="Class event">event</a> <a name="idp8264416-bb"></a><span class="identifier">enqueue_fill_buffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span> pattern<span class="special">,</span> 
+                          <span class="identifier">size_t</span> pattern_size<span class="special">,</span> <span class="identifier">size_t</span> offset<span class="special">,</span> <span class="identifier">size_t</span> size<span class="special">)</span><span class="special">;</span></pre>
+<p>Enqueues a command to fill <code class="computeroutput">buffer</code> with <code class="computeroutput">pattern</code>.</p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>This method is only available if the OpenCL version is 1.2 or later.</p></td></tr>
+</table></div>
 <p>
-                Blocks until all outstanding operations are completed.
-              </p>
+</p>
+<p><span class="bold"><strong>See Also:</strong></span></p>
+<p>fill() </p>
+<p>
+</p>
 </li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <span class="special">*</span> <a name="idp8272608-bb"></a><span class="identifier">enqueue_map_buffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> <span class="identifier">cl_map_flags</span> flags<span class="special">,</span> 
+                          <span class="identifier">size_t</span> offset<span class="special">,</span> <span class="identifier">size_t</span> size<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8276768-bb"></a><span class="identifier">enqueue_unmap_buffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span> mapped_ptr<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8279552-bb"></a><span class="identifier">enqueue_unmap_mem_object</span><span class="special">(</span><span class="identifier">cl_mem</span> mem<span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span> mapped_ptr<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8281904-bb"></a><span class="identifier">enqueue_read_image</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span> image<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> origin<span class="special">,</span> 
+                          <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">,</span> <span class="identifier">size_t</span> row_pitch<span class="special">,</span> 
+                          <span class="keyword">void</span> <span class="special">*</span> host_ptr<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8286304-bb"></a><span class="identifier">enqueue_read_image</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span> image<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> origin<span class="special">,</span> 
+                          <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">,</span> <span class="identifier">size_t</span> row_pitch<span class="special">,</span> 
+                          <span class="identifier">size_t</span> slice_pitch<span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span> host_ptr<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8291392-bb"></a><span class="identifier">enqueue_write_image</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span> image<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> origin<span class="special">,</span> 
+                           <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">,</span> <span class="identifier">size_t</span> input_row_pitch<span class="special">,</span> 
+                           <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span> host_ptr<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8295792-bb"></a><span class="identifier">enqueue_write_image</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span> image<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> origin<span class="special">,</span> 
+                           <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">,</span> <span class="identifier">size_t</span> input_row_pitch<span class="special">,</span> 
+                           <span class="identifier">size_t</span> input_slice_pitch<span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span> host_ptr<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8300880-bb"></a><span class="identifier">enqueue_copy_image</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span> src_image<span class="special">,</span> 
+                          <span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span> dst_image<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> src_origin<span class="special">,</span> 
+                          <span class="keyword">const</span> <span class="identifier">size_t</span> dst_origin<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8305280-bb"></a><span class="identifier">enqueue_copy_image</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span> src_image<span class="special">,</span> 
+                          <span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span> dst_image<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> src_origin<span class="special">,</span> 
+                          <span class="keyword">const</span> <span class="identifier">size_t</span> dst_origin<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8309680-bb"></a><span class="identifier">enqueue_copy_image</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span> src_image<span class="special">,</span> 
+                          <span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span> dst_image<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> src_origin<span class="special">,</span> 
+                          <span class="keyword">const</span> <span class="identifier">size_t</span> dst_origin<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8314080-bb"></a><span class="identifier">enqueue_copy_image</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span> src_image<span class="special">,</span> 
+                          <span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span> dst_image<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> src_origin<span class="special">,</span> 
+                          <span class="keyword">const</span> <span class="identifier">size_t</span> dst_origin<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8318480-bb"></a><span class="identifier">enqueue_copy_image_to_buffer</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span> src_image<span class="special">,</span> 
+                                    <span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> dst_buffer<span class="special">,</span> 
+                                    <span class="keyword">const</span> <span class="identifier">size_t</span> src_origin<span class="special">,</span> 
+                                    <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">,</span> <span class="identifier">size_t</span> dst_offset<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8323344-bb"></a><span class="identifier">enqueue_copy_image_to_buffer</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span> src_image<span class="special">,</span> 
+                                    <span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> dst_buffer<span class="special">,</span> 
+                                    <span class="keyword">const</span> <span class="identifier">size_t</span> src_origin<span class="special">,</span> 
+                                    <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">,</span> <span class="identifier">size_t</span> dst_offset<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8328208-bb"></a><span class="identifier">enqueue_copy_buffer_to_image</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> src_buffer<span class="special">,</span> 
+                                    <span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span> dst_image<span class="special">,</span> 
+                                    <span class="identifier">size_t</span> src_offset<span class="special">,</span> 
+                                    <span class="keyword">const</span> <span class="identifier">size_t</span> dst_origin<span class="special">,</span> 
+                                    <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8333072-bb"></a><span class="identifier">enqueue_copy_buffer_to_image</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> src_buffer<span class="special">,</span> 
+                                    <span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span> dst_image<span class="special">,</span> 
+                                    <span class="identifier">size_t</span> src_offset<span class="special">,</span> 
+                                    <span class="keyword">const</span> <span class="identifier">size_t</span> dst_origin<span class="special">,</span> 
+                                    <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8337936-bb"></a><span class="identifier">enqueue_fill_image</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image2d</span> <span class="special">&amp;</span> image<span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span> fill_color<span class="special">,</span> 
+                          <span class="keyword">const</span> <span class="identifier">size_t</span> origin<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp8341648-bb"></a><span class="identifier">enqueue_fill_image</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">image3d</span> <span class="special">&amp;</span> image<span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span> fill_color<span class="special">,</span> 
+                          <span class="keyword">const</span> <span class="identifier">size_t</span> origin<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">size_t</span> region<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp8345360-bb"></a><span class="identifier">enqueue_migrate_memory_objects</span><span class="special">(</span><span class="identifier">uint_</span> num_mem_objects<span class="special">,</span> 
+                                    <span class="keyword">const</span> <span class="identifier">cl_mem</span> <span class="special">*</span> mem_objects<span class="special">,</span> 
+                                    <span class="identifier">cl_mem_migration_flags</span> flags<span class="special">)</span><span class="special">;</span></pre></li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp7449376-bb"></a><span class="identifier">enqueue_barrier</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
-<p>
-                Enqueues a barrier in the command queue.
-              </p>
-</li>
+<pre class="literallayout"><a class="link" href="event.html" title="Class event">event</a> <a name="idp8348400-bb"></a><span class="identifier">enqueue_nd_range_kernel</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">&amp;</span> kernel<span class="special">,</span> <span class="identifier">size_t</span> work_dim<span class="special">,</span> 
+                              <span class="keyword">const</span> <span class="identifier">size_t</span> <span class="special">*</span> global_work_offset<span class="special">,</span> 
+                              <span class="keyword">const</span> <span class="identifier">size_t</span> <span class="special">*</span> global_work_size<span class="special">,</span> 
+                              <span class="keyword">const</span> <span class="identifier">size_t</span> <span class="special">*</span> local_work_size <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span></pre>Enqueues a kernel for execution. </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="event.html" title="Class event">event</a> <a name="idp7451408-bb"></a><span class="identifier">enqueue_marker</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
-<p>
-                Enqueues a marker in the command queue.
-              </p>
+<pre class="literallayout"><a class="link" href="event.html" title="Class event">event</a> <a name="idp8353968-bb"></a><span class="identifier">enqueue_task</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="kernel.html" title="Class kernel">kernel</a> <span class="special">&amp;</span> kernel<span class="special">)</span><span class="special">;</span></pre>Enqueues a kernel to execute using a single work-item. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp8356512-bb"></a><span class="identifier">flush</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Flushes the command queue. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp8357776-bb"></a><span class="identifier">finish</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Blocks until all outstanding commands in the queue have finished. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp8359072-bb"></a><span class="identifier">enqueue_barrier</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Enqueues a barrier in the queue. </li>
+<li class="listitem">
+<pre class="literallayout"><a class="link" href="event.html" title="Class event">event</a> <a name="idp8360336-bb"></a><span class="identifier">enqueue_marker</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Enqueues a marker in the queue and returns an event that can be used to track its progress. </p>
 </li>
 </ol></div>
 </div>
@@ -282,7 +358,7 @@ if(queue.get_properties() &amp; command_queue::enable_profiling){
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="buffer.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../index/s06.html#header.boost.compute.command_queue_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="context.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="buffer.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.command_queue_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="allocator.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

@@ -1,0 +1,97 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Class template mersenne_twister_engine</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
+<link rel="up" href="../../compute/reference.html#header.boost.compute.random.mersenne_twister_hpp" title="Header &lt;boost/compute/random/mersenne_twister.hpp&gt;">
+<link rel="prev" href="program.html" title="Class program">
+<link rel="next" href="system.html" title="Class system">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="spirit-nav">
+<a accesskey="p" href="program.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.random.mersenne_twister_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="system.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+<div class="refentry">
+<a name="boost.compute.mersenne_twister_engine"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class template mersenne_twister_engine</span></h2>
+<p>boost::compute::mersenne_twister_engine</p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../compute/reference.html#header.boost.compute.random.mersenne_twister_hpp" title="Header &lt;boost/compute/random/mersenne_twister.hpp&gt;">boost/compute/random/mersenne_twister.hpp</a>&gt;
+
+</span><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
+<span class="keyword">class</span> <a class="link" href="mersenne_twister_engine.html" title="Class template mersenne_twister_engine">mersenne_twister_engine</a> <span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// types</span>
+  <span class="keyword">typedef</span> <span class="identifier">T</span> <a name="boost.compute.mersenne_twister_engine.result_type"></a><span class="identifier">result_type</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="mersenne_twister_engine.html#boost.compute.mersenne_twister_engineconstruct-copy-destruct">construct/copy/destruct</a></span>
+  <a class="link" href="mersenne_twister_engine.html#idp9293728-bb"><span class="identifier">mersenne_twister_engine</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="mersenne_twister_engine.html#idp9294992-bb"><span class="identifier">mersenne_twister_engine</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">mersenne_twister_engine</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  mersenne_twister_engine&amp; <a class="link" href="mersenne_twister_engine.html#idp9295824-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">mersenne_twister_engine</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="mersenne_twister_engine.html#idp9296656-bb"><span class="special">~</span><span class="identifier">mersenne_twister_engine</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="mersenne_twister_engine.html#idp9287232-bb">public member functions</a></span>
+  <span class="keyword">void</span> <a class="link" href="mersenne_twister_engine.html#idp9287632-bb"><span class="identifier">seed</span></a><span class="special">(</span><span class="identifier">result_type</span> <span class="special">=</span> <span class="identifier">default_seed</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> OutputIterator<span class="special">&gt;</span> 
+    <span class="keyword">void</span> <a class="link" href="mersenne_twister_engine.html#idp9289568-bb"><span class="identifier">fill</span></a><span class="special">(</span><span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="mersenne_twister_engine.html#idp9296784-bb">private member functions</a></span>
+  <span class="keyword">void</span> <a class="link" href="mersenne_twister_engine.html#idp9297200-bb"><span class="identifier">generate_state</span></a><span class="special">(</span><a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="mersenne_twister_engine.html#idp9299136-bb"><span class="identifier">load_program</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// public data members</span>
+  <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">default_seed</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">n</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">m</span><span class="special">;</span>
+<span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="idp73345104"></a><h2>Description</h2>
+<div class="refsect2">
+<a name="idp73345520"></a><h3>
+<a name="boost.compute.mersenne_twister_engineconstruct-copy-destruct"></a><code class="computeroutput">mersenne_twister_engine</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><pre class="literallayout"><a name="idp9293728-bb"></a><span class="identifier">mersenne_twister_engine</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> context<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp9294992-bb"></a><span class="identifier">mersenne_twister_engine</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">mersenne_twister_engine</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout">mersenne_twister_engine&amp; <a name="idp9295824-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">mersenne_twister_engine</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp9296656-bb"></a><span class="special">~</span><span class="identifier">mersenne_twister_engine</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="idp73373712"></a><h3>
+<a name="idp9287232-bb"></a><code class="computeroutput">mersenne_twister_engine</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp9287632-bb"></a><span class="identifier">seed</span><span class="special">(</span><span class="identifier">result_type</span> value <span class="special">=</span> <span class="identifier">default_seed</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> OutputIterator<span class="special">&gt;</span> 
+  <span class="keyword">void</span> <a name="idp9289568-bb"></a><span class="identifier">fill</span><span class="special">(</span><span class="identifier">OutputIterator</span> first<span class="special">,</span> <span class="identifier">OutputIterator</span> last<span class="special">,</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue<span class="special">)</span><span class="special">;</span></pre></li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="idp73393168"></a><h3>
+<a name="idp9296784-bb"></a><code class="computeroutput">mersenne_twister_engine</code> private member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp9297200-bb"></a><span class="identifier">generate_state</span><span class="special">(</span><a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp9299136-bb"></a><span class="identifier">load_program</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2013 Kyle Lutz<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="program.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.random.mersenne_twister_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="system.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

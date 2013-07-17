@@ -3,19 +3,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Advanced Topics</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
 <link rel="prev" href="tutorial.html" title="Tutorial">
 <link rel="next" href="porting_guide.html" title="Porting Guide">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%"><tr><td valign="top"></td></tr></table>
-<hr>
 <div class="spirit-nav">
 <a accesskey="p" href="tutorial.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="porting_guide.html"><img src="../images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section boost_compute_advanced_topics">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_compute.advanced_topics"></a><a class="link" href="advanced_topics.html" title="Advanced Topics">Advanced Topics</a>
 </h2></div></div></div>
@@ -36,7 +34,7 @@
 <p>
       The following topics show advanced features of the Boost Compute library.
     </p>
-<div class="section">
+<div class="section boost_compute_advanced_topics_custom_functions">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_compute.advanced_topics.custom_functions"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.custom_functions" title="Custom Functions">Custom
       Functions</a>
@@ -48,7 +46,7 @@
       </p>
 <p>
         The Boost Compute library provides a few different ways to create custom
-        functions that can be passed to the provided algorithms such as <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp8626464.html" title="Function template transform">transform()</a></code> and <code class="computeroutput"><a class="link" href="../boost/compute/reduce.html" title="Function template reduce">reduce()</a></code>.
+        functions that can be passed to the provided algorithms such as <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp8096112.html" title="Function template transform">transform()</a></code> and <code class="computeroutput"><a class="link" href="../boost/compute/reduce.html" title="Function template reduce">reduce()</a></code>.
       </p>
 <p>
         The most basic method is to provide the raw source code for a function:
@@ -66,7 +64,7 @@
 <p>
       </p>
 </div>
-<div class="section">
+<div class="section boost_compute_advanced_topics_complex_values">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_compute.advanced_topics.complex_values"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.complex_values" title="Complex Values">Complex
       Values</a>
@@ -99,7 +97,7 @@
 <p>
       </p>
 </div>
-<div class="section">
+<div class="section boost_compute_advanced_topics_lambda_expressions">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_compute.advanced_topics.lambda_expressions"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.lambda_expressions" title="Lambda Expressions">Lambda
       Expressions</a>
@@ -144,7 +142,7 @@
 <p>
       </p>
 </div>
-<div class="section">
+<div class="section boost_compute_advanced_topics_asynchronous_operations">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_compute.advanced_topics.asynchronous_operations"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.asynchronous_operations" title="Asynchronous Operations">Asynchronous
       Operations</a>
@@ -187,16 +185,11 @@
 <p>
       </p>
 </div>
-<div class="section">
+<div class="section boost_compute_advanced_topics_performance_timing">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_compute.advanced_topics.performance_timing"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.performance_timing" title="Performance Timing">Performance
       Timing</a>
 </h3></div></div></div>
-<p>
-        The <code class="computeroutput">boost::compute::timer</code>
-        class provides a simple way to measure performance using the event timers
-        on a compute device.
-      </p>
 <p>
         For example, to measure the time to copy a vector of data from the host to
         the device:
@@ -265,7 +258,7 @@
 <p>
       </p>
 </div>
-<div class="section">
+<div class="section boost_compute_advanced_topics_opencl_c_api_interoperability">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_compute.advanced_topics.opencl_c_api_interoperability"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.opencl_c_api_interoperability" title="OpenCL C API Interoperability">OpenCL
       C API Interoperability</a>

@@ -3,31 +3,80 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Class template allocator</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
-<link rel="up" href="../../index/s06.html#header.boost.compute.container.allocator_hpp" title="Header &lt;boost/compute/container/allocator.hpp&gt;">
-<link rel="prev" href="upper_bound.html" title="Function template upper_bound">
+<link rel="up" href="../../compute/reference.html#header.boost.compute.container.allocator_hpp" title="Header &lt;boost/compute/container/allocator.hpp&gt;">
+<link rel="prev" href="command_queue.html" title="Class command_queue">
 <link rel="next" href="array.html" title="Class template array">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%"><tr><td valign="top"></td></tr></table>
-<hr>
 <div class="spirit-nav">
-<a accesskey="p" href="upper_bound.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../index/s06.html#header.boost.compute.container.allocator_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="array.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="command_queue.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.container.allocator_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="array.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 <div class="refentry">
 <a name="boost.compute.allocator"></a><div class="titlepage"></div>
 <div class="refnamediv">
 <h2><span class="refentrytitle">Class template allocator</span></h2>
-<p>boost::compute::allocator &#8212; A memory allocator</p>
+<p>boost::compute::allocator</p>
 </div>
 <h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
-<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../index/s06.html#header.boost.compute.container.allocator_hpp" title="Header &lt;boost/compute/container/allocator.hpp&gt;">boost/compute/container/allocator.hpp</a>&gt;
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../compute/reference.html#header.boost.compute.container.allocator_hpp" title="Header &lt;boost/compute/container/allocator.hpp&gt;">boost/compute/container/allocator.hpp</a>&gt;
 
-</span><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="comment">  // value type</span>
-         <span class="special">&gt;</span> 
+</span><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
 <span class="keyword">class</span> <a class="link" href="allocator.html" title="Class template allocator">allocator</a> <span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// types</span>
+  <span class="keyword">typedef</span> <span class="identifier">T</span>                     <a name="boost.compute.allocator.value_type"></a><span class="identifier">value_type</span><span class="special">;</span>     
+  <span class="keyword">typedef</span> <span class="identifier">device_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span>       <a name="boost.compute.allocator.pointer"></a><span class="identifier">pointer</span><span class="special">;</span>        
+  <span class="keyword">typedef</span> <span class="keyword">const</span> <span class="identifier">device_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a name="boost.compute.allocator.const_pointer"></a><span class="identifier">const_pointer</span><span class="special">;</span>  
+  <span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span>           <a name="boost.compute.allocator.size_type"></a><span class="identifier">size_type</span><span class="special">;</span>      
+  <span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ptrdiff_t</span>        <a name="boost.compute.allocator.difference_type"></a><span class="identifier">difference_type</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="allocator.html#boost.compute.allocatorconstruct-copy-destruct">construct/copy/destruct</a></span>
+  <a class="link" href="allocator.html#idp8389344-bb"><span class="identifier">allocator</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="allocator.html#idp8390608-bb"><span class="identifier">allocator</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  allocator&amp; <a class="link" href="allocator.html#idp8391424-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="allocator.html#idp8392240-bb"><span class="special">~</span><span class="identifier">allocator</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="allocator.html#idp8382912-bb">public member functions</a></span>
+  <span class="identifier">pointer</span> <a class="link" href="allocator.html#idp8383312-bb"><span class="identifier">allocate</span></a><span class="special">(</span><span class="identifier">size_type</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="allocator.html#idp8384960-bb"><span class="identifier">deallocate</span></a><span class="special">(</span><span class="identifier">pointer</span><span class="special">,</span> <span class="identifier">size_type</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">size_type</span> <a class="link" href="allocator.html#idp8387296-bb"><span class="identifier">max_size</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="allocator.html#idp8388256-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="allocator.html#idp8392368-bb">protected member functions</a></span>
+  <span class="keyword">void</span> <a class="link" href="allocator.html#idp8392784-bb"><span class="identifier">set_mem_flags</span></a><span class="special">(</span><span class="identifier">cl_mem_flags</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="idp66260416"></a><h2>Description</h2>
+<div class="refsect2">
+<a name="idp66260832"></a><h3>
+<a name="boost.compute.allocatorconstruct-copy-destruct"></a><code class="computeroutput">allocator</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><pre class="literallayout"><a name="idp8389344-bb"></a><span class="identifier">allocator</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> context<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp8390608-bb"></a><span class="identifier">allocator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout">allocator&amp; <a name="idp8391424-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp8392240-bb"></a><span class="special">~</span><span class="identifier">allocator</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="idp66288864"></a><h3>
+<a name="idp8382912-bb"></a><code class="computeroutput">allocator</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><pre class="literallayout"><span class="identifier">pointer</span> <a name="idp8383312-bb"></a><span class="identifier">allocate</span><span class="special">(</span><span class="identifier">size_type</span> n<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp8384960-bb"></a><span class="identifier">deallocate</span><span class="special">(</span><span class="identifier">pointer</span> p<span class="special">,</span> <span class="identifier">size_type</span> n<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">size_type</span> <a name="idp8387296-bb"></a><span class="identifier">max_size</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a class="link" href="context.html" title="Class context">context</a> <a name="idp8388256-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="idp66312480"></a><h3>
+<a name="idp8392368-bb"></a><code class="computeroutput">allocator</code> protected member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp8392784-bb"></a><span class="identifier">set_mem_flags</span><span class="special">(</span><span class="identifier">cl_mem_flags</span> flags<span class="special">)</span><span class="special">;</span></pre></li></ol></div>
+</div>
+</div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
@@ -39,7 +88,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="upper_bound.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../index/s06.html#header.boost.compute.container.allocator_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="array.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="command_queue.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.container.allocator_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="array.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

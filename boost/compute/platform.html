@@ -3,137 +3,104 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Class platform</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
-<link rel="up" href="../../index/s06.html#header.boost.compute.platform_hpp" title="Header &lt;boost/compute/platform.hpp&gt;">
-<link rel="prev" href="kernel.html" title="Class kernel">
+<link rel="up" href="../../compute/reference.html#header.boost.compute.platform_hpp" title="Header &lt;boost/compute/platform.hpp&gt;">
+<link rel="prev" href="memory_object.html" title="Class memory_object">
 <link rel="next" href="program.html" title="Class program">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table cellpadding="2" width="100%"><tr><td valign="top"></td></tr></table>
-<hr>
 <div class="spirit-nav">
-<a accesskey="p" href="kernel.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../index/s06.html#header.boost.compute.platform_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="program.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="memory_object.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.platform_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="program.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 <div class="refentry">
 <a name="boost.compute.platform"></a><div class="titlepage"></div>
 <div class="refnamediv">
 <h2><span class="refentrytitle">Class platform</span></h2>
-<p>boost::compute::platform &#8212; Represents a compute platform.</p>
+<p>boost::compute::platform &#8212; A compute platform. </p>
 </div>
 <h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
-<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../index/s06.html#header.boost.compute.platform_hpp" title="Header &lt;boost/compute/platform.hpp&gt;">boost/compute/platform.hpp</a>&gt;
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../compute/reference.html#header.boost.compute.platform_hpp" title="Header &lt;boost/compute/platform.hpp&gt;">boost/compute/platform.hpp</a>&gt;
 
 </span>
 <span class="keyword">class</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="platform.html#boost.compute.platformconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <span class="keyword">explicit</span> <a class="link" href="platform.html#idp7698464-bb"><span class="identifier">platform</span></a><span class="special">(</span><span class="identifier">cl_platform_id</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="platform.html#idp7702064-bb"><span class="identifier">platform</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  platform&amp; <a class="link" href="platform.html#idp7705856-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="platform.html#idp7709616-bb"><span class="special">~</span><span class="identifier">platform</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="platform.html#idp9216480-bb"><span class="identifier">platform</span></a><span class="special">(</span><span class="identifier">cl_platform_id</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="platform.html#idp9218320-bb"><span class="identifier">platform</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  platform&amp; <a class="link" href="platform.html#idp9220336-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="platform.html#idp9222352-bb"><span class="special">~</span><span class="identifier">platform</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="platform.html#idp7711008-bb">public member functions</a></span>
-  <span class="identifier">cl_platform_id</span> <a class="link" href="platform.html#idp7711888-bb"><span class="identifier">id</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="platform.html#idp7714592-bb"><span class="identifier">name</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="platform.html#idp7717296-bb"><span class="identifier">vendor</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="platform.html#idp7720048-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_platform_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="device.html" title="Class device">device</a><span class="special">&gt;</span> <a class="link" href="platform.html#idp7724944-bb"><span class="identifier">devices</span></a><span class="special">(</span><span class="identifier">cl_device_type</span> <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">size_t</span> <a class="link" href="platform.html#idp7729760-bb"><span class="identifier">device_count</span></a><span class="special">(</span><span class="identifier">cl_device_type</span> <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">void</span><span class="special">*</span> <a class="link" href="platform.html#idp7734128-bb"><span class="identifier">get_extension_function_address</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="platform.html#idp7738736-bb"><span class="identifier">unload_compiler</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="platform.html#idp9192944-bb">public member functions</a></span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="platform.html#idp9193344-bb"><span class="identifier">name</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="platform.html#idp9194608-bb"><span class="identifier">vendor</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="platform.html#idp9195888-bb"><span class="identifier">profile</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="platform.html#idp9197168-bb"><span class="identifier">version</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&gt;</span> <a class="link" href="platform.html#idp9198448-bb"><span class="identifier">extensions</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="platform.html#idp9199760-bb"><span class="identifier">supports_extension</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">&gt;</span> <a class="link" href="platform.html#idp9202752-bb"><span class="identifier">devices</span></a><span class="special">(</span><span class="identifier">cl_device_type</span> <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">size_t</span> <a class="link" href="platform.html#idp9205456-bb"><span class="identifier">device_count</span></a><span class="special">(</span><span class="identifier">cl_device_type</span> <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="platform.html#idp9207712-bb"><span class="identifier">get_info</span></a><span class="special">(</span><span class="identifier">cl_platform_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">void</span> <span class="special">*</span> <a class="link" href="platform.html#idp9211728-bb"><span class="identifier">get_extension_function_address</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="platform.html#idp9215184-bb"><span class="identifier">unload_compiler</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp64709056"></a><h2>Description</h2>
+<a name="idp72757888"></a><h2>Description</h2>
+<p>The platform class provides an interface to an OpenCL platform.</p>
+<p>To obtain a list of all platforms on the system use the system::platforms() method.</p>
+<p><span class="bold"><strong>See Also:</strong></span></p>
+<p><a class="link" href="device.html" title="Class device">device</a>, <a class="link" href="context.html" title="Class context">context</a> </p>
 <p>
-            The platform class provides an interface to an OpenCL platform.
-          </p>
+</p>
 <div class="refsect2">
-<a name="idp64710080"></a><h3>
+<a name="idp72761664"></a><h3>
 <a name="boost.compute.platformconstruct-copy-destruct"></a><code class="computeroutput">platform</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp7698464-bb"></a><span class="identifier">platform</span><span class="special">(</span><span class="identifier">cl_platform_id</span> id<span class="special">)</span><span class="special">;</span></pre>
-<p>
-              Creates a new platform object for <code class="computeroutput">id</code>.
-            </p>
-</li>
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp9216480-bb"></a><span class="identifier">platform</span><span class="special">(</span><span class="identifier">cl_platform_id</span> id<span class="special">)</span><span class="special">;</span></pre>Creates a new platform object for <code class="computeroutput">id</code>. </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7702064-bb"></a><span class="identifier">platform</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
-<p>
-              Creates a new platform object as a copy of <code class="computeroutput">other</code>.
-            </p>
-</li>
+<pre class="literallayout"><a name="idp9218320-bb"></a><span class="identifier">platform</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>Creates a new platform as a copy of <code class="computeroutput">other</code>. </li>
 <li class="listitem">
-<pre class="literallayout">platform&amp; <a name="idp7705856-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
-<p>
-              Copies the platform from <code class="computeroutput">other</code>.
-            </p>
-</li>
+<pre class="literallayout">platform&amp; <a name="idp9220336-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>Copies the platform id from <code class="computeroutput">other</code>. </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp7709616-bb"></a><span class="special">~</span><span class="identifier">platform</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
-<p>
-              Destroys the platform object.
-            </p>
-</li>
+<pre class="literallayout"><a name="idp9222352-bb"></a><span class="special">~</span><span class="identifier">platform</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the platform object. </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp64737232"></a><h3>
-<a name="idp7711008-bb"></a><code class="computeroutput">platform</code> public member functions</h3>
+<a name="idp72788048"></a><h3>
+<a name="idp9192944-bb"></a><code class="computeroutput">platform</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">cl_platform_id</span> <a name="idp7711888-bb"></a><span class="identifier">id</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<p>
-                Returns the ID of the platform.
-              </p>
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp9193344-bb"></a><span class="identifier">name</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the name of the platform. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp9194608-bb"></a><span class="identifier">vendor</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the name of the vendor for the platform. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp9195888-bb"></a><span class="identifier">profile</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the profile string for the platform. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp9197168-bb"></a><span class="identifier">version</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the version string for the platform. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&gt;</span> <a name="idp9198448-bb"></a><span class="identifier">extensions</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns a list of extensions supported by the platform. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">bool</span> <a name="idp9199760-bb"></a><span class="identifier">supports_extension</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>Returns <code class="computeroutput">true</code> if the platform supports the extension with <code class="computeroutput">name</code>. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp7714592-bb"></a><span class="identifier">name</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<p>
-                Returns the name of the platform.
-              </p>
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">&gt;</span> <a name="idp9202752-bb"></a><span class="identifier">devices</span><span class="special">(</span><span class="identifier">cl_device_type</span> type <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns a list of devices on the platform. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">size_t</span> <a name="idp9205456-bb"></a><span class="identifier">device_count</span><span class="special">(</span><span class="identifier">cl_device_type</span> type <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the number of devices on the platform. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp9207712-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_platform_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>Returns information about the platform.</p>
+<p>See the documentation for <a href="http://www.khronos.org/registry/cl/sdk/1.2/docs/man/xhtml/clGetPlatformInfo.html" target="_top">clGetPlatformInfo()</a> for more information. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp7717296-bb"></a><span class="identifier">vendor</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<p>
-                Returns the name of the vendor of the platform.
-              </p>
+<pre class="literallayout"><span class="keyword">void</span> <span class="special">*</span> <a name="idp9211728-bb"></a><span class="identifier">get_extension_function_address</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> function_name<span class="special">)</span><span class="special">;</span></pre>
+<p>Returns the address of the <code class="computeroutput">function_name</code> extension function. Returns <code class="computeroutput">0</code> if <code class="computeroutput">function_name</code> is invalid. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp7720048-bb"></a><span class="identifier">get_info</span><span class="special">(</span><span class="identifier">cl_platform_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<p>
-                Returns information about the platform.
-              </p>
-</li>
-<li class="listitem">
-<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><a class="link" href="device.html" title="Class device">device</a><span class="special">&gt;</span> <a name="idp7724944-bb"></a><span class="identifier">devices</span><span class="special">(</span><span class="identifier">cl_device_type</span> type <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<p>
-                Returns a vector of devices for the platform.
-              </p>
-</li>
-<li class="listitem">
-<pre class="literallayout"><span class="identifier">size_t</span> <a name="idp7729760-bb"></a><span class="identifier">device_count</span><span class="special">(</span><span class="identifier">cl_device_type</span> type <span class="special">=</span> <span class="identifier">CL_DEVICE_TYPE_ALL</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<p>
-                Returns the number of devices on the platform.
-              </p>
-</li>
-<li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span><span class="special">*</span> <a name="idp7734128-bb"></a><span class="identifier">get_extension_function_address</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> function_name<span class="special">)</span><span class="special">;</span></pre>
-<p>
-                Returns the address of the extension function with
-                <code class="computeroutput">function_name</code>. Returns <code class="computeroutput">0</code> if no
-                function with the given name exists.
-              </p>
-</li>
-<li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp7738736-bb"></a><span class="identifier">unload_compiler</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
-<p>
-                Instructs the implementation to unload any compiler resources.
-              </p>
-</li>
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp9215184-bb"></a><span class="identifier">unload_compiler</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Requests that the platform unload any compiler resources. </li>
 </ol></div>
 </div>
 </div>
@@ -148,7 +115,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="kernel.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../index/s06.html#header.boost.compute.platform_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="program.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="memory_object.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.platform_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="program.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
