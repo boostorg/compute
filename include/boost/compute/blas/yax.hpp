@@ -11,11 +11,11 @@
 #ifndef BOOST_COMPUTE_BLAS_YAX_HPP
 #define BOOST_COMPUTE_BLAS_YAX_HPP
 
-#include <boost/compute/types.hpp>
 #include <boost/compute/lambda.hpp>
 #include <boost/compute/device_ptr.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/transform.hpp>
+#include <boost/compute/types/builtin.hpp>
 #include <boost/compute/type_traits/make_vector_type.hpp>
 
 namespace boost {

@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_PAIR_HPP
-#define BOOST_COMPUTE_PAIR_HPP
+#ifndef BOOST_COMPUTE_TYPES_PAIR_HPP
+#define BOOST_COMPUTE_TYPES_PAIR_HPP
 
 #include <string>
 #include <utility>
@@ -101,4 +101,4 @@ struct type_name_trait<std::pair<T1, T2> >
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_PAIR_HPP
+#endif // BOOST_COMPUTE_TYPES_PAIR_HPP

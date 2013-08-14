@@ -11,8 +11,8 @@
 #ifndef BOOST_COMPUTE_FUNCTIONAL_DETAIL_NVIDIA_BALLOT_HPP
 #define BOOST_COMPUTE_FUNCTIONAL_DETAIL_NVIDIA_BALLOT_HPP
 
-#include <boost/compute/types.hpp>
 #include <boost/compute/function.hpp>
+#include <boost/compute/types/builtin.hpp>
 
 namespace boost {
 namespace compute {

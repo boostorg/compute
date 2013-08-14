@@ -15,11 +15,11 @@
 #include <boost/tuple/tuple_io.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
 
-#include <boost/compute/tuple.hpp>
 #include <boost/compute/lambda.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/sort.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/types/tuple.hpp>
 
 #include "context_setup.hpp"
 

@@ -21,8 +21,8 @@
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 
-#include <boost/compute/tuple.hpp>
 #include <boost/compute/functional.hpp>
+#include <boost/compute/types/tuple.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/is_device_iterator.hpp>

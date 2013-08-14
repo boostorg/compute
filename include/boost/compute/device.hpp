@@ -19,8 +19,8 @@
 #include <boost/algorithm/string.hpp>
 
 #include <boost/compute/cl.hpp>
-#include <boost/compute/types.hpp>
 #include <boost/compute/exception.hpp>
+#include <boost/compute/types/builtin.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
 

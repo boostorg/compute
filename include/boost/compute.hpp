@@ -15,7 +15,6 @@
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/cl.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/complex.hpp>
 #include <boost/compute/config.hpp>
 #include <boost/compute/container.hpp>
 #include <boost/compute/context.hpp>
@@ -30,12 +29,10 @@
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/lambda.hpp>
 #include <boost/compute/malloc.hpp>
-#include <boost/compute/pair.hpp>
 #include <boost/compute/platform.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/random.hpp>
 #include <boost/compute/system.hpp>
-#include <boost/compute/tuple.hpp>
 #include <boost/compute/types.hpp>
 #include <boost/compute/version.hpp>
 

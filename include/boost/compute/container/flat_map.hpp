@@ -18,7 +18,6 @@
 #include <boost/config.hpp>
 #include <boost/throw_exception.hpp>
 
-#include <boost/compute/pair.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/algorithm/lower_bound.hpp>
@@ -26,6 +25,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/functional/get.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
+#include <boost/compute/types/pair.hpp>
 #include <boost/compute/detail/buffer_value.hpp>
 
 namespace boost {

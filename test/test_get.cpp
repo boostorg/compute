@@ -15,9 +15,9 @@
 #include <boost/static_assert.hpp>
 #include <boost/utility/result_of.hpp>
 
-#include <boost/compute/pair.hpp>
-#include <boost/compute/tuple.hpp>
-#include <boost/compute/types.hpp>
+#include <boost/compute/types/pair.hpp>
+#include <boost/compute/types/tuple.hpp>
+#include <boost/compute/types/builtin.hpp>
 #include <boost/compute/functional/get.hpp>
 
 namespace compute = boost::compute;

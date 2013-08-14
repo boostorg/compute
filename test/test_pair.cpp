@@ -11,13 +11,13 @@
 #define BOOST_TEST_MODULE TestPair
 #include <boost/test/unit_test.hpp>
 
-#include <boost/compute/pair.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/functional/get.hpp>
+#include <boost/compute/types/pair.hpp>
 
 #include "quirks.hpp"
 #include "check_macros.hpp"

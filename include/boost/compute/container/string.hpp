@@ -11,7 +11,7 @@
 #ifndef BOOST_COMPUTE_CONTAINER_STRING_HPP
 #define BOOST_COMPUTE_CONTAINER_STRING_HPP
 
-#include <boost/compute/types.hpp>
+#include <boost/compute/types/builtin.hpp>
 #include <boost/compute/container/basic_string.hpp>
 
 namespace boost {

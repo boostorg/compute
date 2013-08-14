@@ -8,16 +8,16 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_COMPLEX_HPP
-#define BOOST_COMPUTE_COMPLEX_HPP
+#ifndef BOOST_COMPUTE_TYPES_COMPLEX_HPP
+#define BOOST_COMPUTE_TYPES_COMPLEX_HPP
 
 #include <complex>
 
-#include <boost/compute/types.hpp>
 #include <boost/compute/functional.hpp>
-#include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/types/builtin.hpp>
 #include <boost/compute/type_traits/make_vector_type.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
+#include <boost/compute/detail/meta_kernel.hpp>
 
 namespace boost {
 namespace compute {
@@ -193,4 +193,4 @@ struct type_name_trait<std::complex<T> >
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_COMPLEX_HPP
+#endif // BOOST_COMPUTE_TYPES_COMPLEX_HPP

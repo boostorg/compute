@@ -11,13 +11,13 @@
 #define BOOST_TEST_MODULE TestLambda
 #include <boost/test/unit_test.hpp>
 
-#include <boost/compute/pair.hpp>
-#include <boost/compute/tuple.hpp>
 #include <boost/compute/lambda.hpp>
 #include <boost/compute/algorithm/for_each.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/zip_iterator.hpp>
+#include <boost/compute/types/pair.hpp>
+#include <boost/compute/types/tuple.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"

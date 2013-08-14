@@ -14,7 +14,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/stringize.hpp>
 
-#include <boost/compute/types.hpp>
+#include <boost/compute/types/builtin.hpp>
 
 namespace boost {
 namespace compute {

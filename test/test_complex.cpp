@@ -11,11 +11,11 @@
 #define BOOST_TEST_MODULE TestComplex
 #include <boost/test/unit_test.hpp>
 
-#include <boost/compute/complex.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/types/complex.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 
 #include "context_setup.hpp"

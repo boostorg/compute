@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_TUPLE_HPP
-#define BOOST_COMPUTE_TUPLE_HPP
+#ifndef BOOST_COMPUTE_TYPES_TUPLE_HPP
+#define BOOST_COMPUTE_TYPES_TUPLE_HPP
 
 #include <string>
 #include <utility>
@@ -230,4 +230,4 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_TUPLE_HPP
+#endif // BOOST_COMPUTE_TYPES_TUPLE_HPP

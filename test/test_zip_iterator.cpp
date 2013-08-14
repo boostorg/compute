@@ -16,12 +16,12 @@
 #include <boost/tuple/tuple_io.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
 
-#include <boost/compute/tuple.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/zip_iterator.hpp>
+#include <boost/compute/types/tuple.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"

@@ -18,7 +18,6 @@
 #include <boost/config.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 
-#include <boost/compute/types.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/type_traits/make_vector_type.hpp>

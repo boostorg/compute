@@ -13,7 +13,7 @@
 
 #include <cstddef>
 
-#include <boost/compute/types.hpp>
+#include <boost/compute/types/builtin.hpp>
 #include <boost/compute/type_traits/scalar_type.hpp>
 
 namespace boost {

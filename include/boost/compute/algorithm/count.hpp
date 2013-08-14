@@ -11,7 +11,6 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_COUNT_HPP
 #define BOOST_COMPUTE_ALGORITHM_COUNT_HPP
 
-#include <boost/compute/types.hpp>
 #include <boost/compute/lambda.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
