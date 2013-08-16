@@ -153,4 +153,35 @@ BOOST_AUTO_TEST_CASE(count_uchar)
     );
 }
 
+BOOST_AUTO_TEST_CASE(count_vector_component)
+{
+    int data[] = {
+        1, 2,
+        3, 4,
+        5, 6,
+        7, 8
+    };
+
+    using boost::compute::int2_;
+
+    compute::vector<int2_> vector(4);
+    compute::copy(
+        reinterpret_cast<int2_ *>(data),
+        reinterpret_cast<int2_ *>(data) + 4,
+        vector.begin()
+    );
+
+    using boost::compute::lambda::_1;
+    using boost::compute::lambda::get;
+
+    BOOST_CHECK_EQUAL(
+        compute::count_if(vector.begin(), vector.end(), get<0>(_1) < 4),
+        2
+    );
+    BOOST_CHECK_EQUAL(
+        compute::count_if(vector.begin(), vector.end(), get<1>(_1) > 3),
+        3
+    );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

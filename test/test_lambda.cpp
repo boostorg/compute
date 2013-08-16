@@ -127,6 +127,13 @@ BOOST_AUTO_TEST_CASE(result_of)
 
     check_unary_lambda_result<int>(_1 + _1, int(1));
     check_unary_lambda_result<float>(_1 * _1, float(1));
+
+    using boost::compute::float4_;
+    using boost::compute::lambda::get;
+
+    check_unary_lambda_result<float>(get<0>(_1), float4_(1, 2, 3, 4));
+    check_unary_lambda_result<bool>(get<0>(_1) < 1.f, float4_(1, 2, 3, 4));
+    check_unary_lambda_result<bool>(_1 < 1.f, float(2));
 }
 
 BOOST_AUTO_TEST_CASE(make_function_from_lamdba)
