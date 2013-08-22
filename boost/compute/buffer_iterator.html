@@ -31,41 +31,41 @@
   <span class="keyword">typedef</span> <span class="identifier">super_type</span><span class="special">::</span><span class="identifier">difference_type</span> <a name="boost.compute.buffer_iterator.difference_type"></a><span class="identifier">difference_type</span><span class="special">;</span>
 
   <span class="comment">// <a class="link" href="buffer_iterator.html#boost.compute.buffer_iteratorconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="buffer_iterator.html#idp8934704-bb"><span class="identifier">buffer_iterator</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="buffer_iterator.html#idp8934832-bb"><span class="identifier">buffer_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="buffer_iterator.html#idp8936784-bb"><span class="identifier">buffer_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer_iterator.html" title="Class template buffer_iterator">buffer_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  buffer_iterator&amp; <a class="link" href="buffer_iterator.html#idp8938048-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer_iterator.html" title="Class template buffer_iterator">buffer_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="buffer_iterator.html#idp8939312-bb"><span class="special">~</span><span class="identifier">buffer_iterator</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="buffer_iterator.html#idp8964064-bb"><span class="identifier">buffer_iterator</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="buffer_iterator.html#idp8964192-bb"><span class="identifier">buffer_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="buffer_iterator.html#idp8966144-bb"><span class="identifier">buffer_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer_iterator.html" title="Class template buffer_iterator">buffer_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  buffer_iterator&amp; <a class="link" href="buffer_iterator.html#idp8967408-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer_iterator.html" title="Class template buffer_iterator">buffer_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="buffer_iterator.html#idp8968672-bb"><span class="special">~</span><span class="identifier">buffer_iterator</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="buffer_iterator.html#idp8931936-bb">public member functions</a></span>
-  <span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> <a class="link" href="buffer_iterator.html#idp8932336-bb"><span class="identifier">get_buffer</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">size_t</span> <a class="link" href="buffer_iterator.html#idp8933744-bb"><span class="identifier">get_index</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="buffer_iterator.html#idp8961296-bb">public member functions</a></span>
+  <span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> <a class="link" href="buffer_iterator.html#idp8961696-bb"><span class="identifier">get_buffer</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">size_t</span> <a class="link" href="buffer_iterator.html#idp8963104-bb"><span class="identifier">get_index</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp70746640"></a><h2>Description</h2>
+<a name="idp14452112"></a><h2>Description</h2>
 <p><span class="bold"><strong>See Also:</strong></span></p>
 <p>make_buffer_iterator() </p>
 <p>
 </p>
 <div class="refsect2">
-<a name="idp70748288"></a><h3>
+<a name="idp14453760"></a><h3>
 <a name="boost.compute.buffer_iteratorconstruct-copy-destruct"></a><code class="computeroutput">buffer_iterator</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><a name="idp8934704-bb"></a><span class="identifier">buffer_iterator</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp8934832-bb"></a><span class="identifier">buffer_iterator</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> <span class="identifier">size_t</span> index<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp8936784-bb"></a><span class="identifier">buffer_iterator</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer_iterator.html" title="Class template buffer_iterator">buffer_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout">buffer_iterator&amp; <a name="idp8938048-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer_iterator.html" title="Class template buffer_iterator">buffer_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp8939312-bb"></a><span class="special">~</span><span class="identifier">buffer_iterator</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp8964064-bb"></a><span class="identifier">buffer_iterator</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp8964192-bb"></a><span class="identifier">buffer_iterator</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> <span class="identifier">size_t</span> index<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp8966144-bb"></a><span class="identifier">buffer_iterator</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer_iterator.html" title="Class template buffer_iterator">buffer_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout">buffer_iterator&amp; <a name="idp8967408-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="buffer_iterator.html" title="Class template buffer_iterator">buffer_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp8968672-bb"></a><span class="special">~</span><span class="identifier">buffer_iterator</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp70781904"></a><h3>
-<a name="idp8931936-bb"></a><code class="computeroutput">buffer_iterator</code> public member functions</h3>
+<a name="idp14487376"></a><h3>
+<a name="idp8961296-bb"></a><code class="computeroutput">buffer_iterator</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> <a name="idp8932336-bb"></a><span class="identifier">get_buffer</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">size_t</span> <a name="idp8933744-bb"></a><span class="identifier">get_index</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">const</span> <a class="link" href="buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> <a name="idp8961696-bb"></a><span class="identifier">get_buffer</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">size_t</span> <a name="idp8963104-bb"></a><span class="identifier">get_index</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 </div>
