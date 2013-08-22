@@ -1,0 +1,33 @@
+[section:platforms_and_compilers Platforms and Compilers]
+
+Boost.Compute has been tested on the following:
+
+[section Compilers]
+
+* GCC (>= 4.6)
+* Clang (>= 3.0)
+* MSVC (>= 2010)
+
+[endsect]
+
+[section Platforms]
+
+* Linux
+* Mac OSX
+* Windows
+
+[endsect]
+
+[section OpenCL Implementations]
+
+* NVIDIA (GPUs only)
+* AMD (CPUs and GPUs)
+* Intel (CPUs only)
+* POCL (CPUs only)
+
+[endsect]
+
+If you have an additional platform you would like to see supported please
+submit a bug-report.
+
+[endsect]

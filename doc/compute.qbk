@@ -18,6 +18,7 @@
 [include tutorial.qbk]
 [include advanced_topics.qbk]
 [include porting_guide.qbk]
+[include platforms_and_compilers.qbk]
 
 [section Reference]
 [xinclude autodoc.xml]
