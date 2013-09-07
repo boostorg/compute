@@ -178,7 +178,7 @@ inline T reduce(InputIterator first,
     }
 
     const device &device = queue.get_device();
-    if(device.type() == device::cpu){
+    if(device.type() & device::cpu){
         return detail::serial_reduce(first, last, init, function, queue);
     }
     else {

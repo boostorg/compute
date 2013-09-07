@@ -39,7 +39,7 @@ inline size_t count_if(InputIterator first,
         return 0;
     }
 
-    if(device.type() == device::cpu){
+    if(device.type() & device::cpu){
         if(input_size < 1024){
             return detail::serial_count_if(first, last, predicate, queue);
         }

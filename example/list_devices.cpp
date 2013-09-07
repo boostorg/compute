@@ -27,11 +27,11 @@ int main()
             const compute::device &device = devices[j];
 
             std::string type;
-            if(device.type() == compute::device::gpu)
+            if(device.type() & compute::device::gpu)
                 type = "GPU Device";
-            else if(device.type() == compute::device::cpu)
+            else if(device.type() & compute::device::cpu)
                 type = "CPU Device";
-            else if(device.type() == compute::device::accelerator)
+            else if(device.type() & compute::device::accelerator)
                 type = "Accelerator Device";
             else
                 type = "Unknown Device";
