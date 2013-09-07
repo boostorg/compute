@@ -1,0 +1,62 @@
+//---------------------------------------------------------------------------//
+// Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//
+// See http://kylelutz.github.com/compute for more information.
+//---------------------------------------------------------------------------//
+
+#ifndef BOOST_COMPUTE_ALGORITHM_SORT_BY_KEY_HPP
+#define BOOST_COMPUTE_ALGORITHM_SORT_BY_KEY_HPP
+
+#include <iterator>
+
+#include <boost/compute/system.hpp>
+#include <boost/compute/command_queue.hpp>
+#include <boost/compute/algorithm/detail/insertion_sort.hpp>
+#include <boost/compute/detail/iterator_range_size.hpp>
+
+namespace boost {
+namespace compute {
+
+/// Performs a key-value sort using the keys in the range [\p keys_first,
+/// \p keys_last) on the values in the range [\p values_first,
+/// \p values_first \c + (\p keys_last \c - \p keys_first)) using \p compare.
+template<class KeyIterator, class ValueIterator, class Compare>
+inline void sort_by_key(KeyIterator keys_first,
+                        KeyIterator keys_last,
+                        ValueIterator values_first,
+                        Compare compare,
+                        command_queue &queue = system::default_queue())
+{
+    detail::serial_insertion_sort_by_key(
+        keys_first,
+        keys_last,
+        values_first,
+        compare,
+        queue
+    );
+}
+
+/// Performs a key-value sort using the keys in the range [\p keys_first,
+/// \p keys_last) on the values in the range [\p values_first,
+/// \p values_first \c + (\p keys_last \c - \p keys_first)).
+///
+/// Uses less<> as the comparison operator for the keys.
+template<class KeyIterator, class ValueIterator>
+inline void sort_by_key(KeyIterator keys_first,
+                        KeyIterator keys_last,
+                        ValueIterator values_first,
+                        command_queue &queue = system::default_queue())
+{
+    typedef typename std::iterator_traits<KeyIterator>::value_type key_type;
+
+    sort_by_key(keys_first, keys_last, values_first, less<key_type>(), queue);
+}
+
+} // end compute namespace
+} // end boost namespace
+
+#endif // BOOST_COMPUTE_ALGORITHM_SORT_BY_KEY_HPP

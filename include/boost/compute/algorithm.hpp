@@ -63,6 +63,7 @@
 #include <boost/compute/algorithm/reverse_copy.hpp>
 #include <boost/compute/algorithm/scatter.hpp>
 #include <boost/compute/algorithm/sort.hpp>
+#include <boost/compute/algorithm/sort_by_key.hpp>
 #include <boost/compute/algorithm/stable_sort.hpp>
 #include <boost/compute/algorithm/swap_ranges.hpp>
 #include <boost/compute/algorithm/transform.hpp>
