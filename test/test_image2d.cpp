@@ -17,6 +17,7 @@
 #include <boost/compute/algorithm/count.hpp>
 #include <boost/compute/iterator/detail/pixel_input_iterator.hpp>
 
+#include "quirks.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -55,6 +56,11 @@ BOOST_AUTO_TEST_CASE(get_info)
 
 BOOST_AUTO_TEST_CASE(count_with_pixel_iterator)
 {
+    if(is_pocl_device(device)){
+        std::cerr << "skipping count_with_pixel_iterator test" << std::endl;
+        return;
+    }
+
     unsigned int data[] = { 0x00000000, 0x000000ff, 0xff0000ff,
                             0xffff00ff, 0x000000ff, 0xff0000ff,
                             0xff0000ff, 0x00ff00ff, 0x0000ffff };
@@ -101,6 +107,11 @@ BOOST_AUTO_TEST_CASE(count_with_pixel_iterator)
 
 BOOST_AUTO_TEST_CASE(find_with_pixel_iterator)
 {
+    if(is_pocl_device(device)){
+        std::cerr << "skipping find_with_pixel_iterator test" << std::endl;
+        return;
+    }
+
     unsigned int data[] = { 0x00000000, 0x000000ff, 0xff0000ff,
                             0xffff00ff, 0x000000ff, 0xff0000ff,
                             0xff0000ff, 0x00ff00ff, 0x0000ffff };

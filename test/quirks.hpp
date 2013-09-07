@@ -18,6 +18,16 @@
 // behavior in OpenCL implementations. this allows us to skip certain
 // tests when running on buggy platforms.
 
+// returns true if the device is a POCL device
+inline bool is_pocl_device(const boost::compute::device &device)
+{
+    boost::compute::platform platform(
+        device.get_info<cl_platform_id>(CL_DEVICE_PLATFORM)
+    );
+
+    return platform.name() == "Portable Computing Language";
+}
+
 // AMD platforms have a bug when using struct assignment. this affects
 // algorithms like fill() when used with pairs/tuples.
 //
@@ -33,6 +43,21 @@ inline bool bug_in_struct_assignment(const boost::compute::device &device)
     }
 
     return false;
+}
+
+// returns true if the device supports image samplers.
+inline bool supports_image_samplers(const boost::compute::device &device)
+{
+    // POCL does not yet support image samplers and gives the following
+    // error when attempting to create one:
+    //
+    // pocl error: encountered unimplemented part of the OpenCL specs
+    // in clCreateSampler.c:28
+    if(is_pocl_device(device)){
+        return false;
+    }
+
+    return true;
 }
 
 #endif // BOOST_COMPUTE_TEST_QUIRKS_HPP
