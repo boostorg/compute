@@ -48,6 +48,14 @@ BOOST_AUTO_TEST_CASE(copy_on_device)
     CHECK_RANGE_EQUAL(float, 4, b, (6.1f, 10.2f, 19.3f, 25.4f));
 }
 
+BOOST_AUTO_TEST_CASE(copy_on_host)
+{
+    int data[] = { 2, 4, 6, 8 };
+    std::vector<int> vector(4);
+    compute::copy(data, data + 4, vector.begin());
+    CHECK_RANGE_EQUAL(int, 4, vector, (2, 4, 6, 8));
+}
+
 BOOST_AUTO_TEST_CASE(copy)
 {
     int data[] = { 1, 2, 5, 6 };

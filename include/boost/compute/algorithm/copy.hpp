@@ -259,6 +259,23 @@ dispatch_copy_async(InputIterator first,
     return make_future(result + n, event_);
 }
 
+// host -> host
+template<class InputIterator, class OutputIterator>
+inline OutputIterator
+dispatch_copy(InputIterator first,
+              InputIterator last,
+              OutputIterator result,
+              command_queue &queue,
+              typename boost::enable_if_c<
+                  !is_device_iterator<InputIterator>::value &&
+                  !is_device_iterator<OutputIterator>::value
+              >::type* = 0)
+{
+    (void) queue;
+
+    return std::copy(first, last, result);
+}
+
 } // end detail namespace
 
 /// Copies the values in the range [\p first, \p last) to the range
