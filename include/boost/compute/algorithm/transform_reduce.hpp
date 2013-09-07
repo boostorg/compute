@@ -24,22 +24,26 @@ namespace compute {
 /// \p transform_function and then reduces each transformed value and
 /// \p init with \p reduce_function.
 template<class InputIterator,
+         class OutputIterator,
          class UnaryTransformFunction,
          class T,
          class BinaryReduceFunction>
-inline T transform_reduce(InputIterator first,
-                          InputIterator last,
-                          UnaryTransformFunction transform_function,
-                          T init,
-                          BinaryReduceFunction reduce_function,
-                          command_queue &queue = system::default_queue())
+inline void transform_reduce(InputIterator first,
+                             InputIterator last,
+                             OutputIterator result,
+                             UnaryTransformFunction transform_function,
+                             T init,
+                             BinaryReduceFunction reduce_function,
+                             command_queue &queue = system::default_queue())
 {
-    return ::boost::compute::reduce(
-               ::boost::compute::make_transform_iterator(first, transform_function),
-               ::boost::compute::make_transform_iterator(last, transform_function),
-               init,
-               reduce_function,
-               queue);
+    ::boost::compute::reduce(
+        ::boost::compute::make_transform_iterator(first, transform_function),
+        ::boost::compute::make_transform_iterator(last, transform_function),
+        result,
+        init,
+        reduce_function,
+        queue
+    );
 }
 
 /// Transforms each value in the range [\p first1, \p last1) and the
@@ -48,31 +52,35 @@ inline T transform_reduce(InputIterator first,
 /// \p reduce_function.
 template<class InputIterator1,
          class InputIterator2,
+         class OutputIterator,
          class BinaryTransformFunction,
          class T,
          class BinaryReduceFunction>
-inline T transform_reduce(InputIterator1 first1,
-                          InputIterator1 last1,
-                          InputIterator2 first2,
-                          BinaryTransformFunction transform_function,
-                          T init,
-                          BinaryReduceFunction reduce_function,
-                          command_queue &queue = system::default_queue())
+inline void transform_reduce(InputIterator1 first1,
+                             InputIterator1 last1,
+                             InputIterator2 first2,
+                             OutputIterator result,
+                             BinaryTransformFunction transform_function,
+                             T init,
+                             BinaryReduceFunction reduce_function,
+                             command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<InputIterator1>::difference_type difference_type;
 
     difference_type n = std::distance(first1, last1);
 
-    return ::boost::compute::reduce(
-               detail::make_binary_transform_iterator(first1,
-                                                      first2,
-                                                      transform_function),
-               detail::make_binary_transform_iterator(last1,
-                                                      first2 + n,
-                                                      transform_function),
-               init,
-               reduce_function,
-               queue);
+    ::boost::compute::reduce(
+        detail::make_binary_transform_iterator(first1,
+                                               first2,
+                                               transform_function),
+        detail::make_binary_transform_iterator(last1,
+                                               first2 + n,
+                                               transform_function),
+        result,
+        init,
+        reduce_function,
+        queue
+    );
 }
 
 } // end compute namespace

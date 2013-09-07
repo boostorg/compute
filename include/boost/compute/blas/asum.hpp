@@ -28,12 +28,18 @@ inline Scalar asum(const int N,
 {
     BOOST_ASSERT_MSG(incX == 1, "Only contiguous arrays are currently supported.");
 
-    return ::boost::compute::transform_reduce(X,
-                                              X + N,
-                                              ::boost::compute::abs<Scalar>(),
-                                              Scalar(0),
-                                              ::boost::compute::plus<Scalar>(),
-                                              queue);
+    Scalar result;
+    ::boost::compute::transform_reduce(
+        X,
+        X + N,
+        &result,
+        ::boost::compute::abs<Scalar>(),
+        Scalar(0),
+        ::boost::compute::plus<Scalar>(),
+        queue
+    );
+
+    return result;
 }
 
 } // end blas namespace

@@ -34,13 +34,19 @@ inline T inner_product(InputIterator1 first1,
     typedef typename std::iterator_traits<InputIterator1>::value_type input_type;
     typedef typename multiplies<input_type>::result_type product_type;
 
-    return ::boost::compute::transform_reduce(first1,
-                                              last1,
-                                              first2,
-                                              multiplies<input_type>(),
-                                              init,
-                                              plus<product_type>(),
-                                              queue);
+    T result;
+    ::boost::compute::transform_reduce(
+        first1,
+        last1,
+        first2,
+        &result,
+        multiplies<input_type>(),
+        init,
+        plus<product_type>(),
+        queue
+    );
+
+    return result;
 }
 
 /// Returns the inner product of the elements in the range

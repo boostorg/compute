@@ -20,43 +20,34 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-template<class InputIterator, class T, class BinaryFunction>
-inline T serial_reduce(InputIterator first,
-                       InputIterator last,
-                       T init,
-                       BinaryFunction function,
-                       command_queue &queue)
+template<class InputIterator, class OutputIterator, class T, class BinaryFunction>
+inline void serial_reduce(InputIterator first,
+                          InputIterator last,
+                          OutputIterator result,
+                          T init,
+                          BinaryFunction function,
+                          command_queue &queue)
 {
-    size_t count = detail::iterator_range_size(first, last);
-    if(count == 0){
-        return init;
-    }
-
     const context &context = queue.get_context();
+    size_t count = detail::iterator_range_size(first, last);
 
     meta_kernel k("serial_reduce");
     size_t init_arg = k.add_arg<T>("init");
     size_t count_arg = k.add_arg<cl_uint>("count");
-    size_t output_arg = k.add_arg<T *>("__global", "output");
 
     k <<
         k.decl<T>("result") << " = init;\n" <<
         "for(uint i = 0; i < count; i++)\n" <<
         "    result = " << function(k.var<T>("result"),
                                     first[k.var<cl_uint>("i")]) << ";\n" <<
-        "*output = result;\n";
+        result[0] << " = result;\n";
 
     kernel kernel = k.compile(context);
 
-    scalar<T> output(context);
-
     kernel.set_arg(init_arg, init);
     kernel.set_arg(count_arg, static_cast<cl_uint>(count));
-    kernel.set_arg(output_arg, output.get_buffer());
 
     queue.enqueue_task(kernel);
-
-    return output.read(queue);
 }
 
 } // end detail namespace

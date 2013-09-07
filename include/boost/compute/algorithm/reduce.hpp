@@ -20,6 +20,7 @@
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/detail/inplace_reduce.hpp>
 #include <boost/compute/algorithm/detail/serial_reduce.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
@@ -158,12 +159,17 @@ block_reduce(InputIterator first,
 /// The difference between the reduce() function and the accumulate()
 /// function is that reduce() requires the binary operator to be
 /// commutative.
-template<class InputIterator, class T, class BinaryFunction>
-inline T reduce(InputIterator first,
-                InputIterator last,
-                T init,
-                BinaryFunction function,
-                command_queue &queue = system::default_queue())
+///
+/// This algorithm supports both host and device iterators for the
+/// result argument. This allows for values to be reduced and copied
+/// to the host all with a single function call.
+template<class InputIterator, class OutputIterator, class T, class BinaryFunction>
+inline void reduce(InputIterator first,
+                   InputIterator last,
+                   OutputIterator result,
+                   T init,
+                   BinaryFunction function,
+                   command_queue &queue = system::default_queue())
 {
     typedef typename
         std::iterator_traits<InputIterator>::value_type
@@ -172,14 +178,20 @@ inline T reduce(InputIterator first,
         boost::tr1_result_of<BinaryFunction(input_type, input_type)>::type
         result_type;
 
+    const device &device = queue.get_device();
+    const context &context = queue.get_context();
+
     size_t count = detail::iterator_range_size(first, last);
     if(count == 0){
-        return init;
+        boost::compute::copy_n(&init, 1, result, queue);
+        return;
     }
 
-    const device &device = queue.get_device();
+    boost::compute::vector<result_type> value(1, context);
+
     if(device.type() & device::cpu){
-        return detail::serial_reduce(first, last, init, function, queue);
+        detail::serial_reduce(first, last, value.begin(), init, function, queue);
+        boost::compute::copy_n(value.begin(), 1, result, queue);
     }
     else {
         size_t block_size = 256;
@@ -198,11 +210,16 @@ inline T reduce(InputIterator first,
                                    queue);
         }
 
-        return detail::serial_reduce(results.begin(),
-                                     results.begin() + 1,
-                                     init,
-                                     function,
-                                     queue);
+        detail::serial_reduce(
+            results.begin(),
+            results.begin() + 1,
+            value.begin(),
+            init,
+            function,
+            queue
+        );
+
+        boost::compute::copy_n(value.begin(), 1, result, queue);
     }
 }
 

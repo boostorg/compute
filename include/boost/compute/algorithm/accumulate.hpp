@@ -16,6 +16,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/reduce.hpp>
 #include <boost/compute/algorithm/detail/serial_reduce.hpp>
+#include <boost/compute/container/vector.hpp>
 
 namespace boost {
 namespace compute {
@@ -28,7 +29,9 @@ inline T accumulate(InputIterator first,
                     T init,
                     command_queue &queue = system::default_queue())
 {
-    return ::boost::compute::reduce(first, last, init, plus<T>(), queue);
+    T result;
+    ::boost::compute::reduce(first, last, &result, init, plus<T>(), queue);
+    return result;
 }
 
 /// Returns the result of applying \p function to the elements in the
@@ -40,7 +43,12 @@ inline T accumulate(InputIterator first,
                     BinaryFunction function,
                     command_queue &queue = system::default_queue())
 {
-    return detail::serial_reduce(first, last, init, function, queue);
+    vector<T> result_value(1, queue.get_context());
+    detail::serial_reduce(first, last, result_value.begin(), init, function, queue);
+
+    T result;
+    ::boost::compute::copy_n(result_value.begin(), 1, &result, queue);
+    return result;
 }
 
 } // end compute namespace

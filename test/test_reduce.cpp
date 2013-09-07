@@ -20,71 +20,83 @@
 #include <boost/compute/iterator/counting_iterator.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
-namespace bc = boost::compute;
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(reduce_int)
 {
     int data[] = { 1, 5, 9, 13, 17 };
-    bc::vector<int> vector(data, data + 5, context);
-    int sum = bc::reduce(vector.begin(),
-                         vector.end(),
-                         0,
-                         bc::plus<int>(),
-                         queue);
+    compute::vector<int> vector(data, data + 5, context);
+    int sum;
+    compute::reduce(vector.begin(), vector.end(), &sum, 0, compute::plus<int>(), queue);
     BOOST_CHECK_EQUAL(sum, 45);
 
-    int product = bc::reduce(vector.begin(),
-                             vector.end(),
-                             1,
-                             bc::multiplies<int>(),
-                             queue);
+    int product;
+    compute::reduce(vector.begin(), vector.end(), &product, 1, compute::multiplies<int>(), queue);
     BOOST_CHECK_EQUAL(product, 9945);
+}
+
+BOOST_AUTO_TEST_CASE(reduce_on_device)
+{
+    int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    compute::vector<int> input(data, data + 8, context);
+    compute::vector<int> result(2, context);
+    compute::reduce(input.begin(), input.begin() + 4, result.begin(), 0, compute::plus<int>(), queue);
+    compute::reduce(input.begin() + 4, input.end(), result.end() - 1, 0, compute::plus<int>(), queue);
+    CHECK_RANGE_EQUAL(int, 2, result, (10, 26));
 }
 
 BOOST_AUTO_TEST_CASE(reduce_int_min_max)
 {
     int data[] = { 11, 5, 92, 13, 42 };
-    bc::vector<int> vector(data, data + 5, context);
-    BOOST_CHECK_EQUAL(
-        bc::reduce(vector.begin(),
-                   vector.end(),
-                   (std::numeric_limits<int>::max)(),
-                   bc::min<int>(),
-                   queue
-        ),
-        5
+    compute::vector<int> vector(data, data + 5, context);
+    int min_value;
+    compute::reduce(
+        vector.begin(),
+        vector.end(),
+        &min_value,
+        (std::numeric_limits<int>::max)(),
+        compute::min<int>(),
+        queue
     );
+    BOOST_CHECK_EQUAL(min_value, 5);
 
-    BOOST_CHECK_EQUAL(
-        bc::reduce(vector.begin(),
-                   vector.end(),
-                   (std::numeric_limits<int>::min)(),
-                   bc::max<int>(),
-                   queue
-        ),
-        92
+    int max_value;
+    compute::reduce(
+        vector.begin(),
+        vector.end(),
+        &max_value,
+        (std::numeric_limits<int>::min)(),
+        compute::max<int>(),
+        queue
     );
+    BOOST_CHECK_EQUAL(max_value, 92);
 }
 
 BOOST_AUTO_TEST_CASE(reduce_int2)
 {
-    std::vector<bc::int2_> data;
+    std::vector<compute::int2_> data;
     for(int i = 0; i < 6; i++){
-        bc::int2_ value;
+        compute::int2_ value;
         value[0] = i + 1;
         value[1] = 2 * i + 1;
         data.push_back(value);
     }
 
-    bc::vector<bc::int2_> vector(data.begin(), data.end(), context);
-    bc::int2_ sum = bc::reduce(vector.begin(),
-                               vector.end(),
-                               bc::int2_(0, 0),
-                               bc::plus<bc::int2_>(),
-                               queue);
-    BOOST_CHECK_EQUAL(sum, bc::int2_(21, 36));
+    compute::vector<compute::int2_> vector(data.begin(), data.end(), context);
+
+    compute::int2_ sum;
+    compute::reduce(
+        vector.begin(),
+        vector.end(),
+        &sum,
+        compute::int2_(0, 0),
+        compute::plus<compute::int2_>(),
+        queue
+    );
+    BOOST_CHECK_EQUAL(sum, compute::int2_(21, 36));
 }
 
 BOOST_AUTO_TEST_CASE(reduce_pinned_vector)
@@ -92,64 +104,78 @@ BOOST_AUTO_TEST_CASE(reduce_pinned_vector)
     int data[] = { 2, 5, 8, 11, 15 };
     std::vector<int> vector(data, data + 5);
 
-    bc::buffer buffer(context,
-                      vector.size() * sizeof(int),
-                      bc::buffer::read_only | bc::buffer::use_host_ptr,
-                      &vector[0]);
+    compute::buffer buffer(context,
+                           vector.size() * sizeof(int),
+                           compute::buffer::read_only | compute::buffer::use_host_ptr,
+                           &vector[0]);
 
-    int sum = bc::reduce(bc::make_buffer_iterator<int>(buffer, 0),
-                         bc::make_buffer_iterator<int>(buffer, 5),
-                         0,
-                         bc::plus<int>());
+    int sum;
+    compute::reduce(
+        compute::make_buffer_iterator<int>(buffer, 0),
+        compute::make_buffer_iterator<int>(buffer, 5),
+        &sum,
+        0,
+        compute::plus<int>()
+    );
     BOOST_CHECK_EQUAL(sum, 41);
 }
 
 BOOST_AUTO_TEST_CASE(reduce_constant_iterator)
 {
-    BOOST_CHECK_EQUAL(
-        bc::reduce(bc::make_constant_iterator(1, 0),
-                   bc::make_constant_iterator(1, 5),
-                   0,
-                   bc::plus<int>(),
-                   queue),
-        int(5)
+    int result;
+    compute::reduce(
+        compute::make_constant_iterator(1, 0),
+        compute::make_constant_iterator(1, 5),
+        &result,
+        0,
+        compute::plus<int>(),
+        queue
     );
-    BOOST_CHECK_EQUAL(
-        bc::reduce(bc::make_constant_iterator(3, 0),
-                   bc::make_constant_iterator(3, 5),
-                   0,
-                   bc::plus<int>(),
-                   queue),
-        int(15)
+    BOOST_CHECK_EQUAL(result, 5);
+
+    compute::reduce(
+        compute::make_constant_iterator(3, 0),
+        compute::make_constant_iterator(3, 5),
+        &result,
+        0,
+        compute::plus<int>(),
+        queue
     );
-    BOOST_CHECK_EQUAL(
-        bc::reduce(bc::make_constant_iterator(2, 0),
-                   bc::make_constant_iterator(2, 5),
-                   1,
-                   bc::multiplies<int>(),
-                   queue),
-        int(32)
+    BOOST_CHECK_EQUAL(result, 15);
+
+    compute::reduce(
+        compute::make_constant_iterator(2, 0),
+        compute::make_constant_iterator(2, 5),
+        &result,
+        1,
+        compute::multiplies<int>(),
+        queue
     );
+    BOOST_CHECK_EQUAL(result, 32);
 }
 
 BOOST_AUTO_TEST_CASE(reduce_counting_iterator)
 {
-    BOOST_CHECK_EQUAL(
-        bc::reduce(bc::make_counting_iterator(1),
-                   bc::make_counting_iterator(10),
-                   0,
-                   bc::plus<int>(),
-                   queue),
-        int(45)
+    int result;
+    compute::reduce(
+        compute::make_counting_iterator(1),
+        compute::make_counting_iterator(10),
+        &result,
+        0,
+        compute::plus<int>(),
+        queue
     );
-    BOOST_CHECK_EQUAL(
-        bc::reduce(bc::make_counting_iterator(1),
-                   bc::make_counting_iterator(5),
-                   1,
-                   bc::multiplies<int>(),
-                   queue),
-        int(24)
+    BOOST_CHECK_EQUAL(result, 45);
+
+    compute::reduce(
+        compute::make_counting_iterator(1),
+        compute::make_counting_iterator(5),
+        &result,
+        1,
+        compute::multiplies<int>(),
+        queue
     );
+    BOOST_CHECK_EQUAL(result, 24);
 }
 
 BOOST_AUTO_TEST_CASE(reduce_transform_iterator)
@@ -157,34 +183,38 @@ BOOST_AUTO_TEST_CASE(reduce_transform_iterator)
     using ::boost::compute::_1;
 
     int data[] = { 1, 3, 5, 7, 9 };
-    bc::vector<int> vector(data, data + 5, context);
+    compute::vector<int> vector(data, data + 5, context);
 
-    BOOST_CHECK_EQUAL(
-        bc::reduce(bc::make_transform_iterator(vector.begin(), _1 + 1),
-                   bc::make_transform_iterator(vector.end(), _1 + 1),
-                   0,
-                   bc::plus<int>(),
-                   queue),
-        int(30)
+    int sum;
+    compute::reduce(
+        compute::make_transform_iterator(vector.begin(), _1 + 1),
+        compute::make_transform_iterator(vector.end(), _1 + 1),
+        &sum,
+        0,
+        compute::plus<int>(),
+        queue
     );
+    BOOST_CHECK_EQUAL(sum, 30);
 
-    BOOST_CHECK_EQUAL(
-        bc::reduce(bc::make_transform_iterator(vector.begin(), _1 > 4),
-                   bc::make_transform_iterator(vector.end(), _1 > 4),
-                   0,
-                   bc::plus<int>(),
-                   queue),
-        int(3)
+    compute::reduce(
+        compute::make_transform_iterator(vector.begin(), _1 > 4),
+        compute::make_transform_iterator(vector.end(), _1 > 4),
+        &sum,
+        0,
+        compute::plus<int>(),
+        queue
     );
+    BOOST_CHECK_EQUAL(sum, 3);
 
-    BOOST_CHECK_EQUAL(
-        bc::reduce(bc::make_transform_iterator(vector.begin(), _1 * _1),
-                   bc::make_transform_iterator(vector.end(), _1 * _1),
-                   0,
-                   bc::plus<int>(),
-                   queue),
-        int(165)
+    compute::reduce(
+        compute::make_transform_iterator(vector.begin(), _1 * _1),
+        compute::make_transform_iterator(vector.end(), _1 * _1),
+        &sum,
+        0,
+        compute::plus<int>(),
+        queue
     );
+    BOOST_CHECK_EQUAL(sum, 165);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

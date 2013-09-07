@@ -61,13 +61,16 @@ inline size_t count_if_with_ballot(InputIterator first,
 
     k.exec_1d(queue, 0, block_size * block_count, block_size);
 
-    return ::boost::compute::reduce(
-               counts.begin(),
-               counts.end(),
-               uint_(0),
-               ::boost::compute::plus<uint_>(),
-               queue
-           );
+    uint_ result;
+    ::boost::compute::reduce(
+        counts.begin(),
+        counts.end(),
+        &result,
+        uint_(0),
+        ::boost::compute::plus<uint_>(),
+        queue
+    );
+    return result;
 }
 
 } // end detail namespace

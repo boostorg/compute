@@ -33,16 +33,18 @@ inline Scalar norm2(const int N,
     using ::boost::compute::lambda::_1;
     using ::boost::compute::lambda::_2;
 
-    return std::sqrt(
-               ::boost::compute::transform_reduce(
-                   X,
-                   X + N,
-                   _1 * _1,
-                   Scalar(0),
-                   _1 + _2,
-                   queue
-               )
-           );
+    Scalar result;
+    ::boost::compute::transform_reduce(
+        X,
+        X + N,
+        &result,
+        _1 * _1,
+        Scalar(0),
+        _1 + _2,
+        queue
+    );
+
+    return std::sqrt(result);
 }
 
 } // end blas namespace

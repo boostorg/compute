@@ -18,20 +18,23 @@
 
 #include "context_setup.hpp"
 
-namespace bc = boost::compute;
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(sum_abs_int)
 {
     int data[] = { 1, -2, -3, -4, 5 };
-    bc::vector<int> vector(data, data + 5, context);
+    compute::vector<int> vector(data, data + 5, context);
 
-    int sum =
-        bc::transform_reduce(vector.begin(),
-                             vector.end(),
-                             bc::abs<int>(),
-                             0,
-                             bc::plus<int>(),
-                             queue);
+    int sum;
+    compute::transform_reduce(
+        vector.begin(),
+        vector.end(),
+        &sum,
+        compute::abs<int>(),
+        0,
+        compute::plus<int>(),
+        queue
+    );
     BOOST_CHECK_EQUAL(sum, 15);
 }
 
@@ -40,17 +43,22 @@ BOOST_AUTO_TEST_CASE(multiply_vector_length)
     float data[] = { 2.0f, 0.0f, 0.0f, 0.0f,
                      0.0f, 3.0f, 0.0f, 0.0f,
                      0.0f, 0.0f, 4.0f, 0.0f };
-    bc::vector<bc::float4_> vector(reinterpret_cast<bc::float4_ *>(data),
-                                   reinterpret_cast<bc::float4_ *>(data) + 3,
-                                   context);
+    compute::vector<compute::float4_> vector(
+        reinterpret_cast<compute::float4_ *>(data),
+        reinterpret_cast<compute::float4_ *>(data) + 3,
+        context
+    );
 
-    float product =
-        bc::transform_reduce(vector.begin(),
-                             vector.end(),
-                             bc::length<bc::float4_>(),
-                             1.0f,
-                             bc::multiplies<float>(),
-                             queue);
+    float product;
+    compute::transform_reduce(
+        vector.begin(),
+        vector.end(),
+        &product,
+        compute::length<compute::float4_>(),
+        1.0f,
+        compute::multiplies<float>(),
+        queue
+    );
     BOOST_CHECK_CLOSE(product, 24.0f, 1e-4f);
 }
 
