@@ -31,36 +31,36 @@
   <span class="keyword">typedef</span> <span class="identifier">super_type</span><span class="special">::</span><span class="identifier">difference_type</span> <a name="boost.compute.constant_iterator.difference_type"></a><span class="identifier">difference_type</span><span class="special">;</span>
 
   <span class="comment">// <a class="link" href="constant_iterator.html#boost.compute.constant_iteratorconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="constant_iterator.html#idp9008752-bb"><span class="identifier">constant_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="constant_iterator.html#idp9010544-bb"><span class="identifier">constant_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="constant_iterator.html" title="Class template constant_iterator">constant_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  constant_iterator&amp; <a class="link" href="constant_iterator.html#idp9011808-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="constant_iterator.html" title="Class template constant_iterator">constant_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="constant_iterator.html#idp9013072-bb"><span class="special">~</span><span class="identifier">constant_iterator</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="constant_iterator.html#idp9060224-bb"><span class="identifier">constant_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="constant_iterator.html#idp9062016-bb"><span class="identifier">constant_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="constant_iterator.html" title="Class template constant_iterator">constant_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  constant_iterator&amp; <a class="link" href="constant_iterator.html#idp9063280-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="constant_iterator.html" title="Class template constant_iterator">constant_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="constant_iterator.html#idp9064544-bb"><span class="special">~</span><span class="identifier">constant_iterator</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="constant_iterator.html#idp9007392-bb">public member functions</a></span>
-  <span class="identifier">size_t</span> <a class="link" href="constant_iterator.html#idp9007792-bb"><span class="identifier">get_index</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="constant_iterator.html#idp9058864-bb">public member functions</a></span>
+  <span class="identifier">size_t</span> <a class="link" href="constant_iterator.html#idp9059264-bb"><span class="identifier">get_index</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp14814656"></a><h2>Description</h2>
+<a name="idp14999744"></a><h2>Description</h2>
 <p><span class="bold"><strong>See Also:</strong></span></p>
 <p>make_constant_iterator() </p>
 <p>
 </p>
 <div class="refsect2">
-<a name="idp14816320"></a><h3>
+<a name="idp15001408"></a><h3>
 <a name="boost.compute.constant_iteratorconstruct-copy-destruct"></a><code class="computeroutput">constant_iterator</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><a name="idp9008752-bb"></a><span class="identifier">constant_iterator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span> value<span class="special">,</span> <span class="identifier">size_t</span> index <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp9010544-bb"></a><span class="identifier">constant_iterator</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="constant_iterator.html" title="Class template constant_iterator">constant_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout">constant_iterator&amp; <a name="idp9011808-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="constant_iterator.html" title="Class template constant_iterator">constant_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp9013072-bb"></a><span class="special">~</span><span class="identifier">constant_iterator</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp9060224-bb"></a><span class="identifier">constant_iterator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span> value<span class="special">,</span> <span class="identifier">size_t</span> index <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp9062016-bb"></a><span class="identifier">constant_iterator</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="constant_iterator.html" title="Class template constant_iterator">constant_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout">constant_iterator&amp; <a name="idp9063280-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="constant_iterator.html" title="Class template constant_iterator">constant_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp9064544-bb"></a><span class="special">~</span><span class="identifier">constant_iterator</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp14847344"></a><h3>
-<a name="idp9007392-bb"></a><code class="computeroutput">constant_iterator</code> public member functions</h3>
-<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="literallayout"><span class="identifier">size_t</span> <a name="idp9007792-bb"></a><span class="identifier">get_index</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li></ol></div>
+<a name="idp15032352"></a><h3>
+<a name="idp9058864-bb"></a><code class="computeroutput">constant_iterator</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="literallayout"><span class="identifier">size_t</span> <a name="idp9059264-bb"></a><span class="identifier">get_index</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li></ol></div>
 </div>
 </div>
 </div>
