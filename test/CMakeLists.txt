@@ -102,6 +102,7 @@ add_compute_test("ext.get" test_get.cpp)
 add_compute_test("ext.lambda" test_lambda.cpp)
 add_compute_test("ext.malloc" test_malloc.cpp)
 add_compute_test("ext.pair" test_pair.cpp)
+add_compute_test("ext.program_cache" test_program_cache.cpp)
 add_compute_test("ext.tuple" test_tuple.cpp)
 
 add_compute_test("issue.11" test_issue_11.cpp)

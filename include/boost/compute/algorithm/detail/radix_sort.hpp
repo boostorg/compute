@@ -24,6 +24,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/detail/program_cache.hpp>
 
 namespace boost {
 namespace compute {
@@ -188,6 +189,10 @@ inline void radix_sort(Iterator first,
         sort_type;
 
     const context &context = queue.get_context();
+
+    boost::shared_ptr<program_cache> cache =
+        detail::get_program_cache(context);
+
     size_t count = detail::iterator_range_size(first, last);
 
     // sort parameters
@@ -200,23 +205,33 @@ inline void radix_sort(Iterator first,
         block_count++;
     }
 
-    // setup kernels
-    program radix_sort_program =
-        program::create_with_source(radix_sort_source, context);
-    std::stringstream options;
-    options << "-DK=" << k;
-    options << " -DT=" << type_name<sort_type>();
-    options << " -DBLOCK_SIZE=" << block_size;
+    // load (or create) radix sort program
+    std::string cache_key =
+        std::string("radix_sort_") + type_name<value_type>();
 
-    if(boost::is_floating_point<value_type>::value){
-        options << " -DIS_FLOATING_POINT";
+    program radix_sort_program = cache->get(cache_key);
+
+    if(!radix_sort_program.get()){
+        std::stringstream options;
+        options << "-DK=" << k;
+        options << " -DT=" << type_name<sort_type>();
+        options << " -DBLOCK_SIZE=" << block_size;
+
+        if(boost::is_floating_point<value_type>::value){
+            options << " -DIS_FLOATING_POINT";
+        }
+
+        if(boost::is_signed<value_type>::value){
+            options << " -DIS_SIGNED";
+        }
+
+        radix_sort_program =
+            program::create_with_source(radix_sort_source, context);
+
+        radix_sort_program.build(options.str());
+
+        cache->insert(cache_key, radix_sort_program);
     }
-
-    if(boost::is_signed<value_type>::value){
-        options << " -DIS_SIGNED";
-    }
-
-    radix_sort_program.build(options.str());
 
     kernel count_kernel(radix_sort_program, "count");
     kernel scan_kernel(radix_sort_program, "scan");

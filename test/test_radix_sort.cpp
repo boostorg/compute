@@ -145,6 +145,15 @@ BOOST_AUTO_TEST_CASE(sort_float_vector)
         float, 10, vector,
         (-6023.0f, -5000.1f, -63.0f, -8.25f, -0.0f, 0.0f, 11.2f, 14.0f, 152.5f, 1234567.0f)
     );
+
+    // copy data, sort, and check again (to check program caching)
+    boost::compute::copy(data, data + 10, vector.begin(), queue);
+    boost::compute::detail::radix_sort(vector.begin(), vector.end(), queue);
+    BOOST_CHECK(boost::compute::is_sorted(vector.begin(), vector.end(), queue) == true);
+    CHECK_RANGE_EQUAL(
+        float, 10, vector,
+        (-6023.0f, -5000.1f, -63.0f, -8.25f, -0.0f, 0.0f, 11.2f, 14.0f, 152.5f, 1234567.0f)
+    );
 }
 
 BOOST_AUTO_TEST_CASE(sort_double_vector)
