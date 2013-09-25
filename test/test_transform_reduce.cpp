@@ -11,6 +11,7 @@
 #define BOOST_TEST_MODULE TestTransformReduce
 #include <boost/test/unit_test.hpp>
 
+#include <boost/compute/lambda.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/algorithm/transform_reduce.hpp>
@@ -60,6 +61,45 @@ BOOST_AUTO_TEST_CASE(multiply_vector_length)
         queue
     );
     BOOST_CHECK_CLOSE(product, 24.0f, 1e-4f);
+}
+
+BOOST_AUTO_TEST_CASE(mean_and_std_dev)
+{
+    using compute::lambda::_1;
+    using compute::lambda::pow;
+
+    float data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    compute::vector<float> vector(10, context);
+    compute::copy_n(data, 10, vector.begin(), queue);
+
+    float sum;
+    compute::reduce(
+        vector.begin(),
+        vector.end(),
+        &sum,
+        0,
+        compute::plus<float>(),
+        queue
+    );
+
+    float mean = sum / vector.size();
+    BOOST_CHECK_CLOSE(mean, 5.5f, 1e-4);
+
+    compute::transform_reduce(
+        vector.begin(),
+        vector.end(),
+        &sum,
+        pow(_1 - mean, 2),
+        0.f,
+        compute::plus<float>(),
+        queue
+    );
+
+    float variance = sum / vector.size();
+    BOOST_CHECK_CLOSE(variance, 8.25f, 1e-4);
+
+    float std_dev = std::sqrt(variance);
+    BOOST_CHECK_CLOSE(std_dev, 2.8722813232690143, 1e-4);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
