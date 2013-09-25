@@ -9,6 +9,7 @@ endif()
 set(BENCHMARKS
   copy_to_device
   count_int
+  mersenne_twister
   partial_sum
   saxpy
   sort_float
