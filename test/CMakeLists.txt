@@ -82,6 +82,9 @@ add_compute_test("container.string" test_string.cpp)
 add_compute_test("container.valarray" test_valarray.cpp)
 add_compute_test("container.vector" test_vector.cpp)
 
+add_compute_test("functional.as" test_functional_as.cpp)
+add_compute_test("functional.convert" test_functional_convert.cpp)
+
 add_compute_test("iterator.adjacent_transform_iterator" test_adjacent_transform_iterator.cpp)
 add_compute_test("iterator.constant_iterator" test_constant_iterator.cpp)
 add_compute_test("iterator.counting_iterator" test_counting_iterator.cpp)

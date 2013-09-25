@@ -15,8 +15,10 @@
 ///
 /// Meta-header to include all Boost.Compute functional headers.
 
+#include <boost/compute/functional/as.hpp>
 #include <boost/compute/functional/atomic.hpp>
 #include <boost/compute/functional/common.hpp>
+#include <boost/compute/functional/convert.hpp>
 #include <boost/compute/functional/get.hpp>
 #include <boost/compute/functional/math.hpp>
 #include <boost/compute/functional/integer.hpp>
