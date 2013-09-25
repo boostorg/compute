@@ -107,10 +107,12 @@ public:
 
     invoked_binary_function(const std::string &name,
                             const Expr1 &arg1,
-                            const Expr2 &arg2)
+                            const Expr2 &arg2,
+                            const std::string &source)
         : m_name(name),
           m_expr1(arg1),
-          m_expr2(arg2)
+          m_expr2(arg2),
+          m_source(source)
     {
     }
 
@@ -129,10 +131,16 @@ public:
         return m_expr2;
     }
 
+    std::string source() const
+    {
+        return m_source;
+    }
+
 private:
     std::string m_name;
     Expr1 m_expr1;
     Expr2 m_expr2;
+    std::string m_source;
 };
 
 template<class Expr1, class Expr2, class Expr3, class Result>
@@ -144,11 +152,13 @@ public:
     invoked_ternary_function(const std::string &name,
                              const Expr1 &arg1,
                              const Expr2 &arg2,
-                             const Expr3 &arg3)
+                             const Expr3 &arg3,
+                             const std::string &source)
         : m_name(name),
           m_expr1(arg1),
           m_expr2(arg2),
-          m_expr3(arg3)
+          m_expr3(arg3),
+          m_source(source)
     {
     }
 
@@ -172,11 +182,17 @@ public:
         return m_expr3;
     }
 
+    std::string source() const
+    {
+        return m_source;
+    }
+
 private:
     std::string m_name;
     Expr1 m_expr1;
     Expr2 m_expr2;
     Expr3 m_expr3;
+    std::string m_source;
 };
 
 } // end detail namespace
@@ -250,7 +266,7 @@ public:
             "Non-binary function invoked with two arguments"
         );
 
-        return detail::invoked_binary_function<Arg1, Arg2, result_type>(m_name, arg1, arg2);
+        return detail::invoked_binary_function<Arg1, Arg2, result_type>(m_name, arg1, arg2, m_source);
     }
 
     template<class Arg1, class Arg2, class Arg3>
@@ -262,7 +278,7 @@ public:
             "Non-ternary function invoked with two arguments"
         );
 
-        return detail::invoked_ternary_function<Arg1, Arg2, Arg3, result_type>(m_name, arg1, arg2, arg3);
+        return detail::invoked_ternary_function<Arg1, Arg2, Arg3, result_type>(m_name, arg1, arg2, arg3, m_source);
     }
 
 private:

@@ -796,6 +796,10 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
                                                              Arg2,
                                                              Result> &expr)
 {
+    if(!expr.source().empty()){
+        kernel.add_function(expr.name(), expr.source());
+    }
+
     return kernel << expr.name() << "("
                   << expr.arg1() << ","
                   << expr.arg2() << ")";
@@ -808,6 +812,10 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
                                                               Arg3,
                                                               Result> &expr)
 {
+    if(!expr.source().empty()){
+        kernel.add_function(expr.name(), expr.source());
+    }
+
     return kernel << expr.name() << "("
                   << expr.arg1() << ","
                   << expr.arg2() << ","
