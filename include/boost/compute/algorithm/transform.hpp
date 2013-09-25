@@ -15,7 +15,8 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
-#include <boost/compute/iterator/detail/binary_transform_iterator.hpp>
+#include <boost/compute/iterator/zip_iterator.hpp>
+#include <boost/compute/functional/detail/unpack.hpp>
 
 namespace boost {
 namespace compute {
@@ -56,10 +57,11 @@ inline OutputIterator transform(InputIterator1 first1,
 
     difference_type n = std::distance(first1, last1);
 
-    return copy(
-               detail::make_binary_transform_iterator(first1, first2, op),
-               detail::make_binary_transform_iterator(last1, last1 + n, op),
+    return transform(
+               make_zip_iterator(boost::make_tuple(first1, first2)),
+               make_zip_iterator(boost::make_tuple(last1, first2 + n)),
                result,
+               detail::unpack(op),
                queue
            );
 }

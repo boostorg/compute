@@ -14,7 +14,8 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/reduce.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
-#include <boost/compute/iterator/detail/binary_transform_iterator.hpp>
+#include <boost/compute/iterator/zip_iterator.hpp>
+#include <boost/compute/functional/detail/unpack.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 
 namespace boost {
@@ -69,14 +70,15 @@ inline void transform_reduce(InputIterator1 first1,
 
     difference_type n = std::distance(first1, last1);
 
-    ::boost::compute::reduce(
-        detail::make_binary_transform_iterator(first1,
-                                               first2,
-                                               transform_function),
-        detail::make_binary_transform_iterator(last1,
-                                               first2 + n,
-                                               transform_function),
+    ::boost::compute::transform_reduce(
+        ::boost::compute::make_zip_iterator(
+            boost::make_tuple(first1, first2)
+        ),
+        ::boost::compute::make_zip_iterator(
+            boost::make_tuple(last1, first2 + n)
+        ),
         result,
+        detail::unpack(transform_function),
         init,
         reduce_function,
         queue

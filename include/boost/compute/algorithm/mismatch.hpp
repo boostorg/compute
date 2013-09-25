@@ -18,7 +18,9 @@
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/find.hpp>
-#include <boost/compute/iterator/detail/binary_transform_iterator.hpp>
+#include <boost/compute/iterator/transform_iterator.hpp>
+#include <boost/compute/iterator/zip_iterator.hpp>
+#include <boost/compute/functional/detail/unpack.hpp>
 
 namespace boost {
 namespace compute {
@@ -40,12 +42,24 @@ mismatch(InputIterator1 first1,
     InputIterator2 last2 = first2 + std::distance(first1, last1);
 
     InputIterator1 iter =
-        ::boost::compute::find(
-            detail::make_binary_transform_iterator(first1, first2, op),
-            detail::make_binary_transform_iterator(last1, last2, op),
-            false,
-            queue
-        ).base();
+        boost::get<0>(
+            ::boost::compute::find(
+                ::boost::compute::make_transform_iterator(
+                    ::boost::compute::make_zip_iterator(
+                        boost::make_tuple(first1, first2)
+                    ),
+                    detail::unpack(op)
+                ),
+                ::boost::compute::make_transform_iterator(
+                    ::boost::compute::make_zip_iterator(
+                        boost::make_tuple(last1, last2)
+                    ),
+                    detail::unpack(op)
+                ),
+                false,
+                queue
+            ).base().get_iterator_tuple()
+        );
 
     return std::make_pair(iter, first2 + std::distance(first1, iter));
 }
