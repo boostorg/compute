@@ -193,6 +193,12 @@ inline void reduce(InputIterator first,
         detail::serial_reduce(first, last, value.begin(), init, function, queue);
         boost::compute::copy_n(value.begin(), 1, result, queue);
     }
+    else if(sizeof(input_type) != sizeof(result_type)){
+        // if the memory size of the input_type and result_type differ the
+        // inplace_reduce() algorithm can't be used.
+        detail::serial_reduce(first, last, value.begin(), init, function, queue);
+        boost::compute::copy_n(value.begin(), 1, result, queue);
+    }
     else {
         size_t block_size = 256;
 
