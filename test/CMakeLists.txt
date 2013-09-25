@@ -91,12 +91,6 @@ add_compute_test("iterator.zip_iterator" test_zip_iterator.cpp)
 
 add_compute_test("random.mersenne_twister" test_mersenne_twister.cpp)
 
-add_compute_test("blas.axpy" test_blas_axpy.cpp)
-add_compute_test("blas.gemm" test_blas_gemm.cpp)
-add_compute_test("blas.gemv" test_blas_gemv.cpp)
-add_compute_test("blas.iamax" test_blas_iamax.cpp)
-add_compute_test("blas.norm2" test_blas_norm2.cpp)
-
 add_compute_test("ext.complex" test_complex.cpp)
 add_compute_test("ext.get" test_get.cpp)
 add_compute_test("ext.lambda" test_lambda.cpp)

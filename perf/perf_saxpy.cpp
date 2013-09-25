@@ -13,7 +13,6 @@
 #include <vector>
 
 #include <boost/compute.hpp>
-#include <boost/compute/blas/axpy.hpp>
 #include <boost/compute/detail/timer.hpp>
 
 float rand_float()
@@ -31,12 +30,17 @@ void serial_saxpy(size_t n, float alpha, const float *x, float *y)
 
 int main(int argc, char *argv[])
 {
+    using boost::compute::lambda::_1;
+    using boost::compute::lambda::_2;
+
     size_t size = 1000;
     if(argc >= 2){
         size = boost::lexical_cast<size_t>(argv[1]);
     }
 
     std::cout << "size: " << size << std::endl;
+
+    float alpha = 2.5f;
 
     // setup context and queue for the default device
     boost::compute::device device = boost::compute::system::default_device();
@@ -55,12 +59,19 @@ int main(int argc, char *argv[])
     boost::compute::vector<float> device_y(host_y.begin(), host_y.end(), context);
 
     boost::compute::detail::timer t;
-    boost::compute::blas::axpy(static_cast<int>(size), 2.5f, &device_x[0], 1, &device_y[0], 1, queue);
+    boost::compute::transform(
+        device_x.begin(),
+        device_x.end(),
+        device_y.begin(),
+        device_y.begin(),
+        alpha * _1 + _2,
+        queue
+    );
     queue.finish();
     std::cout << "time: " << t.elapsed() << " ms" << std::endl;
 
     // perform saxpy on host
-    serial_saxpy(size, 2.5f, &host_x[0], &host_y[0]);
+    serial_saxpy(size, alpha, &host_x[0], &host_y[0]);
 
     // copy device_y to host_x
     boost::compute::copy(device_y.begin(), device_y.end(), host_x.begin(), queue);

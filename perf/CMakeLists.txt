@@ -7,10 +7,10 @@ if(NOT ${BOOST_COMPUTE_TIMER_USE_STD_CHRONO})
 endif()
 
 set(BENCHMARKS
-  blas_saxpy
   copy_to_device
   count_int
   partial_sum
+  saxpy
   sort_float
   sort_uint
   sum_int
