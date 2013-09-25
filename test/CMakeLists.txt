@@ -84,6 +84,7 @@ add_compute_test("container.vector" test_vector.cpp)
 
 add_compute_test("functional.as" test_functional_as.cpp)
 add_compute_test("functional.convert" test_functional_convert.cpp)
+add_compute_test("functional.get" test_functional_get.cpp)
 
 add_compute_test("iterator.adjacent_transform_iterator" test_adjacent_transform_iterator.cpp)
 add_compute_test("iterator.constant_iterator" test_constant_iterator.cpp)
@@ -95,7 +96,6 @@ add_compute_test("iterator.zip_iterator" test_zip_iterator.cpp)
 add_compute_test("random.mersenne_twister" test_mersenne_twister.cpp)
 
 add_compute_test("ext.complex" test_complex.cpp)
-add_compute_test("ext.get" test_get.cpp)
 add_compute_test("ext.lambda" test_lambda.cpp)
 add_compute_test("ext.malloc" test_malloc.cpp)
 add_compute_test("ext.pair" test_pair.cpp)

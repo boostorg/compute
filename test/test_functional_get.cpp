@@ -8,7 +8,7 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#define BOOST_TEST_MODULE TestGet
+#define BOOST_TEST_MODULE TestFunctionalGet
 #include <boost/test/unit_test.hpp>
 
 #include <boost/type_traits.hpp>
