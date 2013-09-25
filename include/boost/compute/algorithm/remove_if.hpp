@@ -36,12 +36,10 @@ inline Iterator remove_if(Iterator first,
     // temporary storage for the input data
     ::boost::compute::vector<value_type> tmp(first, last, context);
 
-    ::boost::compute::unary_negate<Predicate> not_predicate(predicate);
-
     return ::boost::compute::copy_if(tmp.begin(),
                                      tmp.end(),
                                      first,
-                                     not_predicate,
+                                     not1(predicate),
                                      queue);
 }
 

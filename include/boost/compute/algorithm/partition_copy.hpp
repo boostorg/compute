@@ -50,7 +50,7 @@ partition_copy(InputIterator first,
         ::boost::compute::copy_if(first,
                                   last,
                                   first_false,
-                                  unary_negate<UnaryPredicate>(predicate),
+                                  not1(predicate),
                                   queue);
 
     // return iterators to the end of the true and the false ranges

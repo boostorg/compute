@@ -51,7 +51,7 @@ inline Iterator partition(Iterator first,
         ::boost::compute::copy_if(tmp.begin(),
                                   tmp.end(),
                                   last_true,
-                                  unary_negate<UnaryPredicate>(predicate),
+                                  not1(predicate),
                                   queue);
 
     // return iterator pointing to the last true value

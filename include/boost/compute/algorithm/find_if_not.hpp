@@ -29,12 +29,10 @@ inline InputIterator find_if_not(InputIterator first,
                                  UnaryPredicate predicate,
                                  command_queue &queue = system::default_queue())
 {
-    ::boost::compute::unary_negate<UnaryPredicate> not_predicate(predicate);
-
     return ::boost::compute::find_if(
                first,
                last,
-               not_predicate,
+               not1(predicate),
                queue
            );
 }

@@ -152,6 +152,18 @@ private:
     Predicate m_pred;
 };
 
+template<class Predicate>
+inline unary_negate<Predicate> not1(const Predicate &predicate)
+{
+    return unary_negate<Predicate>(predicate);
+}
+
+template<class Predicate>
+inline binary_negate<Predicate> not2(const Predicate &predicate)
+{
+    return binary_negate<Predicate>(predicate);
+}
+
 template<class T>
 struct logical_not : public unary_function<T, int>
 {
