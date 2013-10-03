@@ -94,7 +94,7 @@ struct type_name_trait<char>
 /// type_name<float4_>() == "float4"
 /// \endcode
 template<class T>
-const char* type_name()
+inline const char* type_name()
 {
     return detail::type_name_trait<T>::value();
 }
