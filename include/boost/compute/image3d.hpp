@@ -147,21 +147,9 @@ public:
     }
 };
 
-namespace detail {
-
-// type_name() specialization for image3d
-template<>
-struct type_name_trait<image3d>
-{
-    static const char* value()
-    {
-        return "image3d_t";
-    }
-};
-
-} // end detail namespace
-
 } // end compute namespace
 } // end boost namespace
+
+BOOST_COMPUTE_TYPE_NAME(boost::compute::image3d, image3d_t)
 
 #endif // BOOST_COMPUTE_IMAGE3D_HPP

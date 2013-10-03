@@ -142,21 +142,9 @@ public:
     }
 };
 
-namespace detail {
-
-// type_name() specialization for image2d
-template<>
-struct type_name_trait<image2d>
-{
-    static const char* value()
-    {
-        return "image2d_t";
-    }
-};
-
-} // end detail namespace
-
 } // end compute namespace
 } // end boost namespace
+
+BOOST_COMPUTE_TYPE_NAME(boost::compute::image2d, image2d_t)
 
 #endif // BOOST_COMPUTE_IMAGE2D_HPP

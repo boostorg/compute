@@ -144,20 +144,9 @@ private:
     cl_sampler m_sampler;
 };
 
-namespace detail {
-
-// type_name() specialization for image_sampler
-template<>
-struct type_name_trait<image_sampler>
-{
-    static const char* value()
-    {
-        return "sampler_t";
-    }
-};
-
-} // end detail namespace
 } // end compute namespace
 } // end boost namespace
+
+BOOST_COMPUTE_TYPE_NAME(boost::compute::image_sampler, sampler_t)
 
 #endif // BOOST_COMPUTE_IMAGE_SAMPLER_HPP

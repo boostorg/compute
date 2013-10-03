@@ -102,4 +102,24 @@ inline const char* type_name()
 } // end compute namespace
 } // end boost namespace
 
+/// Registers the OpenCL type for the C++ \p type to \p name.
+///
+/// For example, the following will allow Eigen's \c Vector2f type
+/// to be used with Boost.Compute algorithms and containers as the
+/// built-in \c float2 type.
+/// \code
+/// BOOST_COMPUTE_TYPE_NAME(Eigen::Vector2f, float2)
+/// \endcode
+///
+/// This macro should be invoked in the global namespace.
+///
+/// \see type_name()
+#define BOOST_COMPUTE_TYPE_NAME(type, name) \
+    namespace boost { namespace compute { \
+    template<> \
+    inline const char* type_name<type>() \
+    { \
+        return #name; \
+    }}}
+
 #endif // BOOST_COMPUTE_TYPE_TRAITS_TYPE_NAME_HPP
