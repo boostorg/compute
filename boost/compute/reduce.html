@@ -29,7 +29,7 @@
               <span class="identifier">T</span> init<span class="special">,</span> <span class="identifier">BinaryFunction</span> function<span class="special">,</span> 
               <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue <span class="special">=</span> <span class="identifier">system</span><span class="special">::</span><span class="identifier">default_queue</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp7947344"></a><h2>Description</h2>
+<a name="idp64978240"></a><h2>Description</h2>
 <p>Returns the result of applying <code class="computeroutput">function</code> to the elements in the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) and <code class="computeroutput">init</code>.</p>
 <p>The difference between the reduce() function and the accumulate() function is that reduce() requires the binary operator to be commutative.</p>
 <p>This algorithm supports both host and device iterators for the result argument. This allows for values to be reduced and copied to the host all with a single function call. </p>

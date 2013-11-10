@@ -46,7 +46,7 @@
       </p>
 <p>
         The Boost Compute library provides a few different ways to create custom
-        functions that can be passed to the provided algorithms such as <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp8174448.html" title="Function template transform">transform()</a></code> and <code class="computeroutput"><a class="link" href="../boost/compute/reduce.html" title="Function template reduce">reduce()</a></code>.
+        functions that can be passed to the provided algorithms such as <code class="computeroutput"><a class="link" href="../boost/compute/transform_idp7982336.html" title="Function template transform">transform()</a></code> and <code class="computeroutput"><a class="link" href="../boost/compute/reduce.html" title="Function template reduce">reduce()</a></code>.
       </p>
 <p>
         The most basic method is to provide the raw source code for a function:
@@ -58,6 +58,19 @@
         <span class="string">"add_four"</span><span class="special">,</span>
         <span class="string">"int add_four(int x) { return x + 4; }"</span>
     <span class="special">);</span>
+
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">add_four</span><span class="special">);</span>
+</pre>
+<p>
+      </p>
+<p>
+        This can also be done more succinctly using the BOOST_COMPUTE_FUNCTION()
+        macro:
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_COMPUTE_FUNCTION</span><span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">add_four</span><span class="special">,</span> <span class="special">(</span><span class="keyword">int</span><span class="special">),</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="identifier">_1</span> <span class="special">+</span> <span class="number">4</span><span class="special">;</span>
+<span class="special">});</span>
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">add_four</span><span class="special">);</span>
 </pre>
