@@ -168,10 +168,12 @@ template<class T>
 struct logical_not : public unary_function<T, int>
 {
     template<class Expr>
-    detail::invoked_unary_function<Expr, int>
+    detail::invoked_function<int, boost::tuple<Expr> >
     operator()(const Expr &expr) const
     {
-        return detail::invoked_unary_function<Expr, int>("!", expr);
+        return detail::invoked_function<int, boost::tuple<Expr> >(
+            "!", std::string(), boost::make_tuple(expr)
+        );
     }
 };
 

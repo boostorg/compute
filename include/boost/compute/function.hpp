@@ -15,6 +15,7 @@
 
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/tuple/tuple.hpp>
 #include <boost/type_traits/function_traits.hpp>
 
 #include <boost/compute/cl.hpp>
@@ -23,21 +24,28 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-template<class Result>
-class invoked_nullary_function
+template<class ResultType, class ArgTuple>
+class invoked_function
 {
 public:
-    typedef Result result_type;
+    typedef ResultType result_type;
 
-    invoked_nullary_function(const std::string &name)
-        : m_name(name)
+    BOOST_STATIC_CONSTANT(
+        size_t, arity = boost::tuples::length<ArgTuple>::value
+    );
+
+    invoked_function(const std::string &name, const std::string &source)
+        : m_name(name),
+          m_source(source)
     {
     }
 
-    invoked_nullary_function(const std::string &name,
-                             const std::string &source)
+    invoked_function(const std::string &name,
+                     const std::string &source,
+                     const ArgTuple &args)
         : m_name(name),
-          m_source(source)
+          m_source(source),
+          m_args(args)
     {
     }
 
@@ -51,190 +59,65 @@ public:
         return m_source;
     }
 
-private:
-    std::string m_name;
-    std::string m_source;
-};
-
-template<class Expr, class Result>
-class invoked_unary_function
-{
-public:
-    typedef Result result_type;
-
-    invoked_unary_function(const std::string &name,
-                           const Expr &expr)
-        : m_name(name),
-          m_expr(expr)
+    const ArgTuple& args() const
     {
-    }
-
-    invoked_unary_function(const std::string &name,
-                           const Expr &expr,
-                           const std::string &source)
-        : m_name(name),
-          m_expr(expr),
-          m_source(source)
-    {
-    }
-
-    std::string name() const
-    {
-        return m_name;
-    }
-
-    Expr expr() const
-    {
-        return m_expr;
-    }
-
-    std::string source() const
-    {
-        return m_source;
+        return m_args;
     }
 
 private:
     std::string m_name;
-    Expr m_expr;
     std::string m_source;
-};
-
-template<class Expr1, class Expr2, class Result>
-class invoked_binary_function
-{
-public:
-    typedef Result result_type;
-
-    invoked_binary_function(const std::string &name,
-                            const Expr1 &arg1,
-                            const Expr2 &arg2,
-                            const std::string &source)
-        : m_name(name),
-          m_expr1(arg1),
-          m_expr2(arg2),
-          m_source(source)
-    {
-    }
-
-    std::string name() const
-    {
-        return m_name;
-    }
-
-    Expr1 arg1() const
-    {
-        return m_expr1;
-    }
-
-    Expr2 arg2() const
-    {
-        return m_expr2;
-    }
-
-    std::string source() const
-    {
-        return m_source;
-    }
-
-private:
-    std::string m_name;
-    Expr1 m_expr1;
-    Expr2 m_expr2;
-    std::string m_source;
-};
-
-template<class Expr1, class Expr2, class Expr3, class Result>
-class invoked_ternary_function
-{
-public:
-    typedef Result result_type;
-
-    invoked_ternary_function(const std::string &name,
-                             const Expr1 &arg1,
-                             const Expr2 &arg2,
-                             const Expr3 &arg3,
-                             const std::string &source)
-        : m_name(name),
-          m_expr1(arg1),
-          m_expr2(arg2),
-          m_expr3(arg3),
-          m_source(source)
-    {
-    }
-
-    std::string name() const
-    {
-        return m_name;
-    }
-
-    Expr1 arg1() const
-    {
-        return m_expr1;
-    }
-
-    Expr2 arg2() const
-    {
-        return m_expr2;
-    }
-
-    Expr3 arg3() const
-    {
-        return m_expr3;
-    }
-
-    std::string source() const
-    {
-        return m_source;
-    }
-
-private:
-    std::string m_name;
-    Expr1 m_expr1;
-    Expr2 m_expr2;
-    Expr3 m_expr3;
-    std::string m_source;
+    ArgTuple m_args;
 };
 
 } // end detail namespace
 
+/// \class function
+/// \brief A function object.
 template<class Signature>
 class function
 {
 public:
+    /// \internal_
     typedef typename
-        boost::function_traits<Signature>::result_type
-        result_type;
+        boost::function_traits<Signature>::result_type result_type;
 
+    /// \internal_
     BOOST_STATIC_CONSTANT(
-      size_t,
-      arity = boost::function_traits<Signature>::arity
+        size_t, arity = boost::function_traits<Signature>::arity
     );
 
+    /// Creates a new function object with \p name.
     function(const std::string &name)
         : m_name(name)
     {
     }
 
+    /// Destroys the function object.
     ~function()
     {
     }
 
+    /// \internal_
     std::string name() const
     {
         return m_name;
     }
 
+    /// \internal_
     void set_source(const std::string &source)
     {
         m_source = source;
     }
 
+    /// \internal_
     std::string source() const
     {
         return m_source;
     }
 
-    detail::invoked_nullary_function<result_type>
+    /// \internal_
+    detail::invoked_function<result_type, boost::tuple<> >
     operator()() const
     {
         BOOST_STATIC_ASSERT_MSG(
@@ -242,11 +125,14 @@ public:
             "Non-nullary function invoked with zero arguments"
         );
 
-        return detail::invoked_nullary_function<result_type>(m_name, m_source);
+        return detail::invoked_function<result_type, boost::tuple<> >(
+            m_name, m_source
+        );
     }
 
+    /// \internal_
     template<class Arg1>
-    detail::invoked_unary_function<Arg1, result_type>
+    detail::invoked_function<result_type, boost::tuple<Arg1> >
     operator()(const Arg1 &arg1) const
     {
         BOOST_STATIC_ASSERT_MSG(
@@ -254,11 +140,14 @@ public:
             "Non-unary function invoked one argument"
         );
 
-        return detail::invoked_unary_function<Arg1, result_type>(m_name, arg1, m_source);
+        return detail::invoked_function<result_type, boost::tuple<Arg1> >(
+            m_name, m_source, boost::make_tuple(arg1)
+        );
     }
 
+    /// \internal_
     template<class Arg1, class Arg2>
-    detail::invoked_binary_function<Arg1, Arg2, result_type>
+    detail::invoked_function<result_type, boost::tuple<Arg1, Arg2> >
     operator()(const Arg1 &arg1, const Arg2 &arg2) const
     {
         BOOST_STATIC_ASSERT_MSG(
@@ -266,11 +155,14 @@ public:
             "Non-binary function invoked with two arguments"
         );
 
-        return detail::invoked_binary_function<Arg1, Arg2, result_type>(m_name, arg1, arg2, m_source);
+        return detail::invoked_function<result_type, boost::tuple<Arg1, Arg2> >(
+            m_name, m_source, boost::make_tuple(arg1, arg2)
+        );
     }
 
+    /// \internal_
     template<class Arg1, class Arg2, class Arg3>
-    detail::invoked_ternary_function<Arg1, Arg2, Arg3, result_type>
+    detail::invoked_function<result_type, boost::tuple<Arg1, Arg2, Arg3> >
     operator()(const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3) const
     {
         BOOST_STATIC_ASSERT_MSG(
@@ -278,7 +170,9 @@ public:
             "Non-ternary function invoked with two arguments"
         );
 
-        return detail::invoked_ternary_function<Arg1, Arg2, Arg3, result_type>(m_name, arg1, arg2, arg3, m_source);
+        return detail::invoked_function<result_type, boost::tuple<Arg1, Arg2, Arg3> >(
+            m_name, m_source, boost::make_tuple(arg1, arg2, arg3)
+        );
     }
 
 private:
@@ -286,19 +180,19 @@ private:
     std::string m_source;
 };
 
+/// Creates a function object given its \p name and \p source.
+///
+/// \param name The function name.
+/// \param source The function source code.
+///
+/// \see BOOST_COMPUTE_FUNCTION()
 template<class Signature>
-inline function<Signature> make_function_from_source(const std::string &name,
-                                                     const std::string &source)
+inline function<Signature>
+make_function_from_source(const std::string &name, const std::string &source)
 {
     function<Signature> f(name);
     f.set_source(source);
     return f;
-}
-
-template<class Signature>
-inline function<Signature> make_function_from_builtin(const std::string &name)
-{
-    return function<Signature>(name);
 }
 
 } // end compute namespace

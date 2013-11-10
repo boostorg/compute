@@ -18,6 +18,7 @@
 #include <sstream>
 #include <utility>
 
+#include <boost/tuple/tuple.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/static_assert.hpp>
@@ -643,15 +644,19 @@ public:
     }
 
     template<class Predicate>
-    detail::invoked_unary_function<Predicate, bool> if_(Predicate pred) const
+    detail::invoked_function<bool, boost::tuple<Predicate> > if_(Predicate pred) const
     {
-        return detail::invoked_unary_function<Predicate, bool>("if", pred);
+        return detail::invoked_function<bool, boost::tuple<Predicate> >(
+            "if", std::string(), boost::make_tuple(pred)
+        );
     }
 
     template<class Predicate>
-    detail::invoked_unary_function<Predicate, bool> else_if_(Predicate pred) const
+    detail::invoked_function<bool, boost::tuple<Predicate> > else_if_(Predicate pred) const
     {
-        return detail::invoked_unary_function<Predicate, bool>("else if", pred);
+        return detail::invoked_function<bool, boost::tuple<Predicate> >(
+            "else if", std::string(), boost::make_tuple(pred)
+        );
     }
 
     detail::meta_kernel_variable<cl_uint> get_global_id(size_t dim) const
@@ -771,9 +776,9 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
     return kernel << literal.value();
 }
 
-template<class Result>
+template<class ResultType>
 inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_nullary_function<Result> &expr)
+                               const invoked_function<ResultType, boost::tuple<> > &expr)
 {
     if(!expr.source().empty()){
         kernel.add_function(expr.name(), expr.source());
@@ -782,50 +787,47 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
     return kernel << expr.name() << "()";
 }
 
-template<class Arg, class Result>
+template<class ResultType, class Arg1>
 inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_unary_function<Arg,
-                                                            Result> &expr)
+                               const invoked_function<ResultType, boost::tuple<Arg1> > &expr)
 {
     if(!expr.source().empty()){
         kernel.add_function(expr.name(), expr.source());
     }
 
-    return kernel << expr.name() << '(' << expr.expr() << ')';
+    return kernel << expr.name() << '(' << boost::get<0>(expr.args()) << ')';
 }
 
-template<class Arg1, class Arg2, class Result>
+template<class ResultType, class Arg1, class Arg2>
 inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_binary_function<Arg1,
-                                                             Arg2,
-                                                             Result> &expr)
+                               const invoked_function<ResultType, boost::tuple<Arg1, Arg2> > &expr)
 {
     if(!expr.source().empty()){
         kernel.add_function(expr.name(), expr.source());
     }
 
-    return kernel << expr.name() << "("
-                  << expr.arg1() << ","
-                  << expr.arg2() << ")";
+    return kernel << expr.name()
+                  << '('
+                  << boost::get<0>(expr.args()) << ", "
+                  << boost::get<1>(expr.args())
+                  << ')';
 }
 
-template<class Arg1, class Arg2, class Arg3, class Result>
+template<class ResultType, class Arg1, class Arg2, class Arg3>
 inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_ternary_function<Arg1,
-                                                              Arg2,
-                                                              Arg3,
-                                                              Result> &expr)
+                               const invoked_function<ResultType, boost::tuple<Arg1, Arg2, Arg3> > &expr)
 {
     if(!expr.source().empty()){
         kernel.add_function(expr.name(), expr.source());
     }
 
-    return kernel << expr.name() << "("
-                  << expr.arg1() << ","
-                  << expr.arg2() << ","
-                  << expr.arg3() << ")";
+    return kernel << expr.name()
+                  << '('
+                  << boost::get<0>(expr.args()) << ", "
+                  << boost::get<1>(expr.args()) << ", "
+                  << boost::get<2>(expr.args())
+                  << ')';
 }
-
 
 template<class Arg1, class Arg2, class Result>
 inline meta_kernel& operator<<(meta_kernel &kernel,
