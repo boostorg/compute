@@ -106,6 +106,8 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
         make_zip_iterator_value_type<tuple_type>::type
         value_type;
 
+    kernel.inject_type<value_type>();
+
     return kernel
         << "(" << type_name<value_type>() << ")"
         << "{ "
@@ -126,6 +128,9 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
     typedef typename
         make_zip_iterator_value_type<tuple_type>::type
         value_type;
+
+
+    kernel.inject_type<value_type>();
 
     return kernel
         << "(" << type_name<value_type>() << ")"
@@ -152,6 +157,8 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
     typedef typename
         make_zip_iterator_value_type<tuple_type>::type
         value_type;
+
+    kernel.inject_type<value_type>();
 
     return kernel
         << "(" << type_name<value_type>() << ")"

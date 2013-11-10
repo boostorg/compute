@@ -305,6 +305,9 @@ public:
             stream << m_pragmas << "\n";
         }
 
+        // add type declaration source
+        stream << m_type_declaration_source.str() << "\n";
+
         // add external function source
         stream << m_external_function_source.str() << "\n";
 
@@ -672,12 +675,12 @@ public:
         const char *name = type_name<Type>();
 
         // check if the type has already been declared
-        std::string source = m_external_function_source.str();
+        std::string source = m_type_declaration_source.str();
         if(source.find(name) != std::string::npos){
             return;
         }
 
-        m_external_function_source << declaration;
+        m_type_declaration_source << declaration;
     }
 
     template<class Type>
@@ -690,6 +693,7 @@ private:
     std::string m_name;
     std::stringstream m_source;
     std::stringstream m_external_function_source;
+    std::stringstream m_type_declaration_source;
     std::set<std::string> m_external_function_names;
     std::vector<std::string> m_args;
     std::string m_pragmas;
