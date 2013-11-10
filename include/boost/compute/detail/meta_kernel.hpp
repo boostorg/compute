@@ -920,6 +920,13 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 }
 
 template<class T, class Arg>
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const invoked_field<T, Arg> &expr)
+{
+    return kernel << expr.m_arg << "." << expr.m_field;
+}
+
+template<class T, class Arg>
 inline meta_kernel& operator<<(meta_kernel &k,
                                const invoked_as<T, Arg> &expr)
 {

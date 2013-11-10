@@ -18,11 +18,13 @@
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/counting_iterator.hpp>
+#include <boost/compute/functional/field.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(transform_int_abs)
 {
@@ -243,6 +245,34 @@ BOOST_AUTO_TEST_CASE(generate_fibonacci_sequence)
         (0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610,
          987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368)
     );
+}
+
+BOOST_AUTO_TEST_CASE(field)
+{
+    using compute::uint2_;
+    using compute::uint4_;
+    using compute::field;
+
+    unsigned int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    compute::vector<uint4_> input(
+        reinterpret_cast<uint4_ *>(data),
+        reinterpret_cast<uint4_ *>(data) + 2,
+        context
+    );
+    compute::vector<uint2_> output(input.size(), context);
+
+    compute::transform(
+        input.begin(),
+        input.end(),
+        output.begin(),
+        compute::field<uint2_>("xz"),
+        queue
+    );
+
+    queue.finish();
+
+    BOOST_CHECK_EQUAL(uint2_(output[0]), uint2_(1, 3));
+    BOOST_CHECK_EQUAL(uint2_(output[1]), uint2_(5, 7));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

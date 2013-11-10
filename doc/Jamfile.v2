@@ -38,6 +38,7 @@ doxygen autodoc
     [ glob ../include/boost/compute/exception/*.hpp ]
 
     ../include/boost/compute/functional.hpp
+    ../include/boost/compute/functional/field.hpp
     ../include/boost/compute/functional/get.hpp
 
     ../include/boost/compute/iterator.hpp

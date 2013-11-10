@@ -17,6 +17,7 @@
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/functional/get.hpp>
+#include <boost/compute/functional/field.hpp>
 #include <boost/compute/types/pair.hpp>
 
 #include "quirks.hpp"
@@ -111,6 +112,33 @@ BOOST_AUTO_TEST_CASE(transform_pair_get)
         input.end(),
         second_output.begin(),
         ::boost::compute::get<1>()
+    );
+    CHECK_RANGE_EQUAL(float, 4, second_output, (2.0f, 4.0f, 6.0f, 8.0f));
+}
+
+BOOST_AUTO_TEST_CASE(transform_pair_field)
+{
+    boost::compute::vector<std::pair<int, float> > input;
+    input.push_back(std::make_pair(1, 2.0f));
+    input.push_back(std::make_pair(3, 4.0f));
+    input.push_back(std::make_pair(5, 6.0f));
+    input.push_back(std::make_pair(7, 8.0f));
+
+    boost::compute::vector<int> first_output(4);
+    boost::compute::transform(
+        input.begin(),
+        input.end(),
+        first_output.begin(),
+        boost::compute::field<int>("first")
+    );
+    CHECK_RANGE_EQUAL(int, 4, first_output, (1, 3, 5, 7));
+
+    boost::compute::vector<float> second_output(4);
+    boost::compute::transform(
+        input.begin(),
+        input.end(),
+        second_output.begin(),
+        boost::compute::field<float>("second")
     );
     CHECK_RANGE_EQUAL(float, 4, second_output, (2.0f, 4.0f, 6.0f, 8.0f));
 }
