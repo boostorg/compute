@@ -84,6 +84,16 @@ struct type_name_trait<char>
     }
 };
 
+// define type_name() for void
+template<>
+struct type_name_trait<void>
+{
+    static const char* value()
+    {
+        return "void";
+    }
+};
+
 } // end detail namespace
 
 /// Returns the OpenCL type name for the type \p T as a string.
