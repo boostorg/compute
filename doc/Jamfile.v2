@@ -19,6 +19,7 @@ doxygen autodoc
     ../include/boost/compute/context.hpp
     ../include/boost/compute/device.hpp
     ../include/boost/compute/event.hpp
+    ../include/boost/compute/function.hpp
     ../include/boost/compute/future.hpp
     ../include/boost/compute/kernel.hpp
     ../include/boost/compute/memory_object.hpp

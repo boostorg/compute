@@ -12,6 +12,7 @@
 #define BOOST_COMPUTE_FUNCTION_HPP
 
 #include <string>
+#include <sstream>
 
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
@@ -19,6 +20,8 @@
 #include <boost/type_traits/function_traits.hpp>
 
 #include <boost/compute/cl.hpp>
+#include <boost/compute/type_traits/type_name.hpp>
+#include <boost/compute/detail/function_signature_to_mpl_vector.hpp>
 
 namespace boost {
 namespace compute {
@@ -195,7 +198,105 @@ make_function_from_source(const std::string &name, const std::string &source)
     return f;
 }
 
+namespace detail {
+
+struct signature_argument_inserter
+{
+    signature_argument_inserter(std::stringstream &s_, size_t last)
+        : s(s_)
+    {
+        n = 0;
+        m_last = last;
+    }
+
+    template<class T>
+    void operator()(const T&)
+    {
+        s << type_name<T>() << " _" << n+1;
+        if(n+1 < m_last){
+            s << ", ";
+        }
+        n++;
+    }
+
+    size_t n;
+    size_t m_last;
+    std::stringstream &s;
+};
+
+template<class Signature>
+std::string make_function_declaration(const std::string &name)
+{
+    typedef typename
+        boost::function_traits<Signature>::result_type result_type;
+    typedef typename
+        function_signature_to_mpl_vector<Signature>::type signature_vector;
+    typedef typename
+        mpl::size<signature_vector>::type arity_type;
+
+    std::stringstream s;
+    signature_argument_inserter i(s, arity_type::value);
+    s << "inline " << type_name<result_type>() << " " << name;
+    s << "(";
+    mpl::for_each<signature_vector>(i);
+    s << ")";
+    return s.str();
+}
+
+// used by the BOOST_COMPUTE_FUNCTION() macro to create a function
+// with the given signature, name, and source.
+template<class Signature>
+inline function<Signature>
+make_function_impl(const std::string &name, const std::string &source)
+{
+    std::stringstream s;
+    s << make_function_declaration<Signature>(name);
+    s << source;
+    return make_function_from_source<Signature>(name, s.str());
+}
+
+} // end detail namespace
 } // end compute namespace
 } // end boost namespace
+
+/// Creates a function object with \p name and \p source.
+///
+/// \param return_type The return type for the function.
+/// \param name The name of the function.
+/// \param args A list of argument types for the function.
+/// \param source The OpenCL C source code for the function.
+///
+/// The function declaration and signature are automatically created using
+/// the \p return_type, \p name, and \p args macro parameters. The argument
+/// names are \c _1 to \c _N (where \c N is the arity of the function).
+///
+/// The source code for the function is interpreted as OpenCL C99 source code
+/// which is stringified and passed to the OpenCL compiler when the function
+/// is invoked.
+///
+/// For example, to create a function which squares a number:
+/// \code
+/// BOOST_COMPUTE_FUNCTION(float, square, (float),
+/// {
+///     return _1 * _1;
+/// });
+/// \endcode
+///
+/// And to create a function which sums two numbers:
+/// \code
+/// BOOST_COMPUTE_FUNCTION(int, sum_two, (int, int),
+/// {
+///     return _1 + _2;
+/// });
+/// \endcode
+#ifdef BOOST_COMPUTE_DOXYGEN_INVOKED
+#define BOOST_COMPUTE_FUNCTION(return_type, name, args, source)
+#else
+#define BOOST_COMPUTE_FUNCTION(return_type, name, args, ...) \
+    ::boost::compute::function<return_type args> name = \
+        ::boost::compute::detail::make_function_impl<return_type args>( \
+            #name, #__VA_ARGS__ \
+        )
+#endif
 
 #endif // BOOST_COMPUTE_FUNCTION_HPP

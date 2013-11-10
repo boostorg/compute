@@ -25,6 +25,16 @@ boost::compute::function<int (int)> add_four =
 boost::compute::transform(vector.begin(), vector.end(), vector.begin(), add_four);
 ``
 
+This can also be done more succinctly using the BOOST_COMPUTE_FUNCTION() macro:
+``
+BOOST_COMPUTE_FUNCTION(int, add_four, (int),
+{
+    return _1 + 4;
+});
+
+boost::compute::transform(vector.begin(), vector.end(), vector.begin(), add_four);
+``
+
 [endsect] [/ custom functions]
 
 [section Complex Values]

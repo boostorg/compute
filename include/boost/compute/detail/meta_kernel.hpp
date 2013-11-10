@@ -306,6 +306,10 @@ public:
             stream << m_pragmas << "\n";
         }
 
+        // add macros
+        stream << "#define boost_tuple_get(x, n) (x.v ## n)\n";
+        stream << "#define boost_pair_get(x, n) (n == 0 ? x.first ## x.second)\n";
+
         // add type declaration source
         stream << m_type_declaration_source.str() << "\n";
 
