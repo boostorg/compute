@@ -143,30 +143,6 @@ BOOST_AUTO_TEST_CASE(push_back)
     BOOST_CHECK_EQUAL(vector[102], 99);
 }
 
-BOOST_AUTO_TEST_CASE(std_sort_float_vector)
-{
-    std::vector<float> host_vector(10);
-    std::generate(host_vector.begin(), host_vector.end(), rand);
-
-    bc::vector<float> vector = host_vector;
-    std::sort(vector.begin(), vector.end());
-    BOOST_CHECK_LE(vector.front(), vector.back());
-}
-
-BOOST_AUTO_TEST_CASE(std_max_element_int_vector)
-{
-    bc::vector<int> vector;
-    vector.push_back(1);
-    vector.push_back(9);
-    vector.push_back(5);
-    vector.push_back(2);
-    vector.push_back(6);
-    bc::vector<int>::const_iterator iter =
-        std::max_element(vector.begin(), vector.end());
-    BOOST_VERIFY(iter == vector.begin() + 1);
-    BOOST_CHECK_EQUAL(*iter, 9);
-}
-
 BOOST_AUTO_TEST_CASE(at)
 {
     bc::vector<int> vector;
