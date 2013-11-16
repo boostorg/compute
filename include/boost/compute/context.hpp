@@ -12,9 +12,11 @@
 #define BOOST_COMPUTE_CONTEXT_HPP
 
 #include <boost/move/move.hpp>
+#include <boost/throw_exception.hpp>
 
 #include <boost/compute/cl.hpp>
 #include <boost/compute/device.hpp>
+#include <boost/compute/exception/context_error.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
 
 namespace boost {
@@ -47,8 +49,8 @@ public:
         m_context = clCreateContext(properties,
                                     1,
                                     &device_id,
-                                    0,
-                                    0,
+                                    default_error_handler,
+                                    static_cast<void *>(this),
                                     &error);
         if(!m_context){
             BOOST_THROW_EXCEPTION(runtime_exception(error));
@@ -177,6 +179,23 @@ public:
     operator cl_context() const
     {
         return m_context;
+    }
+
+private:
+    // this function is registered as the default error handler for every
+    // context when it is created. user_data is the 'this' pointer for the
+    // associated context object. this function simply throws an exception
+    // containing the context error information.
+    static void default_error_handler(const char *errinfo,
+                                      const void *private_info,
+                                      size_t cb,
+                                      void *user_data)
+    {
+        context *this_ = static_cast<context *>(user_data);
+
+        BOOST_THROW_EXCEPTION(
+            context_error(this_, errinfo, private_info, cb)
+        );
     }
 
 private:
