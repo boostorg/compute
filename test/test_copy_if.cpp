@@ -19,6 +19,7 @@
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(copy_if_int)
 {
@@ -88,6 +89,23 @@ BOOST_AUTO_TEST_CASE(clip_points_below_plane)
                     output.begin(),
                     dot(_1 - plane_origin, plane_normal) > 0.0f);
     BOOST_CHECK(iter == output.begin() + 2);
+}
+
+BOOST_AUTO_TEST_CASE(copy_index_if_int)
+{
+    int data[] = { 1, 6, 3, 5, 8, 2, 4 };
+    compute::vector<int> input(data, data + 7);
+
+    compute::vector<int> output(input.size());
+    compute::fill(output.begin(), output.end(), -1);
+
+    using ::boost::compute::_1;
+    using ::boost::compute::detail::copy_index_if;
+
+    compute::vector<int>::iterator iter =
+        copy_index_if(input.begin(), input.end(), output.begin(), _1 < 5);
+    BOOST_VERIFY(iter == output.begin() + 4);
+    CHECK_RANGE_EQUAL(int, 7, output, (0, 2, 5, 6, -1, -1, -1));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

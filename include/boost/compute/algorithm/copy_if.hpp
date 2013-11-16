@@ -22,15 +22,15 @@
 
 namespace boost {
 namespace compute {
+namespace detail {
 
-/// Copies each element in the range [\p first, \p last) for which
-/// \p predicate returns \c true to the range beginning at \p result.
 template<class InputIterator, class OutputIterator, class Predicate>
-inline OutputIterator copy_if(InputIterator first,
-                              InputIterator last,
-                              OutputIterator result,
-                              Predicate predicate,
-                              command_queue &queue = system::default_queue())
+inline OutputIterator copy_if_impl(InputIterator first,
+                                   InputIterator last,
+                                   OutputIterator result,
+                                   Predicate predicate,
+                                   bool copyIndex,
+                                   command_queue &queue)
 {
     typedef typename std::iterator_traits<OutputIterator>::difference_type difference_type;
 
@@ -63,11 +63,44 @@ inline OutputIterator copy_if(InputIterator first,
     // copy values
     ::boost::compute::detail::meta_kernel k2("copy_if_do_copy");
     k2 << "if(" << predicate(first[k2.get_global_id(0)]) << ")" <<
-          "    " << result[indices.begin()[k2.get_global_id(0)]]
-                     << " = " << first[k2.get_global_id(0)] << ";\n";
+          "    " << result[indices.begin()[k2.get_global_id(0)]] << "=";
+
+    if(copyIndex){
+        k2 << k2.get_global_id(0) << ";\n";
+    }
+    else {
+        k2 << first[k2.get_global_id(0)] << ";\n";
+    }
+
     k2.exec_1d(queue, 0, count);
 
     return result + static_cast<difference_type>(copied_element_count);
+}
+
+// like the copy_if() algorithm but writes the indices of the values for which
+// predicate returns true.
+template<class InputIterator, class OutputIterator, class Predicate>
+inline OutputIterator copy_index_if(InputIterator first,
+                                    InputIterator last,
+                                    OutputIterator result,
+                                    Predicate predicate,
+                                    command_queue &queue = system::default_queue())
+{
+    return detail::copy_if_impl(first, last, result, predicate, true, queue);
+}
+
+} // end detail namespace
+
+/// Copies each element in the range [\p first, \p last) for which
+/// \p predicate returns \c true to the range beginning at \p result.
+template<class InputIterator, class OutputIterator, class Predicate>
+inline OutputIterator copy_if(InputIterator first,
+                              InputIterator last,
+                              OutputIterator result,
+                              Predicate predicate,
+                              command_queue &queue = system::default_queue())
+{
+    return detail::copy_if_impl(first, last, result, predicate, false, queue);
 }
 
 } // end compute namespace
