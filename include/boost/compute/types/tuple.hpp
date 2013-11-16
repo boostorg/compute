@@ -16,9 +16,14 @@
 
 #include <boost/tuple/tuple.hpp>
 
+#include <boost/compute/config.hpp>
 #include <boost/compute/functional/get.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
+
+#ifndef BOOST_COMPUTE_DETAIL_NO_STD_TUPLE
+#include <tuple>
+#endif
 
 namespace boost {
 namespace compute {
@@ -119,14 +124,15 @@ struct inject_type_impl<boost::tuple<T1, T2, T3> >
     }
 };
 
-// type_name() specializations for boost::tuple
+#ifdef BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
+// type_name() specializations for boost::tuple (without variadic templates)
 template<class T1>
 struct type_name_trait<boost::tuple<T1> >
 {
     static const char* value()
     {
         static std::string name =
-            std::string("_tuple_") + type_name<T1>() + "_t";
+            std::string("boost_tuple_") + type_name<T1>() + "_t";
 
         return name.c_str();
     }
@@ -138,7 +144,7 @@ struct type_name_trait<boost::tuple<T1, T2> >
     static const char* value()
     {
         static std::string name =
-            std::string("_tuple_") +
+            std::string("boost_tuple_") +
             type_name<T1>() + "_" +
             type_name<T2>() + "_t";
 
@@ -152,7 +158,7 @@ struct type_name_trait<boost::tuple<T1, T2, T3> >
     static const char* value()
     {
         static std::string name =
-            std::string("_tuple_") +
+            std::string("boost_tuple_") +
             type_name<T1>() + "_" +
             type_name<T2>() + "_" +
             type_name<T3>() + "_t";
@@ -160,6 +166,78 @@ struct type_name_trait<boost::tuple<T1, T2, T3> >
         return name.c_str();
     }
 };
+#else
+template<size_t N, class T, class... Rest>
+struct write_tuple_type_names
+{
+    void operator()(std::ostream &os)
+    {
+        os << type_name<T>() << "_";
+        write_tuple_type_names<N-1, Rest...>()(os);
+    }
+};
+
+template<class T, class... Rest>
+struct write_tuple_type_names<1, T, Rest...>
+{
+    void operator()(std::ostream &os)
+    {
+        os << type_name<T>();
+    }
+};
+
+// type_name<> specialization for boost::tuple<...> (with variadic templates)
+template<class... T>
+struct type_name_trait<boost::tuple<T...>>
+{
+    static const char* value()
+    {
+        static std::string str = make_type_name();
+
+        return str.c_str();
+    }
+
+    static std::string make_type_name()
+    {
+        typedef typename boost::tuple<T...> tuple_type;
+
+        std::stringstream s;
+        s << "boost_tuple_";
+        write_tuple_type_names<
+            boost::tuples::length<tuple_type>::value, T...
+        >()(s);
+        s << "_t";
+        return s.str();
+    }
+};
+#endif // BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
+
+#ifndef BOOST_COMPUTE_DETAIL_NO_STD_TUPLE
+// type_name<> specialization for std::tuple<T...>
+template<class... T>
+struct type_name_trait<std::tuple<T...>>
+{
+    static const char* value()
+    {
+        static std::string str = make_type_name();
+
+        return str.c_str();
+    }
+
+    static std::string make_type_name()
+    {
+        typedef typename std::tuple<T...> tuple_type;
+
+        std::stringstream s;
+        s << "std_tuple_";
+        write_tuple_type_names<
+            std::tuple_size<tuple_type>::value, T...
+        >()(s);
+        s << "_t";
+        return s.str();
+    }
+};
+#endif // BOOST_COMPUTE_DETAIL_NO_STD_TUPLE
 
 // get<N>() result type specialization for boost::tuple<>
 template<size_t N, class T1>
