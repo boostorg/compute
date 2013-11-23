@@ -83,3 +83,9 @@ Bugs and feature requests can be reported through the [issue tracker](
 https://github.com/kylelutz/compute/issues?state=open).
 
 Also feel free to send me an email with any problems, questions, or feedback.
+
+## Help Wanted ##
+The Boost.Compute project is currently looking for additional developers with
+interest in parallel computing.
+
+Please send an email to Kyle Lutz (kyle.r.lutz@gmail.com) for more information.
