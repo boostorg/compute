@@ -48,10 +48,14 @@ public:
                    InputIterator last,
                    OutputIterator result)
     {
+        m_count_arg = add_arg<uint_>("count");
+
         *this <<
             "const uint i = get_global_id(0);\n" <<
-            result[expr<uint_>("i")] << '='
-                << first[expr<uint_>("i")] << ";\n";
+            "if(i < count){\n" <<
+                result[expr<uint_>("i")] << '='
+                    << first[expr<uint_>("i")] << ";\n" <<
+            "}\n";
 
         m_count = detail::iterator_range_size(first, last);
     }
@@ -63,14 +67,22 @@ public:
             return event();
         }
 
-        const device &device = queue.get_device();
-        size_t work_group_size = pick_copy_work_group_size(m_count, device);
+        size_t work_group_size = 256;
+        size_t global_work_size = m_count;
 
-        return exec_1d(queue, 0, m_count, work_group_size);
+        if(global_work_size % work_group_size != 0){
+            global_work_size +=
+                work_group_size - global_work_size % work_group_size;
+        }
+
+        set_arg(m_count_arg, uint_(m_count));
+
+        return exec_1d(queue, 0, global_work_size, work_group_size);
     }
 
 private:
     size_t m_count;
+    size_t m_count_arg;
 };
 
 template<class InputIterator, class OutputIterator>
