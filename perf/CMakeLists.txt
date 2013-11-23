@@ -7,6 +7,7 @@ if(NOT ${BOOST_COMPUTE_TIMER_USE_STD_CHRONO})
 endif()
 
 set(BENCHMARKS
+  cart_to_polar
   copy_to_device
   count_int
   mersenne_twister
