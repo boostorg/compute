@@ -30,6 +30,27 @@ inline OutputIterator merge(InputIterator1 first1,
                             OutputIterator result,
                             command_queue &queue = system::default_queue())
 {
+    typedef typename std::iterator_traits<InputIterator1>::value_type T1;
+
+    return merge(first1, last1, first2, last2, result, less<T1>(), queue);
+}
+
+/// Merges the sorted values in the range [\p first1, \p last1) with
+/// the sorted values in the range [\p first2, last2) and stores the
+/// result in the range beginning at \p result. Values are compared
+/// using the \p comp function.
+template<class InputIterator1,
+         class InputIterator2,
+         class OutputIterator,
+         class Compare>
+inline OutputIterator merge(InputIterator1 first1,
+                            InputIterator1 last1,
+                            InputIterator2 first2,
+                            InputIterator2 last2,
+                            OutputIterator result,
+                            Compare comp,
+                            command_queue &queue = system::default_queue())
+{
     size_t size1 = detail::iterator_range_size(first1, last1);
     size_t size2 = detail::iterator_range_size(first2, last2);
 
@@ -44,7 +65,9 @@ inline OutputIterator merge(InputIterator1 first1,
         return ::boost::compute::copy(first1, last1, result, queue);
     }
 
-    return detail::serial_merge(first1, last1, first2, last2, result, queue);
+    return detail::serial_merge(
+        first1, last1, first2, last2, result, comp, queue
+    );
 }
 
 } // end compute namespace

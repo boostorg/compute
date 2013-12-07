@@ -21,12 +21,16 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-template<class InputIterator1, class InputIterator2, class OutputIterator>
+template<class InputIterator1,
+         class InputIterator2,
+         class OutputIterator,
+         class Compare>
 inline OutputIterator serial_merge(InputIterator1 first1,
                                    InputIterator1 last1,
                                    InputIterator2 first2,
                                    InputIterator2 last2,
                                    OutputIterator result,
+                                   Compare comp,
                                    command_queue &queue)
 {
     typedef typename
@@ -57,7 +61,8 @@ inline OutputIterator serial_merge(InputIterator1 first1,
 
         // merge values from both input ranges to the result range
         "while(j < size1 && k < size2){\n" <<
-        "    if(j_value < k_value){\n" <<
+        "    if(" << comp(k.var<input_type1>("j_value"),
+                          k.var<input_type2>("k_value")) << "){\n" <<
         "        " << result[k.var<uint_>("i++")] << " = j_value;\n" <<
         "        j_value = " << first1[k.var<uint_>("++j")] << ";\n" <<
         "    }\n" <<
