@@ -12,6 +12,7 @@
 #define BOOST_COMPUTE_CONFIG_HPP
 
 #include <boost/config.hpp>
+#include <boost/compute/cl.hpp>
 
 // the BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES macro is defined
 // if the compiler does not *fully* support variadic templates
@@ -27,6 +28,15 @@
     defined(BOOST_NO_0X_HDR_TUPLE) || \
     defined(BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES)
   #define BOOST_COMPUTE_DETAIL_NO_STD_TUPLE
+#endif
+
+// defines BOOST_COMPUTE_CL_CALLBACK to the value of CL_CALLBACK
+// if it is defined (it was added in OpenCL 1.1). this is used to
+// annotate certain callback functions registered with OpenCL
+#ifdef CL_CALLBACK
+#  define BOOST_COMPUTE_CL_CALLBACK CL_CALLBACK
+#else
+#  define BOOST_COMPUTE_CL_CALLBACK
 #endif
 
 #endif // BOOST_COMPUTE_CONFIG_HPP

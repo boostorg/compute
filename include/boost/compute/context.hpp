@@ -15,6 +15,7 @@
 #include <boost/throw_exception.hpp>
 
 #include <boost/compute/cl.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/device.hpp>
 #include <boost/compute/exception/context_error.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
@@ -186,10 +187,11 @@ private:
     // context when it is created. user_data is the 'this' pointer for the
     // associated context object. this function simply throws an exception
     // containing the context error information.
-    static void default_error_handler(const char *errinfo,
-                                      const void *private_info,
-                                      size_t cb,
-                                      void *user_data)
+    static void BOOST_COMPUTE_CL_CALLBACK
+    default_error_handler(const char *errinfo,
+                          const void *private_info,
+                          size_t cb,
+                          void *user_data)
     {
         context *this_ = static_cast<context *>(user_data);
 
