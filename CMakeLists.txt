@@ -24,6 +24,11 @@ if(${BOOST_COMPUTE_TIMER_USE_STD_CHRONO})
   add_definitions(-DBOOST_COMPUTE_TIMER_USE_STD_CHRONO)
 endif()
 
+if(MSVC)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  add_definitions(-D_SCL_SECURE_NO_WARNINGS)
+endif()
+
 option(BOOST_COMPUTE_BUILD_EXAMPLES "Build the Boost.Compute examples" OFF)
 if(${BOOST_COMPUTE_BUILD_EXAMPLES})
   add_subdirectory(example)
