@@ -27,8 +27,11 @@ BOOST_AUTO_TEST_CASE(generate4)
     bc::fill(vector.begin(), vector.end(), 2);
     CHECK_RANGE_EQUAL(int, 4, vector, (2, 2, 2, 2));
 
-    bc::function<int (void)> ret4 =
-        bc::make_function_from_source<int ()>("ret4", "int ret4() { return 4; }");
+    BOOST_COMPUTE_FUNCTION(int, ret4, (void),
+    {
+        return 4;
+    });
+
     bc::generate(vector.begin(), vector.end(), ret4);
     CHECK_RANGE_EQUAL(int, 4, vector, (4, 4, 4, 4));
 }

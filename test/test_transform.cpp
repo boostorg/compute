@@ -116,10 +116,10 @@ BOOST_AUTO_TEST_CASE(transform_custom_function)
     float data[] = { 9.0f, 7.0f, 5.0f, 3.0f };
     bc::vector<float> vector(data, data + 4);
 
-    const char source[] =
-        "float pow3add4(float x){ return pow(x, 3.0f) + 4.0f; }";
-    bc::function<float (float)> pow3add4 =
-        bc::make_function_from_source<float (float)>("pow3add4", source);
+    BOOST_COMPUTE_FUNCTION(float, pow3add4, (float),
+    {
+        return pow(_1, 3.0f) + 4.0f;
+    });
 
     bc::vector<float> result(4);
     bc::transform(vector.begin(),
@@ -222,16 +222,11 @@ BOOST_AUTO_TEST_CASE(generate_fibonacci_sequence)
 
     boost::compute::vector<uint_> sequence(25, context);
 
-    const char nth_fibonacci_source[] =
-        "inline uint nth_fibonacci(const uint n)\n"
-        "{\n"
-        "    const float golden_ratio = (1.f + sqrt(5.f)) / 2.f;\n"
-        "    return floor(pown(golden_ratio, n) / sqrt(5.f) + 0.5f);\n"
-        "}\n";
-
-    boost::compute::function<uint_(const uint_)> nth_fibonacci =
-        boost::compute::make_function_from_source<uint_(const uint_)>(
-            "nth_fibonacci", nth_fibonacci_source);
+    BOOST_COMPUTE_FUNCTION(uint_, nth_fibonacci, (const uint_),
+    {
+        const float golden_ratio = (1.f + sqrt(5.f)) / 2.f;
+        return floor(pown(golden_ratio, _1) / sqrt(5.f) + 0.5f);
+    });
 
     boost::compute::transform(
         boost::compute::make_counting_iterator(uint_(0)),

@@ -183,10 +183,10 @@ BOOST_AUTO_TEST_CASE(min_and_max)
     boost::compute::vector<int> vector(6, context);
     boost::compute::copy_n(data, 6, vector.begin(), queue);
 
-    boost::compute::function<int2_(int2_, int)> min_and_max =
-        boost::compute::make_function_from_source<int2_(int2_, int)>("min_and_max",
-            "int2 min_and_max(int2 r, int x) { return (int2)(min(r.x, x), max(r.y, x)); }"
-        );
+    BOOST_COMPUTE_FUNCTION(int2_, min_and_max, (int2_, int),
+    {
+        return (int2)(min(_1.x, _2), max(_1.y, _2));
+    });
 
     int2_ result = boost::compute::accumulate(
         vector.begin(), vector.end(), int2_(100, -100), min_and_max, queue
