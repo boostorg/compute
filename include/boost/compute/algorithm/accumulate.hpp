@@ -15,7 +15,7 @@
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/reduce.hpp>
-#include <boost/compute/algorithm/detail/serial_reduce.hpp>
+#include <boost/compute/algorithm/detail/serial_accumulate.hpp>
 #include <boost/compute/container/vector.hpp>
 
 namespace boost {
@@ -23,19 +23,21 @@ namespace compute {
 
 /// Returns the sum of the elements in the range [\p first, \p last)
 /// plus \p init.
+///
+/// \see reduce()
 template<class InputIterator, class T>
 inline T accumulate(InputIterator first,
                     InputIterator last,
                     T init,
                     command_queue &queue = system::default_queue())
 {
-    T result;
-    ::boost::compute::reduce(first, last, &result, init, plus<T>(), queue);
-    return result;
+    return accumulate(first, last, init, plus<T>(), queue);
 }
 
 /// Returns the result of applying \p function to the elements in the
 /// range [\p first, \p last) and \p init.
+///
+/// \see reduce()
 template<class InputIterator, class T, class BinaryFunction>
 inline T accumulate(InputIterator first,
                     InputIterator last,
@@ -44,7 +46,9 @@ inline T accumulate(InputIterator first,
                     command_queue &queue = system::default_queue())
 {
     vector<T> result_value(1, queue.get_context());
-    detail::serial_reduce(first, last, result_value.begin(), init, function, queue);
+    detail::serial_accumulate(
+        first, last, result_value.begin(), init, function, queue
+    );
 
     T result;
     ::boost::compute::copy_n(result_value.begin(), 1, &result, queue);

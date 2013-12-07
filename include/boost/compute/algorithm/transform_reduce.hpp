@@ -22,18 +22,16 @@ namespace boost {
 namespace compute {
 
 /// Transforms each value in the range [\p first, \p last) with the unary
-/// \p transform_function and then reduces each transformed value and
-/// \p init with \p reduce_function.
+/// \p transform_function and then reduces each transformed value with
+/// \p reduce_function.
 template<class InputIterator,
          class OutputIterator,
          class UnaryTransformFunction,
-         class T,
          class BinaryReduceFunction>
 inline void transform_reduce(InputIterator first,
                              InputIterator last,
                              OutputIterator result,
                              UnaryTransformFunction transform_function,
-                             T init,
                              BinaryReduceFunction reduce_function,
                              command_queue &queue = system::default_queue())
 {
@@ -41,7 +39,6 @@ inline void transform_reduce(InputIterator first,
         ::boost::compute::make_transform_iterator(first, transform_function),
         ::boost::compute::make_transform_iterator(last, transform_function),
         result,
-        init,
         reduce_function,
         queue
     );
@@ -49,20 +46,17 @@ inline void transform_reduce(InputIterator first,
 
 /// Transforms each value in the range [\p first1, \p last1) and the
 /// range beginning at \p first2 with the binary \p transform_function
-/// and then reduces each transformed value and \p init with
-/// \p reduce_function.
+/// and then reduces each transformed value with \p reduce_function.
 template<class InputIterator1,
          class InputIterator2,
          class OutputIterator,
          class BinaryTransformFunction,
-         class T,
          class BinaryReduceFunction>
 inline void transform_reduce(InputIterator1 first1,
                              InputIterator1 last1,
                              InputIterator2 first2,
                              OutputIterator result,
                              BinaryTransformFunction transform_function,
-                             T init,
                              BinaryReduceFunction reduce_function,
                              command_queue &queue = system::default_queue())
 {
@@ -79,7 +73,6 @@ inline void transform_reduce(InputIterator1 first1,
         ),
         result,
         detail::unpack(transform_function),
-        init,
         reduce_function,
         queue
     );

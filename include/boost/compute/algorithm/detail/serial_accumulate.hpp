@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_REDUCE_HPP
-#define BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_REDUCE_HPP
+#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_ACCUMULATE_HPP
+#define BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_ACCUMULATE_HPP
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
@@ -19,37 +19,32 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-template<class InputIterator, class OutputIterator, class BinaryFunction>
-inline void serial_reduce(InputIterator first,
-                          InputIterator last,
-                          OutputIterator result,
-                          BinaryFunction function,
-                          command_queue &queue)
+template<class InputIterator, class OutputIterator, class T, class BinaryFunction>
+inline void serial_accumulate(InputIterator first,
+                              InputIterator last,
+                              OutputIterator result,
+                              T init,
+                              BinaryFunction function,
+                              command_queue &queue)
 {
-    typedef typename
-        std::iterator_traits<InputIterator>::value_type T;
-    typedef typename
-        boost::tr1_result_of<BinaryFunction(T, T)>::type result_type;
-
     const context &context = queue.get_context();
     size_t count = detail::iterator_range_size(first, last);
-    if(count == 0){
-        return;
-    }
 
-    meta_kernel k("serial_reduce");
+    meta_kernel k("serial_accumulate");
+    size_t init_arg = k.add_arg<T>("init");
     size_t count_arg = k.add_arg<cl_uint>("count");
 
     k <<
-        k.decl<result_type>("result") << " = " << first[0] << ";\n" <<
-        "for(uint i = 1; i < count; i++)\n" <<
+        k.decl<T>("result") << " = init;\n" <<
+        "for(uint i = 0; i < count; i++)\n" <<
         "    result = " << function(k.var<T>("result"),
-                                    first[k.var<uint_>("i")]) << ";\n" <<
+                                    first[k.var<cl_uint>("i")]) << ";\n" <<
         result[0] << " = result;\n";
 
     kernel kernel = k.compile(context);
 
-    kernel.set_arg(count_arg, static_cast<uint_>(count));
+    kernel.set_arg(init_arg, init);
+    kernel.set_arg(count_arg, static_cast<cl_uint>(count));
 
     queue.enqueue_task(kernel);
 }
@@ -58,4 +53,4 @@ inline void serial_reduce(InputIterator first,
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_REDUCE_HPP
+#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_ACCUMULATE_HPP

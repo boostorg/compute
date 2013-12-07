@@ -15,8 +15,10 @@
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/accumulate.hpp>
-#include <boost/compute/algorithm/transform_reduce.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/iterator/transform_iterator.hpp>
+#include <boost/compute/iterator/zip_iterator.hpp>
+#include <boost/compute/functional/detail/unpack.hpp>
 
 namespace boost {
 namespace compute {
@@ -34,19 +36,24 @@ inline T inner_product(InputIterator1 first1,
     typedef typename std::iterator_traits<InputIterator1>::value_type input_type;
     typedef typename multiplies<input_type>::result_type product_type;
 
-    T result;
-    ::boost::compute::transform_reduce(
-        first1,
-        last1,
-        first2,
-        &result,
-        multiplies<input_type>(),
+    ptrdiff_t n = std::distance(first1, last1);
+
+    return ::boost::compute::accumulate(
+        ::boost::compute::make_transform_iterator(
+            ::boost::compute::make_zip_iterator(
+                boost::make_tuple(first1, first2)
+            ),
+            detail::unpack(multiplies<input_type>())
+        ),
+        ::boost::compute::make_transform_iterator(
+            ::boost::compute::make_zip_iterator(
+                boost::make_tuple(last1, first2 + n)
+            ),
+            detail::unpack(multiplies<input_type>())
+        ),
         init,
-        plus<product_type>(),
         queue
     );
-
-    return result;
 }
 
 /// Returns the inner product of the elements in the range

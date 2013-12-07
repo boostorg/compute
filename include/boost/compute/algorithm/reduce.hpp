@@ -154,7 +154,7 @@ block_reduce(InputIterator first,
 } // end detail namespace
 
 /// Returns the result of applying \p function to the elements in the
-/// range [\p first, \p last) and \p init.
+/// range [\p first, \p last).
 ///
 /// The difference between the reduce() function and the accumulate()
 /// function is that reduce() requires the binary operator to be
@@ -163,11 +163,10 @@ block_reduce(InputIterator first,
 /// This algorithm supports both host and device iterators for the
 /// result argument. This allows for values to be reduced and copied
 /// to the host all with a single function call.
-template<class InputIterator, class OutputIterator, class T, class BinaryFunction>
+template<class InputIterator, class OutputIterator, class BinaryFunction>
 inline void reduce(InputIterator first,
                    InputIterator last,
                    OutputIterator result,
-                   T init,
                    BinaryFunction function,
                    command_queue &queue = system::default_queue())
 {
@@ -183,20 +182,13 @@ inline void reduce(InputIterator first,
 
     size_t count = detail::iterator_range_size(first, last);
     if(count == 0){
-        boost::compute::copy_n(&init, 1, result, queue);
         return;
     }
 
     boost::compute::vector<result_type> value(1, context);
 
     if(device.type() & device::cpu){
-        detail::serial_reduce(first, last, value.begin(), init, function, queue);
-        boost::compute::copy_n(value.begin(), 1, result, queue);
-    }
-    else if(sizeof(input_type) != sizeof(result_type)){
-        // if the memory size of the input_type and result_type differ the
-        // inplace_reduce() algorithm can't be used.
-        detail::serial_reduce(first, last, value.begin(), init, function, queue);
+        detail::serial_reduce(first, last, value.begin(), function, queue);
         boost::compute::copy_n(value.begin(), 1, result, queue);
     }
     else {
@@ -216,16 +208,7 @@ inline void reduce(InputIterator first,
                                    queue);
         }
 
-        detail::serial_reduce(
-            results.begin(),
-            results.begin() + 1,
-            value.begin(),
-            init,
-            function,
-            queue
-        );
-
-        boost::compute::copy_n(value.begin(), 1, result, queue);
+        boost::compute::copy_n(results.begin(), 1, result, queue);
     }
 }
 

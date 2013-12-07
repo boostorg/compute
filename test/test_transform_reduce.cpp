@@ -32,7 +32,6 @@ BOOST_AUTO_TEST_CASE(sum_abs_int)
         vector.end(),
         &sum,
         compute::abs<int>(),
-        0,
         compute::plus<int>(),
         queue
     );
@@ -56,7 +55,6 @@ BOOST_AUTO_TEST_CASE(multiply_vector_length)
         vector.end(),
         &product,
         compute::length<compute::float4_>(),
-        1.0f,
         compute::multiplies<float>(),
         queue
     );
@@ -77,7 +75,6 @@ BOOST_AUTO_TEST_CASE(mean_and_std_dev)
         vector.begin(),
         vector.end(),
         &sum,
-        0,
         compute::plus<float>(),
         queue
     );
@@ -90,7 +87,6 @@ BOOST_AUTO_TEST_CASE(mean_and_std_dev)
         vector.end(),
         &sum,
         pow(_1 - mean, 2),
-        0.f,
         compute::plus<float>(),
         queue
     );

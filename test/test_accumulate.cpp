@@ -175,4 +175,24 @@ BOOST_AUTO_TEST_CASE(sum_iota)
     );
 }
 
+BOOST_AUTO_TEST_CASE(min_and_max)
+{
+    using boost::compute::int2_;
+
+    int data[] = { 5, 3, 1, 6, 4, 2 };
+    boost::compute::vector<int> vector(6, context);
+    boost::compute::copy_n(data, 6, vector.begin(), queue);
+
+    boost::compute::function<int2_(int2_, int)> min_and_max =
+        boost::compute::make_function_from_source<int2_(int2_, int)>("min_and_max",
+            "int2 min_and_max(int2 r, int x) { return (int2)(min(r.x, x), max(r.y, x)); }"
+        );
+
+    int2_ result = boost::compute::accumulate(
+        vector.begin(), vector.end(), int2_(100, -100), min_and_max, queue
+    );
+    BOOST_CHECK_EQUAL(result[0], 1);
+    BOOST_CHECK_EQUAL(result[1], 6);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
