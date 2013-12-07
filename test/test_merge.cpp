@@ -137,4 +137,31 @@ BOOST_AUTO_TEST_CASE(merge_pairs)
     BOOST_CHECK(v3[7] == std::make_pair(7, 7.1f));
 }
 
+BOOST_AUTO_TEST_CASE(merge_floats)
+{
+    float data1[] = { 1.1f, 2.2f, 3.3f, 4.4f,
+                      5.5f, 6.6f, 7.7f, 8.8f };
+    float data2[] = { 1.0f, 2.0f, 3.9f, 4.9f,
+                      6.8f, 6.9f, 7.0f, 7.1f };
+
+    boost::compute::vector<float> v1(8, context);
+    boost::compute::vector<float> v2(8, context);
+    boost::compute::vector<float> v3(v1.size() + v2.size(), context);
+
+    boost::compute::copy_n(data1, 8, v1.begin(), queue);
+    boost::compute::copy_n(data2, 8, v2.begin(), queue);
+    boost::compute::fill(v3.begin(), v3.end(), 0.f, queue);
+
+    boost::compute::merge(
+        v1.begin(), v1.end(),
+        v2.begin(), v2.end(),
+        v3.begin(),
+        queue
+    );
+    CHECK_RANGE_EQUAL(float, 16, v3,
+      (1.0f, 1.1f, 2.0f, 2.2f, 3.3f, 3.9f, 4.4f, 4.9f,
+       5.5f, 6.6f, 6.8f, 6.9f, 7.0f, 7.1f, 7.7f, 8.8f)
+    );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
