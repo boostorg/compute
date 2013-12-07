@@ -66,7 +66,6 @@ inline size_t count_if_with_ballot(InputIterator first,
         counts.begin(),
         counts.end(),
         &result,
-        ::boost::compute::plus<uint_>(),
         queue
     );
     return result;

@@ -153,6 +153,19 @@ block_reduce(InputIterator first,
 
 } // end detail namespace
 
+/// Returns the sum of the elements in the range [\p first, \p last). This
+/// is equivalent to calling reduce() with the \c plus<T>() function.
+template<class InputIterator, class OutputIterator>
+inline void reduce(InputIterator first,
+                   InputIterator last,
+                   OutputIterator result,
+                   command_queue &queue = system::default_queue())
+{
+    typedef typename std::iterator_traits<InputIterator>::value_type T;
+
+    reduce(first, last, result, plus<T>(), queue);
+}
+
 /// Returns the result of applying \p function to the elements in the
 /// range [\p first, \p last).
 ///

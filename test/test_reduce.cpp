@@ -43,8 +43,8 @@ BOOST_AUTO_TEST_CASE(reduce_on_device)
     int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
     compute::vector<int> input(data, data + 8, context);
     compute::vector<int> result(2, context);
-    compute::reduce(input.begin(), input.begin() + 4, result.begin(), compute::plus<int>(), queue);
-    compute::reduce(input.begin() + 4, input.end(), result.end() - 1, compute::plus<int>(), queue);
+    compute::reduce(input.begin(), input.begin() + 4, result.begin(), queue);
+    compute::reduce(input.begin() + 4, input.end(), result.end() - 1, queue);
     CHECK_RANGE_EQUAL(int, 2, result, (10, 26));
 }
 
@@ -90,7 +90,6 @@ BOOST_AUTO_TEST_CASE(reduce_int2)
         vector.begin(),
         vector.end(),
         &sum,
-        compute::plus<compute::int2_>(),
         queue
     );
     BOOST_CHECK_EQUAL(sum, compute::int2_(21, 36));
@@ -123,7 +122,6 @@ BOOST_AUTO_TEST_CASE(reduce_constant_iterator)
         compute::make_constant_iterator(1, 0),
         compute::make_constant_iterator(1, 5),
         &result,
-        compute::plus<int>(),
         queue
     );
     BOOST_CHECK_EQUAL(result, 5);
@@ -132,7 +130,6 @@ BOOST_AUTO_TEST_CASE(reduce_constant_iterator)
         compute::make_constant_iterator(3, 0),
         compute::make_constant_iterator(3, 5),
         &result,
-        compute::plus<int>(),
         queue
     );
     BOOST_CHECK_EQUAL(result, 15);
@@ -154,7 +151,6 @@ BOOST_AUTO_TEST_CASE(reduce_counting_iterator)
         compute::make_counting_iterator(1),
         compute::make_counting_iterator(10),
         &result,
-        compute::plus<int>(),
         queue
     );
     BOOST_CHECK_EQUAL(result, 45);
@@ -181,7 +177,6 @@ BOOST_AUTO_TEST_CASE(reduce_transform_iterator)
         compute::make_transform_iterator(vector.begin(), _1 + 1),
         compute::make_transform_iterator(vector.end(), _1 + 1),
         &sum,
-        compute::plus<int>(),
         queue
     );
     BOOST_CHECK_EQUAL(sum, 30);
@@ -199,7 +194,6 @@ BOOST_AUTO_TEST_CASE(reduce_transform_iterator)
         compute::make_transform_iterator(vector.begin(), _1 * _1),
         compute::make_transform_iterator(vector.end(), _1 * _1),
         &sum,
-        compute::plus<int>(),
         queue
     );
     BOOST_CHECK_EQUAL(sum, 165);
