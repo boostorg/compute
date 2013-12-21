@@ -22,6 +22,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/detail/inplace_reduce.hpp>
+#include <boost/compute/algorithm/detail/reduce_on_gpu.hpp>
 #include <boost/compute/algorithm/detail/serial_reduce.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 
@@ -151,37 +152,12 @@ block_reduce(InputIterator first,
     return result_vector;
 }
 
-} // end detail namespace
-
-/// Returns the sum of the elements in the range [\p first, \p last). This
-/// is equivalent to calling reduce() with the \c plus<T>() function.
-template<class InputIterator, class OutputIterator>
-inline void reduce(InputIterator first,
-                   InputIterator last,
-                   OutputIterator result,
-                   command_queue &queue = system::default_queue())
-{
-    typedef typename std::iterator_traits<InputIterator>::value_type T;
-
-    reduce(first, last, result, plus<T>(), queue);
-}
-
-/// Returns the result of applying \p function to the elements in the
-/// range [\p first, \p last).
-///
-/// The difference between the reduce() function and the accumulate()
-/// function is that reduce() requires the binary operator to be
-/// commutative.
-///
-/// This algorithm supports both host and device iterators for the
-/// result argument. This allows for values to be reduced and copied
-/// to the host all with a single function call.
 template<class InputIterator, class OutputIterator, class BinaryFunction>
-inline void reduce(InputIterator first,
-                   InputIterator last,
-                   OutputIterator result,
-                   BinaryFunction function,
-                   command_queue &queue = system::default_queue())
+inline void generic_reduce(InputIterator first,
+                           InputIterator last,
+                           OutputIterator result,
+                           BinaryFunction function,
+                           command_queue &queue)
 {
     typedef typename
         std::iterator_traits<InputIterator>::value_type
@@ -223,6 +199,67 @@ inline void reduce(InputIterator first,
 
         boost::compute::copy_n(results.begin(), 1, result, queue);
     }
+}
+
+template<class T>
+inline void dispatch_reduce(const buffer_iterator<T> first,
+                            const buffer_iterator<T> last,
+                            const buffer_iterator<T> result,
+                            const plus<T> &function,
+                            command_queue &queue)
+{
+    const device &device = queue.get_device();
+    if(device.type() & device::gpu && first.get_index() == 0){
+        reduce_on_gpu(first, last, result, queue);
+    }
+    else {
+        generic_reduce(first, last, result, function, queue);
+    }
+}
+
+template<class InputIterator, class OutputIterator, class BinaryFunction>
+inline void dispatch_reduce(InputIterator first,
+                            InputIterator last,
+                            OutputIterator result,
+                            BinaryFunction function,
+                            command_queue &queue)
+{
+    generic_reduce(first, last, result, function, queue);
+}
+
+} // end detail namespace
+
+/// Returns the sum of the elements in the range [\p first, \p last). This
+/// is equivalent to calling reduce() with the \c plus<T>() function.
+template<class InputIterator, class OutputIterator>
+inline void reduce(InputIterator first,
+                   InputIterator last,
+                   OutputIterator result,
+                   command_queue &queue = system::default_queue())
+{
+    typedef typename std::iterator_traits<InputIterator>::value_type T;
+
+    detail::dispatch_reduce(first, last, result, plus<T>(), queue);
+}
+
+/// Returns the result of applying \p function to the elements in the
+/// range [\p first, \p last).
+///
+/// The difference between the reduce() function and the accumulate()
+/// function is that reduce() requires the binary operator to be
+/// commutative.
+///
+/// This algorithm supports both host and device iterators for the
+/// result argument. This allows for values to be reduced and copied
+/// to the host all with a single function call.
+template<class InputIterator, class OutputIterator, class BinaryFunction>
+inline void reduce(InputIterator first,
+                   InputIterator last,
+                   OutputIterator result,
+                   BinaryFunction function,
+                   command_queue &queue = system::default_queue())
+{
+    detail::dispatch_reduce(first, last, result, function, queue);
 }
 
 } // end compute namespace

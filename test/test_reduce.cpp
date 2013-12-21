@@ -19,6 +19,7 @@
 #include <boost/compute/iterator/constant_iterator.hpp>
 #include <boost/compute/iterator/counting_iterator.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
+#include <boost/compute/types/complex.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"
@@ -36,6 +37,22 @@ BOOST_AUTO_TEST_CASE(reduce_int)
     int product;
     compute::reduce(vector.begin(), vector.end(), &product, compute::multiplies<int>(), queue);
     BOOST_CHECK_EQUAL(product, 9945);
+}
+
+BOOST_AUTO_TEST_CASE(reduce_twos)
+{
+    using compute::uint_;
+
+    compute::vector<uint_> vector(8, context);
+    compute::fill(vector.begin(), vector.end(), uint_(2), queue);
+
+    uint_ sum;
+    compute::reduce(vector.begin(), vector.end(), &sum, compute::plus<uint_>(), queue);
+    BOOST_CHECK_EQUAL(sum, 16);
+
+    uint_ product;
+    compute::reduce(vector.begin(), vector.end(), &product, compute::multiplies<uint_>(), queue);
+    BOOST_CHECK_EQUAL(product, 256);
 }
 
 BOOST_AUTO_TEST_CASE(reduce_on_device)
@@ -197,6 +214,34 @@ BOOST_AUTO_TEST_CASE(reduce_transform_iterator)
         queue
     );
     BOOST_CHECK_EQUAL(sum, 165);
+}
+
+BOOST_AUTO_TEST_CASE(reduce_complex)
+{
+    std::vector<std::complex<float> > data;
+    data.push_back(std::complex<float>(1, 2));
+    data.push_back(std::complex<float>(2, 4));
+    data.push_back(std::complex<float>(3, 6));
+    data.push_back(std::complex<float>(4, 8));
+
+    compute::vector<std::complex<float> > vector(data.size(), context);
+    compute::copy(data.begin(), data.end(), vector.begin(), queue);
+
+    std::complex<float> result;
+    compute::reduce(
+        vector.begin(), vector.end(), &result, queue
+    );
+    BOOST_CHECK(result == std::complex<float>(10, 20));
+
+    compute::reduce(
+        vector.begin(), vector.end(), &result, compute::plus<std::complex<float> >(), queue
+    );
+    BOOST_CHECK(result == std::complex<float>(10, 20));
+
+    compute::reduce(
+        vector.begin(), vector.end(), &result, compute::multiplies<std::complex<float> >(), queue
+    );
+    BOOST_CHECK(result == std::complex<float>(-168, -576));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

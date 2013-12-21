@@ -39,6 +39,29 @@ BOOST_AUTO_TEST_CASE(sum_int)
     );
 }
 
+BOOST_AUTO_TEST_CASE(product_int)
+{
+    int data[] = { 2, 4, 6, 8 };
+    boost::compute::vector<int> vector(data, data + 4);
+    BOOST_CHECK_EQUAL(
+        boost::compute::accumulate(
+            vector.begin(), vector.end(), 1, boost::compute::multiplies<int>()),
+        384
+    );
+
+    BOOST_CHECK_EQUAL(
+        boost::compute::accumulate(
+            vector.begin(), vector.end(), -1, boost::compute::multiplies<int>()),
+        -384
+    );
+
+    BOOST_CHECK_EQUAL(
+        boost::compute::accumulate(
+            vector.begin(), vector.end(), 2, boost::compute::multiplies<int>()),
+        768
+    );
+}
+
 BOOST_AUTO_TEST_CASE(quotient_int)
 {
     int data[] = { 2, 8, 16 };

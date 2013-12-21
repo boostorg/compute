@@ -11,15 +11,103 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_ACCUMULATE_HPP
 #define BOOST_COMPUTE_ALGORITHM_ACCUMULATE_HPP
 
+#include <boost/preprocessor/seq/for_each.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/reduce.hpp>
 #include <boost/compute/algorithm/detail/serial_accumulate.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/detail/iterator_range_size.hpp>
 
 namespace boost {
 namespace compute {
+namespace detail {
+
+template<class InputIterator, class T, class BinaryFunction>
+inline T generic_accumulate(InputIterator first,
+                            InputIterator last,
+                            T init,
+                            BinaryFunction function,
+                            command_queue &queue)
+{
+    size_t size = iterator_range_size(first, last);
+    if(size == 0){
+        return init;
+    }
+
+    vector<T> result_value(1, queue.get_context());
+    detail::serial_accumulate(
+        first, last, result_value.begin(), init, function, queue
+    );
+
+    T result;
+    ::boost::compute::copy_n(result_value.begin(), 1, &result, queue);
+    return result;
+}
+
+// returns true if we can use reduce() instead of accumulate() when
+// accumulate() this is true when the function is commutative (such as
+// addition of integers) and the initial value is the identity value
+// for the operation (zero for addition, one for multiplication).
+template<class T, class F>
+inline bool can_accumulate_with_reduce(T init, F function)
+{
+    return false;
+}
+
+#define BOOST_COMPUTE_DETAIL_DECLARE_CAN_ACCUMULATE_WITH_REDUCE(r, data, type) \
+    inline bool can_accumulate_with_reduce(type init, plus<type>) \
+    { \
+        return init == type(0); \
+    } \
+    inline bool can_accumulate_with_reduce(type init, multiplies<type>) \
+    { \
+        return init == type(1); \
+    }
+
+BOOST_PP_SEQ_FOR_EACH(
+    BOOST_COMPUTE_DETAIL_DECLARE_CAN_ACCUMULATE_WITH_REDUCE,
+    _,
+    (char_)(uchar_)(short_)(ushort_)(int_)(uint_)(long_)(ulong_)
+);
+
+#undef BOOST_COMPUTE_DETAIL_DECLARE_CAN_ACCUMULATE_WITH_REDUCE
+
+template<class T>
+inline T dispatch_accumulate(const buffer_iterator<T> first,
+                             const buffer_iterator<T> last,
+                             T init,
+                             const plus<T> &function,
+                             command_queue &queue)
+{
+    size_t size = iterator_range_size(first, last);
+    if(size == 0){
+        return init;
+    }
+
+    if(can_accumulate_with_reduce(init, function)){
+        T sum;
+        reduce(first, last, &sum, queue);
+        return sum;
+    }
+    else {
+        return generic_accumulate(first, last, init, function, queue);
+    }
+}
+
+template<class InputIterator, class T, class BinaryFunction>
+inline T dispatch_accumulate(InputIterator first,
+                             InputIterator last,
+                             T init,
+                             BinaryFunction function,
+                             command_queue &queue)
+{
+    return generic_accumulate(first, last, init, function, queue);
+}
+
+} // end detail namespace
 
 /// Returns the sum of the elements in the range [\p first, \p last)
 /// plus \p init.
@@ -31,7 +119,9 @@ inline T accumulate(InputIterator first,
                     T init,
                     command_queue &queue = system::default_queue())
 {
-    return accumulate(first, last, init, plus<T>(), queue);
+    typedef typename std::iterator_traits<InputIterator>::value_type IT;
+
+    return detail::dispatch_accumulate(first, last, init, plus<IT>(), queue);
 }
 
 /// Returns the result of applying \p function to the elements in the
@@ -45,14 +135,7 @@ inline T accumulate(InputIterator first,
                     BinaryFunction function,
                     command_queue &queue = system::default_queue())
 {
-    vector<T> result_value(1, queue.get_context());
-    detail::serial_accumulate(
-        first, last, result_value.begin(), init, function, queue
-    );
-
-    T result;
-    ::boost::compute::copy_n(result_value.begin(), 1, &result, queue);
-    return result;
+    return detail::dispatch_accumulate(first, last, init, function, queue);
 }
 
 } // end compute namespace
