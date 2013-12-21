@@ -48,15 +48,15 @@ struct gather_kernel
 
 } // end detail namespace
 
-/// Copies the elements from the range [\p first, \p last) to the range
-/// beginning at \p result using the input indices from the range beginning
-/// at \p map.
+/// Copies the elements using the indices from the range [\p first, \p last)
+/// to the range beginning at \p result using the input values from the range
+/// beginning at \p input.
 ///
 /// \see scatter()
 template<class InputIterator, class MapIterator, class OutputIterator>
-inline void gather(InputIterator first,
-                   InputIterator last,
-                   MapIterator map,
+inline void gather(MapIterator first,
+                   MapIterator last,
+                   InputIterator input,
                    OutputIterator result,
                    command_queue &queue = system::default_queue())
 {
@@ -71,8 +71,8 @@ inline void gather(InputIterator first,
                                output_value_type>::source();
     kernel kernel = kernel::create_with_source(source, "gather", context);
 
-    kernel.set_arg(0, first.get_buffer());
-    kernel.set_arg(1, map.get_buffer());
+    kernel.set_arg(0, input.get_buffer());
+    kernel.set_arg(1, first.get_buffer());
     kernel.set_arg(2, result.get_buffer());
 
     size_t offset = first.get_index();
