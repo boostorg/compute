@@ -1,6 +1,13 @@
 include_directories(../include)
 
-find_package(Boost 1.48 REQUIRED COMPONENTS unit_test_framework)
+set(BOOST_COMPONENTS unit_test_framework)
+
+if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
+    set(BOOST_COMPONENTS ${BOOST_COMPONENTS} system filesystem)
+    add_definitions(-DBOOST_COMPUTE_USE_OFFLINE_CACHE)
+endif()
+
+find_package(Boost 1.48 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 add_definitions(-DBOOST_TEST_DYN_LINK)
 
 add_definitions(-DBOOST_COMPUTE_DEBUG_KERNEL_COMPILATION)

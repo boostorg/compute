@@ -342,10 +342,9 @@ public:
         ::boost::compute::program program = cache->get(cache_key);
 
         // build the program if it was not in the cache
-        if(!program.get() || program.source() != source){
+        if(!program.get()/* || program.source() != source*/){
             program =
-                ::boost::compute::program::create_with_source(source, context);
-            program.build();
+                ::boost::compute::program::build_with_source(source, context);
 
             cache->insert(cache_key, program);
         }

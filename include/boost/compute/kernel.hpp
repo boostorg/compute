@@ -273,14 +273,7 @@ public:
                                      const std::string &name,
                                      const context &context)
     {
-        program program_ = program::create_with_source(source, context);
-
-        cl_int ret = program_.build();
-        if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
-        }
-
-        return program_.create_kernel(name);
+        return program::build_with_source(source, context).create_kernel(name);
     }
 
 private:
