@@ -3,7 +3,7 @@ include_directories(../include)
 set(EXAMPLES
   copy_data
   hello_world
-  find_longest_vector
+  longest_vector
   list_devices
   monte_carlo
   point_centroid
