@@ -9,12 +9,20 @@
 //---------------------------------------------------------------------------//
 
 #include <iostream>
-#include <boost/compute.hpp>
+
+#include <boost/compute/function.hpp>
+#include <boost/compute/system.hpp>
+#include <boost/compute/algorithm/count_if.hpp>
+#include <boost/compute/container/vector.hpp>
+#include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/random/default_random_engine.hpp>
+#include <boost/compute/types/builtin.hpp>
 
 namespace compute = boost::compute;
 
 int main()
 {
+    // get default device and setup context
     compute::device gpu = compute::system::default_device();
     compute::context context(gpu);
     compute::command_queue queue(context, gpu);
@@ -22,47 +30,39 @@ int main()
     std::cout << "device: " << gpu.name() << std::endl;
 
     using compute::uint_;
+    using compute::uint2_;
 
-    size_t n = 2500;
+    // ten million random points
+    size_t n = 10000000;
 
     // generate random numbers
     compute::default_random_engine rng(context);
     compute::vector<uint_> vector(n * 2, context);
     rng.fill(vector.begin(), vector.end(), queue);
 
-    // compile program
-    const char source[] =
-        "__kernel void count_in_circle(__global uint *count,\n"
-        "                              __global uint *random_values)\n"
-        "{\n"
-        "    const uint i = get_global_id(0);\n"
-        "    const uint ix = random_values[i*2+0];\n"
-        "    const uint iy = random_values[i*2+1];\n"
-        "    const float x = ix / (float) UINT_MAX - 1;\n"
-        "    const float y = iy / (float) UINT_MAX - 1;\n"
-        "    if((x*x + y*y) < 1.0f) atomic_inc(count);\n"
-        "}\n";
+    // function returing true if the point is within the unit circle
+    BOOST_COMPUTE_FUNCTION(bool, is_in_unit_circle, (uint2_),
+    {
+        const float x = _1.x / (float) UINT_MAX - 1;
+        const float y = _1.y / (float) UINT_MAX - 1;
 
-    compute::program program =
-        compute::program::create_with_source(source, context);
-    program.build();
+        return (x*x + y*y) < 1.0f;
+    });
 
-    compute::vector<uint_> count(1, context);
-    count[0] = 0;
+    // iterate over vector<uint> as vector<uint2>
+    compute::buffer_iterator<uint2_> start =
+        compute::make_buffer_iterator<uint2_>(vector.get_buffer(), 0);
+    compute::buffer_iterator<uint2_> end =
+        compute::make_buffer_iterator<uint2_>(vector.get_buffer(), vector.size() / 2);
 
-    compute::kernel count_kernel(program, "count_in_circle");
-    count_kernel.set_arg(0, count.get_buffer());
-    count_kernel.set_arg(1, vector.get_buffer());
+    // count number of random points within the unit circle
+    size_t count = compute::count_if(start, end, is_in_unit_circle, queue);
 
-    // execute kernel
-    queue.enqueue_1d_range_kernel(count_kernel, 0, n);
-    queue.finish();
-
-    float total = float(uint_(count[0]));
-
-    std::cout << "count: " << uint_(count[0]) << " / " << n << std::endl;
-    std::cout << "ratio: " << total / float(n) << std::endl;
-    std::cout << "pi = " << (total / float(n)) * 4.0f << std::endl;
+    // print out values
+    float count_f = static_cast<float>(count);
+    std::cout << "count: " << count << " / " << n << std::endl;
+    std::cout << "ratio: " << count_f / float(n) << std::endl;
+    std::cout << "pi = " << (count_f / float(n)) * 4.0f << std::endl;
 
     return 0;
 }
