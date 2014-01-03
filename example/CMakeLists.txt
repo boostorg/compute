@@ -7,6 +7,7 @@ set(EXAMPLES
   list_devices
   monte_carlo
   point_centroid
+  price_cross
   sort_vector
   simple_kernel
   time_copy
