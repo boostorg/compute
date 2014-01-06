@@ -71,7 +71,7 @@ BOOST_PP_SEQ_FOR_EACH(
     BOOST_COMPUTE_DETAIL_DECLARE_CAN_ACCUMULATE_WITH_REDUCE,
     _,
     (char_)(uchar_)(short_)(ushort_)(int_)(uint_)(long_)(ulong_)
-);
+)
 
 #undef BOOST_COMPUTE_DETAIL_DECLARE_CAN_ACCUMULATE_WITH_REDUCE
 
