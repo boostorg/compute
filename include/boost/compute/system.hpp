@@ -22,6 +22,7 @@
 #include <boost/compute/context.hpp>
 #include <boost/compute/platform.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/detail/getenv.hpp>
 
 namespace boost {
 namespace compute {
@@ -139,16 +140,9 @@ private:
         }
 
         // check for device from environment variable
-#ifdef _MSC_VER
-#  pragma warning(push)
-#  pragma warning(disable: 4996)
-#endif
-        const char *name     = std::getenv("BOOST_COMPUTE_DEFAULT_DEVICE");
-        const char *platform = std::getenv("BOOST_COMPUTE_DEFAULT_PLATFORM");
-        const char *vendor   = std::getenv("BOOST_COMPUTE_DEFAULT_VENDOR");
-#ifdef _MSC_VER
-#  pragma warning(pop)
-#endif
+        const char *name     = detail::getenv("BOOST_COMPUTE_DEFAULT_DEVICE");
+        const char *platform = detail::getenv("BOOST_COMPUTE_DEFAULT_PLATFORM");
+        const char *vendor   = detail::getenv("BOOST_COMPUTE_DEFAULT_VENDOR");
 
         if(name || platform || vendor){
             BOOST_FOREACH(const device &device, devices_){
