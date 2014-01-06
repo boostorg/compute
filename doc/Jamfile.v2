@@ -25,6 +25,7 @@ doxygen autodoc
     ../include/boost/compute/memory_object.hpp
     ../include/boost/compute/platform.hpp
     ../include/boost/compute/program.hpp
+    ../include/boost/compute/source.hpp
     ../include/boost/compute/system.hpp
     ../include/boost/compute/version.hpp
 

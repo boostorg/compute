@@ -13,6 +13,7 @@
 
 #include <iterator>
 
+#include <boost/compute/source.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/program_cache.hpp>
@@ -27,7 +28,7 @@ inline void reduce_on_gpu(const buffer_iterator<T> first,
                           const buffer_iterator<T> result,
                           command_queue &queue)
 {
-    const char source[] = BOOST_STRINGIZE(
+    const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
         __kernel void reduce(__global const T *input,
                              const uint size,
                              __global T *output)
