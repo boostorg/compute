@@ -100,6 +100,16 @@ public:
         return image_format(get_info<cl_image_format>(CL_IMAGE_FORMAT));
     }
 
+    size_t height() const
+    {
+        return get_info<size_t>(CL_IMAGE_HEIGHT);
+    }
+
+    size_t width() const
+    {
+        return get_info<size_t>(CL_IMAGE_WIDTH);
+    }
+
     template<class T>
     T get_info(cl_image_info info) const
     {
@@ -108,10 +118,7 @@ public:
 
     size_t get_pixel_count() const
     {
-        size_t height = get_info<size_t>(CL_IMAGE_HEIGHT);
-        size_t width = get_info<size_t>(CL_IMAGE_WIDTH);
-
-        return height * width;
+        return height() * width();
     }
 
     static std::vector<image_format> get_supported_formats(const context &context,

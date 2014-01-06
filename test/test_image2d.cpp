@@ -48,6 +48,9 @@ BOOST_AUTO_TEST_CASE(get_info)
     BOOST_CHECK_EQUAL(image.get_info<size_t>(CL_IMAGE_SLICE_PITCH), size_t(0));
     BOOST_CHECK_EQUAL(image.get_info<size_t>(CL_IMAGE_ELEMENT_SIZE), size_t(4));
 
+    BOOST_CHECK_EQUAL(image.width(), size_t(48));
+    BOOST_CHECK_EQUAL(image.height(), size_t(64));
+
     BOOST_CHECK(bc::image_format(
                     image.get_info<cl_image_format>(CL_IMAGE_FORMAT)) ==
                 bc::image_format(
