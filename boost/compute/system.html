@@ -6,12 +6,12 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
 <link rel="up" href="../../compute/reference.html#header.boost.compute.system_hpp" title="Header &lt;boost/compute/system.hpp&gt;">
-<link rel="prev" href="uniform_real_distribution.html" title="Class template uniform_real_distribution">
+<link rel="prev" href="../../BOOST_COMPUTE_STRINGIZE_SOURCE.html" title="Macro BOOST_COMPUTE_STRINGIZE_SOURCE">
 <link rel="next" href="is_vector_type.html" title="Struct template is_vector_type">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="spirit-nav">
-<a accesskey="p" href="uniform_real_distribution.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.system_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="is_vector_type.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="../../BOOST_COMPUTE_STRINGIZE_SOURCE.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.system_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="is_vector_type.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 <div class="refentry">
 <a name="boost.compute.system"></a><div class="titlepage"></div>
@@ -26,49 +26,49 @@
 <span class="keyword">class</span> <a class="link" href="system.html" title="Class system">system</a> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
 
-  <span class="comment">// <a class="link" href="system.html#idp9242064-bb">public static functions</a></span>
-  <span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a class="link" href="system.html#idp9242464-bb"><span class="identifier">default_device</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a class="link" href="system.html#idp9244032-bb"><span class="identifier">find_device</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">&gt;</span> <a class="link" href="system.html#idp9246720-bb"><span class="identifier">devices</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <span class="identifier">size_t</span> <a class="link" href="system.html#idp9248592-bb"><span class="identifier">device_count</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="system.html#idp9249872-bb"><span class="identifier">default_context</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> <a class="link" href="system.html#idp9251440-bb"><span class="identifier">default_queue</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <span class="keyword">void</span> <a class="link" href="system.html#idp9253168-bb"><span class="identifier">finish</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&gt;</span> <a class="link" href="system.html#idp9254608-bb"><span class="identifier">platforms</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <span class="identifier">size_t</span> <a class="link" href="system.html#idp9256352-bb"><span class="identifier">platform_count</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="system.html#idp24262688-bb">public static functions</a></span>
+  <span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a class="link" href="system.html#idp24263248-bb"><span class="identifier">default_device</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a class="link" href="system.html#idp24264816-bb"><span class="identifier">find_device</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">&gt;</span> <a class="link" href="system.html#idp24267504-bb"><span class="identifier">devices</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="identifier">size_t</span> <a class="link" href="system.html#idp24269536-bb"><span class="identifier">device_count</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="system.html#idp24270976-bb"><span class="identifier">default_context</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> <a class="link" href="system.html#idp24272544-bb"><span class="identifier">default_queue</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="keyword">void</span> <a class="link" href="system.html#idp24274272-bb"><span class="identifier">finish</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&gt;</span> <a class="link" href="system.html#idp24275872-bb"><span class="identifier">platforms</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="identifier">size_t</span> <a class="link" href="system.html#idp24277776-bb"><span class="identifier">platform_count</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp74649632"></a><h2>Description</h2>
+<a name="idp85587952"></a><h2>Description</h2>
 <p><span class="bold"><strong>See Also:</strong></span></p>
 <p><a class="link" href="platform.html" title="Class platform">platform</a>, <a class="link" href="device.html" title="Class device">device</a>, <a class="link" href="context.html" title="Class context">context</a> </p>
 <p>
 </p>
 <div class="refsect2">
-<a name="idp74653520"></a><h3>
-<a name="idp9242064-bb"></a><code class="computeroutput">system</code> public static functions</h3>
+<a name="idp85591840"></a><h3>
+<a name="idp24262688-bb"></a><code class="computeroutput">system</code> public static functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a name="idp9242464-bb"></a><span class="identifier">default_device</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Returns the default compute device for the system. </li>
+<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a name="idp24263248-bb"></a><span class="identifier">default_device</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Returns the default compute device for the system. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a name="idp9244032-bb"></a><span class="identifier">find_device</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> name<span class="special">)</span><span class="special">;</span></pre>Returns the device with <code class="computeroutput">name</code>. </li>
+<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="device.html" title="Class device">device</a> <a name="idp24264816-bb"></a><span class="identifier">find_device</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> name<span class="special">)</span><span class="special">;</span></pre>Returns the device with <code class="computeroutput">name</code>. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">&gt;</span> <a name="idp9246720-bb"></a><span class="identifier">devices</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <a class="link" href="device.html" title="Class device">device</a> <span class="special">&gt;</span> <a name="idp24267504-bb"></a><span class="identifier">devices</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>Returns a vector containing all of the compute devices on the system. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">size_t</span> <a name="idp9248592-bb"></a><span class="identifier">device_count</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Returns the number of compute devices on the system. </li>
+<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">size_t</span> <a name="idp24269536-bb"></a><span class="identifier">device_count</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Returns the number of compute devices on the system. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="context.html" title="Class context">context</a> <a name="idp9249872-bb"></a><span class="identifier">default_context</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Returns the default context for the system. </li>
+<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="context.html" title="Class context">context</a> <a name="idp24270976-bb"></a><span class="identifier">default_context</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Returns the default context for the system. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> <a name="idp9251440-bb"></a><span class="identifier">default_queue</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Returns the default command queue for the system. </li>
+<pre class="literallayout"><span class="keyword">static</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> <a name="idp24272544-bb"></a><span class="identifier">default_queue</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Returns the default command queue for the system. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <span class="keyword">void</span> <a name="idp9253168-bb"></a><span class="identifier">finish</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">static</span> <span class="keyword">void</span> <a name="idp24274272-bb"></a><span class="identifier">finish</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>Blocks until all outstanding computations on the default command queue are complete. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&gt;</span> <a name="idp9254608-bb"></a><span class="identifier">platforms</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Returns a vector of all the compute platforms on the system. </li>
+<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <a class="link" href="platform.html" title="Class platform">platform</a> <span class="special">&gt;</span> <a name="idp24275872-bb"></a><span class="identifier">platforms</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Returns a vector of all the compute platforms on the system. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">size_t</span> <a name="idp9256352-bb"></a><span class="identifier">platform_count</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Returns the number of compute platforms on the system. </li>
+<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">size_t</span> <a name="idp24277776-bb"></a><span class="identifier">platform_count</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Returns the number of compute platforms on the system. </li>
 </ol></div>
 </div>
 </div>
@@ -83,7 +83,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="uniform_real_distribution.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.system_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="is_vector_type.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="../../BOOST_COMPUTE_STRINGIZE_SOURCE.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.system_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="is_vector_type.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

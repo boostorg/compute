@@ -24,22 +24,22 @@
 
 </span>BOOST_COMPUTE_FUNCTION(return_type, name, args, source)</pre></div>
 <div class="refsect1">
-<a name="idp71491984"></a><h2>Description</h2>
+<a name="idp82284512"></a><h2>Description</h2>
 <p>Creates a function object with <code class="computeroutput">name</code> and <code class="computeroutput">source</code>.</p>
 <p>
 The function declaration and signature are automatically created using the <code class="computeroutput">return_type</code>, <code class="computeroutput">name</code>, and <code class="computeroutput">args</code> macro parameters. The argument names are <code class="computeroutput">_1</code> to <code class="computeroutput">_N</code> (where <code class="computeroutput">N</code> is the arity of the function).</p>
 <p>The source code for the function is interpreted as OpenCL C99 source code which is stringified and passed to the OpenCL compiler when the function is invoked.</p>
 <p>For example, to create a function which squares a number: </p>
-<pre class="programlisting"> <span class="identifier">BOOST_COMPUTE_FUNCTION</span><span class="special">(</span><span class="keyword">float</span><span class="special">,</span> <span class="identifier">square</span><span class="special">,</span> <span class="special">(</span><span class="keyword">float</span><span class="special">)</span><span class="special">,</span>
- <span class="special">{</span>
-     <span class="keyword">return</span> <span class="identifier">_1</span> <span class="special">*</span> <span class="identifier">_1</span><span class="special">;</span>
- <span class="special">}</span><span class="special">)</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_COMPUTE_FUNCTION</span><span class="special">(</span><span class="keyword">float</span><span class="special">,</span> <span class="identifier">square</span><span class="special">,</span> <span class="special">(</span><span class="keyword">float</span><span class="special">)</span><span class="special">,</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="identifier">_1</span> <span class="special">*</span> <span class="identifier">_1</span><span class="special">;</span>
+<span class="special">}</span><span class="special">)</span><span class="special">;</span>
 </pre>
 <p>And to create a function which sums two numbers: </p>
-<pre class="programlisting"> <span class="identifier">BOOST_COMPUTE_FUNCTION</span><span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">sum_two</span><span class="special">,</span> <span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">)</span><span class="special">,</span>
- <span class="special">{</span>
-     <span class="keyword">return</span> <span class="identifier">_1</span> <span class="special">+</span> <span class="identifier">_2</span><span class="special">;</span>
- <span class="special">}</span><span class="special">)</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">BOOST_COMPUTE_FUNCTION</span><span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">sum_two</span><span class="special">,</span> <span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">)</span><span class="special">,</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="identifier">_1</span> <span class="special">+</span> <span class="identifier">_2</span><span class="special">;</span>
+<span class="special">}</span><span class="special">)</span><span class="special">;</span>
 </pre>
 <p> </p>
 <div class="variablelist"><table border="0">

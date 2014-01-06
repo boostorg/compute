@@ -25,12 +25,12 @@
 </span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator<span class="special">,</span> <span class="keyword">typename</span> MapIterator<span class="special">,</span> 
          <span class="keyword">typename</span> OutputIterator<span class="special">&gt;</span> 
-  <span class="keyword">void</span> <span class="identifier">gather</span><span class="special">(</span><span class="identifier">InputIterator</span> first<span class="special">,</span> <span class="identifier">InputIterator</span> last<span class="special">,</span> <span class="identifier">MapIterator</span> map<span class="special">,</span> 
+  <span class="keyword">void</span> <span class="identifier">gather</span><span class="special">(</span><span class="identifier">MapIterator</span> first<span class="special">,</span> <span class="identifier">MapIterator</span> last<span class="special">,</span> <span class="identifier">InputIterator</span> input<span class="special">,</span> 
               <span class="identifier">OutputIterator</span> result<span class="special">,</span> 
               <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue <span class="special">=</span> <span class="identifier">system</span><span class="special">::</span><span class="identifier">default_queue</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp63957680"></a><h2>Description</h2>
-<p>Copies the elements from the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) to the range beginning at <code class="computeroutput">result</code> using the input indices from the range beginning at <code class="computeroutput">map</code>.</p>
+<a name="idp74315328"></a><h2>Description</h2>
+<p>Copies the elements using the indices from the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) to the range beginning at <code class="computeroutput">result</code> using the input values from the range beginning at <code class="computeroutput">input</code>.</p>
 <p><span class="bold"><strong>See Also:</strong></span></p>
 <p>scatter() </p>
 <p>
