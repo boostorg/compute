@@ -1,6 +1,6 @@
 include_directories(../include)
 
-find_package(Boost 1.46 REQUIRED COMPONENTS unit_test_framework)
+find_package(Boost 1.48 REQUIRED COMPONENTS unit_test_framework)
 add_definitions(-DBOOST_TEST_DYN_LINK)
 
 add_definitions(-DBOOST_COMPUTE_DEBUG_KERNEL_COMPILATION)

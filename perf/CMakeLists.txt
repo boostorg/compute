@@ -2,7 +2,7 @@ include_directories(../include)
 
 # find Boost.Chrono
 if(NOT ${BOOST_COMPUTE_TIMER_USE_STD_CHRONO})
-  find_package(Boost 1.47 REQUIRED COMPONENTS chrono system)
+  find_package(Boost 1.48 REQUIRED COMPONENTS chrono system)
   include_directories(${Boost_INCLUDE_DIRS})
 endif()
 

@@ -9,7 +9,7 @@ find_package(OpenCL REQUIRED)
 include_directories(${OPENCL_INCLUDE_DIRS})
 
 # find Boost
-find_package(Boost 1.46 REQUIRED)
+find_package(Boost 1.48 REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 include_directories(include)
