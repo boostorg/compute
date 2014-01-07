@@ -12,6 +12,7 @@
 #define BOOST_COMPUTE_TYPE_TRAITS_HPP
 
 #include <boost/compute/type_traits/common_type.hpp>
+#include <boost/compute/type_traits/is_fundamental.hpp>
 #include <boost/compute/type_traits/is_vector_type.hpp>
 #include <boost/compute/type_traits/make_vector_type.hpp>
 #include <boost/compute/type_traits/scalar_type.hpp>

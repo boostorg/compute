@@ -61,6 +61,19 @@ BOOST_AUTO_TEST_CASE(make_vector_type)
     BOOST_STATIC_ASSERT((boost::is_same<bc::make_vector_type<bc::char_, 16>::type, bc::char16_>::value));
 }
 
+BOOST_AUTO_TEST_CASE(is_fundamental_type)
+{
+    BOOST_STATIC_ASSERT((bc::is_fundamental<int>::value == true));
+    BOOST_STATIC_ASSERT((bc::is_fundamental<bc::int_>::value == true));
+    BOOST_STATIC_ASSERT((bc::is_fundamental<bc::int2_>::value == true));
+    BOOST_STATIC_ASSERT((bc::is_fundamental<float>::value == true));
+    BOOST_STATIC_ASSERT((bc::is_fundamental<bc::float_>::value == true));
+    BOOST_STATIC_ASSERT((bc::is_fundamental<bc::float4_>::value == true));
+
+    BOOST_STATIC_ASSERT((bc::is_fundamental<std::pair<int, float> >::value == false));
+    BOOST_STATIC_ASSERT((bc::is_fundamental<std::complex<float> >::value == false));
+}
+
 BOOST_AUTO_TEST_CASE(type_name)
 {
     // scalar types
