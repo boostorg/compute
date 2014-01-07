@@ -19,10 +19,6 @@
 #include <boost/compute/memory_object.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 
-#ifdef BOOST_COMPUTE_HAVE_GL
-#include <boost/compute/cl_gl.hpp>
-#endif
-
 namespace boost {
 namespace compute {
 
@@ -122,23 +118,6 @@ public:
     {
         return get_memory_info<T>(info);
     }
-
-    #ifdef BOOST_COMPUTE_HAVE_GL
-    static buffer from_gl_buffer(const context &context,
-                                 GLuint bufobj,
-                                 cl_mem_flags flags = read_write)
-    {
-        cl_int error = 0;
-        cl_mem mem = clCreateFromGLBuffer(context, flags, bufobj, &error);
-        if(!mem){
-            BOOST_THROW_EXCEPTION(runtime_exception(error));
-        }
-
-        buffer buf(mem);
-        clReleaseMemObject(mem);
-        return buf;
-    }
-    #endif // BOOST_COMPUTE_HAVE_GL
 
 private:
     BOOST_COPYABLE_AND_MOVABLE(buffer)

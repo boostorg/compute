@@ -40,8 +40,4 @@
 #include <boost/compute/cl_ext.hpp>
 #endif
 
-#ifdef BOOST_COMPUTE_HAVE_GL
-#include <boost/compute/cl_gl.hpp>
-#endif
-
 #endif // BOOST_COMPUTE_HPP

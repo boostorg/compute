@@ -113,3 +113,38 @@ add_compute_test("ext.program_cache" test_program_cache.cpp)
 add_compute_test("ext.tuple" test_tuple.cpp)
 
 add_compute_test("issue.11" test_issue_11.cpp)
+
+# eigen interop tests
+if(${BOOST_COMPUTE_HAVE_EIGEN})
+  find_package(Eigen REQUIRED)
+  include_directories(${EIGEN_INCLUDE_DIRS})
+  add_compute_test("interop.eigen" test_interop_eigen.cpp)
+endif()
+
+# opencv interop tests
+if(${BOOST_COMPUTE_HAVE_OPENCV})
+  find_package(OpenCV REQUIRED)
+  include_directories(${OpenCV_INCLUDE_DIRS})
+  add_compute_test("interop.opencv" test_interop_opencv.cpp)
+  target_link_libraries(test_interop_opencv ${OpenCV_LIBRARIES})
+endif()
+
+# qt interop tests
+if(${BOOST_COMPUTE_HAVE_QT})
+  find_package(Qt REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+  include(${QT_USE_FILE})
+  add_compute_test("interop.qt" test_interop_qt.cpp)
+  target_link_libraries(test_interop_qt ${QT_LIBRARIES})
+
+  # the opengl interop test depends on qt to create the opengl context
+  add_compute_test("interop.opengl" test_interop_opengl.cpp)
+  target_link_libraries(test_interop_opengl ${QT_LIBRARIES})
+endif()
+
+# vtk interop tests
+if(${BOOST_COMPUTE_HAVE_VTK})
+  find_package(VTK REQUIRED)
+  include(${VTK_USE_FILE})
+  add_compute_test("interop.vtk" test_interop_vtk.cpp)
+  target_link_libraries(test_interop_vtk ${VTK_LIBRARIES})
+endif()

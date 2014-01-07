@@ -12,6 +12,12 @@ include_directories(${OPENCL_INCLUDE_DIRS})
 find_package(Boost 1.48 REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
+# optional third-party libraries
+option(BOOST_COMPUTE_HAVE_EIGEN "Have Eigen" OFF)
+option(BOOST_COMPUTE_HAVE_OPENCV "Have OpenCV" OFF)
+option(BOOST_COMPUTE_HAVE_QT "Have Qt" OFF)
+option(BOOST_COMPUTE_HAVE_VTK "Have VTK" OFF)
+
 include_directories(include)
 
 if(${OpenCL_HEADER_CL_EXT_FOUND})

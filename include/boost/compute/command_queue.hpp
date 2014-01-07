@@ -28,10 +28,6 @@
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
 
-#ifdef BOOST_COMPUTE_HAVE_GL
-#include <boost/compute/cl_gl.hpp>
-#endif
-
 namespace boost {
 namespace compute {
 
@@ -1116,54 +1112,6 @@ public:
     {
         return m_queue;
     }
-
-    #ifdef BOOST_COMPUTE_HAVE_GL
-    void enqueue_acquire_gl_objects(size_t num_objects,
-                                    const cl_mem *mem_objects)
-    {
-        BOOST_ASSERT(m_queue != 0);
-
-        cl_int ret = clEnqueueAcquireGLObjects(m_queue,
-                                               num_objects,
-                                               mem_objects,
-                                               0,
-                                               0,
-                                               0);
-        if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
-        }
-    }
-
-    void enqueue_acquire_gl_buffer(const buffer &buffer)
-    {
-        BOOST_ASSERT(buffer.get_context() == this->get_context());
-
-        enqueue_acquire_gl_objects(1, &buffer.get());
-    }
-
-    void enqueue_release_gl_objects(size_t num_objects,
-                                    const cl_mem *mem_objects)
-    {
-        BOOST_ASSERT(m_queue != 0);
-
-        cl_int ret = clEnqueueReleaseGLObjects(m_queue,
-                                               num_objects,
-                                               mem_objects,
-                                               0,
-                                               0,
-                                               0);
-        if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
-        }
-    }
-
-    void enqueue_release_gl_buffer(const buffer &buffer)
-    {
-        BOOST_ASSERT(buffer.get_context() == this->get_context());
-
-        enqueue_release_gl_objects(1, &buffer.get());
-    }
-    #endif // BOOST_COMPUTE_HAVE_GL
 
 private:
     BOOST_COPYABLE_AND_MOVABLE(command_queue)
