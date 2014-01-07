@@ -370,12 +370,14 @@ public:
      * on Windows.
      */
     static program build_with_source(
-            std::string source,
-            const context &context,
+            const std::string &source,
+            const context     &context,
             const std::string &options = std::string()
             )
     {
 #ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
+        // Get hash string for the kernel.
+        std::string hash;
         {
             device   d(context.get_device());
             platform p(d.get_info<cl_platform_id>(CL_DEVICE_PLATFORM));
@@ -386,11 +388,9 @@ public:
                 << "// " << options << "\n\n"
                 << source;
 
-            source = src.str();
+            hash = sha1(src.str());
         }
 
-        // Get hash string for the kernel.
-        std::string hash = sha1(source);
 
         // Try to get cached program binaries:
         try {
