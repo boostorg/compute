@@ -11,9 +11,9 @@
 #define BOOST_TEST_MODULE TestFill
 #include <boost/test/unit_test.hpp>
 
-#include <boost/compute/future.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/fill_n.hpp>
+#include <boost/compute/async/future.hpp>
 #include <boost/compute/container/vector.hpp>
 
 #include "check_macros.hpp"

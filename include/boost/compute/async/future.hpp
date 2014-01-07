@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_FUTURE_HPP
-#define BOOST_COMPUTE_FUTURE_HPP
+#ifndef BOOST_COMPUTE_ASYNC_FUTURE_HPP
+#define BOOST_COMPUTE_ASYNC_FUTURE_HPP
 
 #include <boost/compute/event.hpp>
 
@@ -161,4 +161,4 @@ inline future<Result> make_future(const Result &result, const event &event)
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_FUTURE_HPP
+#endif // BOOST_COMPUTE_ASYNC_FUTURE_HPP

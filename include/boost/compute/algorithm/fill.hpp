@@ -19,10 +19,10 @@
 #include <boost/utility/enable_if.hpp>
 
 #include <boost/compute/cl.hpp>
-#include <boost/compute/future.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/async/future.hpp>
 #include <boost/compute/iterator/constant_iterator.hpp>
 #include <boost/compute/detail/is_buffer_iterator.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>

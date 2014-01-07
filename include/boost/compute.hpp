@@ -12,6 +12,7 @@
 #define BOOST_COMPUTE_HPP
 
 #include <boost/compute/algorithm.hpp>
+#include <boost/compute/async.hpp>
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/cl.hpp>
 #include <boost/compute/command_queue.hpp>
@@ -20,7 +21,6 @@
 #include <boost/compute/context.hpp>
 #include <boost/compute/device.hpp>
 #include <boost/compute/functional.hpp>
-#include <boost/compute/future.hpp>
 #include <boost/compute/image2d.hpp>
 #include <boost/compute/image3d.hpp>
 #include <boost/compute/image_format.hpp>

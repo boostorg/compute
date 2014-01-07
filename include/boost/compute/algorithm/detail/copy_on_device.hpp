@@ -13,10 +13,10 @@
 
 #include <iterator>
 
-#include <boost/compute/future.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/async/future.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/detail/meta_kernel.hpp>
 
 namespace boost {
 namespace compute {

@@ -15,8 +15,8 @@
 
 #include <boost/utility/addressof.hpp>
 
-#include <boost/compute/future.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/async/future.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 
 namespace boost {

@@ -24,6 +24,7 @@
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/iota.hpp>
+#include <boost/compute/async/future.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/detail/swizzle_iterator.hpp>
 

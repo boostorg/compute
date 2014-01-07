@@ -20,7 +20,6 @@ doxygen autodoc
     ../include/boost/compute/device.hpp
     ../include/boost/compute/event.hpp
     ../include/boost/compute/function.hpp
-    ../include/boost/compute/future.hpp
     ../include/boost/compute/kernel.hpp
     ../include/boost/compute/memory_object.hpp
     ../include/boost/compute/platform.hpp
@@ -31,6 +30,9 @@ doxygen autodoc
 
     ../include/boost/compute/algorithm.hpp
     [ glob ../include/boost/compute/algorithm/*.hpp ]
+
+    ../include/boost/compute/async.hpp
+    [ glob ../include/boost/compute/async/*.hpp ]
 
     ../include/boost/compute/container.hpp
     [ glob ../include/boost/compute/container/*.hpp ]

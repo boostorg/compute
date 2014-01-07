@@ -17,9 +17,9 @@
 #include <boost/utility/enable_if.hpp>
 
 #include <boost/compute/buffer.hpp>
-#include <boost/compute/future.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/async/future.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/is_contiguous_iterator.hpp>
