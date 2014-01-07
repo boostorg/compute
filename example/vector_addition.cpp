@@ -9,7 +9,11 @@
 //---------------------------------------------------------------------------//
 
 #include <iostream>
-#include <boost/compute.hpp>
+
+#include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/algorithm/transform.hpp>
+#include <boost/compute/container/vector.hpp>
+#include <boost/compute/functional/operator.hpp>
 
 namespace compute = boost::compute;
 

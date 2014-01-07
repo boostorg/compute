@@ -14,7 +14,11 @@
 #include <cstdlib>
 #include <iostream>
 
-#include <boost/compute.hpp>
+#include <boost/compute/event.hpp>
+#include <boost/compute/system.hpp>
+#include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/async/future.hpp>
+#include <boost/compute/container/vector.hpp>
 
 namespace compute = boost::compute;
 

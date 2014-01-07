@@ -11,7 +11,11 @@
 //[point_centroid_example
 
 #include <iostream>
-#include <boost/compute.hpp>
+
+#include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/algorithm/accumulate.hpp>
+#include <boost/compute/container/vector.hpp>
+#include <boost/compute/types/builtin.hpp>
 
 namespace compute = boost::compute;
 

@@ -11,7 +11,9 @@
 //[copy_data_example
 
 #include <vector>
-#include <boost/compute.hpp>
+
+#include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/container/vector.hpp>
 
 namespace compute = boost::compute;
 

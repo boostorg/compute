@@ -12,7 +12,10 @@
 
 #include <vector>
 #include <algorithm>
-#include <boost/compute.hpp>
+
+#include <boost/compute/algorithm/transform.hpp>
+#include <boost/compute/container/vector.hpp>
+#include <boost/compute/functional/math.hpp>
 
 namespace compute = boost::compute;
 

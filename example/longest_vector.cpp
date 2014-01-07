@@ -8,11 +8,14 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-
 #include <iostream>
 #include <iterator>
 
-#include <boost/compute.hpp>
+#include <boost/compute/algorithm/max_element.hpp>
+#include <boost/compute/container/vector.hpp>
+#include <boost/compute/functional/geometry.hpp>
+#include <boost/compute/iterator/transform_iterator.hpp>
+#include <boost/compute/types/builtin.hpp>
 
 namespace compute = boost::compute;
 

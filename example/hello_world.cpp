@@ -11,7 +11,9 @@
 //[hello_world_example
 
 #include <iostream>
-#include <boost/compute.hpp>
+
+#include <boost/compute/device.hpp>
+#include <boost/compute/system.hpp>
 
 namespace compute = boost::compute;
 
