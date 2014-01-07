@@ -17,7 +17,7 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-const char* getenv(const char *env_var)
+inline const char* getenv(const char *env_var)
 {
 #ifdef _MSC_VER
 #  pragma warning(push)

@@ -148,3 +148,15 @@ if(${BOOST_COMPUTE_HAVE_VTK})
   add_compute_test("interop.vtk" test_interop_vtk.cpp)
   target_link_libraries(test_interop_vtk ${VTK_LIBRARIES})
 endif()
+
+# Check for linkage problems
+add_executable(test_multiple_objects
+    test_multiple_objects1.cpp
+    test_multiple_objects2.cpp
+    )
+target_link_libraries(test_multiple_objects
+    ${OPENCL_LIBRARIES}
+    ${Boost_LIBRARIES}
+    )
+add_test("core.multiple_objects" test_multiple_objects)
+
