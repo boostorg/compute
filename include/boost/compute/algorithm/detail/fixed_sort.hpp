@@ -45,8 +45,9 @@ inline void sort2(const buffer &buffer, command_queue &queue)
             "    }\n"
             "}\n";
 
-        sort2_program = program::create_with_source(source, context);
-        sort2_program.build(std::string("-DT=") + type_name<T>());
+        sort2_program = program::build_with_source(
+                source, context, std::string("-DT=") + type_name<T>()
+                );
 
         cache->insert(cache_key, sort2_program);
     }
@@ -106,8 +107,9 @@ inline void sort3(const buffer &buffer, command_queue &queue)
             "    }\n"
             "}\n";
 
-        sort3_program = program::create_with_source(source, context);
-        sort3_program.build(std::string("-DT=") + type_name<T>());
+        sort3_program = program::build_with_source(
+                source, context, std::string("-DT=") + type_name<T>()
+                );
 
         cache->insert(cache_key, sort3_program);
     }

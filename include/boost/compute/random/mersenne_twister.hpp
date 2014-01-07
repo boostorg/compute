@@ -168,8 +168,7 @@ private:
                 "    vector[offset+i] = random_number(state, i);\n"
                 "}\n";
 
-            m_program = program::create_with_source(source, m_context);
-            m_program.build();
+            m_program = program::build_with_source(source, m_context);
 
             cache->insert(cache_key, m_program);
         }

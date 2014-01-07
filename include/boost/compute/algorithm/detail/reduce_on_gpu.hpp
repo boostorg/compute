@@ -81,8 +81,7 @@ inline void reduce_on_gpu(const buffer_iterator<T> first,
         options << "-DT=" << type_name<T>()
                 << " -DVPT=" << vpt
                 << " -DTPB=" << tpb;
-        reduce_program = program::create_with_source(source, context);
-        reduce_program.build(options.str());
+        reduce_program = program::build_with_source(source, context, options.str());
 
         cache->insert(cache_key, reduce_program);
     }

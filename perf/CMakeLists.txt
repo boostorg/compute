@@ -1,8 +1,15 @@
 include_directories(../include)
 
-# find Boost.Chrono
-if(NOT ${BOOST_COMPUTE_TIMER_USE_STD_CHRONO})
-  find_package(Boost 1.48 REQUIRED COMPONENTS chrono system)
+if (NOT ${BOOST_COMPUTE_TIMER_USE_STD_CHRONO})
+    set(BOOST_COMPONENTS ${BOOST_COMPONENTS} chrono system)
+endif()
+
+if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
+    set(BOOST_COMPONENTS ${BOOST_COMPONENTS} filesystem)
+endif()
+
+if (DEFINED BOOST_COMPONENTS)
+  find_package(Boost 1.48 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
   include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
@@ -23,7 +30,7 @@ foreach(BENCHMARK ${BENCHMARKS})
   add_executable(${PERF_TARGET} perf_${BENCHMARK}.cpp)
   target_link_libraries(${PERF_TARGET} ${OPENCL_LIBRARIES})
 
-  if(NOT ${BOOST_COMPUTE_TIMER_USE_STD_CHRONO})
+  if(DEFINED BOOST_COMPONENTS)
     target_link_libraries(${PERF_TARGET} ${Boost_LIBRARIES})
   endif()
 endforeach()

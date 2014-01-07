@@ -44,3 +44,8 @@ option(BOOST_COMPUTE_BUILD_BENCHMARKS "Build the Boost.Compute benchmarks" OFF)
 if(${BOOST_COMPUTE_BUILD_BENCHMARKS})
   add_subdirectory(perf)
 endif()
+
+option(BOOST_COMPUTE_USE_OFFLINE_CACHE "Use offline cache for OpenCL program binaries" OFF)
+if(${BOOST_COMPUTE_USE_OFFLINE_CACHE})
+    add_definitions(-DBOOST_COMPUTE_USE_OFFLINE_CACHE)
+endif()

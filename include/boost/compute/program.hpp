@@ -28,6 +28,16 @@
 #include <boost/compute/detail/assert_cl_success.hpp>
 #include <boost/compute/detail/program_create_kernel_result.hpp>
 
+#ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
+#include <sstream>
+#include <iomanip>
+#include <boost/uuid/sha1.hpp>
+#include <boost/optional.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/compute/platform.hpp>
+#include <boost/compute/detail/getenv.hpp>
+#endif
+
 namespace boost {
 namespace compute {
 
@@ -352,10 +362,164 @@ public:
         return create_with_binary(&binary[0], binary.size(), context);
     }
 
+    /// Create a new program with \p source in \p context and builds it with \p options.
+    /**
+     * In case BOOST_COMPUTE_USE_OFFLINE_CACHE macro is defined,
+     * the compiled binary is stored for reuse in the offline cache located in
+     * $HOME/.boost_compute on UNIX-like systems and in %APPDATA%/boost_compute
+     * on Windows.
+     */
+    static program build_with_source(
+            std::string source,
+            const context &context,
+            const std::string &options = std::string()
+            )
+    {
+#ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
+        {
+            device   d(context.get_device());
+            platform p(d.get_info<cl_platform_id>(CL_DEVICE_PLATFORM));
+
+            std::ostringstream src;
+            src << "// " << p.name() << " v" << p.version() << "\n"
+                << "// " << context.get_device().name() << "\n"
+                << "// " << options << "\n\n"
+                << source;
+
+            source = src.str();
+        }
+
+        // Get hash string for the kernel.
+        std::string hash = sha1(source);
+
+        // Try to get cached program binaries:
+        try {
+            boost::optional<program> prog = load_program_binary(hash, context);
+
+            if (prog) {
+                prog->build(options);
+                return *prog;
+            }
+        } catch (...) {
+            // Something bad happened. Fallback to normal compilation.
+        }
+
+        // Cache is apparently not available. Just compile the sources.
+#endif
+        const char *source_string = source.c_str();
+
+        cl_int error = 0;
+        cl_program program_ = clCreateProgramWithSource(context,
+                                                        uint_(1),
+                                                        &source_string,
+                                                        0,
+                                                        &error);
+        if(!program_){
+            BOOST_THROW_EXCEPTION(runtime_exception(error));
+        }
+
+        program prog(program_, false);
+        prog.build(options);
+
+#ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
+        // Save program binaries for future reuse.
+        save_program_binary(hash, prog);
+#endif
+
+        return prog;
+    }
+
 private:
     BOOST_COPYABLE_AND_MOVABLE(program)
 
     cl_program m_program;
+
+#ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
+    // Path delimiter symbol for the current OS.
+    static const std::string& path_delim() {
+        static const std::string delim =
+            boost::filesystem::path("/").make_preferred().string();
+        return delim;
+    }
+
+    // Path to appdata folder.
+    static inline const std::string& appdata_path() {
+#ifdef WIN32
+        static const std::string appdata = detail::getenv("APPDATA")
+            + path_delim() + "boost_compute";
+#else
+        static const std::string appdata = detail::getenv("HOME")
+            + path_delim() + ".boost_compute";
+#endif
+        return appdata;
+    }
+
+    // Path to cached binaries.
+    static std::string program_binary_path(const std::string &hash, bool create = false)
+    {
+        std::string dir = appdata_path()    + path_delim()
+                        + hash.substr(0, 2) + path_delim()
+                        + hash.substr(2);
+
+        if (create) boost::filesystem::create_directories(dir);
+
+        return dir + path_delim();
+    }
+
+    // Returns SHA1 hash of the string parameter.
+    static std::string sha1(const std::string &src) {
+        boost::uuids::detail::sha1 sha1;
+        sha1.process_bytes(src.c_str(), src.size());
+
+        unsigned int hash[5];
+        sha1.get_digest(hash);
+
+        std::ostringstream buf;
+        for(int i = 0; i < 5; ++i)
+            buf << std::hex << std::setfill('0') << std::setw(8) << hash[i];
+
+        return buf.str();
+    }
+
+    // Saves program binaries for future reuse.
+    static void save_program_binary(const std::string &hash, const program &prog)
+    {
+        std::string fname = program_binary_path(hash, true) + "kernel";
+        std::ofstream bfile(fname.c_str(), std::ios::binary);
+        if (!bfile) return;
+
+        std::vector<unsigned char> binary = prog.binary();
+
+        size_t binary_size = binary.size();
+        bfile.write((char*)&binary_size, sizeof(size_t));
+        bfile.write((char*)binary.data(), binary_size);
+    }
+
+    // Tries to read program binaries from file cache.
+    static boost::optional<program> load_program_binary(
+            const std::string &hash, const context &ctx
+            )
+    {
+        std::string fname = program_binary_path(hash) + "kernel";
+        std::ifstream bfile(fname.c_str(), std::ios::binary);
+        if (!bfile) return boost::optional<program>();
+
+        size_t binary_size;
+        std::vector<unsigned char> binary;
+
+        bfile.read((char*)&binary_size, sizeof(size_t));
+
+        binary.resize(binary_size);
+        bfile.read((char*)binary.data(), binary_size);
+
+        return boost::optional<program>(
+                program::create_with_binary(
+                    binary.data(), binary_size, ctx
+                    )
+                );
+    }
+#endif // BOOST_COMPUTE_USE_OFFLINE_CACHE
+
 };
 
 } // end compute namespace

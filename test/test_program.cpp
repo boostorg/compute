@@ -31,7 +31,9 @@ BOOST_AUTO_TEST_CASE(get_program_info)
     program.build();
 
     // check program info
+#ifndef BOOST_COMPUTE_USE_OFFLINE_CACHE
     BOOST_CHECK(program.source().empty() == false);
+#endif
     BOOST_CHECK(program.get_context() == context);
 }
 

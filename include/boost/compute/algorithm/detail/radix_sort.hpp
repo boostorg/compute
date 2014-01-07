@@ -226,9 +226,7 @@ inline void radix_sort(Iterator first,
         }
 
         radix_sort_program =
-            program::create_with_source(radix_sort_source, context);
-
-        radix_sort_program.build(options.str());
+            program::build_with_source(radix_sort_source, context, options.str());
 
         cache->insert(cache_key, radix_sort_program);
     }

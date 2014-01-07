@@ -24,11 +24,8 @@
 ///     }
 /// );
 ///
-/// // create square program
-/// program square_program = program::create_with_source(source, context);
-///
-/// // build square program
-/// square_program.build();
+/// // create and build square program
+/// program square_program = program::build_with_source(source, context);
 ///
 /// // create square kernel
 /// kernel square_kernel(square_program, "square");
