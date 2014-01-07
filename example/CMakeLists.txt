@@ -1,6 +1,7 @@
 include_directories(../include)
 
 set(EXAMPLES
+  black_scholes
   copy_data
   hello_world
   longest_vector
