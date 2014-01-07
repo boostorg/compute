@@ -30,12 +30,11 @@
 
 #ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
 #include <sstream>
-#include <iomanip>
-#include <boost/uuid/sha1.hpp>
 #include <boost/optional.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/compute/platform.hpp>
 #include <boost/compute/detail/getenv.hpp>
+#include <boost/compute/detail/sha1.hpp>
 #endif
 
 namespace boost {
@@ -390,7 +389,7 @@ public:
         }
 
         // Get hash string for the kernel.
-        std::string hash = sha1(source);
+        std::string hash = detail::sha1(source);
 
         // Try to get cached program binaries:
         try {
@@ -464,21 +463,6 @@ private:
         if (create) boost::filesystem::create_directories(dir);
 
         return dir + path_delim();
-    }
-
-    // Returns SHA1 hash of the string parameter.
-    static std::string sha1(const std::string &src) {
-        boost::uuids::detail::sha1 sha1;
-        sha1.process_bytes(src.c_str(), src.size());
-
-        unsigned int hash[5];
-        sha1.get_digest(hash);
-
-        std::ostringstream buf;
-        for(int i = 0; i < 5; ++i)
-            buf << std::hex << std::setfill('0') << std::setw(8) << hash[i];
-
-        return buf.str();
     }
 
     // Saves program binaries for future reuse.
