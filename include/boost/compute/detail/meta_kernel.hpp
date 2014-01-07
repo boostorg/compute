@@ -23,7 +23,6 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/algorithm/string/find.hpp>
-#include <boost/functional/hash.hpp>
 
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/image2d.hpp>
@@ -36,6 +35,7 @@
 #include <boost/compute/image_sampler.hpp>
 #include <boost/compute/memory_object.hpp>
 #include <boost/compute/detail/program_cache.hpp>
+#include <boost/compute/detail/sha1.hpp>
 
 namespace boost {
 namespace compute {
@@ -332,17 +332,14 @@ public:
         std::string source = this->source();
 
         // generate cache key
-        size_t hash = boost::hash<std::string>()(source);
-        std::string cache_key =
-            std::string("meta_kernel_") +
-            boost::lexical_cast<std::string>(hash);
+        std::string cache_key = detail::sha1(source);
 
         // try to look the program up in the cache
         boost::shared_ptr<program_cache> cache = get_program_cache(context);
         ::boost::compute::program program = cache->get(cache_key);
 
         // build the program if it was not in the cache
-        if(!program.get()/* || program.source() != source*/){
+        if(!program.get()){
             program =
                 ::boost::compute::program::build_with_source(source, context);
 
