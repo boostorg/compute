@@ -45,7 +45,7 @@ Compute library provides them.
 To use complex values first include the following header:
 
 ``
-#include <boost/compute/complex.hpp>
+#include <boost/compute/types/complex.hpp>
 ``
 
 A vector of complex values can be created like so:
