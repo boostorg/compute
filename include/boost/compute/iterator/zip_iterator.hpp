@@ -28,6 +28,12 @@
 #include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/mpl_vector_to_tuple.hpp>
 
+#ifndef BOOST_COMPUTE_MAX_ARITY
+   // should be no more than max boost::tuple size (10 by default)
+#  define BOOST_COMPUTE_MAX_ARITY 10
+#endif
+#include <boost/preprocessor/repetition.hpp>
+
 namespace boost {
 namespace compute {
 
@@ -92,82 +98,37 @@ struct zip_iterator_index_expr
     IndexExpr m_index_expr;
 };
 
-template<class Iterator1, class IndexExpr>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const zip_iterator_index_expr<
-                                   boost::tuple<Iterator1>,
-                                   IndexExpr
-                                > &expr)
-{
-    typedef typename
-        boost::tuple<Iterator1>
-        tuple_type;
-    typedef typename
-        make_zip_iterator_value_type<tuple_type>::type
-        value_type;
+#define BOOST_COMPUTE_PRINT_ELEM(z, n, unused)                                 \
+        BOOST_PP_EXPR_IF(n, << ", ")                                           \
+        << boost::get<n>(expr.m_iterators)[expr.m_index_expr]
 
-    kernel.inject_type<value_type>();
-
-    return kernel
-        << "(" << type_name<value_type>() << ")"
-        << "{ "
-        << boost::get<0>(expr.m_iterators)[expr.m_index_expr]
-        << "}";
+#define BOOST_COMPUTE_PRINT_ZIP_IDX(z, n, unused)                              \
+template<BOOST_PP_ENUM_PARAMS(n, class Iterator), class IndexExpr>             \
+inline meta_kernel& operator<<(                                                \
+        meta_kernel &kernel,                                                   \
+        const zip_iterator_index_expr<                                         \
+                  boost::tuple<BOOST_PP_ENUM_PARAMS(n, Iterator)>,             \
+                  IndexExpr                                                    \
+              > &expr)                                                         \
+{                                                                              \
+    typedef typename                                                           \
+        boost::tuple<BOOST_PP_ENUM_PARAMS(n, Iterator)>                        \
+        tuple_type;                                                            \
+    typedef typename                                                           \
+        make_zip_iterator_value_type<tuple_type>::type                         \
+        value_type;                                                            \
+    kernel.inject_type<value_type>();                                          \
+    return kernel                                                              \
+        << "(" << type_name<value_type>() << ")"                               \
+        << "{ "                                                                \
+        BOOST_PP_REPEAT(n, BOOST_COMPUTE_PRINT_ELEM, ~)                        \
+        << "}";                                                                \
 }
 
-template<class Iterator1, class Iterator2, class IndexExpr>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const zip_iterator_index_expr<
-                                   boost::tuple<Iterator1, Iterator2>,
-                                   IndexExpr
-                                > &expr)
-{
-    typedef typename
-        boost::tuple<Iterator1, Iterator2>
-        tuple_type;
-    typedef typename
-        make_zip_iterator_value_type<tuple_type>::type
-        value_type;
+BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_PRINT_ZIP_IDX, ~)
 
-
-    kernel.inject_type<value_type>();
-
-    return kernel
-        << "(" << type_name<value_type>() << ")"
-        << "{ "
-        << boost::get<0>(expr.m_iterators)[expr.m_index_expr] << ", "
-        << boost::get<1>(expr.m_iterators)[expr.m_index_expr]
-        << "}";
-}
-
-template<class Iterator1, class Iterator2, class Iterator3, class IndexExpr>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const zip_iterator_index_expr<
-                                   boost::tuple<
-                                       Iterator1,
-                                       Iterator2,
-                                       Iterator3
-                                    >,
-                                   IndexExpr
-                                > &expr)
-{
-    typedef typename
-        boost::tuple<Iterator1, Iterator2, Iterator3>
-        tuple_type;
-    typedef typename
-        make_zip_iterator_value_type<tuple_type>::type
-        value_type;
-
-    kernel.inject_type<value_type>();
-
-    return kernel
-        << "(" << type_name<value_type>() << ")"
-        << "{ "
-        << boost::get<0>(expr.m_iterators)[expr.m_index_expr] << ", "
-        << boost::get<1>(expr.m_iterators)[expr.m_index_expr] << ", "
-        << boost::get<2>(expr.m_iterators)[expr.m_index_expr]
-        << "}";
-}
+#undef BOOST_COMPUTE_PRINT_ZIP_IDX
+#undef BOOST_COMPUTE_PRINT_ELEM
 
 struct iterator_advancer
 {
@@ -311,62 +272,28 @@ struct is_device_iterator<
 > : public boost::true_type {};
 
 // get<N>() specialization for zip_iterator
-template<size_t N, class IteratorTuple, class IndexExpr, class T1>
-inline meta_kernel&
-operator<<(meta_kernel &kernel,
-           const invoked_get<
-               N,
-               zip_iterator_index_expr<IteratorTuple, IndexExpr>,
-               boost::tuple<T1>
-            > &expr)
-{
-    typedef typename boost::tuple<T1> Tuple;
-    typedef typename boost::tuples::element<N, Tuple>::type T;
-
-    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<Tuple>::value));
-
-    kernel.inject_type<T>();
-
-    return kernel << boost::get<N>(expr.m_arg.m_iterators)[expr.m_arg.m_index_expr];
+#define BOOST_COMPUTE_ZIP_GET_N(z, n, unused)                                  \
+template<size_t N, class IteratorTuple, class IndexExpr,                       \
+    BOOST_PP_ENUM_PARAMS(n, class T)>                                          \
+inline meta_kernel&                                                            \
+operator<<(meta_kernel &kernel,                                                \
+           const invoked_get<                                                  \
+               N,                                                              \
+               zip_iterator_index_expr<IteratorTuple, IndexExpr>,              \
+               boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)>                        \
+            > &expr)                                                           \
+{                                                                              \
+    typedef typename boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)> Tuple;           \
+    typedef typename boost::tuples::element<N, Tuple>::type T;                 \
+    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<Tuple>::value));      \
+    kernel.inject_type<T>();                                                   \
+    return kernel                                                              \
+        << boost::get<N>(expr.m_arg.m_iterators)[expr.m_arg.m_index_expr];     \
 }
 
-template<size_t N, class IteratorTuple, class IndexExpr, class T1, class T2>
-inline meta_kernel&
-operator<<(meta_kernel &kernel,
-           const invoked_get<
-               N,
-               zip_iterator_index_expr<IteratorTuple, IndexExpr>,
-               boost::tuple<T1, T2>
-            > &expr)
-{
-    typedef typename boost::tuple<T1, T2> Tuple;
-    typedef typename boost::tuples::element<N, Tuple>::type T;
+BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_ZIP_GET_N, ~)
 
-    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<Tuple>::value));
-
-    kernel.inject_type<T>();
-
-    return kernel << boost::get<N>(expr.m_arg.m_iterators)[expr.m_arg.m_index_expr];
-}
-
-template<size_t N, class IteratorTuple, class IndexExpr, class T1, class T2, class T3>
-inline meta_kernel&
-operator<<(meta_kernel &kernel,
-           const invoked_get<
-               N,
-               zip_iterator_index_expr<IteratorTuple, IndexExpr>,
-               boost::tuple<T1, T2, T3>
-            > &expr)
-{
-    typedef typename boost::tuple<T1, T2, T3> Tuple;
-    typedef typename boost::tuples::element<N, Tuple>::type T;
-
-    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<Tuple>::value));
-
-    kernel.inject_type<T>();
-
-    return kernel << boost::get<N>(expr.m_arg.m_iterators)[expr.m_arg.m_index_expr];
-}
+#undef BOOST_COMPUTE_ZIP_GET_N
 
 } // end detail namespace
 } // end compute namespace
