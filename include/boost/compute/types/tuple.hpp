@@ -25,147 +25,94 @@
 #include <tuple>
 #endif
 
+#ifndef BOOST_COMPUTE_MAX_ARITY
+   // should be no more than max boost::tuple size (10 by default)
+#  define BOOST_COMPUTE_MAX_ARITY 10
+#endif
+#include <boost/preprocessor/repetition.hpp>
+
 namespace boost {
 namespace compute {
 namespace detail {
 
 // meta_kernel operators for boost::tuple literals
-template<class T1>
-inline meta_kernel&
-operator<<(meta_kernel &kernel, const boost::tuple<T1> &x)
-{
-    kernel << "(" << type_name<boost::tuple<T1> >() << ")"
-           << "{" << kernel.make_lit(boost::get<0>(x)) << "}";
+#define BOOST_COMPUTE_PRINT_ELEM(z, n, unused)                                 \
+        BOOST_PP_EXPR_IF(n, << ", ")                                           \
+        << kernel.make_lit(boost::get<n>(x))
 
-    return kernel;
+#define BOOST_COMPUTE_PRINT_TUPLE(z, n, unused)                                \
+template<BOOST_PP_ENUM_PARAMS(n, class T)>                                     \
+inline meta_kernel&                                                            \
+operator<<(meta_kernel &kernel,                                                \
+        const boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)> &x)                     \
+{                                                                              \
+    return kernel                                                              \
+           << "("                                                              \
+           << type_name<boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)> >()           \
+           << ")"                                                              \
+           << "{"                                                              \
+           BOOST_PP_REPEAT(n, BOOST_COMPUTE_PRINT_ELEM, ~)                     \
+           << "}";                                                             \
 }
 
-template<class T1, class T2>
-inline meta_kernel&
-operator<<(meta_kernel &kernel, const boost::tuple<T1, T2> &x)
-{
-    kernel << "(" << type_name<boost::tuple<T1, T2> >() << ")"
-           << "{" << kernel.make_lit(boost::get<0>(x)) << ", "
-                  << kernel.make_lit(boost::get<1>(x)) << "}";
+BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_PRINT_TUPLE, ~)
 
-    return kernel;
-}
-
-template<class T1, class T2, class T3>
-inline meta_kernel&
-operator<<(meta_kernel &kernel, const boost::tuple<T1, T2, T3> &x)
-{
-    kernel << "(" << type_name<boost::tuple<T1, T2, T3> >() << ")"
-           << "{" << kernel.make_lit(boost::get<0>(x)) << ", "
-                  << kernel.make_lit(boost::get<1>(x)) << ", "
-                  << kernel.make_lit(boost::get<2>(x)) << "}";
-
-    return kernel;
-}
+#undef BOOST_COMPUTE_PRINT_TUPLE
+#undef BOOST_COMPUTE_PRINT_ELEM
 
 // inject_type() specializations for boost::tuple
-template<class T1>
-struct inject_type_impl<boost::tuple<T1> >
-{
-    void operator()(meta_kernel &kernel)
-    {
-        typedef boost::tuple<T1> tuple_type;
+#define BOOST_COMPUTE_INJECT_TYPE(z, n, unused)                                \
+        kernel.inject_type<T ## n>();
 
-        kernel.inject_type<T1>();
+#define BOOST_COMPUTE_INJECT_DECL(z, n, unused)                                \
+        << "    " << type_name<T ## n>() << " v" #n ";\n"
 
-        std::stringstream declaration;
-        declaration << "typedef struct {\n"
-                    << "    " << type_name<T1>() << " v0;\n"
-                    << "} " << type_name<tuple_type>() << ";\n";
-
-        kernel.add_type_declaration<tuple_type>(declaration.str());
-    }
+#define BOOST_COMPUTE_INJECT_IMPL(z, n, unused)                                \
+template<BOOST_PP_ENUM_PARAMS(n, class T)>                                     \
+struct inject_type_impl<boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)> >             \
+{                                                                              \
+    void operator()(meta_kernel &kernel)                                       \
+    {                                                                          \
+        typedef boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)> tuple_type;           \
+        BOOST_PP_REPEAT(n, BOOST_COMPUTE_INJECT_TYPE, ~)                       \
+        std::stringstream declaration;                                         \
+        declaration << "typedef struct {\n"                                    \
+                    BOOST_PP_REPEAT(n, BOOST_COMPUTE_INJECT_DECL, ~)           \
+                    << "} " << type_name<tuple_type>() << ";\n";               \
+        kernel.add_type_declaration<tuple_type>(declaration.str());            \
+    }                                                                          \
 };
 
-template<class T1, class T2>
-struct inject_type_impl<boost::tuple<T1, T2> >
-{
-    void operator()(meta_kernel &kernel)
-    {
-        typedef boost::tuple<T1, T2> tuple_type;
+BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_INJECT_IMPL, ~)
 
-        kernel.inject_type<T1>();
-        kernel.inject_type<T2>();
-
-        std::stringstream declaration;
-        declaration << "typedef struct {\n"
-                    << "    " << type_name<T1>() << " v0;\n"
-                    << "    " << type_name<T2>() << " v1;\n"
-                    << "} " << type_name<tuple_type>() << ";\n";
-
-        kernel.add_type_declaration<tuple_type>(declaration.str());
-    }
-};
-
-template<class T1, class T2, class T3>
-struct inject_type_impl<boost::tuple<T1, T2, T3> >
-{
-    void operator()(meta_kernel &kernel)
-    {
-        typedef boost::tuple<T1, T2, T3> tuple_type;
-
-        kernel.inject_type<T1>();
-        kernel.inject_type<T2>();
-        kernel.inject_type<T3>();
-
-        std::stringstream declaration;
-        declaration << "typedef struct {\n"
-                    << "    " << type_name<T1>() << " v0;\n"
-                    << "    " << type_name<T2>() << " v1;\n"
-                    << "    " << type_name<T3>() << " v2;\n"
-                    << "} " << type_name<tuple_type>() << ";\n";
-
-        kernel.add_type_declaration<tuple_type>(declaration.str());
-    }
-};
+#undef BOOST_COMPUTE_INJECT_IMPL
+#undef BOOST_COMPUTE_INJECT_DECL
+#undef BOOST_COMPUTE_INJECT_TYPE
 
 #ifdef BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
 // type_name() specializations for boost::tuple (without variadic templates)
-template<class T1>
-struct type_name_trait<boost::tuple<T1> >
-{
-    static const char* value()
-    {
-        static std::string name =
-            std::string("boost_tuple_") + type_name<T1>() + "_t";
+#define BOOST_COMPUTE_PRINT_TYPE(z, n, unused)                                 \
+            + type_name<T ## n>() + "_"
 
-        return name.c_str();
-    }
+#define BOOST_COMPUTE_PRINT_TYPE_NAME(z, n, unused)                            \
+template<BOOST_PP_ENUM_PARAMS(n, class T)>                                     \
+struct type_name_trait<boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)> >              \
+{                                                                              \
+    static const char* value()                                                 \
+    {                                                                          \
+        static std::string name =                                              \
+            std::string("boost_tuple_")                                        \
+            BOOST_PP_REPEAT(n, BOOST_COMPUTE_PRINT_TYPE, ~)                    \
+            "t";                                                               \
+        return name.c_str();                                                   \
+    }                                                                          \
 };
 
-template<class T1, class T2>
-struct type_name_trait<boost::tuple<T1, T2> >
-{
-    static const char* value()
-    {
-        static std::string name =
-            std::string("boost_tuple_") +
-            type_name<T1>() + "_" +
-            type_name<T2>() + "_t";
+BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_PRINT_TYPE_NAME, ~)
 
-        return name.c_str();
-    }
-};
+#undef BOOST_COMPUTE_PRINT_TYPE_NAME
+#undef BOOST_COMPUTE_PRINT_TYPE
 
-template<class T1, class T2, class T3>
-struct type_name_trait<boost::tuple<T1, T2, T3> >
-{
-    static const char* value()
-    {
-        static std::string name =
-            std::string("boost_tuple_") +
-            type_name<T1>() + "_" +
-            type_name<T2>() + "_" +
-            type_name<T3>() + "_t";
-
-        return name.c_str();
-    }
-};
 #else
 template<size_t N, class T, class... Rest>
 struct write_tuple_type_names
@@ -240,69 +187,34 @@ struct type_name_trait<std::tuple<T...>>
 #endif // BOOST_COMPUTE_DETAIL_NO_STD_TUPLE
 
 // get<N>() result type specialization for boost::tuple<>
-template<size_t N, class T1>
-struct get_result_type<N, boost::tuple<T1> >
-{
-    typedef typename boost::tuple<T1> T;
-
-    typedef typename boost::tuples::element<N, T>::type type;
+#define BOOST_COMPUTE_GET_RESULT_TYPE(z, n, unused)                            \
+template<size_t N, BOOST_PP_ENUM_PARAMS(n, class T)>                           \
+struct get_result_type<N, boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)> >           \
+{                                                                              \
+    typedef typename boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)> T;               \
+    typedef typename boost::tuples::element<N, T>::type type;                  \
 };
 
-template<size_t N, class T1, class T2>
-struct get_result_type<N, boost::tuple<T1, T2> >
-{
-    typedef typename boost::tuple<T1, T2> T;
+BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_GET_RESULT_TYPE, ~)
 
-    typedef typename boost::tuples::element<N, T>::type type;
-};
+#undef BOOST_COMPUTE_GET_RESULT_TYPE
 
-template<size_t N, class T1, class T2, class T3>
-struct get_result_type<N, boost::tuple<T1, T2, T3> >
-{
-    typedef typename boost::tuple<T1, T2, T3> T;
-
-    typedef typename boost::tuples::element<N, T>::type type;
-};
 
 // get<N>() specialization for boost::tuple<>
-template<size_t N, class Arg, class T1>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_get<N, Arg, boost::tuple<T1> > &expr)
-{
-    typedef typename boost::tuple<T1> T;
-
-    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<T>::value));
-
-    kernel.inject_type<T>();
-
-    return kernel << expr.m_arg << ".v" << uint_(N);
+#define BOOST_COMPUTE_GET_N(z, n, unused)                                      \
+template<size_t N, class Arg, BOOST_PP_ENUM_PARAMS(n, class T)>                \
+inline meta_kernel& operator<<(meta_kernel &kernel,                            \
+   const invoked_get<N, Arg, boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)> > &expr) \
+{                                                                              \
+    typedef typename boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)> T;               \
+    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<T>::value));          \
+    kernel.inject_type<T>();                                                   \
+    return kernel << expr.m_arg << ".v" << uint_(N);                           \
 }
 
-template<size_t N, class Arg, class T1, class T2>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_get<N, Arg, boost::tuple<T1, T2> > &expr)
-{
-    typedef typename boost::tuple<T1, T2> T;
+BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_GET_N, ~)
 
-    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<T>::value));
-
-    kernel.inject_type<T>();
-
-    return kernel << expr.m_arg << ".v" << uint_(N);
-}
-
-template<size_t N, class Arg, class T1, class T2, class T3>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_get<N, Arg, boost::tuple<T1, T2, T3> > &expr)
-{
-    typedef typename boost::tuple<T1, T2, T3> T;
-
-    BOOST_STATIC_ASSERT(N < size_t(boost::tuples::length<T>::value));
-
-    kernel.inject_type<T>();
-
-    return kernel << expr.m_arg << ".v" << uint_(N);
-}
+#undef BOOST_COMPUTE_GET_N
 
 } // end detail namespace
 } // end compute namespace

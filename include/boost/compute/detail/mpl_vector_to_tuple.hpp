@@ -17,6 +17,12 @@
 #include <boost/fusion/include/mpl.hpp>
 #include <boost/fusion/adapted/boost_tuple.hpp>
 
+#ifndef BOOST_COMPUTE_MAX_ARITY
+   // should be no more than max boost::tuple size (10 by default)
+#  define BOOST_COMPUTE_MAX_ARITY 10
+#endif
+#include <boost/preprocessor/repetition.hpp>
+
 namespace boost {
 namespace compute {
 namespace detail {
@@ -26,35 +32,23 @@ namespace mpl = boost::mpl;
 template<class Vector, size_t N>
 struct mpl_vector_to_tuple_impl;
 
-template<class Vector>
-struct mpl_vector_to_tuple_impl<Vector, 1>
-{
-    typedef typename
-        boost::tuple<
-            typename mpl::at_c<Vector, 0>::type
-        > type;
+#define BOOST_COMPUTE_PRINT_ELEM(z, n, unused)                                 \
+    typename mpl::at_c<Vector, n>::type
+
+#define BOOST_COMPUTE_VEC2TUP(z, n, unused)                                    \
+template<class Vector>                                                         \
+struct mpl_vector_to_tuple_impl<Vector, n>                                     \
+{                                                                              \
+    typedef typename                                                           \
+        boost::tuple<                                                          \
+            BOOST_PP_ENUM(n, BOOST_COMPUTE_PRINT_ELEM, ~)                      \
+        > type;                                                                \
 };
 
-template<class Vector>
-struct mpl_vector_to_tuple_impl<Vector, 2>
-{
-    typedef typename
-        boost::tuple<
-            typename mpl::at_c<Vector, 0>::type,
-            typename mpl::at_c<Vector, 1>::type
-        > type;
-};
+BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_VEC2TUP, ~)
 
-template<class Vector>
-struct mpl_vector_to_tuple_impl<Vector, 3>
-{
-    typedef typename
-        boost::tuple<
-            typename mpl::at_c<Vector, 0>::type,
-            typename mpl::at_c<Vector, 1>::type,
-            typename mpl::at_c<Vector, 2>::type
-        > type;
-};
+#undef BOOST_COMPUTE_VEC2TUP
+#undef BOOST_COMPUTE_PRINT_ELEM
 
 // meta-function which converts a mpl::vector to a boost::tuple
 template<class Vector>
