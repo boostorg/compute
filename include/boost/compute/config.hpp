@@ -39,4 +39,10 @@
 #  define BOOST_COMPUTE_CL_CALLBACK
 #endif
 
+// Maximum number of iterators acceptable for make_zip_iterator
+#ifndef BOOST_COMPUTE_MAX_ARITY
+   // should be no more than max boost::tuple size (10 by default)
+#  define BOOST_COMPUTE_MAX_ARITY 10
+#endif
+
 #endif // BOOST_COMPUTE_CONFIG_HPP

@@ -20,7 +20,9 @@
 #include <boost/mpl/back_inserter.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/iterator/iterator_facade.hpp>
+#include <boost/preprocessor/repetition.hpp>
 
+#include <boost/compute/config.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/types/tuple.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
@@ -28,11 +30,6 @@
 #include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/mpl_vector_to_tuple.hpp>
 
-#ifndef BOOST_COMPUTE_MAX_ARITY
-   // should be no more than max boost::tuple size (10 by default)
-#  define BOOST_COMPUTE_MAX_ARITY 10
-#endif
-#include <boost/preprocessor/repetition.hpp>
 
 namespace boost {
 namespace compute {
