@@ -16,12 +16,9 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/fusion/include/mpl.hpp>
 #include <boost/fusion/adapted/boost_tuple.hpp>
-
-#ifndef BOOST_COMPUTE_MAX_ARITY
-   // should be no more than max boost::tuple size (10 by default)
-#  define BOOST_COMPUTE_MAX_ARITY 10
-#endif
 #include <boost/preprocessor/repetition.hpp>
+
+#include <boost/compute/config.hpp>
 
 namespace boost {
 namespace compute {

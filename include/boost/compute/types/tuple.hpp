@@ -25,10 +25,6 @@
 #include <tuple>
 #endif
 
-#ifndef BOOST_COMPUTE_MAX_ARITY
-   // should be no more than max boost::tuple size (10 by default)
-#  define BOOST_COMPUTE_MAX_ARITY 10
-#endif
 #include <boost/preprocessor/repetition.hpp>
 
 namespace boost {
