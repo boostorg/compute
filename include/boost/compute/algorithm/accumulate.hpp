@@ -18,6 +18,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/reduce.hpp>
 #include <boost/compute/algorithm/detail/serial_accumulate.hpp>
+#include <boost/compute/container/array.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 
@@ -32,18 +33,22 @@ inline T generic_accumulate(InputIterator first,
                             BinaryFunction function,
                             command_queue &queue)
 {
+    const context &context = queue.get_context();
+
     size_t size = iterator_range_size(first, last);
     if(size == 0){
         return init;
     }
 
-    vector<T> result_value(1, queue.get_context());
+    // accumulate on device
+    array<T, 1> device_result(context);
     detail::serial_accumulate(
-        first, last, result_value.begin(), init, function, queue
+        first, last, device_result.begin(), init, function, queue
     );
 
+    // copy result to host
     T result;
-    ::boost::compute::copy_n(result_value.begin(), 1, &result, queue);
+    ::boost::compute::copy_n(device_result.begin(), 1, &result, queue);
     return result;
 }
 
@@ -82,15 +87,22 @@ inline T dispatch_accumulate(const buffer_iterator<T> first,
                              const plus<T> &function,
                              command_queue &queue)
 {
+    const context &context = queue.get_context();
+
     size_t size = iterator_range_size(first, last);
     if(size == 0){
         return init;
     }
 
     if(can_accumulate_with_reduce(init, function)){
-        T sum;
-        reduce(first, last, &sum, queue);
-        return sum;
+        // reduce on device
+        array<T, 1> device_result(context);
+        reduce(first, last, device_result.begin(), queue);
+
+        // copy result to host
+        T result;
+        copy_n(device_result.begin(), 1, &result, queue);
+        return result;
     }
     else {
         return generic_accumulate(first, last, init, function, queue);
