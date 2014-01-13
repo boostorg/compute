@@ -58,15 +58,15 @@ inline double16_ eigen_matrix4d_to_double16(const Eigen::Matrix4d &matrix)
 } // end compute namespace
 } // end boost namespace
 
-BOOST_COMPUTE_TYPE_NAME(Eigen::Vector2i, int2);
-BOOST_COMPUTE_TYPE_NAME(Eigen::Vector4i, int4);
-BOOST_COMPUTE_TYPE_NAME(Eigen::Vector2f, float2);
-BOOST_COMPUTE_TYPE_NAME(Eigen::Vector4f, float4);
-BOOST_COMPUTE_TYPE_NAME(Eigen::Matrix2f, float8);
-BOOST_COMPUTE_TYPE_NAME(Eigen::Matrix4f, float16);
-BOOST_COMPUTE_TYPE_NAME(Eigen::Vector2d, double2);
-BOOST_COMPUTE_TYPE_NAME(Eigen::Vector4d, double4);
-BOOST_COMPUTE_TYPE_NAME(Eigen::Matrix2d, double8);
-BOOST_COMPUTE_TYPE_NAME(Eigen::Matrix4d, double16);
+BOOST_COMPUTE_TYPE_NAME(Eigen::Vector2i, int2)
+BOOST_COMPUTE_TYPE_NAME(Eigen::Vector4i, int4)
+BOOST_COMPUTE_TYPE_NAME(Eigen::Vector2f, float2)
+BOOST_COMPUTE_TYPE_NAME(Eigen::Vector4f, float4)
+BOOST_COMPUTE_TYPE_NAME(Eigen::Matrix2f, float8)
+BOOST_COMPUTE_TYPE_NAME(Eigen::Matrix4f, float16)
+BOOST_COMPUTE_TYPE_NAME(Eigen::Vector2d, double2)
+BOOST_COMPUTE_TYPE_NAME(Eigen::Vector4d, double4)
+BOOST_COMPUTE_TYPE_NAME(Eigen::Matrix2d, double8)
+BOOST_COMPUTE_TYPE_NAME(Eigen::Matrix4d, double16)
 
 #endif // BOOST_COMPUTE_INTEROP_EIGEN_EIGEN_HPP
