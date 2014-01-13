@@ -261,4 +261,12 @@ BOOST_AUTO_TEST_CASE(sort_vectors_by_length)
     BOOST_CHECK_EQUAL(data[9], 0.0f);
 }
 
+BOOST_AUTO_TEST_CASE(sort_host_vector)
+{
+    int data[] = { 5, 2, 3, 6, 7, 4, 0, 1 };
+    std::vector<int> vector(data, data + 8);
+    boost::compute::sort(vector.begin(), vector.end(), queue);
+    CHECK_RANGE_EQUAL(int, 8, vector, (0, 1, 2, 3, 4, 5, 6, 7));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

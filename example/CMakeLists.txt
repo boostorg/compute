@@ -4,6 +4,7 @@ set(EXAMPLES
   black_scholes
   copy_data
   hello_world
+  host_sort
   longest_vector
   list_devices
   monte_carlo
