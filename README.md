@@ -76,7 +76,8 @@ above can be compiled with:
 `g++ -I/path/to/compute/include sort.cpp -lOpenCL`
 
 More examples can be found in the [tutorial](
-http://kylelutz.github.io/compute/boost_compute/tutorial.html).
+http://kylelutz.github.io/compute/boost_compute/tutorial.html) and under the
+[examples](https://github.com/kylelutz/compute/tree/master/example) directory.
 
 ## Support ##
 Bugs and feature requests can be reported through the [issue tracker](
