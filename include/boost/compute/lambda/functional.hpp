@@ -20,6 +20,7 @@
 
 #include <boost/compute/functional/get.hpp>
 #include <boost/compute/lambda/result_of.hpp>
+#include <boost/compute/lambda/placeholder.hpp>
 
 namespace boost {
 namespace compute {
@@ -39,24 +40,24 @@ namespace proto = boost::proto;
                 typedef int type; \
             }; \
             \
-            static const char* function_name() \
+            template<class Context, class Arg> \
+            static void apply(Context &ctx, const Arg &arg) \
             { \
-                return BOOST_PP_STRINGIZE(name); \
+                ctx.stream << #name << "("; \
+                proto::eval(arg, ctx); \
+                ctx.stream << ")"; \
             } \
         }; \
     } \
     template<class Arg> \
-    typename proto::result_of::make_expr< \
-               proto::tag::function, \
-               BOOST_PP_CAT(detail::name, _func), \
-               const Arg& \
-         >::type const \
+    inline typename proto::result_of::make_expr< \
+        proto::tag::function, BOOST_PP_CAT(detail::name, _func), const Arg& \
+    >::type const \
     name(const Arg &arg) \
     { \
         return proto::make_expr<proto::tag::function>( \
-                   BOOST_PP_CAT(detail::name, _func)(), \
-                   ::boost::ref(arg) \
-           ); \
+            BOOST_PP_CAT(detail::name, _func)(), ::boost::ref(arg) \
+        ); \
     }
 
 // wraps a unary function who's return type is the same as the argument type
@@ -71,24 +72,24 @@ namespace proto = boost::proto;
                 typedef typename ::boost::compute::lambda::result_of<Arg1, Args>::type type; \
             }; \
             \
-            static const char* function_name() \
+            template<class Context, class Arg> \
+            static void apply(Context &ctx, const Arg &arg) \
             { \
-                return BOOST_PP_STRINGIZE(name); \
+                ctx.stream << #name << "("; \
+                proto::eval(arg, ctx); \
+                ctx.stream << ")"; \
             } \
         }; \
     } \
     template<class Arg> \
-    typename proto::result_of::make_expr< \
-               proto::tag::function, \
-               BOOST_PP_CAT(detail::name, _func), \
-               const Arg& \
-         >::type const \
+    inline typename proto::result_of::make_expr< \
+        proto::tag::function, BOOST_PP_CAT(detail::name, _func), const Arg& \
+    >::type const \
     name(const Arg &arg) \
     { \
         return proto::make_expr<proto::tag::function>( \
-                   BOOST_PP_CAT(detail::name, _func)(), \
-                   ::boost::ref(arg) \
-           ); \
+            BOOST_PP_CAT(detail::name, _func)(), ::boost::ref(arg) \
+        ); \
     }
 
 #define BOOST_COMPUTE_LAMBDA_WRAP_BINARY_FUNCTION(name) \
@@ -102,25 +103,26 @@ namespace proto = boost::proto;
                 typedef typename ::boost::compute::lambda::result_of<Arg1, Args>::type type; \
             }; \
             \
-            static const char* function_name() \
+            template<class Context, class Arg1, class Arg2> \
+            static void apply(Context &ctx, const Arg1 &arg1, const Arg2 &arg2) \
             { \
-                return BOOST_PP_STRINGIZE(name); \
+                ctx.stream << #name << "("; \
+                proto::eval(arg1, ctx); \
+                ctx.stream << ", "; \
+                proto::eval(arg2, ctx); \
+                ctx.stream << ")"; \
             } \
         }; \
     } \
     template<class Arg1, class Arg2> \
-    typename proto::result_of::make_expr< \
-                 proto::tag::function, \
-                 BOOST_PP_CAT(detail::name, _func), \
-                 const Arg1&, \
-                 const Arg2& \
-             >::type const \
+    inline typename proto::result_of::make_expr< \
+        proto::tag::function, BOOST_PP_CAT(detail::name, _func), const Arg1&, const Arg2& \
+    >::type const \
     name(const Arg1 &arg1, const Arg2 &arg2) \
     { \
         return proto::make_expr<proto::tag::function>( \
-                   BOOST_PP_CAT(detail::name, _func)(), \
-                   ::boost::ref(arg1), \
-                   ::boost::ref(arg2)); \
+            BOOST_PP_CAT(detail::name, _func)(), ::boost::ref(arg1), ::boost::ref(arg2) \
+        ); \
     }
 
 // wraps a ternary function
@@ -135,27 +137,28 @@ namespace proto = boost::proto;
                 typedef typename ::boost::compute::lambda::result_of<Arg1, Args>::type type; \
             }; \
             \
-            static const char* function_name() \
+            template<class Context, class Arg1, class Arg2, class Arg3> \
+            static void apply(Context &ctx, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3) \
             { \
-                return BOOST_PP_STRINGIZE(name); \
+                ctx.stream << #name << "("; \
+                proto::eval(arg1, ctx); \
+                ctx.stream << ", "; \
+                proto::eval(arg2, ctx); \
+                ctx.stream << ", "; \
+                proto::eval(arg3, ctx); \
+                ctx.stream << ")"; \
             } \
         }; \
     } \
     template<class Arg1, class Arg2, class Arg3> \
-    typename proto::result_of::make_expr< \
-                 proto::tag::function, \
-                 BOOST_PP_CAT(detail::name, _func), \
-                 const Arg1&, \
-                 const Arg2&, \
-                 const Arg3& \
-             >::type const \
+    inline typename proto::result_of::make_expr< \
+        proto::tag::function, BOOST_PP_CAT(detail::name, _func), const Arg1&, const Arg2&, const Arg3& \
+    >::type const \
     name(const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3) \
     { \
         return proto::make_expr<proto::tag::function>( \
-                   BOOST_PP_CAT(detail::name, _func)(), \
-                   ::boost::ref(arg1), \
-                   ::boost::ref(arg2), \
-                   ::boost::ref(arg3)); \
+            BOOST_PP_CAT(detail::name, _func)(), ::boost::ref(arg1), ::boost::ref(arg2), ::boost::ref(arg3) \
+        ); \
     }
 
 
@@ -211,127 +214,28 @@ struct dot_func
         typedef typename ::boost::compute::scalar_type<T1>::type type;
     };
 
-    static const char* function_name()
+    template<class Context, class Arg1, class Arg2>
+    static void apply(Context &ctx, const Arg1 &arg1, const Arg2 &arg2)
     {
-        return "dot";
-    }
-};
-
-// function wrapper for get<N>() in lambda expressions
-template<size_t N>
-struct get_func
-{
-    template<class Expr, class Args>
-    struct lambda_result
-    {
-        typedef typename proto::result_of::child_c<Expr, 1>::type Arg;
-        typedef typename ::boost::compute::lambda::result_of<Arg, Args>::type T;
-        typedef typename ::boost::compute::detail::get_result_type<N, T>::type type;
-    };
-};
-
-// returns the suffix string for get<N>() in lambda expressions
-// (e.g. ".x" for get<0>() with float4)
-template<size_t N, class T>
-struct get_func_suffix
-{
-    static std::string value()
-    {
-        BOOST_STATIC_ASSERT(N < 16);
-
-        std::stringstream stream;
-
-        if(N < 10){
-            stream << ".s" << uint_(N);
-        }
-        else if(N < 16){
-            stream << ".s" << char('a' + (N - 10));
-        }
-
-        return stream.str();
-    }
-};
-
-template<size_t N, class T1, class T2>
-struct get_func_suffix<N, std::pair<T1, T2> >
-{
-    static std::string value()
-    {
-        BOOST_STATIC_ASSERT(N < 2);
-
-        if(N == 0){
-            return ".first";
-        }
-        else {
-            return ".second";
-        }
-    };
-};
-
-template<size_t N, class T1>
-struct get_func_suffix<N, boost::tuple<T1> >
-{
-    static std::string value()
-    {
-        BOOST_STATIC_ASSERT(N < 1);
-
-        return ".v" + boost::lexical_cast<std::string>(N);
-    }
-};
-
-template<size_t N, class T1, class T2>
-struct get_func_suffix<N, boost::tuple<T1, T2> >
-{
-    static std::string value()
-    {
-        BOOST_STATIC_ASSERT(N < 2);
-
-        return ".v" + boost::lexical_cast<std::string>(N);
-    }
-};
-
-template<size_t N, class T1, class T2, class T3>
-struct get_func_suffix<N, boost::tuple<T1, T2, T3> >
-{
-    static std::string value()
-    {
-        BOOST_STATIC_ASSERT(N < 3);
-
-        return ".v" + boost::lexical_cast<std::string>(N);
+        ctx.stream << "dot(";
+        proto::eval(arg1, ctx);
+        ctx.stream << ", ";
+        proto::eval(arg2, ctx);
+        ctx.stream << ")";
     }
 };
 
 } // end detail namespace
 
 template<class Arg1, class Arg2>
-typename proto::result_of::make_expr<
-             proto::tag::function,
-             detail::dot_func,
-             const Arg1&,
-             const Arg2&
-         >::type const
+inline typename proto::result_of::make_expr<
+    proto::tag::function, detail::dot_func, const Arg1&, const Arg2&
+>::type const
 dot(const Arg1 &arg1, const Arg2 &arg2)
 {
     return proto::make_expr<proto::tag::function>(
-               detail::dot_func(),
-               ::boost::ref(arg1),
-               ::boost::ref(arg2)
-           );
-}
-
-// get<N>()
-template<size_t N, class Arg>
-typename proto::result_of::make_expr<
-             proto::tag::function,
-             detail::get_func<N>,
-             const Arg&
-         >::type const
-get(const Arg &arg)
-{
-    return proto::make_expr<proto::tag::function>(
-               detail::get_func<N>(),
-               ::boost::ref(arg)
-           );
+        detail::dot_func(), ::boost::ref(arg1), ::boost::ref(arg2)
+    );
 }
 
 } // end lambda namespace

@@ -27,12 +27,6 @@ namespace lambda {
 namespace mpl = boost::mpl;
 namespace proto = boost::proto;
 
-// placeholder type
-template<int I>
-struct placeholder
-{
-};
-
 #define BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_BINARY_OPERATOR(tag, op) \
     template<class LHS, class RHS> \
     void operator()(tag, const LHS &lhs, const RHS &rhs) \
@@ -63,15 +57,12 @@ template<class Args>
 struct context : proto::callable_context<context<Args> >
 {
     typedef void result_type;
+    typedef Args args_tuple;
 
-    context(boost::compute::detail::meta_kernel &kernel,
-            const Args &args)
+    // create a lambda context for kernel with args
+    context(boost::compute::detail::meta_kernel &kernel, const Args &args_)
         : stream(kernel),
-          m_args(args)
-    {
-    }
-
-    ~context()
+          args(args_)
     {
     }
 
@@ -87,7 +78,7 @@ struct context : proto::callable_context<context<Args> >
     template<int I>
     void operator()(proto::tag::terminal, placeholder<I>)
     {
-        stream << boost::get<I>(m_args);
+        stream << boost::get<I>(args);
     }
 
     // handle functions
@@ -96,7 +87,7 @@ struct context : proto::callable_context<context<Args> >
                     const F &function,
                     const Arg &arg)
     {
-        apply_function(proto::value(function), arg);
+        proto::value(function).apply(*this, arg);
     }
 
     template<class F, class Arg1, class Arg2>
@@ -105,11 +96,7 @@ struct context : proto::callable_context<context<Args> >
                     const Arg1 &arg1,
                     const Arg2 &arg2)
     {
-        stream << proto::value(function).function_name() << '(';
-        proto::eval(arg1, *this);
-        stream << ',';
-        proto::eval(arg2, *this);
-        stream << ')';
+        proto::value(function).apply(*this, arg1, arg2);
     }
 
     template<class F, class Arg1, class Arg2, class Arg3>
@@ -119,58 +106,7 @@ struct context : proto::callable_context<context<Args> >
                     const Arg2 &arg2,
                     const Arg3 &arg3)
     {
-        stream << proto::value(function).function_name() << '(';
-        proto::eval(arg1, *this);
-        stream << ',';
-        proto::eval(arg2, *this);
-        stream << ',';
-        proto::eval(arg3, *this);
-        stream << ')';
-    }
-
-    template<class F, class Arg>
-    void apply_function(const F &function, const Arg &arg)
-    {
-        stream << function.function_name() << '(';
-        proto::eval(arg, *this);
-        stream << ')';
-    }
-
-    template<size_t N, class Arg>
-    void apply_function(detail::get_func<N>, const Arg &arg)
-    {
-        typedef typename
-            boost::remove_cv<
-                typename boost::compute::lambda::result_of<Arg, Args>::type
-            >::type T;
-
-        apply_get_function<N, T>(arg, typename proto::tag_of<Arg>::type());
-    }
-
-    template<size_t N, class T, class Arg, class Tag>
-    void apply_get_function(const Arg &arg, Tag)
-    {
-        proto::eval(arg, *this);
-        stream << detail::get_func_suffix<N, T>::value();
-    }
-
-    template<size_t N, class T, class Arg>
-    void apply_get_function(const Arg &arg, proto::tag::terminal)
-    {
-        apply_get_terminal_function<N, T>(arg, proto::value(arg));
-    }
-
-    template<size_t N, class T, class Arg, class ArgValue>
-    void apply_get_terminal_function(const Arg &arg, ArgValue)
-    {
-        proto::eval(arg, *this);
-        stream << detail::get_func_suffix<N, T>::value();
-    }
-
-    template<size_t N, class T, class Arg, int I>
-    void apply_get_terminal_function(Arg, placeholder<I>)
-    {
-        stream << ::boost::compute::get<N>()(::boost::get<I>(m_args));
+        proto::value(function).apply(*this, arg1, arg2, arg3);
     }
 
     // operators
@@ -208,13 +144,13 @@ struct context : proto::callable_context<context<Args> >
     {
         proto::eval(p, *this);
         stream << '?';
-        proto::eval(x);
+        proto::eval(x, *this);
         stream << ':';
-        proto::eval(y);
+        proto::eval(y, *this);
     }
 
     boost::compute::detail::meta_kernel &stream;
-    Args m_args;
+    Args args;
 };
 
 namespace detail {
