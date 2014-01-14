@@ -309,8 +309,10 @@ public:
         }
 
         // add macros
-        stream << "#define boost_tuple_get(x, n) (x.v ## n)\n";
+        stream << "#define boost_pair_type(t1, t2) _pair_ ## t1 ## _ ## t2 ## _t\n";
         stream << "#define boost_pair_get(x, n) (n == 0 ? x.first ## x.second)\n";
+        stream << "#define boost_make_pair(t1, x, t2, y) (boost_pair_type(t1, t2)) { x, y }\n";
+        stream << "#define boost_tuple_get(x, n) (x.v ## n)\n";
 
         // add type declaration source
         stream << m_type_declaration_source.str() << "\n";
