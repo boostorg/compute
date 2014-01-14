@@ -176,11 +176,11 @@ BOOST_AUTO_TEST_CASE(count_vector_component)
 
     BOOST_CHECK_EQUAL(
         compute::count_if(vector.begin(), vector.end(), get<0>(_1) < 4),
-        2
+        size_t(2)
     );
     BOOST_CHECK_EQUAL(
         compute::count_if(vector.begin(), vector.end(), get<1>(_1) > 3),
-        3
+        size_t(3)
     );
 }
 

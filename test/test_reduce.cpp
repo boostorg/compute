@@ -48,11 +48,11 @@ BOOST_AUTO_TEST_CASE(reduce_twos)
 
     uint_ sum;
     compute::reduce(vector.begin(), vector.end(), &sum, compute::plus<uint_>(), queue);
-    BOOST_CHECK_EQUAL(sum, 16);
+    BOOST_CHECK_EQUAL(sum, uint_(16));
 
     uint_ product;
     compute::reduce(vector.begin(), vector.end(), &product, compute::multiplies<uint_>(), queue);
-    BOOST_CHECK_EQUAL(product, 256);
+    BOOST_CHECK_EQUAL(product, uint_(256));
 }
 
 BOOST_AUTO_TEST_CASE(reduce_on_device)

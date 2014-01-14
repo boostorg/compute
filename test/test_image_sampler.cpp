@@ -39,13 +39,25 @@ BOOST_AUTO_TEST_CASE(get_info)
 
     bc::image_sampler sampler(context, true, CL_ADDRESS_NONE, CL_FILTER_NEAREST);
     BOOST_CHECK_EQUAL(sampler.get_info<bool>(CL_SAMPLER_NORMALIZED_COORDS), true);
-    BOOST_CHECK_EQUAL(sampler.get_info<cl_addressing_mode>(CL_SAMPLER_ADDRESSING_MODE), CL_ADDRESS_NONE);
-    BOOST_CHECK_EQUAL(sampler.get_info<cl_filter_mode>(CL_SAMPLER_FILTER_MODE), CL_FILTER_NEAREST);
+    BOOST_CHECK_EQUAL(
+        sampler.get_info<cl_addressing_mode>(CL_SAMPLER_ADDRESSING_MODE),
+        cl_addressing_mode(CL_ADDRESS_NONE)
+    );
+    BOOST_CHECK_EQUAL(
+        sampler.get_info<cl_filter_mode>(CL_SAMPLER_FILTER_MODE),
+        cl_filter_mode(CL_FILTER_NEAREST)
+    );
 
     sampler = bc::image_sampler(context, false, CL_ADDRESS_CLAMP, CL_FILTER_LINEAR);
     BOOST_CHECK_EQUAL(sampler.get_info<bool>(CL_SAMPLER_NORMALIZED_COORDS), false);
-    BOOST_CHECK_EQUAL(sampler.get_info<cl_addressing_mode>(CL_SAMPLER_ADDRESSING_MODE), CL_ADDRESS_CLAMP);
-    BOOST_CHECK_EQUAL(sampler.get_info<cl_filter_mode>(CL_SAMPLER_FILTER_MODE), CL_FILTER_LINEAR);
+    BOOST_CHECK_EQUAL(
+        sampler.get_info<cl_addressing_mode>(CL_SAMPLER_ADDRESSING_MODE),
+        cl_addressing_mode(CL_ADDRESS_CLAMP)
+    );
+    BOOST_CHECK_EQUAL(
+        sampler.get_info<cl_filter_mode>(CL_SAMPLER_FILTER_MODE),
+        cl_filter_mode(CL_FILTER_LINEAR)
+    );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

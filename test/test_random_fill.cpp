@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(random_fill_float)
         compute::count_if(
             vector.begin(), vector.end(), _1 < 0.0f || _1 > 1.0f, queue
         ),
-        0
+        size_t(0)
     );
 
     // fill with values between 5 and 10
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(random_fill_float)
         compute::count_if(
             vector.begin(), vector.end(), _1 < 5.0f || _1 > 10.0f, queue
         ),
-        0
+        size_t(0)
     );
 
     // fill with values between -25 and 25
@@ -71,6 +71,6 @@ BOOST_AUTO_TEST_CASE(random_fill_float)
         compute::count_if(
             vector.begin(), vector.end(), _1 < -25.0f || _1 > 25.0f, queue
         ),
-        0
+        size_t(0)
     );
 }

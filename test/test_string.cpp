@@ -26,8 +26,8 @@ BOOST_AUTO_TEST_CASE(size)
 {
     boost::compute::string str = "string";
     BOOST_VERIFY(!str.empty());
-    BOOST_CHECK_EQUAL(str.size(), 6);
-    BOOST_CHECK_EQUAL(str.length(), 6);
+    BOOST_CHECK_EQUAL(str.size(), size_t(6));
+    BOOST_CHECK_EQUAL(str.length(), size_t(6));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

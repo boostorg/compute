@@ -162,11 +162,11 @@ BOOST_AUTO_TEST_CASE(erase)
     BOOST_CHECK_EQUAL(vector.size(), 5);
 
     vector.erase(vector.begin() + 1);
-    BOOST_CHECK_EQUAL(vector.size(), 4);
+    BOOST_CHECK_EQUAL(vector.size(), size_t(4));
     CHECK_RANGE_EQUAL(int, 4, vector, (1, 5, 7, 9));
 
     vector.erase(vector.begin() + 2, vector.end());
-    BOOST_CHECK_EQUAL(vector.size(), 2);
+    BOOST_CHECK_EQUAL(vector.size(), size_t(2));
     CHECK_RANGE_EQUAL(int, 2, vector, (1, 5));
 }
 
