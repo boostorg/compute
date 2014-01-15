@@ -14,9 +14,12 @@
 #include <boost/mpl/copy.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/for_each.hpp>
+#include <boost/preprocessor/repetition.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/fusion/include/mpl.hpp>
 #include <boost/fusion/adapted/boost_tuple.hpp>
+
+#include <boost/compute/config.hpp>
 
 namespace boost {
 namespace compute {
@@ -33,35 +36,21 @@ struct function_signature_to_mpl_vector_impl<Signature, 0>
     typedef mpl::vector<> type;
 };
 
-template<class Signature>
-struct function_signature_to_mpl_vector_impl<Signature, 1>
-{
-    typedef typename boost::function_traits<Signature> traits;
-    typedef typename traits::arg1_type T1;
+#define BOOST_COMPUTE_FUNCTION_SIGNATURE_TO_MPL_VECTOR_ARG_TYPE(z, n, unused) \
+    typedef typename BOOST_PP_CAT(BOOST_PP_CAT(traits::arg, BOOST_PP_INC(n)), _type) BOOST_PP_CAT(T, n);
 
-    typedef mpl::vector<T1> type;
+#define BOOST_COMPUTE_FUNCTION_SIGNATURE_TO_MPL_VECTOR_IMPL(z, n, unused) \
+template<class Signature> \
+struct function_signature_to_mpl_vector_impl<Signature, n> \
+{ \
+    typedef typename boost::function_traits<Signature> traits; \
+    BOOST_PP_REPEAT(n, BOOST_COMPUTE_FUNCTION_SIGNATURE_TO_MPL_VECTOR_ARG_TYPE, ~) \
+    typedef mpl::vector<BOOST_PP_ENUM_PARAMS(n, T)> type; \
 };
 
-template<class Signature>
-struct function_signature_to_mpl_vector_impl<Signature, 2>
-{
-    typedef typename boost::function_traits<Signature> traits;
-    typedef typename traits::arg1_type T1;
-    typedef typename traits::arg2_type T2;
+BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_FUNCTION_SIGNATURE_TO_MPL_VECTOR_IMPL, ~)
 
-    typedef mpl::vector<T1, T2> type;
-};
-
-template<class Signature>
-struct function_signature_to_mpl_vector_impl<Signature, 3>
-{
-    typedef typename boost::function_traits<Signature> traits;
-    typedef typename traits::arg1_type T1;
-    typedef typename traits::arg2_type T2;
-    typedef typename traits::arg2_type T3;
-
-    typedef mpl::vector<T1, T2, T3> type;
-};
+#undef BOOST_COMPUTE_FUNCTION_SIGNATURE_TO_MPL_VECTOR_IMPL
 
 // meta-function returning the argument types from the function
 // signature as a mpl vector
