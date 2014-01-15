@@ -70,7 +70,7 @@ void check_lambda_result(const Expr &)
 }
 
 template<class Result, class Expr, class Arg1>
-void check_unary_lambda_result(const Expr &, const Arg1 &)
+void check_lambda_result(const Expr &, const Arg1 &)
 {
     BOOST_STATIC_ASSERT((
         boost::is_same<
@@ -84,7 +84,7 @@ void check_unary_lambda_result(const Expr &, const Arg1 &)
 }
 
 template<class Result, class Expr, class Arg1, class Arg2>
-void check_binary_lambda_result(const Expr &, const Arg1 &, const Arg2 &)
+void check_lambda_result(const Expr &, const Arg1 &, const Arg2 &)
 {
     BOOST_STATIC_ASSERT((
         boost::is_same<
@@ -110,30 +110,30 @@ BOOST_AUTO_TEST_CASE(result_of)
     check_lambda_result<float>(proto::lit(1) + 1.2f);
     check_lambda_result<float>(proto::lit(1) / 2 + 1.2f);
 
-    check_unary_lambda_result<int>(_1, int(1));
-    check_unary_lambda_result<float>(_1, float(1.2f));
-    check_unary_lambda_result<bc::float4_>(_1, bc::float4_(1, 2, 3, 4));
-    check_unary_lambda_result<bc::float4_>(2.0f * _1, bc::float4_(1, 2, 3, 4));
-    check_unary_lambda_result<bc::float4_>(_1 * 2.0f, bc::float4_(1, 2, 3, 4));
+    check_lambda_result<int>(_1, int(1));
+    check_lambda_result<float>(_1, float(1.2f));
+    check_lambda_result<bc::float4_>(_1, bc::float4_(1, 2, 3, 4));
+    check_lambda_result<bc::float4_>(2.0f * _1, bc::float4_(1, 2, 3, 4));
+    check_lambda_result<bc::float4_>(_1 * 2.0f, bc::float4_(1, 2, 3, 4));
 
-    check_binary_lambda_result<float>(dot(_1, _2), bc::float4_(0, 1, 2, 3), bc::float4_(3, 2, 1, 0));
-    check_unary_lambda_result<float>(dot(_1, bc::float4_(3, 2, 1, 0)), bc::float4_(0, 1, 2, 3));
+    check_lambda_result<float>(dot(_1, _2), bc::float4_(0, 1, 2, 3), bc::float4_(3, 2, 1, 0));
+    check_lambda_result<float>(dot(_1, bc::float4_(3, 2, 1, 0)), bc::float4_(0, 1, 2, 3));
 
-    check_unary_lambda_result<int>(_1 + 2, int(2));
-    check_unary_lambda_result<float>(_1 + 2, float(2.2f));
+    check_lambda_result<int>(_1 + 2, int(2));
+    check_lambda_result<float>(_1 + 2, float(2.2f));
 
-    check_binary_lambda_result<int>(_1 + _2, int(1), int(2));
-    check_binary_lambda_result<float>(_1 + _2, int(1), float(2.2f));
+    check_lambda_result<int>(_1 + _2, int(1), int(2));
+    check_lambda_result<float>(_1 + _2, int(1), float(2.2f));
 
-    check_unary_lambda_result<int>(_1 + _1, int(1));
-    check_unary_lambda_result<float>(_1 * _1, float(1));
+    check_lambda_result<int>(_1 + _1, int(1));
+    check_lambda_result<float>(_1 * _1, float(1));
 
     using boost::compute::float4_;
     using boost::compute::lambda::get;
 
-    check_unary_lambda_result<float>(get<0>(_1), float4_(1, 2, 3, 4));
-    check_unary_lambda_result<bool>(get<0>(_1) < 1.f, float4_(1, 2, 3, 4));
-    check_unary_lambda_result<bool>(_1 < 1.f, float(2));
+    check_lambda_result<float>(get<0>(_1), float4_(1, 2, 3, 4));
+    check_lambda_result<bool>(get<0>(_1) < 1.f, float4_(1, 2, 3, 4));
+    check_lambda_result<bool>(_1 < 1.f, float(2));
 }
 
 BOOST_AUTO_TEST_CASE(make_function_from_lamdba)
