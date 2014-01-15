@@ -12,6 +12,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <boost/compute/lambda.hpp>
+#include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/for_each.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
@@ -134,6 +135,12 @@ BOOST_AUTO_TEST_CASE(result_of)
     check_lambda_result<float>(get<0>(_1), float4_(1, 2, 3, 4));
     check_lambda_result<bool>(get<0>(_1) < 1.f, float4_(1, 2, 3, 4));
     check_lambda_result<bool>(_1 < 1.f, float(2));
+
+    using boost::compute::lambda::make_pair;
+
+    check_lambda_result<int>(get<0>(make_pair(_1, _2)), int(1), float(1.2f));
+    check_lambda_result<float>(get<1>(make_pair(_1, _2)), int(1), float(1.2f));
+    check_lambda_result<std::pair<int, float> >(make_pair(_1, _2), int(1), float(1.2f));
 }
 
 BOOST_AUTO_TEST_CASE(make_function_from_lamdba)
@@ -296,6 +303,40 @@ BOOST_AUTO_TEST_CASE(lambda_get_zip_iterator)
     CHECK_RANGE_EQUAL(float, 8, output,
         (1.2f, 2.3f, 3.4f, 4.5f, 5.6f, 6.7f, 7.8f, 9.0f)
     );
+}
+
+BOOST_AUTO_TEST_CASE(lambda_make_pair)
+{
+    using boost::compute::_1;
+    using boost::compute::_2;
+    using boost::compute::lambda::make_pair;
+
+    int int_data[] = { 1, 3, 5, 7 };
+    float float_data[] = { 1.2f, 2.3f, 3.4f, 4.5f };
+
+    compute::vector<int> int_vector(4, context);
+    compute::vector<float> float_vector(4, context);
+
+    compute::copy_n(int_data, 4, int_vector.begin(), queue);
+    compute::copy_n(float_data, 4, float_vector.begin(), queue);
+
+    compute::vector<std::pair<int, float> > output_vector(4, context);
+
+    compute::transform(
+        int_vector.begin(),
+        int_vector.end(),
+        float_vector.begin(),
+        output_vector.begin(),
+        make_pair(_1 - 1, 0 - _2),
+        queue
+    );
+
+    std::vector<std::pair<int, float> > host_vector(4);
+    compute::copy_n(output_vector.begin(), 4, host_vector.begin(), queue);
+    BOOST_CHECK(host_vector[0] == std::make_pair(0, -1.2f));
+    BOOST_CHECK(host_vector[1] == std::make_pair(2, -2.3f));
+    BOOST_CHECK(host_vector[2] == std::make_pair(4, -3.4f));
+    BOOST_CHECK(host_vector[3] == std::make_pair(6, -4.5f));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
