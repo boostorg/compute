@@ -26,6 +26,7 @@ namespace proto = boost::proto;
 // lambda placeholders
 expression<proto::terminal<placeholder<0> >::type> const _1;
 expression<proto::terminal<placeholder<1> >::type> const _2;
+expression<proto::terminal<placeholder<2> >::type> const _3;
 
 namespace detail {
 
@@ -71,11 +72,20 @@ struct result_of<expression<proto::terminal<placeholder<1> >::type>, Args, proto
     typedef typename detail::terminal_type<arg_type>::type type;
 };
 
+template<class Args>
+struct result_of<expression<proto::terminal<placeholder<2> >::type>, Args, proto::tag::terminal>
+{
+    typedef typename boost::tuples::element<2, Args>::type arg_type;
+
+    typedef typename detail::terminal_type<arg_type>::type type;
+};
+
 } // end lambda namespace
 
 // lift lambda placeholders up to the boost::compute namespace
 using lambda::_1;
 using lambda::_2;
+using lambda::_3;
 
 } // end compute namespace
 } // end boost namespace
