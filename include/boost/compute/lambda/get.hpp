@@ -11,6 +11,9 @@
 #ifndef BOOST_COMPUTE_LAMBDA_GET_HPP
 #define BOOST_COMPUTE_LAMBDA_GET_HPP
 
+#include <boost/preprocessor/repetition.hpp>
+
+#include <boost/compute/config.hpp>
 #include <boost/compute/functional/get.hpp>
 #include <boost/compute/lambda/placeholder.hpp>
 
@@ -81,38 +84,20 @@ struct get_func
     };
 
     // get<N>() specialization for boost::tuple<T...>
-    template<class T1>
-    struct make_get_suffix<boost::tuple<T1> >
-    {
-        static std::string value()
-        {
-            BOOST_STATIC_ASSERT(N < 1);
-
-            return ".v" + boost::lexical_cast<std::string>(N);
-        }
+    #define BOOST_COMPUTE_LAMBDA_GET_MAKE_TUPLE_SUFFIX(z, n, unused) \
+    template<BOOST_PP_ENUM_PARAMS(n, class T)> \
+    struct make_get_suffix<boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)> > \
+    { \
+        static std::string value() \
+        { \
+            BOOST_STATIC_ASSERT(N < n); \
+            return ".v" + boost::lexical_cast<std::string>(N); \
+        } \
     };
 
-    template<class T1, class T2>
-    struct make_get_suffix<boost::tuple<T1, T2> >
-    {
-        static std::string value()
-        {
-            BOOST_STATIC_ASSERT(N < 2);
+    BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_LAMBDA_GET_MAKE_TUPLE_SUFFIX, ~)
 
-            return ".v" + boost::lexical_cast<std::string>(N);
-        }
-    };
-
-    template<class T1, class T2, class T3>
-    struct make_get_suffix<boost::tuple<T1, T2, T3> >
-    {
-        static std::string value()
-        {
-            BOOST_STATIC_ASSERT(N < 3);
-
-            return ".v" + boost::lexical_cast<std::string>(N);
-        }
-    };
+    #undef BOOST_COMPUTE_LAMBDA_GET_MAKE_TUPLE_SUFFIX
 
     template<class Context, class Arg>
     static void dispatch_apply_terminal(Context &ctx, const Arg &arg)
