@@ -14,10 +14,12 @@
 #include <boost/proto/core.hpp>
 #include <boost/proto/context.hpp>
 #include <boost/type_traits.hpp>
+#include <boost/preprocessor/repetition.hpp>
 
-#include <boost/compute/type_traits/type_name.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/lambda/result_of.hpp>
 #include <boost/compute/lambda/functional.hpp>
+#include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 
 namespace boost {
@@ -82,32 +84,23 @@ struct context : proto::callable_context<context<Args> >
     }
 
     // handle functions
-    template<class F, class Arg>
-    void operator()(proto::tag::function,
-                    const F &function,
-                    const Arg &arg)
-    {
-        proto::value(function).apply(*this, arg);
+    #define BOOST_COMPUTE_LAMBDA_CONTEXT_FUNCTION_ARG(z, n, unused) \
+        BOOST_PP_COMMA_IF(n) BOOST_PP_CAT(const Arg, n) BOOST_PP_CAT(&arg, n)
+
+    #define BOOST_COMPUTE_LAMBDA_CONTEXT_FUNCTION(z, n, unused) \
+    template<class F, BOOST_PP_ENUM_PARAMS(n, class Arg)> \
+    void operator()( \
+        proto::tag::function, \
+        const F &function, \
+        BOOST_PP_REPEAT(n, BOOST_COMPUTE_LAMBDA_CONTEXT_FUNCTION_ARG, ~) \
+    ) \
+    { \
+        proto::value(function).apply(*this, BOOST_PP_ENUM_PARAMS(n, arg)); \
     }
 
-    template<class F, class Arg1, class Arg2>
-    void operator()(proto::tag::function,
-                    const F &function,
-                    const Arg1 &arg1,
-                    const Arg2 &arg2)
-    {
-        proto::value(function).apply(*this, arg1, arg2);
-    }
+    BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_LAMBDA_CONTEXT_FUNCTION, ~)
 
-    template<class F, class Arg1, class Arg2, class Arg3>
-    void operator()(proto::tag::function,
-                    const F &function,
-                    const Arg1 &arg1,
-                    const Arg2 &arg2,
-                    const Arg3 &arg3)
-    {
-        proto::value(function).apply(*this, arg1, arg2, arg3);
-    }
+    #undef BOOST_COMPUTE_LAMBDA_CONTEXT_FUNCTION
 
     // operators
     BOOST_COMPUTE_LAMBDA_CONTEXT_DEFINE_BINARY_OPERATOR(proto::tag::plus, '+')
