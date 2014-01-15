@@ -11,6 +11,9 @@
 #define BOOST_TEST_MODULE TestLambda
 #include <boost/test/unit_test.hpp>
 
+#include <boost/tuple/tuple_io.hpp>
+#include <boost/tuple/tuple_comparison.hpp>
+
 #include <boost/compute/lambda.hpp>
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/for_each.hpp>
@@ -98,10 +101,25 @@ void check_lambda_result(const Expr &, const Arg1 &, const Arg2 &)
     ));
 }
 
+template<class Result, class Expr, class Arg1, class Arg2, class Arg3>
+void check_lambda_result(const Expr &, const Arg1 &, const Arg2 &, const Arg3 &)
+{
+    BOOST_STATIC_ASSERT((
+        boost::is_same<
+            typename ::boost::compute::lambda::result_of<
+                Expr,
+                typename boost::tuple<Arg1, Arg2, Arg3>
+            >::type,
+            Result
+        >::value
+    ));
+}
+
 BOOST_AUTO_TEST_CASE(result_of)
 {
     using ::boost::compute::lambda::_1;
     using ::boost::compute::lambda::_2;
+    using ::boost::compute::lambda::_3;
 
     namespace proto = ::boost::proto;
 
@@ -141,6 +159,22 @@ BOOST_AUTO_TEST_CASE(result_of)
     check_lambda_result<int>(get<0>(make_pair(_1, _2)), int(1), float(1.2f));
     check_lambda_result<float>(get<1>(make_pair(_1, _2)), int(1), float(1.2f));
     check_lambda_result<std::pair<int, float> >(make_pair(_1, _2), int(1), float(1.2f));
+
+    using boost::compute::lambda::make_tuple;
+
+    check_lambda_result<boost::tuple<int> >(make_tuple(_1), int(1));
+    check_lambda_result<boost::tuple<int, float> >(make_tuple(_1, _2), int(1), float(1.2f));
+    check_lambda_result<boost::tuple<int, int> >(make_tuple(_1, _1), int(1));
+    check_lambda_result<boost::tuple<int, float> >(make_tuple(_1, _2), int(1), float(1.4f));
+    check_lambda_result<boost::tuple<char, int, float> >(
+        make_tuple(_1, _2, _3), char('a'), int(2), float(3.4f)
+    );
+    check_lambda_result<boost::tuple<int, int, int> >(
+        make_tuple(_1, _1, _1), int(1), float(1.4f)
+    );
+    check_lambda_result<boost::tuple<int, float, int, float, int> >(
+        make_tuple(_1, _2, _1, _2, _1), int(1), float(1.4f)
+    );
 }
 
 BOOST_AUTO_TEST_CASE(make_function_from_lamdba)
@@ -337,6 +371,57 @@ BOOST_AUTO_TEST_CASE(lambda_make_pair)
     BOOST_CHECK(host_vector[1] == std::make_pair(2, -2.3f));
     BOOST_CHECK(host_vector[2] == std::make_pair(4, -3.4f));
     BOOST_CHECK(host_vector[3] == std::make_pair(6, -4.5f));
+}
+
+BOOST_AUTO_TEST_CASE(lambda_make_tuple)
+{
+    using boost::compute::_1;
+    using boost::compute::lambda::get;
+    using boost::compute::lambda::make_tuple;
+
+    std::vector<boost::tuple<int, float> > data;
+    data.push_back(boost::make_tuple(2, 1.2f));
+    data.push_back(boost::make_tuple(4, 2.4f));
+    data.push_back(boost::make_tuple(6, 4.6f));
+    data.push_back(boost::make_tuple(8, 6.8f));
+
+    compute::vector<boost::tuple<int, float> > input_vector(4, context);
+    compute::copy(data.begin(), data.end(), input_vector.begin(), queue);
+
+    // reverse the elements in the tuple
+    compute::vector<boost::tuple<float, int> > output_vector(4, context);
+
+    compute::transform(
+        input_vector.begin(),
+        input_vector.end(),
+        output_vector.begin(),
+        make_tuple(get<1>(_1), get<0>(_1)),
+        queue
+    );
+
+    std::vector<boost::tuple<float, int> > host_vector(4);
+    compute::copy_n(output_vector.begin(), 4, host_vector.begin(), queue);
+    BOOST_CHECK_EQUAL(host_vector[0], boost::make_tuple(1.2f, 2));
+    BOOST_CHECK_EQUAL(host_vector[1], boost::make_tuple(2.4f, 4));
+    BOOST_CHECK_EQUAL(host_vector[2], boost::make_tuple(4.6f, 6));
+    BOOST_CHECK_EQUAL(host_vector[3], boost::make_tuple(6.8f, 8));
+
+    // duplicate each element in the tuple
+    compute::vector<boost::tuple<int, int, float, float> > doubled_vector(4, context);
+    compute::transform(
+        input_vector.begin(),
+        input_vector.end(),
+        doubled_vector.begin(),
+        make_tuple(get<0>(_1), get<0>(_1), get<1>(_1), get<1>(_1)),
+        queue
+    );
+
+    std::vector<boost::tuple<int, int, float, float> > doubled_host_vector(4);
+    compute::copy_n(doubled_vector.begin(), 4, doubled_host_vector.begin(), queue);
+    BOOST_CHECK_EQUAL(doubled_host_vector[0], boost::make_tuple(2, 2, 1.2f, 1.2f));
+    BOOST_CHECK_EQUAL(doubled_host_vector[1], boost::make_tuple(4, 4, 2.4f, 2.4f));
+    BOOST_CHECK_EQUAL(doubled_host_vector[2], boost::make_tuple(6, 6, 4.6f, 4.6f));
+    BOOST_CHECK_EQUAL(doubled_host_vector[3], boost::make_tuple(8, 8, 6.8f, 6.8f));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

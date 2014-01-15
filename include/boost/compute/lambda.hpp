@@ -15,6 +15,7 @@
 #include <boost/compute/lambda/functional.hpp>
 #include <boost/compute/lambda/get.hpp>
 #include <boost/compute/lambda/make_pair.hpp>
+#include <boost/compute/lambda/make_tuple.hpp>
 #include <boost/compute/lambda/placeholders.hpp>
 #include <boost/compute/lambda/result_of.hpp>
 #include <boost/compute/lambda/make_function_from_lambda.hpp>
