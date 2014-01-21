@@ -5,6 +5,7 @@ set(EXAMPLES
   copy_data
   hello_world
   host_sort
+  inline_ptx
   longest_vector
   list_devices
   monte_carlo
