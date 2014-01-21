@@ -12,7 +12,13 @@
 #define BOOST_COMPUTE_CONFIG_HPP
 
 #include <boost/config.hpp>
+#include <boost/version.hpp>
 #include <boost/compute/cl.hpp>
+
+// check for minimum required boost version
+#if BOOST_VERSION < 104800
+#error Boost.Compute requires Boost version 1.48 or later
+#endif
 
 // the BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES macro is defined
 // if the compiler does not *fully* support variadic templates
