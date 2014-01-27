@@ -17,6 +17,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/types/pair.hpp>
 
+#include "quirks.hpp"
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
@@ -39,6 +40,11 @@ BOOST_AUTO_TEST_CASE(generate4)
 
 BOOST_AUTO_TEST_CASE(generate_pair)
 {
+    if(bug_in_struct_assignment(device)){
+        std::cerr << "skipping generate_pair test" << std::endl;
+        return;
+    }
+
     // in order to use std::pair<T1, T2> with BOOST_COMPUTE_FUNCTION() macro we
     // need a typedef. otherwise the commas in the type declaration screw it up.
     typedef std::pair<int, float> pair_type;
