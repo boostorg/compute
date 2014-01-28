@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(value_type)
 BOOST_AUTO_TEST_CASE(copy)
 {
     int data[] = { 1, -2, 3, -4, 5 };
-    boost::compute::vector<int> a(data, data + 5, context);
+    boost::compute::vector<int> a(data, data + 5, queue);
 
     boost::compute::vector<int> b(5, context);
     boost::compute::copy(

@@ -12,7 +12,6 @@
 #include <boost/test/unit_test.hpp>
 
 #include <boost/compute/system.hpp>
-#include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/sort_by_key.hpp>
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/container/vector.hpp>
@@ -40,11 +39,8 @@ BOOST_AUTO_TEST_CASE(sort_int_1)
     int keys_data[] = { 11 };
     int values_data[] = { 100 };
 
-    compute::vector<int> keys(1, context);
-    compute::vector<int> values(1, context);
-
-    compute::copy_n(keys_data, 1, keys.begin(), queue);
-    compute::copy_n(values_data, 1, values.begin(), queue);
+    compute::vector<int> keys(keys_data, keys_data + 1, queue);
+    compute::vector<int> values(values_data, values_data + 1, queue);
 
     BOOST_CHECK(compute::is_sorted(keys.begin(), keys.end(), queue) == true);
     BOOST_CHECK(compute::is_sorted(values.begin(), values.end(), queue) == true);
@@ -58,11 +54,8 @@ BOOST_AUTO_TEST_CASE(sort_int_2)
     int keys_data[] = { 4, 2 };
     int values_data[] = { 42, 24 };
 
-    compute::vector<int> keys(2, context);
-    compute::vector<int> values(2, context);
-
-    compute::copy_n(keys_data, 2, keys.begin(), queue);
-    compute::copy_n(values_data, 2, values.begin(), queue);
+    compute::vector<int> keys(keys_data, keys_data + 2, queue);
+    compute::vector<int> values(values_data, values_data + 2, queue);
 
     BOOST_CHECK(compute::is_sorted(keys.begin(), keys.end(), queue) == false);
     BOOST_CHECK(compute::is_sorted(values.begin(), values.end(), queue) == false);
@@ -78,11 +71,8 @@ BOOST_AUTO_TEST_CASE(sort_char_by_int)
     int keys_data[] = { 6, 2, 1, 3, 4, 7, 5, 0 };
     char values_data[] = { 'g', 'c', 'b', 'd', 'e', 'h', 'f', 'a' };
 
-    compute::vector<int> keys(8, context);
-    compute::vector<char> values(8, context);
-
-    compute::copy_n(keys_data, 8, keys.begin(), queue);
-    compute::copy_n(values_data, 8, values.begin(), queue);
+    compute::vector<int> keys(keys_data, keys_data + 8, queue);
+    compute::vector<char> values(values_data, values_data + 8, queue);
 
     compute::sort_by_key(keys.begin(), keys.end(), values.begin(), queue);
 

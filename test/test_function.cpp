@@ -13,7 +13,7 @@
 
 #include <boost/compute/system.hpp>
 #include <boost/compute/function.hpp>
-#include <boost/compute/algorithm/copy_n.hpp>
+#include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/accumulate.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/algorithm/sort.hpp>
@@ -34,8 +34,7 @@ BOOST_AUTO_TEST_CASE(add_three)
     });
 
     int data[] = { 1, 2, 3, 4 };
-    compute::vector<int> vector(4, context);
-    compute::copy_n(data, 4, vector.begin(), queue);
+    compute::vector<int> vector(data, data + 4, queue);
 
     compute::transform(
         vector.begin(), vector.end(), vector.begin(), add_three, queue
@@ -56,8 +55,7 @@ BOOST_AUTO_TEST_CASE(sum_odd_values)
     });
 
     int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-    compute::vector<int> vector(8, context);
-    compute::copy_n(data, 8, vector.begin(), queue);
+    compute::vector<int> vector(data, data + 8, queue);
 
     int result = compute::accumulate(
         vector.begin(), vector.end(), 0, add_odd_value, queue
@@ -103,12 +101,10 @@ BOOST_AUTO_TEST_CASE(sort_pairs)
 BOOST_AUTO_TEST_CASE(transform_zip_iterator)
 {
     float float_data[] = { 1.f, 2.f, 3.f, 4.f };
-    compute::vector<float> input_floats(4, context);
-    compute::copy_n(float_data, 4, input_floats.begin(), queue);
+    compute::vector<float> input_floats(float_data, float_data + 4, queue);
 
     int int_data[] = { 2, 4, 6, 8 };
-    compute::vector<int> input_ints(4, context);
-    compute::copy_n(int_data, 4, input_ints.begin(), queue);
+    compute::vector<int> input_ints(int_data, int_data + 4, queue);
 
     compute::vector<float> results(4, context);
 
@@ -130,7 +126,7 @@ BOOST_AUTO_TEST_CASE(transform_zip_iterator)
     );
 
     float results_data[4];
-    compute::copy_n(results.begin(), 4, results_data, queue);
+    compute::copy(results.begin(), results.end(), results_data, queue);
     BOOST_CHECK_CLOSE(results_data[0], 1.f, 1e-4);
     BOOST_CHECK_CLOSE(results_data[1], 16.f, 1e-4);
     BOOST_CHECK_CLOSE(results_data[2], 729.f, 1e-4);

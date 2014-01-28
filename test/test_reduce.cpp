@@ -29,7 +29,7 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(reduce_int)
 {
     int data[] = { 1, 5, 9, 13, 17 };
-    compute::vector<int> vector(data, data + 5, context);
+    compute::vector<int> vector(data, data + 5, queue);
     int sum;
     compute::reduce(vector.begin(), vector.end(), &sum, compute::plus<int>(), queue);
     BOOST_CHECK_EQUAL(sum, 45);
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE(reduce_twos)
 BOOST_AUTO_TEST_CASE(reduce_on_device)
 {
     int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-    compute::vector<int> input(data, data + 8, context);
+    compute::vector<int> input(data, data + 8, queue);
     compute::vector<int> result(2, context);
     compute::reduce(input.begin(), input.begin() + 4, result.begin(), queue);
     compute::reduce(input.begin() + 4, input.end(), result.end() - 1, queue);
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(reduce_on_device)
 BOOST_AUTO_TEST_CASE(reduce_int_min_max)
 {
     int data[] = { 11, 5, 92, 13, 42 };
-    compute::vector<int> vector(data, data + 5, context);
+    compute::vector<int> vector(data, data + 5, queue);
     int min_value;
     compute::reduce(
         vector.begin(),
@@ -100,7 +100,7 @@ BOOST_AUTO_TEST_CASE(reduce_int2)
         data.push_back(value);
     }
 
-    compute::vector<compute::int2_> vector(data.begin(), data.end(), context);
+    compute::vector<compute::int2_> vector(data.begin(), data.end(), queue);
 
     compute::int2_ sum;
     compute::reduce(
@@ -187,7 +187,7 @@ BOOST_AUTO_TEST_CASE(reduce_transform_iterator)
     using ::boost::compute::_1;
 
     int data[] = { 1, 3, 5, 7, 9 };
-    compute::vector<int> vector(data, data + 5, context);
+    compute::vector<int> vector(data, data + 5, queue);
 
     int sum;
     compute::reduce(

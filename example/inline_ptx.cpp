@@ -13,7 +13,7 @@
 #include <vector>
 
 #include <boost/compute/system.hpp>
-#include <boost/compute/algorithm/copy_n.hpp>
+#include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 
@@ -41,8 +41,7 @@ int main()
     // create input values and copy them to the device
     using compute::uint_;
     uint_ data[] = { 0x00, 0x01, 0x11, 0xFF };
-    compute::vector<uint_> input(4, context);
-    compute::copy_n(data, 4, input.begin(), queue);
+    compute::vector<uint_> input(data, data + 4, queue);
 
     // function returning the number of bits set (aka population count or
     // popcount) using the "popc" inline ptx assembly instruction.
@@ -61,7 +60,7 @@ int main()
 
     // copy results back to the host and print them out
     std::vector<uint_> counts(output.size());
-    compute::copy_n(output.begin(), counts.size(), counts.begin(), queue);
+    compute::copy(output.begin(), output.end(), counts.begin(), queue);
 
     for(size_t i = 0; i < counts.size(); i++){
         std::cout << "0x" << std::hex << data[i]

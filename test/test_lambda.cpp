@@ -348,12 +348,8 @@ BOOST_AUTO_TEST_CASE(lambda_make_pair)
     int int_data[] = { 1, 3, 5, 7 };
     float float_data[] = { 1.2f, 2.3f, 3.4f, 4.5f };
 
-    compute::vector<int> int_vector(4, context);
-    compute::vector<float> float_vector(4, context);
-
-    compute::copy_n(int_data, 4, int_vector.begin(), queue);
-    compute::copy_n(float_data, 4, float_vector.begin(), queue);
-
+    compute::vector<int> int_vector(int_data, int_data + 4, queue);
+    compute::vector<float> float_vector(float_data, float_data + 4, queue);
     compute::vector<std::pair<int, float> > output_vector(4, context);
 
     compute::transform(

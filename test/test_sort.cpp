@@ -229,7 +229,7 @@ BOOST_AUTO_TEST_CASE(sort_vectors_by_length)
     boost::compute::vector<float2_> vector(
         reinterpret_cast<float2_ *>(data),
         reinterpret_cast<float2_ *>(data) + 5,
-        context
+        queue
     );
 
     // sort vectors by length

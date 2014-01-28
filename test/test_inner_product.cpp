@@ -22,10 +22,10 @@ namespace bc = boost::compute;
 BOOST_AUTO_TEST_CASE(inner_product_int)
 {
     int data1[] = { 1, 2, 3, 4 };
-    bc::vector<int> input1(data1, data1 + 4, context);
+    bc::vector<int> input1(data1, data1 + 4, queue);
 
     int data2[] = { 10, 20, 30, 40 };
-    bc::vector<int> input2(data2, data2 + 4, context);
+    bc::vector<int> input2(data2, data2 + 4, queue);
 
     int product = bc::inner_product(input1.begin(),
                                     input1.end(),

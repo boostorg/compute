@@ -31,10 +31,8 @@ inline Iterator remove_if(Iterator first,
 {
     typedef typename std::iterator_traits<Iterator>::value_type value_type;
 
-    const context &context = queue.get_context();
-
     // temporary storage for the input data
-    ::boost::compute::vector<value_type> tmp(first, last, context);
+    ::boost::compute::vector<value_type> tmp(first, last, queue);
 
     return ::boost::compute::copy_if(tmp.begin(),
                                      tmp.end(),

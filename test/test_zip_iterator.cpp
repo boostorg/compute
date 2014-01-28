@@ -107,13 +107,13 @@ BOOST_AUTO_TEST_CASE(copy)
 {
     // create three separate vectors of three different types
     char char_data[] = { 'x', 'y', 'z' };
-    boost::compute::vector<char> char_vector(char_data, char_data + 3, context);
+    boost::compute::vector<char> char_vector(char_data, char_data + 3, queue);
 
     int int_data[] = { 4, 7, 9 };
-    boost::compute::vector<int> int_vector(int_data, int_data + 3, context);
+    boost::compute::vector<int> int_vector(int_data, int_data + 3, queue);
 
     float float_data[] = { 3.2f, 4.5f, 7.6f };
-    boost::compute::vector<float> float_vector(float_data, float_data + 3, context);
+    boost::compute::vector<float> float_vector(float_data, float_data + 3, queue);
 
     // zip all three vectors into a single tuple vector
     boost::compute::vector<boost::tuple<char, int, float> > tuple_vector(3, context);
@@ -156,12 +156,8 @@ BOOST_AUTO_TEST_CASE(zip_iterator_get)
     int data1[] = { 0, 2, 4, 6, 8 };
     int data2[] = { 1, 3, 5, 7, 9 };
 
-    compute::vector<int> input1(5, context);
-    compute::copy(data1, data1 + 5, input1.begin(), queue);
-
-    compute::vector<int> input2(5, context);
-    compute::copy(data2, data2 + 5, input2.begin(), queue);
-
+    compute::vector<int> input1(data1, data1 + 5, queue);
+    compute::vector<int> input2(data2, data2 + 5, queue);
     compute::vector<int> output(5, context);
 
     // extract first component from (input1)

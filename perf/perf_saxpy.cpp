@@ -55,8 +55,8 @@ int main(int argc, char *argv[])
     std::generate(host_y.begin(), host_y.end(), rand_float);
 
     // create vector on the device and copy the data
-    boost::compute::vector<float> device_x(host_x.begin(), host_x.end(), context);
-    boost::compute::vector<float> device_y(host_y.begin(), host_y.end(), context);
+    boost::compute::vector<float> device_x(host_x.begin(), host_x.end(), queue);
+    boost::compute::vector<float> device_y(host_y.begin(), host_y.end(), queue);
 
     boost::compute::detail::timer t;
     boost::compute::transform(

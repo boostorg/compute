@@ -23,7 +23,7 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(clamp_float_range)
 {
     float data[] = { 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f };
-    compute::vector<float> input(data, data + 8, context);
+    compute::vector<float> input(data, data + 8, queue);
 
     compute::vector<float> result(8, context);
     compute::detail::clamp_range(

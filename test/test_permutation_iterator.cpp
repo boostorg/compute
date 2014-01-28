@@ -52,10 +52,10 @@ BOOST_AUTO_TEST_CASE(value_type)
 BOOST_AUTO_TEST_CASE(copy)
 {
     int input_data[] = { 3, 4, 2, 1, 5 };
-    boost::compute::vector<int> input(input_data, input_data + 5, context);
+    boost::compute::vector<int> input(input_data, input_data + 5, queue);
 
     int map_data[] = { 3, 2, 0, 1, 4 };
-    boost::compute::vector<int> map(map_data, map_data + 5, context);
+    boost::compute::vector<int> map(map_data, map_data + 5, queue);
 
     boost::compute::vector<int> output(5, context);
     boost::compute::copy(

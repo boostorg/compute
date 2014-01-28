@@ -25,9 +25,7 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(sort_int_by_abs)
 {
     int data[] = { 1, -2, 4, -3, 0, 5, -8, -9 };
-
-    compute::vector<int> vector(8, context);
-    compute::copy_n(data, 8, vector.begin(), queue);
+    compute::vector<int> vector(data, data + 8, queue);
 
     compute::detail::sort_by_transform(
         vector.begin(),

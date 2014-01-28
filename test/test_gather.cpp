@@ -24,12 +24,10 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(gather_int)
 {
     int input_data[] = { 1, 2, 3, 4, 5 };
-    compute::vector<int> input(5, context);
-    compute::copy_n(input_data, 5, input.begin(), queue);
+    compute::vector<int> input(input_data, input_data + 5, queue);
 
     int indices_data[] = { 0, 4, 1, 3, 2 };
-    compute::vector<int> indices(5, context);
-    compute::copy_n(indices_data, 5, indices.begin(), queue);
+    compute::vector<int> indices(indices_data, indices_data + 5, queue);
 
     compute::vector<int> output(5, context);
     compute::gather(
@@ -42,8 +40,7 @@ BOOST_AUTO_TEST_CASE(copy_index_then_gather)
 {
     // input data
     int data[] = { 1, 4, 3, 2, 5, 9, 8, 7 };
-    compute::vector<int> input(8, context);
-    compute::copy_n(data, 8, input.begin(), queue);
+    compute::vector<int> input(data, data + 8, queue);
 
     // function returning true if the input is odd
     BOOST_COMPUTE_FUNCTION(bool, is_odd, (int),

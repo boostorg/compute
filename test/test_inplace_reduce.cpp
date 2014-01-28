@@ -22,7 +22,7 @@
 BOOST_AUTO_TEST_CASE(sum_int)
 {
     int data[] = { 1, 5, 3, 4, 9, 3, 5, 3 };
-    boost::compute::vector<int> vector(data, data + 8, context);
+    boost::compute::vector<int> vector(data, data + 8, queue);
 
     boost::compute::detail::inplace_reduce(vector.begin(),
                                            vector.end(),
@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE(sum_int)
 BOOST_AUTO_TEST_CASE(multiply_int)
 {
     int data[] = { 1, 5, 3, 4, 9, 3, 5, 3 };
-    boost::compute::vector<int> vector(data, data + 8, context);
+    boost::compute::vector<int> vector(data, data + 8, queue);
 
     boost::compute::detail::inplace_reduce(vector.begin(),
                                            vector.end(),

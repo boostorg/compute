@@ -39,7 +39,6 @@ BOOST_AUTO_TEST_CASE(insert)
     std::pair<iterator, bool> location = set.insert(12);
     BOOST_CHECK(location.first == set.begin());
     BOOST_CHECK(location.second == true);
-    bc::system::finish();
     BOOST_CHECK_EQUAL(*location.first, 12);
     BOOST_CHECK_EQUAL(set.size(), size_t(1));
 
@@ -78,25 +77,21 @@ BOOST_AUTO_TEST_CASE(erase)
     iterator i = set.erase(set.begin());
     BOOST_CHECK(i == set.begin() + 1);
     BOOST_CHECK_EQUAL(set.size(), size_t(4));
-    bc::system::finish();
     BOOST_CHECK_EQUAL(*set.begin(), 2);
 
     size_t count = set.erase(3);
     BOOST_CHECK_EQUAL(count, size_t(1));
     BOOST_CHECK_EQUAL(set.size(), size_t(3));
-    bc::system::finish();
     BOOST_CHECK_EQUAL(*set.begin(), 2);
 
     count = set.erase(9);
     BOOST_CHECK_EQUAL(count, size_t(0));
     BOOST_CHECK_EQUAL(set.size(), size_t(3));
-    bc::system::finish();
     BOOST_CHECK_EQUAL(*set.begin(), 2);
 
     i = set.erase(set.begin() + 1);
     BOOST_CHECK(i == set.begin() + 2);
     BOOST_CHECK_EQUAL(set.size(), size_t(2));
-    bc::system::finish();
     BOOST_CHECK_EQUAL(*set.begin(), 2);
     BOOST_CHECK_EQUAL(*(set.end() - 1), 5);
 

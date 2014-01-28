@@ -23,8 +23,7 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(simple_merge_int)
 {
     int data[] = { 1, 3, 5, 7, 2, 4, 6, 8 };
-
-    compute::vector<int> vector(data, data + 8, context);
+    compute::vector<int> vector(data, data + 8, queue);
 
     // merge each half in-place
     compute::inplace_merge(

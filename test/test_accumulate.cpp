@@ -22,19 +22,19 @@
 BOOST_AUTO_TEST_CASE(sum_int)
 {
     int data[] = { 2, 4, 6, 8 };
-    boost::compute::vector<int> vector(data, data + 4);
+    boost::compute::vector<int> vector(data, data + 4, queue);
     BOOST_CHECK_EQUAL(
-        boost::compute::accumulate(vector.begin(), vector.end(), 0),
+        boost::compute::accumulate(vector.begin(), vector.end(), 0, queue),
         20
     );
 
     BOOST_CHECK_EQUAL(
-        boost::compute::accumulate(vector.begin(), vector.end(), -10),
+        boost::compute::accumulate(vector.begin(), vector.end(), -10, queue),
         10
     );
 
     BOOST_CHECK_EQUAL(
-        boost::compute::accumulate(vector.begin(), vector.end(), 5),
+        boost::compute::accumulate(vector.begin(), vector.end(), 5, queue),
         25
     );
 }
@@ -65,13 +65,14 @@ BOOST_AUTO_TEST_CASE(product_int)
 BOOST_AUTO_TEST_CASE(quotient_int)
 {
     int data[] = { 2, 8, 16 };
-    boost::compute::vector<int> vector(data, data + 3, context);
+    boost::compute::vector<int> vector(data, data + 3, queue);
     BOOST_CHECK_EQUAL(
         boost::compute::accumulate(
             vector.begin(),
             vector.end(),
             1024,
-            boost::compute::divides<int>()
+            boost::compute::divides<int>(),
+            queue
         ),
         4
     );
@@ -203,8 +204,7 @@ BOOST_AUTO_TEST_CASE(min_and_max)
     using boost::compute::int2_;
 
     int data[] = { 5, 3, 1, 6, 4, 2 };
-    boost::compute::vector<int> vector(6, context);
-    boost::compute::copy_n(data, 6, vector.begin(), queue);
+    boost::compute::vector<int> vector(data, data + 6, queue);
 
     BOOST_COMPUTE_FUNCTION(int2_, min_and_max, (int2_, int),
     {

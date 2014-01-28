@@ -29,27 +29,29 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(transform_int_abs)
 {
     int data[] = { 1, -2, -3, -4, 5 };
-    bc::vector<int> vector(data, data + 5);
+    bc::vector<int> vector(data, data + 5, queue);
     CHECK_RANGE_EQUAL(int, 5, vector, (1, -2, -3, -4, 5));
 
     bc::transform(vector.begin(),
                   vector.end(),
                   vector.begin(),
-                  bc::abs<int>());
+                  bc::abs<int>(),
+                  queue);
     CHECK_RANGE_EQUAL(int, 5, vector, (1, 2, 3, 4, 5));
 }
 
 BOOST_AUTO_TEST_CASE(transform_float_sqrt)
 {
     float data[] = { 1.0f, 4.0f, 9.0f, 16.0f };
-    bc::vector<float> vector(data, data + 4);
+    bc::vector<float> vector(data, data + 4, queue);
     CHECK_RANGE_EQUAL(float, 4, vector, (1.0f, 4.0f, 9.0f, 16.0f));
 
     bc::transform(vector.begin(),
                   vector.end(),
                   vector.begin(),
-                  bc::sqrt<float>());
-    bc::system::finish();
+                  bc::sqrt<float>(),
+                  queue);
+    queue.finish();
     BOOST_CHECK_CLOSE(float(vector[0]), 1.0f, 1e-4f);
     BOOST_CHECK_CLOSE(float(vector[1]), 2.0f, 1e-4f);
     BOOST_CHECK_CLOSE(float(vector[2]), 3.0f, 1e-4f);
@@ -59,52 +61,56 @@ BOOST_AUTO_TEST_CASE(transform_float_sqrt)
 BOOST_AUTO_TEST_CASE(transform_float_clamp)
 {
     float data[] = { 10.f, 20.f, 30.f, 40.f, 50.f };
-    bc::vector<float> vector(data, data + 5);
+    bc::vector<float> vector(data, data + 5, queue);
     CHECK_RANGE_EQUAL(float, 5, vector, (10.0f, 20.0f, 30.0f, 40.0f, 50.0f));
 
     bc::transform(vector.begin(),
                   vector.end(),
                   vector.begin(),
-                  clamp(bc::_1, 15.f, 45.f));
+                  clamp(bc::_1, 15.f, 45.f),
+                  queue);
     CHECK_RANGE_EQUAL(float, 5, vector, (15.0f, 20.0f, 30.0f, 40.0f, 45.0f));
 }
 
 BOOST_AUTO_TEST_CASE(transform_add_int)
 {
     int data1[] = { 1, 2, 3, 4 };
-    bc::vector<int> input1(data1, data1 + 4);
+    bc::vector<int> input1(data1, data1 + 4, queue);
 
     int data2[] = { 10, 20, 30, 40 };
-    bc::vector<int> input2(data2, data2 + 4);
+    bc::vector<int> input2(data2, data2 + 4, queue);
 
-    bc::vector<int> output(4);
+    bc::vector<int> output(4, context);
     bc::transform(input1.begin(),
                   input1.end(),
                   input2.begin(),
                   output.begin(),
-                  bc::plus<int>());
+                  bc::plus<int>(),
+                  queue);
     CHECK_RANGE_EQUAL(int, 4, output, (11, 22, 33, 44));
 
     bc::transform(input1.begin(),
                   input1.end(),
                   input2.begin(),
                   output.begin(),
-                  bc::multiplies<int>());
+                  bc::multiplies<int>(),
+                  queue);
     CHECK_RANGE_EQUAL(int, 4, output, (10, 40, 90, 160));
 }
 
 BOOST_AUTO_TEST_CASE(transform_pow4)
 {
     float data[] = { 1.0f, 2.0f, 3.0f, 4.0f };
-    bc::vector<float> vector(data, data + 4);
+    bc::vector<float> vector(data, data + 4, queue);
     CHECK_RANGE_EQUAL(float, 4, vector, (1.0f, 2.0f, 3.0f, 4.0f));
 
-    bc::vector<float> result(4);
+    bc::vector<float> result(4, context);
     bc::transform(vector.begin(),
                   vector.end(),
                   result.begin(),
-                  pown(bc::_1, 4));
-    bc::system::finish();
+                  pown(bc::_1, 4),
+                  queue);
+    queue.finish();
     BOOST_CHECK_CLOSE(float(result[0]), 1.0f, 1e-4f);
     BOOST_CHECK_CLOSE(float(result[1]), 16.0f, 1e-4f);
     BOOST_CHECK_CLOSE(float(result[2]), 81.0f, 1e-4f);
@@ -114,19 +120,20 @@ BOOST_AUTO_TEST_CASE(transform_pow4)
 BOOST_AUTO_TEST_CASE(transform_custom_function)
 {
     float data[] = { 9.0f, 7.0f, 5.0f, 3.0f };
-    bc::vector<float> vector(data, data + 4);
+    bc::vector<float> vector(data, data + 4, queue);
 
     BOOST_COMPUTE_FUNCTION(float, pow3add4, (float),
     {
         return pow(_1, 3.0f) + 4.0f;
     });
 
-    bc::vector<float> result(4);
+    bc::vector<float> result(4, context);
     bc::transform(vector.begin(),
                   vector.end(),
                   result.begin(),
-                  pow3add4);
-    bc::system::finish();
+                  pow3add4,
+                  queue);
+    queue.finish();
     BOOST_CHECK_CLOSE(float(result[0]), 733.0f, 1e-4f);
     BOOST_CHECK_CLOSE(float(result[1]), 347.0f, 1e-4f);
     BOOST_CHECK_CLOSE(float(result[2]), 129.0f, 1e-4f);
@@ -144,7 +151,7 @@ BOOST_AUTO_TEST_CASE(extract_vector_component)
     bc::vector<int2_> vector(
         reinterpret_cast<int2_ *>(data),
         reinterpret_cast<int2_ *>(data) + 4,
-        context
+        queue
     );
     CHECK_RANGE_EQUAL(
         int2_, 4, vector,
@@ -155,14 +162,16 @@ BOOST_AUTO_TEST_CASE(extract_vector_component)
     bc::transform(vector.begin(),
                   vector.end(),
                   x_components.begin(),
-                  bc::get<0>());
+                  bc::get<0>(),
+                  queue);
     CHECK_RANGE_EQUAL(int, 4, x_components, (1, 3, 5, 7));
 
     bc::vector<int> y_components(4, context);
     bc::transform(vector.begin(),
                   vector.end(),
                   y_components.begin(),
-                  bc::get<1>());
+                  bc::get<1>(),
+                  queue);
     CHECK_RANGE_EQUAL(int, 4, y_components, (2, 4, 6, 8));
 }
 
@@ -201,7 +210,7 @@ BOOST_AUTO_TEST_CASE(transform_popcount)
     using boost::compute::uint_;
 
     uint_ data[] = { 0, 1, 2, 3, 4, 45, 127, 5000, 789, 15963 };
-    bc::vector<uint_> input(data, data + 10, context);
+    bc::vector<uint_> input(data, data + 10, queue);
     bc::vector<uint_> output(input.size(), context);
 
     bc::transform(
@@ -252,7 +261,7 @@ BOOST_AUTO_TEST_CASE(field)
     compute::vector<uint4_> input(
         reinterpret_cast<uint4_ *>(data),
         reinterpret_cast<uint4_ *>(data) + 2,
-        context
+        queue
     );
     compute::vector<uint2_> output(input.size(), context);
 

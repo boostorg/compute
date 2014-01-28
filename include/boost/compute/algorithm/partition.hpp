@@ -33,10 +33,8 @@ inline Iterator partition(Iterator first,
 {
     typedef typename std::iterator_traits<Iterator>::value_type value_type;
 
-    const context &context = queue.get_context();
-
     // make temporary copy of the input
-    ::boost::compute::vector<value_type> tmp(first, last, context);
+    ::boost::compute::vector<value_type> tmp(first, last, queue);
 
     // copy true values
     Iterator last_true =

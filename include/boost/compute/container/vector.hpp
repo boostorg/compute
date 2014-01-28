@@ -30,6 +30,7 @@
 #include <boost/compute/context.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/fill_n.hpp>
 #include <boost/compute/container/allocator.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
@@ -75,25 +76,23 @@ public:
 
     vector(size_type count,
            const T &value,
-           const context &context = system::default_context())
+           command_queue &queue = system::default_queue())
         : m_size(count),
-          m_allocator(context)
+          m_allocator(queue.get_context())
     {
         m_data = m_allocator.allocate((std::max)(count, _minimum_capacity()));
 
-        ::boost::compute::fill_n(begin(), count, value);
+        ::boost::compute::fill_n(begin(), count, value, queue);
     }
 
     template<class InputIterator>
     vector(InputIterator first,
            InputIterator last,
-           const context &context = system::default_context())
+           command_queue &queue = system::default_queue())
         : m_size(detail::iterator_range_size(first, last)),
-          m_allocator(context)
+          m_allocator(queue.get_context())
     {
         m_data = m_allocator.allocate((std::max)(m_size, _minimum_capacity()));
-
-        command_queue queue(context, context.get_device());
 
         ::boost::compute::copy(first, last, begin(), queue);
     }
@@ -105,10 +104,11 @@ public:
         m_data = m_allocator.allocate((std::max)(m_size, _minimum_capacity()));
 
         if(!other.empty()){
-            ::boost::compute::copy(other.begin(), other.end(), begin());
+            command_queue queue = default_queue();
+            ::boost::compute::copy(other.begin(), other.end(), begin(), queue);
+            queue.finish();
         }
     }
-
 
     #if !defined(BOOST_NO_RVALUE_REFERENCES)
     vector(vector<T> &&vector)
@@ -122,13 +122,11 @@ public:
 
     template<class OtherAlloc>
     vector(const std::vector<T, OtherAlloc> &vector,
-           const context &context = system::default_context())
+           command_queue &queue = system::default_queue())
         : m_size(vector.size()),
-          m_allocator(context)
+          m_allocator(queue.get_context())
     {
         m_data = m_allocator.allocate((std::max)(m_size, _minimum_capacity()));
-
-        command_queue queue(context, context.get_device());
 
         ::boost::compute::copy(vector.begin(), vector.end(), begin(), queue);
     }
@@ -136,13 +134,11 @@ public:
     #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && \
         !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
     vector(std::initializer_list<T> list,
-           const context &context = system::default_context())
+           command_queue &queue = system::default_queue())
         : m_size(list.size()),
-          m_allocator(context)
+          m_allocator(queue.get_context())
     {
         m_data = m_allocator.allocate((std::max)(m_size, _minimum_capacity()));
-
-        command_queue queue(context, context.get_device());
 
         ::boost::compute::copy(list.begin(), list.end(), begin(), queue);
     }
@@ -158,8 +154,10 @@ public:
     vector<T>& operator=(const vector<T> &other)
     {
         if(this != &other){
-            resize(other.size());
-            ::boost::compute::copy(other.begin(), other.end(), begin());
+            command_queue queue = default_queue();
+            resize(other.size(), queue);
+            ::boost::compute::copy(other.begin(), other.end(), begin(), queue);
+            queue.finish();
         }
 
         return *this;
@@ -168,8 +166,10 @@ public:
     template<class OtherAlloc>
     vector<T>& operator=(const std::vector<T, OtherAlloc> &vector)
     {
-        resize(vector.size());
-        ::boost::compute::copy(vector.begin(), vector.end(), begin());
+        command_queue queue = default_queue();
+        resize(vector.size(), queue);
+        ::boost::compute::copy(vector.begin(), vector.end(), begin(), queue);
+        queue.finish();
         return *this;
     }
 
@@ -243,7 +243,7 @@ public:
         return m_allocator.max_size();
     }
 
-    void resize(size_type size)
+    void resize(size_type size, command_queue &queue)
     {
         if(size < capacity()){
             m_size = size;
@@ -257,11 +257,6 @@ public:
                     )
                 );
 
-            // create command queue
-            const context &context = m_allocator.get_context();
-            const device &device = context.get_device();
-            command_queue queue(context, device);
-
             // copy old values to the new buffer
             ::boost::compute::copy(m_data, m_data + m_size, new_data, queue);
 
@@ -274,6 +269,13 @@ public:
         }
     }
 
+    void resize(size_type size)
+    {
+        command_queue queue = default_queue();
+        resize(size, queue);
+        queue.finish();
+    }
+
     bool empty() const
     {
         return m_size == 0;
@@ -284,13 +286,29 @@ public:
         return m_data.get_buffer().size() / sizeof(T);
     }
 
-    void reserve(size_type size)
+    void reserve(size_type size, command_queue &queue)
     {
         (void) size;
+        (void) queue;
+    }
+
+    void reserve(size_type size)
+    {
+        command_queue queue = default_queue();
+        reserve(size, queue);
+        queue.finish();
+    }
+
+    void shrink_to_fit(command_queue &queue)
+    {
+        (void) queue;
     }
 
     void shrink_to_fit()
     {
+        command_queue queue = default_queue();
+        shrink_to_fit(queue);
+        queue.finish();
     }
 
     reference operator[](size_type index)
@@ -342,93 +360,169 @@ public:
     }
 
     template<class InputIterator>
+    void assign(InputIterator first,
+                InputIterator last,
+                command_queue &queue)
+    {
+        ::boost::compute::copy(first, last, begin(), queue);
+    }
+
+    template<class InputIterator>
     void assign(InputIterator first, InputIterator last)
     {
-        ::boost::compute::copy(first, last, begin());
+        command_queue queue = default_queue();
+        assign(first, last, queue);
+        queue.finish();
+    }
+
+    void assign(size_type n, const T &value, command_queue &queue)
+    {
+        ::boost::compute::fill_n(begin(), n, value, queue);
     }
 
     void assign(size_type n, const T &value)
     {
-        ::boost::compute::fill_n(begin(), n, value);
+        command_queue queue = default_queue();
+        assign(n, value, queue);
+        queue.finish();
+    }
+
+    void push_back(const T &value, command_queue &queue)
+    {
+        insert(end(), value, queue);
     }
 
     void push_back(const T &value)
     {
-        insert(end(), value);
+        command_queue queue = default_queue();
+        push_back(value, queue);
+        queue.finish();
+    }
+
+    void pop_back(command_queue &queue)
+    {
+        resize(size() - 1, queue);
     }
 
     void pop_back()
     {
-        resize(size() - 1);
+        command_queue queue = default_queue();
+        pop_back(queue);
+        queue.finish();
     }
 
-    iterator insert(iterator position, const T &value)
+    iterator insert(iterator position, const T &value, command_queue &queue)
     {
         if(position == end()){
-            resize(m_size + 1);
+            resize(m_size + 1, queue);
             position = begin() + position.get_index();
-
-            *position = value;
+            ::boost::compute::copy_n(&value, 1, position, queue);
         }
         else {
-            ::boost::compute::vector<T> tmp(position, end(), m_allocator.get_context());
-
-            resize(m_size + 1);
+            ::boost::compute::vector<T> tmp(position, end(), queue);
+            resize(m_size + 1, queue);
             position = begin() + position.get_index();
-
-            *position = value;
-            ::boost::compute::copy(tmp.begin(), tmp.end(), position + 1);
+            ::boost::compute::copy_n(&value, 1, position, queue);
+            ::boost::compute::copy(tmp.begin(), tmp.end(), position + 1, queue);
         }
 
         return position + 1;
     }
 
-    void insert(iterator position, size_type count, const T &value)
+    iterator insert(iterator position, const T &value)
     {
-        ::boost::compute::vector<T> tmp(position, end(), m_allocator.get_context());
+        command_queue queue = default_queue();
+        iterator iter = insert(position, value, queue);
+        queue.finish();
+        return iter;
+    }
 
-        resize(size() + count);
+    void insert(iterator position,
+                size_type count,
+                const T &value,
+                command_queue &queue)
+    {
+        ::boost::compute::vector<T> tmp(position, end(), queue);
+        resize(size() + count, queue);
+
         position = begin() + position.get_index();
 
-        ::boost::compute::fill_n(position, count, value);
+        ::boost::compute::fill_n(position, count, value, queue);
         ::boost::compute::copy(
             tmp.begin(),
             tmp.end(),
-            position + static_cast<difference_type>(count)
+            position + static_cast<difference_type>(count),
+            queue
+        );
+    }
+
+    void insert(iterator position, size_type count, const T &value)
+    {
+        command_queue queue = default_queue();
+        insert(position, count, value, queue);
+        queue.finish();
+    }
+
+    template<class InputIterator>
+    void insert(iterator position,
+                InputIterator first,
+                InputIterator last,
+                command_queue &queue)
+    {
+        ::boost::compute::vector<T> tmp(position, end(), queue);
+
+        size_type count = detail::iterator_range_size(first, last);
+        resize(size() + count, queue);
+
+        position = begin() + position.get_index();
+
+        ::boost::compute::copy(first, last, position, queue);
+        ::boost::compute::copy(
+            tmp.begin(),
+            tmp.end(),
+            position + static_cast<difference_type>(count),
+            queue
         );
     }
 
     template<class InputIterator>
     void insert(iterator position, InputIterator first, InputIterator last)
     {
-        ::boost::compute::vector<T> tmp(position, end(), m_allocator.get_context());
-        size_type count = detail::iterator_range_size(first, last);
+        command_queue queue = default_queue();
+        insert(position, first, last, queue);
+        queue.finish();
+    }
 
-        resize(size() + count);
-        position = begin() + position.get_index();
-
-        ::boost::compute::copy(first, last, position);
-        ::boost::compute::copy(
-            tmp.begin(),
-            tmp.end(),
-            position + static_cast<difference_type>(count)
-        );
+    iterator erase(iterator position, command_queue &queue)
+    {
+        return erase(position, position + 1, queue);
     }
 
     iterator erase(iterator position)
     {
-        return erase(position, position + 1);
+        command_queue queue = default_queue();
+        iterator iter = erase(position, queue);
+        queue.finish();
+        return iter;
+    }
+
+    iterator erase(iterator first, iterator last, command_queue &queue)
+    {
+        ::boost::compute::vector<T> tmp(last, end(), queue);
+        ::boost::compute::copy(tmp.begin(), tmp.end(), first, queue);
+
+        difference_type count = std::distance(first, last);
+        resize(size() - static_cast<size_type>(count), queue);
+
+        return begin() + first.get_index() + count;
     }
 
     iterator erase(iterator first, iterator last)
     {
-        ::boost::compute::vector<T> tmp(last, end(), m_allocator.get_context());
-        ::boost::compute::copy(tmp.begin(), tmp.end(), first);
-        difference_type count = std::distance(first, last);
-
-        resize(size() - static_cast<size_type>(count));
-
-        return begin() + first.get_index() + count;
+        command_queue queue = default_queue();
+        iterator iter = erase(first, last, queue);
+        queue.finish();
+        return iter;
     }
 
     void swap(vector<T> &other)
@@ -439,7 +533,7 @@ public:
 
     void clear()
     {
-        resize(0);
+        m_size = 0;
     }
 
     allocator_type get_allocator() const
@@ -451,6 +545,18 @@ public:
     const buffer& get_buffer() const
     {
         return m_data.get_buffer();
+    }
+
+    /// \internal_
+    ///
+    /// Returns a command queue usable to issue commands for the vector's
+    /// memory buffer. This is used when a member function is called without
+    /// speicifying an existing command queue to use.
+    command_queue default_queue() const
+    {
+        const context &context = m_allocator.get_context();
+        command_queue queue(context, context.get_device());
+        return queue;
     }
 
 private:

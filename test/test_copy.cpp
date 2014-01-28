@@ -223,7 +223,7 @@ BOOST_AUTO_TEST_CASE(copy_to_stringstream)
     std::stringstream stream;
 
     int data[] = { 2, 3, 4, 5, 6, 7, 8, 9 };
-    compute::vector<int> vector(data, data + 8, context);
+    compute::vector<int> vector(data, data + 8, queue);
 
     compute::copy(
         vector.begin(),

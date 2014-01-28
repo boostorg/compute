@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(sort_char_vector)
     using boost::compute::char_;
 
     char_ data[] = { 'c', 'a', '0', '7', 'B', 'F', '\0', '$' };
-    boost::compute::vector<char_> vector(data, data + 8, context);
+    boost::compute::vector<char_> vector(data, data + 8, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
     BOOST_CHECK(boost::compute::is_sorted(vector.begin(), vector.end(), queue) == false);
 
@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(sort_uchar_vector)
     using boost::compute::uchar_;
 
     uchar_ data[] = { 0x12, 0x00, 0xFF, 0xB4, 0x80, 0x32, 0x64, 0xA2 };
-    boost::compute::vector<uchar_> vector(data, data + 8, context);
+    boost::compute::vector<uchar_> vector(data, data + 8, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
     BOOST_CHECK(boost::compute::is_sorted(vector.begin(), vector.end(), queue) == false);
 
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(sort_short_vector)
     using boost::compute::short_;
 
     short_ data[] = { -4, 152, -94, 963, 31002, -456, 0, -2113 };
-    boost::compute::vector<short_> vector(data, data + 8, context);
+    boost::compute::vector<short_> vector(data, data + 8, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
     BOOST_CHECK(boost::compute::is_sorted(vector.begin(), vector.end(), queue) == false);
 
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(sort_ushort_vector)
     using boost::compute::ushort_;
 
     ushort_ data[] = { 4, 152, 94, 963, 63202, 34560, 0, 2113 };
-    boost::compute::vector<ushort_> vector(data, data + 8, context);
+    boost::compute::vector<ushort_> vector(data, data + 8, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
     BOOST_CHECK(boost::compute::is_sorted(vector.begin(), vector.end(), queue) == false);
 
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(sort_ushort_vector)
 BOOST_AUTO_TEST_CASE(sort_int_vector)
 {
     int data[] = { -4, 152, -5000, 963, 75321, -456, 0, 1112 };
-    boost::compute::vector<int> vector(data, data + 8, context);
+    boost::compute::vector<int> vector(data, data + 8, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
     BOOST_CHECK(boost::compute::is_sorted(vector.begin(), vector.end(), queue) == false);
 
@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE(sort_uint_vector)
     using boost::compute::uint_;
 
     uint_ data[] = { 500, 1988, 123456, 562, 0, 4000000, 9852, 102030 };
-    boost::compute::vector<uint_> vector(data, data + 8, context);
+    boost::compute::vector<uint_> vector(data, data + 8, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
     BOOST_CHECK(boost::compute::is_sorted(vector.begin(), vector.end(), queue) == false);
 
@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_CASE(sort_long_vector)
     using boost::compute::long_;
 
     long_ data[] = { 500, 1988, 123456, 562, 0, 4000000, 9852, 102030 };
-    boost::compute::vector<long_> vector(data, data + 8, context);
+    boost::compute::vector<long_> vector(data, data + 8, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
     BOOST_CHECK(boost::compute::is_sorted(vector.begin(), vector.end(), queue) == false);
 
@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_CASE(sort_ulong_vector)
     using boost::compute::ulong_;
 
     ulong_ data[] = { 500, 1988, 123456, 562, 0, 4000000, 9852, 102030 };
-    boost::compute::vector<ulong_> vector(data, data + 8, context);
+    boost::compute::vector<ulong_> vector(data, data + 8, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
     BOOST_CHECK(boost::compute::is_sorted(vector.begin(), vector.end(), queue) == false);
 
@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(sort_float_vector)
 {
     float data[] = { -6023.0f, 152.5f, -63.0f, 1234567.0f, 11.2f,
                      -5000.1f, 0.0f, 14.0f, -8.25f, -0.0f };
-    boost::compute::vector<float> vector(data, data + 10, context);
+    boost::compute::vector<float> vector(data, data + 10, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(10));
     BOOST_CHECK(boost::compute::is_sorted(vector.begin(), vector.end(), queue) == false);
 
@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE(sort_double_vector)
 
     double data[] = { -6023.0, 152.5, -63.0, 1234567.0, 11.2,
                      -5000.1, 0.0, 14.0, -8.25, -0.0 };
-    boost::compute::vector<double> vector(data, data + 10, context);
+    boost::compute::vector<double> vector(data, data + 10, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(10));
     BOOST_CHECK(boost::compute::is_sorted(vector.begin(), vector.end(), queue) == false);
 

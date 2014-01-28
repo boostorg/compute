@@ -51,10 +51,10 @@ BOOST_AUTO_TEST_CASE(at)
 BOOST_AUTO_TEST_CASE(copy_from_vector)
 {
     int data[] = { 3, 6, 9, 12 };
-    boost::compute::vector<int> vector(data, data + 4, context);
+    boost::compute::vector<int> vector(data, data + 4, queue);
 
     boost::compute::array<int, 4> array(context);
-    boost::compute::copy(vector.begin(), vector.end(), array.begin());
+    boost::compute::copy(vector.begin(), vector.end(), array.begin(), queue);
     CHECK_RANGE_EQUAL(int, 4, array, (3, 6, 9, 12));
 }
 
@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE(swap)
 {
     int data[] = { 1, 2, 6, 9 };
     boost::compute::array<int, 4> a(context);
-    boost::compute::copy(data, data + 4, a.begin());
+    boost::compute::copy(data, data + 4, a.begin(), queue);
     CHECK_RANGE_EQUAL(int, 4, a, (1, 2, 6, 9));
 
     boost::compute::array<int, 4> b(context);

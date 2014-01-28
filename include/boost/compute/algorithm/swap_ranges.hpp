@@ -32,10 +32,7 @@ inline Iterator2 swap_ranges(Iterator1 first1,
 
     Iterator2 last2 = first2 + std::distance(first1, last1);
 
-    ::boost::compute::vector<value_type> tmp(first1,
-                                             last1,
-                                             queue.get_context());
-
+    ::boost::compute::vector<value_type> tmp(first1, last1, queue);
     ::boost::compute::copy(first2, last2, first1, queue);
     ::boost::compute::copy(tmp.begin(), tmp.end(), first2, queue);
 

@@ -29,7 +29,7 @@ namespace bc = boost::compute;
 BOOST_AUTO_TEST_CASE(inclusive_scan_int)
 {
     int data[] = { 1, 2, 1, 2, 3 };
-    bc::vector<int> vector(data, data + 5, context);
+    bc::vector<int> vector(data, data + 5, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(5));
 
     bc::vector<int> result(5, context);
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(inclusive_scan_int)
 BOOST_AUTO_TEST_CASE(exclusive_scan_int)
 {
     int data[] = { 1, 2, 1, 2, 3 };
-    bc::vector<int> vector(data, data + 5, context);
+    bc::vector<int> vector(data, data + 5, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(5));
 
     bc::vector<int> result(5, context);
@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_CASE(exclusive_scan_counting_iterator)
 BOOST_AUTO_TEST_CASE(inclusive_scan_transform_iterator)
 {
     float data[] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f };
-    bc::vector<float> input(data, data + 5, context);
+    bc::vector<float> input(data, data + 5, queue);
     bc::vector<float> output(5, context);
 
     // normal inclusive scan of the input

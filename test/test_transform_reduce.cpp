@@ -24,7 +24,7 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(sum_abs_int)
 {
     int data[] = { 1, -2, -3, -4, 5 };
-    compute::vector<int> vector(data, data + 5, context);
+    compute::vector<int> vector(data, data + 5, queue);
 
     int sum;
     compute::transform_reduce(
@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE(multiply_vector_length)
     compute::vector<compute::float4_> vector(
         reinterpret_cast<compute::float4_ *>(data),
         reinterpret_cast<compute::float4_ *>(data) + 3,
-        context
+        queue
     );
 
     float product;
@@ -67,8 +67,7 @@ BOOST_AUTO_TEST_CASE(mean_and_std_dev)
     using compute::lambda::pow;
 
     float data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    compute::vector<float> vector(10, context);
-    compute::copy_n(data, 10, vector.begin(), queue);
+    compute::vector<float> vector(data, data + 10, queue);
 
     float sum;
     compute::reduce(

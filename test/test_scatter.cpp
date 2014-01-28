@@ -24,10 +24,10 @@ namespace bc = boost::compute;
 BOOST_AUTO_TEST_CASE(scatter_int)
 {
     int input_data[] = { 1, 2, 3, 4, 5 };
-    bc::vector<int> input(input_data, input_data + 5, context);
+    bc::vector<int> input(input_data, input_data + 5, queue);
 
     int map_data[] = { 0, 4, 1, 3, 2 };
-    bc::vector<int> map(map_data, map_data + 5, context);
+    bc::vector<int> map(map_data, map_data + 5, queue);
 
     bc::vector<int> output(5, context);
     bc::scatter(input.begin(), input.end(), map.begin(), output.begin());
@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(scatter_int)
 BOOST_AUTO_TEST_CASE(scatter_constant_indices)
 {
     int input_data[] = { 1, 2, 3, 4, 5 };
-    bc::vector<int> input(input_data, input_data + 5, context);
+    bc::vector<int> input(input_data, input_data + 5, queue);
 
     int map_data[] = { 0, 4, 1, 3, 2 };
     bc::buffer map_buffer(context,
@@ -49,7 +49,8 @@ BOOST_AUTO_TEST_CASE(scatter_constant_indices)
     bc::scatter(input.begin(),
                 input.end(),
                 bc::make_constant_buffer_iterator<int>(map_buffer, 0),
-                output.begin());
+                output.begin(),
+                queue);
     CHECK_RANGE_EQUAL(int, 5, output, (1, 3, 5, 4, 2));
 }
 
