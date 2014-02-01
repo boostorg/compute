@@ -135,6 +135,9 @@ public:
                 m_radius, m_phi_slices, m_theta_slices, m_command_queue
             );
 
+            // ensure tesselation is finished (seems to be required on AMD)
+            m_command_queue.finish();
+
             // set tesselated flag to true
             m_tesselated = true;
         }
