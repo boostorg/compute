@@ -62,6 +62,11 @@ public:
     {
     }
 
+    cl_platform_id id() const
+    {
+        return m_platform;
+    }
+
     /// Returns the name of the platform.
     std::string name() const
     {
