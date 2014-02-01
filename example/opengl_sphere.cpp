@@ -135,27 +135,6 @@ public:
                 m_radius, m_phi_slices, m_theta_slices, m_command_queue
             );
 
-            // create index array buffer
-            GLuint index_vbo;
-            vtkgl::GenBuffersARB(1, &index_vbo);
-            vtkgl::BindBufferARB(GL_ELEMENT_ARRAY_BUFFER, index_vbo);
-            vtkgl::BufferDataARB(GL_ELEMENT_ARRAY_BUFFER,
-                                 sizeof(unsigned short) * m_vertex_count,
-                                 NULL,
-                                 GL_STATIC_DRAW);
-            vtkgl::BindBufferARB(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-            // fill index buffer with (0, 1, 2, ..., vertex_count-1)
-            m_index_buffer = compute::opengl_buffer(m_context, index_vbo);
-            compute::opengl_enqueue_acquire_buffer(m_index_buffer, m_command_queue);
-            compute::iota(
-                compute::make_buffer_iterator<unsigned short>(m_index_buffer, 0),
-                compute::make_buffer_iterator<unsigned short>(m_index_buffer, m_vertex_count),
-                0,
-                m_command_queue
-            );
-            compute::opengl_enqueue_release_buffer(m_index_buffer, m_command_queue);
-
             // set tesselated flag to true
             m_tesselated = true;
         }
@@ -164,9 +143,7 @@ public:
         glEnableClientState(GL_VERTEX_ARRAY);
         vtkgl::BindBufferARB(vtkgl::ARRAY_BUFFER, m_vertex_buffer.get_opengl_object());
         glVertexPointer(4, GL_FLOAT, sizeof(float)*4, 0);
-
-        vtkgl::BindBufferARB(GL_ELEMENT_ARRAY_BUFFER, m_index_buffer.get_opengl_object());
-        glDrawElements(GL_POINTS, m_vertex_count, GL_UNSIGNED_SHORT, 0);
+        glDrawArrays(GL_POINTS, 0, m_vertex_count);
     }
 
     void Initialize(vtkRenderer *renderer, vtkActor *actor)
@@ -229,7 +206,6 @@ private:
     compute::context m_context;
     compute::command_queue m_command_queue;
     compute::opengl_buffer m_vertex_buffer;
-    compute::opengl_buffer m_index_buffer;
 };
 
 int main(int argc, char *argv[])
