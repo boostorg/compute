@@ -11,7 +11,7 @@
 #include <iostream>
 #include <algorithm>
 
-#include <GL/glx.h>
+#include <GL/gl.h>
 
 #include <vtkActor.h>
 #include <vtkCamera.h>
@@ -158,23 +158,9 @@ public:
         extensions->LoadExtension("GL_ARB_vertex_buffer_object");
 
         // initialize opencl/opengl shared context
-        compute::device device = compute::system::default_device();
+        m_context = compute::opengl_create_shared_context();
+        compute::device device = m_context.get_device();
         std::cout << "device: " << device.name() << std::endl;
-        if(!device.supports_extension("cl_khr_gl_sharing")){
-            std::cerr << "error: "
-                      << "gpu device: " << device.name()
-                      << " does not support OpenGL sharing"
-                      << std::endl;
-             return;
-        }
-
-        // create context for the gpu device
-        cl_context_properties properties[] = {
-            CL_GL_CONTEXT_KHR, (cl_context_properties) glXGetCurrentContext(),
-            CL_GLX_DISPLAY_KHR, (cl_context_properties) glXGetCurrentDisplay(),
-            0
-        };
-        m_context = compute::context(device, properties);
 
         // create command queue for the gpu device
         m_command_queue = compute::command_queue(m_context, device);
