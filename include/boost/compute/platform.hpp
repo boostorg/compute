@@ -154,7 +154,7 @@ public:
 
     /// Returns the address of the \p function_name extension
     /// function. Returns \c 0 if \p function_name is invalid.
-    void* get_extension_function_address(const char *function_name)
+    void* get_extension_function_address(const char *function_name) const
     {
         #ifdef CL_VERSION_1_2
         return clGetExtensionFunctionAddressForPlatform(m_platform,
