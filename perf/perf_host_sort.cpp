@@ -12,17 +12,14 @@
 #include <iostream>
 #include <vector>
 
+#include <boost/timer/timer.hpp>
+
 #include <boost/compute/system.hpp>
-#include <boost/compute/algorithm/is_sorted.hpp>
+#include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/sort.hpp>
 #include <boost/compute/container/vector.hpp>
 
 #include "perf.hpp"
-
-float rand_float()
-{
-    return ((rand() / float(RAND_MAX)) - 0.5f) * 100000.0f;
-}
 
 int main(int argc, char *argv[])
 {
@@ -36,35 +33,31 @@ int main(int argc, char *argv[])
     std::cout << "device: " << device.name() << std::endl;
 
     // create vector of random numbers on the host
-    std::vector<float> host_vector(PERF_N);
-    std::generate(host_vector.begin(), host_vector.end(), rand_float);
+    std::vector<int> random_vector(PERF_N);
+    std::generate(random_vector.begin(), random_vector.end(), rand);
 
-    // create vector on the device and copy the data
-    boost::compute::vector<float> device_vector(PERF_N, context);
-    boost::compute::copy(
-        host_vector.begin(),
-        host_vector.end(),
-        device_vector.begin(),
-        queue
-    );
+    // create input vector for gpu
+    std::vector<int> gpu_vector = random_vector;
 
-    // sort vector
-    perf_timer t;
-    t.start();
+    // sort vector on gpu
+    boost::timer::cpu_timer t;
     boost::compute::sort(
-        device_vector.begin(),
-        device_vector.end(),
-        queue
+        gpu_vector.begin(), gpu_vector.end(), queue
     );
     queue.finish();
-    t.stop();
-    std::cout << "time: " << t.last_time() / 1e6 << " ms" << std::endl;
+    std::cout << "time: " << t.elapsed().wall / 1e6 << " ms" << std::endl;
 
-    // verify vector is sorted
-    if(!boost::compute::is_sorted(device_vector.begin(),
-                                  device_vector.end(),
-                                  queue)){
-        std::cout << "ERROR: is_sorted() returned false" << std::endl;
+    // create input vector for host
+    std::vector<int> host_vector = random_vector;
+
+    // sort vector on host
+    t.start();
+    std::sort(host_vector.begin(), host_vector.end());
+    std::cout << "host time: " << t.elapsed().wall / 1e6 << " ms" << std::endl;
+
+    // ensure that both sorted vectors are equal
+    if(!std::equal(gpu_vector.begin(), gpu_vector.end(), host_vector.begin())){
+        std::cerr << "ERROR: sorted vectors not the same" << std::endl;
         return -1;
     }
 

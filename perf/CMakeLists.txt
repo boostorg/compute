@@ -1,36 +1,86 @@
 include_directories(../include)
 
-if (NOT ${BOOST_COMPUTE_TIMER_USE_STD_CHRONO})
-    set(BOOST_COMPONENTS ${BOOST_COMPONENTS} chrono system)
-endif()
+set(PERF_BOOST_COMPONENTS system timer chrono)
 
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
-    set(BOOST_COMPONENTS ${BOOST_COMPONENTS} filesystem)
+  set(PERF_BOOST_COMPONENTS ${PERF_BOOST_COMPONENTS} filesystem)
 endif()
 
-if (DEFINED BOOST_COMPONENTS)
-  find_package(Boost 1.48 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
-  include_directories(${Boost_INCLUDE_DIRS})
-endif()
+find_package(Boost 1.48 REQUIRED COMPONENTS ${PERF_BOOST_COMPONENTS})
+include_directories(${Boost_INCLUDE_DIRS})
 
 set(BENCHMARKS
+  accumulate
   cart_to_polar
   copy_to_device
-  count_int
+  count
+  inner_product
+  merge
   mersenne_twister
   partial_sum
+  host_sort
   saxpy
+  sort
   sort_float
-  sort_uint
-  sum_int
 )
 
 foreach(BENCHMARK ${BENCHMARKS})
   set(PERF_TARGET perf_${BENCHMARK})
   add_executable(${PERF_TARGET} perf_${BENCHMARK}.cpp)
-  target_link_libraries(${PERF_TARGET} ${OPENCL_LIBRARIES})
-
-  if(DEFINED BOOST_COMPONENTS)
-    target_link_libraries(${PERF_TARGET} ${Boost_LIBRARIES})
-  endif()
+  target_link_libraries(${PERF_TARGET} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES})
 endforeach()
+
+# stl benchmarks (for comparison)
+set(STL_BENCHMARKS
+  stl_accumulate
+  stl_count
+  stl_inner_product
+  stl_merge
+  stl_partial_sum
+  stl_saxpy
+  stl_sort
+)
+
+foreach(BENCHMARK ${STL_BENCHMARKS})
+  set(PERF_TARGET perf_${BENCHMARK})
+  add_executable(${PERF_TARGET} perf_${BENCHMARK}.cpp)
+  target_link_libraries(${PERF_TARGET} ${Boost_LIBRARIES})
+endforeach()
+
+# cuda/thrust benchmarks (for comparison)
+if(${BOOST_COMPUTE_HAVE_CUDA})
+  find_package(CUDA 5.0 REQUIRED)
+
+  set(CUDA_BENCHMARKS
+    thrust_accumulate
+    thrust_count
+    thrust_inner_product
+    thrust_partial_sum
+    thrust_saxpy
+    thrust_sort
+  )
+
+  foreach(BENCHMARK ${CUDA_BENCHMARKS})
+    set(PERF_TARGET perf_${BENCHMARK})
+    cuda_add_executable(${PERF_TARGET} perf_${BENCHMARK}.cu)
+    target_link_libraries(${PERF_TARGET} ${CUDA_LIBRARIES} ${Boost_LIBRARIES})
+  endforeach()
+endif()
+
+# intel tbb benchmarks (for comparison)
+if(${BOOST_COMPUTE_HAVE_TBB})
+  find_package(TBB REQUIRED)
+  include_directories(${TBB_INCLUDE_DIRS})
+
+  set(TBB_BENCHMARKS
+    tbb_accumulate
+    tbb_merge
+    tbb_sort
+  )
+
+  foreach(BENCHMARK ${TBB_BENCHMARKS})
+    set(PERF_TARGET perf_${BENCHMARK})
+    add_executable(${PERF_TARGET} perf_${BENCHMARK}.cpp)
+    target_link_libraries(${PERF_TARGET} ${TBB_LIBRARIES} ${Boost_LIBRARIES})
+  endforeach()
+endif()

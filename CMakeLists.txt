@@ -17,17 +17,13 @@ option(BOOST_COMPUTE_HAVE_EIGEN "Have Eigen" OFF)
 option(BOOST_COMPUTE_HAVE_OPENCV "Have OpenCV" OFF)
 option(BOOST_COMPUTE_HAVE_QT "Have Qt" OFF)
 option(BOOST_COMPUTE_HAVE_VTK "Have VTK" OFF)
+option(BOOST_COMPUTE_HAVE_CUDA "Have CUDA" OFF)
+option(BOOST_COMPUTE_HAVE_TBB "Have TBB" OFF)
 
 include_directories(include)
 
 if(${OpenCL_HEADER_CL_EXT_FOUND})
   add_definitions(-DBOOST_COMPUTE_HAVE_HDR_CL_EXT)
-endif()
-
-option(BOOST_COMPUTE_TIMER_USE_STD_CHRONO "Use std::chrono for timer" OFF)
-mark_as_advanced(BOOST_COMPUTE_TIMER_USE_STD_CHRONO)
-if(${BOOST_COMPUTE_TIMER_USE_STD_CHRONO})
-  add_definitions(-DBOOST_COMPUTE_TIMER_USE_STD_CHRONO)
 endif()
 
 if(MSVC)

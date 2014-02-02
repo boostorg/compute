@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------//
-// Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+// Copyright (c) 2013-2014 Kyle Lutz <kyle.r.lutz@gmail.com>
 //
 // Distributed under the Boost Software License, Version 1.0
 // See accompanying file LICENSE_1_0.txt or copy at
@@ -12,8 +12,13 @@
 #include <iostream>
 #include <vector>
 
-#include <boost/compute.hpp>
-#include <boost/compute/detail/timer.hpp>
+#include <boost/compute/system.hpp>
+#include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/algorithm/copy_n.hpp>
+#include <boost/compute/algorithm/transform.hpp>
+#include <boost/compute/container/vector.hpp>
+
+#include "perf.hpp"
 
 namespace compute = boost::compute;
 
@@ -78,49 +83,54 @@ BOOST_COMPUTE_FUNCTION(float2_, polar_to_cartesian, (float2_),
 
 int main(int argc, char *argv[])
 {
-    size_t size = 1000;
-    if(argc >= 2){
-        size = boost::lexical_cast<size_t>(argv[1]);
-    }
+    perf_parse_args(argc, argv);
 
-    std::cout << "size: " << size << std::endl;
+    std::cout << "size: " << PERF_N << std::endl;
 
     // setup context and queue for the default device
     compute::device device = compute::system::default_device();
-
     compute::context context(device);
     compute::command_queue queue(context, device);
+    std::cout << "device: " << device.name() << std::endl;
 
     // create vector of random numbers on the host
-    std::vector<float> host_vector(size*2);
+    std::vector<float> host_vector(PERF_N*2);
     std::generate(host_vector.begin(), host_vector.end(), rand_float);
 
     // create vector on the device and copy the data
-    compute::vector<float2_> device_vector(size, context);
+    compute::vector<float2_> device_vector(PERF_N, context);
     compute::copy_n(
         reinterpret_cast<float2_ *>(&host_vector[0]),
-        size,
+        PERF_N,
         device_vector.begin(),
         queue
     );
 
-    compute::detail::timer t;
-    compute::transform(
-        device_vector.begin(),
-        device_vector.end(),
-        device_vector.begin(),
-        cartesian_to_polar,
-        queue
-    );
-    queue.finish();
-    std::cout << "time: " << t.elapsed() << " ms" << std::endl;
+    perf_timer t;
+    for(size_t trial = 0; trial < PERF_TRIALS; trial++){
+        t.start();
+        compute::transform(
+            device_vector.begin(),
+            device_vector.end(),
+            device_vector.begin(),
+            cartesian_to_polar,
+            queue
+        );
+        queue.finish();
+        t.stop();
+    }
+    std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
 
     // perform saxpy on host
-    t.start();
-    serial_cartesian_to_polar(&host_vector[0], size, &host_vector[0]);
-    std::cout << "host time: " << t.elapsed() << " ms" << std::endl;
+    t.clear();
+    for(size_t trial = 0; trial < PERF_TRIALS; trial++){
+        t.start();
+        serial_cartesian_to_polar(&host_vector[0], PERF_N, &host_vector[0]);
+        t.stop();
+    }
+    std::cout << "host time: " << t.min_time() / 1e6 << " ms" << std::endl;
 
-    std::vector<float> device_data(size*2);
+    std::vector<float> device_data(PERF_N*2);
     compute::copy(
         device_vector.begin(),
         device_vector.end(),
@@ -128,7 +138,7 @@ int main(int argc, char *argv[])
         queue
     );
 
-    for(size_t i = 0; i < size; i++){
+    for(size_t i = 0; i < PERF_N; i++){
         float host_value = host_vector[i];
         float device_value = device_data[i];
 
