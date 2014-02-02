@@ -29,11 +29,15 @@ namespace compute {
 class image2d : public memory_object
 {
 public:
+    /// Creates a null image2d object.
     image2d()
         : memory_object()
     {
     }
 
+    /// Creates a new image2d object.
+    ///
+    /// \see_opencl_ref{clCreateImage}
     image2d(const context &context,
             cl_mem_flags flags,
             const image_format &format,
@@ -79,11 +83,13 @@ public:
         }
     }
 
+    /// Creates a new image2d as a copy of \p other.
     image2d(const image2d &other)
       : memory_object(other)
     {
     }
 
+    /// Copies the image2d from \p other.
     image2d& operator=(const image2d &other)
     {
         memory_object::operator=(other);
@@ -91,25 +97,32 @@ public:
         return *this;
     }
 
+    /// Destroys the image2d object.
     ~image2d()
     {
     }
 
+    /// Returns the format for the image.
     image_format get_format() const
     {
         return image_format(get_info<cl_image_format>(CL_IMAGE_FORMAT));
     }
 
+    /// Returns the height of the image.
     size_t height() const
     {
         return get_info<size_t>(CL_IMAGE_HEIGHT);
     }
 
+    /// Returns the width of the image.
     size_t width() const
     {
         return get_info<size_t>(CL_IMAGE_WIDTH);
     }
 
+    /// Returns information about the image.
+    ///
+    /// \see_opencl_ref{clGetImageInfo}
     template<class T>
     T get_info(cl_image_info info) const
     {
@@ -121,6 +134,9 @@ public:
         return height() * width();
     }
 
+    /// Returns the supported image formats for the context.
+    ///
+    /// \see_opencl_ref{clGetSupportedImageFormats}
     static std::vector<image_format> get_supported_formats(const context &context,
                                                            cl_mem_flags flags)
     {

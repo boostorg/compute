@@ -72,6 +72,8 @@ public:
 
     /// Creates a command queue in \p context for \p device with
     /// \p properties.
+    ///
+    /// \see_opencl_ref{clCreateCommandQueue}
     command_queue(const context &context,
                   const device &device,
                   cl_command_queue_properties properties = 0)
@@ -135,6 +137,8 @@ public:
     }
 
     /// Destroys the command queue.
+    ///
+    /// \see_opencl_ref{clReleaseCommandQueue}
     ~command_queue()
     {
         if(m_queue){
@@ -197,6 +201,8 @@ public:
 
     /// Enqueues a command to read data from \p buffer to host memory.
     ///
+    /// \see_opencl_ref{clEnqueueReadBuffer}
+    ///
     /// \see copy()
     cl_int enqueue_read_buffer(const buffer &buffer,
                                size_t offset,
@@ -226,6 +232,8 @@ public:
 
     /// Enqueues a command to read data from \p buffer to host memory. The
     /// copy will be performed asynchronously.
+    ///
+    /// \see_opencl_ref{clEnqueueReadBuffer}
     ///
     /// \see copy_async()
     event enqueue_read_buffer_async(const buffer &buffer,
@@ -259,6 +267,8 @@ public:
     #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to read a rectangular region from \p buffer to
     /// host memory.
+    ///
+    /// \see_opencl_ref{clEnqueueReadBufferRect}
     ///
     /// \opencl_version_warning{1,1}
     cl_int enqueue_read_buffer_rect(const buffer &buffer,
@@ -313,6 +323,8 @@ public:
 
     /// Enqueues a command to write data from host memory to \p buffer.
     ///
+    /// \see_opencl_ref{clEnqueueWriteBuffer}
+    ///
     /// \see copy()
     cl_int enqueue_write_buffer(const buffer &buffer,
                                 size_t offset,
@@ -342,6 +354,8 @@ public:
 
     /// Enqueues a command to write data from host memory to \p buffer.
     /// The copy is performed asynchronously.
+    ///
+    /// \see_opencl_ref{clEnqueueWriteBuffer}
     ///
     /// \see copy_async()
     event enqueue_write_buffer_async(const buffer &buffer,
@@ -375,6 +389,8 @@ public:
     #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to write a rectangular region from host memory
     /// to \p buffer.
+    ///
+    /// \see_opencl_ref{clEnqueueWriteBufferRect}
     ///
     /// \opencl_version_warning{1,1}
     cl_int enqueue_write_buffer_rect(const buffer &buffer,
@@ -416,6 +432,8 @@ public:
     /// Enqueues a command to copy data from \p src_buffer to
     /// \p dst_buffer.
     ///
+    /// \see_opencl_ref{clEnqueueCopyBuffer}
+    ///
     /// \see copy()
     event enqueue_copy_buffer(const buffer &src_buffer,
                               const buffer &dst_buffer,
@@ -450,6 +468,8 @@ public:
     #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to copy a rectangular region from
     /// \p src_buffer to \p dst_buffer.
+    ///
+    /// \see_opencl_ref{clEnqueueCopyBufferRect}
     ///
     /// \opencl_version_warning{1,1}
     cl_int enqueue_copy_buffer_rect(const buffer &src_buffer,
@@ -490,6 +510,8 @@ public:
     #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to fill \p buffer with \p pattern.
     ///
+    /// \see_opencl_ref{clEnqueueFillBuffer}
+    ///
     /// \opencl_version_warning{1,2}
     ///
     /// \see fill()
@@ -522,6 +544,9 @@ public:
     }
     #endif // CL_VERSION_1_2
 
+    /// Enqueues a command to map \p buffer into the host address space.
+    ///
+    /// \see_opencl_ref{clEnqueueMapBuffer}
     void* enqueue_map_buffer(const buffer &buffer,
                              cl_map_flags flags,
                              size_t offset,
@@ -549,6 +574,9 @@ public:
         return pointer;
     }
 
+    /// Enqueues a command to unmap \p buffer from the host memory space.
+    ///
+    /// \see_opencl_ref{clEnqueueUnmapMemObject}
     cl_int enqueue_unmap_buffer(const buffer &buffer, void *mapped_ptr)
     {
         BOOST_ASSERT(buffer.get_context() == this->get_context());
@@ -556,6 +584,9 @@ public:
         return enqueue_unmap_mem_object(buffer.get(), mapped_ptr);
     }
 
+    /// Enqueues a command to unmap \p mem from the host memory space.
+    ///
+    /// \see_opencl_ref{clEnqueueUnmapMemObject}
     cl_int enqueue_unmap_mem_object(cl_mem mem, void *mapped_ptr)
     {
         BOOST_ASSERT(m_queue != 0);
@@ -573,6 +604,9 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to read data from \p image to host memory.
+    ///
+    /// \see_opencl_ref{clEnqueueReadImage}
     cl_int enqueue_read_image(const image2d &image,
                               const size_t origin[2],
                               const size_t region[2],
@@ -603,6 +637,9 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to read data from \p image to host memory.
+    ///
+    /// \see_opencl_ref{clEnqueueReadImage}
     cl_int enqueue_read_image(const image3d &image,
                               const size_t origin[3],
                               const size_t region[3],
@@ -631,6 +668,9 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to write data from host memory to \p image.
+    ///
+    /// \see_opencl_ref{clEnqueueWriteImage}
     cl_int enqueue_write_image(const image2d &image,
                                const size_t origin[2],
                                const size_t region[2],
@@ -661,6 +701,9 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to write data from host memory to \p image.
+    ///
+    /// \see_opencl_ref{clEnqueueWriteImage}
     cl_int enqueue_write_image(const image3d &image,
                                const size_t origin[3],
                                const size_t region[3],
@@ -689,6 +732,9 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to copy data from \p src_image to \p dst_image.
+    ///
+    /// \see_opencl_ref{clEnqueueCopyImage}
     cl_int enqueue_copy_image(const image2d &src_image,
                               const image2d &dst_image,
                               const size_t src_origin[2],
@@ -721,6 +767,9 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to copy data from \p src_image to \p dst_image.
+    ///
+    /// \see_opencl_ref{clEnqueueCopyImage}
     cl_int enqueue_copy_image(const image2d &src_image,
                               const image3d &dst_image,
                               const size_t src_origin[2],
@@ -752,6 +801,9 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to copy data from \p src_image to \p dst_image.
+    ///
+    /// \see_opencl_ref{clEnqueueCopyImage}
     cl_int enqueue_copy_image(const image3d &src_image,
                               const image2d &dst_image,
                               const size_t src_origin[3],
@@ -783,6 +835,9 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to copy data from \p src_image to \p dst_image.
+    ///
+    /// \see_opencl_ref{clEnqueueCopyImage}
     cl_int enqueue_copy_image(const image3d &src_image,
                               const image3d &dst_image,
                               const size_t src_origin[3],
@@ -811,6 +866,9 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to copy data from \p src_image to \p dst_buffer.
+    ///
+    /// \see_opencl_ref{clEnqueueCopyImageToBuffer}
     cl_int enqueue_copy_image_to_buffer(const image2d &src_image,
                                         const buffer &dst_buffer,
                                         const size_t src_origin[2],
@@ -840,6 +898,9 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to copy data from \p src_image to \p dst_buffer.
+    ///
+    /// \see_opencl_ref{clEnqueueCopyImageToBuffer}
     cl_int enqueue_copy_image_to_buffer(const image3d &src_image,
                                         const buffer &dst_buffer,
                                         const size_t src_origin[3],
@@ -866,6 +927,9 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to copy data from \p src_buffer to \p dst_image.
+    ///
+    /// \see_opencl_ref{clEnqueueCopyBufferToImage}
     cl_int enqueue_copy_buffer_to_image(const buffer &src_buffer,
                                         const image2d &dst_image,
                                         size_t src_offset,
@@ -895,6 +959,9 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to copy data from \p src_buffer to \p dst_image.
+    ///
+    /// \see_opencl_ref{clEnqueueCopyBufferToImage}
     cl_int enqueue_copy_buffer_to_image(const buffer &src_buffer,
                                         const image3d &dst_image,
                                         size_t src_offset,
@@ -922,6 +989,11 @@ public:
     }
 
     #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Enqueues a command to fill \p image with \p fill_color.
+    ///
+    /// \see_opencl_ref{clEnqueueFillImage}
+    ///
+    /// \opencl_version_warning{1,2}
     cl_int enqueue_fill_image(const image2d &image,
                               const void *fill_color,
                               const size_t origin[2],
@@ -948,6 +1020,11 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to fill \p image with \p fill_color.
+    ///
+    /// \see_opencl_ref{clEnqueueFillImage}
+    ///
+    /// \opencl_version_warning{1,2}
     cl_int enqueue_fill_image(const image3d &image,
                               const void *fill_color,
                               const size_t origin[3],
@@ -971,6 +1048,11 @@ public:
         return ret;
     }
 
+    /// Enqueues a command to migrate \p mem_objects.
+    ///
+    /// \see_opencl_ref{clEnqueueMigrateMemObjects}
+    ///
+    /// \opencl_version_warning{1,2}
     void enqueue_migrate_memory_objects(uint_ num_mem_objects,
                                         const cl_mem *mem_objects,
                                         cl_mem_migration_flags flags)
@@ -991,6 +1073,8 @@ public:
     #endif // CL_VERSION_1_2
 
     /// Enqueues a kernel for execution.
+    ///
+    /// \see_opencl_ref{clEnqueueNDRangeKernel}
     event enqueue_nd_range_kernel(const kernel &kernel,
                                   size_t work_dim,
                                   const size_t *global_work_offset,
@@ -1045,6 +1129,8 @@ public:
     }
 
     /// Enqueues a kernel to execute using a single work-item.
+    ///
+    /// \see_opencl_ref{clEnqueueTask}
     event enqueue_task(const kernel &kernel)
     {
         BOOST_ASSERT(m_queue != 0);
@@ -1061,6 +1147,8 @@ public:
     }
 
     /// Flushes the command queue.
+    ///
+    /// \see_opencl_ref{clFlush}
     void flush()
     {
         BOOST_ASSERT(m_queue != 0);
@@ -1069,6 +1157,8 @@ public:
     }
 
     /// Blocks until all outstanding commands in the queue have finished.
+    ///
+    /// \see_opencl_ref{clFinish}
     void finish()
     {
         BOOST_ASSERT(m_queue != 0);

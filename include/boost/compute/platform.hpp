@@ -62,6 +62,7 @@ public:
     {
     }
 
+    /// Returns the ID of the platform.
     cl_platform_id id() const
     {
         return m_platform;

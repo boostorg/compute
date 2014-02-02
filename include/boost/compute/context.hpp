@@ -39,6 +39,8 @@ public:
     }
 
     /// Creates a new context for \p device with \p properties.
+    ///
+    /// \see_opencl_ref{clCreateContext}
     explicit context(const device &device,
                      const cl_context_properties *properties = 0)
     {

@@ -138,7 +138,7 @@ public:
         #endif
     }
 
-    /// Returns the id for the device.
+    /// Returns the ID of the device.
     cl_device_id id() const
     {
         return m_id;

@@ -46,6 +46,8 @@ public:
 
     /// Create a new memory buffer in of \p size with \p flags in
     /// \p context.
+    ///
+    /// \see_opencl_ref{clCreateBuffer}
     buffer(const context &context,
            size_t size,
            cl_mem_flags flags = read_write,

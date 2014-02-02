@@ -29,11 +29,15 @@ namespace compute {
 class image3d : public memory_object
 {
 public:
+    /// Creates a null image3d object.
     image3d()
         : memory_object()
     {
     }
 
+    /// Creates a new image2d object.
+    ///
+    /// \see_opencl_ref{clCreateImage}
     image3d(const context &context,
             cl_mem_flags flags,
             const image_format &format,
@@ -83,11 +87,13 @@ public:
         }
     }
 
+    /// Creates a new image3d as a copy of \p other.
     image3d(const image3d &other)
         : memory_object(other)
     {
     }
 
+    /// Copies the image3d from \p other.
     image3d& operator=(const image3d &other)
     {
         memory_object::operator=(other);
@@ -95,15 +101,20 @@ public:
         return *this;
     }
 
+    /// Destroys the image3d object.
     ~image3d()
     {
     }
 
+    /// Returns the format for the image.
     image_format get_format() const
     {
         return image_format(get_info<cl_image_format>(CL_IMAGE_FORMAT));
     }
 
+    /// Returns information about the image.
+    ///
+    /// \see_opencl_ref{clGetImageInfo}
     template<class T>
     T get_info(cl_image_info info) const
     {
@@ -119,6 +130,9 @@ public:
         return height * width * depth;
     }
 
+    /// Returns the supported image formats for the context.
+    ///
+    /// \see_opencl_ref{clGetSupportedImageFormats}
     static std::vector<image_format> get_supported_formats(const context &context,
                                                            cl_mem_flags flags)
     {

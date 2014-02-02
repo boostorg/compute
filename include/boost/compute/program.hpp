@@ -278,6 +278,8 @@ public:
     }
 
     /// Creates a new program with \p source in \p context.
+    ///
+    /// \see_opencl_ref{clCreateProgramWithSource}
     static program create_with_source(const std::string &source,
                                       const context &context)
     {
@@ -297,6 +299,8 @@ public:
     }
 
     /// Creates a new program with \p file in \p context.
+    ///
+    /// \see_opencl_ref{clCreateProgramWithSource}
     static program create_with_source_file(const std::string &file,
                                            const context &context)
     {
@@ -315,6 +319,8 @@ public:
 
     /// Creates a new program with \p binary of \p binary_size in
     /// \p context.
+    ///
+    /// \see_opencl_ref{clCreateProgramWithBinary}
     static program create_with_binary(const unsigned char *binary,
                                       size_t binary_size,
                                       const context &context)
@@ -338,6 +344,8 @@ public:
     }
 
     /// Creates a new program with \p binary in \p context.
+    ///
+    /// \see_opencl_ref{clCreateProgramWithBinary}
     static program create_with_binary(const std::vector<unsigned char> &binary,
                                       const context &context)
     {
@@ -345,6 +353,8 @@ public:
     }
 
     /// Creates a new program with \p file in \p context.
+    ///
+    /// \see_opencl_ref{clCreateProgramWithBinary}
     static program create_with_binary_file(const std::string &file,
                                            const context &context)
     {

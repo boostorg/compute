@@ -211,6 +211,8 @@ public:
     }
 
     /// Sets the argument at \p index to \p value with \p size.
+    ///
+    /// \see_opencl_ref{clSetKernelArg}
     void set_arg(size_t index, size_t size, const void *value)
     {
         BOOST_ASSERT(index < arity());
