@@ -1,0 +1,73 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Class extension_unsupported_exception</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
+<link rel="up" href="../../compute/reference.html#header.boost.compute.exception.extension_unsupported_exception_hpp" title="Header &lt;boost/compute/exception/extension_unsupported_exception.hpp&gt;">
+<link rel="prev" href="context_error.html" title="Class context_error">
+<link rel="next" href="runtime_exception.html" title="Class runtime_exception">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="spirit-nav">
+<a accesskey="p" href="context_error.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.exception.extension_unsupported_exception_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="runtime_exception.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+<div class="refentry">
+<a name="boost.compute.extension_unsu_idp45680688"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class extension_unsupported_exception</span></h2>
+<p>boost::compute::extension_unsupported_exception &#8212; Exception thrown when attempting to use an unsupported OpenCL extension. </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../compute/reference.html#header.boost.compute.exception.extension_unsupported_exception_hpp" title="Header &lt;boost/compute/exception/extension_unsupported_exception.hpp&gt;">boost/compute/exception/extension_unsupported_exception.hpp</a>&gt;
+
+</span>
+<span class="keyword">class</span> <a class="link" href="extension_unsu_idp45680688.html" title="Class extension_unsupported_exception">extension_unsupported_exception</a> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">exception</span> <span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// <a class="link" href="extension_unsu_idp45680688.html#boost.compute.extension_unsu_idp45680688construct-copy-destruct">construct/copy/destruct</a></span>
+  <span class="keyword">explicit</span> <a class="link" href="extension_unsu_idp45680688.html#idp45686000-bb"><span class="identifier">extension_unsupported_exception</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="extension_unsu_idp45680688.html#idp45687248-bb"><span class="special">~</span><span class="identifier">extension_unsupported_exception</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="extension_unsu_idp45680688.html#idp45684160-bb">public member functions</a></span>
+  <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a class="link" href="extension_unsu_idp45680688.html#idp45684720-bb"><span class="identifier">what</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+<span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="idp83787632"></a><h2>Description</h2>
+<p>This exception is thrown when the user attempts to use an OpenCL extension which is not supported on the platform and/or device.</p>
+<p>An example of this is attempting to use CL-GL sharing on a non-GPU device.</p>
+<p><span class="bold"><strong>See Also:</strong></span></p>
+<p>runtime_exception </p>
+<p>
+</p>
+<div class="refsect2">
+<a name="idp83790032"></a><h3>
+<a name="boost.compute.extension_unsu_idp45680688construct-copy-destruct"></a><code class="computeroutput">extension_unsupported_exception</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><pre class="literallayout"><span class="keyword">explicit</span> <a name="idp45686000-bb"></a><span class="identifier">extension_unsupported_exception</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> extension<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp45687248-bb"></a><span class="special">~</span><span class="identifier">extension_unsupported_exception</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="idp83802960"></a><h3>
+<a name="idp45684160-bb"></a><code class="computeroutput">extension_unsupported_exception</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="literallayout"><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a name="idp45684720-bb"></a><span class="identifier">what</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li></ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2013 Kyle Lutz<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="context_error.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.exception.extension_unsupported_exception_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="runtime_exception.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
