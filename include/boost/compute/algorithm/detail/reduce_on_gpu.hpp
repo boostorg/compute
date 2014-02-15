@@ -35,7 +35,6 @@ inline void reduce_on_gpu(const buffer_iterator<T> first,
         {
             __global const T *block = input + get_group_id(0) * VPT * TPB;
 
-            const uint gid = get_global_id(0);
             const uint lid = get_local_id(0);
 
             __local T scratch[TPB];
