@@ -111,4 +111,21 @@ BOOST_AUTO_TEST_CASE(check_fill_type)
     #endif
 }
 
+BOOST_AUTO_TEST_CASE(fill_uchar4)
+{
+    using compute::uchar4_;
+
+    // fill vector with uchar4 pattern
+    compute::vector<uchar4_> vec(4, context);
+    compute::fill(vec.begin(), vec.end(), uchar4_(32, 64, 128, 255), queue);
+
+    // check results
+    std::vector<uchar4_> result(4);
+    compute::copy(vec.begin(), vec.end(), result.begin(), queue);
+    BOOST_CHECK_EQUAL(result[0], uchar4_(32, 64, 128, 255));
+    BOOST_CHECK_EQUAL(result[1], uchar4_(32, 64, 128, 255));
+    BOOST_CHECK_EQUAL(result[2], uchar4_(32, 64, 128, 255));
+    BOOST_CHECK_EQUAL(result[3], uchar4_(32, 64, 128, 255));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

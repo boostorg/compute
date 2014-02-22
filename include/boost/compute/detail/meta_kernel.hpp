@@ -226,7 +226,7 @@ struct inject_type_impl
         m_source << "(" << type_name<type>() << ")"; \
         m_source << "("; \
         for(size_t i = 0; i < vector_size<type>::value; i++){ \
-            m_source << x[i]; \
+            *this << lit(x[i]); \
             \
             if(i != vector_size<type>::value - 1){ \
                 m_source << ","; \
@@ -530,6 +530,66 @@ public:
         return *this;
     }
 
+    // define stream operators for variable types
+    template<class T>
+    meta_kernel& operator<<(const meta_kernel_variable<T> &variable)
+    {
+        return *this << variable.name();
+    }
+
+    // define stream operators for literal types
+    template<class T>
+    meta_kernel& operator<<(const meta_kernel_literal<T> &literal)
+    {
+        return *this << literal.value();
+    }
+
+    meta_kernel& operator<<(const meta_kernel_literal<bool> &literal)
+    {
+        return *this << (literal.value() ? "true" : "false");
+    }
+
+    meta_kernel& operator<<(const meta_kernel_literal<char> &literal)
+    {
+        const char c = literal.value();
+
+        switch(c){
+        // control characters
+        case '\0':
+            return *this << "'\\0'";
+        case '\a':
+            return *this << "'\\a'";
+        case '\b':
+            return *this << "'\\b'";
+        case '\t':
+            return *this << "'\\t'";
+        case '\n':
+            return *this << "'\\n'";
+        case '\v':
+            return *this << "'\\v'";
+        case '\f':
+            return *this << "'\\f'";
+        case '\r':
+            return *this << "'\\r'";
+
+        // characters which need escaping
+        case '\"':
+        case '\'':
+        case '\?':
+        case '\\':
+            return *this << "'\\" << c << "'";
+
+        // all other characters
+        default:
+            return *this << "'" << c << "'";
+        }
+    }
+
+    meta_kernel& operator<<(const meta_kernel_literal<unsigned char> &literal)
+    {
+        return *this << uint_(literal.value());
+    }
+
     BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float2_)
     BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float4_)
     BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float8_)
@@ -728,76 +788,6 @@ private:
     std::vector<detail::meta_kernel_stored_arg> m_stored_args;
     std::vector<detail::meta_kernel_buffer_info> m_stored_buffers;
 };
-
-template<class T>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const meta_kernel_variable<T> &variable)
-{
-    return kernel << variable.name();
-}
-
-template<class T>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const meta_kernel_literal<T> &literal)
-{
-    return kernel << literal.value();
-}
-
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const meta_kernel_literal<bool> &literal)
-{
-    return kernel << (literal.value() ? "true" : "false");
-}
-
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const meta_kernel_literal<char> &literal)
-{
-    const char c = literal.value();
-
-    switch(c){
-    // control characters
-    case '\0':
-        return kernel << "'\\0'";
-    case '\a':
-        return kernel << "'\\a'";
-    case '\b':
-        return kernel << "'\\b'";
-    case '\t':
-        return kernel << "'\\t'";
-    case '\n':
-        return kernel << "'\\n'";
-    case '\v':
-        return kernel << "'\\v'";
-    case '\f':
-        return kernel << "'\\f'";
-    case '\r':
-        return kernel << "'\\r'";
-
-    // characters which need escaping
-    case '\"':
-    case '\'':
-    case '\?':
-    case '\\':
-        return kernel << "'\\" << c << "'";
-
-    // all other characters
-    default:
-        return kernel << "'" << c << "'";
-    }
-}
-
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const meta_kernel_literal<unsigned char> &literal)
-{
-    return kernel << uint_(literal.value());
-}
-
-template<class T1, class T2>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const meta_kernel_literal<std::pair<T1, T2> > &literal)
-{
-    return kernel << literal.value();
-}
 
 template<class ResultType>
 inline meta_kernel& operator<<(meta_kernel &kernel,
