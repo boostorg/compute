@@ -23,6 +23,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/algorithm/string/find.hpp>
+#include <boost/preprocessor/repetition.hpp>
 
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/image2d.hpp>
@@ -777,6 +778,53 @@ public:
         inject_type_impl<Type>()(const_cast<meta_kernel &>(*this));
     }
 
+    // the insert_function_call() method inserts a call to a function with
+    // the given name tuple of argument values.
+    template<class ArgTuple>
+    void insert_function_call(const std::string &name, const ArgTuple &args)
+    {
+        *this << name << '(';
+        insert_function_call_args(args);
+        *this << ')';
+    }
+
+    // the insert_function_call_args() method takes a tuple of argument values
+    // and inserts them into the source string with a comma in-between each.
+    // this is useful for creating function calls given a tuple of values.
+    void insert_function_call_args(const boost::tuple<>&)
+    {
+    }
+
+    #define BOOST_COMPUTE_META_KERNEL_INSERT_FUNCTION_ARG_TYPE(z, n, unused) \
+        inject_type<BOOST_PP_CAT(T, n)>();
+
+    #define BOOST_COMPUTE_META_KERNEL_STREAM_FUNCTION_ARG(z, n, unused) \
+        << boost::get<BOOST_PP_DEC(n)>(args) << ", "
+
+    #define BOOST_COMPUTE_META_KERNEL_INSERT_FUNCTION_ARGS(z, n, unused) \
+        template<BOOST_PP_ENUM_PARAMS(n, class T)> \
+        void insert_function_call_args( \
+            const boost::tuple<BOOST_PP_ENUM_PARAMS(n, T)> &args \
+        ) \
+        { \
+            BOOST_PP_REPEAT_FROM_TO( \
+                0, n, BOOST_COMPUTE_META_KERNEL_INSERT_FUNCTION_ARG_TYPE, ~ \
+            ) \
+            *this \
+                BOOST_PP_REPEAT_FROM_TO( \
+                    1, n, BOOST_COMPUTE_META_KERNEL_STREAM_FUNCTION_ARG, ~ \
+                ) \
+                << boost::get<BOOST_PP_DEC(n)>(args); \
+        }
+
+    BOOST_PP_REPEAT_FROM_TO(
+        1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_META_KERNEL_INSERT_FUNCTION_ARGS, ~
+    )
+
+    #undef BOOST_COMPUTE_META_KERNEL_INSERT_FUNCTION_ARG_TYPE
+    #undef BOOST_COMPUTE_META_KERNEL_STREAM_FUNCTION_ARG
+    #undef BOOST_COMPUTE_META_KERNEL_INSERT_FUNCTION_ARGS
+
 private:
     std::string m_name;
     std::stringstream m_source;
@@ -789,57 +837,17 @@ private:
     std::vector<detail::meta_kernel_buffer_info> m_stored_buffers;
 };
 
-template<class ResultType>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_function<ResultType, boost::tuple<> > &expr)
+template<class ResultType, class ArgTuple>
+inline meta_kernel&
+operator<<(meta_kernel &kernel, const invoked_function<ResultType, ArgTuple> &expr)
 {
     if(!expr.source().empty()){
         kernel.add_function(expr.name(), expr.source());
     }
 
-    return kernel << expr.name() << "()";
-}
+    kernel.insert_function_call(expr.name(), expr.args());
 
-template<class ResultType, class Arg1>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_function<ResultType, boost::tuple<Arg1> > &expr)
-{
-    if(!expr.source().empty()){
-        kernel.add_function(expr.name(), expr.source());
-    }
-
-    return kernel << expr.name() << '(' << boost::get<0>(expr.args()) << ')';
-}
-
-template<class ResultType, class Arg1, class Arg2>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_function<ResultType, boost::tuple<Arg1, Arg2> > &expr)
-{
-    if(!expr.source().empty()){
-        kernel.add_function(expr.name(), expr.source());
-    }
-
-    return kernel << expr.name()
-                  << '('
-                  << boost::get<0>(expr.args()) << ", "
-                  << boost::get<1>(expr.args())
-                  << ')';
-}
-
-template<class ResultType, class Arg1, class Arg2, class Arg3>
-inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const invoked_function<ResultType, boost::tuple<Arg1, Arg2, Arg3> > &expr)
-{
-    if(!expr.source().empty()){
-        kernel.add_function(expr.name(), expr.source());
-    }
-
-    return kernel << expr.name()
-                  << '('
-                  << boost::get<0>(expr.args()) << ", "
-                  << boost::get<1>(expr.args()) << ", "
-                  << boost::get<2>(expr.args())
-                  << ')';
+    return kernel;
 }
 
 template<class Arg1, class Arg2, class Result>
