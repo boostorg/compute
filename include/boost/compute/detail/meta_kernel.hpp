@@ -530,6 +530,11 @@ public:
         return *this;
     }
 
+    BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float2_)
+    BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float4_)
+    BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float8_)
+    BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float16_)
+
     // define stream operators for variable types
     template<class T>
     meta_kernel& operator<<(const meta_kernel_variable<T> &variable)
@@ -589,11 +594,6 @@ public:
     {
         return *this << uint_(literal.value());
     }
-
-    BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float2_)
-    BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float4_)
-    BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float8_)
-    BOOST_COMPUTE_META_KERNEL_DECLARE_VECTOR_TYPE_STREAM_OPERATOR(float16_)
 
     // define stream operators for strings
     meta_kernel& operator<<(char ch)
