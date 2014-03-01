@@ -39,9 +39,9 @@ inline void opengl_enqueue_acquire_gl_objects(size_t num_objects,
 /// Enqueues a command to release the specified OpenGL memory objects.
 ///
 /// \see_opencl_ref{clEnqueueReleaseGLObjects}
-void opengl_enqueue_release_gl_objects(size_t num_objects,
-                                       const cl_mem *mem_objects,
-                                       command_queue &queue)
+inline void opengl_enqueue_release_gl_objects(size_t num_objects,
+                                              const cl_mem *mem_objects,
+                                              command_queue &queue)
 {
     cl_int ret = clEnqueueReleaseGLObjects(queue.get(),
                                            num_objects,
