@@ -15,7 +15,7 @@
 #include <boost/compute/function.hpp>
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/algorithm/detail/tabulate.hpp>
+#include <boost/compute/experimental/tabulate.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"
@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(tabulate_negative_int)
     });
 
     compute::vector<int> vector(10, context);
-    compute::detail::tabulate(vector.begin(), vector.end(), negate, queue);
+    compute::experimental::tabulate(vector.begin(), vector.end(), negate, queue);
     CHECK_RANGE_EQUAL(int, 10, vector, (0, -1, -2, -3, -4, -5, -6, -7, -8, -9));
 }
 

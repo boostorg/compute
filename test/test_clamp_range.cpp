@@ -12,8 +12,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <boost/compute/system.hpp>
-#include <boost/compute/algorithm/detail/clamp_range.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/experimental/clamp_range.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"
@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(clamp_float_range)
     compute::vector<float> input(data, data + 8, queue);
 
     compute::vector<float> result(8, context);
-    compute::detail::clamp_range(
+    compute::experimental::clamp_range(
         input.begin(),
         input.end(),
         result.begin(),

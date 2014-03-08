@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_CLAMP_RANGE_HPP
-#define BOOST_COMPUTE_ALGORITHM_DETAIL_CLAMP_RANGE_HPP
+#ifndef BOOST_COMPUTE_EXPERIMENTAL_CLAMP_RANGE_HPP
+#define BOOST_COMPUTE_EXPERIMENTAL_CLAMP_RANGE_HPP
 
 #include <iterator>
 
@@ -18,7 +18,7 @@
 
 namespace boost {
 namespace compute {
-namespace detail {
+namespace experimental {
 
 template<class InputIterator, class OutputIterator>
 inline OutputIterator
@@ -42,8 +42,8 @@ clamp_range(InputIterator first,
     );
 }
 
-} // end detail namespace
+} // end experimental namespace
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_CLAMP_RANGE_HPP
+#endif // BOOST_COMPUTE_EXPERIMENTAL_CLAMP_RANGE_HPP

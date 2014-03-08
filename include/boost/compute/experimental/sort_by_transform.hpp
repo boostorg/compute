@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_SORT_BY_TRANSFORM_HPP
-#define BOOST_COMPUTE_ALGORITHM_DETAIL_SORT_BY_TRANSFORM_HPP
+#ifndef BOOST_COMPUTE_EXPERIMENTAL_SORT_BY_TRANSFORM_HPP
+#define BOOST_COMPUTE_EXPERIMENTAL_SORT_BY_TRANSFORM_HPP
 
 #include <iterator>
 
@@ -22,7 +22,7 @@
 
 namespace boost {
 namespace compute {
-namespace detail {
+namespace experimental {
 
 template<class Iterator, class Transform, class Compare>
 inline void sort_by_transform(Iterator first,
@@ -60,8 +60,8 @@ inline void sort_by_transform(Iterator first,
     );
 }
 
-} // end detail namespace
+} // end experimental namespace
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_SORT_BY_TRANSFORM_HPP
+#endif // BOOST_COMPUTE_EXPERIMENTAL_SORT_BY_TRANSFORM_HPP

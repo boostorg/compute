@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_TABULATE_HPP
-#define BOOST_COMPUTE_ALGORITHM_DETAIL_TABULATE_HPP
+#ifndef BOOST_COMPUTE_EXPERIMENTAL_TABULATE_HPP
+#define BOOST_COMPUTE_EXPERIMENTAL_TABULATE_HPP
 
 #include <iterator>
 
@@ -18,7 +18,7 @@
 
 namespace boost {
 namespace compute {
-namespace detail {
+namespace experimental {
 
 template<class Iterator, class UnaryFunction>
 inline void tabulate(Iterator first,
@@ -37,8 +37,8 @@ inline void tabulate(Iterator first,
     );
 }
 
-} // end detail namespace
+} // end experimental namespace
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_TABULATE_HPP
+#endif // BOOST_COMPUTE_EXPERIMENTAL_TABULATE_HPP

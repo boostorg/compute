@@ -15,7 +15,7 @@
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/algorithm/detail/sort_by_transform.hpp>
+#include <boost/compute/experimental/sort_by_transform.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"
@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(sort_int_by_abs)
     int data[] = { 1, -2, 4, -3, 0, 5, -8, -9 };
     compute::vector<int> vector(data, data + 8, queue);
 
-    compute::detail::sort_by_transform(
+    compute::experimental::sort_by_transform(
         vector.begin(),
         vector.end(),
         compute::abs<int>(),
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(sort_vectors_by_length)
         reinterpret_cast<float4_ *>(data), 4, vector.begin(), queue
     );
 
-    compute::detail::sort_by_transform(
+    compute::experimental::sort_by_transform(
         vector.begin(),
         vector.end(),
         compute::length<float4_>(),
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(sort_vectors_by_component)
     );
 
     // sort by y-component
-    compute::detail::sort_by_transform(
+    compute::experimental::sort_by_transform(
         vector.begin(),
         vector.end(),
         compute::get<1>(),

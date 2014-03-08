@@ -28,7 +28,6 @@
 #include <boost/compute/iterator.hpp>
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/lambda.hpp>
-#include <boost/compute/malloc.hpp>
 #include <boost/compute/platform.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/random.hpp>

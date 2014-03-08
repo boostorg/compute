@@ -11,8 +11,8 @@
 #define BOOST_TEST_MODULE TestMalloc
 #include <boost/test/unit_test.hpp>
 
-#include <boost/compute/malloc.hpp>
 #include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/experimental/malloc.hpp>
 
 #include "context_setup.hpp"
 
@@ -20,7 +20,7 @@ namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(malloc_int)
 {
-    bc::device_ptr<int> ptr = bc::malloc<int>(5);
+    bc::device_ptr<int> ptr = bc::experimental::malloc<int>(5);
 
     int input_data[] = { 2, 5, 8, 3, 6 };
     bc::copy(input_data, input_data + 5, ptr);
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(malloc_int)
     BOOST_CHECK_EQUAL(output_data[3], 3);
     BOOST_CHECK_EQUAL(output_data[4], 6);
 
-    bc::free(ptr);
+    bc::experimental::free(ptr);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_MALLOC_HPP
-#define BOOST_COMPUTE_MALLOC_HPP
+#ifndef BOOST_COMPUTE_EXPERIMENTAL_MALLOC_HPP
+#define BOOST_COMPUTE_EXPERIMENTAL_MALLOC_HPP
 
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/system.hpp>
@@ -18,6 +18,7 @@
 
 namespace boost {
 namespace compute {
+namespace experimental {
 
 template<class T>
 inline device_ptr<T>
@@ -40,7 +41,8 @@ inline void free(device_ptr<T> &ptr)
     clReleaseMemObject(ptr.get_buffer().get());
 }
 
+} // end experimental namespace
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_MALLOC_HPP
+#endif // BOOST_COMPUTE_EXPERIMENTAL_MALLOC_HPP
