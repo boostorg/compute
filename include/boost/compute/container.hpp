@@ -20,6 +20,7 @@
 #include <boost/compute/container/basic_string.hpp>
 #include <boost/compute/container/flat_map.hpp>
 #include <boost/compute/container/flat_set.hpp>
+#include <boost/compute/container/mapped_view.hpp>
 #include <boost/compute/container/pinned_allocator.hpp>
 #include <boost/compute/container/string.hpp>
 #include <boost/compute/container/vector.hpp>

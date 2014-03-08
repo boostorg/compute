@@ -8,6 +8,7 @@ set(EXAMPLES
   inline_ptx
   longest_vector
   list_devices
+  mapped_view
   monte_carlo
   point_centroid
   price_cross

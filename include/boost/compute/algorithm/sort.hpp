@@ -21,6 +21,7 @@
 #include <boost/compute/algorithm/detail/fixed_sort.hpp>
 #include <boost/compute/algorithm/detail/radix_sort.hpp>
 #include <boost/compute/algorithm/detail/insertion_sort.hpp>
+#include <boost/compute/container/mapped_view.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 
 namespace boost {
@@ -70,27 +71,15 @@ inline void dispatch_sort(Iterator first,
     size_t size = static_cast<size_t>(std::distance(first, last));
 
     // create mapped buffer
-    buffer mapped_buffer(
-        queue.get_context(),
-        size * sizeof(T),
-        buffer::read_write | buffer::use_host_ptr,
-        boost::addressof(*first)
+    mapped_view<T> view(
+        boost::addressof(*first), size, queue.get_context()
     );
 
     // sort mapped buffer
-    dispatch_sort(
-        make_buffer_iterator<T>(mapped_buffer, 0),
-        make_buffer_iterator<T>(mapped_buffer, size),
-        queue
-    );
+    dispatch_sort(view.begin(), view.end(), queue);
 
     // return results to host
-    queue.enqueue_map_buffer(
-        mapped_buffer,
-        command_queue::map_read | command_queue::map_write,
-        0,
-        size * sizeof(T)
-    );
+    view.map(queue);
 }
 
 } // end detail namespace
