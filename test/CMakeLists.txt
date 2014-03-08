@@ -34,7 +34,6 @@ add_compute_test("core.kernel" test_kernel.cpp)
 add_compute_test("core.program" test_program.cpp)
 add_compute_test("core.system" test_system.cpp)
 add_compute_test("core.type_traits" test_type_traits.cpp)
-add_compute_test("core.types" test_types.cpp)
 
 add_compute_test("algorithm.accumulate" test_accumulate.cpp)
 add_compute_test("algorithm.adjacent_difference" test_adjacent_difference.cpp)
@@ -105,12 +104,14 @@ add_compute_test("iterator.zip_iterator" test_zip_iterator.cpp)
 
 add_compute_test("random.mersenne_twister" test_mersenne_twister.cpp)
 
-add_compute_test("ext.complex" test_complex.cpp)
+add_compute_test("types.builtin" test_types.cpp)
+add_compute_test("types.complex" test_complex.cpp)
+add_compute_test("types.pair" test_pair.cpp)
+add_compute_test("types.tuple" test_tuple.cpp)
+
 add_compute_test("ext.lambda" test_lambda.cpp)
 add_compute_test("ext.malloc" test_malloc.cpp)
-add_compute_test("ext.pair" test_pair.cpp)
 add_compute_test("ext.program_cache" test_program_cache.cpp)
-add_compute_test("ext.tuple" test_tuple.cpp)
 
 add_compute_test("issue.11" test_issue_11.cpp)
 
