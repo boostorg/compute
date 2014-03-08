@@ -31,6 +31,17 @@
 
 namespace boost {
 namespace compute {
+namespace detail {
+
+inline void BOOST_COMPUTE_CL_CALLBACK
+nullary_native_kernel_trampoline(void *user_func_ptr)
+{
+    void (*user_func)();
+    std::memcpy(&user_func, user_func_ptr, sizeof(user_func));
+    user_func();
+}
+
+} // end detail namespace
 
 /// \class command_queue
 /// \brief A command queue.
@@ -1145,6 +1156,50 @@ public:
         }
 
         return event_;
+    }
+
+    /// Enqueues a function to execute on the host.
+    event enqueue_native_kernel(void (BOOST_COMPUTE_CL_CALLBACK *user_func)(void *),
+                                void *args,
+                                size_t cb_args,
+                                uint_ num_mem_objects,
+                                const cl_mem *mem_list,
+                                const void **args_mem_loc)
+    {
+        BOOST_ASSERT(m_queue != 0);
+
+        event event_;
+        cl_int ret = clEnqueueNativeKernel(
+            m_queue,
+            user_func,
+            args,
+            cb_args,
+            num_mem_objects,
+            mem_list,
+            args_mem_loc,
+            0,
+            0,
+            &event_.get()
+        );
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+        }
+
+        return event_;
+    }
+
+    /// Convience overload for enqueue_native_kernel() which enqueues a
+    /// native kernel on the host with a nullary function.
+    event enqueue_native_kernel(void (BOOST_COMPUTE_CL_CALLBACK *user_func)(void))
+    {
+        return enqueue_native_kernel(
+            detail::nullary_native_kernel_trampoline,
+            reinterpret_cast<void *>(&user_func),
+            sizeof(user_func),
+            0,
+            0,
+            0
+        );
     }
 
     /// Flushes the command queue.

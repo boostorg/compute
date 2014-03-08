@@ -15,10 +15,13 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/algorithm/fill.hpp>
+#include <boost/compute/container/vector.hpp>
 
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(get_context)
 {
@@ -166,5 +169,33 @@ BOOST_AUTO_TEST_CASE(write_buffer_rect)
     BOOST_CHECK_EQUAL(output[3], 7);
 }
 #endif // CL_VERSION_1_1
+
+static bool nullary_kernel_executed = false;
+
+static void nullary_kernel()
+{
+    nullary_kernel_executed = true;
+}
+
+BOOST_AUTO_TEST_CASE(native_kernel)
+{
+    cl_device_exec_capabilities exec_capabilities =
+        device.get_info<cl_device_exec_capabilities>(
+            CL_DEVICE_EXECUTION_CAPABILITIES
+        );
+    if(!(exec_capabilities & CL_EXEC_NATIVE_KERNEL)){
+        std::cerr << "skipping native_kernel test: "
+                  << "device does not support CL_EXEC_NATIVE_KERNEL"
+                  << std::endl;
+        return;
+    }
+
+    compute::vector<int> vector(1000, context);
+    compute::fill(vector.begin(), vector.end(), 42, queue);
+    BOOST_CHECK_EQUAL(nullary_kernel_executed, false);
+    queue.enqueue_native_kernel(&nullary_kernel);
+    queue.finish();
+    BOOST_CHECK_EQUAL(nullary_kernel_executed, true);
+}
 
 BOOST_AUTO_TEST_SUITE_END()
