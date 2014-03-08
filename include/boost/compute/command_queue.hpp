@@ -25,6 +25,7 @@
 #include <boost/compute/image2d.hpp>
 #include <boost/compute/image3d.hpp>
 #include <boost/compute/exception.hpp>
+#include <boost/compute/wait_list.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
 
@@ -1178,6 +1179,20 @@ public:
         #endif
     }
 
+    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Enqueues a barrier in the queue after \p events.
+    ///
+    /// \opencl_version_warning{1,2}
+    void enqueue_barrier(const wait_list &events)
+    {
+        BOOST_ASSERT(m_queue != 0);
+
+        clEnqueueBarrierWithWaitList(
+            m_queue, events.size(), events.get_event_ptr(), 0
+        );
+    }
+    #endif // CL_VERSION_1_2
+
     /// Enqueues a marker in the queue and returns an event that can be
     /// used to track its progress.
     event enqueue_marker()
@@ -1196,6 +1211,27 @@ public:
 
         return event_;
     }
+
+    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Enqueues a marker after \p events in the queue and returns an
+    /// event that can be used to track its progress.
+    ///
+    /// \opencl_version_warning{1,2}
+    event enqueue_marker(const wait_list &events)
+    {
+        event event_;
+
+        cl_int ret = clEnqueueMarkerWithWaitList(
+            m_queue, events.size(), events.get_event_ptr(), &event_.get()
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+        }
+
+        return event_;
+    }
+    #endif // CL_VERSION_1_2
 
     /// \internal_
     operator cl_command_queue() const
