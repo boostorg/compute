@@ -19,6 +19,7 @@
 #include <boost/compute/functional.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/container/array.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/detail/inplace_reduce.hpp>
@@ -215,6 +216,23 @@ inline void dispatch_reduce(const buffer_iterator<T> first,
     else {
         generic_reduce(first, last, result, function, queue);
     }
+}
+
+template<class T, class OutputIterator>
+inline void dispatch_reduce(const buffer_iterator<T> first,
+                            const buffer_iterator<T> last,
+                            OutputIterator result,
+                            const plus<T> &function,
+                            command_queue &queue)
+{
+    const context &context = queue.get_context();
+
+    // reduce to temporary buffer on device
+    array<T, 1> tmp(context);
+    dispatch_reduce(first, last, tmp.begin(), function, queue);
+
+    // copy to result iterator
+    copy_n(tmp.begin(), 1, result, queue);
 }
 
 template<class InputIterator, class OutputIterator, class BinaryFunction>

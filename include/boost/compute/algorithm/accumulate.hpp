@@ -87,21 +87,14 @@ inline T dispatch_accumulate(const buffer_iterator<T> first,
                              const plus<T> &function,
                              command_queue &queue)
 {
-    const context &context = queue.get_context();
-
     size_t size = iterator_range_size(first, last);
     if(size == 0){
         return init;
     }
 
     if(can_accumulate_with_reduce(init, function)){
-        // reduce on device
-        array<T, 1> device_result(context);
-        reduce(first, last, device_result.begin(), queue);
-
-        // copy result to host
         T result;
-        copy_n(device_result.begin(), 1, &result, queue);
+        reduce(first, last, &result, queue);
         return result;
     }
     else {
