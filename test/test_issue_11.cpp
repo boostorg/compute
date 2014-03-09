@@ -11,57 +11,82 @@
 #define BOOST_TEST_MODULE TestIssue11
 #include <boost/test/unit_test.hpp>
 
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_io.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
-
-#include <boost/compute/lambda.hpp>
+#include <boost/compute/function.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/sort.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/types/tuple.hpp>
-
-#include "context_setup.hpp"
+#include <boost/compute/types/struct.hpp>
 
 namespace compute = boost::compute;
 
 // user-defined data type containing two int's and a float
-typedef boost::tuple<int, int, float> UDD;
+struct UDD
+{
+    int a;
+    int b;
+    float c;
+};
+
+// make UDD available to OpenCL
+BOOST_COMPUTE_ADAPT_STRUCT(UDD, UDD, (a, b, c))
+
+// comparison operator for UDD
+bool operator==(const UDD &lhs, const UDD &rhs)
+{
+    return lhs.a == rhs.a && lhs.b == rhs.b && lhs.c == rhs.c;
+}
+
+// output stream operator for UDD
+std::ostream& operator<<(std::ostream &stream, const UDD &x)
+{
+    return stream << "(" << x.a << ", " << x.b << ", " << x.c << ")";
+}
 
 // function to generate a random UDD on the host
 UDD rand_UDD()
 {
-    int a = rand() % 100;
-    int b = rand() % 100;
-    float c = (float)(rand() % 100) / 1.3f;
+    UDD udd;
+    udd.a = rand() % 100;
+    udd.b = rand() % 100;
+    udd.c = (float)(rand() % 100) / 1.3f;
 
-    return boost::make_tuple(a, b, c);
+    return udd;
 }
 
 // function to compare two UDD's on the host by their first component
-bool compare_UDD(const UDD &lhs, const UDD &rhs)
+bool compare_UDD_host(const UDD &lhs, const UDD &rhs)
 {
-    return lhs.get<0>() < rhs.get<0>();
+    return lhs.a < rhs.a;
 }
+
+// function to compate two UDD's on the device by their first component
+BOOST_COMPUTE_FUNCTION(bool, compare_UDD_device, (UDD, UDD),
+{
+    return _1.a < _2.a;
+});
 
 BOOST_AUTO_TEST_CASE(issue_11)
 {
-    using compute::lambda::_1;
-    using compute::lambda::_2;
-    using compute::lambda::get;
+    // get default device and setup context
+    compute::device gpu = compute::system::default_device();
+    compute::context context(gpu);
+    compute::command_queue queue(context, gpu);
 
     // create vector of random values on the host
     std::vector<UDD> host_vector(10);
     std::generate(host_vector.begin(), host_vector.end(), rand_UDD);
 
     // transfer the values to the device
-    compute::vector<UDD> device_vector = host_vector;
+    compute::vector<UDD> device_vector(host_vector.size(), context);
+    compute::copy(
+        host_vector.begin(), host_vector.end(), device_vector.begin(), queue
+    );
 
     // sort values on the device
     compute::sort(
         device_vector.begin(),
         device_vector.end(),
-        get<0>(_1) < get<0>(_2),
+        compare_UDD_device,
         queue
     );
 
@@ -69,7 +94,7 @@ BOOST_AUTO_TEST_CASE(issue_11)
     std::sort(
         host_vector.begin(),
         host_vector.end(),
-        compare_UDD
+        compare_UDD_host
     );
 
     // copy sorted device values back to the host
@@ -86,5 +111,3 @@ BOOST_AUTO_TEST_CASE(issue_11)
         BOOST_CHECK_EQUAL(tmp[i], host_vector[i]);
     }
 }
-
-BOOST_AUTO_TEST_SUITE_END()

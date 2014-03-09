@@ -107,6 +107,7 @@ add_compute_test("types.builtin" test_types.cpp)
 add_compute_test("types.complex" test_complex.cpp)
 add_compute_test("types.pair" test_pair.cpp)
 add_compute_test("types.tuple" test_tuple.cpp)
+add_compute_test("types.struct" test_struct.cpp)
 
 add_compute_test("experimental.clamp_range" test_clamp_range.cpp)
 add_compute_test("experimental.malloc" test_malloc.cpp)

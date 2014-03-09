@@ -50,6 +50,9 @@ doxygen autodoc
     ../include/boost/compute/random.hpp
     [ glob ../include/boost/compute/random/*.hpp ]
 
+    ../include/boost/compute/types.hpp
+    ../include/boost/compute/types/struct.hpp
+
     ../include/boost/compute/type_traits.hpp
     [ glob ../include/boost/compute/type_traits/*.hpp ]
   :

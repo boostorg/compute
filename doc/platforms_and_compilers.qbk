@@ -8,6 +8,12 @@ Boost.Compute has been tested on the following:
 * Clang (>= 3.0)
 * MSVC (>= 2010)
 
+Boost.Compute requires variadic macro support. Variadic macros are supported by
+most modern C++98 compilers and all C++11 compilers.
+
+To explicitly enable variadic support for Boost.Preprocessor add
+-DBOOST_PP_VARIADICS=1 to your compiler flags.
+
 [endsect]
 
 [section Platforms]
