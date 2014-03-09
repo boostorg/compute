@@ -29,35 +29,35 @@
   <span class="keyword">typedef</span> <span class="identifier">RealType</span> <a name="boost.compute.uniform_real_distribution.result_type"></a><span class="identifier">result_type</span><span class="special">;</span>
 
   <span class="comment">// <a class="link" href="uniform_real_distribution.html#boost.compute.uniform_real_distributionconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="uniform_real_distribution.html#idp53859344-bb"><span class="identifier">uniform_real_distribution</span></a><span class="special">(</span><span class="identifier">RealType</span> <span class="special">=</span> <span class="number">0</span><span class="special">.</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="number">1</span><span class="special">.</span><span class="identifier">f</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="uniform_real_distribution.html#idp53861584-bb"><span class="special">~</span><span class="identifier">uniform_real_distribution</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="uniform_real_distribution.html#idp41692528-bb"><span class="identifier">uniform_real_distribution</span></a><span class="special">(</span><span class="identifier">RealType</span> <span class="special">=</span> <span class="number">0</span><span class="special">.</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="number">1</span><span class="special">.</span><span class="identifier">f</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="uniform_real_distribution.html#idp41694768-bb"><span class="special">~</span><span class="identifier">uniform_real_distribution</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="uniform_real_distribution.html#idp53851088-bb">public member functions</a></span>
-  <span class="identifier">result_type</span> <a class="link" href="uniform_real_distribution.html#idp53851648-bb"><span class="identifier">a</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">result_type</span> <a class="link" href="uniform_real_distribution.html#idp53852768-bb"><span class="identifier">b</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="uniform_real_distribution.html#idp41684272-bb">public member functions</a></span>
+  <span class="identifier">result_type</span> <a class="link" href="uniform_real_distribution.html#idp41684832-bb"><span class="identifier">a</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">result_type</span> <a class="link" href="uniform_real_distribution.html#idp41685952-bb"><span class="identifier">b</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
   <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> OutputIterator<span class="special">,</span> <span class="keyword">typename</span> Generator<span class="special">&gt;</span> 
-    <span class="keyword">void</span> <a class="link" href="uniform_real_distribution.html#idp53853888-bb"><span class="identifier">fill</span></a><span class="special">(</span><span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">Generator</span> <span class="special">&amp;</span><span class="special">,</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+    <span class="keyword">void</span> <a class="link" href="uniform_real_distribution.html#idp41687072-bb"><span class="identifier">fill</span></a><span class="special">(</span><span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">Generator</span> <span class="special">&amp;</span><span class="special">,</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp97102688"></a><h2>Description</h2>
+<a name="idp81008176"></a><h2>Description</h2>
 <div class="refsect2">
-<a name="idp97103104"></a><h3>
+<a name="idp81008592"></a><h3>
 <a name="boost.compute.uniform_real_distributionconstruct-copy-destruct"></a><code class="computeroutput">uniform_real_distribution</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><a name="idp53859344-bb"></a><span class="identifier">uniform_real_distribution</span><span class="special">(</span><span class="identifier">RealType</span> a <span class="special">=</span> <span class="number">0</span><span class="special">.</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">RealType</span> b <span class="special">=</span> <span class="number">1</span><span class="special">.</span><span class="identifier">f</span><span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp53861584-bb"></a><span class="special">~</span><span class="identifier">uniform_real_distribution</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp41692528-bb"></a><span class="identifier">uniform_real_distribution</span><span class="special">(</span><span class="identifier">RealType</span> a <span class="special">=</span> <span class="number">0</span><span class="special">.</span><span class="identifier">f</span><span class="special">,</span> <span class="identifier">RealType</span> b <span class="special">=</span> <span class="number">1</span><span class="special">.</span><span class="identifier">f</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp41694768-bb"></a><span class="special">~</span><span class="identifier">uniform_real_distribution</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp97119712"></a><h3>
-<a name="idp53851088-bb"></a><code class="computeroutput">uniform_real_distribution</code> public member functions</h3>
+<a name="idp81025328"></a><h3>
+<a name="idp41684272-bb"></a><code class="computeroutput">uniform_real_distribution</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><span class="identifier">result_type</span> <a name="idp53851648-bb"></a><span class="identifier">a</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">result_type</span> <a name="idp53852768-bb"></a><span class="identifier">b</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">result_type</span> <a name="idp41684832-bb"></a><span class="identifier">a</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">result_type</span> <a name="idp41685952-bb"></a><span class="identifier">b</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
 <li class="listitem"><pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> OutputIterator<span class="special">,</span> <span class="keyword">typename</span> Generator<span class="special">&gt;</span> 
-  <span class="keyword">void</span> <a name="idp53853888-bb"></a><span class="identifier">fill</span><span class="special">(</span><span class="identifier">OutputIterator</span> first<span class="special">,</span> <span class="identifier">OutputIterator</span> last<span class="special">,</span> <span class="identifier">Generator</span> <span class="special">&amp;</span> g<span class="special">,</span> 
+  <span class="keyword">void</span> <a name="idp41687072-bb"></a><span class="identifier">fill</span><span class="special">(</span><span class="identifier">OutputIterator</span> first<span class="special">,</span> <span class="identifier">OutputIterator</span> last<span class="special">,</span> <span class="identifier">Generator</span> <span class="special">&amp;</span> g<span class="special">,</span> 
             <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue<span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
