@@ -289,6 +289,8 @@ make_function_impl(const std::string &name, const std::string &source)
 ///     return _1 + _2;
 /// });
 /// \endcode
+///
+/// \see BOOST_COMPUTE_CLOSURE()
 #ifdef BOOST_COMPUTE_DOXYGEN_INVOKED
 #define BOOST_COMPUTE_FUNCTION(return_type, name, args, source)
 #else

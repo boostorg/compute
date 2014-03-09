@@ -28,6 +28,7 @@
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/image2d.hpp>
 #include <boost/compute/image3d.hpp>
+#include <boost/compute/closure.hpp>
 #include <boost/compute/function.hpp>
 #include <boost/compute/device_ptr.hpp>
 #include <boost/compute/functional.hpp>
@@ -846,6 +847,24 @@ operator<<(meta_kernel &kernel, const invoked_function<ResultType, ArgTuple> &ex
     }
 
     kernel.insert_function_call(expr.name(), expr.args());
+
+    return kernel;
+}
+
+template<class ResultType, class Arg1, class CaptureTuple>
+inline meta_kernel&
+operator<<(meta_kernel &kernel,
+           const invoked_closure<ResultType, boost::tuple<Arg1>, CaptureTuple> &expr)
+{
+    if(!expr.source().empty()){
+        kernel.add_function(expr.name(), expr.source());
+    }
+
+    kernel << expr.name() << '(';
+    kernel.insert_function_call_args(expr.args());
+    kernel << ", ";
+    kernel.insert_function_call_args(expr.capture());
+    kernel << ')';
 
     return kernel;
 }

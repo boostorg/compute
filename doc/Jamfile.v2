@@ -14,6 +14,7 @@ doxygen autodoc
     ../include/boost/compute.hpp
     ../include/boost/compute/buffer.hpp
     ../include/boost/compute/cl.hpp
+    ../include/boost/compute/closure.hpp
     ../include/boost/compute/command_queue.hpp
     ../include/boost/compute/config.hpp
     ../include/boost/compute/context.hpp

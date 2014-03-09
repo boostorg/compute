@@ -23,6 +23,7 @@ function(add_compute_test TEST_NAME TEST_SOURCE)
 endfunction()
 
 add_compute_test("core.buffer" test_buffer.cpp)
+add_compute_test("core.closure" test_closure.cpp)
 add_compute_test("core.command_queue" test_command_queue.cpp)
 add_compute_test("core.context" test_context.cpp)
 add_compute_test("core.device" test_device.cpp)

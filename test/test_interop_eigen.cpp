@@ -11,6 +11,7 @@
 #define BOOST_TEST_MODULE TestInteropEigen
 #include <boost/test/unit_test.hpp>
 
+#include <boost/compute/closure.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/algorithm/transform.hpp>
@@ -58,45 +59,48 @@ BOOST_AUTO_TEST_CASE(multiply_matrix4)
     std::vector<Eigen::Vector4f> host_vectors;
     std::vector<Eigen::Matrix4f> host_matrices;
 
-    host_matrices.push_back(Eigen::Matrix4f::Identity());
-    host_matrices.push_back(Eigen::Matrix4f::Zero());
-    host_matrices.push_back(Eigen::Matrix4f::Ones());
-    host_matrices.push_back(Eigen::Matrix4f::Ones() * 2);
+    Eigen::Matrix4f matrix;
+    matrix << 1, 2, 0, 3,
+              2, 1, 2, 0,
+              0, 3, 1, 2,
+              2, 0, 2, 1;
 
     host_vectors.push_back(Eigen::Vector4f(1, 2, 3, 4));
     host_vectors.push_back(Eigen::Vector4f(4, 3, 2, 1));
     host_vectors.push_back(Eigen::Vector4f(1, 2, 3, 4));
     host_vectors.push_back(Eigen::Vector4f(4, 3, 2, 1));
+
+    // store the eigen 4x4 matrix as a float16
+    bcl::float16_ M =
+        bcl::eigen_matrix4f_to_float16(matrix);
 
     // returns the result of M*x
-    BOOST_COMPUTE_FUNCTION(Eigen::Vector4f, transform4x4, (const Eigen::Matrix4f, const Eigen::Vector4f),
+    BOOST_COMPUTE_CLOSURE(Eigen::Vector4f, transform4x4, (const Eigen::Vector4f), (M),
     {
         float4 r;
-        r.x = dot(_1.s048c, _2);
-        r.y = dot(_1.s159d, _2);
-        r.z = dot(_1.s26ae, _2);
-        r.w = dot(_1.s37bf, _2);
+        r.x = dot(M.s048c, _1);
+        r.y = dot(M.s159d, _1);
+        r.z = dot(M.s26ae, _1);
+        r.w = dot(M.s37bf, _1);
         return r;
     });
 
     bcl::vector<Eigen::Vector4f> vectors(4, context);
-    bcl::vector<Eigen::Matrix4f> matrices(4, context);
     bcl::vector<Eigen::Vector4f> results(4, context);
 
     bcl::copy(host_vectors.begin(), host_vectors.end(), vectors.begin(), queue);
-    bcl::copy(host_matrices.begin(), host_matrices.end(), matrices.begin(), queue);
 
     bcl::transform(
-        matrices.begin(), matrices.end(), vectors.begin(), results.begin(), transform4x4, queue
+        vectors.begin(), vectors.end(), results.begin(), transform4x4, queue
     );
 
     std::vector<Eigen::Vector4f> host_results(4);
     bcl::copy(results.begin(), results.end(), host_results.begin(), queue);
 
-    BOOST_CHECK((host_matrices[0] * host_vectors[0]) == host_results[0]);
-    BOOST_CHECK((host_matrices[1] * host_vectors[1]) == host_results[1]);
-    BOOST_CHECK((host_matrices[2] * host_vectors[2]) == host_results[2]);
-    BOOST_CHECK((host_matrices[3] * host_vectors[3]) == host_results[3]);
+    BOOST_CHECK((matrix * host_vectors[0]) == host_results[0]);
+    BOOST_CHECK((matrix * host_vectors[1]) == host_results[1]);
+    BOOST_CHECK((matrix * host_vectors[2]) == host_results[2]);
+    BOOST_CHECK((matrix * host_vectors[3]) == host_results[3]);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
