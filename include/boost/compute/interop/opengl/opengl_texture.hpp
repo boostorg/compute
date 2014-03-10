@@ -19,19 +19,28 @@
 namespace boost {
 namespace compute {
 
+/// \class opengl_texture
+///
+/// A OpenCL image2d for accessing an OpenGL texture object.
 class opengl_texture : public memory_object
 {
 public:
+    /// Creates a null OpenGL texture object.
     opengl_texture()
         : memory_object()
     {
     }
 
+    /// Creates a new OpenGL texture object for \p mem.
     explicit opengl_texture(cl_mem mem, bool retain = true)
         : memory_object(mem, retain)
     {
     }
 
+    /// Creates a new OpenGL texture object in \p context for \p texture
+    /// with \p flags.
+    ///
+    /// \see_opencl_ref{clCreateFromGLTexture}
     opengl_texture(const context &context,
                    GLenum texture_target,
                    GLint miplevel,
@@ -61,11 +70,13 @@ public:
         }
     }
 
+    /// Creates a new OpenGL texture object as a copy of \p other.
     opengl_texture(const opengl_texture &other)
         : memory_object(other)
     {
     }
 
+    /// Copies the OpenGL texture object from \p other.
     opengl_texture& operator=(const opengl_texture &other)
     {
         if(this != &other){
@@ -75,10 +86,14 @@ public:
         return *this;
     }
 
+    /// Destroys the texture object.
     ~opengl_texture()
     {
     }
 
+    /// Returns information about the texture.
+    ///
+    /// \see_opencl_ref{clGetGLTextureInfo}
     template<class T>
     T get_texture_info(cl_gl_texture_info info) const
     {

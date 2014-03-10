@@ -60,6 +60,13 @@
 
     [[*System*]]
     [[`clGetPlatformIDs()`] [[memberref boost::compute::system::platforms system::platforms()]]]
+
+    [[*OpenGL Sharing*]]
+    [[`clCreateFromGLBuffer()`] [[classref boost::compute::opengl_buffer opengl_buffer::opengl_buffer()]]]
+    [[`clCreateFromGLTexture()`] [[classref boost::compute::opengl_texture opengl_texture::opengl_texture()]]]
+    [[`clGetGLTextureInfo()`] [[classref boost::compute::opengl_texture opengl_texture::get_texture_info<T>()]]]
+    [[`clEnqueueAcquireGLObjects()`] [[funcref boost::compute::opengl_enqueue_acquire_gl_objects opengl_enqueue_acquire_gl_objects()]]]
+    [[`clEnqueueReleaseGLObjects()`] [[funcref boost::compute::opengl_enqueue_release_gl_objects opengl_enqueue_release_gl_objects()]]]
 ]
 
 [endsect] [/ opencl c api]

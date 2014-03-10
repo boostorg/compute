@@ -11,6 +11,10 @@
 #ifndef BOOST_COMPUTE_INTEROP_OPENGL_HPP
 #define BOOST_COMPUTE_INTEROP_OPENGL_HPP
 
+/// \file
+///
+/// Meta-header to include all Boost.Compute OpenGL interop headers.
+
 #include <boost/compute/interop/opengl/acquire.hpp>
 #include <boost/compute/interop/opengl/context.hpp>
 #include <boost/compute/interop/opengl/opengl_buffer.hpp>

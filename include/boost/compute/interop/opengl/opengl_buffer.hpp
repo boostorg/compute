@@ -38,6 +38,8 @@ public:
 
     /// Creates a new OpenGL buffer object in \p context for \p bufobj
     /// with \p flags.
+    ///
+    /// \see_opencl_ref{clCreateFromGLBuffer}
     opengl_buffer(const context &context,
                   GLuint bufobj,
                   cl_mem_flags flags = read_write)
@@ -71,6 +73,8 @@ public:
     }
 
     /// Returns the OpenGL memory object ID.
+    ///
+    /// \see_opencl_ref{clGetGLObjectInfo}
     GLuint get_opengl_object() const
     {
         GLuint object = 0;
@@ -79,6 +83,8 @@ public:
     }
 
     /// Returns the OpenGL memory object type.
+    ///
+    /// \see_opencl_ref{clGetGLObjectInfo}
     cl_gl_object_type get_opengl_type() const
     {
         cl_gl_object_type type;

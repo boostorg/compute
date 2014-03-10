@@ -54,6 +54,9 @@ inline void opengl_enqueue_release_gl_objects(size_t num_objects,
     }
 }
 
+/// Enqueues a command to acquire the specified OpenGL buffer.
+///
+/// \see_opencl_ref{clEnqueueAcquireGLObjects}
 inline void opengl_enqueue_acquire_buffer(const opengl_buffer &buffer,
                                           command_queue &queue)
 {
@@ -62,6 +65,9 @@ inline void opengl_enqueue_acquire_buffer(const opengl_buffer &buffer,
     opengl_enqueue_acquire_gl_objects(1, &buffer.get(), queue);
 }
 
+/// Enqueues a command to release the specified OpenGL buffer.
+///
+/// \see_opencl_ref{clEnqueueReleaseGLObjects}
 inline void opengl_enqueue_release_buffer(const opengl_buffer &buffer,
                                           command_queue &queue)
 {
