@@ -35,7 +35,7 @@
     [[`clReleaseEvent()`] [[classref boost::compute::event event::~event()]]]
     [[`clGetEventInfo()`] [[memberref boost::compute::event::get_info event::get_info<T>()]]]
     [[`clGetEventProfilingInfo()`] [[memberref boost::compute::event::get_profiling_info event::get_profiling_info<T>()]]]
-    [[`clWaitForEvents()`] [[memberref boost::compute::wait_list::wait()]]]
+    [[`clWaitForEvents()`] [[memberref boost::compute::wait_list::wait() wait_list::wait()]]]
 
     [[*Kernels*]]
     [[`clCreateKernel()`] [[classref boost::compute::kernel kernel::kernel()]]]

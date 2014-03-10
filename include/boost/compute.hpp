@@ -34,6 +34,7 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/types.hpp>
 #include <boost/compute/version.hpp>
+#include <boost/compute/wait_list.hpp>
 
 #ifdef BOOST_COMPUTE_HAVE_HDR_CL_EXT
 #include <boost/compute/cl_ext.hpp>

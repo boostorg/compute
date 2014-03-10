@@ -73,7 +73,7 @@ public:
     /// Returns \c 0 if the wait-list is empty.
     ///
     /// This can be used to pass the wait-list to OpenCL C functions which
-    /// expect a cl_event pointer to refer to a list of events.
+    /// expect a \c cl_event pointer to refer to a list of events.
     const cl_event* get_event_ptr() const
     {
         if(empty()){

@@ -28,6 +28,7 @@ doxygen autodoc
     ../include/boost/compute/source.hpp
     ../include/boost/compute/system.hpp
     ../include/boost/compute/version.hpp
+    ../include/boost/compute/wait_list.hpp
 
     ../include/boost/compute/algorithm.hpp
     [ glob ../include/boost/compute/algorithm/*.hpp ]
