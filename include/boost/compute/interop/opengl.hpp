@@ -18,6 +18,7 @@
 #include <boost/compute/interop/opengl/acquire.hpp>
 #include <boost/compute/interop/opengl/context.hpp>
 #include <boost/compute/interop/opengl/opengl_buffer.hpp>
+#include <boost/compute/interop/opengl/opengl_renderbuffer.hpp>
 #include <boost/compute/interop/opengl/opengl_texture.hpp>
 
 #endif // BOOST_COMPUTE_INTEROP_OPENGL_HPP

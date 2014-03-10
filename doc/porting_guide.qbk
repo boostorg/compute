@@ -63,6 +63,7 @@
 
     [[*OpenGL Sharing*]]
     [[`clCreateFromGLBuffer()`] [[classref boost::compute::opengl_buffer opengl_buffer::opengl_buffer()]]]
+    [[`clCreateFromGLRenderbuffer()`] [[classref boost::compute::opengl_renderbuffer opengl_renderbuffer::opengl_renderbuffer()]]]
     [[`clCreateFromGLTexture()`] [[classref boost::compute::opengl_texture opengl_texture::opengl_texture()]]]
     [[`clGetGLTextureInfo()`] [[classref boost::compute::opengl_texture opengl_texture::get_texture_info<T>()]]]
     [[`clEnqueueAcquireGLObjects()`] [[funcref boost::compute::opengl_enqueue_acquire_gl_objects opengl_enqueue_acquire_gl_objects()]]]
