@@ -1,6 +1,7 @@
 # Boost.Compute #
 
-[![Build Status](https://travis-ci.org/kylelutz/compute.png)](https://travis-ci.org/kylelutz/compute)
+[![Build Status](https://travis-ci.org/kylelutz/compute.png?branch=master)]
+ (https://travis-ci.org/kylelutz/compute)
 
 Boost.Compute is a GPU/parallel-computing library for C++ based on OpenCL.
 
