@@ -31,6 +31,9 @@ if(MSVC)
   add_definitions(-D_SCL_SECURE_NO_WARNINGS)
 endif()
 
+# compiler options
+option(BOOST_COMPUTE_ENABLE_COVERAGE "Enable code coverage generation" OFF)
+
 option(BOOST_COMPUTE_BUILD_EXAMPLES "Build the Boost.Compute examples" OFF)
 if(${BOOST_COMPUTE_BUILD_EXAMPLES})
   add_subdirectory(example)
