@@ -122,7 +122,7 @@ private:
         m_program = cache->get(cache_key);
         if(!m_program.get()){
             const char source[] =
-                "uint twiddle(uint u, uint v)\n"
+                "static uint twiddle(uint u, uint v)\n"
                 "{\n"
                 "    return (((u & 0x80000000U) | (v & 0x7FFFFFFFU)) >> 1) ^\n"
                 "           ((v & 1U) ? 0x9908B0DFU : 0x0U);\n"
@@ -132,9 +132,9 @@ private:
                 "{\n"
                 "    const uint n = 624;\n"
                 "    const uint m = 397;\n"
-                "    for(int i = 0; i < (n - m); i++)\n"
+                "    for(uint i = 0; i < (n - m); i++)\n"
                 "        state[i] = state[i+m] ^ twiddle(state[i], state[i+1]);\n"
-                "    for(int i = n - m; i < (n - 1); i++)\n"
+                "    for(uint i = n - m; i < (n - 1); i++)\n"
                 "        state[i] = state[i+m-n] ^ twiddle(state[i], state[i+1]);\n"
                 "    state[n-1] = state[m-1] ^ twiddle(state[n-1], state[0]);\n"
                 "}\n"
@@ -142,7 +142,6 @@ private:
                 "__kernel void seed(const uint s, __global uint *state)\n"
                 "{\n"
                 "    const uint n = 624;\n"
-                "    const uint m = 397;\n"
                 "    state[0] = s & 0xFFFFFFFFU;\n"
                 "    for(uint i = 1; i < n; i++){\n"
                 "        state[i] = 1812433253U * (state[i-1] ^ (state[i-1] >> 30)) + i;\n"
@@ -151,7 +150,7 @@ private:
                 "    generate_state(state);\n"
                 "}\n"
 
-                "uint random_number(__global uint *state, const uint p)\n"
+                "static uint random_number(__global uint *state, const uint p)\n"
                 "{\n"
                 "    uint x = state[p];\n"
                 "    x ^= (x >> 11);\n"
