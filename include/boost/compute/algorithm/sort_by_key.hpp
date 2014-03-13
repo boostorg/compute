@@ -16,6 +16,7 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/detail/insertion_sort.hpp>
+#include <boost/compute/algorithm/detail/radix_sort.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 
 namespace boost {
@@ -53,7 +54,18 @@ inline void sort_by_key(KeyIterator keys_first,
 {
     typedef typename std::iterator_traits<KeyIterator>::value_type key_type;
 
-    sort_by_key(keys_first, keys_last, values_first, less<key_type>(), queue);
+    size_t count = detail::iterator_range_size(keys_first, keys_last);
+
+    if(count < 32){
+        detail::serial_insertion_sort_by_key(
+            keys_first, keys_last, values_first, less<key_type>(), queue
+        );
+    }
+    else {
+        detail::radix_sort_by_key(
+            keys_first, keys_last, values_first, queue
+        );
+    }
 }
 
 } // end compute namespace

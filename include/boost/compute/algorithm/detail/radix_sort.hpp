@@ -133,7 +133,13 @@ const char radix_sort_source[] =
 "                      const uint low_bit,\n"
 "                      __global const uint *counts,\n"
 "                      __global const uint *global_offsets,\n"
+"#ifndef SORT_BY_KEY\n"
 "                      __global T *output)\n"
+"#else\n"
+"                      __global T *keys_output,\n"
+"                      __global T2 *values_input,\n"
+"                      __global T2 *values_output)\n"
+"#endif\n"
 "{\n"
      // work-item parameters
 "    const uint gid = get_global_id(0);\n"
@@ -172,21 +178,24 @@ const char radix_sort_source[] =
 "            local_offset++;\n"
 "    }\n"
 
+"#ifndef SORT_BY_KEY\n"
      // write value to output
 "    output[offset + local_offset] = value;\n"
+"#else\n"
+     // write key and value if doing sort_by_key
+"    keys_output[offset + local_offset] = value;\n"
+"    values_output[offset + local_offset] = values_input[gid];\n"
+"#endif\n"
 "}\n";
 
-template<class Iterator>
-inline void radix_sort(Iterator first,
-                       Iterator last,
-                       command_queue &queue)
+template<class T, class T2>
+inline void radix_sort_impl(const buffer_iterator<T> first,
+                            const buffer_iterator<T> last,
+                            const buffer_iterator<T2> values_first,
+                            command_queue &queue)
 {
-    typedef typename
-        std::iterator_traits<Iterator>::value_type
-        value_type;
-    typedef typename
-        radix_sort_value_type<sizeof(value_type)>::type
-        sort_type;
+    typedef T value_type;
+    typedef typename radix_sort_value_type<sizeof(T)>::type sort_type;
 
     const context &context = queue.get_context();
 
@@ -205,9 +214,17 @@ inline void radix_sort(Iterator first,
         block_count++;
     }
 
+    // if we have a valid values iterator then we are doing a
+    // sort by key and have to set up the values buffer
+    bool sort_by_key = (values_first.get_buffer().get() != 0);
+
     // load (or create) radix sort program
     std::string cache_key =
         std::string("radix_sort_") + type_name<value_type>();
+
+    if(sort_by_key){
+        cache_key += std::string("_with_") + type_name<T2>();
+    }
 
     program radix_sort_program = cache->get(cache_key);
 
@@ -225,6 +242,11 @@ inline void radix_sort(Iterator first,
             options << " -DIS_SIGNED";
         }
 
+        if(sort_by_key){
+            options << " -DSORT_BY_KEY";
+            options << " -DT2=" << type_name<T2>();
+        }
+
         radix_sort_program =
             program::build_with_source(radix_sort_source, context, options.str());
 
@@ -237,11 +259,14 @@ inline void radix_sort(Iterator first,
 
     // setup temporary buffers
     vector<value_type> output(count, context);
+    vector<T2> values_output(sort_by_key ? count : 0, context);
     vector<uint_> offsets(k2, context);
     vector<uint_> counts(block_count * k2, context);
 
     const buffer *input_buffer = &first.get_buffer();
     const buffer *output_buffer = &output.get_buffer();
+    const buffer *values_input_buffer = &values_first.get_buffer();
+    const buffer *values_output_buffer = &values_output.get_buffer();
 
     for(uint_ i = 0; i < sizeof(sort_type) * CHAR_BIT / k; i++){
         // write counts
@@ -302,6 +327,10 @@ inline void radix_sort(Iterator first,
         scatter_kernel.set_arg(3, counts);
         scatter_kernel.set_arg(4, offsets);
         scatter_kernel.set_arg(5, *output_buffer);
+        if(sort_by_key){
+            scatter_kernel.set_arg(6, *values_input_buffer);
+            scatter_kernel.set_arg(7, *values_output_buffer);
+        }
         queue.enqueue_1d_range_kernel(scatter_kernel,
                                       0,
                                       block_count * block_size,
@@ -309,7 +338,25 @@ inline void radix_sort(Iterator first,
 
         // swap buffers
         std::swap(input_buffer, output_buffer);
+        std::swap(values_input_buffer, values_output_buffer);
     }
+}
+
+template<class Iterator>
+inline void radix_sort(Iterator first,
+                       Iterator last,
+                       command_queue &queue)
+{
+    radix_sort_impl(first, last, buffer_iterator<int>(), queue);
+}
+
+template<class KeyIterator, class ValueIterator>
+inline void radix_sort_by_key(KeyIterator keys_first,
+                              KeyIterator keys_last,
+                              ValueIterator values_first,
+                              command_queue &queue)
+{
+    radix_sort_impl(keys_first, keys_last, values_first, queue);
 }
 
 } // end detail namespace

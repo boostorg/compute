@@ -21,6 +21,7 @@ set(BENCHMARKS
   host_sort
   saxpy
   sort
+  sort_by_key
   sort_float
 )
 
