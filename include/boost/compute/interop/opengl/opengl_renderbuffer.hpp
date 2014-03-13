@@ -97,6 +97,19 @@ public:
     }
 };
 
+namespace detail {
+
+// set_kernel_arg specialization for opengl_renderbuffer
+template<>
+struct set_kernel_arg<opengl_renderbuffer>
+{
+    void operator()(kernel &kernel_, size_t index, const opengl_renderbuffer &buffer_)
+    {
+        kernel_.set_arg(index, buffer_.get());
+    }
+};
+
+} // end detail namespace
 } // end compute namespace
 } // end boost namespace
 

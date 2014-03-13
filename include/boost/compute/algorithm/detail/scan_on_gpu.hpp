@@ -216,7 +216,7 @@ inline OutputIterator scan_impl(InputIterator first,
 
     ::boost::compute::kernel kernel = local_scan_kernel.compile(context);
     kernel.set_arg(local_scan_kernel.m_scratch_arg, block_size * sizeof(value_type), 0);
-    kernel.set_arg(local_scan_kernel.m_block_sums_arg, block_sums.get_buffer());
+    kernel.set_arg(local_scan_kernel.m_block_sums_arg, block_sums);
     kernel.set_arg(local_scan_kernel.m_block_size_arg, static_cast<cl_uint>(block_size));
     kernel.set_arg(local_scan_kernel.m_count_arg, static_cast<cl_uint>(count));
 
@@ -240,7 +240,7 @@ inline OutputIterator scan_impl(InputIterator first,
         write_scanned_output_kernel<value_type> write_output_kernel;
         kernel = write_output_kernel.compile(context);
         kernel.set_arg(write_output_kernel.m_output_arg, result.get_buffer());
-        kernel.set_arg(write_output_kernel.m_block_sums_arg, block_sums.get_buffer());
+        kernel.set_arg(write_output_kernel.m_block_sums_arg, block_sums);
         kernel.set_arg(write_output_kernel.m_count_arg, static_cast<cl_uint>(count));
 
         queue.enqueue_1d_range_kernel(kernel,

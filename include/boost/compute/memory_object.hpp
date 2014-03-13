@@ -15,6 +15,7 @@
 
 #include <boost/compute/cl.hpp>
 #include <boost/compute/context.hpp>
+#include <boost/compute/kernel.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
 
@@ -186,6 +187,19 @@ protected:
     cl_mem m_mem;
 };
 
+namespace detail {
+
+// set_kernel_arg specialization for memory_object
+template<>
+struct set_kernel_arg<memory_object>
+{
+    void operator()(kernel &kernel_, size_t index, const memory_object &mem)
+    {
+        kernel_.set_arg(index, mem.get());
+    }
+};
+
+} // end detail namespace
 } // end compute namespace
 } // end boost namespace
 

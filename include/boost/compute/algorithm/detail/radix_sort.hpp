@@ -247,8 +247,8 @@ inline void radix_sort(Iterator first,
         // write counts
         count_kernel.set_arg(0, *input_buffer);
         count_kernel.set_arg(1, static_cast<uint_>(count));
-        count_kernel.set_arg(2, counts.get_buffer());
-        count_kernel.set_arg(3, offsets.get_buffer());
+        count_kernel.set_arg(2, counts);
+        count_kernel.set_arg(3, offsets);
         count_kernel.set_arg(4, block_size * sizeof(uint_), 0);
         count_kernel.set_arg(5, i * k);
         queue.enqueue_1d_range_kernel(count_kernel,
@@ -290,8 +290,8 @@ inline void radix_sort(Iterator first,
         }
 
         // scan global offsets
-        scan_kernel.set_arg(0, counts.get_buffer());
-        scan_kernel.set_arg(1, offsets.get_buffer());
+        scan_kernel.set_arg(0, counts);
+        scan_kernel.set_arg(1, offsets);
         scan_kernel.set_arg(2, block_count);
         queue.enqueue_task(scan_kernel);
 
@@ -299,8 +299,8 @@ inline void radix_sort(Iterator first,
         scatter_kernel.set_arg(0, *input_buffer);
         scatter_kernel.set_arg(1, static_cast<uint_>(count));
         scatter_kernel.set_arg(2, i * k);
-        scatter_kernel.set_arg(3, counts.get_buffer());
-        scatter_kernel.set_arg(4, offsets.get_buffer());
+        scatter_kernel.set_arg(3, counts);
+        scatter_kernel.set_arg(4, offsets);
         scatter_kernel.set_arg(5, *output_buffer);
         queue.enqueue_1d_range_kernel(scatter_kernel,
                                       0,

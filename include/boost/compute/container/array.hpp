@@ -228,6 +228,19 @@ private:
     buffer m_buffer;
 };
 
+namespace detail {
+
+// set_kernel_arg specialization for array<T, N>
+template<class T, std::size_t N>
+struct set_kernel_arg<array<T, N> >
+{
+    void operator()(kernel &kernel_, size_t index, const array<T, N> &array)
+    {
+        kernel_.set_arg(index, array.get_buffer());
+    }
+};
+
+} // end detail namespace
 } // end compute namespace
 } // end boost namespace
 

@@ -17,6 +17,7 @@
 #include <boost/compute/cl.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/exception.hpp>
+#include <boost/compute/kernel.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
@@ -144,6 +145,19 @@ private:
     cl_sampler m_sampler;
 };
 
+namespace detail {
+
+// set_kernel_arg specialization for image samplers
+template<>
+struct set_kernel_arg<image_sampler>
+{
+    void operator()(kernel &kernel_, size_t index, const image_sampler &sampler)
+    {
+        kernel_.set_arg(index, sampler.get());
+    }
+};
+
+} // end detail namespace
 } // end compute namespace
 } // end boost namespace
 

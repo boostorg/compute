@@ -161,6 +161,19 @@ public:
     }
 };
 
+namespace detail {
+
+// set_kernel_arg specialization for image3d
+template<>
+struct set_kernel_arg<image3d>
+{
+    void operator()(kernel &kernel_, size_t index, const image3d &image)
+    {
+        kernel_.set_arg(index, image.get());
+    }
+};
+
+} // end detail namespace
 } // end compute namespace
 } // end boost namespace
 

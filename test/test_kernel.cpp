@@ -11,7 +11,9 @@
 #define BOOST_TEST_MODULE TestKernel
 #include <boost/test/unit_test.hpp>
 
+#include <boost/compute/buffer.hpp>
 #include <boost/compute/kernel.hpp>
+#include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 
 #include "context_setup.hpp"
@@ -47,6 +49,25 @@ BOOST_AUTO_TEST_CASE(arity)
                                                     "baz",
                                                     context);
     BOOST_CHECK_EQUAL(baz.arity(), size_t(3));
+}
+
+BOOST_AUTO_TEST_CASE(set_buffer_arg)
+{
+    const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void foo(__global int *x, __global int *y)
+        {
+            x[get_global_id(0)] = -y[get_global_id(0)];
+        }
+    );
+
+    bc::kernel foo =
+        bc::kernel::create_with_source(source, "foo", context);
+
+    bc::buffer x(context, 16);
+    bc::buffer y(context, 16);
+
+    foo.set_arg(0, x);
+    foo.set_arg(1, y.get());
 }
 
 BOOST_AUTO_TEST_CASE(get_work_group_info)

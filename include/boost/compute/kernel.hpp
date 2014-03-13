@@ -16,20 +16,23 @@
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/move/move.hpp>
+#include <boost/utility/enable_if.hpp>
 
 #include <boost/compute/cl.hpp>
-#include <boost/compute/buffer.hpp>
-#include <boost/compute/image2d.hpp>
-#include <boost/compute/image3d.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/exception.hpp>
-#include <boost/compute/image_sampler.hpp>
+#include <boost/compute/type_traits/is_fundamental.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
 #include <boost/compute/detail/program_create_kernel_result.hpp>
 
 namespace boost {
 namespace compute {
+namespace detail {
+
+template<class T> struct set_kernel_arg;
+
+} // end detail namespace
 
 /// \class kernel
 /// \brief A compute kernel.
@@ -227,30 +230,35 @@ public:
     }
 
     /// Sets the argument at \p index to \p value.
+    ///
+    /// For built-in types (e.g. \c float, \c int4_), this is equivalent to
+    /// calling set_arg(index, sizeof(type), &value).
+    ///
+    /// Additionally, this method is specialized for device memory objects
+    /// such as buffer and image2d. This allows for them to be passed directly
+    /// without having to extract their underlying cl_mem object.
+    ///
+    /// This method is also specialized for device container types such as
+    /// vector<T> and array<T, N>. This allows for them to be passed directly
+    /// as kernel arguments without having to extract their underlying buffer.
     template<class T>
     void set_arg(size_t index, const T &value)
     {
-        set_arg(index, sizeof(value), &value);
+        // if you get a compilation error pointing here it means you
+        // attempted to set a kernel argument from an invalid type.
+        detail::set_kernel_arg<T>()(*this, index, value);
     }
 
     /// \internal_
-    ///
-    /// specialization for buffer, image2d and image3d
-    void set_arg(size_t index, const memory_object &mem)
+    void set_arg(size_t index, const cl_mem mem)
     {
-        BOOST_ASSERT(mem.get_context() == this->get_context());
-
-        set_arg(index, sizeof(cl_mem), static_cast<const void *>(&mem.get()));
+        set_arg(index, sizeof(cl_mem), static_cast<const void *>(&mem));
     }
 
     /// \internal_
-    ///
-    /// specialization for image samplers
-    void set_arg(size_t index, const image_sampler &sampler)
+    void set_arg(size_t index, const cl_sampler sampler)
     {
-        cl_sampler sampler_ = cl_sampler(sampler);
-
-        set_arg(index, sizeof(cl_sampler), static_cast<const void *>(&sampler_));
+        set_arg(index, sizeof(cl_sampler), static_cast<const void *>(&sampler));
     }
 
     #ifndef BOOST_NO_VARIADIC_TEMPLATES
@@ -301,6 +309,30 @@ private:
     cl_kernel m_kernel;
 };
 
+namespace detail {
+
+// set_kernel_arg implementation for built-in types
+template<class T>
+struct set_kernel_arg
+{
+    typename boost::enable_if<is_fundamental<T> >::type
+    operator()(kernel &kernel_, size_t index, const T &value)
+    {
+        kernel_.set_arg(index, sizeof(T), &value);
+    }
+};
+
+// set_kernel_arg specialization for char (different from built-in cl_char)
+template<>
+struct set_kernel_arg<char>
+{
+    void operator()(kernel &kernel_, size_t index, const char c)
+    {
+        kernel_.set_arg(index, sizeof(char), &c);
+    }
+};
+
+} // end detail namespace
 } // end namespace compute
 } // end namespace boost
 

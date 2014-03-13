@@ -165,6 +165,19 @@ public:
     }
 };
 
+namespace detail {
+
+// set_kernel_arg specialization for image2d
+template<>
+struct set_kernel_arg<image2d>
+{
+    void operator()(kernel &kernel_, size_t index, const image2d &image)
+    {
+        kernel_.set_arg(index, image.get());
+    }
+};
+
+} // end detail namespace
 } // end compute namespace
 } // end boost namespace
 

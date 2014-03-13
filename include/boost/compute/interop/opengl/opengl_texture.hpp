@@ -101,6 +101,19 @@ public:
     }
 };
 
+namespace detail {
+
+// set_kernel_arg specialization for opengl_texture
+template<>
+struct set_kernel_arg<opengl_texture>
+{
+    void operator()(kernel &kernel_, size_t index, const opengl_texture &texture)
+    {
+        kernel_.set_arg(index, texture.get());
+    }
+};
+
+} // end detail namespace
 } // end compute namespace
 } // end boost namespace
 

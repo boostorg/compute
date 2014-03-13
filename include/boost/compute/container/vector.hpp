@@ -572,6 +572,19 @@ private:
     allocator_type m_allocator;
 };
 
+namespace detail {
+
+// set_kernel_arg specialization for vector<T>
+template<class T, class Alloc>
+struct set_kernel_arg<vector<T, Alloc> >
+{
+    void operator()(kernel &kernel_, size_t index, const vector<T, Alloc> &vector)
+    {
+        kernel_.set_arg(index, vector.get_buffer());
+    }
+};
+
+} // end detail namespace
 } // end compute namespace
 } // end boost namespace
 

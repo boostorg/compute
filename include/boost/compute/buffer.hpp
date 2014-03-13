@@ -125,6 +125,19 @@ private:
     BOOST_COPYABLE_AND_MOVABLE(buffer)
 };
 
+namespace detail {
+
+// set_kernel_arg specialization for buffer
+template<>
+struct set_kernel_arg<buffer>
+{
+    void operator()(kernel &kernel_, size_t index, const buffer &buffer_)
+    {
+        kernel_.set_arg(index, buffer_.get());
+    }
+};
+
+} // end detail namespace
 } // end compute namespace
 } // end boost namespace
 

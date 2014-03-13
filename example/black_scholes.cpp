@@ -126,11 +126,11 @@ int main()
 
     // setup black-scholes kernel
     compute::kernel kernel(program, "black_scholes");
-    kernel.set_arg(0, call_result.get_buffer());
-    kernel.set_arg(1, put_result.get_buffer());
-    kernel.set_arg(2, stock_price.get_buffer());
-    kernel.set_arg(3, option_strike.get_buffer());
-    kernel.set_arg(4, option_years.get_buffer());
+    kernel.set_arg(0, call_result);
+    kernel.set_arg(1, put_result);
+    kernel.set_arg(2, stock_price);
+    kernel.set_arg(3, option_strike);
+    kernel.set_arg(4, option_years);
     kernel.set_arg(5, risk_free_rate);
     kernel.set_arg(6, volatility);
 
