@@ -12,6 +12,11 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 
 add_definitions(-DBOOST_COMPUTE_DEBUG_KERNEL_COMPILATION)
 
+# enable code coverage generation (only with GCC for now)
+if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  add_definitions(-fprofile-arcs -ftest-coverage)
+endif()
+
 function(add_compute_test TEST_NAME TEST_SOURCE)
   get_filename_component(TEST_TARGET ${TEST_SOURCE} NAME_WE)
   add_executable(${TEST_TARGET} ${TEST_SOURCE})
@@ -19,6 +24,12 @@ function(add_compute_test TEST_NAME TEST_SOURCE)
     ${OPENCL_LIBRARIES}
     ${Boost_LIBRARIES}
   )
+
+  # link with coverage library
+  if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    target_link_libraries(${TEST_TARGET} -fprofile-arcs -ftest-coverage)
+  endif()
+
   add_test(${TEST_NAME} ${TEST_TARGET})
 endfunction()
 
@@ -165,5 +176,9 @@ target_link_libraries(test_multiple_objects
     ${OPENCL_LIBRARIES}
     ${Boost_LIBRARIES}
     )
+# link with coverage library
+if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  target_link_libraries(test_multiple_objects -fprofile-arcs -ftest-coverage)
+endif()
 add_test("core.multiple_objects" test_multiple_objects)
 
