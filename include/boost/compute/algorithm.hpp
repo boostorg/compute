@@ -54,7 +54,6 @@
 #include <boost/compute/algorithm/partition.hpp>
 #include <boost/compute/algorithm/partition_copy.hpp>
 #include <boost/compute/algorithm/random_shuffle.hpp>
-#include <boost/compute/algorithm/rotate.hpp>
 #include <boost/compute/algorithm/reduce.hpp>
 #include <boost/compute/algorithm/remove.hpp>
 #include <boost/compute/algorithm/remove_if.hpp>
@@ -62,6 +61,8 @@
 #include <boost/compute/algorithm/replace_copy.hpp>
 #include <boost/compute/algorithm/reverse.hpp>
 #include <boost/compute/algorithm/reverse_copy.hpp>
+#include <boost/compute/algorithm/rotate.hpp>
+#include <boost/compute/algorithm/rotate_copy.hpp>
 #include <boost/compute/algorithm/scatter.hpp>
 #include <boost/compute/algorithm/sort.hpp>
 #include <boost/compute/algorithm/sort_by_key.hpp>
