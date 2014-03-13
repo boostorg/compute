@@ -135,14 +135,14 @@ add_compute_test("issue.11" test_issue_11.cpp)
 # eigen interop tests
 if(${BOOST_COMPUTE_HAVE_EIGEN})
   find_package(Eigen REQUIRED)
-  include_directories(${EIGEN_INCLUDE_DIRS})
+  include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})
   add_compute_test("interop.eigen" test_interop_eigen.cpp)
 endif()
 
 # opencv interop tests
 if(${BOOST_COMPUTE_HAVE_OPENCV})
   find_package(OpenCV REQUIRED)
-  include_directories(${OpenCV_INCLUDE_DIRS})
+  include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
   add_compute_test("interop.opencv" test_interop_opencv.cpp)
   target_link_libraries(test_interop_opencv ${OpenCV_LIBRARIES})
 endif()

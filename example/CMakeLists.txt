@@ -21,7 +21,7 @@ set(EXAMPLES
 
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
   find_package(Boost 1.46 REQUIRED COMPONENTS system filesystem)
-  include_directories(${Boost_INCLUDE_DIRS})
+  include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 endif()
 
 foreach(EXAMPLE ${EXAMPLES})
@@ -32,7 +32,7 @@ endforeach()
 # eigen examples
 if(${BOOST_COMPUTE_HAVE_EIGEN})
   find_package(Eigen REQUIRED)
-  include_directories(${EIGEN_INCLUDE_DIRS})
+  include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})
   add_executable(batched_determinant batched_determinant.cpp)
   target_link_libraries(batched_determinant ${OPENCL_LIBRARIES})
 endif()
@@ -40,7 +40,7 @@ endif()
 # opencv examples
 if(${BOOST_COMPUTE_HAVE_OPENCV})
   find_package(OpenCV REQUIRED)
-  include_directories(${OpenCV_INCLUDE_DIRS})
+  include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
   add_executable(opencv_filter opencv_filter.cpp)
   target_link_libraries(opencv_filter ${OPENCL_LIBRARIES} ${OpenCV_LIBRARIES})
 endif()

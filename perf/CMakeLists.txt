@@ -7,7 +7,7 @@ if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
 endif()
 
 find_package(Boost 1.48 REQUIRED COMPONENTS ${PERF_BOOST_COMPONENTS})
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 set(BENCHMARKS
   accumulate
@@ -70,7 +70,7 @@ endif()
 # intel tbb benchmarks (for comparison)
 if(${BOOST_COMPUTE_HAVE_TBB})
   find_package(TBB REQUIRED)
-  include_directories(${TBB_INCLUDE_DIRS})
+  include_directories(SYSTEM ${TBB_INCLUDE_DIRS})
 
   set(TBB_BENCHMARKS
     tbb_accumulate

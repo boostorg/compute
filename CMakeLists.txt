@@ -6,11 +6,11 @@ set(CMAKE_MODULE_PATH ${BoostCompute_SOURCE_DIR}/cmake)
 
 # find OpenCL
 find_package(OpenCL REQUIRED)
-include_directories(${OPENCL_INCLUDE_DIRS})
+include_directories(SYSTEM ${OPENCL_INCLUDE_DIRS})
 
 # find Boost
 find_package(Boost 1.48 REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 # optional third-party libraries
 option(BOOST_COMPUTE_HAVE_EIGEN "Have Eigen" OFF)
