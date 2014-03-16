@@ -28,6 +28,10 @@
 namespace boost {
 namespace compute {
 
+/// \class array
+/// \brief A fixed-size container.
+///
+/// \see vector<T>
 template<class T, std::size_t N>
 class array
 {

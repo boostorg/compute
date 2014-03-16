@@ -12,7 +12,7 @@ Boost.Compute requires variadic macro support. Variadic macros are supported by
 most modern C++98 compilers and all C++11 compilers.
 
 To explicitly enable variadic support for Boost.Preprocessor add
--DBOOST_PP_VARIADICS=1 to your compiler flags.
+`-DBOOST_PP_VARIADICS=1` to your compiler flags.
 
 [endsect]
 
@@ -34,6 +34,6 @@ To explicitly enable variadic support for Boost.Preprocessor add
 [endsect]
 
 If you have an additional platform you would like to see supported please
-submit a bug-report.
+[@https://github.com/kylelutz/compute/issues/new submit] a bug-report.
 
 [endsect]

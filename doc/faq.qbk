@@ -11,8 +11,11 @@ Please submit an issue on the GitHub issue tracker at
 * The main documentation is here: [@http://kylelutz.github.io/compute/]
 * The README is here: [@https://github.com/kylelutz/compute/blob/master/README.md]
 * The wiki is here: [@https://github.com/kylelutz/compute/wiki]
+* The contributor guide is here:
+[@https://github.com/kylelutz/compute/blob/master/CONTRIBUTING.md]
 * The header reference is here:
 [@http://kylelutz.github.io/compute/compute/reference.html#header_reference]
+
 
 [h3 What compute devices (e.g. GPUs) are supported?]
 
@@ -105,7 +108,9 @@ GPGPU and parallel-computing.
 
 Please send an email to Kyle Lutz (kyle.r.lutz@gmail.com) for more information.
 
-Also check out the list of issues at:
+Also see the
+[@https://github.com/kylelutz/compute/blob/master/CONTRIBUTING.md contributor guide]
+and check out the list of issues at:
 [@https://github.com/kylelutz/compute/issues].
 
 

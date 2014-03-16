@@ -27,6 +27,7 @@ namespace compute {
 template<class T>
 struct is_fundamental : public boost::false_type {};
 
+/// \internal_
 #define BOOST_COMPUTE_DETAIL_DECLARE_FUNDAMENTAL(type) \
     template<> struct is_fundamental<BOOST_PP_CAT(type, _)> : boost::true_type {}; \
     template<> struct is_fundamental<BOOST_PP_CAT(BOOST_PP_CAT(type, 2), _)> : boost::true_type {}; \

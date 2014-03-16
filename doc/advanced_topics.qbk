@@ -25,7 +25,8 @@ boost::compute::function<int (int)> add_four =
 boost::compute::transform(vector.begin(), vector.end(), vector.begin(), add_four);
 ``
 
-This can also be done more succinctly using the BOOST_COMPUTE_FUNCTION() macro:
+This can also be done more succinctly using the [macroref BOOST_COMPUTE_FUNCTION
+BOOST_COMPUTE_FUNCTION()] macro:
 ``
 BOOST_COMPUTE_FUNCTION(int, add_four, (int),
 {
@@ -35,7 +36,18 @@ BOOST_COMPUTE_FUNCTION(int, add_four, (int),
 boost::compute::transform(vector.begin(), vector.end(), vector.begin(), add_four);
 ``
 
+Also see [@http://kylelutz.blogspot.com/2014/03/custom-opencl-functions-in-c-with.html
+"Custom OpenCL functions in C++ with Boost.Compute"] for more details.
+
 [endsect] [/ custom functions]
+
+[section Custom Types]
+
+Boost.Compute provides the [macroref BOOST_COMPUTE_ADAPT_STRUCT
+BOOST_COMPUTE_ADAPT_STRUCT()] macro which allows a C++ struct/class to be
+wrapped and used in OpenCL.
+
+[endsect] [/ custom types]
 
 [section Complex Values]
 

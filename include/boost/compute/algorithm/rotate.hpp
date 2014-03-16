@@ -18,8 +18,7 @@
 namespace boost {
 namespace compute {
 
-/// Performs left rotation such that element at
-/// n_first comes to the beginning
+/// Performs left rotation such that element at \p n_first comes to the beginning
 template<class InputIterator>
 inline void rotate(InputIterator first, 
                    InputIterator n_first, 

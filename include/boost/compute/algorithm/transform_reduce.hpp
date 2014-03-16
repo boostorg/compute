@@ -44,9 +44,7 @@ inline void transform_reduce(InputIterator first,
     );
 }
 
-/// Transforms each value in the range [\p first1, \p last1) and the
-/// range beginning at \p first2 with the binary \p transform_function
-/// and then reduces each transformed value with \p reduce_function.
+/// \overload
 template<class InputIterator1,
          class InputIterator2,
          class OutputIterator,

@@ -21,6 +21,13 @@ namespace compute {
 
 /// Fills the range [\p first, \p last) with sequential values starting at
 /// \p value.
+///
+/// For example, the following code:
+/// \code
+/// boost::compute::iota(vec.begin(), vec.end(), 0, queue);
+/// \endcode
+///
+/// Will fill \c vec with the values (\c 0, \c 1, \c 2, \c ...).
 template<class BufferIterator, class T>
 inline void iota(BufferIterator first,
                  BufferIterator last,

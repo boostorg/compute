@@ -86,6 +86,10 @@ inline void dispatch_sort(Iterator first,
 
 /// Sorts the values in the range [\p first, \p last) according to
 /// \p compare.
+///
+/// If no compare function is specified, \c less is used.
+///
+/// \see is_sorted()
 template<class Iterator, class Compare>
 inline void sort(Iterator first,
                  Iterator last,
@@ -105,7 +109,7 @@ inline void sort(Iterator first,
                                                            queue);
 }
 
-/// Sorts the values in the range [\p first, \p last).
+/// \overload
 template<class Iterator>
 inline void sort(Iterator first,
                  Iterator last,

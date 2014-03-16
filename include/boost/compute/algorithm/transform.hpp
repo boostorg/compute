@@ -39,9 +39,7 @@ inline OutputIterator transform(InputIterator first,
            );
 }
 
-/// Transforms the elements in the range [\p first1, \p last1) and
-/// \p first2 using \p op and stores the results in the range beginning
-/// at \p result.
+/// \overload
 template<class InputIterator1,
          class InputIterator2,
          class OutputIterator,

@@ -19,20 +19,6 @@ namespace compute {
 
 /// Rearranges the elements in the range [\p first, \p last) such that
 /// the \p nth element would be in that position in a sorted sequence.
-template<class Iterator>
-inline void nth_element(Iterator first,
-                        Iterator nth,
-                        Iterator last,
-                        command_queue &queue = system::default_queue())
-{
-    (void) nth;
-
-    sort(first, last, queue);
-}
-
-/// Rearranges the elements in the range [\p first, \p last) such that
-/// the \p nth element would be in that position in a sorted sequence.
-/// Uses \p compare to compare the elements.
 template<class Iterator, class Compare>
 inline void nth_element(Iterator first,
                         Iterator nth,
@@ -43,6 +29,18 @@ inline void nth_element(Iterator first,
     (void) nth;
 
     sort(first, last, compare, queue);
+}
+
+/// \overload
+template<class Iterator>
+inline void nth_element(Iterator first,
+                        Iterator nth,
+                        Iterator last,
+                        command_queue &queue = system::default_queue())
+{
+    (void) nth;
+
+    sort(first, last, queue);
 }
 
 } // end compute namespace

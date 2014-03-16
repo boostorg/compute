@@ -62,6 +62,7 @@ inline bool can_accumulate_with_reduce(T init, F function)
     return false;
 }
 
+/// \internal_
 #define BOOST_COMPUTE_DETAIL_DECLARE_CAN_ACCUMULATE_WITH_REDUCE(r, data, type) \
     inline bool can_accumulate_with_reduce(type init, plus<type>) \
     { \
@@ -114,23 +115,10 @@ inline T dispatch_accumulate(InputIterator first,
 
 } // end detail namespace
 
-/// Returns the sum of the elements in the range [\p first, \p last)
-/// plus \p init.
-///
-/// \see reduce()
-template<class InputIterator, class T>
-inline T accumulate(InputIterator first,
-                    InputIterator last,
-                    T init,
-                    command_queue &queue = system::default_queue())
-{
-    typedef typename std::iterator_traits<InputIterator>::value_type IT;
-
-    return detail::dispatch_accumulate(first, last, init, plus<IT>(), queue);
-}
-
 /// Returns the result of applying \p function to the elements in the
 /// range [\p first, \p last) and \p init.
+///
+/// If no function is specified, \c plus will be used.
 ///
 /// \see reduce()
 template<class InputIterator, class T, class BinaryFunction>
@@ -141,6 +129,18 @@ inline T accumulate(InputIterator first,
                     command_queue &queue = system::default_queue())
 {
     return detail::dispatch_accumulate(first, last, init, function, queue);
+}
+
+/// \overload
+template<class InputIterator, class T>
+inline T accumulate(InputIterator first,
+                    InputIterator last,
+                    T init,
+                    command_queue &queue = system::default_queue())
+{
+    typedef typename std::iterator_traits<InputIterator>::value_type IT;
+
+    return detail::dispatch_accumulate(first, last, init, plus<IT>(), queue);
 }
 
 } // end compute namespace

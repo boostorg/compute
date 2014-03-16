@@ -247,8 +247,41 @@ inline void dispatch_reduce(InputIterator first,
 
 } // end detail namespace
 
-/// Returns the sum of the elements in the range [\p first, \p last). This
-/// is equivalent to calling reduce() with the \c plus<T>() function.
+/// Returns the result of applying \p function to the elements in the
+/// range [\p first, \p last).
+///
+/// If no function is specified, \c plus will be used.
+///
+/// The difference between the reduce() function and the accumulate()
+/// function is that reduce() requires the binary operator to be
+/// commutative.
+///
+/// This algorithm supports both host and device iterators for the
+/// result argument. This allows for values to be reduced and copied
+/// to the host all with a single function call.
+///
+/// For example, to calculate the sum of a vector of int's:
+/// \code
+/// // get/create vector of int's on the device
+/// boost:compute::vector<int> vec = ...
+///
+/// // compute the sum
+/// int sum = 0;
+/// boost::compute::reduce(vec.begin(), vec.end(), &sum, queue);
+/// \endcode
+///
+/// \see accumulate()
+template<class InputIterator, class OutputIterator, class BinaryFunction>
+inline void reduce(InputIterator first,
+                   InputIterator last,
+                   OutputIterator result,
+                   BinaryFunction function,
+                   command_queue &queue = system::default_queue())
+{
+    detail::dispatch_reduce(first, last, result, function, queue);
+}
+
+/// \overload
 template<class InputIterator, class OutputIterator>
 inline void reduce(InputIterator first,
                    InputIterator last,
@@ -258,26 +291,6 @@ inline void reduce(InputIterator first,
     typedef typename std::iterator_traits<InputIterator>::value_type T;
 
     detail::dispatch_reduce(first, last, result, plus<T>(), queue);
-}
-
-/// Returns the result of applying \p function to the elements in the
-/// range [\p first, \p last).
-///
-/// The difference between the reduce() function and the accumulate()
-/// function is that reduce() requires the binary operator to be
-/// commutative.
-///
-/// This algorithm supports both host and device iterators for the
-/// result argument. This allows for values to be reduced and copied
-/// to the host all with a single function call.
-template<class InputIterator, class OutputIterator, class BinaryFunction>
-inline void reduce(InputIterator first,
-                   InputIterator last,
-                   OutputIterator result,
-                   BinaryFunction function,
-                   command_queue &queue = system::default_queue())
-{
-    detail::dispatch_reduce(first, last, result, function, queue);
 }
 
 } // end compute namespace

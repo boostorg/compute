@@ -56,10 +56,7 @@ inline T inner_product(InputIterator1 first1,
     );
 }
 
-/// Returns the inner product of the elements in the range
-/// [\p first1, \p last1) with the elements in the range beginning
-/// at \p first2 using \p accumulate_function and
-/// \p transform_function.
+/// \overload
 template<class InputIterator1,
          class InputIterator2,
          class T,

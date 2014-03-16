@@ -95,10 +95,12 @@ struct zip_iterator_index_expr
     IndexExpr m_index_expr;
 };
 
+/// \internal_
 #define BOOST_COMPUTE_PRINT_ELEM(z, n, unused)                                 \
         BOOST_PP_EXPR_IF(n, << ", ")                                           \
         << boost::get<n>(expr.m_iterators)[expr.m_index_expr]
 
+/// \internal_
 #define BOOST_COMPUTE_PRINT_ZIP_IDX(z, n, unused)                              \
 template<BOOST_PP_ENUM_PARAMS(n, class Iterator), class IndexExpr>             \
 inline meta_kernel& operator<<(                                                \
@@ -269,6 +271,7 @@ struct is_device_iterator<
 > : public boost::true_type {};
 
 // get<N>() specialization for zip_iterator
+/// \internal_
 #define BOOST_COMPUTE_ZIP_GET_N(z, n, unused)                                  \
 template<size_t N, class IteratorTuple, class IndexExpr,                       \
     BOOST_PP_ENUM_PARAMS(n, class T)>                                          \

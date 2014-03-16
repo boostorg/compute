@@ -1,7 +1,7 @@
 [library Boost.Compute
     [quickbook 1.5]
     [authors [Lutz, Kyle]]
-    [copyright 2013 Kyle Lutz]
+    [copyright 2013-2014 Kyle Lutz]
     [purpose A multi-core/GPGPU computing library]
     [category concurrent]
     [id compute]
@@ -15,8 +15,10 @@
 
 [include introduction.qbk]
 [include getting_started.qbk]
+[include design.qbk]
 [include tutorial.qbk]
 [include advanced_topics.qbk]
+[include interop.qbk]
 [include porting_guide.qbk]
 [include platforms_and_compilers.qbk]
 

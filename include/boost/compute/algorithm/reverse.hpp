@@ -51,6 +51,8 @@ struct reverse_kernel : public meta_kernel
 } // end detail namespace
 
 /// Reverses the elements in the range [\p first, \p last).
+///
+/// \see reverse_copy()
 template<class Iterator>
 inline void reverse(Iterator first,
                     Iterator last,

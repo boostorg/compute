@@ -44,6 +44,8 @@ struct for_each_kernel : public meta_kernel
 } // end detail namespace
 
 /// Calls \p function on each element in the range [\p first, \p last).
+///
+/// \see transform()
 template<class InputIterator, class UnaryFunction>
 inline UnaryFunction for_each(InputIterator first,
                               InputIterator last,

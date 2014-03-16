@@ -25,6 +25,10 @@ namespace compute {
 /// Performs a key-value sort using the keys in the range [\p keys_first,
 /// \p keys_last) on the values in the range [\p values_first,
 /// \p values_first \c + (\p keys_last \c - \p keys_first)) using \p compare.
+///
+/// If no compare function is specified, \c less is used.
+///
+/// \see sort()
 template<class KeyIterator, class ValueIterator, class Compare>
 inline void sort_by_key(KeyIterator keys_first,
                         KeyIterator keys_last,
@@ -41,11 +45,7 @@ inline void sort_by_key(KeyIterator keys_first,
     );
 }
 
-/// Performs a key-value sort using the keys in the range [\p keys_first,
-/// \p keys_last) on the values in the range [\p values_first,
-/// \p values_first \c + (\p keys_last \c - \p keys_first)).
-///
-/// Uses less<> as the comparison operator for the keys.
+/// \overload
 template<class KeyIterator, class ValueIterator>
 inline void sort_by_key(KeyIterator keys_first,
                         KeyIterator keys_last,

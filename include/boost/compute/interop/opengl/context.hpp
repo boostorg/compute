@@ -26,10 +26,13 @@
 namespace boost {
 namespace compute {
 
-/// Creates an OpenCL/OpenGL sharing context for the currently active
+/// Creates a shared OpenCL/OpenGL context for the currently active
 /// OpenGL context.
 ///
-/// Throws an extension_unsupported_exception if no CL-GL sharing capable
+/// Once created, the shared context can be used to create OpenCL memory
+/// objects which can interact with OpenGL memory objects (e.g. VBOs).
+///
+/// \throws extension_unsupported_exception if no CL-GL sharing capable
 /// devices are found.
 inline context opengl_create_shared_context()
 {

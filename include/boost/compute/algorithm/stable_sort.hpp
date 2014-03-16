@@ -36,10 +36,7 @@ inline void stable_sort(Iterator first,
                                                            queue);
 }
 
-/// Sorts the values in the range [\p first, \p last). The relative
-/// order of identical values is preserved.
-///
-/// \see sort(), is_sorted()
+/// \overload
 template<class Iterator>
 inline void stable_sort(Iterator first,
                         Iterator last,
