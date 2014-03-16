@@ -18,6 +18,7 @@ set(BENCHMARKS
   merge
   mersenne_twister
   partial_sum
+  reverse
   host_sort
   saxpy
   sort
@@ -38,6 +39,7 @@ set(STL_BENCHMARKS
   stl_inner_product
   stl_merge
   stl_partial_sum
+  stl_reverse
   stl_saxpy
   stl_sort
 )
