@@ -14,6 +14,7 @@
 #include <boost/move/move.hpp>
 
 #include <boost/compute/cl.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
@@ -185,6 +186,27 @@ public:
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
     }
+
+    #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Registers a function to be called when the event status changes to
+    /// \p status (by default CL_COMPLETE). The callback is passed the OpenCL
+    /// event object, the event status, and a pointer to arbitrary user data.
+    ///
+    /// \see_opencl_ref{clSetEventCallback}
+    ///
+    /// \opencl_version_warning{1,1}
+    void set_callback(void (BOOST_COMPUTE_CL_CALLBACK *callback)(
+                          cl_event event, cl_int status, void *user_data
+                      ),
+                      cl_int status = CL_COMPLETE,
+                      void *user_data = 0)
+    {
+        cl_int ret = clSetEventCallback(m_event, status, callback, user_data);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+        }
+    }
+    #endif // CL_VERSION_1_1
 
     /// Returns \c true if the event is the same as \p other.
     bool operator==(const event &other) const
