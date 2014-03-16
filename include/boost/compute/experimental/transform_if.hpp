@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ALGORITHM_TRANSFORM_IF_HPP
-#define BOOST_COMPUTE_ALGORITHM_TRANSFORM_IF_HPP
+#ifndef BOOST_COMPUTE_EXPERIMENTAL_TRANSFORM_IF_HPP
+#define BOOST_COMPUTE_EXPERIMENTAL_TRANSFORM_IF_HPP
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
@@ -18,6 +18,7 @@
 
 namespace boost {
 namespace compute {
+namespace experimental {
 
 template<class InputIterator,
          class OutputIterator,
@@ -55,6 +56,7 @@ inline OutputIterator transform_if(InputIterator first,
     return result + count;
 }
 
+} // end experimental namespace
 } // end compute namespace
 } // end boost namespace
 

@@ -69,7 +69,6 @@
 #include <boost/compute/algorithm/stable_sort.hpp>
 #include <boost/compute/algorithm/swap_ranges.hpp>
 #include <boost/compute/algorithm/transform.hpp>
-#include <boost/compute/algorithm/transform_if.hpp>
 #include <boost/compute/algorithm/transform_reduce.hpp>
 #include <boost/compute/algorithm/upper_bound.hpp>
 

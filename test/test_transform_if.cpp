@@ -13,7 +13,7 @@
 
 #include <boost/compute/lambda.hpp>
 #include <boost/compute/functional.hpp>
-#include <boost/compute/algorithm/transform_if.hpp>
+#include <boost/compute/experimental/transform_if.hpp>
 #include <boost/compute/container/vector.hpp>
 
 #include "check_macros.hpp"
@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(abs_if_odd)
     compute::vector<int> vector(data, data + 8, queue);
 
     // calculate absolute value only for odd values
-    compute::transform_if(
+    compute::experimental::transform_if(
         vector.begin(),
         vector.end(),
         vector.begin(),
