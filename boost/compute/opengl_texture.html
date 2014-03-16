@@ -26,49 +26,49 @@
 <span class="keyword">class</span> <a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">memory_object</span> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="opengl_texture.html#boost.compute.opengl_textureconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="opengl_texture.html#idp49213504-bb"><span class="identifier">opengl_texture</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">explicit</span> <a class="link" href="opengl_texture.html#idp49214096-bb"><span class="identifier">opengl_texture</span></a><span class="special">(</span><span class="identifier">cl_mem</span><span class="special">,</span> <span class="keyword">bool</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="opengl_texture.html#idp49217088-bb"><span class="identifier">opengl_texture</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">GLenum</span><span class="special">,</span> <span class="identifier">GLint</span><span class="special">,</span> <span class="identifier">GLuint</span><span class="special">,</span> 
+  <a class="link" href="opengl_texture.html#idp25359408-bb"><span class="identifier">opengl_texture</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="opengl_texture.html#idp25360000-bb"><span class="identifier">opengl_texture</span></a><span class="special">(</span><span class="identifier">cl_mem</span><span class="special">,</span> <span class="keyword">bool</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="opengl_texture.html#idp25362992-bb"><span class="identifier">opengl_texture</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">GLenum</span><span class="special">,</span> <span class="identifier">GLint</span><span class="special">,</span> <span class="identifier">GLuint</span><span class="special">,</span> 
                  <span class="identifier">cl_mem_flags</span> <span class="special">=</span> <span class="identifier">read_write</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="opengl_texture.html#idp49224416-bb"><span class="identifier">opengl_texture</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">&amp;</span> <a class="link" href="opengl_texture.html#idp49226608-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="opengl_texture.html#idp49229360-bb"><span class="special">~</span><span class="identifier">opengl_texture</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="opengl_texture.html#idp25370320-bb"><span class="identifier">opengl_texture</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">&amp;</span> <a class="link" href="opengl_texture.html#idp25372512-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="opengl_texture.html#idp25375264-bb"><span class="special">~</span><span class="identifier">opengl_texture</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="opengl_texture.html#idp49208608-bb">public member functions</a></span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="opengl_texture.html#idp49209168-bb"><span class="identifier">get_texture_info</span></a><span class="special">(</span><span class="identifier">cl_gl_texture_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="opengl_texture.html#idp25354512-bb">public member functions</a></span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="opengl_texture.html#idp25355072-bb"><span class="identifier">get_texture_info</span></a><span class="special">(</span><span class="identifier">cl_gl_texture_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp101445120"></a><h2>Description</h2>
+<a name="idp83934992"></a><h2>Description</h2>
 <p>A OpenCL image2d for accessing an OpenGL texture object. </p>
 <div class="refsect2">
-<a name="idp101445872"></a><h3>
+<a name="idp83935744"></a><h3>
 <a name="boost.compute.opengl_textureconstruct-copy-destruct"></a><code class="computeroutput">opengl_texture</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp49213504-bb"></a><span class="identifier">opengl_texture</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Creates a null OpenGL texture object. </li>
+<pre class="literallayout"><a name="idp25359408-bb"></a><span class="identifier">opengl_texture</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Creates a null OpenGL texture object. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp49214096-bb"></a><span class="identifier">opengl_texture</span><span class="special">(</span><span class="identifier">cl_mem</span> mem<span class="special">,</span> <span class="keyword">bool</span> retain <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span></pre>Creates a new OpenGL texture object for <code class="computeroutput">mem</code>. </li>
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp25360000-bb"></a><span class="identifier">opengl_texture</span><span class="special">(</span><span class="identifier">cl_mem</span> mem<span class="special">,</span> <span class="keyword">bool</span> retain <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span></pre>Creates a new OpenGL texture object for <code class="computeroutput">mem</code>. </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp49217088-bb"></a><span class="identifier">opengl_texture</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> context<span class="special">,</span> <span class="identifier">GLenum</span> texture_target<span class="special">,</span> <span class="identifier">GLint</span> miplevel<span class="special">,</span> 
+<pre class="literallayout"><a name="idp25362992-bb"></a><span class="identifier">opengl_texture</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> context<span class="special">,</span> <span class="identifier">GLenum</span> texture_target<span class="special">,</span> <span class="identifier">GLint</span> miplevel<span class="special">,</span> 
                <span class="identifier">GLuint</span> texture<span class="special">,</span> <span class="identifier">cl_mem_flags</span> flags <span class="special">=</span> <span class="identifier">read_write</span><span class="special">)</span><span class="special">;</span></pre>
 <p>Creates a new OpenGL texture object in <code class="computeroutput">context</code> for <code class="computeroutput">texture</code> with <code class="computeroutput">flags</code>.</p>
 <p>See the documentation for <a href="http://www.khronos.org/registry/cl/sdk/1.2/docs/man/xhtml/clCreateFromGLTexture.html" target="_top">clCreateFromGLTexture()</a> for more information. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp49224416-bb"></a><span class="identifier">opengl_texture</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>Creates a new OpenGL texture object as a copy of <code class="computeroutput">other</code>. </li>
+<pre class="literallayout"><a name="idp25370320-bb"></a><span class="identifier">opengl_texture</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>Creates a new OpenGL texture object as a copy of <code class="computeroutput">other</code>. </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">&amp;</span> <a name="idp49226608-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>Copies the OpenGL texture object from <code class="computeroutput">other</code>. </li>
+<pre class="literallayout"><a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">&amp;</span> <a name="idp25372512-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_texture.html" title="Class opengl_texture">opengl_texture</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>Copies the OpenGL texture object from <code class="computeroutput">other</code>. </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp49229360-bb"></a><span class="special">~</span><span class="identifier">opengl_texture</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the texture object. </li>
+<pre class="literallayout"><a name="idp25375264-bb"></a><span class="special">~</span><span class="identifier">opengl_texture</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the texture object. </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp101496352"></a><h3>
-<a name="idp49208608-bb"></a><code class="computeroutput">opengl_texture</code> public member functions</h3>
+<a name="idp83986288"></a><h3>
+<a name="idp25354512-bb"></a><code class="computeroutput">opengl_texture</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp49209168-bb"></a><span class="identifier">get_texture_info</span><span class="special">(</span><span class="identifier">cl_gl_texture_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp25355072-bb"></a><span class="identifier">get_texture_info</span><span class="special">(</span><span class="identifier">cl_gl_texture_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>Returns information about the texture.</p>
 <p>See the documentation for <a href="http://www.khronos.org/registry/cl/sdk/1.2/docs/man/xhtml/clGetGLTextureInfo.html" target="_top">clGetGLTextureInfo()</a> for more information. </p>
 </li></ol></div>
@@ -77,7 +77,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2013 Kyle Lutz<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2013, 2014 Kyle Lutz<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -6,12 +6,12 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
 <link rel="up" href="../../compute/reference.html#header.boost.compute.exception.runtime_exception_hpp" title="Header &lt;boost/compute/exception/runtime_exception.hpp&gt;">
-<link rel="prev" href="extension_unsu_idp49067408.html" title="Class extension_unsupported_exception">
+<link rel="prev" href="extension_unsu_idp25213312.html" title="Class extension_unsupported_exception">
 <link rel="next" href="function.html" title="Class template function">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="spirit-nav">
-<a accesskey="p" href="extension_unsu_idp49067408.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.exception.runtime_exception_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="function.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="extension_unsu_idp25213312.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.exception.runtime_exception_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="function.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 <div class="refentry">
 <a name="boost.compute.runtime_exception"></a><div class="titlepage"></div>
@@ -26,38 +26,38 @@
 <span class="keyword">class</span> <a class="link" href="runtime_exception.html" title="Class runtime_exception">runtime_exception</a> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">exception</span> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="runtime_exception.html#boost.compute.runtime_exceptionconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <span class="keyword">explicit</span> <a class="link" href="runtime_exception.html#idp49080592-bb"><span class="identifier">runtime_exception</span></a><span class="special">(</span><span class="identifier">cl_int</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="runtime_exception.html#idp49081840-bb"><span class="special">~</span><span class="identifier">runtime_exception</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="runtime_exception.html#idp25226496-bb"><span class="identifier">runtime_exception</span></a><span class="special">(</span><span class="identifier">cl_int</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="runtime_exception.html#idp25227744-bb"><span class="special">~</span><span class="identifier">runtime_exception</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="runtime_exception.html#idp49077632-bb">public member functions</a></span>
-  <span class="identifier">cl_int</span> <a class="link" href="runtime_exception.html#idp49078192-bb"><span class="identifier">get_error</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a class="link" href="runtime_exception.html#idp49079312-bb"><span class="identifier">what</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="runtime_exception.html#idp25223536-bb">public member functions</a></span>
+  <span class="identifier">cl_int</span> <a class="link" href="runtime_exception.html#idp25224096-bb"><span class="identifier">get_error</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a class="link" href="runtime_exception.html#idp25225216-bb"><span class="identifier">what</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp100736896"></a><h2>Description</h2>
+<a name="idp83226880"></a><h2>Description</h2>
 <div class="refsect2">
-<a name="idp100737312"></a><h3>
+<a name="idp83227296"></a><h3>
 <a name="boost.compute.runtime_exceptionconstruct-copy-destruct"></a><code class="computeroutput">runtime_exception</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><span class="keyword">explicit</span> <a name="idp49080592-bb"></a><span class="identifier">runtime_exception</span><span class="special">(</span><span class="identifier">cl_int</span> error<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp49081840-bb"></a><span class="special">~</span><span class="identifier">runtime_exception</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">explicit</span> <a name="idp25226496-bb"></a><span class="identifier">runtime_exception</span><span class="special">(</span><span class="identifier">cl_int</span> error<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp25227744-bb"></a><span class="special">~</span><span class="identifier">runtime_exception</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp100748816"></a><h3>
-<a name="idp49077632-bb"></a><code class="computeroutput">runtime_exception</code> public member functions</h3>
+<a name="idp83238800"></a><h3>
+<a name="idp25223536-bb"></a><code class="computeroutput">runtime_exception</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp49078192-bb"></a><span class="identifier">get_error</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a name="idp49079312-bb"></a><span class="identifier">what</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp25224096-bb"></a><span class="identifier">get_error</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a name="idp25225216-bb"></a><span class="identifier">what</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2013 Kyle Lutz<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2013, 2014 Kyle Lutz<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -65,7 +65,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="extension_unsu_idp49067408.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.exception.runtime_exception_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="function.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="extension_unsu_idp25213312.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.exception.runtime_exception_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="function.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
