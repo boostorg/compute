@@ -19,6 +19,8 @@ set(BENCHMARKS
   mersenne_twister
   partial_sum
   reverse
+  rotate
+  rotate_copy
   host_sort
   saxpy
   sort
@@ -40,6 +42,8 @@ set(STL_BENCHMARKS
   stl_merge
   stl_partial_sum
   stl_reverse
+  stl_rotate
+  stl_rotate_copy
   stl_saxpy
   stl_sort
 )
