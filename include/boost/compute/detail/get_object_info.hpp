@@ -78,6 +78,10 @@ struct _get_object_info_impl<std::string, Function, Object, Info>
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
+        if(size == 0){
+            return std::string();
+        }
+
         std::string value(size - 1, 0);
         ret = function(object,
                        static_cast<cl_uint>(info),
