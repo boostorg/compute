@@ -339,6 +339,9 @@ public:
         if(!program_){
             BOOST_THROW_EXCEPTION(runtime_exception(error));
         }
+        if(binary_status != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(runtime_exception(binary_status));
+        }
 
         return program(program_, false);
     }
