@@ -14,6 +14,7 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/inner_product.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/iterator/counting_iterator.hpp>
 
 #include "context_setup.hpp"
 
@@ -33,6 +34,20 @@ BOOST_AUTO_TEST_CASE(inner_product_int)
                                     0,
                                     queue);
     BOOST_CHECK_EQUAL(product, 300);
+}
+
+BOOST_AUTO_TEST_CASE(inner_product_counting_iterator)
+{
+    BOOST_CHECK_EQUAL(
+        boost::compute::inner_product(
+            boost::compute::make_counting_iterator<int>(0),
+            boost::compute::make_counting_iterator<int>(100),
+            boost::compute::make_counting_iterator<int>(0),
+            0,
+            queue
+        ),
+        328350
+    );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
