@@ -15,13 +15,16 @@
 #include <sstream>
 
 #include <boost/config.hpp>
+#include <boost/mpl/for_each.hpp>
+#include <boost/mpl/transform.hpp>
+#include <boost/function_types/parameter_types.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <boost/type_traits/add_pointer.hpp>
 #include <boost/type_traits/function_traits.hpp>
 
 #include <boost/compute/cl.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
-#include <boost/compute/detail/function_signature_to_mpl_vector.hpp>
 
 namespace boost {
 namespace compute {
@@ -210,7 +213,7 @@ struct signature_argument_inserter
     }
 
     template<class T>
-    void operator()(const T&)
+    void operator()(const T*)
     {
         s << type_name<T>() << " _" << n+1;
         if(n+1 < m_last){
@@ -230,15 +233,17 @@ std::string make_function_declaration(const std::string &name)
     typedef typename
         boost::function_traits<Signature>::result_type result_type;
     typedef typename
-        function_signature_to_mpl_vector<Signature>::type signature_vector;
+        boost::function_types::parameter_types<Signature>::type parameter_types;
     typedef typename
-        mpl::size<signature_vector>::type arity_type;
+        mpl::size<parameter_types>::type arity_type;
 
     std::stringstream s;
     signature_argument_inserter i(s, arity_type::value);
     s << "inline " << type_name<result_type>() << " " << name;
     s << "(";
-    mpl::for_each<signature_vector>(i);
+    mpl::for_each<
+        typename mpl::transform<parameter_types, boost::add_pointer<mpl::_1>
+    >::type>(i);
     s << ")";
     return s.str();
 }

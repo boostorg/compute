@@ -15,6 +15,8 @@
 #include <sstream>
 
 #include <boost/config.hpp>
+#include <boost/mpl/for_each.hpp>
+#include <boost/mpl/transform.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/algorithm/string.hpp>
@@ -235,9 +237,9 @@ make_closure_declaration(const std::string &name,
     typedef typename
         boost::function_traits<Signature>::result_type result_type;
     typedef typename
-        function_signature_to_mpl_vector<Signature>::type signature_vector;
+        boost::function_types::parameter_types<Signature>::type parameter_types;
     typedef typename
-        mpl::size<signature_vector>::type arity_type;
+        mpl::size<parameter_types>::type arity_type;
 
     std::stringstream s;
     s << "inline " << type_name<result_type>() << " " << name;
@@ -245,7 +247,9 @@ make_closure_declaration(const std::string &name,
 
     // insert function arguments
     signature_argument_inserter i(s, arity_type::value);
-    mpl::for_each<signature_vector>(i);
+    mpl::for_each<
+        typename mpl::transform<parameter_types, boost::add_pointer<mpl::_1>
+    >::type>(i);
     s << ", ";
 
     // insert capture arguments

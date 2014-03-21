@@ -27,10 +27,6 @@ namespace chemistry {
 
 struct Atom
 {
-    Atom()
-    {
-    }
-
     Atom(float _x, float _y, float _z, int _number)
         : x(_x), y(_y), z(_z), number(_number)
     {
