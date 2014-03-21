@@ -83,4 +83,12 @@ BOOST_AUTO_TEST_CASE(move_constructor)
     BOOST_CHECK_EQUAL(buffer2.size(), size_t(16));
 }
 
+BOOST_AUTO_TEST_CASE(clone_buffer)
+{
+    boost::compute::buffer buffer1(context, 16);
+    boost::compute::buffer buffer2 = buffer1.clone(queue);
+    BOOST_CHECK(buffer1.get() != buffer2.get());
+    BOOST_CHECK_EQUAL(buffer1.size(), buffer2.size());
+}
+
 BOOST_AUTO_TEST_SUITE_END()

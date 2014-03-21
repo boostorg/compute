@@ -22,10 +22,17 @@
 namespace boost {
 namespace compute {
 
+// forward declarations
+class command_queue;
+
 /// \class buffer
 /// \brief A memory buffer on a compute device.
 ///
 /// The buffer class represents a memory buffer on a compute device.
+///
+/// Buffer objects have reference semantics. Creating a copy of a buffer
+/// object simply creates another reference to the underlying OpenCL memory
+/// object. To create an actual copy use the buffer::clone() method.
 ///
 /// \see vector
 class buffer : public memory_object
@@ -120,6 +127,10 @@ public:
     {
         return get_memory_info<T>(info);
     }
+
+    /// Creates a new buffer with a copy of the data in \c *this. Uses
+    /// \p queue to perform the copy.
+    buffer clone(command_queue &queue) const;
 
 private:
     BOOST_COPYABLE_AND_MOVABLE(buffer)

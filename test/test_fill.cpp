@@ -11,6 +11,7 @@
 #define BOOST_TEST_MODULE TestFill
 #include <boost/test/unit_test.hpp>
 
+#include <boost/compute/algorithm/equal.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/fill_n.hpp>
 #include <boost/compute/async/future.hpp>
@@ -126,6 +127,48 @@ BOOST_AUTO_TEST_CASE(fill_uchar4)
     BOOST_CHECK_EQUAL(result[1], uchar4_(32, 64, 128, 255));
     BOOST_CHECK_EQUAL(result[2], uchar4_(32, 64, 128, 255));
     BOOST_CHECK_EQUAL(result[3], uchar4_(32, 64, 128, 255));
+}
+
+BOOST_AUTO_TEST_CASE(fill_clone_buffer)
+{
+    int data[] = { 1, 2, 3, 4 };
+    compute::vector<int> vec(data, data + 4, queue);
+    CHECK_RANGE_EQUAL(int, 4, vec, (1, 2, 3, 4));
+
+    compute::buffer cloned_buffer = vec.get_buffer().clone(queue);
+    BOOST_CHECK(
+        compute::equal(
+            vec.begin(),
+            vec.end(),
+            compute::make_buffer_iterator<int>(cloned_buffer, 0),
+            queue
+        )
+    );
+
+    compute::fill(vec.begin(), vec.end(), 5, queue);
+    BOOST_CHECK(
+        !compute::equal(
+            vec.begin(),
+            vec.end(),
+            compute::make_buffer_iterator<int>(cloned_buffer, 0),
+            queue
+        )
+    );
+
+    compute::fill(
+        compute::make_buffer_iterator<int>(cloned_buffer, 0),
+        compute::make_buffer_iterator<int>(cloned_buffer, 4),
+        5,
+        queue
+    );
+    BOOST_CHECK(
+        compute::equal(
+            vec.begin(),
+            vec.end(),
+            compute::make_buffer_iterator<int>(cloned_buffer, 0),
+            queue
+        )
+    );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -1300,6 +1300,13 @@ private:
     cl_command_queue m_queue;
 };
 
+inline buffer buffer::clone(command_queue &queue) const
+{
+    buffer copy(this->get_context(), this->size());
+    queue.enqueue_copy_buffer(*this, copy, 0, 0, this->size());
+    return copy;
+}
+
 } // end compute namespace
 } // end boost namespace
 
