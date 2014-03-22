@@ -36,8 +36,6 @@ inline OutputIterator scan_on_cpu(InputIterator first,
 
     typedef typename
         std::iterator_traits<InputIterator>::value_type input_type;
-    typedef typename
-        std::iterator_traits<OutputIterator>::value_type output_type;
 
     const context &context = queue.get_context();
 

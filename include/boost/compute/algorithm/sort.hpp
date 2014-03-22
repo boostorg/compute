@@ -96,8 +96,6 @@ inline void sort(Iterator first,
                  Compare compare,
                  command_queue &queue = system::default_queue())
 {
-    typedef typename std::iterator_traits<Iterator>::value_type T;
-
     size_t count = detail::iterator_range_size(first, last);
     if(count < 2){
         return;

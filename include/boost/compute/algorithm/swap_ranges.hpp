@@ -28,7 +28,6 @@ inline Iterator2 swap_ranges(Iterator1 first1,
                              command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<Iterator1>::value_type value_type;
-    typedef typename std::iterator_traits<Iterator1>::difference_type difference_type;
 
     Iterator2 last2 = first2 + std::distance(first1, last1);
 

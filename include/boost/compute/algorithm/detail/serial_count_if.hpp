@@ -29,7 +29,6 @@ inline size_t serial_count_if(InputIterator first,
                               command_queue &queue)
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
-    typedef typename std::iterator_traits<InputIterator>::difference_type difference_type;
 
     const context &context = queue.get_context();
     size_t size = iterator_range_size(first, last);

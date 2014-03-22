@@ -33,7 +33,7 @@ public:
     }
 
     /// Creates a new wait-list as a copy of \p other.
-    wait_list(const wait_list &other)
+    wait_list(const wait_list &/*other*/)
     {
     }
 
