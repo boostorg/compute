@@ -33,7 +33,8 @@ public:
     }
 
     /// Creates a new wait-list as a copy of \p other.
-    wait_list(const wait_list &/*other*/)
+    wait_list(const wait_list &other)
+        : m_events(other.m_events)
     {
     }
 
@@ -41,6 +42,7 @@ public:
     wait_list& operator=(const wait_list &other)
     {
         if(this != &other){
+            m_events = other.m_events;
         }
 
         return *this;
