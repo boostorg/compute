@@ -140,7 +140,6 @@ public:
         // work-item parameters
         *this <<
             "const uint gid = get_global_id(0);\n" <<
-            "const uint lid = get_local_id(0);\n" <<
             "const uint block_id = get_group_id(0);\n";
 
         // check against data size
