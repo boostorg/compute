@@ -59,9 +59,6 @@ inline future<HostIterator> copy_to_host_async(DeviceIterator first,
     typedef typename
         std::iterator_traits<DeviceIterator>::value_type
         value_type;
-    typedef typename
-        std::iterator_traits<HostIterator>::difference_type
-        difference_type;
 
     size_t count = iterator_range_size(first, last);
     if(count == 0){

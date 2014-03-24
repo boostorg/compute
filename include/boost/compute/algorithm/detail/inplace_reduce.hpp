@@ -32,9 +32,6 @@ inline void inplace_reduce(Iterator first,
     typedef typename
         std::iterator_traits<Iterator>::value_type
         value_type;
-    typedef typename
-        boost::tr1_result_of<BinaryFunction(value_type, value_type)>::type
-        result_type;
 
     size_t input_size = iterator_range_size(first, last);
     if(input_size < 2){

@@ -174,7 +174,6 @@ private:
 
         kernel kernel = k.compile(context);
 
-        typedef typename std::iterator_traits<InputIterator>::value_type input_type;
         buffer output_buffer(context, sizeof(value_type));
 
         kernel.set_arg(output_arg, output_buffer);

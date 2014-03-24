@@ -28,7 +28,6 @@ inline InputIterator find_extrema_with_atomics(InputIterator first,
                                                char sign,
                                                command_queue &queue)
 {
-    typedef typename std::iterator_traits<InputIterator>::value_type value_type;
     typedef typename std::iterator_traits<InputIterator>::difference_type difference_type;
 
     const context &context = queue.get_context();

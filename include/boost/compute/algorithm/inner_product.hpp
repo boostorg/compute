@@ -34,7 +34,6 @@ inline T inner_product(InputIterator1 first1,
                        command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<InputIterator1>::value_type input_type;
-    typedef typename multiplies<input_type>::result_type product_type;
 
     ptrdiff_t n = std::distance(first1, last1);
 
