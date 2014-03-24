@@ -26,6 +26,7 @@ set(BENCHMARKS
   sort
   sort_by_key
   sort_float
+  unique
 )
 
 foreach(BENCHMARK ${BENCHMARKS})
@@ -46,6 +47,7 @@ set(STL_BENCHMARKS
   stl_rotate_copy
   stl_saxpy
   stl_sort
+  stl_unique
 )
 
 foreach(BENCHMARK ${STL_BENCHMARKS})

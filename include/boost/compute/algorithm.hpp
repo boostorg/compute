@@ -70,6 +70,7 @@
 #include <boost/compute/algorithm/swap_ranges.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/algorithm/transform_reduce.hpp>
+#include <boost/compute/algorithm/unique.hpp>
 #include <boost/compute/algorithm/upper_bound.hpp>
 
 #endif // BOOST_COMPUTE_ALGORITHM_HPP

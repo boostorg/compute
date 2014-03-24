@@ -113,7 +113,7 @@ def run_benchmark(name, sizes, vs=[]):
         "thrust" : ["accumulate", "count", "inner_product", "partial_sum", "sort", "saxpy"],
         "tbb": ["accumulate", "merge", "sort"],
         "stl": ["accumulate", "count", "inner_product", "merge",  "partial_sum", 
-                "reverse", "rotate", "rotate_copy", "sort"]
+                "reverse", "rotate", "rotate_copy", "sort", "unique"]
     }
 
     for other in vs:
