@@ -4,10 +4,17 @@ compiler:
     - clang
 before_install:
     - sudo apt-get update -qq
-    - sudo apt-get install -qq fglrx=2:8.960-0ubuntu1 opencl-headers libboost-chrono1.48-dev libboost-date-time1.48-dev libboost-test1.48-dev libboost-system1.48-dev libboost-filesystem1.48-dev libboost-timer1.48-dev python-yaml
-    - sudo pip install cpp-coveralls --use-mirrors
+    - sudo apt-get install -qq fglrx=2:8.960-0ubuntu1 opencl-headers libboost-chrono1.48-dev libboost-date-time1.48-dev libboost-test1.48-dev libboost-system1.48-dev libboost-filesystem1.48-dev libboost-timer1.48-dev python-yaml lcov
+    - gem install coveralls-lcov
 script:
-    - mkdir -p build && (cd build && cmake -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_ENABLE_COVERAGE=ON .. && make)
-    - (cd build && ctest --output-on-failure && ctest --output-on-failure)
+    - mkdir -p build
+    - cd build
+    - cmake -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_ENABLE_COVERAGE=ON ..
+    - make
+    - ./example/list_devices
+    - ctest --output-on-failure
+    - ctest --output-on-failure
 after_success:
-  - coveralls -b build
+    - lcov --directory test --base-directory ../include/boost/compute/ --capture --output-file coverage.info
+    - lcov --remove coverage.info '/usr*' -o coverage.info
+    - cd .. && coveralls-lcov build/coverage.info
