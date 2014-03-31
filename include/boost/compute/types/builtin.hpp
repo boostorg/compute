@@ -100,17 +100,67 @@ protected:
 #define BOOST_COMPUTE_VECTOR_TYPE_ASSIGN_CTOR_ARG(z, i, _) \
     m_value[i] = BOOST_PP_CAT(arg, i);
 
-#define BOOST_COMPUTE_DECLARE_VECTOR_TYPE_CLASS(cl_scalar, size, class_name) \
-    class class_name : public vector_type<cl_scalar, size> \
+#define BOOST_COMPUTE_VECTOR_TYPE_DECLARE_S_ACCESSOR(z, i, _) \
+    scalar_type BOOST_PP_CAT(s, i);
+#define BOOST_COMPUTE_VECTOR_TYPE_DECLARE_S_ACCESSORS(size) \
+    BOOST_PP_REPEAT(size, BOOST_COMPUTE_VECTOR_TYPE_DECLARE_S_ACCESSOR, _)
+
+#define BOOST_COMPUTE_VECTOR_TYPE_DECLARE_XY \
+    scalar_type x; scalar_type y;
+#define BOOST_COMPUTE_VECTOR_TYPE_DECLARE_XYZW \
+    scalar_type x; scalar_type y; scalar_type z; scalar_type w;
+#define BOOST_COMPUTE_VECTOR_TYPE_DECLARE_XYZW_ACCESSORS(size) \
+    BOOST_PP_IF(BOOST_PP_EQUAL(size, 2), \
+                BOOST_COMPUTE_VECTOR_TYPE_DECLARE_XY, \
+                BOOST_COMPUTE_VECTOR_TYPE_DECLARE_XYZW)
+
+#define BOOST_COMPUTE_DECLARE_VECTOR_TYPE_CLASS(cl_scalar, vsize, class_name) \
+    union class_name \
     { \
     public: \
+        typedef cl_scalar scalar_type; \
+        typedef cl_scalar Scalar; \
         class_name() { } \
         class_name( \
-            BOOST_PP_REPEAT(size, BOOST_COMPUTE_VECTOR_TYPE_CTOR_ARG_FUNCTION, _) \
+            BOOST_PP_REPEAT(vsize, BOOST_COMPUTE_VECTOR_TYPE_CTOR_ARG_FUNCTION, _) \
         ) \
         { \
-          BOOST_PP_REPEAT(size, BOOST_COMPUTE_VECTOR_TYPE_ASSIGN_CTOR_ARG, _) \
+            BOOST_PP_REPEAT(vsize, BOOST_COMPUTE_VECTOR_TYPE_ASSIGN_CTOR_ARG, _) \
         } \
+        class_name(const class_name &other) \
+        { \
+            std::memcpy(m_value, other.m_value, sizeof(cl_scalar)*vsize); \
+        } \
+        class_name & \
+        operator=(const class_name &other) \
+        { \
+            std::memcpy(m_value, other.m_value, sizeof(cl_scalar)*vsize); \
+            return *this; \
+        } \
+        bool operator==(const class_name &other) const \
+        { \
+            return std::memcmp(m_value, other.m_value, sizeof(cl_scalar)*vsize) == 0; \
+        } \
+        size_t size() const \
+        { \
+            return vsize; \
+        } \
+        Scalar& operator[](size_t i) \
+        { \
+            return m_value[i]; \
+        } \
+        Scalar operator[](size_t i) const \
+        { \
+            return m_value[i]; \
+        } \
+        bool operator!=(const class_name &other) const \
+        { \
+            return !(*this == other); \
+        } \
+        struct { BOOST_COMPUTE_VECTOR_TYPE_DECLARE_S_ACCESSORS(vsize) }; \
+        struct { BOOST_COMPUTE_VECTOR_TYPE_DECLARE_XYZW_ACCESSORS(vsize) }; \
+    private: \
+        cl_scalar m_value[vsize]; \
     };
 
 #define BOOST_COMPUTE_DECLARE_VECTOR_TYPE(scalar, size) \
