@@ -15,6 +15,7 @@
 
 #include <boost/compute/device.hpp>
 #include <boost/compute/system.hpp>
+#include <boost/compute/detail/nvidia_compute_capability.hpp>
 
 BOOST_AUTO_TEST_CASE(null_device)
 {
@@ -157,3 +158,11 @@ BOOST_AUTO_TEST_CASE(partition_by_affinity_domain)
     BOOST_CHECK(sub_devices.size() > 0);
 }
 #endif // CL_VERSION_1_2
+
+BOOST_AUTO_TEST_CASE(nvidia_compute_capability)
+{
+    boost::compute::device device = boost::compute::system::default_device();
+    int major, minor;
+    boost::compute::detail::get_nvidia_compute_capability(device, major, minor);
+    boost::compute::detail::check_nvidia_compute_capability(device, 3, 0);
+}
