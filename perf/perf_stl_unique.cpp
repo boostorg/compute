@@ -27,10 +27,10 @@ int main(int argc, char *argv[])
 
     // create vector of random numbers on the host
     std::vector<int> host_vector(PERF_N);
-    std::generate(host_vector.begin(), host_vector.end(), rand_int);
 
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
+        std::generate(host_vector.begin(), host_vector.end(), rand_int);
         t.start();
         std::unique(host_vector.begin(), host_vector.end());
         t.stop();
