@@ -17,6 +17,7 @@
 #include <boost/compute/async/future.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/detail/work_size.hpp>
 
 namespace boost {
 namespace compute {
@@ -42,6 +43,8 @@ public:
         : meta_kernel("copy")
     {
         m_count = 0;
+        m_vpt = 4;
+        m_tpb = 128;
     }
 
     void set_range(InputIterator first,
@@ -51,10 +54,14 @@ public:
         m_count_arg = add_arg<uint_>("count");
 
         *this <<
-            "const uint i = get_global_id(0);\n" <<
-            "if(i < count){\n" <<
-                result[expr<uint_>("i")] << '='
-                    << first[expr<uint_>("i")] << ";\n" <<
+            "uint index = get_local_id(0) + " <<
+               "(" << m_vpt * m_tpb << " * get_group_id(0));\n" <<
+            "for(uint i = 0; i < " << m_vpt << "; i++){\n" <<
+            "    if(index < count){\n" <<
+                     result[expr<uint_>("index")] << '=' <<
+                         first[expr<uint_>("index")] << ";\n" <<
+            "        index += " << m_tpb << ";\n"
+            "    }\n"
             "}\n";
 
         m_count = detail::iterator_range_size(first, last);
@@ -67,22 +74,18 @@ public:
             return event();
         }
 
-        size_t work_group_size = 256;
-        size_t global_work_size = m_count;
-
-        if(global_work_size % work_group_size != 0){
-            global_work_size +=
-                work_group_size - global_work_size % work_group_size;
-        }
+        size_t global_work_size = calculate_work_size(m_count, m_vpt, m_tpb);
 
         set_arg(m_count_arg, uint_(m_count));
 
-        return exec_1d(queue, 0, global_work_size, work_group_size);
+        return exec_1d(queue, 0, global_work_size, m_tpb);
     }
 
 private:
     size_t m_count;
     size_t m_count_arg;
+    uint_ m_vpt;
+    uint_ m_tpb;
 };
 
 template<class InputIterator, class OutputIterator>

@@ -17,6 +17,7 @@
 #include <boost/compute/program.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/program_cache.hpp>
+#include <boost/compute/detail/work_size.hpp>
 
 namespace boost {
 namespace compute {
@@ -95,10 +96,7 @@ inline void reduce_on_gpu(const buffer_iterator<T> first,
     reduce_kernel.set_arg(1, uint_(count));
     reduce_kernel.set_arg(2, ping);
 
-    size_t work_size = std::ceil(float(count) / vpt);
-    if(work_size % tpb != 0){
-        work_size += tpb - work_size % tpb;
-    }
+    size_t work_size = calculate_work_size(count, vpt, tpb);
 
     queue.enqueue_1d_range_kernel(reduce_kernel, 0, work_size, tpb);
 
