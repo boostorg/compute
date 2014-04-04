@@ -41,12 +41,13 @@ int main(int argc, char *argv[])
 
     // create vector on the device and copy the data
     boost::compute::vector<int> device_vector(PERF_N, context);
-    boost::compute::copy(
-        host_vector.begin(), host_vector.end(), device_vector.begin(), queue
-    );
+    
 
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
+        boost::compute::copy(
+            host_vector.begin(), host_vector.end(), device_vector.begin(), queue
+        );
         t.start();
         boost::compute::unique(
             device_vector.begin(), device_vector.end(), queue
