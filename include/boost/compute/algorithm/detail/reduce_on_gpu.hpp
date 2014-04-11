@@ -23,18 +23,106 @@ namespace boost {
 namespace compute {
 namespace detail {
 
+template<class InputIterator, class Function>
+inline void initial_reduce(InputIterator first,
+                           InputIterator last,
+                           buffer result,
+                           const Function &function,
+                           kernel &reduce_kernel,
+                           const uint_ vpt,
+                           const uint_ tpb,
+                           command_queue &queue)
+{
+    (void) reduce_kernel;
+
+    typedef typename std::iterator_traits<InputIterator>::value_type Arg;
+    typedef typename boost::tr1_result_of<Function(Arg, Arg)>::type T;
+
+    size_t count = std::distance(first, last);
+    detail::meta_kernel k("initial_reduce");
+    k.add_set_arg<const uint_>("count", uint_(count));
+    size_t output_arg = k.add_arg<T *>("__global", "output");
+
+    k <<
+        k.decl<const uint_>("offset") << " = get_group_id(0) * VPT * TPB;\n" <<
+        k.decl<const uint_>("lid") << " = get_local_id(0);\n" <<
+
+        "__local " << k.type<T>() << " scratch[TPB];\n" <<
+
+        // private reduction
+        k.decl<T>("sum") << " = 0;\n" <<
+        "for(uint i = 0; i < VPT; i++){\n" <<
+        "    if(offset + lid + i*TPB < count){\n" <<
+        "        sum = sum + " << first[k.var<uint_>("offset+lid+i*TPB")] << ";\n" <<
+        "    }\n" <<
+        "}\n" <<
+
+        "scratch[lid] = sum;\n" <<
+
+        // local reduction
+        "for(int i = 1; i < TPB; i <<= 1){\n" <<
+        "    barrier(CLK_LOCAL_MEM_FENCE);\n" <<
+        "    uint mask = (i << 1) - 1;\n" <<
+        "    if((lid & mask) == 0){\n" <<
+        "        scratch[lid] += scratch[lid+i];\n" <<
+        "    }\n" <<
+        "}\n" <<
+
+        // write sum to output
+        "if(lid == 0){\n" <<
+        "    output[get_group_id(0)] = scratch[0];\n" <<
+        "}\n";
+
+    const context &context = queue.get_context();
+    std::stringstream options;
+    options << "-DVPT=" << vpt << " -DTPB=" << tpb;
+    kernel generic_reduce_kernel = k.compile(context, options.str());
+    generic_reduce_kernel.set_arg(output_arg, result);
+
+    size_t work_size = calculate_work_size(count, vpt, tpb);
+
+    queue.enqueue_1d_range_kernel(generic_reduce_kernel, 0, work_size, tpb);
+}
+
 template<class T>
-inline void reduce_on_gpu(const buffer_iterator<T> first,
-                          const buffer_iterator<T> last,
-                          const buffer_iterator<T> result,
+inline void initial_reduce(const buffer_iterator<T> &first,
+                           const buffer_iterator<T> &last,
+                           const buffer &result,
+                           const plus<T> &function,
+                           kernel &reduce_kernel,
+                           const uint_ vpt,
+                           const uint_ tpb,
+                           command_queue &queue)
+{
+    size_t count = std::distance(first, last);
+
+    reduce_kernel.set_arg(0, first.get_buffer());
+    reduce_kernel.set_arg(1, uint_(first.get_index()));
+    reduce_kernel.set_arg(2, uint_(count));
+    reduce_kernel.set_arg(3, result);
+    reduce_kernel.set_arg(4, uint_(0));
+
+    size_t work_size = calculate_work_size(count, vpt, tpb);
+
+    queue.enqueue_1d_range_kernel(reduce_kernel, 0, work_size, tpb);
+}
+
+template<class InputIterator, class T, class Function>
+inline void reduce_on_gpu(InputIterator first,
+                          InputIterator last,
+                          buffer_iterator<T> result,
+                          Function function,
                           command_queue &queue)
 {
     const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
         __kernel void reduce(__global const T *input,
+                             const uint offset,
                              const uint size,
-                             __global T *output)
+                             __global T *output,
+                             const uint output_offset)
         {
-            __global const T *block = input + get_group_id(0) * VPT * TPB;
+            const uint block_offset = get_group_id(0) * VPT * TPB;
+            __global const T *block = input + offset + block_offset;
 
             const uint lid = get_local_id(0);
 
@@ -43,7 +131,7 @@ inline void reduce_on_gpu(const buffer_iterator<T> first,
             // private reduction
             T sum = 0;
             for(uint i = 0; i < VPT; i++){
-                if(block + lid + i*TPB < input + size){
+                if(block_offset + lid + i*TPB < size){
                     sum += block[lid+i*TPB];
                 }
             }
@@ -61,7 +149,7 @@ inline void reduce_on_gpu(const buffer_iterator<T> first,
 
             // write sum to output
             if(lid == 0){
-                output[get_group_id(0)] = scratch[0];
+                output[output_offset + get_group_id(0)] = scratch[0];
             }
         }
     );
@@ -91,15 +179,9 @@ inline void reduce_on_gpu(const buffer_iterator<T> first,
 
     // first pass, reduce from input to ping
     buffer ping(context, std::ceil(float(count) / vpt / tpb) * sizeof(T));
+    initial_reduce(first, last, ping, function, reduce_kernel, vpt, tpb, queue);
 
-    reduce_kernel.set_arg(0, first.get_buffer());
-    reduce_kernel.set_arg(1, uint_(count));
-    reduce_kernel.set_arg(2, ping);
-
-    size_t work_size = calculate_work_size(count, vpt, tpb);
-
-    queue.enqueue_1d_range_kernel(reduce_kernel, 0, work_size, tpb);
-
+    // update count after initial reduce
     count = std::ceil(float(count) / vpt / tpb);
 
     // middle pass(es), reduce between ping and pong
@@ -109,10 +191,12 @@ inline void reduce_on_gpu(const buffer_iterator<T> first,
     if(count > vpt * tpb){
         while(count > vpt * tpb){
             reduce_kernel.set_arg(0, *input_buffer);
-            reduce_kernel.set_arg(1, uint_(count));
-            reduce_kernel.set_arg(2, *output_buffer);
+            reduce_kernel.set_arg(1, uint_(0));
+            reduce_kernel.set_arg(2, uint_(count));
+            reduce_kernel.set_arg(3, *output_buffer);
+            reduce_kernel.set_arg(4, uint_(0));
 
-            work_size = std::ceil(float(count) / vpt);
+            size_t work_size = std::ceil(float(count) / vpt);
             if(work_size % tpb != 0){
                 work_size += tpb - work_size % tpb;
             }
@@ -125,8 +209,10 @@ inline void reduce_on_gpu(const buffer_iterator<T> first,
 
     // final pass, reduce from ping/pong to result
     reduce_kernel.set_arg(0, *input_buffer);
-    reduce_kernel.set_arg(1, uint_(count));
-    reduce_kernel.set_arg(2, result.get_buffer());
+    reduce_kernel.set_arg(1, uint_(0));
+    reduce_kernel.set_arg(2, uint_(count));
+    reduce_kernel.set_arg(3, result.get_buffer());
+    reduce_kernel.set_arg(4, uint_(result.get_index()));
 
     queue.enqueue_1d_range_kernel(reduce_kernel, 0, tpb, tpb);
 }

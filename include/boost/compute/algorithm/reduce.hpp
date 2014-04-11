@@ -202,25 +202,19 @@ inline void generic_reduce(InputIterator first,
     }
 }
 
-template<class T>
-inline void dispatch_reduce(const buffer_iterator<T> first,
-                            const buffer_iterator<T> last,
+template<class InputIterator, class T>
+inline void dispatch_reduce(InputIterator first,
+                            InputIterator last,
                             const buffer_iterator<T> result,
                             const plus<T> &function,
                             command_queue &queue)
 {
-    const device &device = queue.get_device();
-    if(device.type() & device::gpu && first.get_index() == 0){
-        reduce_on_gpu(first, last, result, queue);
-    }
-    else {
-        generic_reduce(first, last, result, function, queue);
-    }
+    reduce_on_gpu(first, last, result, function, queue);
 }
 
-template<class T, class OutputIterator>
-inline void dispatch_reduce(const buffer_iterator<T> first,
-                            const buffer_iterator<T> last,
+template<class InputIterator, class OutputIterator, class T>
+inline void dispatch_reduce(InputIterator first,
+                            InputIterator last,
                             OutputIterator result,
                             const plus<T> &function,
                             command_queue &queue)

@@ -330,7 +330,7 @@ public:
         return stream.str();
     }
 
-    kernel compile(const context &context)
+    kernel compile(const context &context, const std::string &options = std::string())
     {
         // generate the program source
         std::string source = this->source();
@@ -344,8 +344,9 @@ public:
 
         // build the program if it was not in the cache
         if(!program.get()){
-            program =
-                ::boost::compute::program::build_with_source(source, context);
+            program = ::boost::compute::program::build_with_source(
+                source, context, options
+            );
 
             cache->insert(cache_key, program);
         }

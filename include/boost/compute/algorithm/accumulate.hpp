@@ -81,9 +81,9 @@ BOOST_PP_SEQ_FOR_EACH(
 
 #undef BOOST_COMPUTE_DETAIL_DECLARE_CAN_ACCUMULATE_WITH_REDUCE
 
-template<class T>
-inline T dispatch_accumulate(const buffer_iterator<T> first,
-                             const buffer_iterator<T> last,
+template<class InputIterator, class T>
+inline T dispatch_accumulate(InputIterator first,
+                             InputIterator last,
                              T init,
                              const plus<T> &function,
                              command_queue &queue)
