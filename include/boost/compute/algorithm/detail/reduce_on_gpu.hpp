@@ -18,6 +18,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/program_cache.hpp>
 #include <boost/compute/detail/work_size.hpp>
+#include <boost/compute/type_traits/type_name.hpp>
 
 namespace boost {
 namespace compute {
@@ -47,7 +48,7 @@ inline void initial_reduce(InputIterator first,
         k.decl<const uint_>("offset") << " = get_group_id(0) * VPT * TPB;\n" <<
         k.decl<const uint_>("lid") << " = get_local_id(0);\n" <<
 
-        "__local " << k.type<T>() << " scratch[TPB];\n" <<
+        "__local " << type_name<T>() << " scratch[TPB];\n" <<
 
         // private reduction
         k.decl<T>("sum") << " = 0;\n" <<
