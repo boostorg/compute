@@ -1118,18 +1118,6 @@ public:
     /// \internal_
     event enqueue_1d_range_kernel(const kernel &kernel,
                                   size_t global_work_offset,
-                                  size_t global_work_size)
-    {
-        return enqueue_nd_range_kernel(kernel,
-                                       1,
-                                       &global_work_offset,
-                                       &global_work_size,
-                                       0);
-    }
-
-    /// \internal_
-    event enqueue_1d_range_kernel(const kernel &kernel,
-                                  size_t global_work_offset,
                                   size_t global_work_size,
                                   size_t local_work_size)
     {

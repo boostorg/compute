@@ -651,7 +651,8 @@ public:
         return queue.enqueue_1d_range_kernel(
                    kernel,
                    global_work_offset,
-                   global_work_size
+                   global_work_size,
+                   0
                );
     }
 

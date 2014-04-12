@@ -85,7 +85,7 @@ inline void scatter(InputIterator first,
     kernel.set_arg(3, result.get_buffer());
     kernel.set_arg(4, static_cast<cl_uint>(result.get_index()));
 
-    queue.enqueue_1d_range_kernel(kernel, 0, count);
+    queue.enqueue_1d_range_kernel(kernel, 0, count, 0);
 }
 
 } // end compute namespace

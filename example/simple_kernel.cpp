@@ -74,7 +74,7 @@ int main()
     queue.enqueue_write_buffer(buffer_b, b);
 
     // run the add kernel
-    queue.enqueue_1d_range_kernel(kernel, 0, 4);
+    queue.enqueue_1d_range_kernel(kernel, 0, 4, 0);
 
     // transfer results back to the host array 'c'
     queue.enqueue_read_buffer(buffer_c, c);

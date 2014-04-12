@@ -135,7 +135,7 @@ int main()
     kernel.set_arg(6, volatility);
 
     // execute black-scholes kernel
-    queue.enqueue_1d_range_kernel(kernel, 0, N);
+    queue.enqueue_1d_range_kernel(kernel, 0, N, 0);
 
     // print out the first option's put and call prices
     float call0, put0;
