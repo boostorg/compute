@@ -1091,7 +1091,8 @@ public:
         return event_;
     }
 
-    /// \internal_
+    /// Convenience method which calls enqueue_nd_range_kernel() with a
+    /// one-dimensional range.
     event enqueue_1d_range_kernel(const kernel &kernel,
                                   size_t global_work_offset,
                                   size_t global_work_size,
