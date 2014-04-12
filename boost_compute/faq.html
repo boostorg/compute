@@ -149,6 +149,27 @@
     </p>
 <h4>
 <a name="boost_compute.faq.h8"></a>
+      <span><a name="boost_compute.faq.how_can_i_print_out_the_contents_of_a_buffer_vector_on_the_gpu_"></a></span><a class="link" href="faq.html#boost_compute.faq.how_can_i_print_out_the_contents_of_a_buffer_vector_on_the_gpu_">How
+      can I print out the contents of a buffer/vector on the GPU?</a>
+    </h4>
+<p>
+      This can be accompilshed easily using the generic boost::compute::copy() algorithm
+      along with std::ostream_iterator&lt;T&gt;. For example:
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"vector: [ "</span><span class="special">;</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span>
+    <span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream_iterator</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">,</span> <span class="string">", "</span><span class="special">),</span>
+    <span class="identifier">queue</span>
+<span class="special">);</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"]"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+</pre>
+<p>
+    </p>
+<h4>
+<a name="boost_compute.faq.h9"></a>
       <span><a name="boost_compute.faq.how_can_i_contribute_"></a></span><a class="link" href="faq.html#boost_compute.faq.how_can_i_contribute_">How
       can I contribute?</a>
     </h4>

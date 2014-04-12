@@ -26,55 +26,55 @@
 <span class="keyword">class</span> <a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">memory_object</span> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="opengl_renderbuffer.html#boost.compute.opengl_renderbufferconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="opengl_renderbuffer.html#idp25335504-bb"><span class="identifier">opengl_renderbuffer</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">explicit</span> <a class="link" href="opengl_renderbuffer.html#idp25336112-bb"><span class="identifier">opengl_renderbuffer</span></a><span class="special">(</span><span class="identifier">cl_mem</span><span class="special">,</span> <span class="keyword">bool</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="opengl_renderbuffer.html#idp25339104-bb"><span class="identifier">opengl_renderbuffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">GLuint</span><span class="special">,</span> <span class="identifier">cl_mem_flags</span> <span class="special">=</span> <span class="identifier">read_write</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="opengl_renderbuffer.html#idp25345104-bb"><span class="identifier">opengl_renderbuffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">&amp;</span> <a class="link" href="opengl_renderbuffer.html#idp25347296-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="opengl_renderbuffer.html#idp25350064-bb"><span class="special">~</span><span class="identifier">opengl_renderbuffer</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="opengl_renderbuffer.html#idp38394368-bb"><span class="identifier">opengl_renderbuffer</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="opengl_renderbuffer.html#idp38394976-bb"><span class="identifier">opengl_renderbuffer</span></a><span class="special">(</span><span class="identifier">cl_mem</span><span class="special">,</span> <span class="keyword">bool</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="opengl_renderbuffer.html#idp38397968-bb"><span class="identifier">opengl_renderbuffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">GLuint</span><span class="special">,</span> <span class="identifier">cl_mem_flags</span> <span class="special">=</span> <span class="identifier">read_write</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="opengl_renderbuffer.html#idp38403968-bb"><span class="identifier">opengl_renderbuffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">&amp;</span> <a class="link" href="opengl_renderbuffer.html#idp38406160-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="opengl_renderbuffer.html#idp38408928-bb"><span class="special">~</span><span class="identifier">opengl_renderbuffer</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="opengl_renderbuffer.html#idp25329504-bb">public member functions</a></span>
-  <span class="identifier">GLuint</span> <a class="link" href="opengl_renderbuffer.html#idp25330064-bb"><span class="identifier">get_opengl_object</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">cl_gl_object_type</span> <a class="link" href="opengl_renderbuffer.html#idp25332704-bb"><span class="identifier">get_opengl_type</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="opengl_renderbuffer.html#idp38388368-bb">public member functions</a></span>
+  <span class="identifier">GLuint</span> <a class="link" href="opengl_renderbuffer.html#idp38388928-bb"><span class="identifier">get_opengl_object</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">cl_gl_object_type</span> <a class="link" href="opengl_renderbuffer.html#idp38391568-bb"><span class="identifier">get_opengl_type</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp83801776"></a><h2>Description</h2>
+<a name="idp99962608"></a><h2>Description</h2>
 <p>A OpenCL buffer for accessing an OpenGL renderbuffer object. </p>
 <div class="refsect2">
-<a name="idp83802448"></a><h3>
+<a name="idp99963280"></a><h3>
 <a name="boost.compute.opengl_renderbufferconstruct-copy-destruct"></a><code class="computeroutput">opengl_renderbuffer</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp25335504-bb"></a><span class="identifier">opengl_renderbuffer</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Creates a null OpenGL renderbuffer object. </li>
+<pre class="literallayout"><a name="idp38394368-bb"></a><span class="identifier">opengl_renderbuffer</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Creates a null OpenGL renderbuffer object. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp25336112-bb"></a><span class="identifier">opengl_renderbuffer</span><span class="special">(</span><span class="identifier">cl_mem</span> mem<span class="special">,</span> <span class="keyword">bool</span> retain <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span></pre>Creates a new OpenGL renderbuffer object for <code class="computeroutput">mem</code>. </li>
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp38394976-bb"></a><span class="identifier">opengl_renderbuffer</span><span class="special">(</span><span class="identifier">cl_mem</span> mem<span class="special">,</span> <span class="keyword">bool</span> retain <span class="special">=</span> <span class="keyword">true</span><span class="special">)</span><span class="special">;</span></pre>Creates a new OpenGL renderbuffer object for <code class="computeroutput">mem</code>. </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp25339104-bb"></a><span class="identifier">opengl_renderbuffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> context<span class="special">,</span> <span class="identifier">GLuint</span> renderbuffer<span class="special">,</span> 
+<pre class="literallayout"><a name="idp38397968-bb"></a><span class="identifier">opengl_renderbuffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> context<span class="special">,</span> <span class="identifier">GLuint</span> renderbuffer<span class="special">,</span> 
                     <span class="identifier">cl_mem_flags</span> flags <span class="special">=</span> <span class="identifier">read_write</span><span class="special">)</span><span class="special">;</span></pre>
 <p>Creates a new OpenGL renderbuffer object in <code class="computeroutput">context</code> for <code class="computeroutput">renderbuffer</code> with <code class="computeroutput">flags</code>.</p>
 <p>See the documentation for <a href="http://www.khronos.org/registry/cl/sdk/1.2/docs/man/xhtml/clCreateFromGLRenderbuffer.html" target="_top">clCreateFromGLRenderbuffer()</a> for more information. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp25345104-bb"></a><span class="identifier">opengl_renderbuffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>Creates a new OpenGL renderbuffer object as a copy of <code class="computeroutput">other</code>. </li>
+<pre class="literallayout"><a name="idp38403968-bb"></a><span class="identifier">opengl_renderbuffer</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>Creates a new OpenGL renderbuffer object as a copy of <code class="computeroutput">other</code>. </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">&amp;</span> <a name="idp25347296-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>Copies the OpenGL renderbuffer object from <code class="computeroutput">other</code>. </li>
+<pre class="literallayout"><a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">&amp;</span> <a name="idp38406160-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>Copies the OpenGL renderbuffer object from <code class="computeroutput">other</code>. </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp25350064-bb"></a><span class="special">~</span><span class="identifier">opengl_renderbuffer</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the OpenGL buffer object. </li>
+<pre class="literallayout"><a name="idp38408928-bb"></a><span class="special">~</span><span class="identifier">opengl_renderbuffer</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the OpenGL buffer object. </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp83850432"></a><h3>
-<a name="idp25329504-bb"></a><code class="computeroutput">opengl_renderbuffer</code> public member functions</h3>
+<a name="idp100096176"></a><h3>
+<a name="idp38388368-bb"></a><code class="computeroutput">opengl_renderbuffer</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">GLuint</span> <a name="idp25330064-bb"></a><span class="identifier">get_opengl_object</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">GLuint</span> <a name="idp38388928-bb"></a><span class="identifier">get_opengl_object</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>Returns the OpenGL memory object ID.</p>
 <p>See the documentation for <a href="http://www.khronos.org/registry/cl/sdk/1.2/docs/man/xhtml/clGetGLObjectInfo.html" target="_top">clGetGLObjectInfo()</a> for more information. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">cl_gl_object_type</span> <a name="idp25332704-bb"></a><span class="identifier">get_opengl_type</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">cl_gl_object_type</span> <a name="idp38391568-bb"></a><span class="identifier">get_opengl_type</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>Returns the OpenGL memory object type.</p>
 <p>See the documentation for <a href="http://www.khronos.org/registry/cl/sdk/1.2/docs/man/xhtml/clGetGLObjectInfo.html" target="_top">clGetGLObjectInfo()</a> for more information. </p>
 </li>
