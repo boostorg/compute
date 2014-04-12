@@ -154,10 +154,6 @@ public:
     ~command_queue()
     {
         if(m_queue){
-            // finsh any outstanding operations before destoying the queue
-            finish();
-
-            // release the memory for the command queue
             BOOST_COMPUTE_ASSERT_CL_SUCCESS(
                 clReleaseCommandQueue(m_queue)
             );
