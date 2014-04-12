@@ -14,6 +14,7 @@ set(BENCHMARKS
   cart_to_polar
   copy_to_device
   count
+  erase_remove
   inner_product
   merge
   mersenne_twister
