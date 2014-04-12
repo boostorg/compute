@@ -45,8 +45,6 @@ random_fill(OutputIterator first,
     typedef typename
         boost::compute::uniform_real_distribution<value_type> distribution_type;
 
-    const context &context = queue.get_context();
-
     engine_type engine(queue);
     distribution_type generator(lo, hi);
     generator.fill(first, last, engine, queue);
