@@ -198,10 +198,10 @@ public:
     /// \see_opencl_ref{clEnqueueReadBuffer}
     ///
     /// \see copy()
-    cl_int enqueue_read_buffer(const buffer &buffer,
-                               size_t offset,
-                               size_t size,
-                               void *host_ptr)
+    void enqueue_read_buffer(const buffer &buffer,
+                             size_t offset,
+                             size_t size,
+                             void *host_ptr)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(size <= buffer.size());
@@ -220,8 +220,6 @@ public:
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
-
-        return ret;
     }
 
     /// Enqueues a command to read data from \p buffer to host memory. The
@@ -265,15 +263,15 @@ public:
     /// \see_opencl_ref{clEnqueueReadBufferRect}
     ///
     /// \opencl_version_warning{1,1}
-    cl_int enqueue_read_buffer_rect(const buffer &buffer,
-                                    const size_t buffer_origin[3],
-                                    const size_t host_origin[3],
-                                    const size_t region[3],
-                                    size_t buffer_row_pitch,
-                                    size_t buffer_slice_pitch,
-                                    size_t host_row_pitch,
-                                    size_t host_slice_pitch,
-                                    void *host_ptr)
+    void enqueue_read_buffer_rect(const buffer &buffer,
+                                  const size_t buffer_origin[3],
+                                  const size_t host_origin[3],
+                                  const size_t region[3],
+                                  size_t buffer_row_pitch,
+                                  size_t buffer_slice_pitch,
+                                  size_t host_row_pitch,
+                                  size_t host_slice_pitch,
+                                  void *host_ptr)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(buffer.get_context() == this->get_context());
@@ -296,8 +294,6 @@ public:
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
-
-        return ret;
     }
     #endif // CL_VERSION_1_1
 
@@ -306,10 +302,10 @@ public:
     /// \see_opencl_ref{clEnqueueWriteBuffer}
     ///
     /// \see copy()
-    cl_int enqueue_write_buffer(const buffer &buffer,
-                                size_t offset,
-                                size_t size,
-                                const void *host_ptr)
+    void enqueue_write_buffer(const buffer &buffer,
+                              size_t offset,
+                              size_t size,
+                              const void *host_ptr)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(size <= buffer.size());
@@ -328,8 +324,6 @@ public:
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
-
-        return ret;
     }
 
     /// Enqueues a command to write data from host memory to \p buffer.
@@ -373,15 +367,15 @@ public:
     /// \see_opencl_ref{clEnqueueWriteBufferRect}
     ///
     /// \opencl_version_warning{1,1}
-    cl_int enqueue_write_buffer_rect(const buffer &buffer,
-                                     const size_t buffer_origin[3],
-                                     const size_t host_origin[3],
-                                     const size_t region[3],
-                                     size_t buffer_row_pitch,
-                                     size_t buffer_slice_pitch,
-                                     size_t host_row_pitch,
-                                     size_t host_slice_pitch,
-                                     void *host_ptr)
+    void enqueue_write_buffer_rect(const buffer &buffer,
+                                   const size_t buffer_origin[3],
+                                   const size_t host_origin[3],
+                                   const size_t region[3],
+                                   size_t buffer_row_pitch,
+                                   size_t buffer_slice_pitch,
+                                   size_t host_row_pitch,
+                                   size_t host_slice_pitch,
+                                   void *host_ptr)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(buffer.get_context() == this->get_context());
@@ -404,8 +398,6 @@ public:
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
-
-        return ret;
     }
     #endif // CL_VERSION_1_1
 
@@ -452,19 +444,21 @@ public:
     /// \see_opencl_ref{clEnqueueCopyBufferRect}
     ///
     /// \opencl_version_warning{1,1}
-    cl_int enqueue_copy_buffer_rect(const buffer &src_buffer,
-                                    const buffer &dst_buffer,
-                                    const size_t src_origin[3],
-                                    const size_t dst_origin[3],
-                                    const size_t region[3],
-                                    size_t buffer_row_pitch,
-                                    size_t buffer_slice_pitch,
-                                    size_t host_row_pitch,
-                                    size_t host_slice_pitch)
+    event enqueue_copy_buffer_rect(const buffer &src_buffer,
+                                   const buffer &dst_buffer,
+                                   const size_t src_origin[3],
+                                   const size_t dst_origin[3],
+                                   const size_t region[3],
+                                   size_t buffer_row_pitch,
+                                   size_t buffer_slice_pitch,
+                                   size_t host_row_pitch,
+                                   size_t host_slice_pitch)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_buffer.get_context() == this->get_context());
         BOOST_ASSERT(dst_buffer.get_context() == this->get_context());
+
+        event event_;
 
         cl_int ret = clEnqueueCopyBufferRect(m_queue,
                                              src_buffer.get(),
@@ -478,12 +472,12 @@ public:
                                              host_slice_pitch,
                                              0,
                                              0,
-                                             0);
+                                             &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
     #endif // CL_VERSION_1_1
 
@@ -557,7 +551,7 @@ public:
     /// Enqueues a command to unmap \p buffer from the host memory space.
     ///
     /// \see_opencl_ref{clEnqueueUnmapMemObject}
-    cl_int enqueue_unmap_buffer(const buffer &buffer, void *mapped_ptr)
+    void enqueue_unmap_buffer(const buffer &buffer, void *mapped_ptr)
     {
         BOOST_ASSERT(buffer.get_context() == this->get_context());
 
@@ -567,7 +561,7 @@ public:
     /// Enqueues a command to unmap \p mem from the host memory space.
     ///
     /// \see_opencl_ref{clEnqueueUnmapMemObject}
-    cl_int enqueue_unmap_mem_object(cl_mem mem, void *mapped_ptr)
+    void enqueue_unmap_mem_object(cl_mem mem, void *mapped_ptr)
     {
         BOOST_ASSERT(m_queue != 0);
 
@@ -580,18 +574,16 @@ public:
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
-
-        return ret;
     }
 
     /// Enqueues a command to read data from \p image to host memory.
     ///
     /// \see_opencl_ref{clEnqueueReadImage}
-    cl_int enqueue_read_image(const image2d &image,
-                              const size_t origin[2],
-                              const size_t region[2],
-                              size_t row_pitch,
-                              void *host_ptr)
+    void enqueue_read_image(const image2d &image,
+                            const size_t origin[2],
+                            const size_t region[2],
+                            size_t row_pitch,
+                            void *host_ptr)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
@@ -613,19 +605,17 @@ public:
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
-
-        return ret;
     }
 
     /// Enqueues a command to read data from \p image to host memory.
     ///
     /// \see_opencl_ref{clEnqueueReadImage}
-    cl_int enqueue_read_image(const image3d &image,
-                              const size_t origin[3],
-                              const size_t region[3],
-                              size_t row_pitch,
-                              size_t slice_pitch,
-                              void *host_ptr)
+    void enqueue_read_image(const image3d &image,
+                            const size_t origin[3],
+                            const size_t region[3],
+                            size_t row_pitch,
+                            size_t slice_pitch,
+                            void *host_ptr)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
@@ -644,18 +634,16 @@ public:
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
-
-        return ret;
     }
 
     /// Enqueues a command to write data from host memory to \p image.
     ///
     /// \see_opencl_ref{clEnqueueWriteImage}
-    cl_int enqueue_write_image(const image2d &image,
-                               const size_t origin[2],
-                               const size_t region[2],
-                               size_t input_row_pitch,
-                               const void *host_ptr)
+    void enqueue_write_image(const image2d &image,
+                             const size_t origin[2],
+                             const size_t region[2],
+                             size_t input_row_pitch,
+                             const void *host_ptr)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
@@ -677,19 +665,17 @@ public:
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
-
-        return ret;
     }
 
     /// Enqueues a command to write data from host memory to \p image.
     ///
     /// \see_opencl_ref{clEnqueueWriteImage}
-    cl_int enqueue_write_image(const image3d &image,
-                               const size_t origin[3],
-                               const size_t region[3],
-                               size_t input_row_pitch,
-                               size_t input_slice_pitch,
-                               const void *host_ptr)
+    void enqueue_write_image(const image3d &image,
+                             const size_t origin[3],
+                             const size_t region[3],
+                             size_t input_row_pitch,
+                             size_t input_slice_pitch,
+                             const void *host_ptr)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
@@ -708,18 +694,16 @@ public:
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
-
-        return ret;
     }
 
     /// Enqueues a command to copy data from \p src_image to \p dst_image.
     ///
     /// \see_opencl_ref{clEnqueueCopyImage}
-    cl_int enqueue_copy_image(const image2d &src_image,
-                              const image2d &dst_image,
-                              const size_t src_origin[2],
-                              const size_t dst_origin[2],
-                              const size_t region[2])
+    event enqueue_copy_image(const image2d &src_image,
+                             const image2d &dst_image,
+                             const size_t src_origin[2],
+                             const size_t dst_origin[2],
+                             const size_t region[2])
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
@@ -731,6 +715,8 @@ public:
         const size_t dst_origin3[3] = { dst_origin[0], dst_origin[1], size_t(0) };
         const size_t region3[3] = { region[0], region[1], size_t(1) };
 
+        event event_;
+
         cl_int ret = clEnqueueCopyImage(m_queue,
                                         src_image.get(),
                                         dst_image.get(),
@@ -739,22 +725,22 @@ public:
                                         region3,
                                         0,
                                         0,
-                                        0);
+                                        &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
     /// Enqueues a command to copy data from \p src_image to \p dst_image.
     ///
     /// \see_opencl_ref{clEnqueueCopyImage}
-    cl_int enqueue_copy_image(const image2d &src_image,
-                              const image3d &dst_image,
-                              const size_t src_origin[2],
-                              const size_t dst_origin[3],
-                              const size_t region[2])
+    event enqueue_copy_image(const image2d &src_image,
+                             const image3d &dst_image,
+                             const size_t src_origin[2],
+                             const size_t dst_origin[3],
+                             const size_t region[2])
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
@@ -764,6 +750,8 @@ public:
 
         const size_t src_origin3[3] = { src_origin[0], src_origin[1], size_t(0) };
         const size_t region3[3] = { region[0], region[1], size_t(1) };
+
+        event event_;
 
         cl_int ret = clEnqueueCopyImage(m_queue,
                                         src_image.get(),
@@ -773,22 +761,22 @@ public:
                                         region3,
                                         0,
                                         0,
-                                        0);
+                                        &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
     /// Enqueues a command to copy data from \p src_image to \p dst_image.
     ///
     /// \see_opencl_ref{clEnqueueCopyImage}
-    cl_int enqueue_copy_image(const image3d &src_image,
-                              const image2d &dst_image,
-                              const size_t src_origin[3],
-                              const size_t dst_origin[2],
-                              const size_t region[2])
+    event enqueue_copy_image(const image3d &src_image,
+                             const image2d &dst_image,
+                             const size_t src_origin[3],
+                             const size_t dst_origin[2],
+                             const size_t region[2])
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
@@ -799,6 +787,8 @@ public:
         const size_t dst_origin3[3] = { dst_origin[0], dst_origin[1], size_t(0) };
         const size_t region3[3] = { region[0], region[1], size_t(1) };
 
+        event event_;
+
         cl_int ret = clEnqueueCopyImage(m_queue,
                                         src_image.get(),
                                         dst_image.get(),
@@ -807,28 +797,30 @@ public:
                                         region3,
                                         0,
                                         0,
-                                        0);
+                                        &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
     /// Enqueues a command to copy data from \p src_image to \p dst_image.
     ///
     /// \see_opencl_ref{clEnqueueCopyImage}
-    cl_int enqueue_copy_image(const image3d &src_image,
-                              const image3d &dst_image,
-                              const size_t src_origin[3],
-                              const size_t dst_origin[3],
-                              const size_t region[3])
+    event enqueue_copy_image(const image3d &src_image,
+                             const image3d &dst_image,
+                             const size_t src_origin[3],
+                             const size_t dst_origin[3],
+                             const size_t region[3])
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
         BOOST_ASSERT(dst_image.get_context() == this->get_context());
         BOOST_ASSERT_MSG(src_image.get_format() == dst_image.get_format(),
                          "Source and destination image formats must match.");
+
+        event event_;
 
         cl_int ret = clEnqueueCopyImage(m_queue,
                                         src_image.get(),
@@ -838,22 +830,22 @@ public:
                                         region,
                                         0,
                                         0,
-                                        0);
+                                        &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
     /// Enqueues a command to copy data from \p src_image to \p dst_buffer.
     ///
     /// \see_opencl_ref{clEnqueueCopyImageToBuffer}
-    cl_int enqueue_copy_image_to_buffer(const image2d &src_image,
-                                        const buffer &dst_buffer,
-                                        const size_t src_origin[2],
-                                        const size_t region[2],
-                                        size_t dst_offset)
+    event enqueue_copy_image_to_buffer(const image2d &src_image,
+                                       const buffer &dst_buffer,
+                                       const size_t src_origin[2],
+                                       const size_t region[2],
+                                       size_t dst_offset)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
@@ -861,6 +853,8 @@ public:
 
         const size_t src_origin3[3] = { src_origin[0], src_origin[1], size_t(0) };
         const size_t region3[3] = { region[0], region[1], size_t(1) };
+
+        event event_;
 
         cl_int ret = clEnqueueCopyImageToBuffer(m_queue,
                                                 src_image.get(),
@@ -870,26 +864,28 @@ public:
                                                 dst_offset,
                                                 0,
                                                 0,
-                                                0);
+                                                &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
     /// Enqueues a command to copy data from \p src_image to \p dst_buffer.
     ///
     /// \see_opencl_ref{clEnqueueCopyImageToBuffer}
-    cl_int enqueue_copy_image_to_buffer(const image3d &src_image,
-                                        const buffer &dst_buffer,
-                                        const size_t src_origin[3],
-                                        const size_t region[3],
-                                        size_t dst_offset)
+    event enqueue_copy_image_to_buffer(const image3d &src_image,
+                                       const buffer &dst_buffer,
+                                       const size_t src_origin[3],
+                                       const size_t region[3],
+                                       size_t dst_offset)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
         BOOST_ASSERT(dst_buffer.get_context() == this->get_context());
+
+        event event_;
 
         cl_int ret = clEnqueueCopyImageToBuffer(m_queue,
                                                 src_image.get(),
@@ -899,22 +895,22 @@ public:
                                                 dst_offset,
                                                 0,
                                                 0,
-                                                0);
+                                                &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
     /// Enqueues a command to copy data from \p src_buffer to \p dst_image.
     ///
     /// \see_opencl_ref{clEnqueueCopyBufferToImage}
-    cl_int enqueue_copy_buffer_to_image(const buffer &src_buffer,
-                                        const image2d &dst_image,
-                                        size_t src_offset,
-                                        const size_t dst_origin[3],
-                                        const size_t region[3])
+    event enqueue_copy_buffer_to_image(const buffer &src_buffer,
+                                       const image2d &dst_image,
+                                       size_t src_offset,
+                                       const size_t dst_origin[3],
+                                       const size_t region[3])
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_buffer.get_context() == this->get_context());
@@ -922,6 +918,8 @@ public:
 
         const size_t dst_origin3[3] = { dst_origin[0], dst_origin[1], size_t(0) };
         const size_t region3[3] = { region[0], region[1], size_t(1) };
+
+        event event_;
 
         cl_int ret = clEnqueueCopyBufferToImage(m_queue,
                                                 src_buffer.get(),
@@ -931,26 +929,28 @@ public:
                                                 region3,
                                                 0,
                                                 0,
-                                                0);
+                                                &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
     /// Enqueues a command to copy data from \p src_buffer to \p dst_image.
     ///
     /// \see_opencl_ref{clEnqueueCopyBufferToImage}
-    cl_int enqueue_copy_buffer_to_image(const buffer &src_buffer,
-                                        const image3d &dst_image,
-                                        size_t src_offset,
-                                        const size_t dst_origin[3],
-                                        const size_t region[3])
+    event enqueue_copy_buffer_to_image(const buffer &src_buffer,
+                                       const image3d &dst_image,
+                                       size_t src_offset,
+                                       const size_t dst_origin[3],
+                                       const size_t region[3])
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_buffer.get_context() == this->get_context());
         BOOST_ASSERT(dst_image.get_context() == this->get_context());
+
+        event event_;
 
         cl_int ret = clEnqueueCopyBufferToImage(m_queue,
                                                 src_buffer.get(),
@@ -960,12 +960,12 @@ public:
                                                 region,
                                                 0,
                                                 0,
-                                                0);
+                                                &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
     #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
@@ -974,16 +974,18 @@ public:
     /// \see_opencl_ref{clEnqueueFillImage}
     ///
     /// \opencl_version_warning{1,2}
-    cl_int enqueue_fill_image(const image2d &image,
-                              const void *fill_color,
-                              const size_t origin[2],
-                              const size_t region[2])
+    event enqueue_fill_image(const image2d &image,
+                             const void *fill_color,
+                             const size_t origin[2],
+                             const size_t region[2])
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
 
         const size_t origin3[3] = { origin[0], origin[1], size_t(0) };
         const size_t region3[3] = { region[0], region[1], size_t(1) };
+
+        event event_;
 
         cl_int ret = clEnqueueFillImage(m_queue,
                                         image.get(),
@@ -992,12 +994,12 @@ public:
                                         region3,
                                         0,
                                         0,
-                                        0);
+                                        &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
     /// Enqueues a command to fill \p image with \p fill_color.
@@ -1005,13 +1007,15 @@ public:
     /// \see_opencl_ref{clEnqueueFillImage}
     ///
     /// \opencl_version_warning{1,2}
-    cl_int enqueue_fill_image(const image3d &image,
-                              const void *fill_color,
-                              const size_t origin[3],
-                              const size_t region[3])
+    event enqueue_fill_image(const image3d &image,
+                             const void *fill_color,
+                             const size_t origin[3],
+                             const size_t region[3])
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
+
+        event event_;
 
         cl_int ret = clEnqueueFillImage(m_queue,
                                         image.get(),
@@ -1020,12 +1024,12 @@ public:
                                         region,
                                         0,
                                         0,
-                                        0);
+                                        &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
 
-        return ret;
+        return event_;
     }
 
     /// Enqueues a command to migrate \p mem_objects.
@@ -1033,11 +1037,13 @@ public:
     /// \see_opencl_ref{clEnqueueMigrateMemObjects}
     ///
     /// \opencl_version_warning{1,2}
-    void enqueue_migrate_memory_objects(uint_ num_mem_objects,
-                                        const cl_mem *mem_objects,
-                                        cl_mem_migration_flags flags)
+    event enqueue_migrate_memory_objects(uint_ num_mem_objects,
+                                         const cl_mem *mem_objects,
+                                         cl_mem_migration_flags flags)
     {
         BOOST_ASSERT(m_queue != 0);
+
+        event event_;
 
         cl_int ret = clEnqueueMigrateMemObjects(m_queue,
                                                 num_mem_objects,
@@ -1045,10 +1051,12 @@ public:
                                                 flags,
                                                 0,
                                                 0,
-                                                0);
+                                                &event_.get());
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
+
+        return event_;
     }
     #endif // CL_VERSION_1_2
 
