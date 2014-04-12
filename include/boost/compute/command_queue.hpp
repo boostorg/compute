@@ -1091,7 +1091,7 @@ public:
                                   size_t work_dim,
                                   const size_t *global_work_offset,
                                   const size_t *global_work_size,
-                                  const size_t *local_work_size = 0)
+                                  const size_t *local_work_size)
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(kernel.get_context() == this->get_context());

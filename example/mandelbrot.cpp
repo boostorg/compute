@@ -167,7 +167,7 @@ void MandelbrotWidget::paintGL()
     const size_t global_work_size[] = { size_t(width()), size_t(height()) };
 
     queue_.enqueue_nd_range_kernel(
-        kernel, 2, global_work_offset, global_work_size
+        kernel, 2, global_work_offset, global_work_size, 0
     );
 
     // release the opengl texture so it can be used by opengl
