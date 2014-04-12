@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(kernel_profiling)
     boost::compute::buffer buffer(context, sizeof(data));
 
     // copy input data to device
-    queue.enqueue_write_buffer(buffer, sizeof(data), data);
+    queue.enqueue_write_buffer(buffer, 0, sizeof(data), data);
 
     // setup kernel
     const char source[] =
@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(kernel_profiling)
     event.get_profiling_info<cl_ulong>(bc::event::profiling_command_end);
 
     // read results back to host
-    queue.enqueue_read_buffer(buffer, sizeof(data), data);
+    queue.enqueue_read_buffer(buffer, 0, sizeof(data), data);
 
     // check results
     BOOST_CHECK_EQUAL(data[0], 2);
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE(write_buffer_rect)
 
     // check output values
     int output[4];
-    queue.enqueue_read_buffer(buffer, 4 * sizeof(int), output);
+    queue.enqueue_read_buffer(buffer, 0, 4 * sizeof(int), output);
     BOOST_CHECK_EQUAL(output[0], 1);
     BOOST_CHECK_EQUAL(output[1], 3);
     BOOST_CHECK_EQUAL(output[2], 5);

@@ -193,20 +193,6 @@ public:
         return get_info<cl_command_queue_properties>(CL_QUEUE_PROPERTIES);
     }
 
-    /// \internal_
-    cl_int enqueue_read_buffer(const buffer &buffer, void *host_ptr)
-    {
-        return enqueue_read_buffer(buffer, 0, buffer.size(), host_ptr);
-    }
-
-    /// \internal_
-    cl_int enqueue_read_buffer(const buffer &buffer,
-                               size_t size,
-                               void *host_ptr)
-    {
-        return enqueue_read_buffer(buffer, 0, size, host_ptr);
-    }
-
     /// Enqueues a command to read data from \p buffer to host memory.
     ///
     /// \see_opencl_ref{clEnqueueReadBuffer}
@@ -314,20 +300,6 @@ public:
         return ret;
     }
     #endif // CL_VERSION_1_1
-
-    /// \internal_
-    cl_int enqueue_write_buffer(const buffer &buffer, const void *host_ptr)
-    {
-        return enqueue_write_buffer(buffer, 0, buffer.size(), host_ptr);
-    }
-
-    /// \internal_
-    cl_int enqueue_write_buffer(const buffer &buffer,
-                                size_t size,
-                                const void *host_ptr)
-    {
-        return enqueue_write_buffer(buffer, 0, size, host_ptr);
-    }
 
     /// Enqueues a command to write data from host memory to \p buffer.
     ///
