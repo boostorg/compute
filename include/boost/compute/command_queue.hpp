@@ -1152,7 +1152,7 @@ public:
         return event_;
     }
 
-    /// Convience overload for enqueue_native_kernel() which enqueues a
+    /// Convenience overload for enqueue_native_kernel() which enqueues a
     /// native kernel on the host with a nullary function.
     event enqueue_native_kernel(void (BOOST_COMPUTE_CL_CALLBACK *user_func)(void))
     {
