@@ -508,8 +508,10 @@ public:
 
     iterator erase(iterator first, iterator last, command_queue &queue)
     {
-        ::boost::compute::vector<T> tmp(last, end(), queue);
-        ::boost::compute::copy(tmp.begin(), tmp.end(), first, queue);
+        if(last != end()){
+            ::boost::compute::vector<T> tmp(last, end(), queue);
+            ::boost::compute::copy(tmp.begin(), tmp.end(), first, queue);
+        }
 
         difference_type count = std::distance(first, last);
         resize(size() - static_cast<size_type>(count), queue);
