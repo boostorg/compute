@@ -32,15 +32,16 @@ public:
     static const T n = 624;
     static const T m = 397;
 
-    mersenne_twister_engine(const context &context)
-        : m_context(context),
-          m_state_buffer(context, n * sizeof(result_type))
+    explicit mersenne_twister_engine(command_queue &queue,
+                                     result_type value = default_seed)
+        : m_context(queue.get_context()),
+          m_state_buffer(m_context, n * sizeof(result_type))
     {
         // setup program
         load_program();
 
         // seed state
-        seed();
+        seed(queue, value);
     }
 
     mersenne_twister_engine(const mersenne_twister_engine<T> &other)
@@ -62,13 +63,12 @@ public:
     {
     }
 
-    void seed(result_type value = default_seed)
+    void seed(command_queue &queue, result_type value = default_seed)
     {
         kernel seed_kernel = m_program.create_kernel("seed");
         seed_kernel.set_arg(0, value);
         seed_kernel.set_arg(1, m_state_buffer);
 
-        command_queue queue(m_context, m_context.get_device());
         queue.enqueue_task(seed_kernel);
     }
 

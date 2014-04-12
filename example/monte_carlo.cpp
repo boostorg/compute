@@ -36,7 +36,7 @@ int main()
     size_t n = 10000000;
 
     // generate random numbers
-    compute::default_random_engine rng(context);
+    compute::default_random_engine rng(queue);
     compute::vector<uint_> vector(n * 2, context);
     rng.fill(vector.begin(), vector.end(), queue);
 

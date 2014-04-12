@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_CASE(fill_uint)
 {
     using boost::compute::uint_;
 
-    boost::compute::mt19937 rng(context);
+    boost::compute::mt19937 rng(queue);
 
     boost::compute::vector<uint_> vector(10, context);
 

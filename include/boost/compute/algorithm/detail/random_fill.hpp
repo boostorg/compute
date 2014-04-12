@@ -47,7 +47,7 @@ random_fill(OutputIterator first,
 
     const context &context = queue.get_context();
 
-    engine_type engine(context);
+    engine_type engine(queue);
     distribution_type generator(lo, hi);
     generator.fill(first, last, engine, queue);
 }

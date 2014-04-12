@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     compute::vector<unsigned int> vector(PERF_N, context);
 
     // create mersenne twister engine
-    compute::mt19937 rng(context);
+    compute::mt19937 rng(queue);
 
     // generate random numbers
     perf_timer t;
