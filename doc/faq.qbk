@@ -101,6 +101,15 @@ be created for the default GPU device and the algorithm will be
 executed there.
 
 
+[h3 How can I print out the contents of a buffer/vector on the GPU?]
+
+This can be accompilshed easily using the generic boost::compute::copy()
+algorithm along with std::ostream_iterator<T>. For example:
+
+[import ../example/print_vector.cpp]
+[print_vector_example]
+
+
 [h3 How can I contribute?]
 
 We are actively seeking additional C++ developers with experience in

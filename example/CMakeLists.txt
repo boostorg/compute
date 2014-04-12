@@ -12,6 +12,7 @@ set(EXAMPLES
   monte_carlo
   point_centroid
   price_cross
+  print_vector
   sort_vector
   simple_kernel
   time_copy
