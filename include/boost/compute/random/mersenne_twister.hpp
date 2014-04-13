@@ -17,6 +17,7 @@
 #include <boost/compute/context.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/detail/program_cache.hpp>
 #include <boost/compute/iterator/discard_iterator.hpp>
@@ -114,6 +115,13 @@ public:
     void generate(discard_iterator first, discard_iterator last, command_queue &queue)
     {
         m_state_index += std::distance(first, last);
+    }
+
+    template<class OutputIterator, class Function>
+    void generate(OutputIterator first, OutputIterator last, Function op, command_queue &queue)
+    {
+        generate(first, last, queue);
+        transform(first, last, first, op, queue);
     }
 
     void discard(size_t z, command_queue &queue)

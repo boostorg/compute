@@ -12,7 +12,6 @@
 #define BOOST_COMPUTE_RANDOM_UNIFORM_REAL_DISTRIBUTION_HPP
 
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 
 namespace boost {
@@ -98,17 +97,11 @@ public:
     template<class OutputIterator, class Generator>
     void generate(OutputIterator first,
                   OutputIterator last,
-                  Generator &g,
+                  Generator &generator,
                   command_queue &queue)
     {
-        g.generate(first, last, queue);
-
-        transform(
-            first,
-            last,
-            first,
-            detail::scale_random<RealType>(m_a, m_b),
-            queue
+        generator.generate(
+            first, last, detail::scale_random<RealType>(m_a, m_b), queue
         );
     }
 
