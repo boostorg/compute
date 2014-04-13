@@ -19,6 +19,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/detail/program_cache.hpp>
+#include <boost/compute/iterator/discard_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -70,37 +71,54 @@ public:
         seed_kernel.set_arg(1, m_state_buffer);
 
         queue.enqueue_task(seed_kernel);
+
+        m_state_index = 0;
     }
 
     template<class OutputIterator>
     void fill(OutputIterator first, OutputIterator last, command_queue &queue)
     {
-        const buffer &buffer = first.get_buffer();
         const size_t size = detail::iterator_range_size(first, last);
 
         kernel fill_kernel(m_program, "fill");
         fill_kernel.set_arg(0, m_state_buffer);
-        fill_kernel.set_arg(1, buffer);
+        fill_kernel.set_arg(2, first.get_buffer());
 
-        size_t p = 0;
+        size_t offset = 0;
+        size_t &p = m_state_index;
 
         for(;;){
             size_t count = 0;
-            if(size - p >= n)
+            if(size > n){
                 count = n;
-            else
-                count = size - p;
-
-            fill_kernel.set_arg(2, static_cast<uint_>(p));
+            }
+            else {
+                count = size;
+            }
+            fill_kernel.set_arg(1, static_cast<const uint_>(p));
+            fill_kernel.set_arg(3, static_cast<const uint_>(offset));
             queue.enqueue_1d_range_kernel(fill_kernel, 0, count, 0);
 
-            p += n;
+            p += count;
+            offset += count;
 
-            if(p >= size)
+            if(offset >= size){
                 break;
+            }
 
             generate_state(queue);
+            p = 0;
         }
+    }
+
+    void fill(discard_iterator first, discard_iterator last, command_queue &queue)
+    {
+        m_state_index += std::distance(first, last);
+    }
+
+    void discard(size_t z, command_queue &queue)
+    {
+        fill(discard_iterator(0), discard_iterator(z), queue);
     }
 
 private:
@@ -160,11 +178,12 @@ private:
                 "}\n"
 
                 "__kernel void fill(__global uint *state,\n"
+                "                   const uint state_index,\n"
                 "                   __global uint *vector,\n"
                 "                   const uint offset)\n"
                 "{\n"
                 "    const uint i = get_global_id(0);\n"
-                "    vector[offset+i] = random_number(state, i);\n"
+                "    vector[offset+i] = random_number(state, state_index + i);\n"
                 "}\n";
 
             m_program = program::build_with_source(source, m_context);
@@ -175,6 +194,7 @@ private:
 
 private:
     context m_context;
+    size_t m_state_index;
     program m_program;
     buffer m_state_buffer;
 };

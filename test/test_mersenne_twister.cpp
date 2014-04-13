@@ -42,4 +42,25 @@ BOOST_AUTO_TEST_CASE(fill_uint)
     );
 }
 
+BOOST_AUTO_TEST_CASE(discard_uint)
+{
+    using boost::compute::uint_;
+
+    boost::compute::mt19937 rng(queue);
+
+    boost::compute::vector<uint_> vector(5, context);
+
+    rng.discard(5, queue);
+    rng.fill(vector.begin(), vector.end(), queue);
+
+    CHECK_RANGE_EQUAL(
+        uint_, 5, vector,
+        (uint_(4161255391),
+         uint_(3922919429),
+         uint_(949333985),
+         uint_(2715962298),
+         uint_(1323567403))
+    );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
