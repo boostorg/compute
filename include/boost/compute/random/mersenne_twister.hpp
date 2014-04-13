@@ -25,6 +25,8 @@
 namespace boost {
 namespace compute {
 
+/// \class mersenne_twister_engine
+/// \brief Mersenne twister pseudorandom number generator.
 template<class T>
 class mersenne_twister_engine
 {
@@ -34,6 +36,7 @@ public:
     static const T n = 624;
     static const T m = 397;
 
+    /// Creates a new mersenne_twister_engine and seeds it with \p value.
     explicit mersenne_twister_engine(command_queue &queue,
                                      result_type value = default_seed)
         : m_context(queue.get_context()),
@@ -46,12 +49,14 @@ public:
         seed(queue, value);
     }
 
+    /// Creates a new mersenne_twister_engine object as a copy of \p other.
     mersenne_twister_engine(const mersenne_twister_engine<T> &other)
         : m_context(other.m_context),
           m_state_buffer(other.m_state_buffer)
     {
     }
 
+    /// Copies \p other to \c *this.
     mersenne_twister_engine<T>& operator=(const mersenne_twister_engine<T> &other)
     {
         if(this != &other){
@@ -61,10 +66,12 @@ public:
         return *this;
     }
 
+    /// Destroys the mersenne_twister_engine object.
     ~mersenne_twister_engine()
     {
     }
 
+    /// Seeds the random number generator with \p value.
     void seed(command_queue &queue, result_type value = default_seed)
     {
         kernel seed_kernel = m_program.create_kernel("seed");
@@ -76,6 +83,7 @@ public:
         m_state_index = 0;
     }
 
+    /// Generates random numbers and stores them to the range [\p first, \p last).
     template<class OutputIterator>
     void generate(OutputIterator first, OutputIterator last, command_queue &queue)
     {
@@ -112,11 +120,14 @@ public:
         }
     }
 
+    /// \internal_
     void generate(discard_iterator first, discard_iterator last, command_queue &queue)
     {
         m_state_index += std::distance(first, last);
     }
 
+    /// Generates random numbers, transforms them with \p op, and then stores
+    /// them to the range [\p first, \p last).
     template<class OutputIterator, class Function>
     void generate(OutputIterator first, OutputIterator last, Function op, command_queue &queue)
     {
@@ -124,12 +135,13 @@ public:
         transform(first, last, first, op, queue);
     }
 
+    /// Generates \p z random numbers and discards them.
     void discard(size_t z, command_queue &queue)
     {
         generate(discard_iterator(0), discard_iterator(z), queue);
     }
 
-    // deprecated
+    /// \internal_ (deprecated)
     template<class OutputIterator>
     void fill(OutputIterator first, OutputIterator last, command_queue &queue)
     {
@@ -137,6 +149,7 @@ public:
     }
 
 private:
+    /// \internal_
     void generate_state(command_queue &queue)
     {
         kernel generate_state_kernel =
@@ -145,6 +158,7 @@ private:
         queue.enqueue_task(generate_state_kernel);
     }
 
+    /// \internal_
     void load_program()
     {
         boost::shared_ptr<detail::program_cache> cache =

@@ -68,32 +68,41 @@ struct scale_random
 
 } // end detail namespace
 
+/// \class uniform_real_distribution
+/// \brief Produces uniformily distributed random floating-point numbers.
 template<class RealType = float>
 class uniform_real_distribution
 {
 public:
     typedef RealType result_type;
 
+    /// Creates a new uniform distribution producing numbers in the range
+    /// [\p a, \p b).
     uniform_real_distribution(RealType a = 0.f, RealType b = 1.f)
         : m_a(a),
           m_b(b)
     {
     }
 
+    /// Destroys the uniform_real_distribution object.
     ~uniform_real_distribution()
     {
     }
 
+    /// Returns the minimum value of the distribution.
     result_type a() const
     {
         return m_a;
     }
 
+    /// Returns the maximum value of the distribution.
     result_type b() const
     {
         return m_b;
     }
 
+    /// Generates uniformily distributed floating-point numbers and stores
+    /// them to the range [\p first, \p last).
     template<class OutputIterator, class Generator>
     void generate(OutputIterator first,
                   OutputIterator last,
@@ -105,7 +114,7 @@ public:
         );
     }
 
-    // deprecated
+    /// \internal_ (deprecated)
     template<class OutputIterator, class Generator>
     void fill(OutputIterator first,
               OutputIterator last,
