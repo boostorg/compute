@@ -17,7 +17,7 @@
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
-BOOST_AUTO_TEST_CASE(fill_uint)
+BOOST_AUTO_TEST_CASE(generate_uint)
 {
     using boost::compute::uint_;
 
@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(fill_uint)
 
     boost::compute::vector<uint_> vector(10, context);
 
-    rng.fill(vector.begin(), vector.end(), queue);
+    rng.generate(vector.begin(), vector.end(), queue);
 
     CHECK_RANGE_EQUAL(
         uint_, 10, vector,
@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(discard_uint)
     boost::compute::vector<uint_> vector(5, context);
 
     rng.discard(5, queue);
-    rng.fill(vector.begin(), vector.end(), queue);
+    rng.generate(vector.begin(), vector.end(), queue);
 
     CHECK_RANGE_EQUAL(
         uint_, 5, vector,

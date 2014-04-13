@@ -96,12 +96,12 @@ public:
     }
 
     template<class OutputIterator, class Generator>
-    void fill(OutputIterator first,
-              OutputIterator last,
-              Generator &g,
-              command_queue &queue)
+    void generate(OutputIterator first,
+                  OutputIterator last,
+                  Generator &g,
+                  command_queue &queue)
     {
-        g.fill(first, last, queue);
+        g.generate(first, last, queue);
 
         transform(
             first,
@@ -110,6 +110,16 @@ public:
             detail::scale_random<RealType>(m_a, m_b),
             queue
         );
+    }
+
+    // deprecated
+    template<class OutputIterator, class Generator>
+    void fill(OutputIterator first,
+              OutputIterator last,
+              Generator &g,
+              command_queue &queue)
+    {
+        generate(first, last, g, queue);
     }
 
 private:

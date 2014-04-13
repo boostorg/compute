@@ -38,7 +38,7 @@ int main()
     // generate random numbers
     compute::default_random_engine rng(queue);
     compute::vector<uint_> vector(n * 2, context);
-    rng.fill(vector.begin(), vector.end(), queue);
+    rng.generate(vector.begin(), vector.end(), queue);
 
     // function returing true if the point is within the unit circle
     BOOST_COMPUTE_FUNCTION(bool, is_in_unit_circle, (uint2_),

@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     // generate random numbers
     perf_timer t;
     t.start();
-    rng.fill(vector.begin(), vector.end(), queue);
+    rng.generate(vector.begin(), vector.end(), queue);
     queue.finish();
     t.stop();
     std::cout << "time: " << t.last_time() / 1e6 << " ms" << std::endl;

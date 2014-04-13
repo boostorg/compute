@@ -76,7 +76,7 @@ public:
     }
 
     template<class OutputIterator>
-    void fill(OutputIterator first, OutputIterator last, command_queue &queue)
+    void generate(OutputIterator first, OutputIterator last, command_queue &queue)
     {
         const size_t size = detail::iterator_range_size(first, last);
 
@@ -111,14 +111,21 @@ public:
         }
     }
 
-    void fill(discard_iterator first, discard_iterator last, command_queue &queue)
+    void generate(discard_iterator first, discard_iterator last, command_queue &queue)
     {
         m_state_index += std::distance(first, last);
     }
 
     void discard(size_t z, command_queue &queue)
     {
-        fill(discard_iterator(0), discard_iterator(z), queue);
+        generate(discard_iterator(0), discard_iterator(z), queue);
+    }
+
+    // deprecated
+    template<class OutputIterator>
+    void fill(OutputIterator first, OutputIterator last, command_queue &queue)
+    {
+        generate(first, last, queue);
     }
 
 private:
