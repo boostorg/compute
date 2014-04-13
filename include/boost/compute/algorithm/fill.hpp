@@ -24,6 +24,7 @@
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/async/future.hpp>
 #include <boost/compute/iterator/constant_iterator.hpp>
+#include <boost/compute/iterator/discard_iterator.hpp>
 #include <boost/compute/detail/is_buffer_iterator.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 
@@ -89,6 +90,9 @@ struct is_valid_fill_buffer_iterator :
             >
         >
     >::type { };
+
+template<>
+struct is_valid_fill_buffer_iterator<discard_iterator> : public boost::false_type {};
 
 // specialization which uses clEnqueueFillBuffer for buffer iterators
 template<class BufferIterator, class T>

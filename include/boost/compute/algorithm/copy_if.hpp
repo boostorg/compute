@@ -15,10 +15,12 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/count.hpp>
+#include <boost/compute/algorithm/count_if.hpp>
 #include <boost/compute/algorithm/exclusive_scan.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/iterator/discard_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -75,6 +77,19 @@ inline OutputIterator copy_if_impl(InputIterator first,
     k2.exec_1d(queue, 0, count);
 
     return result + static_cast<difference_type>(copied_element_count);
+}
+
+template<class InputIterator, class Predicate>
+inline discard_iterator copy_if_impl(InputIterator first,
+                                     InputIterator last,
+                                     discard_iterator result,
+                                     Predicate predicate,
+                                     bool copyIndex,
+                                     command_queue &queue)
+{
+    (void) copyIndex;
+
+    return result + count_if(first, last, predicate, queue);
 }
 
 // like the copy_if() algorithm but writes the indices of the values for which

@@ -16,6 +16,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/async/future.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/iterator/discard_iterator.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/work_size.hpp>
 
@@ -98,6 +99,17 @@ inline OutputIterator copy_on_device(InputIterator first,
 
     kernel.set_range(first, last, result);
     kernel.exec(queue);
+
+    return result + std::distance(first, last);
+}
+
+template<class InputIterator>
+inline discard_iterator copy_on_device(InputIterator first,
+                                       InputIterator last,
+                                       discard_iterator result,
+                                       command_queue &queue)
+{
+    (void) queue;
 
     return result + std::distance(first, last);
 }
