@@ -70,9 +70,9 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 class discard_iterator : public detail::discard_iterator_base::type
 {
 public:
-    typedef typename detail::discard_iterator_base::type super_type;
-    typedef typename super_type::reference reference;
-    typedef typename super_type::difference_type difference_type;
+    typedef detail::discard_iterator_base::type super_type;
+    typedef super_type::reference reference;
+    typedef super_type::difference_type difference_type;
 
     discard_iterator(size_t index = 0)
         : m_index(index)
