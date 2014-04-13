@@ -7,11 +7,11 @@
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
 <link rel="up" href="../../compute/reference.html#header.boost.compute.exception.context_error_hpp" title="Header &lt;boost/compute/exception/context_error.hpp&gt;">
 <link rel="prev" href="event.html" title="Class event">
-<link rel="next" href="extension_unsu_idp38272176.html" title="Class extension_unsupported_exception">
+<link rel="next" href="extension_unsu_idp40425856.html" title="Class extension_unsupported_exception">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="spirit-nav">
-<a accesskey="p" href="event.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.exception.context_error_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="extension_unsu_idp38272176.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="event.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.exception.context_error_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="extension_unsu_idp40425856.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 <div class="refentry">
 <a name="boost.compute.context_error"></a><div class="titlepage"></div>
@@ -26,32 +26,32 @@
 <span class="keyword">class</span> <a class="link" href="context_error.html" title="Class context_error">context_error</a> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">exception</span> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="context_error.html#boost.compute.context_errorconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="context_error.html#idp38265968-bb"><span class="identifier">context_error</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="context_error.html#idp38269456-bb"><span class="special">~</span><span class="identifier">context_error</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="context_error.html#idp40419648-bb"><span class="identifier">context_error</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="context_error.html#idp40423136-bb"><span class="special">~</span><span class="identifier">context_error</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="context_error.html#idp38262560-bb">public member functions</a></span>
-  <span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span> <a class="link" href="context_error.html#idp38263120-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a class="link" href="context_error.html#idp38264688-bb"><span class="identifier">what</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="context_error.html#idp40416240-bb">public member functions</a></span>
+  <span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span> <a class="link" href="context_error.html#idp40416800-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a class="link" href="context_error.html#idp40418368-bb"><span class="identifier">what</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp99249088"></a><h2>Description</h2>
+<a name="idp90713264"></a><h2>Description</h2>
 <div class="refsect2">
-<a name="idp99249504"></a><h3>
+<a name="idp90713680"></a><h3>
 <a name="boost.compute.context_errorconstruct-copy-destruct"></a><code class="computeroutput">context_error</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><a name="idp38265968-bb"></a><span class="identifier">context_error</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span> context<span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> errinfo<span class="special">,</span> 
+<li class="listitem"><pre class="literallayout"><a name="idp40419648-bb"></a><span class="identifier">context_error</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span> context<span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> errinfo<span class="special">,</span> 
               <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span> private_info<span class="special">,</span> <span class="identifier">size_t</span> private_info_size<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp38269456-bb"></a><span class="special">~</span><span class="identifier">context_error</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp40423136-bb"></a><span class="special">~</span><span class="identifier">context_error</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp99268592"></a><h3>
-<a name="idp38262560-bb"></a><code class="computeroutput">context_error</code> public member functions</h3>
+<a name="idp90732576"></a><h3>
+<a name="idp40416240-bb"></a><code class="computeroutput">context_error</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span> <a name="idp38263120-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a name="idp38264688-bb"></a><span class="identifier">what</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span> <a name="idp40416800-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a name="idp40418368-bb"></a><span class="identifier">what</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 </div>
@@ -66,7 +66,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="event.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.exception.context_error_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="extension_unsu_idp38272176.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="event.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../compute/reference.html#header.boost.compute.exception.context_error_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="extension_unsu_idp40425856.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

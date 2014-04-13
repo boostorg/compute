@@ -33,48 +33,48 @@
   <span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ptrdiff_t</span>        <a name="boost.compute.allocator.difference_type"></a><span class="identifier">difference_type</span><span class="special">;</span>
 
   <span class="comment">// <a class="link" href="allocator.html#boost.compute.allocatorconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="allocator.html#idp37488208-bb"><span class="identifier">allocator</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="allocator.html#idp37489632-bb"><span class="identifier">allocator</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> <a class="link" href="allocator.html#idp37490608-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="allocator.html#idp37491872-bb"><span class="special">~</span><span class="identifier">allocator</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="allocator.html#idp39641872-bb"><span class="identifier">allocator</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="allocator.html#idp39643296-bb"><span class="identifier">allocator</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> <a class="link" href="allocator.html#idp39644272-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="allocator.html#idp39645536-bb"><span class="special">~</span><span class="identifier">allocator</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="allocator.html#idp37481360-bb">public member functions</a></span>
-  <span class="identifier">pointer</span> <a class="link" href="allocator.html#idp37481920-bb"><span class="identifier">allocate</span></a><span class="special">(</span><span class="identifier">size_type</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="allocator.html#idp37483456-bb"><span class="identifier">deallocate</span></a><span class="special">(</span><span class="identifier">pointer</span><span class="special">,</span> <span class="identifier">size_type</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">size_type</span> <a class="link" href="allocator.html#idp37485680-bb"><span class="identifier">max_size</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="allocator.html#idp37486800-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="allocator.html#idp39635024-bb">public member functions</a></span>
+  <span class="identifier">pointer</span> <a class="link" href="allocator.html#idp39635584-bb"><span class="identifier">allocate</span></a><span class="special">(</span><span class="identifier">size_type</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="allocator.html#idp39637120-bb"><span class="identifier">deallocate</span></a><span class="special">(</span><span class="identifier">pointer</span><span class="special">,</span> <span class="identifier">size_type</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">size_type</span> <a class="link" href="allocator.html#idp39639344-bb"><span class="identifier">max_size</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="allocator.html#idp39640464-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="allocator.html#idp37492160-bb">protected member functions</a></span>
-  <span class="keyword">void</span> <a class="link" href="allocator.html#idp37492736-bb"><span class="identifier">set_mem_flags</span></a><span class="special">(</span><span class="identifier">cl_mem_flags</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="allocator.html#idp39645824-bb">protected member functions</a></span>
+  <span class="keyword">void</span> <a class="link" href="allocator.html#idp39646400-bb"><span class="identifier">set_mem_flags</span></a><span class="special">(</span><span class="identifier">cl_mem_flags</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp93831104"></a><h2>Description</h2>
+<a name="idp85231920"></a><h2>Description</h2>
 <div class="refsect2">
-<a name="idp93831520"></a><h3>
+<a name="idp85232336"></a><h3>
 <a name="boost.compute.allocatorconstruct-copy-destruct"></a><code class="computeroutput">allocator</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><a name="idp37488208-bb"></a><span class="identifier">allocator</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> context<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp37489632-bb"></a><span class="identifier">allocator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> <a name="idp37490608-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp37491872-bb"></a><span class="special">~</span><span class="identifier">allocator</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp39641872-bb"></a><span class="identifier">allocator</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">&amp;</span> context<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp39643296-bb"></a><span class="identifier">allocator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> <a name="idp39644272-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">allocator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp39645536-bb"></a><span class="special">~</span><span class="identifier">allocator</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp93862704"></a><h3>
-<a name="idp37481360-bb"></a><code class="computeroutput">allocator</code> public member functions</h3>
+<a name="idp85263424"></a><h3>
+<a name="idp39635024-bb"></a><code class="computeroutput">allocator</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><span class="identifier">pointer</span> <a name="idp37481920-bb"></a><span class="identifier">allocate</span><span class="special">(</span><span class="identifier">size_type</span> n<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp37483456-bb"></a><span class="identifier">deallocate</span><span class="special">(</span><span class="identifier">pointer</span> p<span class="special">,</span> <span class="identifier">size_type</span> n<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">size_type</span> <a name="idp37485680-bb"></a><span class="identifier">max_size</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a class="link" href="context.html" title="Class context">context</a> <a name="idp37486800-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">pointer</span> <a name="idp39635584-bb"></a><span class="identifier">allocate</span><span class="special">(</span><span class="identifier">size_type</span> n<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp39637120-bb"></a><span class="identifier">deallocate</span><span class="special">(</span><span class="identifier">pointer</span> p<span class="special">,</span> <span class="identifier">size_type</span> n<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">size_type</span> <a name="idp39639344-bb"></a><span class="identifier">max_size</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a class="link" href="context.html" title="Class context">context</a> <a name="idp39640464-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp93886464"></a><h3>
-<a name="idp37492160-bb"></a><code class="computeroutput">allocator</code> protected member functions</h3>
-<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp37492736-bb"></a><span class="identifier">set_mem_flags</span><span class="special">(</span><span class="identifier">cl_mem_flags</span> flags<span class="special">)</span><span class="special">;</span></pre></li></ol></div>
+<a name="idp85287040"></a><h3>
+<a name="idp39645824-bb"></a><code class="computeroutput">allocator</code> protected member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp39646400-bb"></a><span class="identifier">set_mem_flags</span><span class="special">(</span><span class="identifier">cl_mem_flags</span> flags<span class="special">)</span><span class="special">;</span></pre></li></ol></div>
 </div>
 </div>
 </div>
