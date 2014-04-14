@@ -37,6 +37,28 @@ using namespace boost::compute;
 
 [endsect]
 
+[section Installation]
+
+Boost.Compute can also be installed system-wide. After compiling, run the
+following command to install the Boost.Compute headers. By default, they will
+be installed under `/usr/local/include`.
+
+[pre
+make install
+]
+
+After installing, Boost.Compute can be used through cmake by adding the following
+to your `CMakeLists.txt`:
+
+[pre
+find_package(BoostCompute REQUIRED)
+include_directories(${BoostCompute_INCLUDE_DIRS})
+]
+
+Ensure you also find and setup the OpenCL libraries for your system.
+
+[endsect] [/ installation]
+
 [section Support]
 
 Bugs and issues can be reported to the

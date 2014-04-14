@@ -54,3 +54,19 @@ option(BOOST_COMPUTE_USE_OFFLINE_CACHE "Use offline cache for OpenCL program bin
 if(${BOOST_COMPUTE_USE_OFFLINE_CACHE})
     add_definitions(-DBOOST_COMPUTE_USE_OFFLINE_CACHE)
 endif()
+
+# configure cmake config file
+configure_file(
+  cmake/BoostComputeConfig.cmake.in
+  ${BoostCompute_BINARY_DIR}/BoostComputeConfig.cmake
+  @ONLY
+)
+
+# install cmake config file
+install(
+  FILES ${BoostCompute_BINARY_DIR}/BoostComputeConfig.cmake
+  DESTINATION share/cmake/BoostCompute
+)
+
+# install header files
+install(DIRECTORY include/boost DESTINATION include/compute)
