@@ -21,6 +21,7 @@
 <dt><span class="section"><a href="gettingstarted.html#boost_compute.gettingstarted.downloading">Downloading</a></span></dt>
 <dt><span class="section"><a href="gettingstarted.html#boost_compute.gettingstarted.compilation_and_usage">Compilation
       and Usage</a></span></dt>
+<dt><span class="section"><a href="gettingstarted.html#boost_compute.gettingstarted.installation">Installation</a></span></dt>
 <dt><span class="section"><a href="gettingstarted.html#boost_compute.gettingstarted.support">Support</a></span></dt>
 </dl></div>
 <div class="section">
@@ -73,6 +74,28 @@
 <pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">;</span>
 </pre>
 <p>
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_compute.gettingstarted.installation"></a><a class="link" href="gettingstarted.html#boost_compute.gettingstarted.installation" title="Installation">Installation</a>
+</h3></div></div></div>
+<p>
+        Boost.Compute can also be installed system-wide. After compiling, run the
+        following command to install the Boost.Compute headers. By default, they
+        will be installed under <code class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">local</span><span class="special">/</span><span class="identifier">include</span></code>.
+      </p>
+<pre class="programlisting">make install
+</pre>
+<p>
+        After installing, Boost.Compute can be used through cmake by adding the following
+        to your <code class="computeroutput"><span class="identifier">CMakeLists</span><span class="special">.</span><span class="identifier">txt</span></code>:
+      </p>
+<pre class="programlisting">find_package(BoostCompute REQUIRED)
+include_directories(${BoostCompute_INCLUDE_DIRS})
+</pre>
+<p>
+        Ensure you also find and setup the OpenCL libraries for your system.
       </p>
 </div>
 <div class="section">
