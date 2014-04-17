@@ -16,6 +16,7 @@
 
 #include <boost/config.hpp>
 #include <boost/mpl/for_each.hpp>
+#include <boost/mpl/size.hpp>
 #include <boost/mpl/transform.hpp>
 #include <boost/function_types/parameter_types.hpp>
 #include <boost/static_assert.hpp>
