@@ -33,6 +33,7 @@
 #include <boost/compute/random.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/types.hpp>
+#include <boost/compute/user_event.hpp>
 #include <boost/compute/version.hpp>
 #include <boost/compute/wait_list.hpp>
 

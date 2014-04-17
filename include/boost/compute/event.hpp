@@ -226,10 +226,11 @@ public:
         return m_event;
     }
 
+protected:
+    cl_event m_event;
+
 private:
     BOOST_COPYABLE_AND_MOVABLE(event)
-
-    cl_event m_event;
 };
 
 } // end compute namespace
