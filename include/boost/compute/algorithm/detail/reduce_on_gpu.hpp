@@ -34,6 +34,7 @@ inline void initial_reduce(InputIterator first,
                            const uint_ tpb,
                            command_queue &queue)
 {
+    (void) function;
     (void) reduce_kernel;
 
     typedef typename std::iterator_traits<InputIterator>::value_type Arg;
@@ -95,6 +96,8 @@ inline void initial_reduce(const buffer_iterator<T> &first,
                            const uint_ tpb,
                            command_queue &queue)
 {
+    (void) function;
+
     size_t count = std::distance(first, last);
 
     reduce_kernel.set_arg(0, first.get_buffer());
