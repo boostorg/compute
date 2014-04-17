@@ -192,7 +192,7 @@ public:
     }
 
     /// Builds the program with \p options.
-    cl_int build(const std::string &options = std::string())
+    void build(const std::string &options = std::string())
     {
         const char *options_string = 0;
 
@@ -218,8 +218,6 @@ public:
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
-
-        return ret;
     }
 
     /// Returns the build log.
