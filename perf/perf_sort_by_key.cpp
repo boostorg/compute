@@ -16,11 +16,15 @@
 #include <boost/compute/algorithm/sort_by_key.hpp>
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/types/builtin.hpp>
 
 #include "perf.hpp"
 
 int main(int argc, char *argv[])
 {
+    using boost::compute::int_;
+    using boost::compute::long_;
+
     perf_parse_args(argc, argv);
 
     std::cout << "size: " << PERF_N << std::endl;
@@ -38,8 +42,8 @@ int main(int argc, char *argv[])
     std::copy(host_keys.begin(), host_keys.end(), host_values.begin());
 
     // create vector on the device and copy the data
-    boost::compute::vector<int> device_keys(PERF_N, context);
-    boost::compute::vector<long> device_values(PERF_N, context);
+    boost::compute::vector<int_> device_keys(PERF_N, context);
+    boost::compute::vector<long_> device_values(PERF_N, context);
 
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
