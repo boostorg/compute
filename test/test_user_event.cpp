@@ -22,8 +22,6 @@ BOOST_AUTO_TEST_CASE(user_event)
 {
     boost::compute::user_event event(context);
     BOOST_CHECK(event.get() != cl_event());
-
-    cl_int status = event.get_status();
     BOOST_CHECK(event.get_status() != CL_COMPLETE);
 
     event.set_status(CL_COMPLETE);
