@@ -11,6 +11,7 @@
 #ifndef BOOST_COMPUTE_EVENT_HPP
 #define BOOST_COMPUTE_EVENT_HPP
 
+#include <boost/function.hpp>
 #include <boost/move/move.hpp>
 
 #include <boost/compute/cl.hpp>
@@ -206,6 +207,23 @@ public:
             BOOST_THROW_EXCEPTION(runtime_exception(ret));
         }
     }
+
+    /// Registers a generic function to be called when the event status
+    /// changes to \p status (by default \c CL_COMPLETE).
+    ///
+    /// The function specified by \p callback must be invokable with zero
+    /// arguments (e.g. \c callback()).
+    ///
+    /// \opencl_version_warning{1,1}
+    template<class Function>
+    void set_callback(Function callback, cl_int status = CL_COMPLETE)
+    {
+        set_callback(
+            event_callback_invoker,
+            status,
+            new boost::function<void()>(callback)
+        );
+    }
     #endif // CL_VERSION_1_1
 
     /// Returns \c true if the event is the same as \p other.
@@ -225,6 +243,21 @@ public:
     {
         return m_event;
     }
+
+private:
+    #ifdef CL_VERSION_1_1
+    /// \internal_
+    static void BOOST_COMPUTE_CL_CALLBACK
+    event_callback_invoker(cl_event, cl_int, void *user_data)
+    {
+        boost::function<void()> *callback =
+            static_cast<boost::function<void()> *>(user_data);
+
+        (*callback)();
+
+        delete callback;
+    }
+    #endif // CL_VERSION_1_1
 
 protected:
     cl_event m_event;
