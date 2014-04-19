@@ -17,8 +17,10 @@
 #include <boost/compute/cl.hpp>
 #include <boost/compute/config.hpp>
 #include <boost/compute/exception.hpp>
+#include <boost/compute/detail/duration.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
+#include <boost/compute/types/builtin.hpp>
 
 namespace boost {
 namespace compute {
@@ -169,6 +171,8 @@ public:
 
     /// Returns profiling information for the event.
     ///
+    /// \see event::duration()
+    ///
     /// \see_opencl_ref{clGetEventProfilingInfo}
     template<class T>
     T get_profiling_info(cl_profiling_info info) const
@@ -225,6 +229,25 @@ public:
         );
     }
     #endif // CL_VERSION_1_1
+
+    /// Returns the total duration of the event from \p start to \p end.
+    ///
+    /// For example, to print the number of milliseconds the event took to
+    /// execute:
+    /// \code
+    /// std::cout << event.duration<std::chrono::milliseconds>().count() << " ms" << std::endl;
+    /// \endcode
+    ///
+    /// \see event::get_profiling_info()
+    template<class Duration>
+    Duration duration(cl_profiling_info start = CL_PROFILING_COMMAND_START,
+                      cl_profiling_info end = CL_PROFILING_COMMAND_END) const
+    {
+        const ulong_ nanoseconds =
+            get_profiling_info<ulong_>(end) - get_profiling_info<ulong_>(start);
+
+        return detail::make_duration_from_nanoseconds(Duration(), nanoseconds);
+    }
 
     /// Returns \c true if the event is the same as \p other.
     bool operator==(const event &other) const

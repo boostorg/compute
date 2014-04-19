@@ -42,17 +42,10 @@ int main(int argc, char *argv[])
     // wait for copy to finish
     future.wait();
 
-    using boost::compute::ulong_;
+    // get elapsed time in nanoseconds
+    size_t elapsed =
+        future.get_event().duration<boost::chrono::nanoseconds>().count();
 
-    ulong_ start_time =
-        future.get_event().get_profiling_info<ulong_>(
-            boost::compute::event::profiling_command_start
-        );
-    ulong_ end_time =
-        future.get_event().get_profiling_info<ulong_>(
-            boost::compute::event::profiling_command_end
-        );
-    size_t elapsed = end_time - start_time;
     std::cout << "time: " << elapsed / 1e6 << " ms" << std::endl;
 
     float rate = (float(size * sizeof(int)) / elapsed) * 1000.f;

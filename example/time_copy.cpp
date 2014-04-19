@@ -31,44 +31,31 @@ int main()
     compute::context context(gpu);
 
     // create command queue with profiling enabled
-    compute::command_queue queue(context,
-                                 gpu,
-                                 compute::command_queue::enable_profiling);
+    compute::command_queue queue(
+        context, gpu, compute::command_queue::enable_profiling
+    );
 
     // generate random data on the host
-    std::vector<int> host_vector(100000);
+    std::vector<int> host_vector(16000000);
     std::generate(host_vector.begin(), host_vector.end(), rand);
 
     // create a vector on the device
     compute::vector<int> device_vector(host_vector.size(), context);
 
     // copy data from the host to the device
-    compute::future<void> future =
-        compute::copy_async(
-            host_vector.begin(),
-            host_vector.end(),
-            device_vector.begin(),
-            queue
-        );
+    compute::future<void> future = compute::copy_async(
+        host_vector.begin(), host_vector.end(), device_vector.begin(), queue
+    );
 
     // wait for copy to finish
     future.wait();
 
-    using compute::ulong_;
-
     // get elapsed time from event profiling information
-    ulong_ start_time =
-        future.get_event().get_profiling_info<ulong_>(
-            compute::event::profiling_command_start
-        );
-    ulong_ end_time =
-        future.get_event().get_profiling_info<ulong_>(
-            compute::event::profiling_command_end
-        );
-    ulong_ elapsed = end_time - start_time;
+    boost::chrono::milliseconds duration =
+        future.get_event().duration<boost::chrono::milliseconds>();
 
     // print elapsed time in milliseconds
-    std::cout << "time: " << elapsed / 1e6 << " ms" << std::endl;
+    std::cout << "time: " << duration.count() << " ms" << std::endl;
 
     return 0;
 }
