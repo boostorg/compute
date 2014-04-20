@@ -71,6 +71,7 @@
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/algorithm/transform_reduce.hpp>
 #include <boost/compute/algorithm/unique.hpp>
+#include <boost/compute/algorithm/unique_copy.hpp>
 #include <boost/compute/algorithm/upper_bound.hpp>
 
 #endif // BOOST_COMPUTE_ALGORITHM_HPP
