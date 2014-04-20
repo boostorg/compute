@@ -18,11 +18,70 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/program_cache.hpp>
 #include <boost/compute/detail/work_size.hpp>
+#include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 
 namespace boost {
 namespace compute {
 namespace detail {
+
+/// \internal
+/// body reduction inside a warp
+template<typename T,bool isNvidiaDevice>
+struct ReduceBody
+{
+    static std::string body()
+    {
+        std::stringstream k;
+        // local reduction
+        k << "for(int i = 1; i < TPB; i <<= 1){\n" <<
+             "   barrier(CLK_LOCAL_MEM_FENCE);\n"  <<
+             "   uint mask = (i << 1) - 1;\n"      <<
+             "   if((lid & mask) == 0){\n"         <<
+             "       scratch[lid] += scratch[lid+i];\n" <<
+             "   }\n" <<
+            "}\n";
+        return k.str();
+    }
+};
+
+/// \internal
+/// body reduction inside a warp
+/// for nvidia device we can use the "unsafe"
+/// memory optimisation
+template<typename T>
+struct ReduceBody<T,true>
+{
+    static std::string body()
+    {
+        std::stringstream k;
+        // local reduction
+        // we use TPB to compile only useful instruction
+        // local reduction when size is greater than warp size
+        k << "barrier(CLK_LOCAL_MEM_FENCE);\n" <<
+        "if(TPB >= 1024){\n" <<
+            "if(lid < 512) { sum += scratch[lid + 512]; scratch[lid] = sum;} barrier(CLK_LOCAL_MEM_FENCE);}\n" <<
+         "if(TPB >= 512){\n" <<
+            "if(lid < 256) { sum += scratch[lid + 256]; scratch[lid] = sum;} barrier(CLK_LOCAL_MEM_FENCE);}\n" <<
+         "if(TPB >= 256){\n" <<
+            "if(lid < 128) { sum += scratch[lid + 128]; scratch[lid] = sum;} barrier(CLK_LOCAL_MEM_FENCE);}\n" <<
+         "if(TPB >= 128){\n" <<
+            "if(lid < 64) { sum += scratch[lid + 64]; scratch[lid] = sum;} barrier(CLK_LOCAL_MEM_FENCE);} \n" <<
+
+        // warp reduction
+        "if(lid < 32){\n" <<
+            // volatile this way we don't need any barrier
+            "volatile __local " << type_name<T>() << " *lmem = scratch;\n" <<
+            "if(TPB >= 64) { lmem[lid] = sum = sum + lmem[lid+32];} \n" <<
+            "if(TPB >= 32) { lmem[lid] = sum = sum + lmem[lid+16];} \n" <<
+            "if(TPB >= 16) { lmem[lid] = sum = sum + lmem[lid+ 8];} \n" <<
+            "if(TPB >=  8) { lmem[lid] = sum = sum + lmem[lid+ 4];} \n" <<
+            "if(TPB >=  4) { lmem[lid] = sum = sum + lmem[lid+ 2];} \n" <<
+            "if(TPB >=  2) { lmem[lid] = sum = sum + lmem[lid+ 1];} \n" <<
+        "}\n";
+        return k.str();
+    }
+};
 
 template<class InputIterator, class Function>
 inline void initial_reduce(InputIterator first,
@@ -62,13 +121,7 @@ inline void initial_reduce(InputIterator first,
         "scratch[lid] = sum;\n" <<
 
         // local reduction
-        "for(int i = 1; i < TPB; i <<= 1){\n" <<
-        "    barrier(CLK_LOCAL_MEM_FENCE);\n" <<
-        "    uint mask = (i << 1) - 1;\n" <<
-        "    if((lid & mask) == 0){\n" <<
-        "        scratch[lid] += scratch[lid+i];\n" <<
-        "    }\n" <<
-        "}\n" <<
+        ReduceBody<T,false>::body() <<
 
         // write sum to output
         "if(lid == 0){\n" <<
@@ -118,45 +171,47 @@ inline void reduce_on_gpu(InputIterator first,
                           Function function,
                           command_queue &queue)
 {
-    const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
-        __kernel void reduce(__global const T *input,
-                             const uint offset,
-                             const uint size,
-                             __global T *output,
-                             const uint output_offset)
-        {
-            const uint block_offset = get_group_id(0) * VPT * TPB;
-            __global const T *block = input + offset + block_offset;
+    //retrive the vendor name
+    const device &device = queue.get_device();
+    const std::string &vendor = device.vendor();
+    //and we pass it to reduce_on_gpu
+    // we only check the 6 first caracter
+    bool isNvidia = (vendor.compare(0,6,"NVIDIA",0,6) == 0);
 
-            const uint lid = get_local_id(0);
+    detail::meta_kernel k("reduce");
+    k.add_arg<T*>("__global const","input");
+    k.add_arg<const uint>("offset");
+    k.add_arg<const uint>("count");
+    k.add_arg<T*>("__global","output");
+    k.add_arg<const uint>("output_offset");
 
-            __local T scratch[TPB];
+    k <<
+        k.decl<const uint_>("block_offset") << " = get_group_id(0) * VPT * TPB;\n" <<
+        "__global const " << type_name<T>() << " *block = input + offset + block_offset;\n" <<
+        k.decl<const uint_>("lid") << " = get_local_id(0);\n" <<
 
-            // private reduction
-            T sum = 0;
-            for(uint i = 0; i < VPT; i++){
-                if(block_offset + lid + i*TPB < size){
-                    sum += block[lid+i*TPB];
-                }
-            }
+        "__local " << type_name<T>() << " scratch[TPB];\n" <<
+        // private reduction
+        k.decl<T>("sum") << " = 0;\n" <<
+        "for(uint i = 0; i < VPT; i++){\n" <<
+        "    if(block_offset + lid + i*TPB < count){\n" <<
+        "        sum = sum + block[lid+i*TPB]; \n" <<
+        "    }\n" <<
+        "}\n" <<
 
-            scratch[lid] = sum;
+        "scratch[lid] = sum;\n";
 
-            // local reduction
-            for(int i = 1; i < TPB; i <<= 1){
-                barrier(CLK_LOCAL_MEM_FENCE);
-                uint mask = (i << 1) - 1;
-                if((lid & mask) == 0){
-                    scratch[lid] += scratch[lid+i];
-                }
-            }
+    // discrimination on vendor name
+    if(isNvidia)
+        k << ReduceBody<T,true>::body();
+    else
+        k << ReduceBody<T,false>::body();
 
-            // write sum to output
-            if(lid == 0){
-                output[output_offset + get_group_id(0)] = scratch[0];
-            }
-        }
-    );
+    k <<
+        // write sum to output
+         "if(lid == 0){\n" <<
+         "    output[output_offset + get_group_id(0)] = scratch[0];\n" <<
+         "}\n";
 
     uint_ vpt = 8;
     uint_ tpb = 128;
@@ -173,7 +228,7 @@ inline void reduce_on_gpu(InputIterator first,
         options << "-DT=" << type_name<T>()
                 << " -DVPT=" << vpt
                 << " -DTPB=" << tpb;
-        reduce_program = program::build_with_source(source, context, options.str());
+        reduce_program = program::build_with_source(k.source(), context, options.str());
 
         cache->insert(cache_key, reduce_program);
     }
