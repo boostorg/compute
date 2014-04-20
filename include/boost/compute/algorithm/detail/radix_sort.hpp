@@ -60,8 +60,8 @@ struct radix_sort_value_type<8>
 };
 
 const char radix_sort_source[] =
-"#define K2 (1 << K)\n"
-"#define RADIX_MASK ((((T)(1)) << K) - 1)\n"
+"#define K2_BITS (1 << K_BITS)\n"
+"#define RADIX_MASK ((((T)(1)) << K_BITS) - 1)\n"
 "#define SIGN_BIT ((sizeof(T) * CHAR_BIT) - 1)\n"
 
 "inline uint radix(const T x, const uint low_bit)\n"
@@ -88,7 +88,7 @@ const char radix_sort_source[] =
 "    const uint lid = get_local_id(0);\n"
 
      // zero local counts
-"    if(lid < K2){\n"
+"    if(lid < K2_BITS){\n"
 "        local_counts[lid] = 0;\n"
 "    }\n"
 "    barrier(CLK_LOCAL_MEM_FENCE);\n"
@@ -102,8 +102,8 @@ const char radix_sort_source[] =
 "    barrier(CLK_LOCAL_MEM_FENCE);\n"
 
      // write block-relative offsets
-"    if(lid < K2){\n"
-"        global_counts[K2*get_group_id(0) + lid] = local_counts[lid];\n"
+"    if(lid < K2_BITS){\n"
+"        global_counts[K2_BITS*get_group_id(0) + lid] = local_counts[lid];\n"
 
          // write global offsets
 "        if(get_group_id(0) == (get_num_groups(0) - 1)){\n"
@@ -117,11 +117,11 @@ const char radix_sort_source[] =
 "                   const uint block_count)\n"
 "{\n"
 "    __global const uint *last_block_offsets =\n"
-"        block_offsets + K2 * (block_count - 1);\n"
+"        block_offsets + K2_BITS * (block_count - 1);\n"
 
      // calculate and scan global_offsets
 "    uint sum = 0;\n"
-"    for(uint i = 0; i < K2; i++){\n"
+"    for(uint i = 0; i < K2_BITS; i++){\n"
 "        uint x = global_offsets[i] + last_block_offsets[i];\n"
 "        global_offsets[i] = sum;\n"
 "        sum += x;\n"
@@ -156,9 +156,9 @@ const char radix_sort_source[] =
 "    }\n"
 
      // copy block counts to local memory
-"    __local uint local_counts[(1 << K)];\n"
-"    if(lid < K2){\n"
-"        local_counts[lid] = counts[get_group_id(0) * K2 + lid];\n"
+"    __local uint local_counts[(1 << K_BITS)];\n"
+"    if(lid < K2_BITS){\n"
+"        local_counts[lid] = counts[get_group_id(0) * K2_BITS + lid];\n"
 "    }\n"
 
      // wait until local memory is ready
@@ -230,7 +230,7 @@ inline void radix_sort_impl(const buffer_iterator<T> first,
 
     if(!radix_sort_program.get()){
         std::stringstream options;
-        options << "-DK=" << k;
+        options << "-DK_BITS=" << k;
         options << " -DT=" << type_name<sort_type>();
         options << " -DBLOCK_SIZE=" << block_size;
 
