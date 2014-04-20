@@ -94,6 +94,7 @@ add_compute_test("algorithm.stable_sort" test_stable_sort.cpp)
 add_compute_test("algorithm.transform" test_transform.cpp)
 add_compute_test("algorithm.transform_reduce" test_transform_reduce.cpp)
 add_compute_test("algorithm.unique" test_unique.cpp)
+add_compute_test("algorithm.unique_copy" test_unique_copy.cpp)
 
 add_compute_test("container.allocator" test_allocator.cpp)
 add_compute_test("container.array" test_array.cpp)
