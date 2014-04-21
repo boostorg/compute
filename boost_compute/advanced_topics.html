@@ -68,9 +68,9 @@
         This can also be done more succinctly using the <code class="computeroutput"><a class="link" href="../BOOST_COMPUTE_FUNCTION.html" title="Macro BOOST_COMPUTE_FUNCTION">BOOST_COMPUTE_FUNCTION()</a></code>
         macro:
 </p>
-<pre class="programlisting"><span class="identifier">BOOST_COMPUTE_FUNCTION</span><span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">add_four</span><span class="special">,</span> <span class="special">(</span><span class="keyword">int</span><span class="special">),</span>
+<pre class="programlisting"><span class="identifier">BOOST_COMPUTE_FUNCTION</span><span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">add_four</span><span class="special">,</span> <span class="special">(</span><span class="keyword">int</span> <span class="identifier">x</span><span class="special">),</span>
 <span class="special">{</span>
-    <span class="keyword">return</span> <span class="identifier">_1</span> <span class="special">+</span> <span class="number">4</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="identifier">x</span> <span class="special">+</span> <span class="number">4</span><span class="special">;</span>
 <span class="special">});</span>
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">add_four</span><span class="special">);</span>
@@ -244,44 +244,31 @@
     <span class="identifier">compute</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">context</span><span class="special">(</span><span class="identifier">gpu</span><span class="special">);</span>
 
     <span class="comment">// create command queue with profiling enabled</span>
-    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">command_queue</span> <span class="identifier">queue</span><span class="special">(</span><span class="identifier">context</span><span class="special">,</span>
-                                 <span class="identifier">gpu</span><span class="special">,</span>
-                                 <span class="identifier">compute</span><span class="special">::</span><span class="identifier">command_queue</span><span class="special">::</span><span class="identifier">enable_profiling</span><span class="special">);</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">command_queue</span> <span class="identifier">queue</span><span class="special">(</span>
+        <span class="identifier">context</span><span class="special">,</span> <span class="identifier">gpu</span><span class="special">,</span> <span class="identifier">compute</span><span class="special">::</span><span class="identifier">command_queue</span><span class="special">::</span><span class="identifier">enable_profiling</span>
+    <span class="special">);</span>
 
     <span class="comment">// generate random data on the host</span>
-    <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">host_vector</span><span class="special">(</span><span class="number">100000</span><span class="special">);</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">host_vector</span><span class="special">(</span><span class="number">16000000</span><span class="special">);</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">generate</span><span class="special">(</span><span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">rand</span><span class="special">);</span>
 
     <span class="comment">// create a vector on the device</span>
     <span class="identifier">compute</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">device_vector</span><span class="special">(</span><span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">size</span><span class="special">(),</span> <span class="identifier">context</span><span class="special">);</span>
 
     <span class="comment">// copy data from the host to the device</span>
-    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">future</span><span class="special">&lt;</span><span class="keyword">void</span><span class="special">&gt;</span> <span class="identifier">future</span> <span class="special">=</span>
-        <span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy_async</span><span class="special">(</span>
-            <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
-            <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
-            <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
-            <span class="identifier">queue</span>
-        <span class="special">);</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">future</span><span class="special">&lt;</span><span class="keyword">void</span><span class="special">&gt;</span> <span class="identifier">future</span> <span class="special">=</span> <span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy_async</span><span class="special">(</span>
+        <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">queue</span>
+    <span class="special">);</span>
 
     <span class="comment">// wait for copy to finish</span>
     <span class="identifier">future</span><span class="special">.</span><span class="identifier">wait</span><span class="special">();</span>
 
-    <span class="keyword">using</span> <span class="identifier">compute</span><span class="special">::</span><span class="identifier">ulong_</span><span class="special">;</span>
-
     <span class="comment">// get elapsed time from event profiling information</span>
-    <span class="identifier">ulong_</span> <span class="identifier">start_time</span> <span class="special">=</span>
-        <span class="identifier">future</span><span class="special">.</span><span class="identifier">get_event</span><span class="special">().</span><span class="identifier">get_profiling_info</span><span class="special">&lt;</span><span class="identifier">ulong_</span><span class="special">&gt;(</span>
-            <span class="identifier">compute</span><span class="special">::</span><span class="identifier">event</span><span class="special">::</span><span class="identifier">profiling_command_start</span>
-        <span class="special">);</span>
-    <span class="identifier">ulong_</span> <span class="identifier">end_time</span> <span class="special">=</span>
-        <span class="identifier">future</span><span class="special">.</span><span class="identifier">get_event</span><span class="special">().</span><span class="identifier">get_profiling_info</span><span class="special">&lt;</span><span class="identifier">ulong_</span><span class="special">&gt;(</span>
-            <span class="identifier">compute</span><span class="special">::</span><span class="identifier">event</span><span class="special">::</span><span class="identifier">profiling_command_end</span>
-        <span class="special">);</span>
-    <span class="identifier">ulong_</span> <span class="identifier">elapsed</span> <span class="special">=</span> <span class="identifier">end_time</span> <span class="special">-</span> <span class="identifier">start_time</span><span class="special">;</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">chrono</span><span class="special">::</span><span class="identifier">milliseconds</span> <span class="identifier">duration</span> <span class="special">=</span>
+        <span class="identifier">future</span><span class="special">.</span><span class="identifier">get_event</span><span class="special">().</span><span class="identifier">duration</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">chrono</span><span class="special">::</span><span class="identifier">milliseconds</span><span class="special">&gt;();</span>
 
     <span class="comment">// print elapsed time in milliseconds</span>
-    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"time: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">elapsed</span> <span class="special">/</span> <span class="number">1e6</span> <span class="special">&lt;&lt;</span> <span class="string">" ms"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"time: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">duration</span><span class="special">.</span><span class="identifier">count</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">" ms"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 
     <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">}</span>

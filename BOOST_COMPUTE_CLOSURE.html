@@ -22,9 +22,9 @@
 <h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
 <div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="compute/reference.html#header.boost.compute.closure_hpp" title="Header &lt;boost/compute/closure.hpp&gt;">boost/compute/closure.hpp</a>&gt;
 
-</span>BOOST_COMPUTE_CLOSURE(return_type, name, args, capture, source)</pre></div>
+</span>BOOST_COMPUTE_CLOSURE(return_type, name, arguments, capture, source)</pre></div>
 <div class="refsect1">
-<a name="idp78921344"></a><h2>Description</h2>
+<a name="idp75891856"></a><h2>Description</h2>
 <p>Creates a closure function object with <code class="computeroutput">name</code> and <code class="computeroutput">source</code>.</p>
 <p>
 For example, to create a function which checks if a 2D point is contained in a circle of a given radius: </p>
@@ -33,9 +33,9 @@ For example, to create a function which checks if a 2D point is contained in a c
 
 <span class="comment">// create a closure function which returns true if the 2D point</span>
 <span class="comment">// argument is contained within a circle of the given radius</span>
-<span class="identifier">BOOST_COMPUTE_CLOSURE</span><span class="special">(</span><span class="keyword">bool</span><span class="special">,</span> <span class="identifier">is_in_circle</span><span class="special">,</span> <span class="special">(</span><span class="identifier">float2_</span><span class="special">)</span><span class="special">,</span> <span class="special">(</span><span class="identifier">radius</span><span class="special">)</span><span class="special">,</span>
+<span class="identifier">BOOST_COMPUTE_CLOSURE</span><span class="special">(</span><span class="keyword">bool</span><span class="special">,</span> <span class="identifier">is_in_circle</span><span class="special">,</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">float2_</span> <span class="identifier">p</span><span class="special">)</span><span class="special">,</span> <span class="special">(</span><span class="identifier">radius</span><span class="special">)</span><span class="special">,</span>
 <span class="special">{</span>
-    <span class="keyword">return</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">_1</span><span class="special">.</span><span class="identifier">x</span><span class="special">*</span><span class="identifier">_1</span><span class="special">.</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">_1</span><span class="special">.</span><span class="identifier">y</span><span class="special">*</span><span class="identifier">_1</span><span class="special">.</span><span class="identifier">y</span><span class="special">)</span> <span class="special">&lt;</span> <span class="identifier">radius</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">p</span><span class="special">.</span><span class="identifier">x</span><span class="special">*</span><span class="identifier">p</span><span class="special">.</span><span class="identifier">x</span> <span class="special">+</span> <span class="identifier">p</span><span class="special">.</span><span class="identifier">y</span><span class="special">*</span><span class="identifier">p</span><span class="special">.</span><span class="identifier">y</span><span class="special">)</span> <span class="special">&lt;</span> <span class="identifier">radius</span><span class="special">;</span>
 <span class="special">}</span><span class="special">)</span><span class="special">;</span>
 
 <span class="comment">// vector of 2D points</span>
@@ -58,8 +58,8 @@ For example, to create a function which checks if a 2D point is contained in a c
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><span class="term"><code class="computeroutput">args</code></span></p></td>
-<td><p>A list of argument types for the function. </p></td>
+<td><p><span class="term"><code class="computeroutput">arguments</code></span></p></td>
+<td><p>A list of arguments for the function. </p></td>
 </tr>
 <tr>
 <td><p><span class="term"><code class="computeroutput">capture</code></span></p></td>
