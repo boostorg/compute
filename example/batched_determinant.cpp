@@ -57,10 +57,8 @@ int main()
     );
 
     // function returning the determinant of a 4x4 matrix.
-    BOOST_COMPUTE_FUNCTION(float, determinant4x4, (float16_),
+    BOOST_COMPUTE_FUNCTION(float, determinant4x4, (const float16_ m),
     {
-        const float16 m = _1;
-
         return m.s0*m.s5*m.sa*m.sf + m.s0*m.s6*m.sb*m.sd + m.s0*m.s7*m.s9*m.se +
                m.s1*m.s4*m.sb*m.se + m.s1*m.s6*m.s8*m.sf + m.s1*m.s7*m.sa*m.sc +
                m.s2*m.s4*m.s9*m.sf + m.s2*m.s5*m.sb*m.sc + m.s2*m.s7*m.s8*m.sd +

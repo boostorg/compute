@@ -122,9 +122,9 @@ BOOST_AUTO_TEST_CASE(transform_custom_function)
     float data[] = { 9.0f, 7.0f, 5.0f, 3.0f };
     bc::vector<float> vector(data, data + 4, queue);
 
-    BOOST_COMPUTE_FUNCTION(float, pow3add4, (float),
+    BOOST_COMPUTE_FUNCTION(float, pow3add4, (float x),
     {
-        return pow(_1, 3.0f) + 4.0f;
+        return pow(x, 3.0f) + 4.0f;
     });
 
     bc::vector<float> result(4, context);
@@ -231,10 +231,10 @@ BOOST_AUTO_TEST_CASE(generate_fibonacci_sequence)
 
     boost::compute::vector<uint_> sequence(25, context);
 
-    BOOST_COMPUTE_FUNCTION(uint_, nth_fibonacci, (const uint_),
+    BOOST_COMPUTE_FUNCTION(uint_, nth_fibonacci, (const uint_ n),
     {
         const float golden_ratio = (1.f + sqrt(5.f)) / 2.f;
-        return floor(pown(golden_ratio, _1) / sqrt(5.f) + 0.5f);
+        return floor(pown(golden_ratio, n) / sqrt(5.f) + 0.5f);
     });
 
     boost::compute::transform(

@@ -45,10 +45,10 @@ int main()
 
     // function returning the number of bits set (aka population count or
     // popcount) using the "popc" inline ptx assembly instruction.
-    BOOST_COMPUTE_FUNCTION(uint_, nvidia_popc, (uint_),
+    BOOST_COMPUTE_FUNCTION(uint_, nvidia_popc, (uint_ x),
     {
         uint count;
-        asm("popc.b32 %0, %1;" : "=r"(count) : "r"(_1));
+        asm("popc.b32 %0, %1;" : "=r"(count) : "r"(x));
         return count;
     });
 

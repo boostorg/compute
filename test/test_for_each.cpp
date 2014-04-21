@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(for_each_nop)
     bc::vector<int> vector(4, context);
     bc::iota(vector.begin(), vector.end(), 0);
 
-    BOOST_COMPUTE_FUNCTION(void, nop, (int), {});
+    BOOST_COMPUTE_FUNCTION(void, nop, (int ignored), {});
 
     bc::for_each(vector.begin(), vector.end(), nop, queue);
 }

@@ -28,9 +28,9 @@ namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(add_three)
 {
-    BOOST_COMPUTE_FUNCTION(int, add_three, (int),
+    BOOST_COMPUTE_FUNCTION(int, add_three, (int x),
     {
-        return _1 + 3;
+        return x + 3;
     });
 
     int data[] = { 1, 2, 3, 4 };
@@ -44,13 +44,13 @@ BOOST_AUTO_TEST_CASE(add_three)
 
 BOOST_AUTO_TEST_CASE(sum_odd_values)
 {
-    BOOST_COMPUTE_FUNCTION(int, add_odd_value, (int, int),
+    BOOST_COMPUTE_FUNCTION(int, add_odd_value, (int sum, int value),
     {
-        if(_2 & 1){
-            return _1 + _2;
+        if(value & 1){
+            return sum + value;
         }
         else {
-            return _1 + 0;
+            return sum + 0;
         }
     });
 
@@ -74,9 +74,9 @@ BOOST_AUTO_TEST_CASE(sort_pairs)
     compute::copy(data.begin(), data.end(), vector.begin(), queue);
 
     // sort by first component
-    BOOST_COMPUTE_FUNCTION(bool, compare_first, (std::pair<int, float>, std::pair<int, float>),
+    BOOST_COMPUTE_FUNCTION(bool, compare_first, (std::pair<int, float> a, std::pair<int, float> b),
     {
-        return _1.first < _2.first;
+        return a.first < b.first;
     });
 
     compute::sort(vector.begin(), vector.end(), compare_first, queue);
@@ -86,9 +86,9 @@ BOOST_AUTO_TEST_CASE(sort_pairs)
     BOOST_CHECK(data[2] == std::make_pair(2, 1.0f));
 
     // sort by second component
-    BOOST_COMPUTE_FUNCTION(bool, compare_second, (std::pair<int, float>, std::pair<int, float>),
+    BOOST_COMPUTE_FUNCTION(bool, compare_second, (std::pair<int, float> a, std::pair<int, float> b),
     {
-        return _1.second < _2.second;
+        return a.second < b.second;
     });
 
     compute::sort(vector.begin(), vector.end(), compare_second, queue);
@@ -108,9 +108,9 @@ BOOST_AUTO_TEST_CASE(transform_zip_iterator)
 
     compute::vector<float> results(4, context);
 
-    BOOST_COMPUTE_FUNCTION(float, tuple_pown, (boost::tuple<float, int>),
+    BOOST_COMPUTE_FUNCTION(float, tuple_pown, (boost::tuple<float, int> x),
     {
-        return pown(boost_tuple_get(_1, 0), boost_tuple_get(_1, 1));
+        return pown(boost_tuple_get(x, 0), boost_tuple_get(x, 1));
     });
 
     compute::transform(

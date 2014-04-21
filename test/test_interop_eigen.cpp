@@ -75,13 +75,13 @@ BOOST_AUTO_TEST_CASE(multiply_matrix4)
         bcl::eigen_matrix4f_to_float16(matrix);
 
     // returns the result of M*x
-    BOOST_COMPUTE_CLOSURE(Eigen::Vector4f, transform4x4, (const Eigen::Vector4f), (M),
+    BOOST_COMPUTE_CLOSURE(Eigen::Vector4f, transform4x4, (const Eigen::Vector4f x), (M),
     {
         float4 r;
-        r.x = dot(M.s048c, _1);
-        r.y = dot(M.s159d, _1);
-        r.z = dot(M.s26ae, _1);
-        r.w = dot(M.s37bf, _1);
+        r.x = dot(M.s048c, x);
+        r.y = dot(M.s159d, x);
+        r.z = dot(M.s26ae, x);
+        r.w = dot(M.s37bf, x);
         return r;
     });
 

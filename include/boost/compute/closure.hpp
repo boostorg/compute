@@ -190,6 +190,13 @@ private:
 
 namespace detail {
 
+template<class Prototype, class ClosureTuple>
+struct make_closure_type
+{
+    typedef typename make_function_type<Prototype>::type FunctionType;
+    typedef closure<typename FunctionType::signature, ClosureTuple> type;
+};
+
 struct closure_signature_argument_inserter
 {
     closure_signature_argument_inserter(std::stringstream &s_,
@@ -230,7 +237,8 @@ struct closure_signature_argument_inserter
 
 template<class Signature, class CaptureTuple>
 inline std::string
-make_closure_declaration(const std::string &name,
+make_closure_declaration(const char *name,
+                         const char *arguments,
                          const CaptureTuple &capture,
                          const char *capture_string)
 {
@@ -246,7 +254,7 @@ make_closure_declaration(const std::string &name,
     s << "(";
 
     // insert function arguments
-    signature_argument_inserter i(s, arity_type::value);
+    signature_argument_inserter i(s, arguments, arity_type::value);
     mpl::for_each<
         typename mpl::transform<parameter_types, boost::add_pointer<mpl::_1>
     >::type>(i);
@@ -264,17 +272,20 @@ make_closure_declaration(const std::string &name,
 
 // used by the BOOST_COMPUTE_CLOSURE() macro to create a closure
 // function with the given signature, name, capture, and source.
-template<class Signature, class CaptureTuple>
-inline closure<Signature, CaptureTuple>
-make_closure_impl(const std::string &name,
+template<class Prototype, class CaptureTuple>
+inline typename make_closure_type<Prototype, CaptureTuple>::type
+make_closure_impl(const char *name,
+                  const char *arguments,
                   const CaptureTuple &capture,
                   const char *capture_string,
                   const std::string &source)
 {
     std::stringstream s;
-    s << make_closure_declaration<Signature>(name, capture, capture_string);
+    s << make_closure_declaration<Prototype>(name, arguments, capture, capture_string);
     s << source;
-    return closure<Signature, CaptureTuple>(name, capture, s.str());
+
+    typedef typename make_closure_type<Prototype, CaptureTuple>::type Closure;
+    return Closure(name, capture, s.str());
 }
 
 } // end detail namespace
@@ -285,7 +296,7 @@ make_closure_impl(const std::string &name,
 ///
 /// \param return_type The return type for the function.
 /// \param name The name of the function.
-/// \param args A list of argument types for the function.
+/// \param arguments A list of arguments for the function.
 /// \param capture A list of variables to capture.
 /// \param source The OpenCL C source code for the function.
 ///
@@ -297,9 +308,9 @@ make_closure_impl(const std::string &name,
 ///
 /// // create a closure function which returns true if the 2D point
 /// // argument is contained within a circle of the given radius
-/// BOOST_COMPUTE_CLOSURE(bool, is_in_circle, (float2_), (radius),
+/// BOOST_COMPUTE_CLOSURE(bool, is_in_circle, (const float2_ p), (radius),
 /// {
-///     return sqrt(_1.x*_1.x + _1.y*_1.y) < radius;
+///     return sqrt(p.x*p.x + p.y*p.y) < radius;
 /// });
 ///
 /// // vector of 2D points
@@ -313,14 +324,18 @@ make_closure_impl(const std::string &name,
 ///
 /// \see BOOST_COMPUTE_FUNCTION()
 #ifdef BOOST_COMPUTE_DOXYGEN_INVOKED
-#define BOOST_COMPUTE_CLOSURE(return_type, name, args, capture, source)
+#define BOOST_COMPUTE_CLOSURE(return_type, name, arguments, capture, source)
 #else
-#define BOOST_COMPUTE_CLOSURE(return_type, name, args, capture, ...) \
-    ::boost::compute::closure< \
-        return_type args, BOOST_TYPEOF(boost::make_tuple capture) \
-    > name = \
-        ::boost::compute::detail::make_closure_impl<return_type args>( \
-            #name, boost::make_tuple capture, #capture, #__VA_ARGS__ \
+#define BOOST_COMPUTE_CLOSURE(return_type, name, arguments, capture, ...) \
+    return_type BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_CLOSURE_DECL_, name) arguments; \
+    typename ::boost::compute::detail::make_closure_type< \
+        BOOST_TYPEOF(BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_CLOSURE_DECL_, name)), \
+        BOOST_TYPEOF(boost::make_tuple capture) \
+    >::type name = \
+        ::boost::compute::detail::make_closure_impl< \
+            BOOST_TYPEOF(BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_CLOSURE_DECL_, name)) \
+        >( \
+            #name, #arguments, boost::make_tuple capture, #capture, #__VA_ARGS__ \
         )
 #endif
 

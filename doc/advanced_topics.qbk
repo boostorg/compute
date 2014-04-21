@@ -28,9 +28,9 @@ boost::compute::transform(vector.begin(), vector.end(), vector.begin(), add_four
 This can also be done more succinctly using the [macroref BOOST_COMPUTE_FUNCTION
 BOOST_COMPUTE_FUNCTION()] macro:
 ``
-BOOST_COMPUTE_FUNCTION(int, add_four, (int),
+BOOST_COMPUTE_FUNCTION(int, add_four, (int x),
 {
-    return _1 + 4;
+    return x + 4;
 });
 
 boost::compute::transform(vector.begin(), vector.end(), vector.begin(), add_four);

@@ -13,18 +13,22 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
 
+#include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <boost/function_types/parameter_types.hpp>
+#include <boost/preprocessor/repetition.hpp>
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/transform.hpp>
-#include <boost/function_types/parameter_types.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/type_traits/add_pointer.hpp>
 #include <boost/type_traits/function_traits.hpp>
 
 #include <boost/compute/cl.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 
 namespace boost {
@@ -93,6 +97,9 @@ public:
     BOOST_STATIC_CONSTANT(
         size_t, arity = boost::function_traits<Signature>::arity
     );
+
+    /// \internal_
+    typedef Signature signature;
 
     /// Creates a new function object with \p name.
     function(const std::string &name)
@@ -204,19 +211,68 @@ make_function_from_source(const std::string &name, const std::string &source)
 
 namespace detail {
 
+// given a string containing the arguments declaration for a function
+// like: "(int a, const float b)", returns a vector containing the name
+// of each argument (e.g. ["a", "b"]).
+inline std::vector<std::string> parse_argument_names(const char *arguments)
+{
+    BOOST_ASSERT_MSG(
+        arguments[0] == '(' && arguments[std::strlen(arguments)-1] == ')',
+        "Arguments should start and end with parentheses"
+    );
+
+    std::vector<std::string> args;
+
+    size_t last_space = 0;
+    size_t skip_comma = 0;
+    for(size_t i = 1; i < std::strlen(arguments) - 2; i++){
+        const char c = arguments[i];
+
+        if(c == ' '){
+            last_space = i;
+        }
+        else if(c == ',' && !skip_comma){
+            std::string name(
+                arguments + last_space + 1, i - last_space - 1
+            );
+            args.push_back(name);
+        }
+        else if(c == '<'){
+            skip_comma++;
+        }
+        else if(c == '>'){
+            skip_comma--;
+        }
+    }
+
+    std::string last_argument(
+        arguments + last_space + 1, std::strlen(arguments) - last_space - 2
+    );
+    args.push_back(last_argument);
+
+    return args;
+}
+
 struct signature_argument_inserter
 {
-    signature_argument_inserter(std::stringstream &s_, size_t last)
+    signature_argument_inserter(std::stringstream &s_, const char *arguments, size_t last)
         : s(s_)
     {
         n = 0;
         m_last = last;
+
+        m_argument_names = parse_argument_names(arguments);
+
+        BOOST_ASSERT_MSG(
+            m_argument_names.size() == last,
+            "Wrong number of arguments"
+        );
     }
 
     template<class T>
     void operator()(const T*)
     {
-        s << type_name<T>() << " _" << n+1;
+        s << type_name<T>() << " " << m_argument_names[n];
         if(n+1 < m_last){
             s << ", ";
         }
@@ -226,39 +282,69 @@ struct signature_argument_inserter
     size_t n;
     size_t m_last;
     std::stringstream &s;
+    std::vector<std::string> m_argument_names;
 };
 
-template<class Signature>
-std::string make_function_declaration(const std::string &name)
+template<class Prototype>
+inline std::string make_function_declaration(const char *name, const char *arguments)
 {
     typedef typename
-        boost::function_traits<Signature>::result_type result_type;
+        boost::function_traits<Prototype>::result_type result_type;
     typedef typename
-        boost::function_types::parameter_types<Signature>::type parameter_types;
+        boost::function_types::parameter_types<Prototype>::type parameter_types;
     typedef typename
         mpl::size<parameter_types>::type arity_type;
 
     std::stringstream s;
-    signature_argument_inserter i(s, arity_type::value);
     s << "inline " << type_name<result_type>() << " " << name;
     s << "(";
-    mpl::for_each<
-        typename mpl::transform<parameter_types, boost::add_pointer<mpl::_1>
-    >::type>(i);
+
+    if(arity_type::value > 0){
+        signature_argument_inserter i(s, arguments, arity_type::value);
+        mpl::for_each<
+            typename mpl::transform<parameter_types, boost::add_pointer<mpl::_1>
+        >::type>(i);
+    }
+
     s << ")";
     return s.str();
 }
 
-// used by the BOOST_COMPUTE_FUNCTION() macro to create a function
-// with the given signature, name, and source.
-template<class Signature>
-inline function<Signature>
-make_function_impl(const std::string &name, const std::string &source)
+template<class Prototype>
+struct make_function_type;
+
+template<class ResultType>
+struct make_function_type<ResultType()>
 {
+    typedef function<ResultType()> type;
+};
+
+#define BOOST_COMPUTE_DETAIL_MAKE_FUNCTION_TYPE(z, n, unused) \
+    template<class ResultType, BOOST_PP_ENUM_PARAMS(n, class Arg)> \
+    struct make_function_type<ResultType(BOOST_PP_ENUM_PARAMS(n, Arg))> \
+    { \
+        typedef function<ResultType(BOOST_PP_ENUM_PARAMS(n, Arg))> type; \
+    };
+
+BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_DETAIL_MAKE_FUNCTION_TYPE, ~)
+
+#undef BOOST_COMPUTE_DETAIL_MAKE_FUNCTION_TYPE
+
+// used by the BOOST_COMPUTE_FUNCTION() macro to create a function
+// with the given signature, name, arguments, and source.
+template<class Prototype>
+inline typename make_function_type<Prototype>::type
+make_function_impl(const char *name, const char *arguments, const char *source)
+{
+    typedef typename make_function_type<Prototype>::type Function;
+
     std::stringstream s;
-    s << make_function_declaration<Signature>(name);
+    s << make_function_declaration<Prototype>(name, arguments);
     s << source;
-    return make_function_from_source<Signature>(name, s.str());
+
+    Function f(name);
+    f.set_source(s.str());
+    return f;
 }
 
 } // end detail namespace
@@ -269,12 +355,11 @@ make_function_impl(const std::string &name, const std::string &source)
 ///
 /// \param return_type The return type for the function.
 /// \param name The name of the function.
-/// \param args A list of argument types for the function.
+/// \param arguments A list of arguments for the function.
 /// \param source The OpenCL C source code for the function.
 ///
 /// The function declaration and signature are automatically created using
-/// the \p return_type, \p name, and \p args macro parameters. The argument
-/// names are \c _1 to \c _N (where \c N is the arity of the function).
+/// the \p return_type, \p name, and \p arguments macro parameters.
 ///
 /// The source code for the function is interpreted as OpenCL C99 source code
 /// which is stringified and passed to the OpenCL compiler when the function
@@ -282,28 +367,33 @@ make_function_impl(const std::string &name, const std::string &source)
 ///
 /// For example, to create a function which squares a number:
 /// \code
-/// BOOST_COMPUTE_FUNCTION(float, square, (float),
+/// BOOST_COMPUTE_FUNCTION(float, square, (float x),
 /// {
-///     return _1 * _1;
+///     return x * x;
 /// });
 /// \endcode
 ///
 /// And to create a function which sums two numbers:
 /// \code
-/// BOOST_COMPUTE_FUNCTION(int, sum_two, (int, int),
+/// BOOST_COMPUTE_FUNCTION(int, sum_two, (int x, int y),
 /// {
-///     return _1 + _2;
+///     return x + y;
 /// });
 /// \endcode
 ///
 /// \see BOOST_COMPUTE_CLOSURE()
 #ifdef BOOST_COMPUTE_DOXYGEN_INVOKED
-#define BOOST_COMPUTE_FUNCTION(return_type, name, args, source)
+#define BOOST_COMPUTE_FUNCTION(return_type, name, arguments, source)
 #else
-#define BOOST_COMPUTE_FUNCTION(return_type, name, args, ...) \
-    ::boost::compute::function<return_type args> name = \
-        ::boost::compute::detail::make_function_impl<return_type args>( \
-            #name, #__VA_ARGS__ \
+#define BOOST_COMPUTE_FUNCTION(return_type, name, arguments, ...) \
+    return_type BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_FUNCTION_DECL_, name) arguments; \
+    typename ::boost::compute::detail::make_function_type< \
+        BOOST_TYPEOF(BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_FUNCTION_DECL_, name)) \
+    >::type name = \
+        ::boost::compute::detail::make_function_impl< \
+            BOOST_TYPEOF(BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_FUNCTION_DECL_, name)) \
+        >( \
+            #name, #arguments, #__VA_ARGS__ \
         )
 #endif
 

@@ -49,16 +49,16 @@ int main()
     compute::copy(prices2.begin(), prices2.end(), gpu_prices2.begin(), queue);
 
     // function returning true if the second price is less than the first price
-    BOOST_COMPUTE_FUNCTION(bool, check_price_cross, (boost::tuple<float, float>),
+    BOOST_COMPUTE_FUNCTION(bool, check_price_cross, (boost::tuple<float, float> prices),
     {
         // first price
-        const float x = boost_tuple_get(_1, 0);
+        const float first = boost_tuple_get(prices, 0);
 
         // second price
-        const float y = boost_tuple_get(_1, 1);
+        const float second = boost_tuple_get(prices, 1);
 
         // return true if second price is less than first
-        return y < x;
+        return second < first;
     });
 
     // find cross point (should be 10.5)

@@ -24,9 +24,9 @@ namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(tabulate_negative_int)
 {
-    BOOST_COMPUTE_FUNCTION(int, negate, (int),
+    BOOST_COMPUTE_FUNCTION(int, negate, (int x),
     {
-        return -_1;
+        return -x;
     });
 
     compute::vector<int> vector(10, context);

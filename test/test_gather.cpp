@@ -43,9 +43,9 @@ BOOST_AUTO_TEST_CASE(copy_index_then_gather)
     compute::vector<int> input(data, data + 8, queue);
 
     // function returning true if the input is odd
-    BOOST_COMPUTE_FUNCTION(bool, is_odd, (int),
+    BOOST_COMPUTE_FUNCTION(bool, is_odd, (int x),
     {
-        return _1 % 2 != 0;
+        return x % 2 != 0;
     });
 
     // copy indices of all odd values

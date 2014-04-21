@@ -206,9 +206,9 @@ BOOST_AUTO_TEST_CASE(min_and_max)
     int data[] = { 5, 3, 1, 6, 4, 2 };
     boost::compute::vector<int> vector(data, data + 6, queue);
 
-    BOOST_COMPUTE_FUNCTION(int2_, min_and_max, (int2_, int),
+    BOOST_COMPUTE_FUNCTION(int2_, min_and_max, (int2_ accumulator, const int value),
     {
-        return (int2)(min(_1.x, _2), max(_1.y, _2));
+        return (int2)(min(accumulator.x, value), max(accumulator.y, value));
     });
 
     int2_ result = boost::compute::accumulate(

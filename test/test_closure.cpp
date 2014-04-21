@@ -26,9 +26,9 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(add_two)
 {
     int two = 2;
-    BOOST_COMPUTE_CLOSURE(int, add_two, (int), (two),
+    BOOST_COMPUTE_CLOSURE(int, add_two, (int x), (two),
     {
-        return _1 + two;
+        return x + two;
     });
 
     int data[] = { 1, 2, 3, 4 };
@@ -44,9 +44,9 @@ BOOST_AUTO_TEST_CASE(add_two_and_pi)
 {
     int two = 2;
     float pi = 3.14f;
-    BOOST_COMPUTE_CLOSURE(float, add_two_and_pi, (float), (two, pi),
+    BOOST_COMPUTE_CLOSURE(float, add_two_and_pi, (float x), (two, pi),
     {
-        return _1 + two + pi;
+        return x + two + pi;
     });
 
     float data[] = { 1.9f, 2.2f, 3.4f, 4.7f };

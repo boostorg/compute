@@ -60,9 +60,9 @@ bool compare_UDD_host(const UDD &lhs, const UDD &rhs)
 }
 
 // function to compate two UDD's on the device by their first component
-BOOST_COMPUTE_FUNCTION(bool, compare_UDD_device, (UDD, UDD),
+BOOST_COMPUTE_FUNCTION(bool, compare_UDD_device, (UDD lhs, UDD rhs),
 {
-    return _1.a < _2.a;
+    return lhs.a < rhs.a;
 });
 
 BOOST_AUTO_TEST_CASE(issue_11)

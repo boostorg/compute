@@ -62,9 +62,9 @@ BOOST_AUTO_TEST_CASE(atom_struct)
     compute::copy(atoms.begin(), atoms.end(), vec.begin(), queue);
 
     // find the oxygen atom
-    BOOST_COMPUTE_FUNCTION(bool, is_oxygen, (chemistry::Atom),
+    BOOST_COMPUTE_FUNCTION(bool, is_oxygen, (chemistry::Atom atom),
     {
-        return _1.number == 8;
+        return atom.number == 8;
     });
 
     compute::vector<chemistry::Atom>::iterator iter =
