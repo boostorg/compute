@@ -387,7 +387,7 @@ make_function_impl(const char *name, const char *arguments, const char *source)
 #else
 #define BOOST_COMPUTE_FUNCTION(return_type, name, arguments, ...) \
     return_type BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_FUNCTION_DECL_, name) arguments; \
-    typename ::boost::compute::detail::make_function_type< \
+    ::boost::compute::detail::make_function_type< \
         BOOST_TYPEOF(BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_FUNCTION_DECL_, name)) \
     >::type name = \
         ::boost::compute::detail::make_function_impl< \

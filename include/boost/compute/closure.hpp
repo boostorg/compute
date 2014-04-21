@@ -328,7 +328,7 @@ make_closure_impl(const char *name,
 #else
 #define BOOST_COMPUTE_CLOSURE(return_type, name, arguments, capture, ...) \
     return_type BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_CLOSURE_DECL_, name) arguments; \
-    typename ::boost::compute::detail::make_closure_type< \
+    ::boost::compute::detail::make_closure_type< \
         BOOST_TYPEOF(BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_CLOSURE_DECL_, name)), \
         BOOST_TYPEOF(boost::make_tuple capture) \
     >::type name = \
