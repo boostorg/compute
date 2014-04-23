@@ -58,10 +58,10 @@ void serial_polar_to_cartesian(const float *input, size_t n, float *output)
 }
 
 // converts from cartesian coordinates (x, y) to polar coordinates (magnitude, angle)
-BOOST_COMPUTE_FUNCTION(float2_, cartesian_to_polar, (float2_),
+BOOST_COMPUTE_FUNCTION(float2_, cartesian_to_polar, (float2_ p),
 {
-    float x = _1.x;
-    float y = _1.y;
+    float x = p.x;
+    float y = p.y;
 
     float magnitude = sqrt(x*x + y*y);
     float angle = atan2(y, x) * 180.f / M_PI;
@@ -70,10 +70,10 @@ BOOST_COMPUTE_FUNCTION(float2_, cartesian_to_polar, (float2_),
 });
 
 // converts from polar coordinates (magnitude, angle) to cartesian coordinates (x, y)
-BOOST_COMPUTE_FUNCTION(float2_, polar_to_cartesian, (float2_),
+BOOST_COMPUTE_FUNCTION(float2_, polar_to_cartesian, (float2_ p),
 {
-    float magnitude = _1.x;
-    float angle = _1.y;
+    float magnitude = p.x;
+    float angle = p.y;
 
     float x = magnitude * cos(angle);
     float y = magnitude * sin(angle);
