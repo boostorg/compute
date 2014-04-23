@@ -3,6 +3,7 @@ include_directories(../include)
 set(EXAMPLES
   black_scholes
   copy_data
+  fizz_buzz
   hello_world
   host_sort
   inline_ptx
