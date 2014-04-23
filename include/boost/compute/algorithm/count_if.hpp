@@ -14,7 +14,6 @@
 #include <boost/compute/device.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/algorithm/detail/count_if_with_atomics.hpp>
 #include <boost/compute/algorithm/detail/count_if_with_ballot.hpp>
 #include <boost/compute/algorithm/detail/count_if_with_reduce.hpp>
 #include <boost/compute/algorithm/detail/count_if_with_threads.hpp>
@@ -52,7 +51,7 @@ inline size_t count_if(InputIterator first,
             return detail::serial_count_if(first, last, predicate, queue);
         }
         else {
-            return detail::count_if_with_atomics(first, last, predicate, queue);
+            return detail::count_if_with_reduce(first, last, predicate, queue);
         }
     }
 }
