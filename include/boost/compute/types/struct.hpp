@@ -70,9 +70,9 @@ inline std::string adapt_struct_insert_member(T Struct::* member, const char *na
 /// boost::compute::vector<Particle> particles = ...
 ///
 /// // function to compare particles by their x-coordinate
-/// BOOST_COMPUTE_FUNCTION(bool, sort_by_x, (Particle, Particle),
+/// BOOST_COMPUTE_FUNCTION(bool, sort_by_x, (Particle a, Particle b),
 /// {
-///     return _1.x < _2.x;
+///     return a.x < b.x;
 /// });
 ///
 /// // sort particles by their x-coordinate
