@@ -175,9 +175,8 @@ inline void generic_reduce(InputIterator first,
         return;
     }
 
-    boost::compute::vector<result_type> value(1, context);
-
     if(device.type() & device::cpu){
+        boost::compute::vector<result_type> value(1, context);
         detail::serial_reduce(first, last, value.begin(), function, queue);
         boost::compute::copy_n(value.begin(), 1, result, queue);
     }
