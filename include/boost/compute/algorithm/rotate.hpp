@@ -18,10 +18,13 @@
 namespace boost {
 namespace compute {
 
-/// Performs left rotation such that element at \p n_first comes to the beginning
+/// Performs left rotation such that element at \p n_first comes to the
+/// beginning.
+///
+/// \see rotate_copy()
 template<class InputIterator>
-inline void rotate(InputIterator first, 
-                   InputIterator n_first, 
+inline void rotate(InputIterator first,
+                   InputIterator n_first,
                    InputIterator last,
                    command_queue &queue = system::default_queue())
 {
@@ -30,7 +33,7 @@ inline void rotate(InputIterator first,
     {
         return;
     }
-    
+
     //Handle others
     typedef typename std::iterator_traits<InputIterator>::value_type T;
 

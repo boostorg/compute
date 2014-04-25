@@ -34,7 +34,7 @@ class command_queue;
 /// object simply creates another reference to the underlying OpenCL memory
 /// object. To create an actual copy use the buffer::clone() method.
 ///
-/// \see vector
+/// \see vector<T>
 class buffer : public memory_object
 {
 public:
@@ -77,11 +77,13 @@ public:
     {
     }
 
+    /// \internal_
     buffer(BOOST_RV_REF(buffer) other)
         : memory_object(boost::move(static_cast<memory_object &>(other)))
     {
     }
 
+    /// Copies the buffer object from \p other to \c *this.
     buffer& operator=(const buffer &other)
     {
         if(this != &other){
@@ -91,6 +93,7 @@ public:
         return *this;
     }
 
+    /// \internal_
     buffer& operator=(BOOST_RV_REF(buffer) other)
     {
         if(this != &other){

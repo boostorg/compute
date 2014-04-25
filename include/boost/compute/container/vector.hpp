@@ -42,6 +42,14 @@ namespace compute {
 
 /// \class vector
 /// \brief A resizable array of values.
+///
+/// The vector<T> class stores a dynamic array of values. Internally, the data
+/// is stored in an OpenCL buffer object.
+///
+/// The internal storage is allocated in a specific OpenCL context which is
+/// passed as an argument to the constructor when the vector is created.
+///
+/// \see buffer
 template<class T, class Alloc = allocator<T> >
 class vector
 {

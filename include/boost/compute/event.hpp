@@ -87,6 +87,7 @@ public:
         }
     }
 
+    /// Makes a new event as a copy of \p other.
     event(const event &other)
         : m_event(other.m_event)
     {
@@ -95,12 +96,14 @@ public:
         }
     }
 
+    /// \internal_
     event(BOOST_RV_REF(event) other)
         : m_event(other.m_event)
     {
         other.m_event = 0;
     }
 
+    /// Copies the event object from \p other to \c *this.
     event& operator=(const event &other)
     {
         if(this != &other){
@@ -118,6 +121,7 @@ public:
         return *this;
     }
 
+    /// \internal_
     event& operator=(BOOST_RV_REF(event) other)
     {
         if(this != &other){

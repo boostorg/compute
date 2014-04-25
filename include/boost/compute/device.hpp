@@ -35,12 +35,9 @@ namespace compute {
 /// via the platform::devices() method.
 ///
 /// The default compute device for the system can be obtained with
-/// the system::default_device() method.
+/// the system::default_device() method. For example:
 ///
-/// For example:
-/// \code
-/// boost::compute::device gpu = boost::compute::system::default_device();
-/// \endcode
+/// \snippet test/test_device.cpp default_gpu
 ///
 /// \see platform, context, command_queue
 class device
@@ -83,12 +80,14 @@ public:
         #endif
     }
 
+    /// \internal_
     device(BOOST_RV_REF(device) other)
         : m_id(other.m_id)
     {
         other.m_id = 0;
     }
 
+    /// Copies the device from \p other to \c *this.
     device& operator=(const device &other)
     {
         if(this != &other){
@@ -110,6 +109,7 @@ public:
         return *this;
     }
 
+    /// \internal_
     device& operator=(BOOST_RV_REF(device) other)
     {
         if(this != &other){

@@ -253,15 +253,10 @@ inline void dispatch_reduce(InputIterator first,
 /// result argument. This allows for values to be reduced and copied
 /// to the host all with a single function call.
 ///
-/// For example, to calculate the sum of a vector of int's:
-/// \code
-/// // get/create vector of int's on the device
-/// boost:compute::vector<int> vec = ...
+/// For example, to calculate the sum of the values in a device vector and
+/// copy the result to a value on the host:
 ///
-/// // compute the sum
-/// int sum = 0;
-/// boost::compute::reduce(vec.begin(), vec.end(), &sum, queue);
-/// \endcode
+/// \snippet test/test_reduce.cpp sum_int
 ///
 /// \see accumulate()
 template<class InputIterator, class OutputIterator, class BinaryFunction>

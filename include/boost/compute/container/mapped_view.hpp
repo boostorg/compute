@@ -28,6 +28,18 @@ namespace compute {
 
 /// \class mapped_view
 /// \brief A mapped view of host memory.
+///
+/// The mapped_view class simplifies mapping host-memory to a compute
+/// device. This allows for host-allocated memory to be used with the
+/// Boost.Compute algorithms.
+///
+/// The following example shows how to map a simple C-array containing
+/// data on the host to the device and run the reduce() algorithm to
+/// calculate the sum:
+///
+/// \snippet test/test_mapped_view.cpp reduce
+///
+/// \see buffer
 template<class T>
 class mapped_view
 {
@@ -201,6 +213,7 @@ public:
     }
 
 private:
+    /// \internal_
     static buffer _make_mapped_buffer(T *host_ptr,
                                       size_t n,
                                       const context &context)
@@ -213,6 +226,7 @@ private:
         );
     }
 
+    /// \internal_
     static buffer _make_mapped_buffer(const T *host_ptr,
                                       size_t n,
                                       const context &context)

@@ -23,9 +23,7 @@ namespace compute {
 /// \p value.
 ///
 /// For example, the following code:
-/// \code
-/// boost::compute::iota(vec.begin(), vec.end(), 0, queue);
-/// \endcode
+/// \snippet test/test_iota.cpp iota
 ///
 /// Will fill \c vec with the values (\c 0, \c 1, \c 2, \c ...).
 template<class BufferIterator, class T>

@@ -43,7 +43,7 @@ namespace compute {
 /// \class program
 /// \brief A compute program.
 ///
-/// The program class represents a compute program.
+/// The program class represents an OpenCL program.
 ///
 /// \see kernel
 class program
@@ -74,12 +74,14 @@ public:
         }
     }
 
+    /// \internal_
     program(BOOST_RV_REF(program) other)
         : m_program(other.m_program)
     {
         other.m_program = 0;
     }
 
+    /// Copies the program object from \p other to \c *this.
     program& operator=(const program &other)
     {
         if(this != &other){
@@ -97,6 +99,7 @@ public:
         return *this;
     }
 
+    /// \internal_
     program& operator=(BOOST_RV_REF(program) other)
     {
         if(this != &other){

@@ -27,6 +27,7 @@ doxygen autodoc
     ../include/boost/compute/program.hpp
     ../include/boost/compute/source.hpp
     ../include/boost/compute/system.hpp
+    ../include/boost/compute/user_event.hpp
     ../include/boost/compute/version.hpp
     ../include/boost/compute/wait_list.hpp
 
@@ -71,6 +72,7 @@ doxygen autodoc
     <doxygen:param>EXPAND_ONLY_PREDEF=YES
     <doxygen:param>SORT_MEMBER_DOCS=NO
     <doxygen:param>TAB_SIZE=4
+    <doxygen:param>EXAMPLE_PATH=../
     <doxygen:param>PREDEFINED=BOOST_COMPUTE_DOXYGEN_INVOKED
     <doxygen:param>"ALIASES= \\
       internal_=\"INTERNAL ONLY\" \\

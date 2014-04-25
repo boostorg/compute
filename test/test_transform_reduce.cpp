@@ -21,20 +21,21 @@
 
 namespace compute = boost::compute;
 
-BOOST_AUTO_TEST_CASE(sum_abs_int)
+BOOST_AUTO_TEST_CASE(sum_abs_int_doctest)
 {
-    int data[] = { 1, -2, -3, -4, 5 };
-    compute::vector<int> vector(data, data + 5, queue);
+    using boost::compute::abs;
+    using boost::compute::plus;
 
-    int sum;
-    compute::transform_reduce(
-        vector.begin(),
-        vector.end(),
-        &sum,
-        compute::abs<int>(),
-        compute::plus<int>(),
-        queue
-    );
+    int data[] = { 1, -2, -3, -4, 5 };
+    compute::vector<int> vec(data, data + 5, queue);
+
+//! [sum_abs_int]
+int sum = 0;
+boost::compute::transform_reduce(
+    vec.begin(), vec.end(), &sum, abs<int>(), plus<int>(), queue
+);
+//! [sum_abs_int]
+
     BOOST_CHECK_EQUAL(sum, 15);
 }
 

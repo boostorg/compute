@@ -319,6 +319,7 @@ struct make_function_type<ResultType()>
     typedef function<ResultType()> type;
 };
 
+/// \internal_
 #define BOOST_COMPUTE_DETAIL_MAKE_FUNCTION_TYPE(z, n, unused) \
     template<class ResultType, BOOST_PP_ENUM_PARAMS(n, class Arg)> \
     struct make_function_type<ResultType(BOOST_PP_ENUM_PARAMS(n, Arg))> \

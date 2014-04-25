@@ -52,13 +52,18 @@ BOOST_AUTO_TEST_CASE(sort)
     view.unmap(queue);
 }
 
-BOOST_AUTO_TEST_CASE(reduce)
+BOOST_AUTO_TEST_CASE(mapped_view_reduce_doctest)
 {
-    int data[] = { 5, 2, 3, 1, 8, 7, 4, 9 };
-    compute::mapped_view<int> view(data, 8, context);
+//! [reduce]
+// create data array on the host
+int data[] = { 5, 2, 3, 1, 8, 7, 4, 9 };
+boost::compute::mapped_view<int> view(data, 8, context);
 
-    int sum = 0;
-    compute::reduce(view.begin(), view.end(), &sum, queue);
+// use reduce() to calculate the sum on the device
+int sum = 0;
+boost::compute::reduce(view.begin(), view.end(), &sum, queue);
+//! [reduce]
+
     BOOST_CHECK_EQUAL(sum, 39);
 }
 

@@ -24,6 +24,13 @@ namespace compute {
 /// Transforms each value in the range [\p first, \p last) with the unary
 /// \p transform_function and then reduces each transformed value with
 /// \p reduce_function.
+///
+/// For example, to calculate the sum of the absolute values of a vector
+/// of integers:
+///
+/// \snippet test/test_transform_reduce.cpp sum_abs_int
+///
+/// \see reduce(), inner_product()
 template<class InputIterator,
          class OutputIterator,
          class UnaryTransformFunction,

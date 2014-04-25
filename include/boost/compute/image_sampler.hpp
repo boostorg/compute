@@ -72,6 +72,7 @@ public:
         }
     }
 
+    /// \internal_
     image_sampler(BOOST_RV_REF(image_sampler) other)
         : m_sampler(other.m_sampler)
     {
@@ -95,6 +96,7 @@ public:
         return *this;
     }
 
+    /// \internal_
     image_sampler& operator=(BOOST_RV_REF(image_sampler) other)
     {
         if(this != &other){

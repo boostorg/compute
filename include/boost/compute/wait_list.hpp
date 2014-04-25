@@ -23,6 +23,19 @@ template<class T> class future;
 /// \class wait_list
 /// \brief Stores a list of events.
 ///
+/// The wait_list class stores a set of event objects and can be used to
+/// specify dependencies for OpenCL operations or to wait on the host until
+/// all of the events have completed.
+///
+/// This class also provides convenience fnuctions for interacting with
+/// OpenCL C APIs which typically accept event dependencies as a \c cl_event*
+/// pointer and a \c cl_uint size. For example:
+/// \code
+/// wait_list events = ...;
+///
+/// clEnqueueNDRangeKernel(..., events.get_event_ptr(), events.size(), ...);
+/// \endcode
+///
 /// \see event, future<T>
 class wait_list
 {
@@ -98,7 +111,7 @@ public:
         insert(future.get_event());
     }
 
-    /// Blocks until the events in the wait-list have completed.
+    /// Blocks until all of the events in the wait-list have completed.
     ///
     /// Does nothing if the wait-list is empty.
     void wait()

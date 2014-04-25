@@ -5,6 +5,9 @@
 The hello world example gives a simple application that prints the name of
 the default compute device on the system.
 
+The [classref boost::compute::system] class provides access to the OpenCL
+platforms and devices present on the host system.
+
 Compute devices are represented with the
 [classref boost::compute::device device] class.
 

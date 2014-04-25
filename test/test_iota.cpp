@@ -38,6 +38,17 @@ BOOST_AUTO_TEST_CASE(iota_int)
     CHECK_RANGE_EQUAL(int, 4, vector, (4, 5, -5, -4));
 }
 
+BOOST_AUTO_TEST_CASE(iota_doctest)
+{
+    boost::compute::vector<int> vec(3, context);
+
+//! [iota]
+boost::compute::iota(vec.begin(), vec.end(), 0, queue);
+//! [iota]
+
+    CHECK_RANGE_EQUAL(int, 3, vec, (0, 1, 2));
+}
+
 BOOST_AUTO_TEST_CASE(iota_permutation_iterator)
 {
     bc::vector<int> output(5);

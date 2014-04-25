@@ -39,6 +39,19 @@ BOOST_AUTO_TEST_CASE(reduce_int)
     BOOST_CHECK_EQUAL(product, 9945);
 }
 
+BOOST_AUTO_TEST_CASE(reduce_doctest)
+{
+    int data[] = { 1, 2, 3, 4 };
+    boost::compute::vector<int> vec(data, data + 4, queue);
+
+//! [sum_int]
+int sum = 0;
+boost::compute::reduce(vec.begin(), vec.end(), &sum, queue);
+//! [sum_int]
+
+    BOOST_CHECK_EQUAL(sum, 10);
+}
+
 BOOST_AUTO_TEST_CASE(reduce_twos)
 {
     using compute::uint_;

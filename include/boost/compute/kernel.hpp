@@ -37,7 +37,7 @@ template<class T> struct set_kernel_arg;
 /// \class kernel
 /// \brief A compute kernel.
 ///
-/// \see program
+/// \see command_queue, program
 class kernel
 {
 public:
@@ -83,12 +83,14 @@ public:
         }
     }
 
+    /// \internal_
     kernel(BOOST_RV_REF(kernel) other)
         : m_kernel(other.m_kernel)
     {
         other.m_kernel = 0;
     }
 
+    /// Copies the kernel object from \p other to \c *this.
     kernel& operator=(const kernel &other)
     {
         if(this != &other){
@@ -106,6 +108,7 @@ public:
         return *this;
     }
 
+    /// \internal_
     kernel& operator=(BOOST_RV_REF(kernel) other)
     {
         if(this != &other){

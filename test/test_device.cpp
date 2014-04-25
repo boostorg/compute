@@ -23,6 +23,15 @@ BOOST_AUTO_TEST_CASE(null_device)
     BOOST_CHECK(null.id() == cl_device_id());
 }
 
+BOOST_AUTO_TEST_CASE(default_device_doctest)
+{
+//! [default_gpu]
+boost::compute::device gpu = boost::compute::system::default_device();
+//! [default_gpu]
+
+    BOOST_CHECK(gpu.id());
+}
+
 BOOST_AUTO_TEST_CASE(get_device_name)
 {
     boost::compute::device gpu = boost::compute::system::default_device();

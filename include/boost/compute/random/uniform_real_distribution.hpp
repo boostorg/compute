@@ -70,6 +70,13 @@ struct scale_random
 
 /// \class uniform_real_distribution
 /// \brief Produces uniformily distributed random floating-point numbers.
+///
+/// The following example shows how to setup a uniform real distribution to
+/// produce random \c float values between \c 1 and \c 100.
+///
+/// \snippet test/test_uniform_real_distribution.cpp generate
+///
+/// \see default_random_engine
 template<class RealType = float>
 class uniform_real_distribution
 {

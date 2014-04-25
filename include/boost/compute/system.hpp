@@ -30,11 +30,32 @@ namespace compute {
 /// \class system
 /// \brief Provides access to platforms and devices on the system.
 ///
+/// The system class contains a set of static functions which provide access to
+/// the OpenCL platforms and compute devices on the host system.
+///
+/// The default_device() convenience method automatically selects and returns
+/// the "best" compute device for the system following a set of heuristics and
+/// enviornemnt variables. This simplifies setup of the OpenCL enviornment.
+///
 /// \see platform, device, context
 class system
 {
 public:
     /// Returns the default compute device for the system.
+    ///
+    /// The default device is selected based on a set of heuristics and can be
+    /// influenced using one of the following environment variables:
+    ///
+    /// \li \c BOOST_COMPUTE_DEFAULT_DEVICE -
+    ///        name of the compute device (e.g. "GTX TITAN")
+    /// \li \c BOOST_COMPUTE_DEFAULT_PLATFORM -
+    ///        name of the platform (e.g. "NVIDIA CUDA")
+    /// \li \c BOOST_COMPUTE_DEFAULT_VENDOR -
+    ///        name of the device vendor (e.g. "NVIDIA")
+    ///
+    /// The default device is determined once on the first time this function
+    /// is called. Calling this function multiple times will always result in
+    /// the same device being returned.
     static device default_device()
     {
         static device default_device = find_default_device();
@@ -56,6 +77,14 @@ public:
 
     /// Returns a vector containing all of the compute devices on
     /// the system.
+    ///
+    /// For example, to print out the name of each OpenCL-capable device
+    /// available on the system:
+    /// \code
+    /// for(const auto &device : boost::compute::system::devices()){
+    ///     std::cout << device.name() << std::endl;
+    /// }
+    /// \endcode
     static std::vector<device> devices()
     {
         std::vector<device> devices;
@@ -82,6 +111,13 @@ public:
     }
 
     /// Returns the default context for the system.
+    ///
+    /// The default context is created for the default device on the system
+    /// (as returned by default_device()).
+    ///
+    /// The default context is created once on the first time this function is
+    /// called. Calling this function multiple times will always result in the
+    /// same context object being returned.
     static context default_context()
     {
         static context default_context(default_device());
@@ -99,12 +135,25 @@ public:
 
     /// Blocks until all outstanding computations on the default
     /// command queue are complete.
+    ///
+    /// This is equivalent to:
+    /// \code
+    /// system::default_queue().finish();
+    /// \endcode
     static void finish()
     {
         default_queue().finish();
     }
 
-    /// Returns a vector of all the compute platforms on the system.
+    /// Returns a vector containing each of the OpenCL platforms on the system.
+    ///
+    /// For example, to print out the name of each OpenCL platform present on
+    /// the system:
+    /// \code
+    /// for(const auto &platform : boost::compute::system::platforms()){
+    ///     std::cout << platform.name() << std::endl;
+    /// }
+    /// \endcode
     static std::vector<platform> platforms()
     {
         cl_uint count = 0;

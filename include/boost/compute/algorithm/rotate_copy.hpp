@@ -18,10 +18,12 @@ namespace boost {
 namespace compute {
 
 /// Performs left rotation such that element at n_first comes to the
-/// beginning and the output is stored in range starting at result
+/// beginning and the output is stored in range starting at result.
+///
+/// \see rotate()
 template<class InputIterator, class OutputIterator>
-inline void rotate_copy(InputIterator first, 
-                        InputIterator n_first, 
+inline void rotate_copy(InputIterator first,
+                        InputIterator n_first,
                         InputIterator last,
                         OutputIterator result,
                         command_queue &queue = system::default_queue())

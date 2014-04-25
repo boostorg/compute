@@ -111,12 +111,14 @@ public:
         }
     }
 
+    /// \internal_
     command_queue(BOOST_RV_REF(command_queue) other)
         : m_queue(other.m_queue)
     {
         other.m_queue = 0;
     }
 
+    /// Copies the command queue object from \p other to \c *this.
     command_queue& operator=(const command_queue &other)
     {
         if(this != &other){
@@ -134,6 +136,7 @@ public:
         return *this;
     }
 
+    /// \internal_
     command_queue& operator=(BOOST_RV_REF(command_queue) other)
     {
         if(this != &other){
