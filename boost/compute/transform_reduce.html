@@ -39,8 +39,19 @@
                         <span class="identifier">BinaryReduceFunction</span> reduce_function<span class="special">,</span> 
                         <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue <span class="special">=</span> <span class="identifier">system</span><span class="special">::</span><span class="identifier">default_queue</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp75555824"></a><h2>Description</h2>
-<p>Transforms each value in the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) with the unary <code class="computeroutput">transform_function</code> and then reduces each transformed value with <code class="computeroutput">reduce_function</code>. </p>
+<a name="idp80437472"></a><h2>Description</h2>
+<p>Transforms each value in the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) with the unary <code class="computeroutput">transform_function</code> and then reduces each transformed value with <code class="computeroutput">reduce_function</code>.</p>
+<p>For example, to calculate the sum of the absolute values of a vector of integers:</p>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">transform_reduce</span><span class="special">(</span>
+    <span class="identifier">vec</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">vec</span><span class="special">.</span><span class="identifier">end</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">sum</span><span class="special">,</span> <span class="identifier">abs</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">plus</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">queue</span>
+<span class="special">)</span><span class="special">;</span>
+</pre>
+<p> </p>
+<p><span class="bold"><strong>See Also:</strong></span></p>
+<p>reduce(), inner_product() </p>
+<p>
+</p>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
