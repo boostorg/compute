@@ -285,13 +285,13 @@ struct signature_argument_inserter
     std::vector<std::string> m_argument_names;
 };
 
-template<class Prototype>
+template<class Signature>
 inline std::string make_function_declaration(const char *name, const char *arguments)
 {
     typedef typename
-        boost::function_traits<Prototype>::result_type result_type;
+        boost::function_traits<Signature>::result_type result_type;
     typedef typename
-        boost::function_types::parameter_types<Prototype>::type parameter_types;
+        boost::function_types::parameter_types<Signature>::type parameter_types;
     typedef typename
         mpl::size<parameter_types>::type arity_type;
 
@@ -310,42 +310,17 @@ inline std::string make_function_declaration(const char *name, const char *argum
     return s.str();
 }
 
-template<class Prototype>
-struct make_function_type;
-
-template<class ResultType>
-struct make_function_type<ResultType()>
-{
-    typedef function<ResultType()> type;
-};
-
-/// \internal_
-#define BOOST_COMPUTE_DETAIL_MAKE_FUNCTION_TYPE(z, n, unused) \
-    template<class ResultType, BOOST_PP_ENUM_PARAMS(n, class Arg)> \
-    struct make_function_type<ResultType(BOOST_PP_ENUM_PARAMS(n, Arg))> \
-    { \
-        typedef function<ResultType(BOOST_PP_ENUM_PARAMS(n, Arg))> type; \
-    };
-
-BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_DETAIL_MAKE_FUNCTION_TYPE, ~)
-
-#undef BOOST_COMPUTE_DETAIL_MAKE_FUNCTION_TYPE
-
 // used by the BOOST_COMPUTE_FUNCTION() macro to create a function
 // with the given signature, name, arguments, and source.
-template<class Prototype>
-inline typename make_function_type<Prototype>::type
+template<class Signature>
+inline function<Signature>
 make_function_impl(const char *name, const char *arguments, const char *source)
 {
-    typedef typename make_function_type<Prototype>::type Function;
-
     std::stringstream s;
-    s << make_function_declaration<Prototype>(name, arguments);
+    s << make_function_declaration<Signature>(name, arguments);
     s << source;
 
-    Function f(name);
-    f.set_source(s.str());
-    return f;
+    return make_function_from_source<Signature>(name, s.str());
 }
 
 } // end detail namespace
@@ -387,13 +362,8 @@ make_function_impl(const char *name, const char *arguments, const char *source)
 #define BOOST_COMPUTE_FUNCTION(return_type, name, arguments, source)
 #else
 #define BOOST_COMPUTE_FUNCTION(return_type, name, arguments, ...) \
-    return_type BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_FUNCTION_DECL_, name) arguments; \
-    ::boost::compute::detail::make_function_type< \
-        BOOST_TYPEOF(BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_FUNCTION_DECL_, name)) \
-    >::type name = \
-        ::boost::compute::detail::make_function_impl< \
-            BOOST_TYPEOF(BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_FUNCTION_DECL_, name)) \
-        >( \
+    ::boost::compute::function<return_type arguments> name = \
+        ::boost::compute::detail::make_function_impl<return_type arguments>( \
             #name, #arguments, #__VA_ARGS__ \
         )
 #endif

@@ -133,4 +133,52 @@ BOOST_AUTO_TEST_CASE(transform_zip_iterator)
     BOOST_CHECK_CLOSE(results_data[3], 65536.f, 1e-4);
 }
 
+static BOOST_COMPUTE_FUNCTION(int, static_function, (int x),
+{
+    return x + 5;
+});
+
+BOOST_AUTO_TEST_CASE(test_static_function)
+{
+    int data[] = { 1, 2, 3, 4};
+    compute::vector<int> vec(data, data + 4, queue);
+
+    compute::transform(
+        vec.begin(), vec.end(), vec.begin(), static_function, queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, vec, (6, 7, 8, 9));
+}
+
+template<class T>
+inline compute::function<T(T)> make_negate_function()
+{
+    BOOST_COMPUTE_FUNCTION(T, negate, (const T x),
+    {
+        return -x;
+    });
+
+    return negate;
+}
+
+BOOST_AUTO_TEST_CASE(test_templated_function)
+{
+    int int_data[] = { 1, 2, 3, 4 };
+    compute::vector<int> int_vec(int_data, int_data + 4, queue);
+
+    compute::function<int(int)> negate_int = make_negate_function<int>();
+    compute::transform(
+        int_vec.begin(), int_vec.end(), int_vec.begin(), negate_int, queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, int_vec, (-1, -2, -3, -4));
+
+    float float_data[] = { 1.1f, 2.2f, 3.3f, 4.4f };
+    compute::vector<float> float_vec(float_data, float_data + 4, queue);
+
+    compute::function<float(float)> negate_float = make_negate_function<float>();
+    compute::transform(
+        float_vec.begin(), float_vec.end(), float_vec.begin(), negate_float, queue
+    );
+    CHECK_RANGE_EQUAL(float, 4, float_vec, (-1.1f, -2.2f, -3.3f, -4.4f));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

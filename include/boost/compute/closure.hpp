@@ -190,13 +190,6 @@ private:
 
 namespace detail {
 
-template<class Prototype, class ClosureTuple>
-struct make_closure_type
-{
-    typedef typename make_function_type<Prototype>::type FunctionType;
-    typedef closure<typename FunctionType::signature, ClosureTuple> type;
-};
-
 struct closure_signature_argument_inserter
 {
     closure_signature_argument_inserter(std::stringstream &s_,
@@ -272,8 +265,8 @@ make_closure_declaration(const char *name,
 
 // used by the BOOST_COMPUTE_CLOSURE() macro to create a closure
 // function with the given signature, name, capture, and source.
-template<class Prototype, class CaptureTuple>
-inline typename make_closure_type<Prototype, CaptureTuple>::type
+template<class Signature, class CaptureTuple>
+inline closure<Signature, CaptureTuple>
 make_closure_impl(const char *name,
                   const char *arguments,
                   const CaptureTuple &capture,
@@ -281,11 +274,10 @@ make_closure_impl(const char *name,
                   const std::string &source)
 {
     std::stringstream s;
-    s << make_closure_declaration<Prototype>(name, arguments, capture, capture_string);
+    s << make_closure_declaration<Signature>(name, arguments, capture, capture_string);
     s << source;
 
-    typedef typename make_closure_type<Prototype, CaptureTuple>::type Closure;
-    return Closure(name, capture, s.str());
+    return closure<Signature, CaptureTuple>(name, capture, s.str());
 }
 
 } // end detail namespace
@@ -327,13 +319,11 @@ make_closure_impl(const char *name,
 #define BOOST_COMPUTE_CLOSURE(return_type, name, arguments, capture, source)
 #else
 #define BOOST_COMPUTE_CLOSURE(return_type, name, arguments, capture, ...) \
-    return_type BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_CLOSURE_DECL_, name) arguments; \
-    ::boost::compute::detail::make_closure_type< \
-        BOOST_TYPEOF(BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_CLOSURE_DECL_, name)), \
-        BOOST_TYPEOF(boost::make_tuple capture) \
-    >::type name = \
+    ::boost::compute::closure< \
+        return_type arguments, BOOST_TYPEOF(boost::make_tuple capture) \
+    > name = \
         ::boost::compute::detail::make_closure_impl< \
-            BOOST_TYPEOF(BOOST_PP_CAT(BOOST_COMPUTE_DETAIL_CLOSURE_DECL_, name)) \
+            return_type arguments \
         >( \
             #name, #arguments, boost::make_tuple capture, #capture, #__VA_ARGS__ \
         )
