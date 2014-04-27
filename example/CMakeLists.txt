@@ -45,6 +45,7 @@ if(${BOOST_COMPUTE_HAVE_OPENCV})
   include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
 
   set(OPENCV_EXAMPLES
+    k_means
     opencv_filter
     random_walk
   )
