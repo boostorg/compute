@@ -59,6 +59,9 @@ inline T generic_accumulate(InputIterator first,
 template<class T, class F>
 inline bool can_accumulate_with_reduce(T init, F function)
 {
+    (void) init;
+    (void) function;
+
     return false;
 }
 

@@ -232,7 +232,7 @@ template<class Signature, class CaptureTuple>
 inline std::string
 make_closure_declaration(const char *name,
                          const char *arguments,
-                         const CaptureTuple &capture,
+                         const CaptureTuple&,
                          const char *capture_string)
 {
     typedef typename

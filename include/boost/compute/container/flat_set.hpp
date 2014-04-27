@@ -206,7 +206,7 @@ public:
                    const const_iterator &last,
                    command_queue &queue)
     {
-        return m_vector.erase(first, last);
+        return m_vector.erase(first, last, queue);
     }
 
     iterator erase(const const_iterator &first, const const_iterator &last)

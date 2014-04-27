@@ -123,6 +123,8 @@ public:
     /// \internal_
     void generate(discard_iterator first, discard_iterator last, command_queue &queue)
     {
+        (void) queue;
+
         m_state_index += std::distance(first, last);
     }
 

@@ -25,7 +25,7 @@ namespace compute {
 namespace detail {
 
 template<class Struct, class T>
-inline std::string adapt_struct_insert_member(T Struct::* member, const char *name)
+inline std::string adapt_struct_insert_member(T Struct::*, const char *name)
 {
     std::stringstream s;
     s << "    " << type_name<T>() << " " << name << ";\n";

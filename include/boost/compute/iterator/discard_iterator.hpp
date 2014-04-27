@@ -58,6 +58,8 @@ template<class IndexExpr>
 inline meta_kernel& operator<<(meta_kernel &kernel,
                                const discard_iterator_index_expr<IndexExpr> &expr)
 {
+    (void) expr;
+
     return kernel;
 }
 
