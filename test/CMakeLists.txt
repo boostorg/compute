@@ -137,8 +137,6 @@ add_compute_test("experimental.transform_if" test_transform_if.cpp)
 add_compute_test("ext.lambda" test_lambda.cpp)
 add_compute_test("ext.program_cache" test_program_cache.cpp)
 
-add_compute_test("issue.11" test_issue_11.cpp)
-
 # eigen interop tests
 if(${BOOST_COMPUTE_HAVE_EIGEN})
   find_package(Eigen REQUIRED)
@@ -174,6 +172,9 @@ if(${BOOST_COMPUTE_HAVE_VTK})
   target_link_libraries(test_interop_vtk ${VTK_LIBRARIES})
 endif()
 
+# tests for particular bugs/issues
+add_compute_test("issue.user_defined_types" test_user_defined_types.cpp)
+
 # Check for linkage problems
 add_executable(test_multiple_objects
     test_multiple_objects1.cpp
@@ -187,5 +188,4 @@ target_link_libraries(test_multiple_objects
 if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   target_link_libraries(test_multiple_objects -fprofile-arcs -ftest-coverage)
 endif()
-add_test("core.multiple_objects" test_multiple_objects)
-
+add_test("issue.multiple_objects" test_multiple_objects)
