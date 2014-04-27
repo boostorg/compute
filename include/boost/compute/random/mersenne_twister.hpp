@@ -18,6 +18,7 @@
 #include <boost/compute/program.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/transform.hpp>
+#include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/detail/program_cache.hpp>
 #include <boost/compute/iterator/discard_iterator.hpp>
@@ -133,8 +134,9 @@ public:
     template<class OutputIterator, class Function>
     void generate(OutputIterator first, OutputIterator last, Function op, command_queue &queue)
     {
-        generate(first, last, queue);
-        transform(first, last, first, op, queue);
+        vector<T> tmp(std::distance(first, last), queue.get_context());
+        generate(tmp.begin(), tmp.end(), queue);
+        transform(tmp.begin(), tmp.end(), first, op, queue);
     }
 
     /// Generates \p z random numbers and discards them.
