@@ -12,61 +12,11 @@
 #define BOOST_COMPUTE_RANDOM_UNIFORM_REAL_DISTRIBUTION_HPP
 
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/function.hpp>
+#include <boost/compute/types/builtin.hpp>
 
 namespace boost {
 namespace compute {
-namespace detail {
-
-template<class T, class Expr>
-struct invoked_scale_random
-{
-    typedef T result_type;
-
-    invoked_scale_random(const T &a, const T &b, const Expr &expr)
-        : m_a(a),
-          m_b(b),
-          m_expr(expr)
-    {
-    }
-
-    T m_a;
-    T m_b;
-    Expr m_expr;
-};
-
-template<class T, class Expr>
-meta_kernel& operator<<(meta_kernel &kernel,
-                        const invoked_scale_random<T, Expr> &expr)
-{
-    return kernel
-        << expr.m_a << " + ("
-        << "(convert_float(as_uint(" << expr.m_expr << ")) / UINT_MAX)"
-        << "* ((" << expr.m_b << ")-(" << expr.m_a << ")))";
-}
-
-template<class T>
-struct scale_random
-{
-    typedef T result_type;
-
-    scale_random(T a, T b)
-        : m_a(a),
-          m_b(b)
-    {
-    }
-
-    template<class Expr>
-    invoked_scale_random<T, Expr> operator()(const Expr &expr) const
-    {
-        return invoked_scale_random<T, Expr>(m_a, m_b, expr);
-    }
-
-    T m_a;
-    T m_b;
-};
-
-} // end detail namespace
 
 /// \class uniform_real_distribution
 /// \brief Produces uniformily distributed random floating-point numbers.
@@ -116,8 +66,20 @@ public:
                   Generator &generator,
                   command_queue &queue)
     {
+        BOOST_COMPUTE_FUNCTION(RealType, scale_random, (const uint_ x),
+        {
+            return LO + (convert_RealType(x) / MAX_RANDOM) * (HI - LO);
+        });
+
+        scale_random.define("LO", boost::lexical_cast<std::string>(m_a));
+        scale_random.define("HI", boost::lexical_cast<std::string>(m_b));
+        scale_random.define("MAX_RANDOM", "UINT_MAX");
+        scale_random.define(
+            "convert_RealType", std::string("convert_") + type_name<RealType>()
+        );
+
         generator.generate(
-            first, last, detail::scale_random<RealType>(m_a, m_b), queue
+            first, last, scale_random, queue
         );
     }
 
