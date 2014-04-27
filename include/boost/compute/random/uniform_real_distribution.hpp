@@ -26,7 +26,7 @@ namespace compute {
 ///
 /// \snippet test/test_uniform_real_distribution.cpp generate
 ///
-/// \see default_random_engine
+/// \see default_random_engine, normal_distribution
 template<class RealType = float>
 class uniform_real_distribution
 {
