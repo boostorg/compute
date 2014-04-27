@@ -43,8 +43,16 @@ endif()
 if(${BOOST_COMPUTE_HAVE_OPENCV})
   find_package(OpenCV REQUIRED)
   include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
-  add_executable(opencv_filter opencv_filter.cpp)
-  target_link_libraries(opencv_filter ${OPENCL_LIBRARIES} ${OpenCV_LIBRARIES})
+
+  set(OPENCV_EXAMPLES
+    opencv_filter
+    random_walk
+  )
+
+  foreach(EXAMPLE ${OPENCV_EXAMPLES})
+    add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
+    target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${OpenCV_LIBRARIES})
+  endforeach()
 endif()
 
 # opengl/vtk examples
