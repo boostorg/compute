@@ -761,6 +761,33 @@ public:
         m_external_function_source << source << "\n";
     }
 
+    void add_function(const std::string &name,
+                      const std::string &source,
+                      const std::map<std::string, std::string> &definitions)
+    {
+        typedef std::map<std::string, std::string>::const_iterator iter;
+
+        std::stringstream s;
+
+        // add #define's
+        for(iter i = definitions.begin(); i != definitions.end(); i++){
+            s << "#define " << i->first;
+            if(!i->second.empty()){
+                s << " " << i->second;
+            }
+            s << "\n";
+        }
+
+        s << source << "\n";
+
+        // add #undef's
+        for(iter i = definitions.begin(); i != definitions.end(); i++){
+            s << "#undef " << i->first << "\n";
+        }
+
+        add_function(name, s.str());
+    }
+
     template<class Type>
     void add_type_declaration(const std::string &declaration)
     {
@@ -845,7 +872,7 @@ inline meta_kernel&
 operator<<(meta_kernel &kernel, const invoked_function<ResultType, ArgTuple> &expr)
 {
     if(!expr.source().empty()){
-        kernel.add_function(expr.name(), expr.source());
+        kernel.add_function(expr.name(), expr.source(), expr.definitions());
     }
 
     kernel.insert_function_call(expr.name(), expr.args());
@@ -859,7 +886,7 @@ operator<<(meta_kernel &kernel,
            const invoked_closure<ResultType, boost::tuple<Arg1>, CaptureTuple> &expr)
 {
     if(!expr.source().empty()){
-        kernel.add_function(expr.name(), expr.source());
+        kernel.add_function(expr.name(), expr.source(), expr.definitions());
     }
 
     kernel << expr.name() << '(';

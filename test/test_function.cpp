@@ -13,10 +13,11 @@
 
 #include <boost/compute/system.hpp>
 #include <boost/compute/function.hpp>
-#include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/accumulate.hpp>
-#include <boost/compute/algorithm/transform.hpp>
+#include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/algorithm/generate.hpp>
 #include <boost/compute/algorithm/sort.hpp>
+#include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/zip_iterator.hpp>
 #include <boost/compute/types/pair.hpp>
@@ -179,6 +180,23 @@ BOOST_AUTO_TEST_CASE(test_templated_function)
         float_vec.begin(), float_vec.end(), float_vec.begin(), negate_float, queue
     );
     CHECK_RANGE_EQUAL(float, 4, float_vec, (-1.1f, -2.2f, -3.3f, -4.4f));
+}
+
+BOOST_AUTO_TEST_CASE(define)
+{
+    BOOST_COMPUTE_FUNCTION(int, return_number, (),
+    {
+        return NUMBER;
+    });
+    return_number.define("NUMBER", "4");
+
+    compute::vector<int> vec(1, context);
+    compute::generate(vec.begin(), vec.end(), return_number, queue);
+    CHECK_RANGE_EQUAL(int, 1, vec, (4));
+
+    return_number.define("NUMBER", "2");
+    compute::generate(vec.begin(), vec.end(), return_number, queue);
+    CHECK_RANGE_EQUAL(int, 1, vec, (2));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

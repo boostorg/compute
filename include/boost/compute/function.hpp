@@ -11,6 +11,7 @@
 #ifndef BOOST_COMPUTE_FUNCTION_HPP
 #define BOOST_COMPUTE_FUNCTION_HPP
 
+#include <map>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -45,9 +46,19 @@ public:
         size_t, arity = boost::tuples::length<ArgTuple>::value
     );
 
-    invoked_function(const std::string &name, const std::string &source)
+    invoked_function(const std::string &name,
+                     const std::string &source)
         : m_name(name),
           m_source(source)
+    {
+    }
+
+    invoked_function(const std::string &name,
+                     const std::string &source,
+                     const std::map<std::string, std::string> &definitions)
+        : m_name(name),
+          m_source(source),
+          m_definitions(definitions)
     {
     }
 
@@ -56,6 +67,17 @@ public:
                      const ArgTuple &args)
         : m_name(name),
           m_source(source),
+          m_args(args)
+    {
+    }
+
+    invoked_function(const std::string &name,
+                     const std::string &source,
+                     const std::map<std::string, std::string> &definitions,
+                     const ArgTuple &args)
+        : m_name(name),
+          m_source(source),
+          m_definitions(definitions),
           m_args(args)
     {
     }
@@ -70,6 +92,11 @@ public:
         return m_source;
     }
 
+    const std::map<std::string, std::string>& definitions() const
+    {
+        return m_definitions;
+    }
+
     const ArgTuple& args() const
     {
         return m_args;
@@ -78,6 +105,7 @@ public:
 private:
     std::string m_name;
     std::string m_source;
+    std::map<std::string, std::string> m_definitions;
     ArgTuple m_args;
 };
 
@@ -131,6 +159,12 @@ public:
     }
 
     /// \internal_
+    void define(std::string name, std::string value = std::string())
+    {
+        m_definitions[name] = value;
+    }
+
+    /// \internal_
     detail::invoked_function<result_type, boost::tuple<> >
     operator()() const
     {
@@ -140,7 +174,7 @@ public:
         );
 
         return detail::invoked_function<result_type, boost::tuple<> >(
-            m_name, m_source
+            m_name, m_source, m_definitions
         );
     }
 
@@ -155,7 +189,7 @@ public:
         );
 
         return detail::invoked_function<result_type, boost::tuple<Arg1> >(
-            m_name, m_source, boost::make_tuple(arg1)
+            m_name, m_source, m_definitions, boost::make_tuple(arg1)
         );
     }
 
@@ -170,7 +204,7 @@ public:
         );
 
         return detail::invoked_function<result_type, boost::tuple<Arg1, Arg2> >(
-            m_name, m_source, boost::make_tuple(arg1, arg2)
+            m_name, m_source, m_definitions, boost::make_tuple(arg1, arg2)
         );
     }
 
@@ -185,13 +219,14 @@ public:
         );
 
         return detail::invoked_function<result_type, boost::tuple<Arg1, Arg2, Arg3> >(
-            m_name, m_source, boost::make_tuple(arg1, arg2, arg3)
+            m_name, m_source, m_definitions, boost::make_tuple(arg1, arg2, arg3)
         );
     }
 
 private:
     std::string m_name;
     std::string m_source;
+    std::map<std::string, std::string> m_definitions;
 };
 
 /// Creates a function object given its \p name and \p source.

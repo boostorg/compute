@@ -42,11 +42,13 @@ public:
     );
 
     invoked_closure(const std::string &name,
-                     const std::string &source,
-                     const ArgTuple &args,
-                     const CaptureTuple &capture)
+                    const std::string &source,
+                    const std::map<std::string, std::string> &definitions,
+                    const ArgTuple &args,
+                    const CaptureTuple &capture)
         : m_name(name),
           m_source(source),
+          m_definitions(definitions),
           m_args(args),
           m_capture(capture)
     {
@@ -62,6 +64,11 @@ public:
         return m_source;
     }
 
+    const std::map<std::string, std::string>& definitions() const
+    {
+        return m_definitions;
+    }
+
     const ArgTuple& args() const
     {
         return m_args;
@@ -75,6 +82,7 @@ public:
 private:
     std::string m_name;
     std::string m_source;
+    std::map<std::string, std::string> m_definitions;
     ArgTuple m_args;
     CaptureTuple m_capture;
 };
@@ -124,6 +132,12 @@ public:
     }
 
     /// \internal_
+    void define(std::string name, std::string value = std::string())
+    {
+        m_definitions[name] = value;
+    }
+
+    /// \internal_
     detail::invoked_closure<result_type, boost::tuple<>, CaptureTuple>
     operator()() const
     {
@@ -133,7 +147,7 @@ public:
         );
 
         return detail::invoked_closure<result_type, boost::tuple<>, CaptureTuple>(
-            m_name, m_source, boost::make_tuple(), m_capture
+            m_name, m_source, m_definitions, boost::make_tuple(), m_capture
         );
     }
 
@@ -148,7 +162,7 @@ public:
         );
 
         return detail::invoked_closure<result_type, boost::tuple<Arg1>, CaptureTuple>(
-            m_name, m_source, boost::make_tuple(arg1), m_capture
+            m_name, m_source, m_definitions, boost::make_tuple(arg1), m_capture
         );
     }
 
@@ -163,7 +177,7 @@ public:
         );
 
         return detail::invoked_closure<result_type, boost::tuple<Arg1, Arg2>, CaptureTuple>(
-            m_name, m_source, boost::make_tuple(arg1, arg2), m_capture
+            m_name, m_source, m_definitions, boost::make_tuple(arg1, arg2), m_capture
         );
     }
 
@@ -178,13 +192,14 @@ public:
         );
 
         return detail::invoked_closure<result_type, boost::tuple<Arg1, Arg2, Arg3>, CaptureTuple>(
-            m_name, m_source, boost::make_tuple(arg1, arg2, arg3), m_capture
+            m_name, m_source, m_definitions, boost::make_tuple(arg1, arg2, arg3), m_capture
         );
     }
 
 private:
     std::string m_name;
     std::string m_source;
+    std::map<std::string, std::string> m_definitions;
     CaptureTuple m_capture;
 };
 
