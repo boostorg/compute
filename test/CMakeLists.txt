@@ -137,6 +137,7 @@ add_compute_test("experimental.transform_if" test_transform_if.cpp)
 
 add_compute_test("ext.lambda" test_lambda.cpp)
 add_compute_test("ext.program_cache" test_program_cache.cpp)
+add_compute_test("ext.amd_cpp_kernel_language" test_amd_cpp_kernel_language.cpp)
 
 # eigen interop tests
 if(${BOOST_COMPUTE_HAVE_EIGEN})

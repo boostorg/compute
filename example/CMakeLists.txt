@@ -1,6 +1,7 @@
 include_directories(../include)
 
 set(EXAMPLES
+  amd_cpp_kernel
   black_scholes
   copy_data
   fizz_buzz
