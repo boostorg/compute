@@ -11,39 +11,51 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_GATHER_HPP
 #define BOOST_COMPUTE_ALGORITHM_GATHER_HPP
 
-#include <boost/algorithm/string/replace.hpp>
-
-#include <boost/compute/system.hpp>
-#include <boost/compute/exception.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/iterator/buffer_iterator.hpp>
-#include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/exception.hpp>
+#include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/system.hpp>
+#include <boost/compute/type_traits/type_name.hpp>
 
 namespace boost {
 namespace compute {
 namespace detail {
 
-template<class InputBufferType, class MapBufferType, class OutputBufferType>
-struct gather_kernel
+template<class InputIterator, class MapIterator, class OutputIterator>
+class gather_kernel : public meta_kernel
 {
-    static std::string source()
+public:
+    gather_kernel() : meta_kernel("gather")
+    {}
+
+    void set_range(MapIterator first,
+                   MapIterator last,
+                   InputIterator input,
+                   OutputIterator result)
     {
-        std::string source =
-            "__kernel void gather(__global const $T1 *input,\n"
-            "                      __global const $T2 *map,\n"
-            "                      __global $T3 *output)\n"
-            "{\n"
-            "    const uint i = get_global_id(0);\n"
-            "    output[i] = input[map[i]];\n"
-            "}\n";
+        m_count = iterator_range_size(first, last);
+        m_offset = first.get_index();
 
-        boost::replace_all(source, "$T1", type_name<InputBufferType>());
-        boost::replace_all(source, "$T2", type_name<MapBufferType>());
-        boost::replace_all(source, "$T3", type_name<OutputBufferType>());
-
-        return source;
+        *this <<
+            "const uint i = get_global_id(0);\n" <<
+            result[expr<uint_>("i")] << "=" << 
+                input[first[expr<uint_>("i")]] << ";\n";
     }
+
+    event exec(command_queue &queue)
+    {
+        if(m_count == 0) {
+            return event();
+        }
+
+        return exec_1d(queue, m_offset, m_count);
+    }
+
+private:
+    size_t m_count;
+    size_t m_offset;
 };
 
 } // end detail namespace
@@ -60,24 +72,10 @@ inline void gather(MapIterator first,
                    OutputIterator result,
                    command_queue &queue = system::default_queue())
 {
-    typedef typename std::iterator_traits<InputIterator>::value_type input_value_type;
-    typedef typename std::iterator_traits<MapIterator>::value_type map_value_type;
-    typedef typename std::iterator_traits<OutputIterator>::value_type output_value_type;
-
-    const context &context = queue.get_context();
-    std::string source =
-        detail::gather_kernel<input_value_type,
-                               map_value_type,
-                               output_value_type>::source();
-    kernel kernel = kernel::create_with_source(source, "gather", context);
-
-    kernel.set_arg(0, input.get_buffer());
-    kernel.set_arg(1, first.get_buffer());
-    kernel.set_arg(2, result.get_buffer());
-
-    size_t offset = first.get_index();
-    size_t count = detail::iterator_range_size(first, last);
-    queue.enqueue_1d_range_kernel(kernel, offset, count, 0);
+    detail::gather_kernel<InputIterator, MapIterator, OutputIterator> kernel;
+    
+    kernel.set_range(first, last, input, result);
+    kernel.exec(queue);
 }
 
 } // end compute namespace
