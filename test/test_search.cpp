@@ -1,0 +1,52 @@
+//---------------------------------------------------------------------------//
+// Copyright (c) 2014 Roshan <thisisroshansmail@gmail.com>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//
+// See http://kylelutz.github.com/compute for more information.
+//---------------------------------------------------------------------------//
+
+#define BOOST_TEST_MODULE TestSearch
+#include <boost/test/unit_test.hpp>
+
+#include <boost/compute/command_queue.hpp>
+#include <boost/compute/algorithm/copy_n.hpp>
+#include <boost/compute/algorithm/search.hpp>
+#include <boost/compute/container/vector.hpp>
+#include <boost/compute/types/builtin.hpp>
+
+#include "check_macros.hpp"
+#include "context_setup.hpp"
+
+namespace bc = boost::compute;
+
+BOOST_AUTO_TEST_CASE(search_int)
+{
+    int data[] = {1, 4, 2, 6, 3, 2, 6, 3, 4, 6};
+    bc::vector<bc::int_> vectort(10, context);
+
+    bc::copy_n(data, 10, vectort.begin(), queue);
+
+    int datap[] = {2, 6};
+    bc::vector<bc::int_> vectorp(2, context);
+
+    bc::copy_n(datap, 2, vectorp.begin(), queue);
+
+    bc::vector<bc::int_>::iterator iter = 
+        bc::search(vectorp.begin(), vectorp.end(), 
+                    vectort.begin(), vectort.end(), queue);
+
+    BOOST_VERIFY(iter == vectort.begin() + 2);
+
+    vectorp[1] = 9;
+
+    iter = 
+        bc::search(vectorp.begin(), vectorp.end(), 
+                    vectort.begin(), vectort.end(), queue);
+
+    BOOST_VERIFY(iter == vectort.begin() + 10);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
