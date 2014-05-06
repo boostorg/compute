@@ -79,6 +79,9 @@ BOOST_AUTO_TEST_CASE(partition_device_equally)
         return;
     }
 
+    // ensure device is not a sub-device
+    BOOST_CHECK(device.is_subdevice() == false);
+
     // check that the device supports partitioning equally
     if(!supports_partition_type(device, CL_DEVICE_PARTITION_EQUALLY)){
         std::cout << "skipping test: "
@@ -100,6 +103,9 @@ BOOST_AUTO_TEST_CASE(partition_device_equally)
         cl_device_id parent_id =
             sub_device.get_info<cl_device_id>(CL_DEVICE_PARENT_DEVICE);
         BOOST_CHECK(parent_id == device.id());
+
+        // ensure device is a sub-device
+        BOOST_CHECK(sub_device.is_subdevice() == true);
 
         // check number of compute units
         BOOST_CHECK_EQUAL(sub_device.compute_units(), size_t(2));
@@ -124,6 +130,9 @@ BOOST_AUTO_TEST_CASE(partition_by_counts)
                   << std::endl;
         return;
     }
+
+    // ensure device is not a sub-device
+    BOOST_CHECK(device.is_subdevice() == false);
 
     // create vector of sub-device compute unit counts
     std::vector<size_t> counts;
@@ -153,6 +162,9 @@ BOOST_AUTO_TEST_CASE(partition_by_affinity_domain)
         return;
     }
 
+    // ensure device is not a sub-device
+    BOOST_CHECK(device.is_subdevice() == false);
+
     // check that the device supports splitting by affinity domains
     if(!supports_partition_type(device, CL_DEVICE_AFFINITY_DOMAIN_NEXT_PARTITIONABLE)){
         std::cout << "skipping test: "
@@ -165,6 +177,7 @@ BOOST_AUTO_TEST_CASE(partition_by_affinity_domain)
         device.partition_by_affinity_domain(
             CL_DEVICE_AFFINITY_DOMAIN_NEXT_PARTITIONABLE);
     BOOST_CHECK(sub_devices.size() > 0);
+    BOOST_CHECK(sub_devices[0].is_subdevice() == true);
 }
 #endif // CL_VERSION_1_2
 

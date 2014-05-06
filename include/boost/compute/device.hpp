@@ -61,7 +61,7 @@ public:
         : m_id(id)
     {
         #ifdef CL_VERSION_1_2
-        if(m_id && retain){
+        if(m_id && retain && is_subdevice()){
             clRetainDevice(m_id);
         }
         #else
@@ -74,7 +74,7 @@ public:
         : m_id(other.m_id)
     {
         #ifdef CL_VERSION_1_2
-        if(m_id){
+        if(m_id && is_subdevice()){
             clRetainDevice(m_id);
         }
         #endif
@@ -92,7 +92,7 @@ public:
     {
         if(this != &other){
             #ifdef CL_VERSION_1_2
-            if(m_id){
+            if(m_id && is_subdevice()){
                 clReleaseDevice(m_id);
             }
             #endif
@@ -100,7 +100,7 @@ public:
             m_id = other.m_id;
 
             #ifdef CL_VERSION_1_2
-            if(m_id){
+            if(m_id && is_subdevice()){
                 clRetainDevice(m_id);
             }
             #endif
@@ -114,7 +114,7 @@ public:
     {
         if(this != &other){
             #ifdef CL_VERSION_1_2
-            if(m_id){
+            if(m_id && is_subdevice()){
                 clReleaseDevice(m_id);
             }
             #endif
@@ -130,7 +130,7 @@ public:
     ~device()
     {
         #ifdef CL_VERSION_1_2
-        if(m_id){
+        if(m_id && is_subdevice()){
             BOOST_COMPUTE_ASSERT_CL_SUCCESS(
                 clReleaseDevice(m_id)
             );
@@ -261,6 +261,23 @@ public:
     size_t profiling_timer_resolution() const
     {
         return get_info<size_t>(CL_DEVICE_PROFILING_TIMER_RESOLUTION);
+    }
+
+    /// Returns \c true if the device is a sub-device.
+    bool is_subdevice() const
+    {
+    #if defined(CL_VERSION_1_2)
+        try {
+            return get_info<cl_device_id>(CL_DEVICE_PARENT_DEVICE) != 0;
+        }
+        catch(runtime_exception&){
+            // the get_info() call above will throw if the device's opencl version
+            // is less than 1.2 (in which case it can't be a sub-device).
+            return false;
+        }
+    #else
+        return false;
+    #endif
     }
 
     /// Returns information about the device.
