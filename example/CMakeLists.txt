@@ -20,6 +20,7 @@ set(EXAMPLES
   time_copy
   transform_sqrt
   vector_addition
+  simple_moving_average
 )
 
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
