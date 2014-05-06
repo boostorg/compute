@@ -141,14 +141,38 @@ inline void reduce_on_gpu(InputIterator first,
             }
 
             scratch[lid] = sum;
-
-            // local reduction
-            for(int i = 1; i < TPB; i <<= 1){
+            
+            // we use TPB to compile only useful instruction
+            // local reduction when size is greater than warp size
+            barrier(CLK_LOCAL_MEM_FENCE);
+            if(TPB >= 1024){
+                if( lid < 512) { sum+= scratch[lid + 512]; scratch[lid] = sum;}
                 barrier(CLK_LOCAL_MEM_FENCE);
-                uint mask = (i << 1) - 1;
-                if((lid & mask) == 0){
-                    scratch[lid] += scratch[lid+i];
-                }
+            }
+            if(TPB >= 512){
+                if( lid < 256) { sum+= scratch[lid + 256]; scratch[lid] = sum;}
+                barrier(CLK_LOCAL_MEM_FENCE);
+            }
+            if(TPB >= 256){
+                if( lid < 128) { sum+= scratch[lid + 128]; scratch[lid] = sum;}
+                barrier(CLK_LOCAL_MEM_FENCE);
+            }
+            if(TPB >= 128){
+                if( lid < 64) { sum+= scratch[lid + 64]; scratch[lid] = sum;}
+                barrier(CLK_LOCAL_MEM_FENCE);
+            }
+            
+            // warp reduction
+            if(lid < 32)
+            {
+                // volatile this way we don't need any barrier
+                volatile __local T* lmem = scratch;
+                if(TPB >= 64) { lmem[lid] = sum = sum + lmem[lid+32];}
+                if(TPB >= 32) { lmem[lid] = sum = sum + lmem[lid+16];}
+                if(TPB >= 16) { lmem[lid] = sum = sum + lmem[lid+ 8];}
+                if(TPB >=  8) { lmem[lid] = sum = sum + lmem[lid+ 4];}
+                if(TPB >=  4) { lmem[lid] = sum = sum + lmem[lid+ 2];}
+                if(TPB >=  2) { lmem[lid] = sum = sum + lmem[lid+ 1];}
             }
 
             // write sum to output
