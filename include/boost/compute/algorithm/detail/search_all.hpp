@@ -22,16 +22,15 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-/*! \brief Search kernel class
- *
- *  Subclass of meta_kernel which is capable of performing pattern matching
- */
+///
+/// \brief Search kernel class
+///
+/// Subclass of meta_kernel which is capable of performing pattern matching
+///
 template<class PatternIterator, class TextIterator, class OutputIterator>
 class search_kernel : public meta_kernel
 {
 public:
-    size_t index;
-
     search_kernel() : meta_kernel("search")
     {}
 
@@ -47,7 +46,7 @@ public:
         m_count = iterator_range_size(t_first, t_last);
         m_count = m_count + 1 - m_p_count;
 
-        *this << 
+        *this <<
             "uint i = get_global_id(0);\n" <<
             "uint i1 = i;\n" <<
             "uint j;\n" <<

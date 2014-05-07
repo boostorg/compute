@@ -25,28 +25,39 @@ namespace bc = boost::compute;
 BOOST_AUTO_TEST_CASE(search_int)
 {
     int data[] = {1, 4, 2, 6, 3, 2, 6, 3, 4, 6};
-    bc::vector<bc::int_> vectort(10, context);
-
-    bc::copy_n(data, 10, vectort.begin(), queue);
+    bc::vector<bc::int_> vectort(data, data + 10, queue);
 
     int datap[] = {2, 6};
-    bc::vector<bc::int_> vectorp(2, context);
+    bc::vector<bc::int_> vectorp(datap, datap + 2, queue);
 
-    bc::copy_n(datap, 2, vectorp.begin(), queue);
-
-    bc::vector<bc::int_>::iterator iter = 
-        bc::search(vectorp.begin(), vectorp.end(), 
+    bc::vector<bc::int_>::iterator iter =
+        bc::search(vectorp.begin(), vectorp.end(),
                     vectort.begin(), vectort.end(), queue);
 
     BOOST_VERIFY(iter == vectort.begin() + 2);
 
     vectorp[1] = 9;
 
-    iter = 
-        bc::search(vectorp.begin(), vectorp.end(), 
+    iter =
+        bc::search(vectorp.begin(), vectorp.end(),
                     vectort.begin(), vectort.end(), queue);
 
     BOOST_VERIFY(iter == vectort.begin() + 10);
+}
+
+BOOST_AUTO_TEST_CASE(search_string)
+{
+    char text[] = "sdabababacabskjabacab";
+    bc::vector<bc::char_> vectort(text, text + 21, queue);
+
+    char pattern[] = "aba";
+    bc::vector<bc::char_> vectorp(pattern, pattern + 3, queue);
+
+    bc::vector<bc::char_>::iterator iter =
+        bc::search(vectorp.begin(), vectorp.end(),
+                    vectort.begin(), vectort.end(), queue);
+
+    BOOST_VERIFY(iter == vectort.begin() + 2);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
