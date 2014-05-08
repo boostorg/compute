@@ -25,10 +25,10 @@ BOOST_AUTO_TEST_CASE(unique_int)
     int data[] = {1, 6, 6, 4, 2, 2, 4};
 
     bc::vector<int> input(data, data + 7);
-    
+
     bc::vector<int>::iterator iter =
         bc::unique(input.begin(), input.end());
-    
+
     BOOST_VERIFY(iter == input.begin() + 5);
     CHECK_RANGE_EQUAL(int, 7, input, (1, 6, 4, 2, 4, 2, 4));
 }
