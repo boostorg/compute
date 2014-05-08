@@ -32,6 +32,7 @@
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/fill_n.hpp>
 #include <boost/compute/algorithm/find.hpp>
+#include <boost/compute/algorithm/find_end.hpp>
 #include <boost/compute/algorithm/find_if.hpp>
 #include <boost/compute/algorithm/find_if_not.hpp>
 #include <boost/compute/algorithm/for_each.hpp>
