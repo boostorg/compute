@@ -56,7 +56,7 @@ public:
                                     static_cast<void *>(this),
                                     &error);
         if(!m_context){
-            BOOST_THROW_EXCEPTION(runtime_exception(error));
+            BOOST_THROW_EXCEPTION(opencl_error(error));
         }
     }
 

@@ -52,7 +52,7 @@ public:
                                     filter_mode,
                                     &error);
         if(!m_sampler){
-            BOOST_THROW_EXCEPTION(runtime_exception(error));
+            BOOST_THROW_EXCEPTION(opencl_error(error));
         }
     }
 

@@ -270,7 +270,7 @@ public:
         try {
             return get_info<cl_device_id>(CL_DEVICE_PARENT_DEVICE) != 0;
         }
-        catch(runtime_exception&){
+        catch(opencl_error&){
             // the get_info() call above will throw if the device's opencl version
             // is less than 1.2 (in which case it can't be a sub-device).
             return false;
@@ -301,14 +301,14 @@ public:
         uint_ count = 0;
         int_ ret = clCreateSubDevices(m_id, properties, 0, 0, &count);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         // get sub-device ids
         std::vector<cl_device_id> ids(count);
         ret = clCreateSubDevices(m_id, properties, count, &ids[0], 0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         // convert ids to device objects

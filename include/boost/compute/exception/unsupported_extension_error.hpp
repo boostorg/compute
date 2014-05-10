@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_EXCEPTION_EXTENSION_UNSUPPORTED_EXCEPTION_HPP
-#define BOOST_COMPUTE_EXCEPTION_EXTENSION_UNSUPPORTED_EXCEPTION_HPP
+#ifndef BOOST_COMPUTE_EXCEPTION_UNSUPPORTED_EXTENSION_ERROR_HPP
+#define BOOST_COMPUTE_EXCEPTION_UNSUPPORTED_EXTENSION_ERROR_HPP
 
 #include <exception>
 #include <sstream>
@@ -18,7 +18,7 @@
 namespace boost {
 namespace compute {
 
-/// \class extension_unsupported_exception
+/// \class unsupported_extension_error
 /// \brief Exception thrown when attempting to use an unsupported
 ///        OpenCL extension.
 ///
@@ -28,31 +28,44 @@ namespace compute {
 /// An example of this is attempting to use CL-GL sharing on a non-GPU
 /// device.
 ///
-/// \see runtime_exception
-class extension_unsupported_exception : public std::exception
+/// \see opencl_error
+class unsupported_extension_error : public std::exception
 {
 public:
-    explicit extension_unsupported_exception(const char *extension) throw()
+    /// Creates a new unsupported extension error exception object indicating
+    /// that \p extension is not supported by the OpenCL platform or device.
+    explicit unsupported_extension_error(const char *extension) throw()
+        : m_extension(extension)
     {
         std::stringstream msg;
         msg << "OpenCL extension " << extension << " not supported";
         m_error_string = msg.str();
     }
 
-    ~extension_unsupported_exception() throw()
+    /// Destroys the unsupported extension error object.
+    ~unsupported_extension_error() throw()
     {
     }
 
+    /// Returns the name of the unsupported extension.
+    std::string extension_name() const throw()
+    {
+        return m_extension;
+    }
+
+    /// Returns a string containing a human-readable error message containing
+    /// the name of the unsupported exception.
     const char* what() const throw()
     {
         return m_error_string.c_str();
     }
 
 private:
+    std::string m_extension;
     std::string m_error_string;
 };
 
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_EXCEPTION_EXTENSION_UNSUPPORTED_EXCEPTION_HPP
+#endif // BOOST_COMPUTE_EXCEPTION_UNSUPPORTED_EXTENSION_ERROR_HPP

@@ -32,7 +32,7 @@ inline void opengl_enqueue_acquire_gl_objects(size_t num_objects,
                                            0,
                                            0);
     if(ret != CL_SUCCESS){
-        BOOST_THROW_EXCEPTION(runtime_exception(ret));
+        BOOST_THROW_EXCEPTION(opencl_error(ret));
     }
 }
 
@@ -50,7 +50,7 @@ inline void opengl_enqueue_release_gl_objects(size_t num_objects,
                                            0,
                                            0);
     if(ret != CL_SUCCESS){
-        BOOST_THROW_EXCEPTION(runtime_exception(ret));
+        BOOST_THROW_EXCEPTION(opencl_error(ret));
     }
 }
 

@@ -79,7 +79,7 @@ public:
         #endif
 
         if(!m_mem){
-            BOOST_THROW_EXCEPTION(runtime_exception(error));
+            BOOST_THROW_EXCEPTION(opencl_error(error));
         }
     }
 

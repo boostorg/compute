@@ -35,7 +35,7 @@ struct _get_object_info_impl
                               &value,
                               0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return value;
@@ -55,7 +55,7 @@ struct _get_object_info_impl<bool, Function, Object, Info>
                               &value,
                               0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return value == CL_TRUE;
@@ -75,7 +75,7 @@ struct _get_object_info_impl<std::string, Function, Object, Info>
                               0,
                               &size);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         if(size == 0){
@@ -89,7 +89,7 @@ struct _get_object_info_impl<std::string, Function, Object, Info>
                        &value[0],
                        0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return value;
@@ -109,7 +109,7 @@ struct _get_object_info_impl<std::vector<T>, Function, Object, Info>
                               0,
                               &size);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         std::vector<T> vector(size / sizeof(T));
@@ -119,7 +119,7 @@ struct _get_object_info_impl<std::vector<T>, Function, Object, Info>
                        &vector[0],
                        0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return vector;

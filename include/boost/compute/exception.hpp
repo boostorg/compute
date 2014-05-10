@@ -15,7 +15,8 @@
 ///
 /// Meta-header to include all Boost.Compute exception headers.
 
-#include <boost/compute/exception/extension_unsupported_exception.hpp>
-#include <boost/compute/exception/runtime_exception.hpp>
+#include <boost/compute/exception/context_error.hpp>
+#include <boost/compute/exception/opencl_error.hpp>
+#include <boost/compute/exception/unsupported_extension_error.hpp>
 
 #endif // BOOST_COMPUTE_EXCEPTION_HPP

@@ -8,36 +8,74 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_EXCEPTION_RUNTIME_EXCEPTION_HPP
-#define BOOST_COMPUTE_EXCEPTION_RUNTIME_EXCEPTION_HPP
+#ifndef BOOST_COMPUTE_EXCEPTION_OPENCL_ERROR_HPP
+#define BOOST_COMPUTE_EXCEPTION_OPENCL_ERROR_HPP
 
 #include <exception>
+#include <string>
+#include <sstream>
 
 #include <boost/compute/cl.hpp>
 
 namespace boost {
 namespace compute {
 
-class runtime_exception : public std::exception
+/// \class opencl_error
+/// \brief A run-time OpenCL error.
+///
+/// The opencl_error class represents an error returned from an OpenCL
+/// function.
+///
+/// \see context_error
+class opencl_error : public std::exception
 {
 public:
-    explicit runtime_exception(cl_int error) throw()
-        : m_error(error)
+    /// Creates a new opencl_error exception object for \p error.
+    explicit opencl_error(cl_int error) throw()
+        : m_error(error),
+          m_error_string(to_string(error))
     {
     }
 
-    ~runtime_exception() throw()
+    /// Destroys the opencl_error object.
+    ~opencl_error() throw()
     {
     }
 
-    cl_int get_error() const throw()
+    /// Returns the numeric error code.
+    cl_int error_code() const throw()
     {
         return m_error;
     }
 
+    /// Returns a string description of the error.
+    std::string error_string() const throw()
+    {
+        return m_error_string;
+    }
+
+    /// Returns a C-string description of the error.
     const char* what() const throw()
     {
-        switch(m_error){
+        return m_error_string.c_str();
+    }
+
+    /// Static function which converts the numeric OpenCL error code \p error
+    /// to a human-readable string.
+    ///
+    /// For example:
+    /// \code
+    /// std::cout << opencl_error::to_string(CL_INVALID_KERNEL_ARGS) << std::endl;
+    /// \endcode
+    ///
+    /// Will print "Invalid Kernel Arguments".
+    ///
+    /// If the error code is unknown (e.g. not a valid OpenCL error), a string
+    /// containing "Unknown OpenCL Error" along with the error number will be
+    /// returned.
+    static std::string to_string(cl_int error)
+    {
+        switch(error){
         case CL_SUCCESS: return "Success";
         case CL_DEVICE_NOT_FOUND: return "Device Not Found";
         case CL_DEVICE_NOT_AVAILABLE: return "Device Not Available";
@@ -92,15 +130,20 @@ public:
         case CL_INVALID_LINKER_OPTIONS: return "Invalid Linker Options";
         case CL_INVALID_DEVICE_PARTITION_COUNT: return "Invalid Device Partition Count";
         #endif // CL_VERSION_1_2
-        default: return "Unknown Error Code";
+        default: {
+            std::stringstream s;
+            s << "Unknown OpenCL Error (" << error << ")";
+            return s.str();
+        }
         }
     }
 
 private:
     cl_int m_error;
+    std::string m_error_string;
 };
 
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_EXCEPTION_RUNTIME_EXCEPTION_HPP
+#endif // BOOST_COMPUTE_EXCEPTION_OPENCL_ERROR_HPP

@@ -47,7 +47,7 @@ public:
         cl_int error = 0;
         m_mem = clCreateFromGLBuffer(context, flags, bufobj, &error);
         if(!m_mem){
-            BOOST_THROW_EXCEPTION(runtime_exception(error));
+            BOOST_THROW_EXCEPTION(opencl_error(error));
         }
     }
 

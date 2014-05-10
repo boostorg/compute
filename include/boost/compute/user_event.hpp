@@ -35,7 +35,7 @@ public:
         cl_int error;
         m_event = clCreateUserEvent(context.get(), &error);
         if(!m_event){
-            BOOST_THROW_EXCEPTION(runtime_exception(error));
+            BOOST_THROW_EXCEPTION(opencl_error(error));
         }
     }
 
@@ -60,7 +60,7 @@ public:
     {
         cl_int ret = clSetUserEventStatus(m_event, execution_status);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
 };

@@ -98,7 +98,7 @@ public:
                                        properties,
                                        &error);
         if(!m_queue){
-            BOOST_THROW_EXCEPTION(runtime_exception(error));
+            BOOST_THROW_EXCEPTION(opencl_error(error));
         }
     }
 
@@ -221,7 +221,7 @@ public:
                                          0,
                                          0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
 
@@ -253,7 +253,7 @@ public:
                                          0,
                                          &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -295,7 +295,7 @@ public:
                                              0,
                                              0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
     #endif // CL_VERSION_1_1
@@ -325,7 +325,7 @@ public:
                                           0,
                                           0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
 
@@ -357,7 +357,7 @@ public:
                                           0,
                                           &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -399,7 +399,7 @@ public:
                                               0,
                                               0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
     #endif // CL_VERSION_1_1
@@ -434,7 +434,7 @@ public:
                                          0,
                                          &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -477,7 +477,7 @@ public:
                                              0,
                                              &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -514,7 +514,7 @@ public:
                                          0,
                                          &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -545,7 +545,7 @@ public:
                                            0,
                                            &ret);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return pointer;
@@ -575,7 +575,7 @@ public:
                                              0,
                                              0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
 
@@ -606,7 +606,7 @@ public:
                                         0,
                                         0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
 
@@ -635,7 +635,7 @@ public:
                                         0,
                                         0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
 
@@ -666,7 +666,7 @@ public:
                                          0,
                                          0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
 
@@ -695,7 +695,7 @@ public:
                                          0,
                                          0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
 
@@ -730,7 +730,7 @@ public:
                                         0,
                                         &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -766,7 +766,7 @@ public:
                                         0,
                                         &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -802,7 +802,7 @@ public:
                                         0,
                                         &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -835,7 +835,7 @@ public:
                                         0,
                                         &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -869,7 +869,7 @@ public:
                                                 0,
                                                 &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -900,7 +900,7 @@ public:
                                                 0,
                                                 &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -934,7 +934,7 @@ public:
                                                 0,
                                                 &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -965,7 +965,7 @@ public:
                                                 0,
                                                 &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -999,7 +999,7 @@ public:
                                         0,
                                         &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -1029,7 +1029,7 @@ public:
                                         0,
                                         &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -1056,7 +1056,7 @@ public:
                                                 0,
                                                 &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -1088,7 +1088,7 @@ public:
                                             0,
                                             &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -1120,7 +1120,7 @@ public:
 
         cl_int ret = clEnqueueTask(m_queue, kernel, 0, 0, &event_.get());
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -1150,7 +1150,7 @@ public:
             &event_.get()
         );
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -1229,7 +1229,7 @@ public:
         #endif
 
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;
@@ -1249,7 +1249,7 @@ public:
         );
 
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return event_;

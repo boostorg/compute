@@ -149,7 +149,7 @@ public:
                                         &binary_ptr,
                                         0);
         if(error != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(error));
+            BOOST_THROW_EXCEPTION(opencl_error(error));
         }
 
         return binary;
@@ -219,7 +219,7 @@ public:
         #endif
 
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
 
@@ -236,7 +236,7 @@ public:
                                            0,
                                            &size);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         std::string value(size - 1, 0);
@@ -247,7 +247,7 @@ public:
                                     &value[0],
                                     0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return value;
@@ -266,7 +266,7 @@ public:
                                           name.c_str(),
                                           &error);
         if(!kernel){
-            BOOST_THROW_EXCEPTION(runtime_exception(error));
+            BOOST_THROW_EXCEPTION(opencl_error(error));
         }
 
         return detail::program_create_kernel_result(kernel);
@@ -293,7 +293,7 @@ public:
                                                         0,
                                                         &error);
         if(!program_){
-            BOOST_THROW_EXCEPTION(runtime_exception(error));
+            BOOST_THROW_EXCEPTION(opencl_error(error));
         }
 
         return program(program_, false);
@@ -338,10 +338,10 @@ public:
                                                         &binary_status,
                                                         &error);
         if(!program_){
-            BOOST_THROW_EXCEPTION(runtime_exception(error));
+            BOOST_THROW_EXCEPTION(opencl_error(error));
         }
         if(binary_status != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(binary_status));
+            BOOST_THROW_EXCEPTION(opencl_error(binary_status));
         }
 
         return program(program_, false);
@@ -427,7 +427,7 @@ public:
                                                         0,
                                                         &error);
         if(!program_){
-            BOOST_THROW_EXCEPTION(runtime_exception(error));
+            BOOST_THROW_EXCEPTION(opencl_error(error));
         }
 
         program prog(program_, false);

@@ -192,7 +192,7 @@ public:
     {
         cl_int ret = clWaitForEvents(1, &m_event);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
 
@@ -212,7 +212,7 @@ public:
     {
         cl_int ret = clSetEventCallback(m_event, status, callback, user_data);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
 

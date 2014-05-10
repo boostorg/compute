@@ -18,9 +18,22 @@ namespace compute {
 
 class context;
 
+/// \class context_error
+/// \brief A run-time OpenCL context error.
+///
+/// The context_error exception is thrown when the OpenCL context encounters
+/// an error condition. Boost.Compute is notified of these error conditions by
+/// registering an error handler when creating context objects (via the
+/// \c pfn_notify argument to the \c clCreateContext() function).
+///
+/// This exception is different than the opencl_error exception which is thrown
+/// as a result of error caused when calling a single OpenCL API function.
+///
+/// \see opencl_error
 class context_error : public std::exception
 {
 public:
+    /// Creates a new context error exception object.
     context_error(const context *context,
                   const char *errinfo,
                   const void *private_info,
@@ -32,15 +45,19 @@ public:
     {
     }
 
+    /// Destroys the context error object.
     ~context_error() throw()
     {
     }
 
+    /// Returns a pointer to the context object which generated the error
+    /// notification.
     const context* get_context() const throw()
     {
         return m_context;
     }
 
+    /// Returns a string with a description of the error.
     const char* what() const throw()
     {
         return m_errinfo;

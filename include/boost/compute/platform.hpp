@@ -126,7 +126,7 @@ public:
                                     &device_ids[0],
                                     0);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         std::vector<device> devices;
@@ -143,7 +143,7 @@ public:
         cl_uint count = 0;
         cl_int ret = clGetDeviceIDs(m_platform, type, 0, 0, &count);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(runtime_exception(ret));
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         return count;

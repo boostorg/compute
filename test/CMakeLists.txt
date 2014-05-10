@@ -109,6 +109,8 @@ add_compute_test("container.string" test_string.cpp)
 add_compute_test("container.valarray" test_valarray.cpp)
 add_compute_test("container.vector" test_vector.cpp)
 
+add_compute_test("exception.opencl_error" test_opencl_error.cpp)
+
 add_compute_test("functional.as" test_functional_as.cpp)
 add_compute_test("functional.convert" test_functional_convert.cpp)
 add_compute_test("functional.get" test_functional_get.cpp)
