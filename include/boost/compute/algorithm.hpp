@@ -66,6 +66,7 @@
 #include <boost/compute/algorithm/rotate_copy.hpp>
 #include <boost/compute/algorithm/scatter.hpp>
 #include <boost/compute/algorithm/search.hpp>
+#include <boost/compute/algorithm/search_n.hpp>
 #include <boost/compute/algorithm/sort.hpp>
 #include <boost/compute/algorithm/sort_by_key.hpp>
 #include <boost/compute/algorithm/stable_sort.hpp>
