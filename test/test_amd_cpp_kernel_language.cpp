@@ -16,6 +16,7 @@
 #include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/detail/vendor.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"
@@ -24,7 +25,7 @@ namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(amd_template_function)
 {
-    if(device.vendor() != "Advanced Micro Devices, Inc."){
+    if(!compute::detail::is_amd_device(device)){
         std::cerr << "skipping amd_template_function test: c++ static kernel "
                      "language is only supported on AMD devices." << std::endl;
         return;

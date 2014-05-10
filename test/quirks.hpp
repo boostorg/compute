@@ -13,6 +13,7 @@
 
 #include <boost/compute/device.hpp>
 #include <boost/compute/platform.hpp>
+#include <boost/compute/detail/vendor.hpp>
 
 // this file contains functions which check for 'quirks' or buggy
 // behavior in OpenCL implementations. this allows us to skip certain
@@ -34,15 +35,7 @@ inline bool is_pocl_device(const boost::compute::device &device)
 // see: http://devgurus.amd.com/thread/166622
 inline bool bug_in_struct_assignment(const boost::compute::device &device)
 {
-    boost::compute::platform platform(
-        device.get_info<cl_platform_id>(CL_DEVICE_PLATFORM)
-    );
-
-    if(platform.vendor() == "Advanced Micro Devices, Inc."){
-        return true;
-    }
-
-    return false;
+    return boost::compute::detail::is_amd_device(device);
 }
 
 // returns true if the device supports image samplers.

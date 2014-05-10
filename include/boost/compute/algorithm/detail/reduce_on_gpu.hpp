@@ -17,6 +17,7 @@
 #include <boost/compute/program.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/program_cache.hpp>
+#include <boost/compute/detail/vendor.hpp>
 #include <boost/compute/detail/work_size.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
@@ -171,12 +172,7 @@ inline void reduce_on_gpu(InputIterator first,
                           Function function,
                           command_queue &queue)
 {
-    //retrive the vendor name
     const device &device = queue.get_device();
-    const std::string &vendor = device.vendor();
-    //and we pass it to reduce_on_gpu
-    // we only check the 6 first caracter
-    bool isNvidia = (vendor.compare(0,6,"NVIDIA",0,6) == 0);
 
     detail::meta_kernel k("reduce");
     k.add_arg<T*>("__global const","input");
@@ -202,7 +198,7 @@ inline void reduce_on_gpu(InputIterator first,
         "scratch[lid] = sum;\n";
 
     // discrimination on vendor name
-    if(isNvidia)
+    if(is_nvidia_device(device))
         k << ReduceBody<T,true>::body();
     else
         k << ReduceBody<T,false>::body();
