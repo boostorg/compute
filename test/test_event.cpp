@@ -39,9 +39,11 @@ callback(cl_event event, cl_int status, void *user_data)
 BOOST_AUTO_TEST_CASE(event_callback)
 {
     BOOST_CHECK_EQUAL(callback_invoked, false);
-    boost::compute::event marker = queue.enqueue_marker();
-    marker.set_callback(callback);
-    queue.finish();
+    {
+        boost::compute::event marker = queue.enqueue_marker();
+        marker.set_callback(callback);
+        queue.finish();
+    }
     BOOST_CHECK_EQUAL(callback_invoked, true);
 }
 
@@ -49,9 +51,11 @@ BOOST_AUTO_TEST_CASE(event_callback)
 BOOST_AUTO_TEST_CASE(lambda_callback)
 {
     bool lambda_invoked = false;
-    boost::compute::event marker = queue.enqueue_marker();
-    marker.set_callback([&lambda_invoked](){ lambda_invoked = true; });
-    queue.finish();
+    {
+        boost::compute::event marker = queue.enqueue_marker();
+        marker.set_callback([&lambda_invoked](){ lambda_invoked = true; });
+        queue.finish();
+    }
     BOOST_CHECK_EQUAL(lambda_invoked, true);
 }
 #endif // BOOST_NO_CXX11_LAMBDAS
@@ -75,6 +79,10 @@ BOOST_AUTO_TEST_CASE(event_to_std_future)
     auto *promise = new std::promise<void>;
     std::future<void> future = promise->get_future();
     event.set_callback(event_promise_fulfiller_callback, CL_COMPLETE, promise);
+
+    // reset the event object (neccessary for intel gpus to fire the callback)
+    event = boost::compute::event();
+
     future.wait();
 }
 #endif // BOOST_NO_CXX11_HDR_FUTURE
