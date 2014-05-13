@@ -21,6 +21,7 @@ set(EXAMPLES
   transform_sqrt
   vector_addition
   simple_moving_average
+  matrix_transpose
 )
 
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
