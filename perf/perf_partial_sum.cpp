@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
 
     // create vector on the device and copy the data
     boost::compute::vector<int> device_vector(PERF_N, context);
+    boost::compute::vector<int> device_res(PERF_N,context);
     boost::compute::copy(
         host_vector.begin(),
         host_vector.end(),
@@ -63,7 +64,7 @@ int main(int argc, char *argv[])
         boost::compute::partial_sum(
             device_vector.begin(),
             device_vector.end(),
-            device_vector.begin(),
+            device_res.begin(),
             queue
         );
         queue.finish();
@@ -78,7 +79,7 @@ int main(int argc, char *argv[])
         host_vector.begin()
     );
 
-    int device_sum = device_vector.back();
+    int device_sum = device_res.back();
     int host_sum = host_vector.back();
 
     if(device_sum != host_sum){
