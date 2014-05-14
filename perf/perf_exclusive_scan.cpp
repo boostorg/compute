@@ -1,20 +1,10 @@
-//---------------------------------------------------------------------------//
-// Copyright (c) 2013-2014 Kyle Lutz <kyle.r.lutz@gmail.com>
-//
-// Distributed under the Boost Software License, Version 1.0
-// See accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt
-//
-// See http://kylelutz.github.com/compute for more information.
-//---------------------------------------------------------------------------//
-
 #include <algorithm>
 #include <iostream>
 #include <numeric>
 #include <vector>
 
 #include <boost/compute/system.hpp>
-#include <boost/compute/algorithm/partial_sum.hpp>
+#include <boost/compute/algorithm/exclusive_scan.hpp>
 #include <boost/compute/container/vector.hpp>
 
 #include "perf.hpp"
@@ -61,7 +51,7 @@ int main(int argc, char *argv[])
         );
 
         t.start();
-        boost::compute::partial_sum(
+        boost::compute::exclusive_scan(
             device_vector.begin(),
             device_vector.end(),
             device_res.begin(),
@@ -80,7 +70,9 @@ int main(int argc, char *argv[])
     );
 
     int device_sum = device_res.back();
-    int host_sum = host_vector.back();
+    // when scan is exclusive values are shifted by one on the left
+    // compared to a inclusive scan
+    int host_sum = host_vector[host_vector.size()-2];
 
     if(device_sum != host_sum){
         std::cout << "ERROR: "

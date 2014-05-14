@@ -29,6 +29,7 @@ set(BENCHMARKS
   sort_float
   unique
   unique_copy
+  exclusive_scan
 )
 
 foreach(BENCHMARK ${BENCHMARKS})
@@ -70,6 +71,7 @@ if(${BOOST_COMPUTE_HAVE_CUDA})
     thrust_partial_sum
     thrust_saxpy
     thrust_sort
+    thrust_exclusive_scan
   )
 
   foreach(BENCHMARK ${CUDA_BENCHMARKS})
