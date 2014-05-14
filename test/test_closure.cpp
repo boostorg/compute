@@ -64,4 +64,20 @@ BOOST_AUTO_TEST_CASE(add_two_and_pi)
     BOOST_CHECK_CLOSE(results[3], 9.84f, 1e-6);
 }
 
+BOOST_AUTO_TEST_CASE(scale_add_vec)
+{
+    const int N = 10;
+    float s = 4.5;
+    compute::vector<float> a(N, context);
+    compute::vector<float> b(N, context);
+    a.assign(N, 1.0f, queue);
+    b.assign(N, 2.0f, queue);
+
+    BOOST_COMPUTE_CLOSURE(float, scaleAddVec, (float b, float a), (s),
+    {
+        return b * s + a;
+    });
+    compute::transform(b.begin(), b.end(), a.begin(), b.begin(), scaleAddVec, queue);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

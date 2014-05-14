@@ -880,10 +880,10 @@ operator<<(meta_kernel &kernel, const invoked_function<ResultType, ArgTuple> &ex
     return kernel;
 }
 
-template<class ResultType, class Arg1, class CaptureTuple>
+template<class ResultType, class ArgTuple, class CaptureTuple>
 inline meta_kernel&
 operator<<(meta_kernel &kernel,
-           const invoked_closure<ResultType, boost::tuple<Arg1>, CaptureTuple> &expr)
+           const invoked_closure<ResultType, ArgTuple, CaptureTuple> &expr)
 {
     if(!expr.source().empty()){
         kernel.add_function(expr.name(), expr.source(), expr.definitions());
