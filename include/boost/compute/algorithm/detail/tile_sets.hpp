@@ -35,11 +35,11 @@ template<class InputIterator1, class InputIterator2,
 class tile_sets_kernel : public meta_kernel
 {
 public:
-    std::string tile_size;
+    unsigned int tile_size;
 
     tile_sets_kernel() : meta_kernel("tile_sets")
     {
-        tile_size = "4";
+        tile_size = 4;
     }
 
     void set_range(InputIterator1 first1,
@@ -125,7 +125,7 @@ public:
         set_arg(m_a_count_arg, uint_(m_a_count));
         set_arg(m_b_count_arg, uint_(m_b_count));
 
-        return exec_1d(queue, 0, (m_a_count + m_b_count)/atoi(tile_size.c_str()));
+        return exec_1d(queue, 0, (m_a_count + m_b_count)/tile_size);
     }
 
 private:

@@ -12,7 +12,6 @@
 #define BOOST_COMPUTE_ALGORITHM_SET_INTERSECTION_HPP
 
 #include <iterator>
-#include <string>
 
 #include <boost/compute/algorithm/detail/compact.hpp>
 #include <boost/compute/algorithm/detail/tile_sets.hpp>
@@ -21,6 +20,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/detail/read_write_single_value.hpp>
 #include <boost/compute/system.hpp>
 
 namespace boost {
@@ -38,11 +38,11 @@ template<class InputIterator1, class InputIterator2,
 class serial_set_intersection_kernel : meta_kernel
 {
 public:
-    std::string tile_size;
+    unsigned int tile_size;
 
     serial_set_intersection_kernel() : meta_kernel("set_intersection")
     {
-        tile_size = "4";
+        tile_size = 4;
     }
 
     void set_range(InputIterator1 first1,
@@ -159,8 +159,6 @@ inline OutputIterator set_intersection(InputIterator1 first1,
 
     exclusive_scan(counts.begin(), counts.end(), counts.begin(), queue);
 
-    queue.finish();
-
     // Compact the results
     detail::compact_kernel<InputIterator1,
                            vector<uint_>::iterator,
@@ -170,7 +168,7 @@ inline OutputIterator set_intersection(InputIterator1 first1,
 
     compact_kernel.exec(queue);
 
-    return result + counts.back();
+    return result + detail::read_single_value<uint_>(counts.get_buffer(), counts.size()-1, queue);
 }
 
 } //end compute namespace

@@ -32,11 +32,11 @@ template<class InputIterator1, class InputIterator2, class OutputIterator>
 class compact_kernel : public meta_kernel
 {
 public:
-    std::string tile_size;
+    unsigned int tile_size;
 
     compact_kernel() : meta_kernel("compact")
     {
-        tile_size = "4";
+        tile_size = 4;
     }
 
     void set_range(InputIterator1 start,
