@@ -40,6 +40,7 @@
 #include <boost/compute/algorithm/generate.hpp>
 #include <boost/compute/algorithm/generate_n.hpp>
 #include <boost/compute/algorithm/inclusive_scan.hpp>
+#include <boost/compute/algorithm/includes.hpp>
 #include <boost/compute/algorithm/inner_product.hpp>
 #include <boost/compute/algorithm/iota.hpp>
 #include <boost/compute/algorithm/is_partitioned.hpp>
@@ -67,7 +68,10 @@
 #include <boost/compute/algorithm/scatter.hpp>
 #include <boost/compute/algorithm/search.hpp>
 #include <boost/compute/algorithm/search_n.hpp>
+#include <boost/compute/algorithm/set_difference.hpp>
 #include <boost/compute/algorithm/set_intersection.hpp>
+#include <boost/compute/algorithm/set_symmetric_difference.hpp>
+#include <boost/compute/algorithm/set_union.hpp>
 #include <boost/compute/algorithm/sort.hpp>
 #include <boost/compute/algorithm/sort_by_key.hpp>
 #include <boost/compute/algorithm/stable_sort.hpp>
