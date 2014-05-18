@@ -40,6 +40,11 @@ public:
         linear = CL_FILTER_LINEAR
     };
 
+    image_sampler()
+        : m_sampler(0)
+    {
+    }
+
     image_sampler(const context &context,
                   bool normalized_coords,
                   cl_addressing_mode addressing_mode,
