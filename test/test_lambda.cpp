@@ -129,14 +129,21 @@ BOOST_AUTO_TEST_CASE(result_of)
     check_lambda_result<float>(proto::lit(1) + 1.2f);
     check_lambda_result<float>(proto::lit(1) / 2 + 1.2f);
 
+    using boost::compute::float4_;
+
     check_lambda_result<int>(_1, int(1));
     check_lambda_result<float>(_1, float(1.2f));
-    check_lambda_result<bc::float4_>(_1, bc::float4_(1, 2, 3, 4));
-    check_lambda_result<bc::float4_>(2.0f * _1, bc::float4_(1, 2, 3, 4));
-    check_lambda_result<bc::float4_>(_1 * 2.0f, bc::float4_(1, 2, 3, 4));
+    check_lambda_result<float4_>(_1, float4_(1, 2, 3, 4));
+    check_lambda_result<float4_>(2.0f * _1, float4_(1, 2, 3, 4));
+    check_lambda_result<float4_>(_1 * 2.0f, float4_(1, 2, 3, 4));
 
-    check_lambda_result<float>(dot(_1, _2), bc::float4_(0, 1, 2, 3), bc::float4_(3, 2, 1, 0));
-    check_lambda_result<float>(dot(_1, bc::float4_(3, 2, 1, 0)), bc::float4_(0, 1, 2, 3));
+    check_lambda_result<float>(dot(_1, _2), float4_(0, 1, 2, 3), float4_(3, 2, 1, 0));
+    check_lambda_result<float>(dot(_1, float4_(3, 2, 1, 0)), float4_(0, 1, 2, 3));
+    check_lambda_result<float>(distance(_1, _2), float4_(0, 1, 2, 3), float4_(3, 2, 1, 0));
+    check_lambda_result<float>(distance(_1, float4_(3, 2, 1, 0)), float4_(0, 1, 2, 3));
+
+    check_lambda_result<float4_>(cross(_1, _2), float4_(0, 1, 2, 3), float4_(3, 2, 1, 0));
+    check_lambda_result<float4_>(cross(_1, float4_(3, 2, 1, 0)), float4_(0, 1, 2, 3));
 
     check_lambda_result<int>(_1 + 2, int(2));
     check_lambda_result<float>(_1 + 2, float(2.2f));
@@ -147,7 +154,6 @@ BOOST_AUTO_TEST_CASE(result_of)
     check_lambda_result<int>(_1 + _1, int(1));
     check_lambda_result<float>(_1 * _1, float(1));
 
-    using boost::compute::float4_;
     using boost::compute::lambda::get;
 
     check_lambda_result<float>(get<0>(_1), float4_(1, 2, 3, 4));

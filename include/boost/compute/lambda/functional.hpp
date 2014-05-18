@@ -92,6 +92,7 @@ namespace proto = boost::proto;
         ); \
     }
 
+// wraps a binary function
 #define BOOST_COMPUTE_LAMBDA_WRAP_BINARY_FUNCTION(name) \
     namespace detail { \
         struct BOOST_PP_CAT(name, _func) \
@@ -101,6 +102,41 @@ namespace proto = boost::proto;
             { \
                 typedef typename proto::result_of::child_c<Expr, 1>::type Arg1; \
                 typedef typename ::boost::compute::lambda::result_of<Arg1, Args>::type type; \
+            }; \
+            \
+            template<class Context, class Arg1, class Arg2> \
+            static void apply(Context &ctx, const Arg1 &arg1, const Arg2 &arg2) \
+            { \
+                ctx.stream << #name << "("; \
+                proto::eval(arg1, ctx); \
+                ctx.stream << ", "; \
+                proto::eval(arg2, ctx); \
+                ctx.stream << ")"; \
+            } \
+        }; \
+    } \
+    template<class Arg1, class Arg2> \
+    inline typename proto::result_of::make_expr< \
+        proto::tag::function, BOOST_PP_CAT(detail::name, _func), const Arg1&, const Arg2& \
+    >::type const \
+    name(const Arg1 &arg1, const Arg2 &arg2) \
+    { \
+        return proto::make_expr<proto::tag::function>( \
+            BOOST_PP_CAT(detail::name, _func)(), ::boost::ref(arg1), ::boost::ref(arg2) \
+        ); \
+    }
+
+// wraps a binary function who's result type is the scalar type of the first argument
+#define BOOST_COMPUTE_LAMBDA_WRAP_BINARY_FUNCTION_ST(name) \
+    namespace detail { \
+        struct BOOST_PP_CAT(name, _func) \
+        { \
+            template<class Expr, class Args> \
+            struct lambda_result \
+            { \
+                typedef typename proto::result_of::child_c<Expr, 1>::type Arg1; \
+                typedef typename ::boost::compute::lambda::result_of<Arg1, Args>::type result_type; \
+                typedef typename ::boost::compute::scalar_type<result_type>::type type; \
             }; \
             \
             template<class Context, class Arg1, class Arg2> \
@@ -186,57 +222,18 @@ BOOST_COMPUTE_LAMBDA_WRAP_UNARY_FUNCTION_T(log10)
 BOOST_COMPUTE_LAMBDA_WRAP_UNARY_FUNCTION_T(round)
 BOOST_COMPUTE_LAMBDA_WRAP_UNARY_FUNCTION_T(length)
 
-//BOOST_COMPUTE_LAMBDA_WRAP_BINARY_FUNCTION(cross)
-//BOOST_COMPUTE_LAMBDA_WRAP_BINARY_FUNCTION(dot)
-//BOOST_COMPUTE_LAMBDA_WRAP_BINARY_FUNCTION(distance)
+BOOST_COMPUTE_LAMBDA_WRAP_BINARY_FUNCTION(cross)
 BOOST_COMPUTE_LAMBDA_WRAP_BINARY_FUNCTION(pow)
 BOOST_COMPUTE_LAMBDA_WRAP_BINARY_FUNCTION(pown)
 BOOST_COMPUTE_LAMBDA_WRAP_BINARY_FUNCTION(powr)
+
+BOOST_COMPUTE_LAMBDA_WRAP_BINARY_FUNCTION_ST(dot)
+BOOST_COMPUTE_LAMBDA_WRAP_BINARY_FUNCTION_ST(distance)
 
 BOOST_COMPUTE_LAMBDA_WRAP_TERNARY_FUNCTION(clamp)
 BOOST_COMPUTE_LAMBDA_WRAP_TERNARY_FUNCTION(fma)
 BOOST_COMPUTE_LAMBDA_WRAP_TERNARY_FUNCTION(mad)
 BOOST_COMPUTE_LAMBDA_WRAP_TERNARY_FUNCTION(smoothstep)
-
-namespace detail {
-
-struct dot_func
-{
-    template<class Expr, class Args>
-    struct lambda_result
-    {
-        typedef typename proto::result_of::child_c<Expr, 1>::type Arg1;
-        typedef typename proto::result_of::child_c<Expr, 2>::type Arg2;
-
-        typedef typename ::boost::compute::lambda::result_of<Arg1, Args>::type T1;
-        typedef typename ::boost::compute::lambda::result_of<Arg2, Args>::type T2;
-
-        typedef typename ::boost::compute::scalar_type<T1>::type type;
-    };
-
-    template<class Context, class Arg1, class Arg2>
-    static void apply(Context &ctx, const Arg1 &arg1, const Arg2 &arg2)
-    {
-        ctx.stream << "dot(";
-        proto::eval(arg1, ctx);
-        ctx.stream << ", ";
-        proto::eval(arg2, ctx);
-        ctx.stream << ")";
-    }
-};
-
-} // end detail namespace
-
-template<class Arg1, class Arg2>
-inline typename proto::result_of::make_expr<
-    proto::tag::function, detail::dot_func, const Arg1&, const Arg2&
->::type const
-dot(const Arg1 &arg1, const Arg2 &arg2)
-{
-    return proto::make_expr<proto::tag::function>(
-        detail::dot_func(), ::boost::ref(arg1), ::boost::ref(arg2)
-    );
-}
 
 } // end lambda namespace
 } // end compute namespace
