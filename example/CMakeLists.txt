@@ -76,6 +76,13 @@ if(${BOOST_COMPUTE_HAVE_QT})
   include_directories(${CMAKE_CURRENT_BINARY_DIR})
   add_executable(qimage_blur qimage_blur.cpp)
   target_link_libraries(qimage_blur ${OPENCL_LIBRARIES} ${QT_LIBRARIES})
-  add_executable(mandelbrot mandelbrot.cpp)
-  target_link_libraries(mandelbrot ${OPENCL_LIBRARIES} ${QT_LIBRARIES} GL)
+
+  set(QT_OPENGL_EXAMPLES
+    mandelbrot
+    resize_image
+  )
+  foreach(EXAMPLE ${QT_OPENGL_EXAMPLES})
+    add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
+    target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${QT_LIBRARIES} GL)
+  endforeach()
 endif()
