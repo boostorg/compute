@@ -12,6 +12,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/lambda.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/algorithm/find_if.hpp>
@@ -23,6 +24,7 @@
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(find_int)
 {
@@ -79,6 +81,26 @@ BOOST_AUTO_TEST_CASE(find_if_not_int)
         bc::find_if_not(vector.begin(), vector.end(), bc::_1 == 2);
     BOOST_CHECK(iter == vector.begin() + 1);
     BOOST_CHECK_EQUAL(*iter, 4);
+}
+
+BOOST_AUTO_TEST_CASE(find_point_by_distance)
+{
+    using boost::compute::float2_;
+    using boost::compute::lambda::_1;
+    using boost::compute::lambda::distance;
+
+    float2_ points[] = {
+        float2_(0, 0), float2_(2, 2), float2_(4, 4), float2_(8, 8)
+    };
+    compute::vector<float2_> vec(points, points + 4, queue);
+
+    compute::vector<float2_>::iterator iter =
+        compute::find_if(vec.begin(), vec.end(), distance(_1, float2_(5, 5)) < 1.5f, queue);
+    BOOST_CHECK(iter == vec.begin() + 2);
+
+    float2_ value;
+    compute::copy_n(iter, 1, &value, queue);
+    BOOST_CHECK_EQUAL(value, float2_(4, 4));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
