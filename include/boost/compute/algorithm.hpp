@@ -40,6 +40,7 @@
 #include <boost/compute/algorithm/generate.hpp>
 #include <boost/compute/algorithm/generate_n.hpp>
 #include <boost/compute/algorithm/inclusive_scan.hpp>
+#include <boost/compute/algorithm/includes.hpp>
 #include <boost/compute/algorithm/inner_product.hpp>
 #include <boost/compute/algorithm/iota.hpp>
 #include <boost/compute/algorithm/is_partitioned.hpp>
