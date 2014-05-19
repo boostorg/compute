@@ -1275,6 +1275,20 @@ inline buffer buffer::clone(command_queue &queue) const
     return copy;
 }
 
+inline image2d image2d::clone(command_queue &queue) const
+{
+    image2d copy(
+        get_context(), get_memory_flags(), get_format(), width(), height(), 0, 0
+    );
+
+    size_t origin[2] = { 0, 0 };
+    size_t region[2] = { this->width(), this->height() };
+
+    queue.enqueue_copy_image(*this, copy, origin, origin, region);
+
+    return copy;
+}
+
 } // end compute namespace
 } // end boost namespace
 

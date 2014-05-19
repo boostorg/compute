@@ -26,6 +26,9 @@
 namespace boost {
 namespace compute {
 
+// forward declarations
+class command_queue;
+
 class image2d : public memory_object
 {
 public:
@@ -163,6 +166,10 @@ public:
 
         return formats;
     }
+
+    /// Creates a new image with a copy of the data in \c *this. Uses \p queue
+    /// to perform the copy operation.
+    image2d clone(command_queue &queue) const;
 };
 
 namespace detail {
