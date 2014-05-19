@@ -8,16 +8,11 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#define BOOST_TEST_MODULE TestWaitList
+#define BOOST_TEST_MODULE TestAsyncWait
 #include <boost/test/unit_test.hpp>
 
-#include <algorithm>
-#include <vector>
-
-#include <boost/compute/command_queue.hpp>
-#include <boost/compute/system.hpp>
-#include <boost/compute/wait_list.hpp>
 #include <boost/compute/async/future.hpp>
+#include <boost/compute/async/wait.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/container/vector.hpp>
 
@@ -26,16 +21,12 @@
 
 namespace compute = boost::compute;
 
-BOOST_AUTO_TEST_CASE(create_wait_list)
+BOOST_AUTO_TEST_CASE(empty)
 {
-    compute::wait_list events;
-    BOOST_CHECK_EQUAL(events.size(), 0);
-    BOOST_CHECK_EQUAL(events.empty(), true);
-    BOOST_CHECK(events.get_event_ptr() == 0);
 }
 
 #ifndef BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
-BOOST_AUTO_TEST_CASE(variadic_insert)
+BOOST_AUTO_TEST_CASE(wait_for_copy)
 {
     // wait list
     compute::wait_list events;
@@ -45,6 +36,16 @@ BOOST_AUTO_TEST_CASE(variadic_insert)
 
     // create vector on the device
     compute::vector<int> vector(8, context);
+
+    // fill vector with 9's
+    compute::future<void> fill_future =
+        compute::fill_async(vector.begin(), vector.end(), 9, queue);
+
+    // wait for fill() to complete
+    compute::wait_for_all(fill_future);
+
+    // check data on the device
+    CHECK_RANGE_EQUAL(int, 8, vector, (9, 9, 9, 9, 9, 9, 9, 9));
 
     // copy each pair of values independently and asynchronously
     compute::event copy1 = queue.enqueue_write_buffer_async(
@@ -60,48 +61,12 @@ BOOST_AUTO_TEST_CASE(variadic_insert)
         vector.get_buffer(), 6 * sizeof(int), 2 * sizeof(int), data + 6
     );
 
-    // add all events to the wait list
-    events.insert(copy1, copy2, copy3, copy4);
+    // wait for all copies to complete
+    compute::wait_for_all(copy1, copy2, copy3, copy4);
 
-    // block until all events complete
-    events.wait();
-
-    // check
+    // check data on the device
     CHECK_RANGE_EQUAL(int, 8, vector, (1, 2, 3, 4, 5, 6, 7, 8));
 }
 #endif // BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
-
-BOOST_AUTO_TEST_CASE(insert_future)
-{
-    // create vector on the host
-    std::vector<int> host_vector(4);
-    std::fill(host_vector.begin(), host_vector.end(), 7);
-
-    // create vector on the device
-    compute::vector<int> device_vector(4, context);
-
-    // create wait list
-    compute::wait_list events;
-
-    // copy values to device
-    compute::future<void> future = compute::copy_async(
-        host_vector.begin(), host_vector.end(), device_vector.begin(), queue
-    );
-
-    // add future event to the wait list
-    events.insert(future);
-    BOOST_CHECK_EQUAL(events.size(), 1);
-    BOOST_CHECK(events.get_event_ptr() != 0);
-
-    // wait for copy to complete
-    events.wait();
-
-    // check values
-    CHECK_RANGE_EQUAL(int, 4, device_vector, (7, 7, 7, 7));
-
-    // clear the event list
-    events.clear();
-    BOOST_CHECK_EQUAL(events.size(), 0);
-}
 
 BOOST_AUTO_TEST_SUITE_END()

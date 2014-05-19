@@ -104,6 +104,8 @@ add_compute_test("algorithm.transform_reduce" test_transform_reduce.cpp)
 add_compute_test("algorithm.unique" test_unique.cpp)
 add_compute_test("algorithm.unique_copy" test_unique_copy.cpp)
 
+add_compute_test("async.wait" test_async_wait.cpp)
+
 add_compute_test("container.allocator" test_allocator.cpp)
 add_compute_test("container.array" test_array.cpp)
 add_compute_test("container.flat_map" test_flat_map.cpp)
