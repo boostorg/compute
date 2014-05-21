@@ -16,6 +16,25 @@
 
 namespace boost {
 namespace compute {
+namespace detail {
+
+#ifndef BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
+template<class Event>
+inline void insert_events_variadic(wait_list &l, Event&& event)
+{
+    l.insert(std::forward<Event>(event));
+}
+
+template<class Event, class... Rest>
+inline void insert_events_variadic(wait_list &l, Event&& event, Rest&&... rest)
+{
+    l.insert(std::forward<Event>(event));
+
+    insert_events_variadic(l, std::forward<Rest>(rest)...);
+}
+#endif // BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
+
+} // end detail namespace
 
 #ifndef BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
 /// Blocks until all events have completed. Events can either be event
@@ -24,7 +43,7 @@ template<class... Events>
 inline void wait_for_all(Events&&... events)
 {
     wait_list l;
-    l.insert(std::forward<Events>(events)...);
+    detail::insert_events_variadic(l, std::forward<Events>(events)...);
     l.wait();
 }
 #endif // BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES

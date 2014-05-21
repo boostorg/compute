@@ -13,7 +13,6 @@
 
 #include <vector>
 
-#include <boost/compute/config.hpp>
 #include <boost/compute/event.hpp>
 
 namespace boost {
@@ -112,15 +111,6 @@ public:
         insert(future.get_event());
     }
 
-    #ifndef BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
-    /// Inserts all of \p events into the wait list.
-    template<class... Event>
-    void insert(const Event&... events)
-    {
-        _insert_variadic(events...);
-    }
-    #endif // BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
-
     /// Blocks until all of the events in the wait-list have completed.
     ///
     /// Does nothing if the wait-list is empty.
@@ -132,22 +122,6 @@ public:
             );
         }
     }
-
-private:
-    #ifndef BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
-    template<class Event>
-    void _insert_variadic(const Event &event)
-    {
-        insert(event);
-    }
-
-    template<class Event, class... Rest>
-    void _insert_variadic(const Event &event, const Rest&... rest)
-    {
-        insert(event);
-        _insert_variadic(rest...);
-    }
-    #endif // BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
 
 private:
     std::vector<event> m_events;
