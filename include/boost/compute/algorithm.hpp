@@ -74,6 +74,7 @@
 #include <boost/compute/algorithm/set_union.hpp>
 #include <boost/compute/algorithm/sort.hpp>
 #include <boost/compute/algorithm/sort_by_key.hpp>
+#include <boost/compute/algorithm/stable_partition.hpp>
 #include <boost/compute/algorithm/stable_sort.hpp>
 #include <boost/compute/algorithm/swap_ranges.hpp>
 #include <boost/compute/algorithm/transform.hpp>

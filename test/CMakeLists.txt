@@ -98,6 +98,7 @@ add_compute_test("algorithm.set_symmetric_difference" test_set_symmetric_differe
 add_compute_test("algorithm.set_union" test_set_union.cpp)
 add_compute_test("algorithm.sort" test_sort.cpp)
 add_compute_test("algorithm.sort_by_key" test_sort_by_key.cpp)
+add_compute_test("algorithm.stable_partition" test_stable_partition.cpp)
 add_compute_test("algorithm.stable_sort" test_stable_sort.cpp)
 add_compute_test("algorithm.transform" test_transform.cpp)
 add_compute_test("algorithm.transform_reduce" test_transform_reduce.cpp)
