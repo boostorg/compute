@@ -51,6 +51,8 @@ if(${BOOST_COMPUTE_HAVE_OPENCV})
     k_means
     opencv_filter
     random_walk
+    opencv_optical_flow
+    opencv_optical_flow_camera
   )
 
   foreach(EXAMPLE ${OPENCV_EXAMPLES})
