@@ -17,6 +17,7 @@
 #include <boost/preprocessor/repetition.hpp>
 
 #include <boost/compute/config.hpp>
+#include <boost/compute/function.hpp>
 #include <boost/compute/lambda/result_of.hpp>
 #include <boost/compute/lambda/functional.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
@@ -274,6 +275,44 @@ struct expression : proto::extends<Expr, expression<Expr>, domain>
                    Arg1,
                    Arg2
                 >(*this, x, y);
+    }
+
+    // function<> conversion operator
+    template<class R, class A1>
+    operator function<R(A1)>() const
+    {
+        using ::boost::compute::detail::meta_kernel;
+
+        std::stringstream source;
+
+        ::boost::compute::detail::meta_kernel_variable<A1> arg1("x");
+
+        source << "inline " << type_name<R>() << " lambda"
+               << ::boost::compute::detail::generate_argument_list<R(A1)>('x')
+               << "{\n"
+               << "    return " << meta_kernel::expr_to_string((*this)(arg1)) << ";\n"
+               << "}\n";
+
+        return make_function_from_source<R(A1)>("lambda", source.str());
+    }
+
+    template<class R, class A1, class A2>
+    operator function<R(A1, A2)>() const
+    {
+        using ::boost::compute::detail::meta_kernel;
+
+        std::stringstream source;
+
+        ::boost::compute::detail::meta_kernel_variable<A1> arg1("x");
+        ::boost::compute::detail::meta_kernel_variable<A1> arg2("y");
+
+        source << "inline " << type_name<R>() << " lambda"
+               << ::boost::compute::detail::generate_argument_list<R(A1, A2)>('x')
+               << "{\n"
+               << "    return " << meta_kernel::expr_to_string((*this)(arg1, arg2)) << ";\n"
+               << "}\n";
+
+        return make_function_from_source<R(A1, A2)>("lambda", source.str());
     }
 };
 

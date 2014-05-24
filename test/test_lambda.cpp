@@ -14,6 +14,7 @@
 #include <boost/tuple/tuple_io.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
 
+#include <boost/compute/function.hpp>
 #include <boost/compute/lambda.hpp>
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/for_each.hpp>
@@ -185,20 +186,37 @@ BOOST_AUTO_TEST_CASE(result_of)
 
 BOOST_AUTO_TEST_CASE(make_function_from_lamdba)
 {
-    using boost::compute::_1;
+    using boost::compute::lambda::_1;
 
     int data[] = { 2, 4, 6, 8, 10 };
-    boost::compute::vector<int> vector(data, data + 5);
-    BOOST_CHECK_EQUAL(vector.size(), size_t(5));
+    compute::vector<int> vector(data, data + 5, queue);
 
-//    boost::compute::function<int(int)> f =
-//        boost::compute::make_function_from_lambda<int(int)>(_1 * 2 + 3);
+    compute::function<int(int)> f = _1 * 2 + 3;
 
-    boost::compute::transform(vector.begin(),
-                              vector.end(),
-                              vector.begin(),
-                              boost::compute::make_function_from_lambda<int(int)>(_1 * 2 + 3));
+    compute::transform(
+        vector.begin(), vector.end(), vector.begin(), f, queue
+    );
     CHECK_RANGE_EQUAL(int, 5, vector, (7, 11, 15, 19, 23));
+}
+
+BOOST_AUTO_TEST_CASE(make_function_from_binary_lamdba)
+{
+    using boost::compute::lambda::_1;
+    using boost::compute::lambda::_2;
+    using boost::compute::lambda::abs;
+
+    int data1[] = { 2, 4, 6, 8, 10 };
+    int data2[] = { 10, 8, 6, 4, 2 };
+    compute::vector<int> vec1(data1, data1 + 5, queue);
+    compute::vector<int> vec2(data2, data2 + 5, queue);
+    compute::vector<int> result(5, context);
+
+    compute::function<int(int, int)> f = abs(_1 - _2);
+
+    compute::transform(
+        vec1.begin(), vec1.end(), vec2.begin(), result.begin(), f, queue
+    );
+    CHECK_RANGE_EQUAL(int, 5, result, (8, 4, 0, 4, 8));
 }
 
 BOOST_AUTO_TEST_CASE(lambda_get_vector)

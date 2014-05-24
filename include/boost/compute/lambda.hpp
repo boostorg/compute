@@ -18,6 +18,5 @@
 #include <boost/compute/lambda/make_tuple.hpp>
 #include <boost/compute/lambda/placeholders.hpp>
 #include <boost/compute/lambda/result_of.hpp>
-#include <boost/compute/lambda/make_function_from_lambda.hpp>
 
 #endif // BOOST_COMPUTE_LAMBDA_HPP

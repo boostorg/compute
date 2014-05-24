@@ -345,6 +345,54 @@ inline std::string make_function_declaration(const char *name, const char *argum
     return s.str();
 }
 
+struct argument_list_inserter
+{
+    argument_list_inserter(std::stringstream &s_, const char first, size_t last)
+        : s(s_)
+    {
+        n = 0;
+        m_last = last;
+        m_name = first;
+    }
+
+    template<class T>
+    void operator()(const T*)
+    {
+        s << type_name<T>() << " " << m_name++;
+        if(n+1 < m_last){
+            s << ", ";
+        }
+        n++;
+    }
+
+    size_t n;
+    size_t m_last;
+    char m_name;
+    std::stringstream &s;
+};
+
+template<class Signature>
+inline std::string generate_argument_list(const char first = 'a')
+{
+    typedef typename
+        boost::function_types::parameter_types<Signature>::type parameter_types;
+    typedef typename
+        mpl::size<parameter_types>::type arity_type;
+
+    std::stringstream s;
+    s << '(';
+
+    if(arity_type::value > 0){
+        argument_list_inserter i(s, first, arity_type::value);
+        mpl::for_each<
+            typename mpl::transform<parameter_types, boost::add_pointer<mpl::_1>
+        >::type>(i);
+    }
+
+    s << ')';
+    return s.str();
+}
+
 // used by the BOOST_COMPUTE_FUNCTION() macro to create a function
 // with the given signature, name, arguments, and source.
 template<class Signature>

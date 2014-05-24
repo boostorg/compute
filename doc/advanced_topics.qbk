@@ -102,6 +102,12 @@ To multiply each value in a vector by three and subtract four:
 boost::compute::transform(vector.begin(), vector.end(), vector.begin(), _1 * 3 - 4);
 ``
 
+Lambda expressions can also be used to create function<> objects:
+
+``
+boost::compute::function<int(int)> add_four = _1 + 4;
+``
+
 [endsect] [/ lambda expressions]
 
 [section Asynchronous Operations]

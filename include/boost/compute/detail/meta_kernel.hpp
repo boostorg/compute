@@ -723,7 +723,7 @@ public:
     }
 
     template<class Expr>
-    static std::string _expr_to_string(const Expr &expr)
+    static std::string expr_to_string(const Expr &expr)
     {
         meta_kernel tmp((std::string()));
         tmp << expr;
