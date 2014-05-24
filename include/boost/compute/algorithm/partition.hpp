@@ -12,48 +12,25 @@
 #define BOOST_COMPUTE_ALGORITHM_PARTITION_HPP
 
 #include <boost/compute/system.hpp>
-#include <boost/compute/context.hpp>
-#include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/algorithm/copy_if.hpp>
-#include <boost/compute/container/vector.hpp>
+#include <boost/compute/algorithm/stable_partition.hpp>
 
 namespace boost {
 namespace compute {
 
-/// Partitions the elements in the range [\p first, \p last) according to
-/// \p predicate.
 ///
-/// \see is_partitioned()
+/// Partitions the elements in the range [\p first, \p last) according to
+/// \p predicate. Order of the elements need not be preserved.
+///
+/// \see is_partitioned() and stable_partition()
+///
 template<class Iterator, class UnaryPredicate>
 inline Iterator partition(Iterator first,
                           Iterator last,
                           UnaryPredicate predicate,
                           command_queue &queue = system::default_queue())
 {
-    typedef typename std::iterator_traits<Iterator>::value_type value_type;
-
-    // make temporary copy of the input
-    ::boost::compute::vector<value_type> tmp(first, last, queue);
-
-    // copy true values
-    Iterator last_true =
-        ::boost::compute::copy_if(tmp.begin(),
-                                  tmp.end(),
-                                  first,
-                                  predicate,
-                                  queue);
-
-    // copy false values
-    Iterator last_false =
-        ::boost::compute::copy_if(tmp.begin(),
-                                  tmp.end(),
-                                  last_true,
-                                  not1(predicate),
-                                  queue);
-
-    // return iterator pointing to the last true value
-    return last_true;
+    return stable_partition(first, last, predicate, queue);
 }
 
 } // end compute namespace
