@@ -11,6 +11,7 @@ set(EXAMPLES
   longest_vector
   list_devices
   mapped_view
+  memory_limits
   monte_carlo
   point_centroid
   price_cross
