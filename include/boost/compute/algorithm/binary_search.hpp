@@ -14,6 +14,8 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/lower_bound.hpp>
+#include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/detail/read_write_single_value.hpp>
 
 namespace boost {
 namespace compute {
@@ -28,7 +30,11 @@ inline bool binary_search(InputIterator first,
 {
     InputIterator position = lower_bound(first, last, value, queue);
 
-    return position != last && *position == value;
+    size_t position_index = detail::iterator_range_size(first, position);
+    return position != last &&
+    		detail::read_single_value<T>(first.get_buffer(),
+    								  	 position_index,
+    								  	 queue) == value;
 }
 
 } // end compute namespace
