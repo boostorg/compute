@@ -55,6 +55,7 @@
 #include <boost/compute/algorithm/partial_sum.hpp>
 #include <boost/compute/algorithm/partition.hpp>
 #include <boost/compute/algorithm/partition_copy.hpp>
+#include <boost/compute/algorithm/partition_point.hpp>
 #include <boost/compute/algorithm/random_shuffle.hpp>
 #include <boost/compute/algorithm/reduce.hpp>
 #include <boost/compute/algorithm/remove.hpp>

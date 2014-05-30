@@ -14,7 +14,7 @@
 #include <boost/compute/lambda.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/algorithm/find_if.hpp>
+#include <boost/compute/algorithm/detail/binary_find.hpp>
 
 namespace boost {
 namespace compute {
@@ -32,7 +32,7 @@ upper_bound(InputIterator first,
     using ::boost::compute::_1;
 
     InputIterator position =
-        ::boost::compute::find_if(first, last, _1 > value, queue);
+        detail::binary_find(first, last, _1 > value, queue);
 
     return position;
 }
