@@ -51,6 +51,7 @@
 #include <boost/compute/algorithm/min_element.hpp>
 #include <boost/compute/algorithm/minmax_element.hpp>
 #include <boost/compute/algorithm/mismatch.hpp>
+#include <boost/compute/algorithm/next_permutation.hpp>
 #include <boost/compute/algorithm/none_of.hpp>
 #include <boost/compute/algorithm/partial_sum.hpp>
 #include <boost/compute/algorithm/partition.hpp>

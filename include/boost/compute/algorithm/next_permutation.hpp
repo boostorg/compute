@@ -15,8 +15,7 @@
 
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/lambda.hpp>
-#include <boost/compute/algorithm/find_end.hpp>
+#include <boost/compute/container/detail/scalar.hpp>
 #include <boost/compute/algorithm/reverse.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
 
@@ -78,10 +77,10 @@ inline InputIterator next_permutation_helper(InputIterator first,
 /// that is greater than it
 ///
 template<class InputIterator, class ValueType>
-inline InputIterator ceiling(InputIterator first,
-                             InputIterator last,
-                             ValueType value,
-                             command_queue &queue)
+inline InputIterator np_ceiling(InputIterator first,
+                                InputIterator last,
+                                ValueType value,
+                                command_queue &queue)
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
@@ -91,7 +90,7 @@ inline InputIterator ceiling(InputIterator first,
     }
     const context &context = queue.get_context();
 
-    detail::meta_kernel k("ceiling");
+    detail::meta_kernel k("np_ceiling");
     size_t index_arg = k.add_arg<int *>("__global", "index");
     size_t value_arg = k.add_arg<value_type>("__private", "value");
     atomic_max<int_> atomic_max_int;
@@ -159,7 +158,7 @@ inline bool next_permutation(InputIterator first,
                                               queue);
 
     InputIterator ceiling_element =
-        detail::ceiling(first_element + 1, last, first_value, queue);
+        detail::np_ceiling(first_element + 1, last, first_value, queue);
 
     size_t ceiling_index =
         detail::iterator_range_size(first, ceiling_element);
