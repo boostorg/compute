@@ -44,6 +44,7 @@
 #include <boost/compute/algorithm/inner_product.hpp>
 #include <boost/compute/algorithm/iota.hpp>
 #include <boost/compute/algorithm/is_partitioned.hpp>
+#include <boost/compute/algorithm/is_permutation.hpp>
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/algorithm/lower_bound.hpp>
 #include <boost/compute/algorithm/max_element.hpp>
