@@ -118,8 +118,9 @@ int main()
     kernel.set_arg(2,c.get_buffer());
     kernel.set_arg(3,(int)wSize);
     
-    uint tpb = 128;
-    uint workSize = size;
+    using compute::uint_;
+    uint_ tpb = 128;
+    uint_ workSize = size;
     queue.enqueue_1d_range_kernel(kernel,0,workSize,tpb);
     
     compute::copy(c.begin(),c.end(),host_result.begin(),queue);
