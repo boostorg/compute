@@ -190,13 +190,22 @@ private:
 
         // check for device from environment variable
         const char *name     = detail::getenv("BOOST_COMPUTE_DEFAULT_DEVICE");
+        const char *type     = detail::getenv("BOOST_COMPUTE_DEFAULT_DEVICE_TYPE");
         const char *platform = detail::getenv("BOOST_COMPUTE_DEFAULT_PLATFORM");
         const char *vendor   = detail::getenv("BOOST_COMPUTE_DEFAULT_VENDOR");
 
-        if(name || platform || vendor){
+        if(name || type || platform || vendor){
             BOOST_FOREACH(const device &device, devices_){
                 if (name && !matches(device.name(), name))
                     continue;
+
+                if (type && matches(std::string("GPU"), type))
+                    if (device.type() != device::gpu)
+                        continue;
+
+                if (type && matches(std::string("CPU"), type))
+                    if (device.type() != device::cpu)
+                        continue;
 
                 if (platform && !matches(device_platform(device).name(), platform))
                     continue;
