@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ALGORITHM_NEXT_PERMUTATION_HPP
-#define BOOST_COMPUTE_ALGORITHM_NEXT_PERMUTATION_HPP
+#ifndef BOOST_COMPUTE_ALGORITHM_PREV_PERMUTATION_HPP
+#define BOOST_COMPUTE_ALGORITHM_PREV_PERMUTATION_HPP
 
 #include <iterator>
 
@@ -24,13 +24,13 @@ namespace compute {
 namespace detail {
 
 ///
-/// \brief Helper function for next_permutation
+/// \brief Helper function for prev_permutation
 ///
-/// To find rightmost element which is smaller
+/// To find rightmost element which is greater
 /// than its next element
 ///
 template<class InputIterator>
-inline InputIterator next_permutation_helper(InputIterator first,
+inline InputIterator prev_permutation_helper(InputIterator first,
                                              InputIterator last,
                                              command_queue &queue)
 {
@@ -43,7 +43,7 @@ inline InputIterator next_permutation_helper(InputIterator first,
     count = count - 1;
     const context &context = queue.get_context();
 
-    detail::meta_kernel k("next_permutation");
+    detail::meta_kernel k("prev_permutation");
     size_t index_arg = k.add_arg<int *>("__global", "index");
     atomic_max<int_> atomic_max_int;
 
@@ -52,7 +52,7 @@ inline InputIterator next_permutation_helper(InputIterator first,
       <<     first[k.var<const int_>("i")] << ";\n"
       << k.decl<const value_type>("next_value") << "="
       <<     first[k.expr<const int_>("i+1")] << ";\n"
-      << "if(cur_value < next_value){\n"
+      << "if(cur_value > next_value){\n"
       << "    " << atomic_max_int(k.var<int_ *>("index"), k.var<int_>("i")) << ";\n"
       << "}\n";
 
@@ -71,16 +71,16 @@ inline InputIterator next_permutation_helper(InputIterator first,
 }
 
 ///
-/// \brief Helper function for next_permutation
+/// \brief Helper function for prev_permutation
 ///
-/// To find the smallest element to the right of the element found above
-/// that is greater than it
+/// To find the largest element to the right of the element found above
+/// that is smaller than it
 ///
 template<class InputIterator, class ValueType>
-inline InputIterator np_ceiling(InputIterator first,
-                                InputIterator last,
-                                ValueType value,
-                                command_queue &queue)
+inline InputIterator pp_floor(InputIterator first,
+                              InputIterator last,
+                              ValueType value,
+                              command_queue &queue)
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
@@ -90,7 +90,7 @@ inline InputIterator np_ceiling(InputIterator first,
     }
     const context &context = queue.get_context();
 
-    detail::meta_kernel k("np_ceiling");
+    detail::meta_kernel k("pp_floor");
     size_t index_arg = k.add_arg<int *>("__global", "index");
     size_t value_arg = k.add_arg<value_type>("__private", "value");
     atomic_max<int_> atomic_max_int;
@@ -98,8 +98,8 @@ inline InputIterator np_ceiling(InputIterator first,
     k << k.decl<const int_>("i") << " = get_global_id(0);\n"
       << k.decl<const value_type>("cur_value") << "="
       <<     first[k.var<const int_>("i")] << ";\n"
-      << "if(cur_value <= " << first[k.expr<int_>("*index")]
-      << "      && cur_value > value){\n"
+      << "if(cur_value >= " << first[k.expr<int_>("*index")]
+      << "      && cur_value < value){\n"
       << "    " << atomic_max_int(k.var<int_ *>("index"), k.var<int_>("i")) << ";\n"
       << "}\n";
 
@@ -123,9 +123,9 @@ inline InputIterator np_ceiling(InputIterator first,
 ///
 /// \brief Permutation generating algorithm
 ///
-/// Transforms the range [first, last) into the next permutation from the
-/// set of all permutations arranged in lexicographic order
-/// \return Boolean value signifying if the last permutation was crossed
+/// Transforms the range [first, last) into the previous permutation from
+/// the set of all permutations arranged in lexicographic order
+/// \return Boolean value signifying if the first permutation was crossed
 /// and the range was reset
 ///
 /// \param first Iterator pointing to start of range
@@ -133,7 +133,7 @@ inline InputIterator np_ceiling(InputIterator first,
 /// \param queue Queue on which to execute
 ///
 template<class InputIterator>
-inline bool next_permutation(InputIterator first,
+inline bool prev_permutation(InputIterator first,
                              InputIterator last,
                              command_queue &queue = system::default_queue())
 {
@@ -142,7 +142,7 @@ inline bool next_permutation(InputIterator first,
     if(first == last) return false;
 
     InputIterator first_element =
-        detail::next_permutation_helper(first, last, queue);
+        detail::prev_permutation_helper(first, last, queue);
 
     if(first_element == last)
     {
@@ -158,7 +158,7 @@ inline bool next_permutation(InputIterator first,
                                               queue);
 
     InputIterator ceiling_element =
-        detail::np_ceiling(first_element + 1, last, first_value, queue);
+        detail::pp_floor(first_element + 1, last, first_value, queue);
 
     size_t ceiling_index =
         detail::iterator_range_size(first, ceiling_element);
@@ -184,4 +184,4 @@ inline bool next_permutation(InputIterator first,
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_ALGORITHM_NEXT_PERMUTATION_HPP
+#endif // BOOST_COMPUTE_ALGORITHM_PREV_PERMUTATION_HPP

@@ -44,6 +44,7 @@
 #include <boost/compute/algorithm/inner_product.hpp>
 #include <boost/compute/algorithm/iota.hpp>
 #include <boost/compute/algorithm/is_partitioned.hpp>
+#include <boost/compute/algorithm/is_permutation.hpp>
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/algorithm/lower_bound.hpp>
 #include <boost/compute/algorithm/max_element.hpp>
@@ -51,11 +52,13 @@
 #include <boost/compute/algorithm/min_element.hpp>
 #include <boost/compute/algorithm/minmax_element.hpp>
 #include <boost/compute/algorithm/mismatch.hpp>
+#include <boost/compute/algorithm/next_permutation.hpp>
 #include <boost/compute/algorithm/none_of.hpp>
 #include <boost/compute/algorithm/partial_sum.hpp>
 #include <boost/compute/algorithm/partition.hpp>
 #include <boost/compute/algorithm/partition_copy.hpp>
 #include <boost/compute/algorithm/partition_point.hpp>
+#include <boost/compute/algorithm/prev_permutation.hpp>
 #include <boost/compute/algorithm/random_shuffle.hpp>
 #include <boost/compute/algorithm/reduce.hpp>
 #include <boost/compute/algorithm/remove.hpp>
