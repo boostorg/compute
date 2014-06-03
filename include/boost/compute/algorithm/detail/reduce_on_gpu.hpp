@@ -176,10 +176,10 @@ inline void reduce_on_gpu(InputIterator first,
 
     detail::meta_kernel k("reduce");
     k.add_arg<T*>("__global const","input");
-    k.add_arg<const uint>("offset");
-    k.add_arg<const uint>("count");
+    k.add_arg<const uint_>("offset");
+    k.add_arg<const uint_>("count");
     k.add_arg<T*>("__global","output");
-    k.add_arg<const uint>("output_offset");
+    k.add_arg<const uint_>("output_offset");
 
     k <<
         k.decl<const uint_>("block_offset") << " = get_group_id(0) * VPT * TPB;\n" <<
