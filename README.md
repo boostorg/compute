@@ -48,25 +48,17 @@ int main()
 
     // copy data to the device
     compute::copy(
-        host_vector.begin(),
-        host_vector.end(),
-        device_vector.begin(),
-        queue
+        host_vector.begin(), host_vector.end(), device_vector.begin(), queue
     );
 
     // sort data on the device
     compute::sort(
-        device_vector.begin(),
-        device_vector.end(),
-        queue
+        device_vector.begin(), device_vector.end(), queue
     );
 
     // copy data back to the host
     compute::copy(
-        device_vector.begin(),
-        device_vector.end(),
-        host_vector.begin(),
-        queue
+        device_vector.begin(), device_vector.end(), host_vector.begin(), queue
     );
 
     return 0;
@@ -83,6 +75,9 @@ http://kylelutz.github.io/compute/boost_compute/tutorial.html) and under the
 [examples](https://github.com/kylelutz/compute/tree/master/example) directory.
 
 ## Support ##
+Questions about the library (both usage and development) can be posted to the
+[mailing list](https://groups.google.com/forum/#!forum/boost-compute).
+
 Bugs and feature requests can be reported through the [issue tracker](
 https://github.com/kylelutz/compute/issues?state=open).
 

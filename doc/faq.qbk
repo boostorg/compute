@@ -17,6 +17,11 @@ Please submit an issue on the GitHub issue tracker at
 [@http://kylelutz.github.io/compute/compute/reference.html#header_reference]
 
 
+[h3 Where is the best place to ask questions about the library?]
+
+The mailing list at [@https://groups.google.com/forum/#!forum/boost-compute].
+
+
 [h3 What compute devices (e.g. GPUs) are supported?]
 
 Any device which implements the OpenCL standard is supported. This includes
