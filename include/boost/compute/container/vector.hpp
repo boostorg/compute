@@ -539,6 +539,7 @@ public:
     {
         std::swap(m_data, other.m_data);
         std::swap(m_size, other.m_size);
+        std::swap(m_allocator, other.m_allocator);
     }
 
     void clear()
