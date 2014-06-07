@@ -171,4 +171,14 @@ BOOST_AUTO_TEST_CASE(fill_clone_buffer)
     );
 }
 
+BOOST_AUTO_TEST_CASE(fill_last_value)
+{
+    compute::vector<int> vec(4, context);
+    compute::fill_n(vec.begin(), 4, 0, queue);
+    CHECK_RANGE_EQUAL(int, 4, vec, (0, 0, 0, 0));
+
+    compute::fill_n(vec.end() - 1, 1, 7, queue);
+    CHECK_RANGE_EQUAL(int, 4, vec, (0, 0, 0, 7));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

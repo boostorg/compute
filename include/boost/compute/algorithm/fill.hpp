@@ -107,14 +107,34 @@ dispatch_fill(BufferIterator first,
 {
     typedef typename std::iterator_traits<BufferIterator>::value_type value_type;
 
+    if(count == 0){
+        // nothing to do
+        return;
+    }
+
     value_type pattern = static_cast<value_type>(value);
     size_t offset = static_cast<size_t>(first.get_index());
 
-    queue.enqueue_fill_buffer(first.get_buffer(),
-                              &pattern,
-                              sizeof(value_type),
-                              offset * sizeof(value_type),
-                              count * sizeof(value_type));
+    if(count == 1){
+        // use clEnqueueWriteBuffer() directly when writing a single value
+        // to the device buffer. this is potentially more efficient and also
+        // works around a bug in the intel opencl driver.
+        queue.enqueue_write_buffer(
+            first.get_buffer(),
+            offset * sizeof(value_type),
+            sizeof(value_type),
+            &pattern
+        );
+    }
+    else {
+        queue.enqueue_fill_buffer(
+            first.get_buffer(),
+            &pattern,
+            sizeof(value_type),
+            offset * sizeof(value_type),
+            count * sizeof(value_type)
+        );
+    }
 }
 
 template<class BufferIterator, class T>
