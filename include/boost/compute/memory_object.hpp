@@ -93,6 +93,25 @@ public:
         return detail::get_object_info<T>(clGetMemObjectInfo, m_mem, info);
     }
 
+    #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Registers a function to be called when the memory object is deleted
+    /// and its resources freed.
+    ///
+    /// \see_opencl_ref{clSetMemObjectDestructorCallback}
+    ///
+    /// \opencl_version_warning{1,1}
+    void set_destructor_callback(void (BOOST_COMPUTE_CL_CALLBACK *callback)(
+                                     cl_mem memobj, void *user_data
+                                 ),
+                                 void *user_data = 0)
+    {
+        cl_int ret = clSetMemObjectDestructorCallback(m_mem, callback, user_data);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+    }
+    #endif // CL_VERSION_1_1
+
     /// Returns \c true if the memory object is the same as \p other.
     bool operator==(const memory_object &other) const
     {

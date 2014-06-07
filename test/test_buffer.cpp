@@ -91,4 +91,26 @@ BOOST_AUTO_TEST_CASE(clone_buffer)
     BOOST_CHECK_EQUAL(buffer1.size(), buffer2.size());
 }
 
+#ifdef CL_VERSION_1_1
+static void BOOST_COMPUTE_CL_CALLBACK
+destructor_callback_function(cl_mem memobj, void *user_data)
+{
+    (void) memobj;
+
+    bool *flag = static_cast<bool *>(user_data);
+
+    *flag = true;
+}
+
+BOOST_AUTO_TEST_CASE(destructor_callback)
+{
+    bool invoked = false;
+    {
+        boost::compute::buffer buf(context, 128);
+        buf.set_destructor_callback(destructor_callback_function, &invoked);
+    }
+    BOOST_CHECK(invoked == true);
+}
+#endif // CL_VERSION_1_1
+
 BOOST_AUTO_TEST_SUITE_END()
