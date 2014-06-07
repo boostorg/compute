@@ -32,8 +32,8 @@ namespace compute {
 /// Once created, the shared context can be used to create OpenCL memory
 /// objects which can interact with OpenGL memory objects (e.g. VBOs).
 ///
-/// \throws extension_unsupported_exception if no CL-GL sharing capable
-/// devices are found.
+/// \throws unsupported_extension_error if no CL-GL sharing capable devices
+///         are found.
 inline context opengl_create_shared_context()
 {
     // name of the OpenGL sharing extension for the system

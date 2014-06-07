@@ -28,6 +28,22 @@ namespace compute {
 ///
 /// The context class represents a compute context.
 ///
+/// A context object manages a set of OpenCL resources including memory
+/// buffers and program objects. Before allocating memory on the device or
+/// executing kernels you must set up a context object.
+///
+/// To create a context for the default device on the system:
+/// \code
+/// // get the default compute device
+/// boost::compute::device gpu = boost::compute::system::default_device();
+///
+/// // create a context for the device
+/// boost::compute::context context(gpu);
+/// \endcode
+///
+/// Once a context is created, memory can be allocated using the buffer class
+/// and kernels can be executed using the command_queue class.
+///
 /// \see device, command_queue
 class context
 {

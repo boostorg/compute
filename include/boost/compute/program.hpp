@@ -45,6 +45,31 @@ namespace compute {
 ///
 /// The program class represents an OpenCL program.
 ///
+/// Program objects are created with one of the static \c create_with_*
+/// functions. For example, to create a program from a source string:
+///
+/// \snippet test/test_program.cpp create_with_source
+///
+/// And to create a program from a source file:
+/// \code
+/// boost::compute::program bar_program =
+///     boost::compute::program::create_with_source_file("/path/to/bar.cl", context);
+/// \endcode
+///
+/// Once a program object has been succesfully created, it can be compiled
+/// using the build() method:
+/// \code
+/// // build the program
+/// foo_program.build();
+/// \endcode
+///
+/// Kernel objects can be created from compiled programs using the kernel
+/// class's constructor:
+/// \code
+/// // create a kernel from the compiled program
+/// boost::compute::kernel foo_kernel(foo_program, "foo");
+/// \endcode
+///
 /// \see kernel
 class program
 {
@@ -195,6 +220,19 @@ public:
     }
 
     /// Builds the program with \p options.
+    ///
+    /// If the program fails to compile, this function will throw an
+    /// opencl_error exception.
+    /// \code
+    /// try {
+    ///     // attempt to compile to program
+    ///     program.build();
+    /// }
+    /// catch(boost::compute::opencl_error &e){
+    ///     // program failed to compile, print out the build log
+    ///     std::cout << program.build_log() << std::endl;
+    /// }
+    /// \endcode
     void build(const std::string &options = std::string())
     {
         const char *options_string = 0;

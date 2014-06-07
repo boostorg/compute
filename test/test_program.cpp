@@ -79,4 +79,16 @@ BOOST_AUTO_TEST_CASE(create_with_binary)
     BOOST_CHECK_EQUAL(binary_bar_kernel.name(), std::string("bar"));
 }
 
+BOOST_AUTO_TEST_CASE(create_with_source_doctest)
+{
+//! [create_with_source]
+std::string source = "__kernel void foo(__global int *data) { }";
+
+boost::compute::program foo_program =
+    boost::compute::program::create_with_source(source, context);
+//! [create_with_source]
+
+    foo_program.build();
+}
+
 BOOST_AUTO_TEST_SUITE_END()

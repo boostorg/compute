@@ -24,6 +24,19 @@ namespace compute {
 /// Transforms the elements in the range [\p first, \p last) using
 /// \p transform and stores the results in the range beginning at
 /// \p result.
+///
+/// For example, to calculate the absolute value for each element in a vector:
+/// \code
+/// int data[] = { -1, -2, -3, -4 };
+/// boost::compute::vector<int> vec(data, data + 4, queue);
+///
+/// using boost::compute::abs;
+///
+/// // calculate the absolute value for each element in-place
+/// boost::compute::transform(
+///     vec.begin(), vec.end(), vec.begin(), abs<int>(), queue
+/// );
+/// \endcode
 template<class InputIterator, class OutputIterator, class UnaryOperator>
 inline OutputIterator transform(InputIterator first,
                                 InputIterator last,

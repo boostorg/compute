@@ -30,11 +30,29 @@ class command_queue;
 ///
 /// The buffer class represents a memory buffer on a compute device.
 ///
+/// Buffers are allocated within a compute context. For example, to allocate
+/// a memory buffer for 32 float's:
+///
+/// \snippet test/test_buffer.cpp constructor
+///
+/// Once created, data can be copied to and from the buffer using the
+/// \c enqueue_*_buffer() methods in the command_queue class. For example, to
+/// copy a set of \c int values from the host to the device:
+/// \code
+/// int data[] = { 1, 2, 3, 4 };
+///
+/// queue.enqueue_write_buffer(buf, 0, 4 * sizeof(int), data);
+/// \endcode
+///
+/// Also see the copy() algorithm for a higher-level interface to copying data
+/// between the host and the device. For a higher-level, dynamically-resizable,
+/// type-safe container for data on a compute device, use the vector<T> class.
+///
 /// Buffer objects have reference semantics. Creating a copy of a buffer
 /// object simply creates another reference to the underlying OpenCL memory
 /// object. To create an actual copy use the buffer::clone() method.
 ///
-/// \see vector<T>
+/// \see context, command_queue
 class buffer : public memory_object
 {
 public:

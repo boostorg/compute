@@ -53,8 +53,24 @@ nullary_native_kernel_trampoline(void *user_func_ptr)
 /// Command queues are created for a compute device within a compute
 /// context.
 ///
+/// For example, to create a context and command queue for the default device
+/// on the system (this is the normal set up code used by almost all OpenCL
+/// programs):
+/// \code
+/// #include <boost/compute/core.hpp>
+///
+/// // get the default compute device
+/// boost::compute::device device = boost::compute::system::default_device();
+///
+/// // set up a compute context and command queue
+/// boost::compute::context context(device);
+/// boost::compute::command_queue queue(context, device);
+/// \endcode
+///
 /// The default command queue for the system can be obtained with the
 /// system::default_queue() method.
+///
+/// \see buffer, context, kernel
 class command_queue
 {
 public:

@@ -21,9 +21,5 @@
 [include interop.qbk]
 [include porting_guide.qbk]
 [include platforms_and_compilers.qbk]
-
-[section Reference]
-[xinclude autodoc.xml]
-[endsect]
-
+[include reference.qbk]
 [include faq.qbk]

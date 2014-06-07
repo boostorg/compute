@@ -113,4 +113,13 @@ BOOST_AUTO_TEST_CASE(destructor_callback)
 }
 #endif // CL_VERSION_1_1
 
+BOOST_AUTO_TEST_CASE(create_buffer_doctest)
+{
+//! [constructor]
+boost::compute::buffer buf(context, 32 * sizeof(float));
+//! [constructor]
+
+    BOOST_CHECK_EQUAL(buf.size(), 32 * sizeof(float));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

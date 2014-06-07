@@ -20,6 +20,16 @@ namespace compute {
 
 /// Copies \p count elements from \p first to \p result.
 ///
+/// For example, to copy four values from the host to the device:
+/// \code
+/// // values on the host and vector on the device
+/// float values[4] = { 1.f, 2.f, 3.f, 4.f };
+/// boost::compute::vector<float> vec(4, context);
+///
+/// // copy from the host to the device
+/// boost::compute::copy_n(values, 4, vec.begin(), queue);
+/// \endcode
+///
 /// \see copy()
 template<class InputIterator, class Size, class OutputIterator>
 inline OutputIterator copy_n(InputIterator first,

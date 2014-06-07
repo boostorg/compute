@@ -1,0 +1,23 @@
+[section:reference Reference]
+
+[section Overview]
+
+[h3 Core Library]
+* [classref boost::compute::buffer buffer]
+* [classref boost::compute::command_queue command_queue]
+* [classref boost::compute::context context]
+* [classref boost::compute::device device]
+* [classref boost::compute::event event]
+* [classref boost::compute::kernel kernel]
+* [classref boost::compute::memory_object memory_object]
+* [classref boost::compute::platform platform]
+* [classref boost::compute::program program]
+* [classref boost::compute::system system]
+* [classref boost::compute::user_event user_event]
+* [classref boost::compute::wait_list wait_list]
+
+[endsect] [/ overview]
+
+[xinclude autodoc.xml]
+
+[endsect] [/ reference ]

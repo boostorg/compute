@@ -35,7 +35,7 @@ namespace compute {
 ///
 /// The default_device() convenience method automatically selects and returns
 /// the "best" compute device for the system following a set of heuristics and
-/// enviornemnt variables. This simplifies setup of the OpenCL enviornment.
+/// environment variables. This simplifies setup of the OpenCL enviornment.
 ///
 /// \see platform, device, context
 class system
@@ -56,6 +56,16 @@ public:
     /// The default device is determined once on the first time this function
     /// is called. Calling this function multiple times will always result in
     /// the same device being returned.
+    ///
+    /// For example, to print the name of the default compute device on the
+    /// system:
+    /// \code
+    /// // get the default compute device
+    /// boost::compute::device device = boost::compute::system::default_device();
+    ///
+    /// // print the name of the device
+    /// std::cout << "default device: " << device.name() << std::endl;
+    /// \endcode
     static device default_device()
     {
         static device default_device = find_default_device();

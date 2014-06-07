@@ -293,6 +293,36 @@ dispatch_copy(InputIterator first,
 /// with non-contiguous data-structures (e.g. \c std::list<T>) as
 /// well as with "fancy" iterators (e.g. transform_iterator).
 ///
+/// For example, to copy an array of \c int values on the host to a vector on
+/// the device:
+/// \code
+/// // array on the host
+/// int data[] = { 1, 2, 3, 4 };
+///
+/// // vector on the device
+/// boost::compute::vector<int> vec(4, context);
+///
+/// // copy values to the device vector
+/// boost::compute::copy(data, data + 4, vec.begin(), queue);
+/// \endcode
+///
+/// The copy algorithm can also be used with standard containers such as
+/// \c std::vector<T>:
+/// \code
+/// std::vector<int> host_vector = ...
+/// boost::compute::vector<int> device_vector = ...
+///
+/// // copy from the host to the device
+/// boost::compute::copy(
+///     host_vector.begin(), host_vector.end(), device_vector.begin(), queue
+/// );
+///
+/// // copy from the device to the host
+/// boost::compute::copy(
+///     device_vector.begin(), device_vector.end(), host_vector.begin(), queue
+/// );
+/// \endcode
+///
 /// \see copy_n(), copy_if(), copy_async()
 template<class InputIterator, class OutputIterator>
 inline OutputIterator copy(InputIterator first,
