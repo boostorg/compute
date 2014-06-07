@@ -10,12 +10,7 @@
 
 #include <iostream>
 
-#include <boost/compute/buffer.hpp>
-#include <boost/compute/command_queue.hpp>
-#include <boost/compute/context.hpp>
-#include <boost/compute/kernel.hpp>
-#include <boost/compute/program.hpp>
-#include <boost/compute/system.hpp>
+#include <boost/compute/core.hpp>
 
 namespace compute = boost::compute;
 

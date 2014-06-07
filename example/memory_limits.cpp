@@ -10,8 +10,7 @@
 
 #include <iostream>
 
-#include <boost/compute/device.hpp>
-#include <boost/compute/system.hpp>
+#include <boost/compute/core.hpp>
 
 namespace compute = boost::compute;
 

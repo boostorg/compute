@@ -28,6 +28,13 @@ All of the Boost.Compute headers can be included with the following directive:
 #include <boost/compute.hpp>
 ``
 
+If you only want to include the core OpenCL wrapper headers (which have minimal
+dependencies on the rest of Boost), use the following directive:
+
+``
+#include <boost/compute/core.hpp>
+``
+
 All of the classes and functions in Boost.Compute live in the `boost::compute`
 namespace and can be brought into global scope with:
 

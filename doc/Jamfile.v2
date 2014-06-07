@@ -18,6 +18,7 @@ doxygen autodoc
     ../include/boost/compute/command_queue.hpp
     ../include/boost/compute/config.hpp
     ../include/boost/compute/context.hpp
+    ../include/boost/compute/core.hpp
     ../include/boost/compute/device.hpp
     ../include/boost/compute/event.hpp
     ../include/boost/compute/function.hpp
