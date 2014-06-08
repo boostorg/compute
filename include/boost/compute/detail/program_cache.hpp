@@ -11,7 +11,6 @@
 #ifndef BOOST_COMPUTE_DETAIL_PROGRAM_CACHE_HPP
 #define BOOST_COMPUTE_DETAIL_PROGRAM_CACHE_HPP
 
-#include <map>
 #include <string>
 
 #include <boost/shared_ptr.hpp>
@@ -29,8 +28,8 @@ namespace detail {
 class program_cache : boost::noncopyable
 {
 public:
-    program_cache()
-        : m_cache(64)
+    program_cache(size_t capacity)
+        : m_cache(capacity)
     {
     }
 
@@ -65,19 +64,18 @@ private:
 // returns the program cache for the context
 inline boost::shared_ptr<program_cache> get_program_cache(const context &context)
 {
-    typedef std::map<cl_context, boost::shared_ptr<program_cache> > cache_map;
+    typedef lru_cache<cl_context, boost::shared_ptr<program_cache> > cache_map;
 
-    static cache_map caches;
+    static cache_map caches(8);
 
-    cache_map::iterator i = caches.find(context.get());
-    if(i != caches.end()){
-        return i->second;
+    boost::shared_ptr<program_cache> cache = caches.get(context.get());
+    if(!cache){
+        cache = boost::make_shared<program_cache>(64);
+
+        caches.insert(context.get(), cache);
     }
-    else {
-        boost::shared_ptr<program_cache> cache = boost::make_shared<program_cache>();
-        caches[context.get()] = cache;
-        return cache;
-    }
+
+    return cache;
 }
 
 } // end detail namespace
