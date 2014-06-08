@@ -24,7 +24,6 @@
 #include <boost/compute/type_traits/is_fundamental.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
-#include <boost/compute/detail/program_create_kernel_result.hpp>
 
 namespace boost {
 namespace compute {
@@ -57,21 +56,15 @@ public:
         }
     }
 
-    /// \internal_
-    ///
-    /// see 'detail/program_create_kernel_result.hpp' for documentation
-    kernel(const detail::program_create_kernel_result &result)
-        : m_kernel(result.kernel)
-    {
-    }
-
     /// Creates a new kernel object with \p name from \p program.
     kernel(const program &program, const std::string &name)
     {
-        detail::program_create_kernel_result
-            result = program.create_kernel(name);
+        cl_int error = 0;
+        m_kernel = clCreateKernel(program.get(), name.c_str(), &error);
 
-        m_kernel = result.kernel;
+        if(!m_kernel){
+            BOOST_THROW_EXCEPTION(opencl_error(error));
+        }
     }
 
     /// Creates a new kernel object as a copy of \p other.
@@ -311,6 +304,11 @@ private:
 
     cl_kernel m_kernel;
 };
+
+inline kernel program::create_kernel(const std::string &name) const
+{
+    return kernel(*this, name);
+}
 
 namespace detail {
 

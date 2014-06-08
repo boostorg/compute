@@ -45,6 +45,9 @@ BOOST_AUTO_TEST_CASE(create_kernel)
 
     boost::compute::kernel foo = program.create_kernel("foo");
     boost::compute::kernel bar = program.create_kernel("bar");
+
+    // try to create a kernel that doesn't exist
+    BOOST_CHECK_THROW(program.create_kernel("baz"), boost::compute::opencl_error);
 }
 
 BOOST_AUTO_TEST_CASE(create_with_binary)

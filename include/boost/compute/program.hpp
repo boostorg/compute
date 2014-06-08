@@ -26,7 +26,6 @@
 #include <boost/compute/context.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
-#include <boost/compute/detail/program_create_kernel_result.hpp>
 
 #ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
 #include <sstream>
@@ -39,6 +38,8 @@
 
 namespace boost {
 namespace compute {
+
+class kernel;
 
 /// \class program
 /// \brief A compute program.
@@ -292,23 +293,13 @@ public:
     }
 
     /// Creates and returns a new kernel object for \p name.
-#ifndef BOOST_COMPUTE_DOXYGEN_INVOKED
-    detail::program_create_kernel_result
-#else
-    kernel
-#endif
-    create_kernel(const std::string &name) const
-    {
-        cl_int error = 0;
-        cl_kernel kernel = clCreateKernel(m_program,
-                                          name.c_str(),
-                                          &error);
-        if(!kernel){
-            BOOST_THROW_EXCEPTION(opencl_error(error));
-        }
-
-        return detail::program_create_kernel_result(kernel);
-    }
+    ///
+    /// For example, to create the \c "foo" kernel (after the program has been
+    /// created and built):
+    /// \code
+    /// boost::compute::kernel foo_kernel = foo_program.create_kernel("foo");
+    /// \endcode
+    kernel create_kernel(const std::string &name) const;
 
     /// \internal_
     operator cl_program() const
