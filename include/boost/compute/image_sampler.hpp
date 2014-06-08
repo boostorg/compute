@@ -11,10 +11,9 @@
 #ifndef BOOST_COMPUTE_IMAGE_SAMPLER_HPP
 #define BOOST_COMPUTE_IMAGE_SAMPLER_HPP
 
-#include <boost/move/move.hpp>
 #include <boost/throw_exception.hpp>
 
-#include <boost/compute/cl.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/kernel.hpp>
@@ -77,13 +76,6 @@ public:
         }
     }
 
-    /// \internal_
-    image_sampler(BOOST_RV_REF(image_sampler) other)
-        : m_sampler(other.m_sampler)
-    {
-        other.m_sampler = 0;
-    }
-
     image_sampler& operator=(const image_sampler &other)
     {
         if(this != &other){
@@ -101,20 +93,25 @@ public:
         return *this;
     }
 
-    /// \internal_
-    image_sampler& operator=(BOOST_RV_REF(image_sampler) other)
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    image_sampler(image_sampler&& other) noexcept
+        : m_sampler(other.m_sampler)
     {
-        if(this != &other){
-            if(m_sampler){
-                clReleaseSampler(m_sampler);
-            }
+        other.m_sampler = 0;
+    }
 
-            m_sampler = other.m_sampler;
-            other.m_sampler = 0;
+    image_sampler& operator=(image_sampler&& other) noexcept
+    {
+        if(m_sampler){
+            clReleaseSampler(m_sampler);
         }
+
+        m_sampler = other.m_sampler;
+        other.m_sampler = 0;
 
         return *this;
     }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
     ~image_sampler()
     {
@@ -147,8 +144,6 @@ public:
     }
 
 private:
-    BOOST_COPYABLE_AND_MOVABLE(image_sampler)
-
     cl_sampler m_sampler;
 };
 

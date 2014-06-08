@@ -14,11 +14,10 @@
 #include <string>
 #include <vector>
 
-#include <boost/move/move.hpp>
 #include <boost/range/algorithm.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include <boost/compute/cl.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/types/builtin.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
@@ -80,13 +79,6 @@ public:
         #endif
     }
 
-    /// \internal_
-    device(BOOST_RV_REF(device) other)
-        : m_id(other.m_id)
-    {
-        other.m_id = 0;
-    }
-
     /// Copies the device from \p other to \c *this.
     device& operator=(const device &other)
     {
@@ -109,22 +101,29 @@ public:
         return *this;
     }
 
-    /// \internal_
-    device& operator=(BOOST_RV_REF(device) other)
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    /// Move-constructs a new device object from \p other.
+    device(device&& other) noexcept
+        : m_id(other.m_id)
     {
-        if(this != &other){
-            #ifdef CL_VERSION_1_2
-            if(m_id && is_subdevice()){
-                clReleaseDevice(m_id);
-            }
-            #endif
+        other.m_id = 0;
+    }
 
-            m_id = other.m_id;
-            other.m_id = 0;
+    /// Move-assigns the device from \p other to \c *this.
+    device& operator=(device&& other) noexcept
+    {
+        #ifdef CL_VERSION_1_2
+        if(m_id && is_subdevice()){
+            clReleaseDevice(m_id);
         }
+        #endif
+
+        m_id = other.m_id;
+        other.m_id = 0;
 
         return *this;
     }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
     /// Destroys the device object.
     ~device()
@@ -364,8 +363,6 @@ public:
     #endif // CL_VERSION_1_2
 
 private:
-    BOOST_COPYABLE_AND_MOVABLE(device)
-
     cl_device_id m_id;
 };
 

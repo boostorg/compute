@@ -15,7 +15,7 @@
 
 #include <boost/throw_exception.hpp>
 
-#include <boost/compute/cl.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/image_format.hpp>
@@ -99,6 +99,22 @@ public:
 
         return *this;
     }
+
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    /// Move-constructs a new image object from \p other.
+    image2d(image2d&& other) noexcept
+        : memory_object(std::move(other))
+    {
+    }
+
+    /// Move-assigns the image from \p other to \c *this.
+    image2d& operator=(image2d&& other) noexcept
+    {
+        memory_object::operator=(std::move(other));
+
+        return *this;
+    }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
     /// Destroys the image2d object.
     ~image2d()

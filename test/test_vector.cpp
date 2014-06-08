@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE(max_size)
     BOOST_VERIFY(vector.max_size() > vector.size());
 }
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
 BOOST_AUTO_TEST_CASE(move_ctor)
 {
       int data[] = { 11, 12, 13, 14 };
@@ -191,7 +191,7 @@ BOOST_AUTO_TEST_CASE(move_ctor)
       BOOST_CHECK_EQUAL(b.size(), size_t(4));
       CHECK_RANGE_EQUAL(int, 4, b, (11, 12, 13, 14));
 }
-#endif // !defined(BOOST_NO_RVALUE_REFERENCES)
+#endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && \
     !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)

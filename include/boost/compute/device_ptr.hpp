@@ -11,12 +11,11 @@
 #ifndef BOOST_COMPUTE_DEVICE_PTR_HPP
 #define BOOST_COMPUTE_DEVICE_PTR_HPP
 
-#include <boost/config.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/static_assert.hpp>
 
-#include <boost/compute/cl.hpp>
 #include <boost/compute/buffer.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/detail/is_buffer_iterator.hpp>
 #include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
@@ -97,6 +96,25 @@ public:
 
         return *this;
     }
+
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    device_ptr(device_ptr<T>&& other) noexcept
+        : m_buffer(other.m_buffer.get(), false),
+          m_index(other.m_index)
+    {
+        other.m_buffer.get() = 0;
+    }
+
+    device_ptr<T>& operator=(device_ptr<T>&& other) noexcept
+    {
+        m_buffer.get() = other.m_buffer.get();
+        m_index = other.m_index;
+
+        other.m_buffer.get() = 0;
+
+        return *this;
+    }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
     ~device_ptr()
     {

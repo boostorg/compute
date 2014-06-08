@@ -12,9 +12,7 @@
 #define BOOST_COMPUTE_EVENT_HPP
 
 #include <boost/function.hpp>
-#include <boost/move/move.hpp>
 
-#include <boost/compute/cl.hpp>
 #include <boost/compute/config.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/detail/duration.hpp>
@@ -96,13 +94,6 @@ public:
         }
     }
 
-    /// \internal_
-    event(BOOST_RV_REF(event) other)
-        : m_event(other.m_event)
-    {
-        other.m_event = 0;
-    }
-
     /// Copies the event object from \p other to \c *this.
     event& operator=(const event &other)
     {
@@ -121,20 +112,27 @@ public:
         return *this;
     }
 
-    /// \internal_
-    event& operator=(BOOST_RV_REF(event) other)
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    /// Move-constructs a new event object from \p other.
+    event(event&& other) noexcept
+        : m_event(other.m_event)
     {
-        if(this != &other){
-            if(m_event){
-                clReleaseEvent(m_event);
-            }
+        other.m_event = 0;
+    }
 
-            m_event = other.m_event;
-            other.m_event = 0;
+    /// Move-assigns the event from \p other to \c *this.
+    event& operator=(event&& other) noexcept
+    {
+        if(m_event){
+            clReleaseEvent(m_event);
         }
+
+        m_event = other.m_event;
+        other.m_event = 0;
 
         return *this;
     }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
     /// Destroys the event object.
     ~event()
@@ -294,9 +292,6 @@ private:
 
 protected:
     cl_event m_event;
-
-private:
-    BOOST_COPYABLE_AND_MOVABLE(event)
 };
 
 } // end compute namespace

@@ -16,8 +16,9 @@
 #include <iterator>
 #include <exception>
 
-#include <boost/config.hpp>
 #include <boost/throw_exception.hpp>
+
+#include <boost/compute/config.hpp>
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && \
     !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
@@ -198,16 +199,6 @@ public:
         }
     }
 
-    #if !defined(BOOST_NO_RVALUE_REFERENCES)
-    vector(vector<T> &&vector)
-        : m_data(std::move(vector.m_data)),
-          m_size(vector.m_size),
-          m_allocator(std::move(vector.m_allocator))
-    {
-        vector.m_size = 0;
-    }
-    #endif // !defined(BOOST_NO_RVALUE_REFERENCES)
-
     /// Creates a new vector and copies the values from \p vector.
     template<class OtherAlloc>
     vector(const std::vector<T, OtherAlloc> &vector,
@@ -233,14 +224,6 @@ public:
     }
     #endif // !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 
-    /// Destroys the vector object.
-    ~vector()
-    {
-        if(m_size){
-            m_allocator.deallocate(m_data, m_size);
-        }
-    }
-
     vector<T>& operator=(const vector<T> &other)
     {
         if(this != &other){
@@ -261,6 +244,41 @@ public:
         ::boost::compute::copy(vector.begin(), vector.end(), begin(), queue);
         queue.finish();
         return *this;
+    }
+
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    /// Move-constructs a new vector from \p other.
+    vector(vector<T>&& other)
+        : m_data(std::move(other.m_data)),
+          m_size(other.m_size),
+          m_allocator(std::move(other.m_allocator))
+    {
+        other.m_size = 0;
+    }
+
+    /// Move-assigns the data from \p other to \c *this.
+    vector<T>& operator=(vector<T>&& other)
+    {
+        if(m_size){
+            m_allocator.deallocate(m_data, m_size);
+        }
+
+        m_data = std::move(other.m_data);
+        m_size = other.m_size;
+        m_allocator = std::move(other.m_allocator);
+
+        other.m_size = 0;
+
+        return *this;
+    }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
+
+    /// Destroys the vector object.
+    ~vector()
+    {
+        if(m_size){
+            m_allocator.deallocate(m_data, m_size);
+        }
     }
 
     iterator begin()

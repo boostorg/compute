@@ -33,13 +33,15 @@ BOOST_AUTO_TEST_CASE(construct_from_cl_context)
     clReleaseContext(ctx);
 }
 
+#ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
 BOOST_AUTO_TEST_CASE(move_constructor)
 {
     boost::compute::device device = boost::compute::system::default_device();
     boost::compute::context context1(device);
     BOOST_VERIFY(cl_context(context1) != cl_context());
 
-    boost::compute::context context2(boost::move(context1));
+    boost::compute::context context2(std::move(context1));
     BOOST_VERIFY(cl_context(context2) != cl_context());
     BOOST_VERIFY(cl_context(context1) == cl_context());
 }
+#endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES

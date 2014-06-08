@@ -71,17 +71,19 @@ BOOST_AUTO_TEST_CASE(reference_count)
     BOOST_CHECK_GE(buf.reference_count(), uint_(1));
 }
 
+#ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
 BOOST_AUTO_TEST_CASE(move_constructor)
 {
     boost::compute::buffer buffer1(context, 16);
     BOOST_CHECK(buffer1.get() != 0);
     BOOST_CHECK_EQUAL(buffer1.size(), size_t(16));
 
-    boost::compute::buffer buffer2(boost::move(buffer1));
+    boost::compute::buffer buffer2(std::move(buffer1));
     BOOST_CHECK(buffer1.get() == 0);
     BOOST_CHECK(buffer2.get() != 0);
     BOOST_CHECK_EQUAL(buffer2.size(), size_t(16));
 }
+#endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
 BOOST_AUTO_TEST_CASE(clone_buffer)
 {

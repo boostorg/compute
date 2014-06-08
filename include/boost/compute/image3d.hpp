@@ -35,7 +35,7 @@ public:
     {
     }
 
-    /// Creates a new image2d object.
+    /// Creates a new image3d object.
     ///
     /// \see_opencl_ref{clCreateImage}
     image3d(const context &context,
@@ -100,6 +100,22 @@ public:
 
         return *this;
     }
+
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    /// Move-constructs a new image object from \p other.
+    image3d(image3d&& other) noexcept
+        : memory_object(std::move(other))
+    {
+    }
+
+    /// Move-assigns the image from \p other to \c *this.
+    image3d& operator=(image3d&& other) noexcept
+    {
+        memory_object::operator=(std::move(other));
+
+        return *this;
+    }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
     /// Destroys the image3d object.
     ~image3d()

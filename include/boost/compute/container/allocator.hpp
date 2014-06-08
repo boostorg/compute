@@ -12,6 +12,7 @@
 #define BOOST_COMPUTE_CONTAINER_ALLOCATOR_HPP
 
 #include <boost/compute/buffer.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/device_ptr.hpp>
 
@@ -49,6 +50,22 @@ public:
 
         return *this;
     }
+
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    allocator(allocator<T>&& other) noexcept
+        : m_context(std::move(other.m_context)),
+          m_mem_flags(other.m_mem_flags)
+    {
+    }
+
+    allocator<T>& operator=(allocator<T>&& other) noexcept
+    {
+        m_context = std::move(other.m_context);
+        m_mem_flags = other.m_mem_flags;
+
+        return *this;
+    }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
     ~allocator()
     {

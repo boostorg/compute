@@ -20,9 +20,7 @@
 #include <iostream>
 #endif
 
-#include <boost/move/move.hpp>
-
-#include <boost/compute/cl.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
@@ -100,13 +98,6 @@ public:
         }
     }
 
-    /// \internal_
-    program(BOOST_RV_REF(program) other)
-        : m_program(other.m_program)
-    {
-        other.m_program = 0;
-    }
-
     /// Copies the program object from \p other to \c *this.
     program& operator=(const program &other)
     {
@@ -125,20 +116,27 @@ public:
         return *this;
     }
 
-    /// \internal_
-    program& operator=(BOOST_RV_REF(program) other)
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    /// Move-constructs a new program object from \p other.
+    program(program&& other) noexcept
+        : m_program(other.m_program)
     {
-        if(this != &other){
-            if(m_program){
-                clReleaseProgram(m_program);
-            }
+        other.m_program = 0;
+    }
 
-            m_program = other.m_program;
-            other.m_program = 0;
+    /// Move-assigns the program from \p other to \c *this.
+    program& operator=(program&& other) noexcept
+    {
+        if(m_program){
+            clReleaseProgram(m_program);
         }
+
+        m_program = other.m_program;
+        other.m_program = 0;
 
         return *this;
     }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
     /// Destroys the program object.
     ~program()
@@ -471,10 +469,6 @@ public:
     }
 
 private:
-    BOOST_COPYABLE_AND_MOVABLE(program)
-
-    cl_program m_program;
-
 #ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
     // Path delimiter symbol for the current OS.
     static const std::string& path_delim() {
@@ -546,6 +540,8 @@ private:
     }
 #endif // BOOST_COMPUTE_USE_OFFLINE_CACHE
 
+private:
+    cl_program m_program;
 };
 
 } // end compute namespace

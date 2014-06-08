@@ -53,6 +53,22 @@ public:
         return *this;
     }
 
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    /// Move-constructs a new user event object from \p other.
+    user_event(user_event&& other) noexcept
+        : event(std::move(other))
+    {
+    }
+
+    /// Move-assigns the user event from \p other to \c *this.
+    user_event& operator=(user_event&& other) noexcept
+    {
+        event::operator=(std::move(other));
+
+        return *this;
+    }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
+
     /// Sets the execution status for the user-event.
     ///
     /// \see_opencl_ref{clSetUserEventStatus}

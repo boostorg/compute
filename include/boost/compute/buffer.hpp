@@ -11,9 +11,7 @@
 #ifndef BOOST_COMPUTE_BUFFER_HPP
 #define BOOST_COMPUTE_BUFFER_HPP
 
-#include <boost/move/move.hpp>
-
-#include <boost/compute/cl.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/memory_object.hpp>
@@ -95,12 +93,6 @@ public:
     {
     }
 
-    /// \internal_
-    buffer(BOOST_RV_REF(buffer) other)
-        : memory_object(boost::move(static_cast<memory_object &>(other)))
-    {
-    }
-
     /// Copies the buffer object from \p other to \c *this.
     buffer& operator=(const buffer &other)
     {
@@ -111,17 +103,21 @@ public:
         return *this;
     }
 
-    /// \internal_
-    buffer& operator=(BOOST_RV_REF(buffer) other)
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    /// Move-constructs a new buffer object from \p other.
+    buffer(buffer&& other) noexcept
+        : memory_object(std::move(other))
     {
-        if(this != &other){
-            memory_object::operator=(
-                boost::move(static_cast<memory_object &>(other))
-            );
-        }
+    }
+
+    /// Move-assigns the buffer from \p other to \c *this.
+    buffer& operator=(buffer&& other) noexcept
+    {
+        memory_object::operator=(std::move(other));
 
         return *this;
     }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
     /// Destroys the buffer object.
     ~buffer()
@@ -152,9 +148,6 @@ public:
     /// Creates a new buffer with a copy of the data in \c *this. Uses
     /// \p queue to perform the copy.
     buffer clone(command_queue &queue) const;
-
-private:
-    BOOST_COPYABLE_AND_MOVABLE(buffer)
 };
 
 namespace detail {

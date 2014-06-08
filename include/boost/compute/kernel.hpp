@@ -13,12 +13,10 @@
 
 #include <string>
 
-#include <boost/config.hpp>
 #include <boost/assert.hpp>
-#include <boost/move/move.hpp>
 #include <boost/utility/enable_if.hpp>
 
-#include <boost/compute/cl.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/type_traits/is_fundamental.hpp>
@@ -76,13 +74,6 @@ public:
         }
     }
 
-    /// \internal_
-    kernel(BOOST_RV_REF(kernel) other)
-        : m_kernel(other.m_kernel)
-    {
-        other.m_kernel = 0;
-    }
-
     /// Copies the kernel object from \p other to \c *this.
     kernel& operator=(const kernel &other)
     {
@@ -101,20 +92,27 @@ public:
         return *this;
     }
 
-    /// \internal_
-    kernel& operator=(BOOST_RV_REF(kernel) other)
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    /// Move-constructs a new kernel object from \p other.
+    kernel(kernel&& other) noexcept
+        : m_kernel(other.m_kernel)
     {
-        if(this != &other){
-            if(m_kernel){
-                clReleaseKernel(m_kernel);
-            }
+        other.m_kernel = 0;
+    }
 
-            m_kernel = other.m_kernel;
-            other.m_kernel = 0;
+    /// Move-assigns the kernel from \p other to \c *this.
+    kernel& operator=(kernel&& other) noexcept
+    {
+        if(m_kernel){
+            clReleaseKernel(m_kernel);
         }
+
+        m_kernel = other.m_kernel;
+        other.m_kernel = 0;
 
         return *this;
     }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
     /// Destroys the kernel object.
     ~kernel()
@@ -300,8 +298,6 @@ private:
     #endif // BOOST_NO_VARIADIC_TEMPLATES
 
 private:
-    BOOST_COPYABLE_AND_MOVABLE(kernel)
-
     cl_kernel m_kernel;
 };
 

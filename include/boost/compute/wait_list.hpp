@@ -61,6 +61,22 @@ public:
         return *this;
     }
 
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    /// Move-constructs a new wait list object from \p other.
+    wait_list(wait_list&& other)
+        : m_events(std::move(other.m_events))
+    {
+    }
+
+    /// Move-assigns the wait list from \p other to \c *this.
+    wait_list& operator=(wait_list&& other)
+    {
+        m_events = std::move(other.m_events);
+
+        return *this;
+    }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
+
     /// Destroys the wait-list.
     ~wait_list()
     {

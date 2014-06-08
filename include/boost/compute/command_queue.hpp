@@ -14,9 +14,8 @@
 #include <cstddef>
 
 #include <boost/assert.hpp>
-#include <boost/move/move.hpp>
 
-#include <boost/compute/cl.hpp>
+#include <boost/compute/config.hpp>
 #include <boost/compute/event.hpp>
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/device.hpp>
@@ -127,13 +126,6 @@ public:
         }
     }
 
-    /// \internal_
-    command_queue(BOOST_RV_REF(command_queue) other)
-        : m_queue(other.m_queue)
-    {
-        other.m_queue = 0;
-    }
-
     /// Copies the command queue object from \p other to \c *this.
     command_queue& operator=(const command_queue &other)
     {
@@ -152,20 +144,27 @@ public:
         return *this;
     }
 
-    /// \internal_
-    command_queue& operator=(BOOST_RV_REF(command_queue) other)
+    #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
+    /// Move-constructs a new command queue object from \p other.
+    command_queue(command_queue&& other) noexcept
+        : m_queue(other.m_queue)
     {
-        if(this != &other){
-            if(m_queue){
-                clReleaseCommandQueue(m_queue);
-            }
+        other.m_queue = 0;
+    }
 
-            m_queue = other.m_queue;
-            other.m_queue = 0;
+    /// Move-assigns the command queue from \p other to \c *this.
+    command_queue& operator=(command_queue&& other) noexcept
+    {
+        if(m_queue){
+            clReleaseCommandQueue(m_queue);
         }
+
+        m_queue = other.m_queue;
+        other.m_queue = 0;
 
         return *this;
     }
+    #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
     /// Destroys the command queue.
     ///
@@ -1278,8 +1277,6 @@ public:
     }
 
 private:
-    BOOST_COPYABLE_AND_MOVABLE(command_queue)
-
     cl_command_queue m_queue;
 };
 
