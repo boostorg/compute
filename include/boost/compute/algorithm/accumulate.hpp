@@ -82,13 +82,25 @@ BOOST_PP_SEQ_FOR_EACH(
     (char_)(uchar_)(short_)(ushort_)(int_)(uint_)(long_)(ulong_)
 )
 
+template<class T>
+inline bool can_accumulate_with_reduce(T init, min<T>)
+{
+    return init == std::numeric_limits<T>::max();
+}
+
+template<class T>
+inline bool can_accumulate_with_reduce(T init, max<T>)
+{
+    return init == std::numeric_limits<T>::min();
+}
+
 #undef BOOST_COMPUTE_DETAIL_DECLARE_CAN_ACCUMULATE_WITH_REDUCE
 
-template<class InputIterator, class T>
+template<class InputIterator, class T, class BinaryFunction>
 inline T dispatch_accumulate(InputIterator first,
                              InputIterator last,
                              T init,
-                             const plus<T> &function,
+                             BinaryFunction function,
                              command_queue &queue)
 {
     size_t size = iterator_range_size(first, last);
@@ -98,22 +110,12 @@ inline T dispatch_accumulate(InputIterator first,
 
     if(can_accumulate_with_reduce(init, function)){
         T result;
-        reduce(first, last, &result, queue);
+        reduce(first, last, &result, function, queue);
         return result;
     }
     else {
         return generic_accumulate(first, last, init, function, queue);
     }
-}
-
-template<class InputIterator, class T, class BinaryFunction>
-inline T dispatch_accumulate(InputIterator first,
-                             InputIterator last,
-                             T init,
-                             BinaryFunction function,
-                             command_queue &queue)
-{
-    return generic_accumulate(first, last, init, function, queue);
 }
 
 } // end detail namespace

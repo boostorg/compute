@@ -218,4 +218,35 @@ BOOST_AUTO_TEST_CASE(min_and_max)
     BOOST_CHECK_EQUAL(result[1], 6);
 }
 
+BOOST_AUTO_TEST_CASE(min_max)
+{
+    float data[] = { 1.2f, 5.5f, 0.1f, 9.6f, 4.2f, 6.7f, 9.0f, 3.4f };
+    boost::compute::vector<float> vec(data, data + 8, queue);
+
+    using ::boost::compute::min;
+    using ::boost::compute::max;
+
+    float min_value = boost::compute::accumulate(
+        vec.begin(), vec.end(), std::numeric_limits<float>::max(), min<float>(), queue
+    );
+    BOOST_CHECK_EQUAL(min_value, 0.1f);
+
+    float max_value = boost::compute::accumulate(
+        vec.begin(), vec.end(), std::numeric_limits<float>::min(), max<float>(), queue
+    );
+    BOOST_CHECK_EQUAL(max_value, 9.6f);
+
+    // find min with init less than any value in the array
+    min_value = boost::compute::accumulate(
+        vec.begin(), vec.end(), -1.f, min<float>(), queue
+    );
+    BOOST_CHECK_EQUAL(min_value, -1.f);
+
+    // find max with init greater than any value in the array
+    max_value = boost::compute::accumulate(
+        vec.begin(), vec.end(), 10.f, max<float>(), queue
+    );
+    BOOST_CHECK_EQUAL(max_value, 10.f);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
