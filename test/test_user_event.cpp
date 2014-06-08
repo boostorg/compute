@@ -22,11 +22,11 @@ BOOST_AUTO_TEST_CASE(user_event)
 {
     boost::compute::user_event event(context);
     BOOST_CHECK(event.get() != cl_event());
-    BOOST_CHECK(event.get_status() != CL_COMPLETE);
+    BOOST_CHECK(event.status() != CL_COMPLETE);
 
     event.set_status(CL_COMPLETE);
     event.wait();
-    BOOST_CHECK(event.get_status() == CL_COMPLETE);
+    BOOST_CHECK(event.status() == CL_COMPLETE);
 }
 #endif // CL_VERSION_1_1
 

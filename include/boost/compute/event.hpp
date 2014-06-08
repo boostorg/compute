@@ -153,7 +153,7 @@ public:
     }
 
     /// Returns the status of the event.
-    cl_int get_status() const
+    cl_int status() const
     {
         return get_info<cl_int>(CL_EVENT_COMMAND_EXECUTION_STATUS);
     }
@@ -269,6 +269,12 @@ public:
     operator cl_event() const
     {
         return m_event;
+    }
+
+    /// \internal_ (deprecated)
+    cl_int get_status() const
+    {
+        return status();
     }
 
 private:
