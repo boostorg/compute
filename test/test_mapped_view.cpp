@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(fill)
 
     view.map(CL_MAP_READ, queue);
     for(int i = 0; i < 8; i++){
-        BOOST_CHECK_EQUAL(data[0], 4);
+        BOOST_CHECK_EQUAL(data[i], 4);
     }
     view.unmap(queue);
 }
