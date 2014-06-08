@@ -143,6 +143,12 @@ public:
         return m_id;
     }
 
+    /// Returns a reference to the underlying OpenCL device id.
+    cl_device_id& get() const
+    {
+        return const_cast<cl_device_id&>(m_id);
+    }
+
     /// Returns the type of the device.
     cl_device_type type() const
     {

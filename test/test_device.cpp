@@ -21,6 +21,7 @@ BOOST_AUTO_TEST_CASE(null_device)
 {
     boost::compute::device null;
     BOOST_CHECK(null.id() == cl_device_id());
+    BOOST_CHECK(null.get() == cl_device_id());
 }
 
 BOOST_AUTO_TEST_CASE(default_device_doctest)
