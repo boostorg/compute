@@ -23,6 +23,7 @@ set(EXAMPLES
   vector_addition
   simple_moving_average
   matrix_transpose
+  visualize_kernel
 )
 
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
@@ -34,6 +35,20 @@ foreach(EXAMPLE ${EXAMPLES})
   add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
   target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES})
 endforeach()
+
+#boost thread
+  set(Boost_USE_MULTITHREADED ON)
+  set(THREAD_EXAMPLES
+  multi_thread
+  )
+if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
+  find_package(Boost 1.46 REQUIRED COMPONENTS  thread)
+  include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+  foreach(EXAMPLE ${THREAD_EXAMPLES})
+   add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
+   target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES})
+  endforeach()
+endif()
 
 # eigen examples
 if(${BOOST_COMPUTE_HAVE_EIGEN})
