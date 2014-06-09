@@ -173,13 +173,13 @@ int main(int argc, char *argv[])
             compute::program::create_with_source(source, context);
     optical_program.build();
 
-    // create flip kernel and set arguments
+    // create optical flow kernel and set arguments
     compute::kernel optical_kernel(optical_program, "optical_flow");
     float scale = 10;
     float offset = 1;
     float lambda = 0.0025;
     float threshold = 1.0;
-    char key;
+    char key = '\0';
 
     optical_kernel.set_arg(0, dev_previous_image);
     optical_kernel.set_arg(1, dev_current_image);
