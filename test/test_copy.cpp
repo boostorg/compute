@@ -238,35 +238,41 @@ BOOST_AUTO_TEST_CASE(check_copy_type)
 {
     // copy from host to device and ensure clEnqueueWriteBuffer() is used
     int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-    compute::vector<int> a(8);
-    compute::future<void> future = compute::copy_async(data, data + 8, a.begin());
+    compute::vector<int> a(8, context);
+    compute::future<void> future =
+        compute::copy_async(data, data + 8, a.begin(), queue);
     BOOST_CHECK(
         future.get_event().get_command_type() == CL_COMMAND_WRITE_BUFFER
     );
+    future.wait();
     CHECK_RANGE_EQUAL(int, 8, a, (1, 2, 3, 4, 5, 6, 7, 8));
 
     // copy on the device and ensure clEnqueueCopyBuffer() is used
-    compute::vector<int> b(8);
-    future = compute::copy_async(a.begin(), a.end(), b.begin());
+    compute::vector<int> b(8, context);
+    future = compute::copy_async(a.begin(), a.end(), b.begin(), queue);
     BOOST_CHECK(
         future.get_event().get_command_type() == CL_COMMAND_COPY_BUFFER
     );
+    future.wait();
     CHECK_RANGE_EQUAL(int, 8, b, (1, 2, 3, 4, 5, 6, 7, 8));
 
     // copy between vectors of different types on the device and ensure
     // that the copy kernel is used
-    compute::vector<short> c(8);
-    future = compute::copy_async(a.begin(), a.end(), c.begin());
+    compute::vector<short> c(8, context);
+    future = compute::copy_async(a.begin(), a.end(), c.begin(), queue);
     BOOST_CHECK(
         future.get_event().get_command_type() == CL_COMMAND_NDRANGE_KERNEL
     );
+    future.wait();
     CHECK_RANGE_EQUAL(short, 8, c, (1, 2, 3, 4, 5, 6, 7, 8));
 
     // copy from device to host and ensure clEnqueueReadBuffer() is used
-    future = compute::copy_async(b.begin(), b.end(), data);
+    future = compute::copy_async(b.begin(), b.end(), data, queue);
     BOOST_CHECK(
         future.get_event().get_command_type() == CL_COMMAND_READ_BUFFER
     );
+    future.wait();
+    CHECK_HOST_RANGE_EQUAL(int, 8, data, (1, 2, 3, 4, 5, 6, 7, 8));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
