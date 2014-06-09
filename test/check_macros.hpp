@@ -14,19 +14,29 @@
 #define LIST_ARRAY_VALUES(z, n, data) \
     BOOST_PP_COMMA_IF(n) BOOST_PP_ARRAY_ELEM(n, data)
 
-// checks 'size' values of 'type' in the device range '_actual`
-// against the values given in the array '_expected'
-#define CHECK_RANGE_EQUAL(type, size, _actual, _expected) \
+// checks 'size' values of 'type' in the device range 'actual`
+// against the values given in the array 'expected'
+#define CHECK_RANGE_EQUAL(type, size, actual, expected) \
     { \
-        type actual[size]; \
+        type _actual[size]; \
         boost::compute::copy( \
-            _actual.begin(), _actual.end(), actual, queue \
+            actual.begin(), actual.end(), _actual, queue \
         ); \
-        const type expected[size] = { \
-            BOOST_PP_REPEAT(size, LIST_ARRAY_VALUES, (size, _expected)) \
+        const type _expected[size] = { \
+            BOOST_PP_REPEAT(size, LIST_ARRAY_VALUES, (size, expected)) \
         }; \
         BOOST_CHECK_EQUAL_COLLECTIONS( \
-            actual, actual + size, expected, expected + size \
+            _actual, _actual + size, _expected, _expected + size \
+        ); \
+    }
+
+#define CHECK_HOST_RANGE_EQUAL(type, size, actual, expected) \
+    { \
+        const type _expected[size] = { \
+            BOOST_PP_REPEAT(size, LIST_ARRAY_VALUES, (size, expected)) \
+        }; \
+        BOOST_CHECK_EQUAL_COLLECTIONS( \
+            actual, actual + size, _expected, _expected + size \
         ); \
     }
 

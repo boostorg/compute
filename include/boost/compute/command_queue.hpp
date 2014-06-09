@@ -219,22 +219,26 @@ public:
     void enqueue_read_buffer(const buffer &buffer,
                              size_t offset,
                              size_t size,
-                             void *host_ptr)
+                             void *host_ptr,
+                             const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(size <= buffer.size());
         BOOST_ASSERT(buffer.get_context() == this->get_context());
         BOOST_ASSERT(host_ptr != 0);
 
-        cl_int ret = clEnqueueReadBuffer(m_queue,
-                                         buffer.get(),
-                                         true,
-                                         offset,
-                                         size,
-                                         host_ptr,
-                                         0,
-                                         0,
-                                         0);
+        cl_int ret = clEnqueueReadBuffer(
+            m_queue,
+            buffer.get(),
+            CL_TRUE,
+            offset,
+            size,
+            host_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            0
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -249,7 +253,8 @@ public:
     event enqueue_read_buffer_async(const buffer &buffer,
                                     size_t offset,
                                     size_t size,
-                                    void *host_ptr)
+                                    void *host_ptr,
+                                    const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(size <= buffer.size());
@@ -258,15 +263,18 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueReadBuffer(m_queue,
-                                         buffer.get(),
-                                         true,
-                                         offset,
-                                         size,
-                                         host_ptr,
-                                         0,
-                                         0,
-                                         &event_.get());
+        cl_int ret = clEnqueueReadBuffer(
+            m_queue,
+            buffer.get(),
+            CL_FALSE,
+            offset,
+            size,
+            host_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -289,26 +297,30 @@ public:
                                   size_t buffer_slice_pitch,
                                   size_t host_row_pitch,
                                   size_t host_slice_pitch,
-                                  void *host_ptr)
+                                  void *host_ptr,
+                                  const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(buffer.get_context() == this->get_context());
         BOOST_ASSERT(host_ptr != 0);
 
-        cl_int ret = clEnqueueReadBufferRect(m_queue,
-                                             buffer.get(),
-                                             CL_TRUE,
-                                             buffer_origin,
-                                             host_origin,
-                                             region,
-                                             buffer_row_pitch,
-                                             buffer_slice_pitch,
-                                             host_row_pitch,
-                                             host_slice_pitch,
-                                             host_ptr,
-                                             0,
-                                             0,
-                                             0);
+        cl_int ret = clEnqueueReadBufferRect(
+            m_queue,
+            buffer.get(),
+            CL_TRUE,
+            buffer_origin,
+            host_origin,
+            region,
+            buffer_row_pitch,
+            buffer_slice_pitch,
+            host_row_pitch,
+            host_slice_pitch,
+            host_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            0
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -323,22 +335,26 @@ public:
     void enqueue_write_buffer(const buffer &buffer,
                               size_t offset,
                               size_t size,
-                              const void *host_ptr)
+                              const void *host_ptr,
+                              const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(size <= buffer.size());
         BOOST_ASSERT(buffer.get_context() == this->get_context());
         BOOST_ASSERT(host_ptr != 0);
 
-        cl_int ret = clEnqueueWriteBuffer(m_queue,
-                                          buffer.get(),
-                                          CL_TRUE,
-                                          offset,
-                                          size,
-                                          host_ptr,
-                                          0,
-                                          0,
-                                          0);
+        cl_int ret = clEnqueueWriteBuffer(
+            m_queue,
+            buffer.get(),
+            CL_TRUE,
+            offset,
+            size,
+            host_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            0
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -353,7 +369,8 @@ public:
     event enqueue_write_buffer_async(const buffer &buffer,
                                      size_t offset,
                                      size_t size,
-                                     const void *host_ptr)
+                                     const void *host_ptr,
+                                     const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(size <= buffer.size());
@@ -362,15 +379,18 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueWriteBuffer(m_queue,
-                                          buffer.get(),
-                                          CL_FALSE,
-                                          offset,
-                                          size,
-                                          host_ptr,
-                                          0,
-                                          0,
-                                          &event_.get());
+        cl_int ret = clEnqueueWriteBuffer(
+            m_queue,
+            buffer.get(),
+            CL_FALSE,
+            offset,
+            size,
+            host_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -393,26 +413,30 @@ public:
                                    size_t buffer_slice_pitch,
                                    size_t host_row_pitch,
                                    size_t host_slice_pitch,
-                                   void *host_ptr)
+                                   void *host_ptr,
+                                   const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(buffer.get_context() == this->get_context());
         BOOST_ASSERT(host_ptr != 0);
 
-        cl_int ret = clEnqueueWriteBufferRect(m_queue,
-                                              buffer.get(),
-                                              CL_TRUE,
-                                              buffer_origin,
-                                              host_origin,
-                                              region,
-                                              buffer_row_pitch,
-                                              buffer_slice_pitch,
-                                              host_row_pitch,
-                                              host_slice_pitch,
-                                              host_ptr,
-                                              0,
-                                              0,
-                                              0);
+        cl_int ret = clEnqueueWriteBufferRect(
+            m_queue,
+            buffer.get(),
+            CL_TRUE,
+            buffer_origin,
+            host_origin,
+            region,
+            buffer_row_pitch,
+            buffer_slice_pitch,
+            host_row_pitch,
+            host_slice_pitch,
+            host_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            0
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -429,7 +453,8 @@ public:
                               const buffer &dst_buffer,
                               size_t src_offset,
                               size_t dst_offset,
-                              size_t size)
+                              size_t size,
+                              const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_offset + size <= src_buffer.size());
@@ -439,15 +464,18 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueCopyBuffer(m_queue,
-                                         src_buffer.get(),
-                                         dst_buffer.get(),
-                                         src_offset,
-                                         dst_offset,
-                                         size,
-                                         0,
-                                         0,
-                                         &event_.get());
+        cl_int ret = clEnqueueCopyBuffer(
+            m_queue,
+            src_buffer.get(),
+            dst_buffer.get(),
+            src_offset,
+            dst_offset,
+            size,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -470,7 +498,8 @@ public:
                                    size_t buffer_row_pitch,
                                    size_t buffer_slice_pitch,
                                    size_t host_row_pitch,
-                                   size_t host_slice_pitch)
+                                   size_t host_slice_pitch,
+                                   const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_buffer.get_context() == this->get_context());
@@ -478,19 +507,22 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueCopyBufferRect(m_queue,
-                                             src_buffer.get(),
-                                             dst_buffer.get(),
-                                             src_origin,
-                                             dst_origin,
-                                             region,
-                                             buffer_row_pitch,
-                                             buffer_slice_pitch,
-                                             host_row_pitch,
-                                             host_slice_pitch,
-                                             0,
-                                             0,
-                                             &event_.get());
+        cl_int ret = clEnqueueCopyBufferRect(
+            m_queue,
+            src_buffer.get(),
+            dst_buffer.get(),
+            src_origin,
+            dst_origin,
+            region,
+            buffer_row_pitch,
+            buffer_slice_pitch,
+            host_row_pitch,
+            host_slice_pitch,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -511,7 +543,8 @@ public:
                               const void *pattern,
                               size_t pattern_size,
                               size_t offset,
-                              size_t size)
+                              size_t size,
+                              const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(offset + size <= buffer.size());
@@ -519,15 +552,18 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueFillBuffer(m_queue,
-                                         buffer.get(),
-                                         pattern,
-                                         pattern_size,
-                                         offset,
-                                         size,
-                                         0,
-                                         0,
-                                         &event_.get());
+        cl_int ret = clEnqueueFillBuffer(
+            m_queue,
+            buffer.get(),
+            pattern,
+            pattern_size,
+            offset,
+            size,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -542,23 +578,27 @@ public:
     void* enqueue_map_buffer(const buffer &buffer,
                              cl_map_flags flags,
                              size_t offset,
-                             size_t size)
+                             size_t size,
+                             const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(offset + size <= buffer.size());
         BOOST_ASSERT(buffer.get_context() == this->get_context());
 
         cl_int ret = 0;
-        void *pointer = clEnqueueMapBuffer(m_queue,
-                                           buffer.get(),
-                                           CL_TRUE,
-                                           flags,
-                                           offset,
-                                           size,
-                                           0,
-                                           0,
-                                           0,
-                                           &ret);
+        void *pointer = clEnqueueMapBuffer(
+            m_queue,
+            buffer.get(),
+            CL_TRUE,
+            flags,
+            offset,
+            size,
+            events.size(),
+            events.get_event_ptr(),
+            0,
+            &ret
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -569,29 +609,40 @@ public:
     /// Enqueues a command to unmap \p buffer from the host memory space.
     ///
     /// \see_opencl_ref{clEnqueueUnmapMemObject}
-    void enqueue_unmap_buffer(const buffer &buffer, void *mapped_ptr)
+    event enqueue_unmap_buffer(const buffer &buffer,
+                               void *mapped_ptr,
+                               const wait_list &events = wait_list())
     {
         BOOST_ASSERT(buffer.get_context() == this->get_context());
 
-        return enqueue_unmap_mem_object(buffer.get(), mapped_ptr);
+        return enqueue_unmap_mem_object(buffer.get(), mapped_ptr, events);
     }
 
     /// Enqueues a command to unmap \p mem from the host memory space.
     ///
     /// \see_opencl_ref{clEnqueueUnmapMemObject}
-    void enqueue_unmap_mem_object(cl_mem mem, void *mapped_ptr)
+    event enqueue_unmap_mem_object(cl_mem mem,
+                                   void *mapped_ptr,
+                                   const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
 
-        cl_int ret = clEnqueueUnmapMemObject(m_queue,
-                                             mem,
-                                             mapped_ptr,
-                                             0,
-                                             0,
-                                             0);
+        event event_;
+
+        cl_int ret = clEnqueueUnmapMemObject(
+            m_queue,
+            mem,
+            mapped_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
+
+        return event_;
     }
 
     /// Enqueues a command to read data from \p image to host memory.
@@ -601,7 +652,8 @@ public:
                             const size_t origin[2],
                             const size_t region[2],
                             size_t row_pitch,
-                            void *host_ptr)
+                            void *host_ptr,
+                            const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
@@ -609,17 +661,20 @@ public:
         const size_t origin3[3] = { origin[0], origin[1], size_t(0) };
         const size_t region3[3] = { region[0], region[1], size_t(1) };
 
-        cl_int ret = clEnqueueReadImage(m_queue,
-                                        image.get(),
-                                        CL_TRUE,
-                                        origin3,
-                                        region3,
-                                        row_pitch,
-                                        0,
-                                        host_ptr,
-                                        0,
-                                        0,
-                                        0);
+        cl_int ret = clEnqueueReadImage(
+            m_queue,
+            image.get(),
+            CL_TRUE,
+            origin3,
+            region3,
+            row_pitch,
+            0,
+            host_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            0
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -633,22 +688,26 @@ public:
                             const size_t region[3],
                             size_t row_pitch,
                             size_t slice_pitch,
-                            void *host_ptr)
+                            void *host_ptr,
+                            const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
 
-        cl_int ret = clEnqueueReadImage(m_queue,
-                                        image.get(),
-                                        CL_TRUE,
-                                        origin,
-                                        region,
-                                        row_pitch,
-                                        slice_pitch,
-                                        host_ptr,
-                                        0,
-                                        0,
-                                        0);
+        cl_int ret = clEnqueueReadImage(
+            m_queue,
+            image.get(),
+            CL_TRUE,
+            origin,
+            region,
+            row_pitch,
+            slice_pitch,
+            host_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            0
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -661,7 +720,8 @@ public:
                              const size_t origin[2],
                              const size_t region[2],
                              size_t input_row_pitch,
-                             const void *host_ptr)
+                             const void *host_ptr,
+                             const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
@@ -669,17 +729,20 @@ public:
         const size_t origin3[3] = { origin[0], origin[1], size_t(0) };
         const size_t region3[3] = { region[0], region[1], size_t(1) };
 
-        cl_int ret = clEnqueueWriteImage(m_queue,
-                                         image.get(),
-                                         CL_TRUE,
-                                         origin3,
-                                         region3,
-                                         input_row_pitch,
-                                         0,
-                                         host_ptr,
-                                         0,
-                                         0,
-                                         0);
+        cl_int ret = clEnqueueWriteImage(
+            m_queue,
+            image.get(),
+            CL_TRUE,
+            origin3,
+            region3,
+            input_row_pitch,
+            0,
+            host_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            0
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -693,22 +756,26 @@ public:
                              const size_t region[3],
                              size_t input_row_pitch,
                              size_t input_slice_pitch,
-                             const void *host_ptr)
+                             const void *host_ptr,
+                             const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
 
-        cl_int ret = clEnqueueWriteImage(m_queue,
-                                         image.get(),
-                                         CL_TRUE,
-                                         origin,
-                                         region,
-                                         input_row_pitch,
-                                         input_slice_pitch,
-                                         host_ptr,
-                                         0,
-                                         0,
-                                         0);
+        cl_int ret = clEnqueueWriteImage(
+            m_queue,
+            image.get(),
+            CL_TRUE,
+            origin,
+            region,
+            input_row_pitch,
+            input_slice_pitch,
+            host_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            0
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -721,7 +788,8 @@ public:
                              const image2d &dst_image,
                              const size_t src_origin[2],
                              const size_t dst_origin[2],
-                             const size_t region[2])
+                             const size_t region[2],
+                             const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
@@ -735,15 +803,18 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueCopyImage(m_queue,
-                                        src_image.get(),
-                                        dst_image.get(),
-                                        src_origin3,
-                                        dst_origin3,
-                                        region3,
-                                        0,
-                                        0,
-                                        &event_.get());
+        cl_int ret = clEnqueueCopyImage(
+            m_queue,
+            src_image.get(),
+            dst_image.get(),
+            src_origin3,
+            dst_origin3,
+            region3,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -758,7 +829,8 @@ public:
                              const image3d &dst_image,
                              const size_t src_origin[2],
                              const size_t dst_origin[3],
-                             const size_t region[2])
+                             const size_t region[2],
+                             const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
@@ -771,15 +843,18 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueCopyImage(m_queue,
-                                        src_image.get(),
-                                        dst_image.get(),
-                                        src_origin3,
-                                        dst_origin,
-                                        region3,
-                                        0,
-                                        0,
-                                        &event_.get());
+        cl_int ret = clEnqueueCopyImage(
+            m_queue,
+            src_image.get(),
+            dst_image.get(),
+            src_origin3,
+            dst_origin,
+            region3,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -794,7 +869,8 @@ public:
                              const image2d &dst_image,
                              const size_t src_origin[3],
                              const size_t dst_origin[2],
-                             const size_t region[2])
+                             const size_t region[2],
+                             const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
@@ -807,15 +883,18 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueCopyImage(m_queue,
-                                        src_image.get(),
-                                        dst_image.get(),
-                                        src_origin,
-                                        dst_origin3,
-                                        region3,
-                                        0,
-                                        0,
-                                        &event_.get());
+        cl_int ret = clEnqueueCopyImage(
+            m_queue,
+            src_image.get(),
+            dst_image.get(),
+            src_origin,
+            dst_origin3,
+            region3,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -830,7 +909,8 @@ public:
                              const image3d &dst_image,
                              const size_t src_origin[3],
                              const size_t dst_origin[3],
-                             const size_t region[3])
+                             const size_t region[3],
+                             const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
@@ -840,15 +920,18 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueCopyImage(m_queue,
-                                        src_image.get(),
-                                        dst_image.get(),
-                                        src_origin,
-                                        dst_origin,
-                                        region,
-                                        0,
-                                        0,
-                                        &event_.get());
+        cl_int ret = clEnqueueCopyImage(
+            m_queue,
+            src_image.get(),
+            dst_image.get(),
+            src_origin,
+            dst_origin,
+            region,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -863,7 +946,8 @@ public:
                                        const buffer &dst_buffer,
                                        const size_t src_origin[2],
                                        const size_t region[2],
-                                       size_t dst_offset)
+                                       size_t dst_offset,
+                                       const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
@@ -874,15 +958,18 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueCopyImageToBuffer(m_queue,
-                                                src_image.get(),
-                                                dst_buffer.get(),
-                                                src_origin3,
-                                                region3,
-                                                dst_offset,
-                                                0,
-                                                0,
-                                                &event_.get());
+        cl_int ret = clEnqueueCopyImageToBuffer(
+            m_queue,
+            src_image.get(),
+            dst_buffer.get(),
+            src_origin3,
+            region3,
+            dst_offset,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -897,7 +984,8 @@ public:
                                        const buffer &dst_buffer,
                                        const size_t src_origin[3],
                                        const size_t region[3],
-                                       size_t dst_offset)
+                                       size_t dst_offset,
+                                       const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
@@ -905,15 +993,18 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueCopyImageToBuffer(m_queue,
-                                                src_image.get(),
-                                                dst_buffer.get(),
-                                                src_origin,
-                                                region,
-                                                dst_offset,
-                                                0,
-                                                0,
-                                                &event_.get());
+        cl_int ret = clEnqueueCopyImageToBuffer(
+            m_queue,
+            src_image.get(),
+            dst_buffer.get(),
+            src_origin,
+            region,
+            dst_offset,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -928,7 +1019,8 @@ public:
                                        const image2d &dst_image,
                                        size_t src_offset,
                                        const size_t dst_origin[3],
-                                       const size_t region[3])
+                                       const size_t region[3],
+                                       const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_buffer.get_context() == this->get_context());
@@ -939,15 +1031,18 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueCopyBufferToImage(m_queue,
-                                                src_buffer.get(),
-                                                dst_image.get(),
-                                                src_offset,
-                                                dst_origin3,
-                                                region3,
-                                                0,
-                                                0,
-                                                &event_.get());
+        cl_int ret = clEnqueueCopyBufferToImage(
+            m_queue,
+            src_buffer.get(),
+            dst_image.get(),
+            src_offset,
+            dst_origin3,
+            region3,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -962,7 +1057,8 @@ public:
                                        const image3d &dst_image,
                                        size_t src_offset,
                                        const size_t dst_origin[3],
-                                       const size_t region[3])
+                                       const size_t region[3],
+                                       const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(src_buffer.get_context() == this->get_context());
@@ -970,15 +1066,18 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueCopyBufferToImage(m_queue,
-                                                src_buffer.get(),
-                                                dst_image.get(),
-                                                src_offset,
-                                                dst_origin,
-                                                region,
-                                                0,
-                                                0,
-                                                &event_.get());
+        cl_int ret = clEnqueueCopyBufferToImage(
+            m_queue,
+            src_buffer.get(),
+            dst_image.get(),
+            src_offset,
+            dst_origin,
+            region,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -995,7 +1094,8 @@ public:
     event enqueue_fill_image(const image2d &image,
                              const void *fill_color,
                              const size_t origin[2],
-                             const size_t region[2])
+                             const size_t region[2],
+                             const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
@@ -1005,14 +1105,17 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueFillImage(m_queue,
-                                        image.get(),
-                                        fill_color,
-                                        origin3,
-                                        region3,
-                                        0,
-                                        0,
-                                        &event_.get());
+        cl_int ret = clEnqueueFillImage(
+            m_queue,
+            image.get(),
+            fill_color,
+            origin3,
+            region3,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -1028,21 +1131,25 @@ public:
     event enqueue_fill_image(const image3d &image,
                              const void *fill_color,
                              const size_t origin[3],
-                             const size_t region[3])
+                             const size_t region[3],
+                             const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
 
         event event_;
 
-        cl_int ret = clEnqueueFillImage(m_queue,
-                                        image.get(),
-                                        fill_color,
-                                        origin,
-                                        region,
-                                        0,
-                                        0,
-                                        &event_.get());
+        cl_int ret = clEnqueueFillImage(
+            m_queue,
+            image.get(),
+            fill_color,
+            origin,
+            region,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -1057,19 +1164,23 @@ public:
     /// \opencl_version_warning{1,2}
     event enqueue_migrate_memory_objects(uint_ num_mem_objects,
                                          const cl_mem *mem_objects,
-                                         cl_mem_migration_flags flags)
+                                         cl_mem_migration_flags flags,
+                                         const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
 
         event event_;
 
-        cl_int ret = clEnqueueMigrateMemObjects(m_queue,
-                                                num_mem_objects,
-                                                mem_objects,
-                                                flags,
-                                                0,
-                                                0,
-                                                &event_.get());
+        cl_int ret = clEnqueueMigrateMemObjects(
+            m_queue,
+            num_mem_objects,
+            mem_objects,
+            flags,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -1085,22 +1196,26 @@ public:
                                   size_t work_dim,
                                   const size_t *global_work_offset,
                                   const size_t *global_work_size,
-                                  const size_t *local_work_size)
+                                  const size_t *local_work_size,
+                                  const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(kernel.get_context() == this->get_context());
 
         event event_;
 
-        cl_int ret = clEnqueueNDRangeKernel(m_queue,
-                                            kernel,
-                                            static_cast<cl_uint>(work_dim),
-                                            global_work_offset,
-                                            global_work_size,
-                                            local_work_size ? local_work_size : 0,
-                                            0,
-                                            0,
-                                            &event_.get());
+        cl_int ret = clEnqueueNDRangeKernel(
+            m_queue,
+            kernel,
+            static_cast<cl_uint>(work_dim),
+            global_work_offset,
+            global_work_size,
+            local_work_size,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -1113,26 +1228,36 @@ public:
     event enqueue_1d_range_kernel(const kernel &kernel,
                                   size_t global_work_offset,
                                   size_t global_work_size,
-                                  size_t local_work_size)
+                                  size_t local_work_size,
+                                  const wait_list &events = wait_list())
     {
-        return enqueue_nd_range_kernel(kernel,
-                                       1,
-                                       &global_work_offset,
-                                       &global_work_size,
-                                       local_work_size ? &local_work_size : 0);
+        return enqueue_nd_range_kernel(
+            kernel,
+            1,
+            &global_work_offset,
+            &global_work_size,
+            local_work_size ? &local_work_size : 0,
+            events
+        );
     }
 
     /// Enqueues a kernel to execute using a single work-item.
     ///
     /// \see_opencl_ref{clEnqueueTask}
-    event enqueue_task(const kernel &kernel)
+    event enqueue_task(const kernel &kernel, const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(kernel.get_context() == this->get_context());
 
         event event_;
 
-        cl_int ret = clEnqueueTask(m_queue, kernel, 0, 0, &event_.get());
+        cl_int ret = clEnqueueTask(
+            m_queue,
+            kernel,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -1146,7 +1271,8 @@ public:
                                 size_t cb_args,
                                 uint_ num_mem_objects,
                                 const cl_mem *mem_list,
-                                const void **args_mem_loc)
+                                const void **args_mem_loc,
+                                const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
 
@@ -1159,8 +1285,8 @@ public:
             num_mem_objects,
             mem_list,
             args_mem_loc,
-            0,
-            0,
+            events.size(),
+            events.get_event_ptr(),
             &event_.get()
         );
         if(ret != CL_SUCCESS){
@@ -1172,7 +1298,8 @@ public:
 
     /// Convenience overload for enqueue_native_kernel() which enqueues a
     /// native kernel on the host with a nullary function.
-    event enqueue_native_kernel(void (BOOST_COMPUTE_CL_CALLBACK *user_func)(void))
+    event enqueue_native_kernel(void (BOOST_COMPUTE_CL_CALLBACK *user_func)(void),
+                                const wait_list &events = wait_list())
     {
         return enqueue_native_kernel(
             detail::nullary_native_kernel_trampoline,
@@ -1180,7 +1307,8 @@ public:
             sizeof(user_func),
             0,
             0,
-            0
+            0,
+            events
         );
     }
 

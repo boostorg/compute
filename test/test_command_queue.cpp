@@ -18,6 +18,7 @@
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -196,6 +197,33 @@ BOOST_AUTO_TEST_CASE(native_kernel)
     queue.enqueue_native_kernel(&nullary_kernel);
     queue.finish();
     BOOST_CHECK_EQUAL(nullary_kernel_executed, true);
+}
+
+BOOST_AUTO_TEST_CASE(copy_with_wait_list)
+{
+    int data1[] = { 1, 3, 5, 7 };
+    int data2[] = { 2, 4, 6, 8 };
+
+    compute::buffer buf1(context, 4 * sizeof(int));
+    compute::buffer buf2(context, 4 * sizeof(int));
+
+    compute::event write_event1 =
+        queue.enqueue_write_buffer_async(buf1, 0, buf1.size(), data1);
+
+    compute::event write_event2 =
+        queue.enqueue_write_buffer_async(buf2, 0, buf2.size(), data2);
+
+    compute::event read_event1 =
+        queue.enqueue_read_buffer_async(buf1, 0, buf1.size(), data2, write_event1);
+
+    compute::event read_event2 =
+        queue.enqueue_read_buffer_async(buf2, 0, buf2.size(), data1, write_event2);
+
+    read_event1.wait();
+    read_event2.wait();
+
+    CHECK_HOST_RANGE_EQUAL(int, 4, data1, (2, 4, 6, 8));
+    CHECK_HOST_RANGE_EQUAL(int, 4, data2, (1, 3, 5, 7));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

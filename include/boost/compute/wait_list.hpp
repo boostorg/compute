@@ -45,6 +45,12 @@ public:
     {
     }
 
+    /// Creates a wait-list containing \p event.
+    wait_list(const event &event)
+    {
+        insert(event);
+    }
+
     /// Creates a new wait-list as a copy of \p other.
     wait_list(const wait_list &other)
         : m_events(other.m_events)
