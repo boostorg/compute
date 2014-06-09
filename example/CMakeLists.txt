@@ -43,12 +43,11 @@ endforeach()
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
   find_package(Boost 1.46 REQUIRED COMPONENTS  thread)
   include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+  foreach(EXAMPLE ${THREAD_EXAMPLES})
+   add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
+   target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES})
+  endforeach()
 endif()
-
-foreach(EXAMPLE ${THREAD_EXAMPLES})
-  add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
-  target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES})
-endforeach()
 
 # eigen examples
 if(${BOOST_COMPUTE_HAVE_EIGEN})
