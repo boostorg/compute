@@ -1,5 +1,7 @@
 include_directories(../include)
 
+set(Boost_USE_MULTITHREADED ON)
+
 set(EXAMPLES
   amd_cpp_kernel
   black_scholes
@@ -23,6 +25,8 @@ set(EXAMPLES
   vector_addition
   simple_moving_average
   matrix_transpose
+  visualize_kernel
+  multi_thread
 )
 
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
@@ -31,6 +35,7 @@ if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
 endif()
 
 foreach(EXAMPLE ${EXAMPLES})
+  find_package(Boost 1.46 REQUIRED COMPONENTS system filesystem thread program_options)
   add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
   target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES})
 endforeach()
