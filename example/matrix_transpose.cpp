@@ -3,8 +3,10 @@
 
 #include <boost/compute.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
+#include <boost/program_options.hpp>
 
 namespace compute = boost::compute;
+namespace po      = boost::program_options;
 
 #define TILE_DIM 32
 #define BLOCK_ROWS 8
@@ -196,14 +198,50 @@ void _generateMatrix(std::vector<float>& in, std::vector<float>& transposeRef, u
 #define _END    std::cout << std::endl;
 
 
-int main()
+int main(int argc, char *argv[])
 {
-    const uint nx = 4096;
-    const uint ny = 4096;
+    uint nx;  
+    uint ny;
+// Check the command line
+    po::options_description desc("Allowed Options");
+    desc.add_options()
+            ("help", "produce help message")
+            ("x_dim", po::value<int>(), "in multiples of 1024")
+	    ("y_dim", po::value<int>(), "in multiples of 1024")
+            ("usage", "how to run the example");
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    if(vm.count("help"))
+    {
+        std::cout<<desc<<std::endl;
+        return 1;
+    }
+
+    if(vm.count("usage"))
+    {
+        std::cout<<argv[0]<<" --x_dim=2  --y_dim=2\n";
+        return 1;
+    }
+
+    if(vm.count("x_dim") && vm.count("y_dim"))
+    {
+	nx = 1024 * vm["x_dim"].as<int>();
+    	ny = 1024 * vm["y_dim"].as<int>();
+    }
+    else
+    {
+        std::cout<<"To get help: "<<argv[0]<<" --help"
+                   <<std::endl;
+        return 1;
+    }
     
-    std::cout << "Matrix Size: " << nx << "x" << ny << std::endl;
-    std::cout << "Grid Size: " << nx/TILE_DIM << "x" << ny/TILE_DIM << " blocks" << std::endl;
-    std::cout << "Local Size: " << TILE_DIM << "x" << BLOCK_ROWS << " threads" << std::endl;
+    std::cout << "Float Matrix Size : " << nx << "x" << ny<<std::endl;
+    std::cout << "Size in MB : "<< (nx * ny * sizeof(float))/1024/1024 <<std::endl;
+    std::cout << "Grid Size  : " << nx/TILE_DIM << "x" << ny/TILE_DIM << " blocks" << std::endl;
+    std::cout << "Local Size : " << TILE_DIM << "x" << BLOCK_ROWS << " threads" << std::endl;
     
     std::cout << std::endl;
     
@@ -211,110 +249,117 @@ int main()
     const size_t l_workSize[2] = {TILE_DIM,BLOCK_ROWS};
     
     const uint size = nx * ny;
-    
-    std::vector<float> h_input(size);
-    std::vector<float> h_output(size);
-    std::vector<float> expectedResult(size);
-    _generateMatrix(h_input,expectedResult,nx,ny);
-    
-    // get the default device
-    compute::device device = compute::system::default_device();
-    
-    // create a context for the device
-    compute::context context(device);
+    try {
+	    std::vector<float> h_input(size);
+	    std::vector<float> h_output(size);
+	    std::vector<float> expectedResult(size);
 
-    // device vectors
-    compute::vector<float> d_input(size,context);
-    compute::vector<float> d_output(size,context);
-    
-    // command_queue with profiling
-    compute::command_queue queue(context, device,compute::command_queue::enable_profiling);
-    
-    // copy input data
-    compute::copy(h_input.begin(),h_input.end(),d_input.begin(),queue);
-    
-    compute::program copy_program = _copyKernel(context);
-    compute::kernel kernel(copy_program,"copy_kernel");
-    kernel.set_arg(0,d_input);
-    kernel.set_arg(1,d_output);
-    
-    compute::event start;
-    _BEGIN_TEST("Copy_Kernel");
-    start = queue.enqueue_nd_range_kernel(kernel,2,0,g_workSize,l_workSize);
-    queue.finish();
-    uint64_t elapsed = start.duration<boost::chrono::nanoseconds>().count();
-    
-    std::cout << "\tElapsed: " << elapsed  << " ns"<< std::endl;
-    std::cout << "\tBandWidth: " << 2 * nx * ny *sizeof(float)  / elapsed  << " GB/s" << std::endl; 
-    compute::copy(d_output.begin(),d_output.end(),h_output.begin(),queue);
-    
-    if(_checkTransposition(h_input,nx*ny,h_output))
-        std::cout << "\tStatus: Success" << std::endl;
-    else
-        std::cout << "\tStatus: Error" << std::endl;
-    _END
-    
-    _BEGIN_TEST("naiveTranspose")
-    
-    kernel = compute::kernel(_naiveTransposeKernel(context),"naiveTranspose");
-    kernel.set_arg(0,d_input);
-    kernel.set_arg(1,d_output);
-    
-    start = queue.enqueue_nd_range_kernel(kernel,2,0,g_workSize,l_workSize);
-    queue.finish();
-    elapsed = start.duration<boost::chrono::nanoseconds>().count();
-    std::cout << "\tElapsed: " << elapsed  << " ns"<< std::endl;
-    std::cout << "\tBandWidth: " << 2 * nx * ny *sizeof(float)  / elapsed  << " GB/s" << std::endl; 
-    compute::copy(d_output.begin(),d_output.end(),h_output.begin(),queue);
-    
-    if(_checkTransposition(expectedResult,nx*ny,h_output))
-        std::cout << "\tStatus: Success" << std::endl;
-    else
-        std::cout << "\tStatus: Error" << std::endl;
-    _END
-    
-    _BEGIN_TEST("coalescedTranspose")
-    
-    kernel = compute::kernel(_coalescedTransposeKernel(context),"coalescedTranspose");
-    kernel.set_arg(0,d_input);
-    kernel.set_arg(1,d_output);
-    
-    start = queue.enqueue_nd_range_kernel(kernel,2,0,g_workSize,l_workSize);
-    queue.finish();
-    elapsed = start.duration<boost::chrono::nanoseconds>().count();
-    std::cout << "\tElapsed: " << elapsed  << " ns"<< std::endl;
-    std::cout << "\tBandWidth: " << 2 * nx * ny *sizeof(float)  / elapsed  << " GB/s" << std::endl; 
-    
-    
-    compute::copy(d_output.begin(),d_output.end(),h_output.begin(),queue);
-    
-    if(_checkTransposition(expectedResult,nx*ny,h_output))
-        std::cout << "\tStatus: Success" << std::endl;
-    else
-        std::cout << "\tStatus: Error" << std::endl;
-    _END
-    
-    _BEGIN_TEST("coalescedNoBankConflicts")
-    
-    kernel = compute::kernel(_coalescedNoBankConflictsKernel(context),"coalescedNoBankConflicts");
-    kernel.set_arg(0,d_input);
-    kernel.set_arg(1,d_output);
-    
-    start = queue.enqueue_nd_range_kernel(kernel,2,0,g_workSize,l_workSize);
-    queue.finish();
-    elapsed = start.duration<boost::chrono::nanoseconds>().count();
-    std::cout << "\tElapsed: " << elapsed  << " ns"<< std::endl;
-    std::cout << "\tBandWidth: " << 2 * nx * ny *sizeof(float)  / elapsed  << " GB/s" << std::endl; 
-    
-    
-    compute::copy(d_output.begin(),d_output.end(),h_output.begin(),queue);
-    
-    if(_checkTransposition(expectedResult,nx*ny,h_output))
-        std::cout << "\tStatus: Success" << std::endl;
-    else
-        std::cout << "\tStatus: Error" << std::endl;
-    _END
-    
+	    _generateMatrix(h_input,expectedResult,nx,ny);
+	    
+	    // get the default device
+	    compute::device device = compute::system::default_device();
+	    
+	    // create a context for the device
+	    compute::context context(device);
+
+	    // device vectors
+	    compute::vector<float> d_input(size,context);
+	    compute::vector<float> d_output(size,context);
+	    
+	    // command_queue with profiling
+	    compute::command_queue queue(context, device,compute::command_queue::enable_profiling);
+	    
+	    // copy input data
+	    compute::copy(h_input.begin(),h_input.end(),d_input.begin(),queue);
+	    
+	    compute::program copy_program = _copyKernel(context);
+	    compute::kernel kernel(copy_program,"copy_kernel");
+	    kernel.set_arg(0,d_input);
+	    kernel.set_arg(1,d_output);
+	    
+	    compute::event start;
+	    _BEGIN_TEST("Copy_Kernel");
+	    start = queue.enqueue_nd_range_kernel(kernel,2,0,g_workSize,l_workSize);
+	    queue.finish();
+	    uint64_t elapsed = start.duration<boost::chrono::nanoseconds>().count();
+	    
+	    std::cout << "\tElapsed: " << elapsed  << " ns"<< std::endl;
+	    std::cout << "\tBandWidth: " << 2 * nx * ny *sizeof(float)  / ( elapsed / 1000)  << " MB/s" << std::endl; 
+	    std::cout << "\tBandWidth: " << 2 * nx * ny *sizeof(float)  /  elapsed   << " GB/s" << std::endl; 
+	    compute::copy(d_output.begin(),d_output.end(),h_output.begin(),queue);
+	    
+	    if(_checkTransposition(h_input,nx*ny,h_output))
+		std::cout << "\tStatus: Success" << std::endl;
+	    else
+		std::cout << "\tStatus: Error" << std::endl;
+	    _END
+	    
+	    _BEGIN_TEST("naiveTranspose")
+	    
+	    kernel = compute::kernel(_naiveTransposeKernel(context),"naiveTranspose");
+	    kernel.set_arg(0,d_input);
+	    kernel.set_arg(1,d_output);
+	    
+	    start = queue.enqueue_nd_range_kernel(kernel,2,0,g_workSize,l_workSize);
+	    queue.finish();
+	    elapsed = start.duration<boost::chrono::nanoseconds>().count();
+	    std::cout << "\tElapsed: " << elapsed  << " ns"<< std::endl;
+	    std::cout << "\tBandWidth: " << 2 * nx * ny *sizeof(float)  / ( elapsed / 1000)  << " MB/s" << std::endl; 
+	    std::cout << "\tBandWidth: " << 2 * nx * ny *sizeof(float)  /  elapsed   << " GB/s" << std::endl; 
+	    compute::copy(d_output.begin(),d_output.end(),h_output.begin(),queue);
+	    
+	    if(_checkTransposition(expectedResult,nx*ny,h_output))
+		std::cout << "\tStatus: Success" << std::endl;
+	    else
+		std::cout << "\tStatus: Error" << std::endl;
+	    _END
+	    
+	    _BEGIN_TEST("coalescedTranspose")
+	    
+	    kernel = compute::kernel(_coalescedTransposeKernel(context),"coalescedTranspose");
+	    kernel.set_arg(0,d_input);
+	    kernel.set_arg(1,d_output);
+	    
+	    start = queue.enqueue_nd_range_kernel(kernel,2,0,g_workSize,l_workSize);
+	    queue.finish();
+	    elapsed = start.duration<boost::chrono::nanoseconds>().count();
+	    std::cout << "\tElapsed: " << elapsed  << " ns"<< std::endl;
+	    std::cout << "\tBandWidth: " << 2 * nx * ny *sizeof(float)  / ( elapsed / 1000)  << " MB/s" << std::endl; 
+	    std::cout << "\tBandWidth: " << 2 * nx * ny *sizeof(float)  /  elapsed   << " GB/s" << std::endl;     
+	    
+	    compute::copy(d_output.begin(),d_output.end(),h_output.begin(),queue);
+	    
+	    if(_checkTransposition(expectedResult,nx*ny,h_output))
+		std::cout << "\tStatus: Success" << std::endl;
+	    else
+		std::cout << "\tStatus: Error" << std::endl;
+	    _END
+	    
+	    _BEGIN_TEST("coalescedNoBankConflicts")
+	    
+	    kernel = compute::kernel(_coalescedNoBankConflictsKernel(context),"coalescedNoBankConflicts");
+	    kernel.set_arg(0,d_input);
+	    kernel.set_arg(1,d_output);
+	    
+	    start = queue.enqueue_nd_range_kernel(kernel,2,0,g_workSize,l_workSize);
+	    queue.finish();
+	    elapsed = start.duration<boost::chrono::nanoseconds>().count();
+	    std::cout << "\tElapsed: " << elapsed  << " ns"<< std::endl;
+	    std::cout << "\tBandWidth: " << 2 * nx * ny *sizeof(float)  / ( elapsed / 1000)  << " MB/s" << std::endl; 
+	    std::cout << "\tBandWidth: " << 2 * nx * ny *sizeof(float)  /  elapsed   << " GB/s" << std::endl;     
+	    
+	    compute::copy(d_output.begin(),d_output.end(),h_output.begin(),queue);
+	    
+	    if(_checkTransposition(expectedResult,nx*ny,h_output))
+		std::cout << "\tStatus: Success" << std::endl;
+	    else
+		std::cout << "\tStatus: Error" << std::endl;
+	    _END
+    }
+    catch(boost::compute::opencl_error &e)
+    {
+         std::cout << "What went wrong: " << e.error_string() << std::endl;
+    }
     return 0;
 }
 
