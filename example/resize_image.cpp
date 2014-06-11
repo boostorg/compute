@@ -14,6 +14,8 @@
 #include <QtGui>
 #include <QtOpenGL>
 
+#include <boost/program_options.hpp>
+
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/program.hpp>
@@ -25,6 +27,7 @@
 #include <boost/compute/interop/opengl.hpp>
 
 namespace compute = boost::compute;
+namespace po = boost::program_options;
 
 // opencl source code
 const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
@@ -194,17 +197,43 @@ void ImageWidget::paintGL()
 // hardware-accelerated linear interpolation for the resized image.
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    // setup command line arguments
+    po::options_description options("options");
+    options.add_options()
+        ("help", "show usage instructions")
+        ("file", po::value<std::string>(), "image file name (e.g. /path/to/image.png)")
+    ;
+    po::positional_options_description positional_options;
+    positional_options.add("file", 1);
 
-    // check command line
-    if(argc < 2){
-        std::cout << "usage: resize_image [FILENAME]" << std::endl;
+    // parse command line
+    po::variables_map vm;
+    po::store(
+        po::command_line_parser(argc, argv)
+            .options(options)
+            .positional(positional_options)
+            .run(),
+        vm
+    );
+    po::notify(vm);
+
+    // check for file argument
+    if(vm.count("help") || !vm.count("file")){
+        std::cout << options << std::endl;
         return -1;
     }
 
-    ImageWidget widget(argv[1]);
+    // get file name
+    std::string file_name = vm["file"].as<std::string>();
+
+    // setup qt application
+    QApplication app(argc, argv);
+
+    // setup image widget
+    ImageWidget widget(QString::fromStdString(file_name));
     widget.show();
 
+    // run qt application
     return app.exec();
 }
 
