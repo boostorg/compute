@@ -13,7 +13,22 @@
 #include <iostream>
 #include <iterator>
 
-#include <boost/compute.hpp>
+#include <boost/compute/buffer.hpp>
+#include <boost/compute/command_queue.hpp>
+#include <boost/compute/config.hpp>
+#include <boost/compute/context.hpp>
+#include <boost/compute/device.hpp>
+#include <boost/compute/event.hpp>
+#include <boost/compute/kernel.hpp>
+#include <boost/compute/memory_object.hpp>
+#include <boost/compute/platform.hpp>
+#include <boost/compute/program.hpp>
+#include <boost/compute/system.hpp>
+#include <boost/compute/user_event.hpp>
+#include <boost/compute/version.hpp>
+#include <boost/compute/wait_list.hpp>
+#include <boost/compute/source.hpp>
+
 #include <boost/thread.hpp>
 #include <boost/foreach.hpp>
 #include <boost/program_options.hpp>
@@ -29,70 +44,70 @@ namespace po      = boost::program_options;
 //of adding "" to every line. Refer simple_kernel example
 
 const char matrix_multiply_naive_cl[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
-            __kernel void mat_multiply_naive(__global const float *src_a,
-                                       __global const float *src_b,
-                                       __global float *dest_c,
-                                       int width_a, int height_a,
-                                       int width_b, int height_b)
-            {
-                int col = get_global_id(0); //Y-axis
-                int row = get_global_id(1); //X-axis
+    __kernel void mat_multiply_naive(__global const float *src_a,
+                                      __global const float *src_b,
+                                      __global float *dest_c,
+                                      int width_a, int height_a,
+                                      int width_b, int height_b)
+    {
+        int col = get_global_id(0); //Y-axis
+        int row = get_global_id(1); //X-axis
 
-                float accumulate_sum = 0;
-                for(int k = 0; k < width_a; ++k)
-                {
-                    accumulate_sum += src_a[row * width_a + k ] * src_b[k * width_b + col];
-                }
-                dest_c[row * width_a + col] = accumulate_sum;
-
-            }
-            );
+        float accumulate_sum = 0;
+        for(int k = 0; k < width_a; ++k)
+        {
+            accumulate_sum += src_a[row * width_a + k ] *
+                              src_b[k * width_b + col];
+        }
+        dest_c[row * width_a + col] = accumulate_sum;
+    }
+    );
 
 // Run visualize_kernel example to have better undestatnding on blocks
 const char matrix_multiply_block_cl[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
-            __kernel void mat_multiply_block(__global const float *src_a,
-                                             __global const float *src_b,
-                                             __global  float *src_c,
-                                             int width_a, int height_a,
-                                             int width_b, int height_b)
-            {
-                int bx = get_group_id(0);
-                int by = get_group_id(1);
-                int tx = get_local_id(0);
-                int ty = get_local_id(1);
+    __kernel void mat_multiply_block(__global const float *src_a,
+                                     __global const float *src_b,
+                                     __global  float *src_c,
+                                     int width_a, int height_a,
+                                     int width_b, int height_b)
+    {
+        int bx = get_group_id(0);
+        int by = get_group_id(1);
+        int tx = get_local_id(0);
+        int ty = get_local_id(1);
 
-                int aBegin  = width_a * BLOCK_SIZE * by;
-                int aEnd    = aBegin + width_a - 1;
-                int aStep   = BLOCK_SIZE;
+        int aBegin  = width_a * BLOCK_SIZE * by;
+        int aEnd    = aBegin + width_a - 1;
+        int aStep   = BLOCK_SIZE;
 
-                int bBegin  = BLOCK_SIZE * bx;
-                int bStep   = BLOCK_SIZE * width_b;
+        int bBegin  = BLOCK_SIZE * bx;
+        int bStep   = BLOCK_SIZE * width_b;
 
-                float Csub = 0.0;
+        float Csub = 0.0;
 
-                for(int a = aBegin, b = bBegin; a <= aEnd; a+=aStep,
-                                                           b+=bStep)
-                {
-                    //__local specifier makes the variable static
-                    // to the block
-                    __local float As[BLOCK_SIZE][BLOCK_SIZE];
-                    __local float Bs[BLOCK_SIZE][BLOCK_SIZE];
+        for(int a = aBegin, b = bBegin; a <= aEnd; a+=aStep,
+                                                   b+=bStep)
+        {
+            //__local specifier makes the variable static
+            // to the block
+            __local float As[BLOCK_SIZE][BLOCK_SIZE];
+            __local float Bs[BLOCK_SIZE][BLOCK_SIZE];
 
-                    As[ty][tx] = src_a[a + width_a * ty + tx];
-                    Bs[ty][tx] = src_b[b + width_b * ty + tx];
+            As[ty][tx] = src_a[a + width_a * ty + tx];
+            Bs[ty][tx] = src_b[b + width_b * ty + tx];
 
-                    barrier(CLK_LOCAL_MEM_FENCE);
+            barrier(CLK_LOCAL_MEM_FENCE);
 
-                    for(int k = 0; k < BLOCK_SIZE; ++k)
-                            Csub += As[ty][k] * Bs[k][tx];
+            for(int k = 0; k < BLOCK_SIZE; ++k)
+                    Csub += As[ty][k] * Bs[k][tx];
 
-                    barrier(CLK_LOCAL_MEM_FENCE);
-                }
+            barrier(CLK_LOCAL_MEM_FENCE);
+         }
 
-                int c = width_b * BLOCK_SIZE * by + BLOCK_SIZE * bx;
-                src_c[c + width_b * ty + tx] = Csub;
-            }
-            );
+        int c = width_b * BLOCK_SIZE * by + BLOCK_SIZE * bx;
+        src_c[c + width_b * ty + tx] = Csub;
+    }
+    );
 
 /***********************User Defined Function*****************/
 
@@ -122,47 +137,9 @@ void display_matrix(float *data, int dim)
     }
 }
 
-void display_opencl_device_info(compute::device &localdevice)
-{
-    std::cout<<"Device Name     : "
-            <<localdevice.name()<<std::endl;
-    std::cout<<"Device Type     : "
-            <<localdevice.type()<<std::endl;
-    std::cout<<"Device ID       : "
-            <<localdevice.id()<<std::endl;
-    std::cout<<"Vendor Name     : "
-            <<localdevice.vendor()<<std::endl;
-    std::cout<<"Version         : "
-            <<localdevice.version()<<std::endl;
-    //Memory which decides what games can be played on your device
-    std::cout<<"Global Memory   : "
-            <<localdevice.global_memory_size()/1024/1024
-            <<" MBs "<<std::endl;
-    //Memory useless for a Gamer, unfortunately not for us
-    std::cout<<"Local Memory    : "
-            <<localdevice.local_memory_size()/1024
-            <<" Bytes "<<std::endl;
-    std::cout<<"Compute Units   : "
-            <<localdevice.compute_units()<<std::endl;
-    std::cout<<"Clock Frequency : "
-            <<localdevice.clock_frequency()<<" MHz"<<std::endl;
-    std::cout<<"Max Work Group Size         : "
-            <<localdevice.max_work_group_size()<<std::endl;
-    std::cout<<"Max Work Item Dimensions    : "
-            <<localdevice.max_work_item_dimensions()
-            <<std::endl;
-    std::cout<<"Device extensions/plugins   : ";
-
-    //localdevice.extensions() returns vector of strings.
-    //In simple BOOST_FOREACH takes vector data type and a vector
-    //and gives acces to each data in the vector
-    BOOST_FOREACH(std::string extension, localdevice.extensions() )
-            std::cout<<extension<<" ";
-    std::cout<<std::endl<<std::endl<<std::endl;
-}
 
 /***********************Thread Functions*****************/
-void test_matrix_multiply_array(compute::context& context,
+int test_matrix_multiply_array(compute::context& context,
                                          compute::command_queue& queue)
 {
     float a[4][4] = { {1, 1, 1, 1},
@@ -224,7 +201,9 @@ void test_matrix_multiply_array(compute::context& context,
     }
     catch(boost::compute::opencl_error &e)
     {
-         std::cout << matrix_multiply_program.build_log() << std::endl;
+          std::cout <<"OpenCL Build Error : \n"
+                   << matrix_multiply_program.build_log() << std::endl;
+         return -1;
     }
 
     compute::kernel naive_kernel(matrix_multiply_program,
@@ -277,7 +256,7 @@ void test_matrix_multiply_array(compute::context& context,
     display_matrix(&c[0][0], 4);
 }
 
-void test_block_matrix_multiply(compute::context& context,
+int test_block_matrix_multiply(compute::context& context,
                                 compute::command_queue& queue)
 {
     float a[8][8] = { {1, 1, 1, 1, 1, 1, 1, 1},
@@ -319,7 +298,9 @@ void test_block_matrix_multiply(compute::context& context,
     }
     catch(boost::compute::opencl_error &e)
     {
-         std::cout << matrix_block_multiply_program.build_log() << std::endl;
+        std::cout <<"OpenCL Build Error : \n"
+                  <<matrix_block_multiply_program.build_log() << std::endl;
+         return -1;
     }
 
     compute::kernel improved_kernel(matrix_block_multiply_program,
@@ -429,9 +410,6 @@ int main(int argc, char *argv[])
     compute::context gpu_context(gpu);
     compute::command_queue gpu_queue(gpu_context, gpu,
                                      compute::command_queue::enable_profiling);
-
-    //Get the basic info of your GPU card
-    display_opencl_device_info(gpu);
 
     if(vm["thread_use"].as<int>())
     {
