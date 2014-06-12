@@ -310,7 +310,7 @@ int main(int argc, char *argv[])
     display_matrix(&c[0][0], 8);
 
     ///////////////////////////////////////////////////////////////////////
-
+    //Gets executed if user inputs the size
     if(vm.count("size"))
     {
         std::cout<<std::endl
