@@ -26,7 +26,7 @@ set(EXAMPLES
   simple_moving_average
   matrix_transpose
   visualize_kernel
-  multi_thread
+  matrix_multiplication
 )
 
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
