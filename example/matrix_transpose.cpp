@@ -150,13 +150,14 @@ compute::program _coalescedNoBankConflictsKernel(const compute::context& context
     return program;
 }
 
+using compute::uint_;
 /// \fn _checkTransposition
 /// \brief Compare @a expectedResult to @a transposedMatrix
 bool _checkTransposition(const std::vector<float>& expectedResult, 
-                         uint size, 
+                         uint_ size, 
                          const std::vector<float>& transposedMatrix)
 {
-    for(uint i = 0 ; i < size ; ++i)
+    for(uint_ i = 0 ; i < size ; ++i)
     {
         if(expectedResult[i] != transposedMatrix[i])
         {
@@ -171,21 +172,21 @@ bool _checkTransposition(const std::vector<float>& expectedResult,
 
 /// \fn _generateMatrix
 /// \brief generate a matrix inside @a in and do the tranposition inside @a transposeRef
-void _generateMatrix(std::vector<float>& in, std::vector<float>& transposeRef, uint nx, uint ny)
+void _generateMatrix(std::vector<float>& in, std::vector<float>& transposeRef, uint_ nx, uint_ ny)
 {
     // generate a matrix
-    for(uint i = 0 ; i < nx ; ++i)
+    for(uint_ i = 0 ; i < nx ; ++i)
     {
-        for(uint j = 0 ; j < ny ; ++j)
+        for(uint_ j = 0 ; j < ny ; ++j)
         {
             in[i*ny + j] = i*ny + j; 
         }
     }
     
     // store transposed result
-    for(uint j = 0; j < ny ; ++j)
+    for(uint_ j = 0; j < ny ; ++j)
     {
-        for(uint i = 0 ; i < nx ; ++i)
+        for(uint_ i = 0 ; i < nx ; ++i)
         {
             transposeRef[j*nx + i] = in[i*ny + j];
         }
@@ -195,11 +196,14 @@ void _generateMatrix(std::vector<float>& in, std::vector<float>& transposeRef, u
 #define _BEGIN_TEST(name) std::cout << name << std::endl;
 #define _END    std::cout << std::endl;
 
+#ifdef _WIN32
+#define uint64_t unsigned __int64
+#endif
 
 int main()
 {
-    const uint nx = 4096;
-    const uint ny = 4096;
+    const uint_ nx = 4096;
+    const uint_ ny = 4096;
     
     std::cout << "Matrix Size: " << nx << "x" << ny << std::endl;
     std::cout << "Grid Size: " << nx/TILE_DIM << "x" << ny/TILE_DIM << " blocks" << std::endl;
@@ -210,7 +214,7 @@ int main()
     const size_t g_workSize[2] = {nx,ny*BLOCK_ROWS/TILE_DIM};
     const size_t l_workSize[2] = {TILE_DIM,BLOCK_ROWS};
     
-    const uint size = nx * ny;
+    const uint_ size = nx * ny;
     
     std::vector<float> h_input(size);
     std::vector<float> h_output(size);
