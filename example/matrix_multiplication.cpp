@@ -43,7 +43,7 @@ namespace po      = boost::program_options;
 //BOOST_COMPUTE_STRINGIZE_SOURCE helps in reducing the work
 //of adding "" to every line. Refer simple_kernel example
 
-// Run visualize_kernel_id example to have better undestatnding
+// Run visualize_kernel example to have better undestatnding
 // on global id and local id
 const char matrix_multiply_cl[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
     //Naive Kernel
@@ -131,76 +131,90 @@ void matrix_multiply(float* src1, float* src2, float* dest, int dim)
         }
 }
 
-void fill_matrix(float *data, int size)
+///
+/// \brief fill_matrix fills the matrix with 1
+/// \param ptr_2_array pointer to 2D array
+/// \param size dimension of square array
+///
+void fill_matrix(float *ptr_2_array, int size)
 {
-    for(int i=0; i<size; i++)
+    for(int i = 0; i < size; i++)
     {
-        for(int j=0; j<size; j++)
-         data[ j * size + i] = 1;
+        for(int j = 0; j < size; j++)
+         ptr_2_array[ j * size + i] = 1;
     }
 }
 
+///
+/// \brief display_matrix
+/// \param data pointer to 2D array
+/// \param size dimension of square array
+///
 void display_matrix(float *data, int size)
 {
-    for(int i=0; i<size; i++)
+    for(int i = 0; i < size; i++)
     {
-        for(int j=0; j<size; j++)
-            std::cout<<"  "<<data[ j * size + i];
-        std::cout<<std::endl;
+        for(int j = 0; j < size; j++)
+            std::cout <<"  " << data[ j * size + i];
+        std::cout << std::endl;
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+// neccessary for 64-bit integer on win32
+#ifdef _WIN32
+#define uint64_t unsigned __int64
+#endif
 
 int main(int argc, char *argv[])
 {
     ///////////////////////////////////////////////////////////////////////
+    //stores command line user specified matrix size
     int user_size;
 
+    //setup command line arguments
     po::options_description desc("Allowed Options");
     desc.add_options()
-            ("help", "produce help message")
-            ("info", "prints the information")
-            ("usage", "using example")
-            ("size", po::value<int>(),"input size for square matrix")
+            ("help", "displays available options")
+            ("info", "prints the example information")
+            ("usage", "using this example")
+            ("size", po::value<int>(), "input size for square matrix")
             ("display", "display the result for user size");
 
+    //parse command line
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
 
+    //prints availble options
     if(vm.count("help"))
     {
-        std::cout<<desc<<std::endl;
-        return 1;
+        std::cout << desc << std::endl;
+        return 0;
     }
 
+    //prints the example usage
     if(vm.count("usage"))
     {
-        std::cout<<argv[0]<<" --size 1024"<<std::endl;
-        std::cout<<argv[0]<<" --size 64 --display"<<std::endl;
-        return 1;
+        std::cout << argv[0] << " --size 1024" << std::endl;
+        std::cout << argv[0] << " --size 64 --display" << std::endl;
+        return 0;
     }
 
+    //prints the information about the example
     if(vm.count("info"))
     {
-        std::cout<<"OpenCL 2D matrix multiplication \n"
-                 <<"  *  Using pointers \n"
-                 <<"  *  Using naive kernel \n"
-                 <<"  *  Using shared memory kernel \n";
-        return 1;
-    }
-
-    if(vm.count("size"))
-    {
-        user_size = vm["size"].as<int>();
+        std::cout << "OpenCL 2D matrix multiplication \n"
+                  << "  *  Using pointers \n"
+                  << "  *  Using naive kernel \n"
+                  << "  *  Using shared memory kernel \n";
+        return 0;
     }
 
     ///////////////////////////////////////////////////////////////////////
 
-    std::cout<<"======================================"<<std::endl;
-    std::cout<<"Compute Matrix Multiplication example"<<std::endl;
-    std::cout<<"======================================"<<std::endl;
+    std::cout << "======================================" << std::endl;
+    std::cout << "Compute Matrix Multiplication example"  << std::endl;
+    std::cout << "======================================" << std::endl;
 
     float a[8][8] = { {1, 1, 1, 1, 1, 1, 1, 1},
                       {1, 1, 1, 1, 1, 1, 1, 1},
@@ -214,6 +228,7 @@ int main(int argc, char *argv[])
     float b[8][8];
     float c[8][8];
 
+    //host pointer to hold 2D matrix of user_size x user_size
     float *a_ptr;
     float *b_ptr;
     float *c_ptr;
@@ -233,14 +248,6 @@ int main(int argc, char *argv[])
     compute::event profiler;
     uint64_t elapsed;
 
-    ///////////////////////////////////////////////////////////////////////
-
-    std::cout<<"8x8 Matrix Multiplication via pointers"<<std::endl;
-    matrix_multiply(&a[0][0], &b[0][0], &c[0][0], 8);
-    display_matrix(&c[0][0], 8);
-
-    ///////////////////////////////////////////////////////////////////////
-
     //Compile program -> Get handle to kernel -> Run kernel
     //Host Buffer -> Device Buffer -> Map data to Kernel ->
     //Run the Kernel -> Copy result back to host pointer
@@ -254,8 +261,8 @@ int main(int argc, char *argv[])
     }
     catch(boost::compute::opencl_error &e)
     {
-        std::cout <<"Error : "<<e.what()<<"\n"
-                  <<matrix_multiply_program.build_log() << std::endl;
+        std::cout << "Error : " << e.what() << "\n"
+                  << matrix_multiply_program.build_log() << std::endl;
          return -1;
     }
 
@@ -265,58 +272,26 @@ int main(int argc, char *argv[])
                                  "matrix_multiply_naive");
 
     //Verify everything is going well
-    std::cout<<"Kernel Names :  "
-             <<naive_kernel.get_info<std::string>(CL_KERNEL_FUNCTION_NAME)
-             <<std::endl<<"\t\t"
-             <<improved_kernel.get_info<std::string>(CL_KERNEL_FUNCTION_NAME)
-             <<std::endl;;
-
-    compute::buffer dev_a(cl_device_context, 8 * 8 * sizeof(float),
-                          compute::memory_object::read_only |
-                          compute::memory_object::copy_host_ptr,
-                          a);
-
-    compute::buffer dev_b(cl_device_context, 8 * 8 * sizeof(float),
-                          compute::memory_object::read_only |
-                          compute::memory_object::copy_host_ptr,
-                          b);
-
-    compute::buffer dev_c(cl_device_context, 8 * 8 * sizeof(float),
-                          compute::memory_object::write_only
-                          );
-
-    std::cout<<"8x8 Matrix Multiplication via matrix_multiply_block kernel"<<std::endl;
-    improved_kernel.set_arg(0, dev_a);
-    improved_kernel.set_arg(1, dev_b);
-    improved_kernel.set_arg(2, dev_c);
-    improved_kernel.set_arg(3, 8);
-    improved_kernel.set_arg(4, 8);
-    improved_kernel.set_arg(5, 8);
-    improved_kernel.set_arg(6, 8);
-
-    size_t global_thread_size[2]  = { 8, 8 };
-    size_t local_thread_size[2]   = { 4, 4 };
-
-    cl_device_queue.enqueue_nd_range_kernel( improved_kernel,
-                                   2,
-                                   0,
-                                   global_thread_size,
-                                   local_thread_size);
-    cl_device_queue.enqueue_read_buffer(dev_c,
-                              0,
-                              8 * 8 * sizeof(float),
-                              c);
-
-    display_matrix(&c[0][0], 8);
+    std::cout << "Kernel Names :  "
+              << naive_kernel.get_info<std::string>(CL_KERNEL_FUNCTION_NAME)
+              << std::endl<<"\t\t"
+              << improved_kernel.get_info<std::string>(CL_KERNEL_FUNCTION_NAME)
+              << std::endl;
 
     ///////////////////////////////////////////////////////////////////////
     //Gets executed if user inputs the size
     if(vm.count("size"))
     {
-        std::cout<<std::endl
-                 <<user_size<<" x "<<user_size
-                 <<" Matrix Multiplication with both the kernels"
-                 <<std::endl;
+        user_size = vm["size"].as<int>();
+        if(user_size < 0)
+        {
+            std::cout << "Please specify a valid size \n";
+            return 0;
+        }
+        std::cout << std::endl
+                  << user_size << " x " << user_size
+                  << " Matrix Multiplication with both the kernels"
+                  << std::endl;
 
         a_ptr = (float*)malloc(sizeof(float) * user_size * user_size);
         b_ptr = (float*)malloc(sizeof(float) * user_size * user_size);
@@ -424,7 +399,7 @@ int main(int argc, char *argv[])
         }
         catch(compute::opencl_error e)
         {
-            std::cout<<"Error code: "<<e.error_string()<<"\n";
+            std::cout << "!!!Error : "<< e.error_string() << "\n";
             return -1;
         }
 
@@ -432,5 +407,57 @@ int main(int argc, char *argv[])
         {
             display_matrix(c_ptr, user_size);
         }
+
+        //release the host pointer
+        free(a_ptr);
+        free(b_ptr);
+        free(c_ptr);
     }
+    else
+    {
+        std::cout << "8x8 Matrix Multiplication via pointers" << std::endl;
+        matrix_multiply(&a[0][0], &b[0][0], &c[0][0], 8);
+        display_matrix(&c[0][0], 8);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        compute::buffer dev_a(cl_device_context, 8 * 8 * sizeof(float),
+                              compute::memory_object::read_only |
+                              compute::memory_object::copy_host_ptr,
+                              a);
+
+        compute::buffer dev_b(cl_device_context, 8 * 8 * sizeof(float),
+                              compute::memory_object::read_only |
+                              compute::memory_object::copy_host_ptr,
+                              b);
+
+        compute::buffer dev_c(cl_device_context, 8 * 8 * sizeof(float),
+                              compute::memory_object::write_only
+                              );
+
+        std::cout<<"8x8 Matrix Multiplication via matrix_multiply_block kernel"<<std::endl;
+        improved_kernel.set_arg(0, dev_a);
+        improved_kernel.set_arg(1, dev_b);
+        improved_kernel.set_arg(2, dev_c);
+        improved_kernel.set_arg(3, 8);
+        improved_kernel.set_arg(4, 8);
+        improved_kernel.set_arg(5, 8);
+        improved_kernel.set_arg(6, 8);
+
+        size_t global_thread_size[2]  = { 8, 8 };
+        size_t local_thread_size[2]   = { 4, 4 };
+
+        cl_device_queue.enqueue_nd_range_kernel( improved_kernel,
+                                       2,
+                                       0,
+                                       global_thread_size,
+                                       local_thread_size);
+        cl_device_queue.enqueue_read_buffer(dev_c,
+                                  0,
+                                  8 * 8 * sizeof(float),
+                                  c);
+
+        display_matrix(&c[0][0], 8);
+    }
+    return 0;
 }
