@@ -11,6 +11,8 @@
 #include <iostream>
 #include <cstdlib>
 
+#include <boost/program_options.hpp>
+
 #include <boost/compute/core.hpp>
 #include <boost/compute/source.hpp>
 #include <boost/compute/algorithm/copy.hpp>
@@ -18,6 +20,7 @@
 #include <boost/compute/type_traits/type_name.hpp>
 
 namespace compute = boost::compute;
+namespace po = boost::program_options;
 
 using compute::uint_;
 
@@ -213,11 +216,30 @@ void generate_matrix(std::vector<float>& in, std::vector<float>& out, uint_ rows
 #define uint64_t unsigned __int64
 #endif
 
-int main()
+int main(int argc, char *argv[])
 {
-    // default number of rows and columns for the matrix
-    const uint_ rows = 4096;
-    const uint_ cols = 4096;
+    // setup command line arguments
+    po::options_description options("options");
+    options.add_options()
+        ("help", "show usage instructions")
+        ("rows", po::value<uint_>()->default_value(4096), "number of matrix rows")
+        ("cols", po::value<uint_>()->default_value(4096), "number of matrix columns")
+    ;
+
+    // parse command line
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, options), vm);
+    po::notify(vm);
+
+    // check command line arguments
+    if(vm.count("help")){
+        std::cout << options << std::endl;
+        return 0;
+    }
+
+    // get number rows and columns for the matrix
+    const uint_ rows = vm["rows"].as<uint_>();
+    const uint_ cols = vm["cols"].as<uint_>();
 
     // get the default device
     compute::device device = compute::system::default_device();
