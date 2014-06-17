@@ -17,6 +17,7 @@
 
 #include <boost/compute/random/bernoulli_distribution.hpp>
 #include <boost/compute/random/default_random_engine.hpp>
+#include <boost/compute/random/discrete_distribution.hpp>
 #include <boost/compute/random/mersenne_twister.hpp>
 #include <boost/compute/random/normal_distribution.hpp>
 #include <boost/compute/random/uniform_int_distribution.hpp>
