@@ -138,6 +138,7 @@ add_compute_test("iterator.zip_iterator" test_zip_iterator.cpp)
 
 add_compute_test("random.bernoulli_distribution" test_bernoulli_distribution.cpp)
 add_compute_test("random.discrete_distribution" test_discrete_distribution.cpp)
+add_compute_test("random.linear_congruential_engine" test_linear_congruential_engine.cpp)
 add_compute_test("random.mersenne_twister" test_mersenne_twister.cpp)
 add_compute_test("random.normal_distribution" test_normal_distribution.cpp)
 add_compute_test("random.uniform_int_distribution" test_uniform_int_distribution.cpp)
