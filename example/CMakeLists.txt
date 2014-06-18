@@ -55,6 +55,7 @@ if(${BOOST_COMPUTE_HAVE_OPENCV})
   set(OPENCV_EXAMPLES
     k_means
     opencv_filter
+    opencv_flip
     random_walk
     opencv_optical_flow
     opencv_optical_flow_camera
