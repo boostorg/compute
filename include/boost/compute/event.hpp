@@ -114,14 +114,14 @@ public:
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// Move-constructs a new event object from \p other.
-    event(event&& other) noexcept
+    event(event&& other) BOOST_NOEXCEPT
         : m_event(other.m_event)
     {
         other.m_event = 0;
     }
 
     /// Move-assigns the event from \p other to \c *this.
-    event& operator=(event&& other) noexcept
+    event& operator=(event&& other) BOOST_NOEXCEPT
     {
         if(m_event){
             clReleaseEvent(m_event);

@@ -105,13 +105,13 @@ public:
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// Move-constructs a new buffer object from \p other.
-    buffer(buffer&& other) noexcept
+    buffer(buffer&& other) BOOST_NOEXCEPT
         : memory_object(std::move(other))
     {
     }
 
     /// Move-assigns the buffer from \p other to \c *this.
-    buffer& operator=(buffer&& other) noexcept
+    buffer& operator=(buffer&& other) BOOST_NOEXCEPT
     {
         memory_object::operator=(std::move(other));
 

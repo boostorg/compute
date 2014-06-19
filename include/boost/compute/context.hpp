@@ -112,14 +112,14 @@ public:
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// Move-constructs a new context object from \p other.
-    context(context&& other) noexcept
+    context(context&& other) BOOST_NOEXCEPT
         : m_context(other.m_context)
     {
         other.m_context = 0;
     }
 
     /// Move-assigns the context from \p other to \c *this.
-    context& operator=(context&& other) noexcept
+    context& operator=(context&& other) BOOST_NOEXCEPT
     {
         if(m_context){
             clReleaseContext(m_context);

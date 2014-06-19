@@ -55,13 +55,13 @@ public:
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// Move-constructs a new user event object from \p other.
-    user_event(user_event&& other) noexcept
+    user_event(user_event&& other) BOOST_NOEXCEPT
         : event(std::move(other))
     {
     }
 
     /// Move-assigns the user event from \p other to \c *this.
-    user_event& operator=(user_event&& other) noexcept
+    user_event& operator=(user_event&& other) BOOST_NOEXCEPT
     {
         event::operator=(std::move(other));
 

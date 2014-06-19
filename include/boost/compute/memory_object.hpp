@@ -167,14 +167,14 @@ protected:
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// \internal_
-    memory_object(memory_object&& other) noexcept
+    memory_object(memory_object&& other) BOOST_NOEXCEPT
         : m_mem(other.m_mem)
     {
         other.m_mem = 0;
     }
 
     /// \internal_
-    memory_object& operator=(memory_object&& other) noexcept
+    memory_object& operator=(memory_object&& other) BOOST_NOEXCEPT
     {
         if(m_mem){
             clReleaseMemObject(m_mem);

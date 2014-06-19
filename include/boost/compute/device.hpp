@@ -103,14 +103,14 @@ public:
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// Move-constructs a new device object from \p other.
-    device(device&& other) noexcept
+    device(device&& other) BOOST_NOEXCEPT
         : m_id(other.m_id)
     {
         other.m_id = 0;
     }
 
     /// Move-assigns the device from \p other to \c *this.
-    device& operator=(device&& other) noexcept
+    device& operator=(device&& other) BOOST_NOEXCEPT
     {
         #ifdef CL_VERSION_1_2
         if(m_id && is_subdevice()){
