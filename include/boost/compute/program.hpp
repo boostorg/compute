@@ -118,14 +118,14 @@ public:
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// Move-constructs a new program object from \p other.
-    program(program&& other) noexcept
+    program(program&& other) BOOST_NOEXCEPT
         : m_program(other.m_program)
     {
         other.m_program = 0;
     }
 
     /// Move-assigns the program from \p other to \c *this.
-    program& operator=(program&& other) noexcept
+    program& operator=(program&& other) BOOST_NOEXCEPT
     {
         if(m_program){
             clReleaseProgram(m_program);

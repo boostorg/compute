@@ -52,13 +52,13 @@ public:
     }
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
-    allocator(allocator<T>&& other) noexcept
+    allocator(allocator<T>&& other) BOOST_NOEXCEPT
         : m_context(std::move(other.m_context)),
           m_mem_flags(other.m_mem_flags)
     {
     }
 
-    allocator<T>& operator=(allocator<T>&& other) noexcept
+    allocator<T>& operator=(allocator<T>&& other) BOOST_NOEXCEPT
     {
         m_context = std::move(other.m_context);
         m_mem_flags = other.m_mem_flags;

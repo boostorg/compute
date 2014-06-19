@@ -94,14 +94,14 @@ public:
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// Move-constructs a new kernel object from \p other.
-    kernel(kernel&& other) noexcept
+    kernel(kernel&& other) BOOST_NOEXCEPT
         : m_kernel(other.m_kernel)
     {
         other.m_kernel = 0;
     }
 
     /// Move-assigns the kernel from \p other to \c *this.
-    kernel& operator=(kernel&& other) noexcept
+    kernel& operator=(kernel&& other) BOOST_NOEXCEPT
     {
         if(m_kernel){
             clReleaseKernel(m_kernel);

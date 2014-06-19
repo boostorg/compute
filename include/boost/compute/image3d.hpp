@@ -103,13 +103,13 @@ public:
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// Move-constructs a new image object from \p other.
-    image3d(image3d&& other) noexcept
+    image3d(image3d&& other) BOOST_NOEXCEPT
         : memory_object(std::move(other))
     {
     }
 
     /// Move-assigns the image from \p other to \c *this.
-    image3d& operator=(image3d&& other) noexcept
+    image3d& operator=(image3d&& other) BOOST_NOEXCEPT
     {
         memory_object::operator=(std::move(other));
 

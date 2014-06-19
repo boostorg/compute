@@ -146,14 +146,14 @@ public:
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// Move-constructs a new command queue object from \p other.
-    command_queue(command_queue&& other) noexcept
+    command_queue(command_queue&& other) BOOST_NOEXCEPT
         : m_queue(other.m_queue)
     {
         other.m_queue = 0;
     }
 
     /// Move-assigns the command queue from \p other to \c *this.
-    command_queue& operator=(command_queue&& other) noexcept
+    command_queue& operator=(command_queue&& other) BOOST_NOEXCEPT
     {
         if(m_queue){
             clReleaseCommandQueue(m_queue);

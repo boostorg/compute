@@ -98,14 +98,14 @@ public:
     }
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
-    device_ptr(device_ptr<T>&& other) noexcept
+    device_ptr(device_ptr<T>&& other) BOOST_NOEXCEPT
         : m_buffer(other.m_buffer.get(), false),
           m_index(other.m_index)
     {
         other.m_buffer.get() = 0;
     }
 
-    device_ptr<T>& operator=(device_ptr<T>&& other) noexcept
+    device_ptr<T>& operator=(device_ptr<T>&& other) BOOST_NOEXCEPT
     {
         m_buffer.get() = other.m_buffer.get();
         m_index = other.m_index;

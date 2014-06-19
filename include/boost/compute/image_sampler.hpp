@@ -94,13 +94,13 @@ public:
     }
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
-    image_sampler(image_sampler&& other) noexcept
+    image_sampler(image_sampler&& other) BOOST_NOEXCEPT
         : m_sampler(other.m_sampler)
     {
         other.m_sampler = 0;
     }
 
-    image_sampler& operator=(image_sampler&& other) noexcept
+    image_sampler& operator=(image_sampler&& other) BOOST_NOEXCEPT
     {
         if(m_sampler){
             clReleaseSampler(m_sampler);
