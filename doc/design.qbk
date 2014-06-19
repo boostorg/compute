@@ -3,7 +3,7 @@
 [section Library Architecture]
 
 The Boost Compute library consists of several different components. The core
-layer provides a "thin" C++ wrapper over the OpenCL C API. This includes classes
+layer provides a "thin" C++ wrapper over the OpenCL API. This includes classes
 to manage OpenCL objects such as
 [classref boost::compute::device device]'s,
 [classref boost::compute::device kernel]'s and

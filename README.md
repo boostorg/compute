@@ -7,7 +7,7 @@
 
 Boost.Compute is a GPU/parallel-computing library for C++ based on OpenCL.
 
-The core library is a thin C++ wrapper over the OpenCL C API and provides
+The core library is a thin C++ wrapper over the OpenCL API and provides
 access to compute devices, contexts, command queues and memory buffers.
 
 On top of the core library is a generic, STL-like interface providing common

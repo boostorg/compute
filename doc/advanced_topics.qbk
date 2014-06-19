@@ -157,23 +157,23 @@ device:
 
 [endsect]
 
-[section OpenCL C API Interoperability]
+[section OpenCL API Interoperability]
 
-The Boost Compute library is designed to easily interoperate with the OpenCL C
+The Boost Compute library is designed to easily interoperate with the OpenCL
 API. All of the wrapped classes have conversion operators to their underlying
-OpenCL types which allows them to be passed directly to the OpenCL C functions.
+OpenCL types which allows them to be passed directly to the OpenCL functions.
 
 For example,
 ``
 // create context object
 boost::compute::context ctx = boost::compute::default_context();
 
-// query number of devices using the OpenCL C API
+// query number of devices using the OpenCL API
 cl_uint num_devices;
 clGetContextInfo(ctx, CL_CONTEXT_NUM_DEVICES, sizeof(cl_uint), &num_devices, 0);
 std::cout << "num_devices: " << num_devices << std::endl;
 ``
 
-[endsect] [/ opencl c api interoperability]
+[endsect] [/ opencl api interoperability]
 
 [endsect] [/ advanced topics]

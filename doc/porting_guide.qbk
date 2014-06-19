@@ -1,6 +1,6 @@
 [section Porting Guide]
 
-[section OpenCL C API]
+[section OpenCL API]
 
 [table OpenCL API Translation Table
     [[OpenCL Function] [Boost.Compute Function]]
@@ -72,6 +72,6 @@
     [[`clEnqueueReleaseGLObjects()`] [[funcref boost::compute::opengl_enqueue_release_gl_objects opengl_enqueue_release_gl_objects()]]]
 ]
 
-[endsect] [/ opencl c api]
+[endsect] [/ opencl api]
 
 [endsect]

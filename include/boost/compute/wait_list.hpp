@@ -28,7 +28,7 @@ template<class T> class future;
 /// all of the events have completed.
 ///
 /// This class also provides convenience fnuctions for interacting with
-/// OpenCL C APIs which typically accept event dependencies as a \c cl_event*
+/// OpenCL APIs which typically accept event dependencies as a \c cl_event*
 /// pointer and a \c cl_uint size. For example:
 /// \code
 /// wait_list events = ...;
@@ -109,7 +109,7 @@ public:
     /// Returns a cl_event pointer to the first event in the wait-list.
     /// Returns \c 0 if the wait-list is empty.
     ///
-    /// This can be used to pass the wait-list to OpenCL C functions which
+    /// This can be used to pass the wait-list to OpenCL functions which
     /// expect a \c cl_event pointer to refer to a list of events.
     const cl_event* get_event_ptr() const
     {
