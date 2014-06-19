@@ -29,8 +29,8 @@
       Operations</a></span></dt>
 <dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.performance_timing">Performance
       Timing</a></span></dt>
-<dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.opencl_c_api_interoperability">OpenCL
-      C API Interoperability</a></span></dt>
+<dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.opencl_api_interoperability">OpenCL
+      API Interoperability</a></span></dt>
 </dl></div>
 <p>
       The following topics show advanced features of the Boost Compute library.
@@ -287,13 +287,13 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_compute.advanced_topics.opencl_c_api_interoperability"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.opencl_c_api_interoperability" title="OpenCL C API Interoperability">OpenCL
-      C API Interoperability</a>
+<a name="boost_compute.advanced_topics.opencl_api_interoperability"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.opencl_api_interoperability" title="OpenCL API Interoperability">OpenCL
+      API Interoperability</a>
 </h3></div></div></div>
 <p>
         The Boost Compute library is designed to easily interoperate with the OpenCL
-        C API. All of the wrapped classes have conversion operators to their underlying
-        OpenCL types which allows them to be passed directly to the OpenCL C functions.
+        API. All of the wrapped classes have conversion operators to their underlying
+        OpenCL types which allows them to be passed directly to the OpenCL functions.
       </p>
 <p>
         For example,
@@ -301,7 +301,7 @@
 <pre class="programlisting"><span class="comment">// create context object</span>
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">ctx</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">default_context</span><span class="special">();</span>
 
-<span class="comment">// query number of devices using the OpenCL C API</span>
+<span class="comment">// query number of devices using the OpenCL API</span>
 <span class="identifier">cl_uint</span> <span class="identifier">num_devices</span><span class="special">;</span>
 <span class="identifier">clGetContextInfo</span><span class="special">(</span><span class="identifier">ctx</span><span class="special">,</span> <span class="identifier">CL_CONTEXT_NUM_DEVICES</span><span class="special">,</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">cl_uint</span><span class="special">),</span> <span class="special">&amp;</span><span class="identifier">num_devices</span><span class="special">,</span> <span class="number">0</span><span class="special">);</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"num_devices: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">num_devices</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
