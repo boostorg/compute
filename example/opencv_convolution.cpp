@@ -158,6 +158,7 @@ int main(int argc, char *argv[])
     {
         std::cout<<"Build Error: "<<std::endl
                  <<filter_program.build_log();
+	return -1;
     }
 
     // create fliter kernel and set arguments
