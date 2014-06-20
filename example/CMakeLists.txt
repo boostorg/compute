@@ -58,6 +58,7 @@ if(${BOOST_COMPUTE_HAVE_OPENCV})
     random_walk
     opencv_optical_flow
     opencv_optical_flow_camera
+    opencv_convolution
   )
 
   foreach(EXAMPLE ${OPENCV_EXAMPLES})
