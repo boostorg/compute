@@ -122,6 +122,10 @@ public:
 
     event exec(command_queue &queue)
     {
+        if((m_a_count + m_b_count)/tile_size == 0) {
+            return event();
+        }
+
         set_arg(m_a_count_arg, uint_(m_a_count));
         set_arg(m_b_count_arg, uint_(m_b_count));
 
