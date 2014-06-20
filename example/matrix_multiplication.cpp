@@ -13,24 +13,9 @@
 #include <iostream>
 #include <iterator>
 
-#include <boost/compute/buffer.hpp>
-#include <boost/compute/command_queue.hpp>
-#include <boost/compute/config.hpp>
-#include <boost/compute/context.hpp>
-#include <boost/compute/device.hpp>
-#include <boost/compute/event.hpp>
-#include <boost/compute/kernel.hpp>
-#include <boost/compute/memory_object.hpp>
-#include <boost/compute/platform.hpp>
-#include <boost/compute/program.hpp>
 #include <boost/compute/system.hpp>
-#include <boost/compute/user_event.hpp>
-#include <boost/compute/version.hpp>
-#include <boost/compute/wait_list.hpp>
 #include <boost/compute/source.hpp>
 
-#include <boost/thread.hpp>
-#include <boost/foreach.hpp>
 #include <boost/program_options.hpp>
 
 namespace compute = boost::compute;
