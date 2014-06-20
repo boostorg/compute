@@ -15,6 +15,7 @@ set(BENCHMARKS
   copy_to_device
   count
   erase_remove
+  includes
   inner_product
   merge
   mersenne_twister
@@ -24,6 +25,10 @@ set(BENCHMARKS
   rotate_copy
   host_sort
   saxpy
+  set_difference
+  set_intersection
+  set_symmetric_difference
+  set_union
   sort
   sort_by_key
   sort_float
@@ -42,6 +47,7 @@ endforeach()
 set(STL_BENCHMARKS
   stl_accumulate
   stl_count
+  stl_includes
   stl_inner_product
   stl_merge
   stl_partial_sum
@@ -49,6 +55,10 @@ set(STL_BENCHMARKS
   stl_rotate
   stl_rotate_copy
   stl_saxpy
+  stl_set_difference
+  stl_set_intersection
+  stl_set_symmetric_difference
+  stl_set_union
   stl_sort
   stl_unique
   stl_unique_copy
