@@ -57,6 +57,7 @@ if(${BOOST_COMPUTE_HAVE_OPENCV})
     opencv_flip
     random_walk
     opencv_optical_flow 
+    opencv_convolution
   )
 
   foreach(EXAMPLE ${OPENCV_EXAMPLES})
