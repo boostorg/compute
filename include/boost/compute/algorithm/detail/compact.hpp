@@ -59,6 +59,10 @@ public:
 
     event exec(command_queue &queue)
     {
+        if(m_count == 0) {
+            return event();
+        }
+
         return exec_1d(queue, 0, m_count);
     }
 
