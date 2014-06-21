@@ -27,7 +27,7 @@ set(EXAMPLES
 )
 
 # boost library link dependencies
-set(EXAMPLE_BOOST_COMPONENTS program_options system)
+set(EXAMPLE_BOOST_COMPONENTS program_options)
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
   set(EXAMPLE_BOOST_COMPONENTS ${EXAMPLE_BOOST_COMPONENTS} system filesystem)
 endif()
@@ -57,8 +57,7 @@ if(${BOOST_COMPUTE_HAVE_OPENCV})
     k_means
     opencv_filter
     random_walk
-    opencv_optical_flow
-    opencv_optical_flow_camera
+    opencv_optical_flow 
   )
 
   foreach(EXAMPLE ${OPENCV_EXAMPLES})
