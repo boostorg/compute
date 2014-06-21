@@ -23,10 +23,11 @@ set(EXAMPLES
   vector_addition
   simple_moving_average
   matrix_transpose
+  matrix_multiplication
 )
 
 # boost library link dependencies
-set(EXAMPLE_BOOST_COMPONENTS program_options)
+set(EXAMPLE_BOOST_COMPONENTS program_options system)
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
   set(EXAMPLE_BOOST_COMPONENTS ${EXAMPLE_BOOST_COMPONENTS} system filesystem)
 endif()
