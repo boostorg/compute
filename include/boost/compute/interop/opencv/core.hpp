@@ -81,7 +81,7 @@ inline image_format opencv_get_mat_image_format(const cv::Mat &mat)
         case CV_32F:
             return image_format(CL_INTENSITY, CL_FLOAT);
         case CV_8UC1:
-            return image_format(CL_R, CL_UNORM_INT8);
+            return image_format(CL_INTENSITY, CL_UNORM_INT8);
         default:
             return image_format();
     }
@@ -92,7 +92,29 @@ inline cv::Mat opencv_create_mat_with_image2d(const image2d &image,
 {
     BOOST_ASSERT(image.get_context() == queue.get_context());
 
-    cv::Mat mat(image.height(), image.width(), CV_8UC4);
+    cv::Mat mat;
+    image_format format = image.get_format();
+    const cl_image_format *cl_image_format = format.get_format_ptr();
+
+    if(cl_image_format->image_channel_data_type == CL_UNORM_INT8 &&
+            cl_image_format->image_channel_order == CL_BGRA)
+    {
+        mat = cv::Mat(image.height(), image.width(), CV_8UC4);
+    }
+    else if(cl_image_format->image_channel_data_type == CL_UNORM_INT16 &&
+            cl_image_format->image_channel_order == CL_BGRA)
+    {
+        mat = cv::Mat(image.height(), image.width(), CV_16UC4);
+    }
+    else if(cl_image_format->image_channel_data_type == CL_FLOAT &&
+            cl_image_format->image_channel_order == CL_INTENSITY)
+    {
+        mat = cv::Mat(image.height(), image.width(), CV_32FC1);
+    }
+    else
+    {
+        mat = cv::Mat(image.height(), image.width(), CV_8UC1);
+    }
 
     opencv_copy_image_to_mat(image, mat, queue);
 
