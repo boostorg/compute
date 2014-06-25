@@ -15,6 +15,7 @@ set(BENCHMARKS
   copy_to_device
   count
   erase_remove
+  find_end
   includes
   inner_product
   merge
@@ -27,6 +28,8 @@ set(BENCHMARKS
   rotate_copy
   host_sort
   saxpy
+  search
+  search_n
   set_difference
   set_intersection
   set_symmetric_difference
@@ -50,6 +53,7 @@ endforeach()
 set(STL_BENCHMARKS
   stl_accumulate
   stl_count
+  stl_find_end
   stl_includes
   stl_inner_product
   stl_merge
@@ -59,6 +63,8 @@ set(STL_BENCHMARKS
   stl_rotate
   stl_rotate_copy
   stl_saxpy
+  stl_search
+  stl_search_n
   stl_set_difference
   stl_set_intersection
   stl_set_symmetric_difference
