@@ -110,11 +110,34 @@ def run_benchmark(name, sizes, vs=[]):
         report.add_sample("compute", size, time)
 
     competitors = {
-        "thrust" : ["accumulate", "count", "inner_product", "partial_sum", "sort", "saxpy"],
-        "tbb": ["accumulate", "merge", "sort"],
-        "stl": ["accumulate", "count", "includes", "inner_product", "merge",  "partial_sum",
-                "reverse", "rotate", "rotate_copy", "set_difference", "set_intersection",
-                "set_symmetric_difference", "set_union", "sort", "unique", "unique_copy"]
+        "thrust" : ["accumulate",
+                    "count",
+                    "inner_product",
+                    "partial_sum",
+                    "sort",
+                    "saxpy"],
+        "tbb": ["accumulate",
+                "merge",
+                "sort"],
+        "stl": ["accumulate",
+                "count",
+                "includes",
+                "inner_product",
+                "merge",
+                "partial_sum",
+                "partition",
+                "partition_point",
+                "reverse",
+                "rotate",
+                "rotate_copy",
+                "set_difference",
+                "set_intersection",
+                "set_symmetric_difference",
+                "set_union",
+                "sort",
+                "stable_partition",
+                "unique",
+                "unique_copy"]
     }
 
     for other in vs:

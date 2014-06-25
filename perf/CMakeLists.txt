@@ -20,6 +20,8 @@ set(BENCHMARKS
   merge
   mersenne_twister
   partial_sum
+  partition
+  partition_point
   reverse
   rotate
   rotate_copy
@@ -32,6 +34,7 @@ set(BENCHMARKS
   sort
   sort_by_key
   sort_float
+  stable_partition
   unique
   unique_copy
   exclusive_scan
@@ -51,6 +54,7 @@ set(STL_BENCHMARKS
   stl_inner_product
   stl_merge
   stl_partial_sum
+  stl_partition
   stl_reverse
   stl_rotate
   stl_rotate_copy
@@ -60,9 +64,18 @@ set(STL_BENCHMARKS
   stl_set_symmetric_difference
   stl_set_union
   stl_sort
+  stl_stable_partition
   stl_unique
   stl_unique_copy
 )
+
+# stl benchmarks which rerquire c++11
+if(${BOOST_COMPUTE_USE_CPP11})
+  list(APPEND
+    STL_BENCHMARKS
+    stl_partition_point
+  )
+endif()
 
 foreach(BENCHMARK ${STL_BENCHMARKS})
   set(PERF_TARGET perf_${BENCHMARK})
