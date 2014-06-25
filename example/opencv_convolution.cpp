@@ -135,7 +135,6 @@ int main(int argc, char *argv[])
 
     // The convolution filter is 3x3
     int filterWidth = 3;
-    int filterSize  = filterWidth*filterWidth;  // Assume a square kernel
 
     //OpenCL variables
     // Get default device and setup context
@@ -211,7 +210,7 @@ int main(int argc, char *argv[])
     filter_kernel.set_arg(0, dev_input_image);
     filter_kernel.set_arg(1, dev_output_image);
     filter_kernel.set_arg(2, dev_filter);
-    filter_kernel.set_arg(3, (int)9);
+    filter_kernel.set_arg(3, filterWidth);
 
     // run flip kernel
     size_t origin[2] = { 0, 0 };

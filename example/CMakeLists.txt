@@ -63,7 +63,7 @@ if(${BOOST_COMPUTE_HAVE_OPENCV})
 
   foreach(EXAMPLE ${OPENCV_EXAMPLES})
     add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
-    target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBRARIES})
+    target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS})
   endforeach()
 endif()
 

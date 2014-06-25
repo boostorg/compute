@@ -172,7 +172,7 @@ if(${BOOST_COMPUTE_HAVE_OPENCV})
   find_package(OpenCV REQUIRED)
   include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
   add_compute_test("interop.opencv" test_interop_opencv.cpp)
-  target_link_libraries(test_interop_opencv ${OpenCV_LIBRARIES})
+  target_link_libraries(test_interop_opencv ${OpenCV_LIBS})
 endif()
 
 # qt interop tests
