@@ -31,16 +31,16 @@ BOOST_AUTO_TEST_CASE(search_int)
     bc::vector<bc::int_> vectorp(datap, datap + 2, queue);
 
     bc::vector<bc::int_>::iterator iter =
-        bc::search(vectorp.begin(), vectorp.end(),
-                    vectort.begin(), vectort.end(), queue);
+        bc::search(vectort.begin(), vectort.end(),
+                    vectorp.begin(), vectorp.end(), queue);
 
     BOOST_VERIFY(iter == vectort.begin() + 2);
 
     vectorp[1] = 9;
 
     iter =
-        bc::search(vectorp.begin(), vectorp.end(),
-                    vectort.begin(), vectort.end(), queue);
+        bc::search(vectort.begin(), vectort.end(),
+                    vectorp.begin(), vectorp.end(), queue);
 
     BOOST_VERIFY(iter == vectort.begin() + 10);
 }
@@ -54,8 +54,8 @@ BOOST_AUTO_TEST_CASE(search_string)
     bc::vector<bc::char_> vectorp(pattern, pattern + 3, queue);
 
     bc::vector<bc::char_>::iterator iter =
-        bc::search(vectorp.begin(), vectorp.end(),
-                    vectort.begin(), vectort.end(), queue);
+        bc::search(vectort.begin(), vectort.end(),
+                    vectorp.begin(), vectorp.end(), queue);
 
     BOOST_VERIFY(iter == vectort.begin() + 2);
 }

@@ -78,17 +78,17 @@ inline InputIterator find_end_helper(InputIterator first,
 /// in text [t_first, t_last).
 /// \return Iterator pointing to beginning of last occurence
 ///
-/// \param p_first Iterator pointing to start of pattern
-/// \param p_last Iterator pointing to end of pattern
 /// \param t_first Iterator pointing to start of text
 /// \param t_last Iterator pointing to end of text
+/// \param p_first Iterator pointing to start of pattern
+/// \param p_last Iterator pointing to end of pattern
 /// \param queue Queue on which to execute
 ///
-template<class PatternIterator, class TextIterator>
-inline TextIterator find_end(PatternIterator p_first,
-                             PatternIterator p_last,
-                             TextIterator t_first,
+template<class TextIterator, class PatternIterator>
+inline TextIterator find_end(TextIterator t_first,
                              TextIterator t_last,
+                             PatternIterator p_first,
+                             PatternIterator p_last,
                              command_queue &queue = system::default_queue())
 {
     const context &context = queue.get_context();

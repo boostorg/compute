@@ -31,16 +31,16 @@ BOOST_AUTO_TEST_CASE(find_end_int)
     bc::vector<bc::int_> vectorp(datap, datap + 2, queue);
 
     bc::vector<bc::int_>::iterator iter =
-        bc::find_end(vectorp.begin(), vectorp.end(),
-                    vectort.begin(), vectort.end(), queue);
+        bc::find_end(vectort.begin(), vectort.end(),
+                    vectorp.begin(), vectorp.end(), queue);
 
     BOOST_VERIFY(iter == vectort.begin() + 5);
 
     vectorp[1] = 9;
 
     iter =
-        bc::find_end(vectorp.begin(), vectorp.end(),
-                    vectort.begin(), vectort.end(), queue);
+        bc::find_end(vectort.begin(), vectort.end(),
+                    vectorp.begin(), vectorp.end(), queue);
 
     BOOST_VERIFY(iter == vectort.begin() + 10);
 }
@@ -54,8 +54,8 @@ BOOST_AUTO_TEST_CASE(find_end_string)
     bc::vector<bc::char_> vectorp(pattern, pattern + 3, queue);
 
     bc::vector<bc::char_>::iterator iter =
-        bc::find_end(vectorp.begin(), vectorp.end(),
-                    vectort.begin(), vectort.end(), queue);
+        bc::find_end(vectort.begin(), vectort.end(),
+                    vectorp.begin(), vectorp.end(), queue);
 
     BOOST_VERIFY(iter == vectort.begin() + 15);
 }

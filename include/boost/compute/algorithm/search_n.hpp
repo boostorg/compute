@@ -100,15 +100,15 @@ private:
 ///
 /// \param t_first Iterator pointing to start of text
 /// \param t_last Iterator pointing to end of text
-/// \param value Value which repeats
 /// \param n Number of times value repeats
+/// \param value Value which repeats
 /// \param queue Queue on which to execute
 ///
 template<class TextIterator, class ValueType>
 inline TextIterator search_n(TextIterator t_first,
                              TextIterator t_last,
-                             ValueType value,
                              size_t n,
+                             ValueType value,
                              command_queue &queue = system::default_queue())
 {
     vector<uint_> matching_indices(detail::iterator_range_size(t_first, t_last),
