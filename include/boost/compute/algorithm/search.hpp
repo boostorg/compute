@@ -29,17 +29,17 @@ namespace compute {
 /// in text [t_first, t_last).
 /// \return Iterator pointing to beginning of first occurence
 ///
-/// \param p_first Iterator pointing to start of pattern
-/// \param p_last Iterator pointing to end of pattern
 /// \param t_first Iterator pointing to start of text
 /// \param t_last Iterator pointing to end of text
+/// \param p_first Iterator pointing to start of pattern
+/// \param p_last Iterator pointing to end of pattern
 /// \param queue Queue on which to execute
 ///
-template<class PatternIterator, class TextIterator>
-inline TextIterator search(PatternIterator p_first,
-                           PatternIterator p_last,
-                           TextIterator t_first,
+template<class TextIterator, class PatternIterator>
+inline TextIterator search(TextIterator t_first,
                            TextIterator t_last,
+                           PatternIterator p_first,
+                           PatternIterator p_last,
                            command_queue &queue = system::default_queue())
 {
     vector<uint_> matching_indices(detail::iterator_range_size(t_first, t_last),

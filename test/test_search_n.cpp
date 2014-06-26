@@ -27,12 +27,12 @@ BOOST_AUTO_TEST_CASE(search_int)
     bc::vector<bc::int_> vectort(data, data + 10, queue);
 
     bc::vector<bc::int_>::iterator iter =
-        bc::search_n(vectort.begin(), vectort.end(), 2, 3, queue);
+        bc::search_n(vectort.begin(), vectort.end(), 3, 2, queue);
 
     BOOST_VERIFY(iter == vectort.begin() + 1);
 
     iter =
-        bc::search_n(vectort.begin(), vectort.end(), 2, 5, queue);
+        bc::search_n(vectort.begin(), vectort.end(), 5, 2, queue);
 
     BOOST_VERIFY(iter == vectort.begin() + 10);
 }
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(search_string)
     bc::vector<bc::char_> vectort(text, text + 12, queue);
 
     bc::vector<bc::char_>::iterator iter =
-        bc::search_n(vectort.begin(), vectort.end(), 'a', 2, queue);
+        bc::search_n(vectort.begin(), vectort.end(), 2, 'a', queue);
 
     BOOST_VERIFY(iter == vectort.begin() + 2);
 }
