@@ -18,11 +18,14 @@ set(BENCHMARKS
   find_end
   includes
   inner_product
+  is_permutation
   merge
   mersenne_twister
+  next_permutation
   partial_sum
   partition
   partition_point
+  prev_permutation
   reverse
   rotate
   rotate_copy
@@ -57,8 +60,10 @@ set(STL_BENCHMARKS
   stl_includes
   stl_inner_product
   stl_merge
+  stl_next_permutation
   stl_partial_sum
   stl_partition
+  stl_prev_permutation
   stl_reverse
   stl_rotate
   stl_rotate_copy
@@ -79,6 +84,7 @@ set(STL_BENCHMARKS
 if(${BOOST_COMPUTE_USE_CPP11})
   list(APPEND
     STL_BENCHMARKS
+    stl_is_permutation
     stl_partition_point
   )
 endif()
