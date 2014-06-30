@@ -42,7 +42,7 @@ public:
     typedef T result_type;
     static const T default_seed = 1;
     static const T a = 1099087573;
-    static const size_t threads = 64;
+    static const size_t threads = 1024;
 
     /// Creates a new linear_congruential_engine and seeds it with \p value.
     explicit linear_congruential_engine(command_queue &queue,
@@ -190,7 +190,7 @@ private:
                 "{\n"
                 "    uint a = 1099087573;\n"
                 "    multiplicands[0] = a;\n"
-                "    for(uint i = 1; i < 64; i++){\n"
+                "    for(uint i = 1; i < 1024; i++){\n"
                 "        multiplicands[i] = a * multiplicands[i-1];\n"
                 "    }\n"
                 "}\n"
