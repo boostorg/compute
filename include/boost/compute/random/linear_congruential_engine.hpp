@@ -42,7 +42,7 @@ public:
     typedef T result_type;
     static const T default_seed = 1;
     static const T a = 1099087573;
-    static const size_t threads = 64;
+    static const size_t threads = 1024;
 
     /// Creates a new linear_congruential_engine and seeds it with \p value.
     explicit linear_congruential_engine(command_queue &queue,
@@ -54,7 +54,7 @@ public:
         load_program();
 
         // seed state
-        seed(queue, value);
+        seed(value);
 
         // generate multiplicands
         generate_multiplicands(queue);
@@ -85,7 +85,7 @@ public:
     }
 
     /// Seeds the random number generator with \p value.
-    void seed(command_queue &queue, result_type value = default_seed)
+    void seed(result_type value = default_seed)
     {
         m_seed = value;
     }
@@ -130,6 +130,12 @@ public:
         (void) queue;
 
         size_t size = detail::iterator_range_size(first, last);
+        uint max_mult =
+            detail::read_single_value<T>(m_multiplicands, threads-1, queue);
+        while(size >= threads) {
+            m_seed *= max_mult;
+            size -= threads;
+        }
         m_seed *=
             detail::read_single_value<T>(m_multiplicands, size-1, queue);
     }
@@ -184,7 +190,7 @@ private:
                 "{\n"
                 "    uint a = 1099087573;\n"
                 "    multiplicands[0] = a;\n"
-                "    for(uint i = 1; i < 64; i++){\n"
+                "    for(uint i = 1; i < 1024; i++){\n"
                 "        multiplicands[i] = a * multiplicands[i-1];\n"
                 "    }\n"
                 "}\n"

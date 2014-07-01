@@ -19,6 +19,7 @@ set(BENCHMARKS
   includes
   inner_product
   is_permutation
+  linear_congruential_engine
   merge
   mersenne_twister
   next_permutation
