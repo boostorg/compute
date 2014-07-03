@@ -11,9 +11,11 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 set(BENCHMARKS
   accumulate
+  bernoulli_distribution
   cart_to_polar
   copy_to_device
   count
+  discrete_distribution
   erase_remove
   find_end
   includes
@@ -42,6 +44,7 @@ set(BENCHMARKS
   sort_by_key
   sort_float
   stable_partition
+  uniform_int_distribution
   unique
   unique_copy
   exclusive_scan
