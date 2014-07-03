@@ -232,6 +232,8 @@ public:
     ///     std::cout << program.build_log() << std::endl;
     /// }
     /// \endcode
+    ///
+    /// \see_opencl_ref{clBuildProgram}
     void build(const std::string &options = std::string())
     {
         const char *options_string = 0;
@@ -259,6 +261,65 @@ public:
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
+
+    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Compiles the program with \p options.
+    ///
+    /// \opencl_version_warning{1,2}
+    ///
+    /// \see_opencl_ref{clCompileProgram}
+    void compile(const std::string &options = std::string())
+    {
+        const char *options_string = 0;
+
+        if(!options.empty()){
+            options_string = options.c_str();
+        }
+
+        cl_int ret = clCompileProgram(
+            m_program, 0, 0, options_string, 0, 0, 0, 0, 0
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+    }
+
+    /// Links the programs in \p programs with \p options in \p context.
+    ///
+    /// \opencl_version_warning{1,2}
+    ///
+    /// \see_opencl_ref{clLinkProgram}
+    static program link(const std::vector<program> &programs,
+                        const context &context,
+                        const std::string &options = std::string())
+    {
+        const char *options_string = 0;
+
+        if(!options.empty()){
+            options_string = options.c_str();
+        }
+
+        cl_int ret;
+        cl_program program_ = clLinkProgram(
+            context.get(),
+            0,
+            0,
+            options_string,
+            static_cast<uint_>(programs.size()),
+            reinterpret_cast<const cl_program*>(&programs[0]),
+            0,
+            0,
+            &ret
+        );
+
+        if(!program_){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return program(program_, false);
+    }
+    #endif // CL_VERSION_1_2
 
     /// Returns the build log.
     std::string build_log() const

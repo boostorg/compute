@@ -59,6 +59,8 @@
     [[`clReleaseProgram()`] [[classref boost::compute::program program::~program()]]]
     [[`clGetProgramInfo()`] [[memberref boost::compute::program::get_info program::get_info<T>()]]]
     [[`clBuildProgram()`] [[memberref boost::compute::program::build program::build()]]]
+    [[`clCompileProgram()`] [[memberref boost::compute::program::compile program::compile()]]]
+    [[`clLinkProgram()`] [[memberref boost::compute::program::link program::link()]]]
 
     [[*System*]]
     [[`clGetPlatformIDs()`] [[memberref boost::compute::system::platforms system::platforms()]]]

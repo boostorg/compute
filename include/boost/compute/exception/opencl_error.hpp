@@ -124,6 +124,11 @@ public:
         case CL_INVALID_MIP_LEVEL: return "Invalid MIP Level";
         case CL_INVALID_GLOBAL_WORK_SIZE: return "Invalid Global Work Size";
         #ifdef CL_VERSION_1_2
+        case CL_COMPILE_PROGRAM_FAILURE: return "Compile Program Failure";
+        case CL_LINKER_NOT_AVAILABLE: return "Linker Not Available";
+        case CL_LINK_PROGRAM_FAILURE: return "Link Program Failure";
+        case CL_DEVICE_PARTITION_FAILED: return "Device Partition Failed";
+        case CL_KERNEL_ARG_INFO_NOT_AVAILABLE: return "Kernel Argument Info Not Available";
         case CL_INVALID_PROPERTY: return "Invalid Property";
         case CL_INVALID_IMAGE_DESCRIPTOR: return "Invalid Image Descriptor";
         case CL_INVALID_COMPILER_OPTIONS: return "Invalid Compiler Options";
