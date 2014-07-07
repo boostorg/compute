@@ -463,6 +463,35 @@ public:
         return create_with_binary(&binary[0], binary.size(), context);
     }
 
+    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Creates a new program with the built-in kernels listed in
+    /// \p kernel_names for \p devices in \p context.
+    ///
+    /// \opencl_version_warning{1,2}
+    ///
+    /// \see_opencl_ref{clCreateProgramWithBuiltInKernels}
+    static program create_with_built_in_kernels(const context &context,
+                                                const std::vector<device> &devices,
+                                                const std::string kernel_names)
+    {
+        cl_int error = 0;
+
+        cl_program program_ = clCreateProgramWithBuiltInKernels(
+            context.get(),
+            static_cast<uint_>(devices.size()),
+            reinterpret_cast<const cl_device_id *>(&devices[0]),
+            kernel_names.c_str(),
+            &error
+        );
+
+        if(!program_){
+            BOOST_THROW_EXCEPTION(opencl_error(error));
+        }
+
+        return program(program_, false);
+    }
+    #endif // CL_VERSION_1_2
+
     /// Create a new program with \p source in \p context and builds it with \p options.
     /**
      * In case BOOST_COMPUTE_USE_OFFLINE_CACHE macro is defined,
