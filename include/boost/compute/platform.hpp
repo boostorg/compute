@@ -118,6 +118,10 @@ public:
     std::vector<device> devices(cl_device_type type = CL_DEVICE_TYPE_ALL) const
     {
         size_t count = device_count(type);
+        if(count == 0){
+            // no devices for this platform
+            return std::vector<device>();
+        }
 
         std::vector<cl_device_id> device_ids(count);
         cl_int ret = clGetDeviceIDs(m_platform,
@@ -143,7 +147,14 @@ public:
         cl_uint count = 0;
         cl_int ret = clGetDeviceIDs(m_platform, type, 0, 0, &count);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(opencl_error(ret));
+            if(ret == CL_DEVICE_NOT_FOUND){
+                // no devices for this platform
+                return 0;
+            }
+            else {
+                // something else went wrong
+                BOOST_THROW_EXCEPTION(opencl_error(ret));
+            }
         }
 
         return count;
