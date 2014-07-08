@@ -169,6 +169,11 @@ public:
         return detail::get_object_info<T>(clGetPlatformInfo, m_platform, info);
     }
 
+    /// \overload
+    template<int Enum>
+    typename detail::get_object_info_type<platform, Enum>::type
+    get_info() const;
+
     /// Returns the address of the \p function_name extension
     /// function. Returns \c 0 if \p function_name is invalid.
     void* get_extension_function_address(const char *function_name) const
@@ -194,6 +199,15 @@ public:
 private:
     cl_platform_id m_platform;
 };
+
+// define get_info() specializations for platform
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(platform,
+    ((std::string, CL_PLATFORM_PROFILE))
+    ((std::string, CL_PLATFORM_VERSION))
+    ((std::string, CL_PLATFORM_NAME))
+    ((std::string, CL_PLATFORM_VENDOR))
+    ((std::string, CL_PLATFORM_EXTENSIONS))
+)
 
 } // end compute namespace
 } // end boost namespace

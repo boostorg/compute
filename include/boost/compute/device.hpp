@@ -287,12 +287,28 @@ public:
 
     /// Returns information about the device.
     ///
+    /// For example, to get the number of compute units:
+    /// \code
+    /// device.get_info<cl_uint>(CL_DEVICE_MAX_COMPUTE_UNITS);
+    /// \endcode
+    ///
+    /// Alternatively, the template-specialized version can be used which
+    /// automatically determines the result type:
+    /// \code
+    /// device.get_info<CL_DEVICE_MAX_COMPUTE_UNITS>();
+    /// \endcode
+    ///
     /// \see_opencl_ref{clGetDeviceInfo}
     template<class T>
     T get_info(cl_device_info info) const
     {
         return detail::get_object_info<T>(clGetDeviceInfo, m_id, info);
     }
+
+    /// \overload
+    template<int Enum>
+    typename detail::get_object_info_type<device, Enum>::type
+    get_info() const;
 
     #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Partitions the device into multiple sub-devices according to
@@ -406,6 +422,100 @@ inline uint_ device::preferred_vector_width<double_>() const
 {
     return get_info<uint_>(CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE);
 }
+
+// define get_info() specializations for device
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
+    ((cl_uint, CL_DEVICE_ADDRESS_BITS))
+    ((bool, CL_DEVICE_AVAILABLE))
+    ((bool, CL_DEVICE_COMPILER_AVAILABLE))
+    ((bool, CL_DEVICE_ENDIAN_LITTLE))
+    ((bool, CL_DEVICE_ERROR_CORRECTION_SUPPORT))
+    ((cl_device_exec_capabilities, CL_DEVICE_EXECUTION_CAPABILITIES))
+    ((std::string, CL_DEVICE_EXTENSIONS))
+    ((cl_ulong, CL_DEVICE_GLOBAL_MEM_CACHE_SIZE))
+    ((cl_device_mem_cache_type, CL_DEVICE_GLOBAL_MEM_CACHE_TYPE))
+    ((cl_ulong, CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE))
+    ((cl_ulong, CL_DEVICE_GLOBAL_MEM_SIZE))
+    ((bool, CL_DEVICE_IMAGE_SUPPORT))
+    ((size_t, CL_DEVICE_IMAGE2D_MAX_HEIGHT))
+    ((size_t, CL_DEVICE_IMAGE2D_MAX_WIDTH))
+    ((size_t, CL_DEVICE_IMAGE3D_MAX_DEPTH))
+    ((size_t, CL_DEVICE_IMAGE3D_MAX_HEIGHT))
+    ((size_t, CL_DEVICE_IMAGE3D_MAX_WIDTH))
+    ((cl_ulong, CL_DEVICE_LOCAL_MEM_SIZE))
+    ((cl_device_local_mem_type, CL_DEVICE_LOCAL_MEM_TYPE))
+    ((cl_uint, CL_DEVICE_MAX_CLOCK_FREQUENCY))
+    ((cl_uint, CL_DEVICE_MAX_COMPUTE_UNITS))
+    ((cl_uint, CL_DEVICE_MAX_CONSTANT_ARGS))
+    ((cl_ulong, CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE))
+    ((cl_ulong, CL_DEVICE_MAX_MEM_ALLOC_SIZE))
+    ((size_t, CL_DEVICE_MAX_PARAMETER_SIZE))
+    ((cl_uint, CL_DEVICE_MAX_READ_IMAGE_ARGS))
+    ((cl_uint, CL_DEVICE_MAX_SAMPLERS))
+    ((size_t, CL_DEVICE_MAX_WORK_GROUP_SIZE))
+    ((cl_uint, CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS))
+    ((std::vector<size_t>, CL_DEVICE_MAX_WORK_ITEM_SIZES))
+    ((cl_uint, CL_DEVICE_MAX_WRITE_IMAGE_ARGS))
+    ((cl_uint, CL_DEVICE_MEM_BASE_ADDR_ALIGN))
+    ((cl_uint, CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE))
+    ((std::string, CL_DEVICE_NAME))
+    ((cl_platform_id, CL_DEVICE_PLATFORM))
+    ((cl_uint, CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR))
+    ((cl_uint, CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT))
+    ((cl_uint, CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT))
+    ((cl_uint, CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG))
+    ((cl_uint, CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT))
+    ((cl_uint, CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE))
+    ((std::string, CL_DEVICE_PROFILE))
+    ((size_t, CL_DEVICE_PROFILING_TIMER_RESOLUTION))
+    ((cl_command_queue_properties, CL_DEVICE_QUEUE_PROPERTIES))
+    ((cl_device_fp_config, CL_DEVICE_SINGLE_FP_CONFIG))
+    ((cl_device_type, CL_DEVICE_TYPE))
+    ((std::string, CL_DEVICE_VENDOR))
+    ((cl_uint, CL_DEVICE_VENDOR_ID))
+    ((std::string, CL_DEVICE_VERSION))
+    ((std::string, CL_DRIVER_VERSION))
+)
+
+#ifdef CL_DEVICE_DOUBLE_FP_CONFIG
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
+    ((cl_device_fp_config, CL_DEVICE_DOUBLE_FP_CONFIG))
+)
+#endif
+
+#ifdef CL_DEVICE_HALF_FP_CONFIG
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
+    ((cl_device_fp_config, CL_DEVICE_HALF_FP_CONFIG))
+)
+#endif
+
+#ifdef CL_VERSION_1_1
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
+    ((bool, CL_DEVICE_HOST_UNIFIED_MEMORY))
+    ((cl_uint, CL_DEVICE_NATIVE_VECTOR_WIDTH_CHAR))
+    ((cl_uint, CL_DEVICE_NATIVE_VECTOR_WIDTH_SHORT))
+    ((cl_uint, CL_DEVICE_NATIVE_VECTOR_WIDTH_INT))
+    ((cl_uint, CL_DEVICE_NATIVE_VECTOR_WIDTH_LONG))
+    ((cl_uint, CL_DEVICE_NATIVE_VECTOR_WIDTH_FLOAT))
+    ((cl_uint, CL_DEVICE_NATIVE_VECTOR_WIDTH_DOUBLE))
+    ((std::string, CL_DEVICE_OPENCL_C_VERSION))
+)
+#endif // CL_VERSION_1_1
+
+#ifdef CL_VERSION_1_2
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
+    ((std::string, CL_DEVICE_BUILT_IN_KERNELS))
+    ((bool, CL_DEVICE_LINKER_AVAILABLE))
+    ((cl_device_id, CL_DEVICE_PARENT_DEVICE))
+    ((cl_uint, CL_DEVICE_PARTITION_MAX_SUB_DEVICES))
+    ((cl_device_partition_property, CL_DEVICE_PARTITION_PROPERTIES))
+    ((cl_device_affinity_domain, CL_DEVICE_PARTITION_AFFINITY_DOMAIN))
+    ((cl_device_partition_property, CL_DEVICE_PARTITION_TYPE))
+    ((size_t, CL_DEVICE_PRINTF_BUFFER_SIZE))
+    ((bool, CL_DEVICE_PREFERRED_INTEROP_USER_SYNC))
+    ((cl_uint, CL_DEVICE_REFERENCE_COUNT))
+)
+#endif // CL_VERSION_1_2
 
 } // end compute namespace
 } // end boost namespace
