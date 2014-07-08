@@ -27,6 +27,12 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(get_context)
 {
     BOOST_VERIFY(queue.get_context() == context);
+    BOOST_VERIFY(queue.get_info<CL_QUEUE_CONTEXT>() == context.get());
+}
+
+BOOST_AUTO_TEST_CASE(get_device)
+{
+    BOOST_VERIFY(queue.get_info<CL_QUEUE_DEVICE>() == device.get());
 }
 
 BOOST_AUTO_TEST_CASE(event_profiling)
@@ -181,9 +187,7 @@ static void nullary_kernel()
 BOOST_AUTO_TEST_CASE(native_kernel)
 {
     cl_device_exec_capabilities exec_capabilities =
-        device.get_info<cl_device_exec_capabilities>(
-            CL_DEVICE_EXECUTION_CAPABILITIES
-        );
+        device.get_info<CL_DEVICE_EXECUTION_CAPABILITIES>();
     if(!(exec_capabilities & CL_EXEC_NATIVE_KERNEL)){
         std::cerr << "skipping native_kernel test: "
                   << "device does not support CL_EXEC_NATIVE_KERNEL"

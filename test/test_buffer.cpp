@@ -71,6 +71,14 @@ BOOST_AUTO_TEST_CASE(reference_count)
     BOOST_CHECK_GE(buf.reference_count(), uint_(1));
 }
 
+BOOST_AUTO_TEST_CASE(get_size)
+{
+    boost::compute::buffer buf(context, 16);
+    BOOST_CHECK_EQUAL(buf.size(), size_t(16));
+    BOOST_CHECK_EQUAL(buf.get_info<CL_MEM_SIZE>(), size_t(16));
+    BOOST_CHECK_EQUAL(buf.get_info<size_t>(CL_MEM_SIZE), size_t(16));
+}
+
 #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
 BOOST_AUTO_TEST_CASE(move_constructor)
 {

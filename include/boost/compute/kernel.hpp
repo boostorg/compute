@@ -163,6 +163,11 @@ public:
         return detail::get_object_info<T>(clGetKernelInfo, m_kernel, info);
     }
 
+    /// \overload
+    template<int Enum>
+    typename detail::get_object_info_type<kernel, Enum>::type
+    get_info() const;
+
     #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Returns information about the argument at \p index.
     ///
@@ -305,6 +310,21 @@ inline kernel program::create_kernel(const std::string &name) const
 {
     return kernel(*this, name);
 }
+
+// define get_info() specializations for kernel
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(kernel,
+    ((std::string, CL_KERNEL_FUNCTION_NAME))
+    ((cl_uint, CL_KERNEL_NUM_ARGS))
+    ((cl_uint, CL_KERNEL_REFERENCE_COUNT))
+    ((cl_context, CL_KERNEL_CONTEXT))
+    ((cl_program, CL_KERNEL_PROGRAM))
+)
+
+#ifdef CL_VERSION_1_2
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(kernel,
+    ((std::string, CL_KERNEL_ATTRIBUTES))
+)
+#endif // CL_VERSION_1_2
 
 namespace detail {
 

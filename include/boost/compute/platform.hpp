@@ -118,6 +118,10 @@ public:
     std::vector<device> devices(cl_device_type type = CL_DEVICE_TYPE_ALL) const
     {
         size_t count = device_count(type);
+        if(count == 0){
+            // no devices for this platform
+            return std::vector<device>();
+        }
 
         std::vector<cl_device_id> device_ids(count);
         cl_int ret = clGetDeviceIDs(m_platform,
@@ -143,7 +147,14 @@ public:
         cl_uint count = 0;
         cl_int ret = clGetDeviceIDs(m_platform, type, 0, 0, &count);
         if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(opencl_error(ret));
+            if(ret == CL_DEVICE_NOT_FOUND){
+                // no devices for this platform
+                return 0;
+            }
+            else {
+                // something else went wrong
+                BOOST_THROW_EXCEPTION(opencl_error(ret));
+            }
         }
 
         return count;
@@ -157,6 +168,11 @@ public:
     {
         return detail::get_object_info<T>(clGetPlatformInfo, m_platform, info);
     }
+
+    /// \overload
+    template<int Enum>
+    typename detail::get_object_info_type<platform, Enum>::type
+    get_info() const;
 
     /// Returns the address of the \p function_name extension
     /// function. Returns \c 0 if \p function_name is invalid.
@@ -183,6 +199,15 @@ public:
 private:
     cl_platform_id m_platform;
 };
+
+// define get_info() specializations for platform
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(platform,
+    ((std::string, CL_PLATFORM_PROFILE))
+    ((std::string, CL_PLATFORM_VERSION))
+    ((std::string, CL_PLATFORM_NAME))
+    ((std::string, CL_PLATFORM_VENDOR))
+    ((std::string, CL_PLATFORM_EXTENSIONS))
+)
 
 } // end compute namespace
 } // end boost namespace

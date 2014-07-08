@@ -12,10 +12,13 @@
 #include <boost/test/unit_test.hpp>
 
 #include <boost/compute/kernel.hpp>
+#include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/program.hpp>
 
 #include "context_setup.hpp"
+
+namespace compute = boost::compute;
 
 const char source[] =
     "__kernel void foo(__global float *x, const uint n) { }\n"
@@ -93,5 +96,51 @@ boost::compute::program foo_program =
 
     foo_program.build();
 }
+
+#ifdef CL_VERSION_1_2
+BOOST_AUTO_TEST_CASE(compile_and_link)
+{
+    // create the library program
+    const char library_source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
+        // generic square function definition
+        T square(T x) { return x * x; }
+    );
+
+    compute::program library_program =
+        compute::program::create_with_source(library_source, context);
+
+    library_program.compile("-DT=int");
+
+    // create the kernel program
+    const char kernel_source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
+        // forward declare square function
+        extern int square(int);
+
+        // square kernel definition
+        __kernel void square_kernel(__global int *x)
+        {
+            x[0] = square(x[0]);
+        }
+    );
+
+    compute::program square_program =
+        compute::program::create_with_source(kernel_source, context);
+
+    square_program.compile();
+
+    // link the programs
+    std::vector<compute::program> programs;
+    programs.push_back(library_program);
+    programs.push_back(square_program);
+
+    compute::program linked_program =
+        compute::program::link(programs, context);
+
+    // create the square kernel
+    compute::kernel square_kernel =
+        linked_program.create_kernel("square_kernel");
+    BOOST_CHECK_EQUAL(square_kernel.name(), "square_kernel");
+}
+#endif // CL_VERSION_1_2
 
 BOOST_AUTO_TEST_SUITE_END()

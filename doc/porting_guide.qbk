@@ -56,9 +56,12 @@
     [[*Programs*]]
     [[`clCreateProgramWithSource()`] [[memberref boost::compute::program::create_with_source program::create_with_source()]]]
     [[`clCreateProgramWithBinary()`] [[memberref boost::compute::program::create_with_binary program::create_with_binary()]]]
+    [[`clCreateProgramWithBuiltInKernels()`] [[memberref boost::compute::program::create_with_built_in_kernels program::create_with_built_in_kernels()]]]
     [[`clReleaseProgram()`] [[classref boost::compute::program program::~program()]]]
     [[`clGetProgramInfo()`] [[memberref boost::compute::program::get_info program::get_info<T>()]]]
     [[`clBuildProgram()`] [[memberref boost::compute::program::build program::build()]]]
+    [[`clCompileProgram()`] [[memberref boost::compute::program::compile program::compile()]]]
+    [[`clLinkProgram()`] [[memberref boost::compute::program::link program::link()]]]
 
     [[*System*]]
     [[`clGetPlatformIDs()`] [[memberref boost::compute::system::platforms system::platforms()]]]

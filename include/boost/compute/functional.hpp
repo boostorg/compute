@@ -21,6 +21,7 @@
 #include <boost/compute/functional/convert.hpp>
 #include <boost/compute/functional/field.hpp>
 #include <boost/compute/functional/get.hpp>
+#include <boost/compute/functional/hash.hpp>
 #include <boost/compute/functional/math.hpp>
 #include <boost/compute/functional/integer.hpp>
 #include <boost/compute/functional/geometry.hpp>

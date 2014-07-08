@@ -205,6 +205,11 @@ public:
         return detail::get_object_info<T>(clGetCommandQueueInfo, m_queue, info);
     }
 
+    /// \overload
+    template<int Enum>
+    typename detail::get_object_info_type<command_queue, Enum>::type
+    get_info() const;
+
     /// Returns the properties for the command queue.
     cl_command_queue_properties get_properties() const
     {
@@ -1428,6 +1433,14 @@ inline image2d image2d::clone(command_queue &queue) const
 
     return copy;
 }
+
+// define get_info() specializations for command_queue
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(command_queue,
+    ((cl_context, CL_QUEUE_CONTEXT))
+    ((cl_device_id, CL_QUEUE_DEVICE))
+    ((uint_, CL_QUEUE_REFERENCE_COUNT))
+    ((cl_command_queue_properties, CL_QUEUE_PROPERTIES))
+)
 
 } // end compute namespace
 } // end boost namespace

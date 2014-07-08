@@ -218,6 +218,11 @@ public:
         return detail::get_object_info<T>(clGetProgramInfo, m_program, info);
     }
 
+    /// \overload
+    template<int Enum>
+    typename detail::get_object_info_type<program, Enum>::type
+    get_info() const;
+
     /// Builds the program with \p options.
     ///
     /// If the program fails to compile, this function will throw an
@@ -232,6 +237,8 @@ public:
     ///     std::cout << program.build_log() << std::endl;
     /// }
     /// \endcode
+    ///
+    /// \see_opencl_ref{clBuildProgram}
     void build(const std::string &options = std::string())
     {
         const char *options_string = 0;
@@ -259,6 +266,65 @@ public:
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
+
+    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Compiles the program with \p options.
+    ///
+    /// \opencl_version_warning{1,2}
+    ///
+    /// \see_opencl_ref{clCompileProgram}
+    void compile(const std::string &options = std::string())
+    {
+        const char *options_string = 0;
+
+        if(!options.empty()){
+            options_string = options.c_str();
+        }
+
+        cl_int ret = clCompileProgram(
+            m_program, 0, 0, options_string, 0, 0, 0, 0, 0
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+    }
+
+    /// Links the programs in \p programs with \p options in \p context.
+    ///
+    /// \opencl_version_warning{1,2}
+    ///
+    /// \see_opencl_ref{clLinkProgram}
+    static program link(const std::vector<program> &programs,
+                        const context &context,
+                        const std::string &options = std::string())
+    {
+        const char *options_string = 0;
+
+        if(!options.empty()){
+            options_string = options.c_str();
+        }
+
+        cl_int ret;
+        cl_program program_ = clLinkProgram(
+            context.get(),
+            0,
+            0,
+            options_string,
+            static_cast<uint_>(programs.size()),
+            reinterpret_cast<const cl_program*>(&programs[0]),
+            0,
+            0,
+            &ret
+        );
+
+        if(!program_){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return program(program_, false);
+    }
+    #endif // CL_VERSION_1_2
 
     /// Returns the build log.
     std::string build_log() const
@@ -402,6 +468,35 @@ public:
         return create_with_binary(&binary[0], binary.size(), context);
     }
 
+    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Creates a new program with the built-in kernels listed in
+    /// \p kernel_names for \p devices in \p context.
+    ///
+    /// \opencl_version_warning{1,2}
+    ///
+    /// \see_opencl_ref{clCreateProgramWithBuiltInKernels}
+    static program create_with_built_in_kernels(const context &context,
+                                                const std::vector<device> &devices,
+                                                const std::string kernel_names)
+    {
+        cl_int error = 0;
+
+        cl_program program_ = clCreateProgramWithBuiltInKernels(
+            context.get(),
+            static_cast<uint_>(devices.size()),
+            reinterpret_cast<const cl_device_id *>(&devices[0]),
+            kernel_names.c_str(),
+            &error
+        );
+
+        if(!program_){
+            BOOST_THROW_EXCEPTION(opencl_error(error));
+        }
+
+        return program(program_, false);
+    }
+    #endif // CL_VERSION_1_2
+
     /// Create a new program with \p source in \p context and builds it with \p options.
     /**
      * In case BOOST_COMPUTE_USE_OFFLINE_CACHE macro is defined,
@@ -543,6 +638,24 @@ private:
 private:
     cl_program m_program;
 };
+
+// define get_info() specializations for program
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(program,
+    ((cl_uint, CL_PROGRAM_REFERENCE_COUNT))
+    ((cl_context, CL_PROGRAM_CONTEXT))
+    ((cl_uint, CL_PROGRAM_NUM_DEVICES))
+    ((std::vector<cl_device_id>, CL_PROGRAM_DEVICES))
+    ((std::string, CL_PROGRAM_SOURCE))
+    ((std::vector<size_t>, CL_PROGRAM_BINARY_SIZES))
+    ((std::vector<unsigned char *>, CL_PROGRAM_BINARIES))
+)
+
+#ifdef CL_VERSION_1_2
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(program,
+    ((size_t, CL_PROGRAM_NUM_KERNELS))
+    ((std::string, CL_PROGRAM_KERNEL_NAMES))
+)
+#endif // CL_VERSION_1_2
 
 } // end compute namespace
 } // end boost namespace

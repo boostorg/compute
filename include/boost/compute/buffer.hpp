@@ -145,10 +145,33 @@ public:
         return get_memory_info<T>(info);
     }
 
+    /// \overload
+    template<int Enum>
+    typename detail::get_object_info_type<buffer, Enum>::type
+    get_info() const;
+
     /// Creates a new buffer with a copy of the data in \c *this. Uses
     /// \p queue to perform the copy.
     buffer clone(command_queue &queue) const;
 };
+
+// define get_info() specializations for buffer
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(buffer,
+    ((cl_mem_object_type, CL_MEM_TYPE))
+    ((cl_mem_flags, CL_MEM_FLAGS))
+    ((size_t, CL_MEM_SIZE))
+    ((void *, CL_MEM_HOST_PTR))
+    ((cl_uint, CL_MEM_MAP_COUNT))
+    ((cl_uint, CL_MEM_REFERENCE_COUNT))
+    ((cl_context, CL_MEM_CONTEXT))
+)
+
+#ifdef CL_VERSION_1_1
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(buffer,
+    ((cl_mem, CL_MEM_ASSOCIATED_MEMOBJECT))
+    ((size_t, CL_MEM_OFFSET))
+)
+#endif // CL_VERSION_1_1
 
 namespace detail {
 
