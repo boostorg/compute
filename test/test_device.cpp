@@ -189,3 +189,10 @@ BOOST_AUTO_TEST_CASE(nvidia_compute_capability)
     boost::compute::detail::get_nvidia_compute_capability(device, major, minor);
     boost::compute::detail::check_nvidia_compute_capability(device, 3, 0);
 }
+
+BOOST_AUTO_TEST_CASE(get_info_specializations)
+{
+    boost::compute::device device = boost::compute::system::default_device();
+
+    std::cout << device.get_info<CL_DEVICE_NAME>() << std::endl;
+}

@@ -138,6 +138,11 @@ public:
         return detail::get_object_info<T>(clGetSamplerInfo, m_sampler, info);
     }
 
+    /// \overload
+    template<int Enum>
+    typename detail::get_object_info_type<image_sampler, Enum>::type
+    get_info() const;
+
     operator cl_sampler() const
     {
         return m_sampler;
@@ -146,6 +151,15 @@ public:
 private:
     cl_sampler m_sampler;
 };
+
+// define get_info() specializations for image_sampler
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(image_sampler,
+    ((cl_uint, CL_SAMPLER_REFERENCE_COUNT))
+    ((cl_context, CL_SAMPLER_CONTEXT))
+    ((cl_addressing_mode, CL_SAMPLER_ADDRESSING_MODE))
+    ((cl_filter_mode, CL_SAMPLER_FILTER_MODE))
+    ((bool, CL_SAMPLER_NORMALIZED_COORDS))
+)
 
 namespace detail {
 

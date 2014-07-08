@@ -171,6 +171,11 @@ public:
         return detail::get_object_info<T>(clGetEventInfo, m_event, info);
     }
 
+    /// \overload
+    template<int Enum>
+    typename detail::get_object_info_type<event, Enum>::type
+    get_info() const;
+
     /// Returns profiling information for the event.
     ///
     /// \see event::duration()
@@ -293,6 +298,20 @@ private:
 protected:
     cl_event m_event;
 };
+
+// define get_info() specializations for event
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(event,
+    ((cl_command_queue, CL_EVENT_COMMAND_QUEUE))
+    ((cl_command_type, CL_EVENT_COMMAND_TYPE))
+    ((cl_int, CL_EVENT_COMMAND_EXECUTION_STATUS))
+    ((cl_uint, CL_EVENT_REFERENCE_COUNT))
+)
+
+#ifdef CL_VERSION_1_1
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(event,
+    ((cl_context, CL_EVENT_CONTEXT))
+)
+#endif
 
 } // end compute namespace
 } // end boost namespace
