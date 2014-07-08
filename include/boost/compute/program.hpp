@@ -218,6 +218,11 @@ public:
         return detail::get_object_info<T>(clGetProgramInfo, m_program, info);
     }
 
+    /// \overload
+    template<int Enum>
+    typename detail::get_object_info_type<program, Enum>::type
+    get_info() const;
+
     /// Builds the program with \p options.
     ///
     /// If the program fails to compile, this function will throw an
@@ -633,6 +638,24 @@ private:
 private:
     cl_program m_program;
 };
+
+// define get_info() specializations for program
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(program,
+    ((cl_uint, CL_PROGRAM_REFERENCE_COUNT))
+    ((cl_context, CL_PROGRAM_CONTEXT))
+    ((cl_uint, CL_PROGRAM_NUM_DEVICES))
+    ((std::vector<cl_device_id>, CL_PROGRAM_DEVICES))
+    ((std::string, CL_PROGRAM_SOURCE))
+    ((std::vector<size_t>, CL_PROGRAM_BINARY_SIZES))
+    ((std::vector<unsigned char *>, CL_PROGRAM_BINARIES))
+)
+
+#ifdef CL_VERSION_1_2
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(program,
+    ((size_t, CL_PROGRAM_NUM_KERNELS))
+    ((std::string, CL_PROGRAM_KERNEL_NAMES))
+)
+#endif // CL_VERSION_1_2
 
 } // end compute namespace
 } // end boost namespace

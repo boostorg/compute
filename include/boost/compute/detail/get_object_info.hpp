@@ -133,6 +133,33 @@ inline T get_object_info(Function f, Object o, Info i)
     return _get_object_info_impl<T, Function, Object, Info>()(f, o, i);
 }
 
+// returns the value type for the clGet*Info() call on Object with Enum.
+template<class Object, int Enum>
+struct get_object_info_type;
+
+// defines the object::get_info<Enum>() specialization
+#define BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATION(object_type, result_type, value) \
+    namespace detail { \
+        template<> struct get_object_info_type<object_type, value> { typedef result_type type; }; \
+    } \
+    template<> inline result_type object_type::get_info<value>() const \
+    { \
+        return get_info<result_type>(value); \
+    }
+
+// used by BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS()
+#define BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_IMPL(r, data, elem) \
+    BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATION( \
+        data, BOOST_PP_TUPLE_ELEM(2, 0, elem), BOOST_PP_TUPLE_ELEM(2, 1, elem) \
+    )
+
+// defines the object::get_info<Enum>() specialization for each
+// (result_type, value) tuple in seq for object_type.
+#define BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(object_type, seq) \
+    BOOST_PP_SEQ_FOR_EACH( \
+        BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_IMPL, object_type, seq \
+    )
+
 } // end detail namespace
 } // end compute namespace
 } // end boost namespace
