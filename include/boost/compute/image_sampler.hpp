@@ -143,6 +143,18 @@ public:
     typename detail::get_object_info_type<image_sampler, Enum>::type
     get_info() const;
 
+    /// Returns \c true if the sampler is the same at \p other.
+    bool operator==(const image_sampler &other) const
+    {
+        return m_sampler == other.m_sampler;
+    }
+
+    /// Returns \c true if the sampler is different from \p other.
+    bool operator!=(const image_sampler &other) const
+    {
+        return m_sampler != other.m_sampler;
+    }
+
     operator cl_sampler() const
     {
         return m_sampler;

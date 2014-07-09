@@ -35,6 +35,18 @@ BOOST_AUTO_TEST_CASE(get_device)
     BOOST_VERIFY(queue.get_info<CL_QUEUE_DEVICE>() == device.get());
 }
 
+BOOST_AUTO_TEST_CASE(equality_operator)
+{
+    compute::command_queue queue1(context, device);
+    BOOST_CHECK(queue1 == queue1);
+
+    compute::command_queue queue2 = queue1;
+    BOOST_CHECK(queue1 == queue2);
+
+    compute::command_queue queue3(context, device);
+    BOOST_CHECK(queue1 != queue3);
+}
+
 BOOST_AUTO_TEST_CASE(event_profiling)
 {
     bc::command_queue queue(context, device, bc::command_queue::enable_profiling);

@@ -271,6 +271,18 @@ public:
     }
     #endif // BOOST_NO_VARIADIC_TEMPLATES
 
+    /// Returns \c true if the kernel is the same at \p other.
+    bool operator==(const kernel &other) const
+    {
+        return m_kernel == other.m_kernel;
+    }
+
+    /// Returns \c true if the kernel is different from \p other.
+    bool operator!=(const kernel &other) const
+    {
+        return m_kernel != other.m_kernel;
+    }
+
     /// \internal_
     operator cl_kernel() const
     {

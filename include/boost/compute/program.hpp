@@ -365,6 +365,18 @@ public:
     /// \endcode
     kernel create_kernel(const std::string &name) const;
 
+    /// Returns \c true if the program is the same at \p other.
+    bool operator==(const program &other) const
+    {
+        return m_program == other.m_program;
+    }
+
+    /// Returns \c true if the program is different from \p other.
+    bool operator!=(const program &other) const
+    {
+        return m_program != other.m_program;
+    }
+
     /// \internal_
     operator cl_program() const
     {

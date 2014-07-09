@@ -1403,6 +1403,18 @@ public:
     }
     #endif // CL_VERSION_1_2
 
+    /// Returns \c true if the command queue is the same at \p other.
+    bool operator==(const command_queue &other) const
+    {
+        return m_queue == other.m_queue;
+    }
+
+    /// Returns \c true if the command queue is different from \p other.
+    bool operator!=(const command_queue &other) const
+    {
+        return m_queue != other.m_queue;
+    }
+
     /// \internal_
     operator cl_command_queue() const
     {

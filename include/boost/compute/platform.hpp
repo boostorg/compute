@@ -196,6 +196,18 @@ public:
         #endif
     }
 
+    /// Returns \c true if the platform is the same at \p other.
+    bool operator==(const platform &other) const
+    {
+        return m_platform == other.m_platform;
+    }
+
+    /// Returns \c true if the platform is different from \p other.
+    bool operator!=(const platform &other) const
+    {
+        return m_platform != other.m_platform;
+    }
+
 private:
     cl_platform_id m_platform;
 };
