@@ -57,8 +57,6 @@ struct device_ptr_index_expr
     IndexExpr m_expr;
 };
 
-} // end detail namespace
-
 template<class T>
 class device_ptr
 {
@@ -192,8 +190,6 @@ private:
     const buffer m_buffer;
     size_t m_index;
 };
-
-namespace detail {
 
 // is_buffer_iterator specialization for buffer_iterator
 template<class Iterator>

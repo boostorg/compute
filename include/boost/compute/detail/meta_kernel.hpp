@@ -30,12 +30,12 @@
 #include <boost/compute/image3d.hpp>
 #include <boost/compute/closure.hpp>
 #include <boost/compute/function.hpp>
-#include <boost/compute/device_ptr.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/type_traits.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/image_sampler.hpp>
 #include <boost/compute/memory_object.hpp>
+#include <boost/compute/detail/device_ptr.hpp>
 #include <boost/compute/detail/program_cache.hpp>
 #include <boost/compute/detail/sha1.hpp>
 
@@ -911,7 +911,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
 template<class T, class IndexExpr>
 inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const device_ptr_index_expr<T, IndexExpr> &expr)
+                               const detail::device_ptr_index_expr<T, IndexExpr> &expr)
 {
     if(expr.m_index == 0){
         return kernel <<
@@ -927,7 +927,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
 template<class T1, class T2, class IndexExpr>
 inline meta_kernel& operator<<(meta_kernel &kernel,
-                               const device_ptr_index_expr<std::pair<T1, T2>, IndexExpr> &expr)
+                               const detail::device_ptr_index_expr<std::pair<T1, T2>, IndexExpr> &expr)
 {
     typedef std::pair<T1, T2> T;
 

@@ -14,11 +14,14 @@
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/context.hpp>
-#include <boost/compute/device_ptr.hpp>
+#include <boost/compute/detail/device_ptr.hpp>
 
 namespace boost {
 namespace compute {
 namespace experimental {
+
+// bring device_ptr into the experimental namespace
+using detail::device_ptr;
 
 template<class T>
 inline device_ptr<T>

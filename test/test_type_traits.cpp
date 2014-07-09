@@ -20,7 +20,6 @@
 
 #include <boost/compute/types.hpp>
 #include <boost/compute/type_traits.hpp>
-#include <boost/compute/device_ptr.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/iterator/constant_iterator.hpp>
 #include <boost/compute/detail/is_buffer_iterator.hpp>
@@ -126,5 +125,4 @@ BOOST_AUTO_TEST_CASE(is_device_iterator)
     BOOST_STATIC_ASSERT(is_device_iterator<boost::compute::constant_iterator<int> >::value == true);
     BOOST_STATIC_ASSERT(is_device_iterator<std::vector<int>::iterator>::value == false);
     BOOST_STATIC_ASSERT(is_device_iterator<float *>::value == false);
-    BOOST_STATIC_ASSERT(is_device_iterator<boost::compute::device_ptr<float> >::value == true);
 }
