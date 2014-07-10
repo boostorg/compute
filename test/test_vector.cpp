@@ -291,4 +291,26 @@ BOOST_AUTO_TEST_CASE(swap_between_contexts)
     vec2.resize(64);
 }
 
+BOOST_AUTO_TEST_CASE(assign_from_std_vector)
+{
+    std::vector<int> host_vector;
+    host_vector.push_back(1);
+    host_vector.push_back(9);
+    host_vector.push_back(7);
+    host_vector.push_back(9);
+
+    compute::vector<int> device_vector(context);
+    device_vector.assign(host_vector.begin(), host_vector.end(), queue);
+    BOOST_CHECK_EQUAL(device_vector.size(), size_t(4));
+    CHECK_RANGE_EQUAL(int, 4, device_vector, (1, 9, 7, 9));
+}
+
+BOOST_AUTO_TEST_CASE(assign_constant_value)
+{
+    compute::vector<float> device_vector(10, context);
+    device_vector.assign(3, 6.28f, queue);
+    BOOST_CHECK_EQUAL(device_vector.size(), size_t(3));
+    CHECK_RANGE_EQUAL(float, 3, device_vector, (6.28f, 6.28f, 6.28f));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

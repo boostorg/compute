@@ -472,6 +472,10 @@ public:
                 InputIterator last,
                 command_queue &queue)
     {
+        // resize vector for new contents
+        resize(detail::iterator_range_size(first, last), queue);
+
+        // copy values into the vector
         ::boost::compute::copy(first, last, begin(), queue);
     }
 
@@ -485,6 +489,10 @@ public:
 
     void assign(size_type n, const T &value, command_queue &queue)
     {
+        // resize vector for new contents
+        resize(n, queue);
+
+        // fill vector with value
         ::boost::compute::fill_n(begin(), n, value, queue);
     }
 
