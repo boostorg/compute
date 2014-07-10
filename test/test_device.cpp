@@ -41,6 +41,15 @@ BOOST_AUTO_TEST_CASE(get_device_name)
     }
 }
 
+BOOST_AUTO_TEST_CASE(equality_operator)
+{
+    boost::compute::device device1 = boost::compute::system::default_device();
+    BOOST_CHECK(device1 == device1);
+
+    boost::compute::device device2 = device1;
+    BOOST_CHECK(device1 == device2);
+}
+
 BOOST_AUTO_TEST_CASE(get_max_work_item_sizes)
 {
     boost::compute::device device = boost::compute::system::default_device();

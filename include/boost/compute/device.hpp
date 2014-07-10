@@ -384,6 +384,18 @@ public:
     }
     #endif // CL_VERSION_1_2
 
+    /// Returns \c true if the device is the same at \p other.
+    bool operator==(const device &other) const
+    {
+        return m_id == other.m_id;
+    }
+
+    /// Returns \c true if the device is different from \p other.
+    bool operator!=(const device &other) const
+    {
+        return m_id != other.m_id;
+    }
+
 private:
     cl_device_id m_id;
 };
