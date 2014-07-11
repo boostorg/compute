@@ -12,8 +12,8 @@
 #define BOOST_COMPUTE_DETAIL_BUFFER_VALUE_HPP
 
 #include <boost/compute/context.hpp>
-#include <boost/compute/device_ptr.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/detail/device_ptr.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
 
 namespace boost {
@@ -139,9 +139,9 @@ public:
         return operator=(T(value));
     }
 
-    device_ptr<T> operator&() const
+    detail::device_ptr<T> operator&() const
     {
-        return device_ptr<T>(m_buffer, m_index);
+        return detail::device_ptr<T>(m_buffer, m_index);
     }
 
     buffer_value<T>& operator++()

@@ -14,7 +14,7 @@
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/config.hpp>
 #include <boost/compute/context.hpp>
-#include <boost/compute/device_ptr.hpp>
+#include <boost/compute/detail/device_ptr.hpp>
 
 namespace boost {
 namespace compute {
@@ -24,8 +24,8 @@ class allocator
 {
 public:
     typedef T value_type;
-    typedef device_ptr<T> pointer;
-    typedef const device_ptr<T> const_pointer;
+    typedef detail::device_ptr<T> pointer;
+    typedef const detail::device_ptr<T> const_pointer;
     typedef std::size_t size_type;
     typedef std::ptrdiff_t difference_type;
 
@@ -75,7 +75,7 @@ public:
     {
         buffer buf(m_context, n * sizeof(T), m_mem_flags);
         clRetainMemObject(buf.get());
-        return device_ptr<T>(buf);
+        return detail::device_ptr<T>(buf);
     }
 
     void deallocate(pointer p, size_type n)
