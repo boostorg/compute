@@ -475,9 +475,9 @@ public:
     /// \opencl_version_warning{1,2}
     ///
     /// \see_opencl_ref{clCreateProgramWithBuiltInKernels}
-    static program create_with_built_in_kernels(const context &context,
-                                                const std::vector<device> &devices,
-                                                const std::string kernel_names)
+    static program create_with_builtin_kernels(const context &context,
+                                               const std::vector<device> &devices,
+                                               const std::string &kernel_names)
     {
         cl_int error = 0;
 
