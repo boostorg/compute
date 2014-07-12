@@ -17,6 +17,7 @@ set(BENCHMARKS
   count
   discrete_distribution
   erase_remove
+  fill
   find_end
   includes
   inner_product
