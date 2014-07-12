@@ -112,6 +112,11 @@ dispatch_fill(BufferIterator first,
         return;
     }
 
+    // check if the device supports OpenCL 1.2 (required for enqueue_fill_buffer)
+    if(!queue.check_device_version(1, 2)){
+        return fill_with_copy(first, count, value, queue);
+    }
+
     value_type pattern = static_cast<value_type>(value);
     size_t offset = static_cast<size_t>(first.get_index());
 
@@ -148,6 +153,11 @@ dispatch_fill_async(BufferIterator first,
                     >::type* = 0)
 {
     typedef typename std::iterator_traits<BufferIterator>::value_type value_type;
+
+    // check if the device supports OpenCL 1.2 (required for enqueue_fill_buffer)
+    if(!queue.check_device_version(1, 2)){
+        return fill_async_with_copy(first, count, value, queue);
+    }
 
     value_type pattern = static_cast<value_type>(value);
     size_t offset = static_cast<size_t>(first.get_index());

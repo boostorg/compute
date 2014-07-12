@@ -396,6 +396,22 @@ public:
         return m_id != other.m_id;
     }
 
+    /// \internal_
+    bool check_version(int major, int minor) const
+    {
+        std::stringstream stream;
+        stream << version();
+
+        int actual_major, actual_minor;
+        stream.ignore(7); // 'OpenCL '
+        stream >> actual_major;
+        stream.ignore(1); // '.'
+        stream >> actual_minor;
+
+        return actual_major > major ||
+               (actual_major == major && actual_minor >= minor);
+    }
+
 private:
     cl_device_id m_id;
 };
