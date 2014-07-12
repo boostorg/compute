@@ -114,6 +114,8 @@ destructor_callback_function(cl_mem memobj, void *user_data)
 
 BOOST_AUTO_TEST_CASE(destructor_callback)
 {
+    REQUIRES_OPENCL_VERSION(1,2);
+
     bool invoked = false;
     {
         boost::compute::buffer buf(context, 128);

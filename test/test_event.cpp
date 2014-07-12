@@ -38,6 +38,8 @@ callback(cl_event event, cl_int status, void *user_data)
 
 BOOST_AUTO_TEST_CASE(event_callback)
 {
+    REQUIRES_OPENCL_VERSION(1,2);
+
     BOOST_CHECK_EQUAL(callback_invoked, false);
     {
         boost::compute::event marker = queue.enqueue_marker();

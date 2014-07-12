@@ -17,6 +17,8 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/detail/nvidia_compute_capability.hpp>
 
+#include "opencl_version_check.hpp"
+
 BOOST_AUTO_TEST_CASE(null_device)
 {
     boost::compute::device null;
@@ -82,6 +84,9 @@ BOOST_AUTO_TEST_CASE(partition_device_equally)
 {
     // get default device and ensure it has at least two compute units
     boost::compute::device device = boost::compute::system::default_device();
+
+    REQUIRES_OPENCL_VERSION(1,2);
+
     if(device.compute_units() < 2){
         std::cout << "skipping test: "
                   << "device does not have enough compute units"
@@ -133,6 +138,9 @@ BOOST_AUTO_TEST_CASE(partition_by_counts)
 {
     // get default device and ensure it has at least four compute units
     boost::compute::device device = boost::compute::system::default_device();
+
+    REQUIRES_OPENCL_VERSION(1,2);
+
     if(device.compute_units() < 4){
         std::cout << "skipping test: "
                   << "device does not have enough compute units"
@@ -175,6 +183,9 @@ BOOST_AUTO_TEST_CASE(partition_by_affinity_domain)
 {
     // get default device and ensure it has at least two compute units
     boost::compute::device device = boost::compute::system::default_device();
+
+    REQUIRES_OPENCL_VERSION(1,2);
+
     if(device.compute_units() < 2){
         std::cout << "skipping test: "
                   << "device does not have enough compute units"

@@ -102,9 +102,10 @@ BOOST_AUTO_TEST_CASE(check_fill_type)
     future.wait();
 
     #ifdef CL_VERSION_1_2
-    BOOST_CHECK(
-        future.get_event().get_command_type() == CL_COMMAND_FILL_BUFFER
-    );
+    BOOST_CHECK_EQUAL(
+            future.get_event().get_command_type(),
+            device.check_version(1,2) ? CL_COMMAND_FILL_BUFFER : CL_COMMAND_NDRANGE_KERNEL
+            );
     #else
     BOOST_CHECK(
         future.get_event().get_command_type() == CL_COMMAND_NDRANGE_KERNEL
