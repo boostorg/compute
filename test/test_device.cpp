@@ -122,6 +122,13 @@ BOOST_AUTO_TEST_CASE(partition_device_equally)
     }
 }
 
+// used to sort devices by number of compute units
+bool compare_compute_units(const boost::compute::device &a,
+                           const boost::compute::device &b)
+{
+    return a.compute_units() < b.compute_units();
+}
+
 BOOST_AUTO_TEST_CASE(partition_by_counts)
 {
     // get default device and ensure it has at least four compute units
@@ -155,10 +162,13 @@ BOOST_AUTO_TEST_CASE(partition_by_counts)
         sub_devices = device.partition_by_counts(counts);
     BOOST_CHECK_EQUAL(sub_devices.size(), size_t(3));
 
+    // sort sub-devices by number of compute units (see issue #185)
+    std::sort(sub_devices.begin(), sub_devices.end(), compare_compute_units);
+
     // verify each of the sub-devices
-    BOOST_CHECK_EQUAL(sub_devices[0].compute_units(), size_t(2));
+    BOOST_CHECK_EQUAL(sub_devices[0].compute_units(), size_t(1));
     BOOST_CHECK_EQUAL(sub_devices[1].compute_units(), size_t(1));
-    BOOST_CHECK_EQUAL(sub_devices[2].compute_units(), size_t(1));
+    BOOST_CHECK_EQUAL(sub_devices[2].compute_units(), size_t(2));
 }
 
 BOOST_AUTO_TEST_CASE(partition_by_affinity_domain)
