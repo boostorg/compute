@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_RANDOM_MERSENNE_TWISTER_HPP
-#define BOOST_COMPUTE_RANDOM_MERSENNE_TWISTER_HPP
+#ifndef BOOST_COMPUTE_RANDOM_MERSENNE_TWISTER_ENGINE_HPP
+#define BOOST_COMPUTE_RANDOM_MERSENNE_TWISTER_ENGINE_HPP
 
 #include <boost/compute/types.hpp>
 #include <boost/compute/buffer.hpp>
@@ -237,4 +237,4 @@ typedef mersenne_twister_engine<uint_> mt19937;
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_RANDOM_MERSENNE_TWISTER_HPP
+#endif // BOOST_COMPUTE_RANDOM_MERSENNE_TWISTER_ENGINE_HPP

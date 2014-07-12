@@ -14,7 +14,7 @@
 
 #include <boost/compute/system.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/random/mersenne_twister.hpp>
+#include <boost/compute/random/mersenne_twister_engine.hpp>
 
 #include "perf.hpp"
 

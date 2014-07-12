@@ -8,10 +8,10 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#define BOOST_TEST_MODULE TestMersenneTwister
+#define BOOST_TEST_MODULE TestMersenneTwisterEngine
 #include <boost/test/unit_test.hpp>
 
-#include <boost/compute/random/mersenne_twister.hpp>
+#include <boost/compute/random/mersenne_twister_engine.hpp>
 #include <boost/compute/container/vector.hpp>
 
 #include "check_macros.hpp"
