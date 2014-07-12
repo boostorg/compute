@@ -299,7 +299,7 @@ protected:
     cl_event m_event;
 };
 
-// define get_info() specializations for event
+/// \internal_ define get_info() specializations for event
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(event,
     ((cl_command_queue, CL_EVENT_COMMAND_QUEUE))
     ((cl_command_type, CL_EVENT_COMMAND_TYPE))

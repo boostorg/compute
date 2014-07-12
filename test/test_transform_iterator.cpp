@@ -71,4 +71,26 @@ BOOST_AUTO_TEST_CASE(copy)
     CHECK_RANGE_EQUAL(int, 5, b, (1, 2, 3, 4, 5));
 }
 
+BOOST_AUTO_TEST_CASE(copy_abs_doctest)
+{
+    int data[] = { -1, -2, -3, -4 };
+    boost::compute::vector<int> input(data, data + 4, queue);
+    boost::compute::vector<int> output(4, context);
+
+//! [copy_abs]
+// use abs() from boost.compute
+using boost::compute::abs;
+
+// copy the absolute value for each element in input to output
+boost::compute::copy(
+    boost::compute::make_transform_iterator(input.begin(), abs<int>()),
+    boost::compute::make_transform_iterator(input.end(), abs<int>()),
+    output.begin(),
+    queue
+);
+//! [copy_abs]
+
+    CHECK_RANGE_EQUAL(int, 4, output, (1, 2, 3, 4));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

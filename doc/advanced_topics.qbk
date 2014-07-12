@@ -2,6 +2,31 @@
 
 The following topics show advanced features of the Boost Compute library.
 
+[section Vector Data Types]
+
+In addition to the built-in scalar types (e.g. `int` and `float`), OpenCL
+also provides vector data types (e.g. `int2` and `vector4`). These can be
+used with the Boost Compute library on both the host and device.
+
+Boost.Compute provides typedefs for these types which take the form:
+`boost::compute::scalarN_` where `scalar` is a scalar data type (e.g. `int`,
+`float`, `char`) and `N` is the size of the vector. Supported vector sizes
+are: 2, 4, 8, and 16.
+
+The following example shows how to transfer a set of 3D points stored as an
+array of `float`s on the host the device and then calculate the sum of the
+point coordinates using the [funcref boost::compute::accumulate accumulate()]
+function. The sum is transferred to the host and the centroid computed by
+dividing by the total number of points.
+
+Note that even though the points are in 3D, they are stored as `float4` due to
+OpenCL's alignment requirements.
+
+[import ../example/point_centroid.cpp]
+[point_centroid_example]
+
+[endsect] [/ vector data types]
+
 [section Custom Functions]
 
 The OpenCL runtime and the Boost Compute library provide a number of built-in
@@ -22,7 +47,7 @@ boost::compute::function<int (int)> add_four =
         "int add_four(int x) { return x + 4; }"
     );
 
-boost::compute::transform(vector.begin(), vector.end(), vector.begin(), add_four);
+boost::compute::transform(input.begin(), input.end(), output.begin(), add_four, queue);
 ``
 
 This can also be done more succinctly using the [macroref BOOST_COMPUTE_FUNCTION
@@ -33,7 +58,7 @@ BOOST_COMPUTE_FUNCTION(int, add_four, (int x),
     return x + 4;
 });
 
-boost::compute::transform(vector.begin(), vector.end(), vector.begin(), add_four);
+boost::compute::transform(input.begin(), input.end(), output.begin(), add_four, queue);
 ``
 
 Also see [@http://kylelutz.blogspot.com/2014/03/custom-opencl-functions-in-c-with.html
@@ -93,13 +118,13 @@ Boost.Compute algorithms to perform more complex operations on the device.
 To count the number of odd values in a vector:
 
 ``
-boost::compute::count_if(vector.begin(), vector.end(), _1 % 2 == 1);
+boost::compute::count_if(vector.begin(), vector.end(), _1 % 2 == 1, queue);
 ``
 
 To multiply each value in a vector by three and subtract four:
 
 ``
-boost::compute::transform(vector.begin(), vector.end(), vector.begin(), _1 * 3 - 4);
+boost::compute::transform(vector.begin(), vector.end(), vector.begin(), _1 * 3 - 4, queue);
 ``
 
 Lambda expressions can also be used to create function<> objects:
@@ -126,14 +151,12 @@ other actions:
 std::vector<float> host_vector = ...
 
 // create a vector on the device
-boost::compute::vector<float> device_vector(host_vector.size());
+boost::compute::vector<float> device_vector(host_vector.size(), context);
 
 // copy data to the device asynchronously
-boost::compute::future<void> f =
-    boost::compute::copy_async(host_vector.begin(),
-                               host_vector.end(),
-                               device_vector.begin(),
-                               queue);
+boost::compute::future<void> f = boost::compute::copy_async(
+    host_vector.begin(), host_vector.end(), device_vector.begin(), queue
+);
 
 // perform other work on the host or device
 // ...

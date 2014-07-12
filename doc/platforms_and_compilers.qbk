@@ -26,10 +26,11 @@ To explicitly enable variadic support for Boost.Preprocessor add
 
 [section OpenCL Implementations]
 
-* NVIDIA (GPUs only)
-* AMD (CPUs and GPUs)
+* NVIDIA (NVIDIA GPUs only)
+* AMD (CPUs and AMD GPUs)
 * Intel (CPUs only)
 * POCL (CPUs only)
+* Beignet (Intel GPUs only)
 
 [endsect]
 

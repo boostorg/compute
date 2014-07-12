@@ -341,6 +341,7 @@ public:
         return rend();
     }
 
+    /// Returns the number of elements in the vector.
     size_type size() const
     {
         return m_size;
@@ -351,6 +352,7 @@ public:
         return m_allocator.max_size();
     }
 
+    /// Resizes the vector to \p size.
     void resize(size_type size, command_queue &queue)
     {
         if(size < capacity()){
@@ -377,6 +379,7 @@ public:
         }
     }
 
+    /// \overload
     void resize(size_type size)
     {
         command_queue queue = default_queue();
@@ -384,11 +387,13 @@ public:
         queue.finish();
     }
 
+    /// Returns \c true if the vector is empty.
     bool empty() const
     {
         return m_size == 0;
     }
 
+    /// Returns the capacity of the vector.
     size_type capacity() const
     {
         return m_data.get_buffer().size() / sizeof(T);
@@ -503,11 +508,19 @@ public:
         queue.finish();
     }
 
+    /// Inserts \p value at the end of the vector (resizing if neccessary).
+    ///
+    /// Note that calling \c push_back() to insert data values one at a time
+    /// is inefficient as there is a non-trivial overhead in performing a data
+    /// transfer to the device. It is usually better to store a set of values
+    /// on the host (for example, in a \c std::vector) and then transfer them
+    /// in bulk using the \c insert() method or the copy() algorithm.
     void push_back(const T &value, command_queue &queue)
     {
         insert(end(), value, queue);
     }
 
+    /// \overload
     void push_back(const T &value)
     {
         command_queue queue = default_queue();
@@ -579,6 +592,8 @@ public:
         queue.finish();
     }
 
+    /// Inserts the values in the range [\p first, \p last) into the vector at
+    /// \p position using \p queue.
     template<class InputIterator>
     void insert(iterator position,
                 InputIterator first,
@@ -601,6 +616,7 @@ public:
         );
     }
 
+    /// \overload
     template<class InputIterator>
     void insert(iterator position, InputIterator first, InputIterator last)
     {
@@ -643,6 +659,7 @@ public:
         return iter;
     }
 
+    /// Swaps the contents of \c *this with \p other.
     void swap(vector<T> &other)
     {
         std::swap(m_data, other.m_data);
@@ -650,6 +667,7 @@ public:
         std::swap(m_allocator, other.m_allocator);
     }
 
+    /// Removes all elements from the vector.
     void clear()
     {
         m_size = 0;

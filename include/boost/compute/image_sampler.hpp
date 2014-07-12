@@ -164,7 +164,7 @@ private:
     cl_sampler m_sampler;
 };
 
-// define get_info() specializations for image_sampler
+/// \internal_ define get_info() specializations for image_sampler
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(image_sampler,
     ((cl_uint, CL_SAMPLER_REFERENCE_COUNT))
     ((cl_context, CL_SAMPLER_CONTEXT))

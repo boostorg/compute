@@ -87,7 +87,10 @@ inline void dispatch_sort(Iterator first,
 /// Sorts the values in the range [\p first, \p last) according to
 /// \p compare.
 ///
-/// If no compare function is specified, \c less is used.
+/// \param first first element in the range to sort
+/// \param last last element in the range to sort
+/// \param compare comparison function (by default \c less)
+/// \param queue command queue to perform the operation
 ///
 /// For example, to sort a vector on the device:
 /// \code
