@@ -100,6 +100,8 @@ boost::compute::program foo_program =
 #ifdef CL_VERSION_1_2
 BOOST_AUTO_TEST_CASE(compile_and_link)
 {
+    REQUIRES_OPENCL_VERSION(1,2);
+
     // create the library program
     const char library_source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
         // generic square function definition

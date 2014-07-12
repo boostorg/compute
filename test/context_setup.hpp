@@ -4,6 +4,8 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 
+#include "opencl_version_check.hpp"
+
 struct Context {
     boost::compute::device        device;
     boost::compute::context       context;

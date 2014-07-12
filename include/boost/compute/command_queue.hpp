@@ -1421,6 +1421,12 @@ public:
         return m_queue;
     }
 
+    /// \internal_
+    bool check_device_version(int major, int minor) const
+    {
+        return get_device().check_version(major, minor);
+    }
+
 private:
     cl_command_queue m_queue;
 };

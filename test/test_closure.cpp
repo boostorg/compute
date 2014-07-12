@@ -66,6 +66,8 @@ BOOST_AUTO_TEST_CASE(add_two_and_pi)
 
 BOOST_AUTO_TEST_CASE(scale_add_vec)
 {
+    REQUIRES_OPENCL_VERSION(1,2);
+
     const int N = 10;
     float s = 4.5;
     compute::vector<float> a(N, context);
