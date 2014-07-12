@@ -11,7 +11,7 @@
 #ifndef BOOST_COMPUTE_RANDOM_DEFAULT_RANDOM_ENGINE_HPP
 #define BOOST_COMPUTE_RANDOM_DEFAULT_RANDOM_ENGINE_HPP
 
-#include <boost/compute/random/mersenne_twister.hpp>
+#include <boost/compute/random/mersenne_twister_engine.hpp>
 
 namespace boost {
 namespace compute {
