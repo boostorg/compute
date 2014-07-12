@@ -13,6 +13,7 @@ set(BENCHMARKS
   accumulate
   bernoulli_distribution
   cart_to_polar
+  copy_if
   copy_to_device
   count
   discrete_distribution
