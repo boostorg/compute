@@ -15,6 +15,7 @@
 #include <sstream>
 
 #include <boost/config.hpp>
+#include <boost/fusion/adapted/boost_tuple.hpp>
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/transform.hpp>
 #include <boost/typeof/typeof.hpp>
