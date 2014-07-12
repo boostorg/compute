@@ -11,10 +11,8 @@ Please submit an issue on the GitHub issue tracker at
 * The main documentation is here: [@http://kylelutz.github.io/compute/]
 * The README is here: [@https://github.com/kylelutz/compute/blob/master/README.md]
 * The wiki is here: [@https://github.com/kylelutz/compute/wiki]
-* The contributor guide is here:
-[@https://github.com/kylelutz/compute/blob/master/CONTRIBUTING.md]
-* The header reference is here:
-[@http://kylelutz.github.io/compute/compute/reference.html#header_reference]
+* The contributor guide is here: [@https://github.com/kylelutz/compute/blob/master/CONTRIBUTING.md]
+* The reference is here: [@http://kylelutz.github.io/compute/compute/reference.html]
 
 
 [h3 Where is the best place to ask questions about the library?]
@@ -51,6 +49,9 @@ library. VexCL is closer in nature to the Eigen library while
 Boost.Compute is closer to the C++ standard library. I don't feel that
 Boost.Compute really fills the same role as VexCL and in fact VexCL
 could be built on top of Boost.Compute.
+
+Also see this StackOverflow question:
+[@http://stackoverflow.com/questions/20154179/differences-between-vexcl-thrust-and-boost-compute]
 
 
 [h3 Why not write just write a new OpenCL back-end for Thrust?]
@@ -113,6 +114,19 @@ algorithm along with std::ostream_iterator<T>. For example:
 
 [import ../example/print_vector.cpp]
 [print_vector_example]
+
+
+[h3 Does Boost.Compute support zero-copy memory?]
+
+Zero-copy memory allows OpenCL kernels to directly operate on regions of host
+memory (if supported by the platform).
+
+Boost.Compute supports zero-copy memory in multiple ways. The low-level
+interface is provided by allocating [classref boost::compute::buffer buffer]
+objects with the `CL_MEM_USE_HOST_PTR` flag. The high-level interface is
+provided by the [classref boost::compute::mapped_view mapped_view<T>] class
+which provides a std::vector-like interface to a region of host-memory and can
+be used directly with all of the Boost.Compute algorithms.
 
 
 [h3 How can I contribute?]

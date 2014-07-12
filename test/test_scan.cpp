@@ -133,4 +133,46 @@ BOOST_AUTO_TEST_CASE(inclusive_scan_transform_iterator)
     BOOST_CHECK_CLOSE(float(output[4]), 55.0f, 1e-4f);
 }
 
+BOOST_AUTO_TEST_CASE(inclusive_scan_doctest)
+{
+//! [inclusive_scan_int]
+// setup input
+int data[] = { 1, 2, 3, 4 };
+boost::compute::vector<int> input(data, data + 4, queue);
+
+// setup output
+boost::compute::vector<int> output(4, context);
+
+// scan values
+boost::compute::inclusive_scan(
+    input.begin(), input.end(), output.begin(), queue
+);
+
+// output = [ 1, 3, 6, 10 ]
+//! [inclusive_scan_int]
+
+    CHECK_RANGE_EQUAL(int, 4, output, (1, 3, 6, 10));
+}
+
+BOOST_AUTO_TEST_CASE(exclusive_scan_doctest)
+{
+//! [exclusive_scan_int]
+// setup input
+int data[] = { 1, 2, 3, 4 };
+boost::compute::vector<int> input(data, data + 4, queue);
+
+// setup output
+boost::compute::vector<int> output(4, context);
+
+// scan values
+boost::compute::exclusive_scan(
+    input.begin(), input.end(), output.begin(), queue
+);
+
+// output = [ 0, 1, 3, 6 ]
+//! [exclusive_scan_int]
+
+    CHECK_RANGE_EQUAL(int, 4, output, (0, 1, 3, 6));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

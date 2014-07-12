@@ -94,6 +94,16 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
 /// \class transform_iterator
 /// \brief A transform iterator adaptor.
+///
+/// The transform_iterator adaptor applys a unary function to each element
+/// produced from the underlying iterator when dereferenced.
+///
+/// For example, to copy from an input range to an output range while taking
+/// the absolute value of each element:
+///
+/// \snippet test/test_transform_iterator.cpp copy_abs
+///
+/// \see buffer_iterator, make_transform_iterator()
 template<class InputIterator, class UnaryFunction>
 class transform_iterator :
     public detail::transform_iterator_base<InputIterator,

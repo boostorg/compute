@@ -293,6 +293,13 @@ dispatch_copy(InputIterator first,
 /// with non-contiguous data-structures (e.g. \c std::list<T>) as
 /// well as with "fancy" iterators (e.g. transform_iterator).
 ///
+/// \param first first element in the range to copy
+/// \param last last element in the range to copy
+/// \param result first element in the result range
+/// \param queue command queue to perform the operation
+///
+/// \return \c OutputIterator to the end of the result range
+///
 /// For example, to copy an array of \c int values on the host to a vector on
 /// the device:
 /// \code

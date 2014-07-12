@@ -1,4 +1,4 @@
-[section:gettingstarted Getting Started]
+[section:getting_started Getting Started]
 
 [section Downloading]
 
@@ -71,8 +71,11 @@ Ensure you also find and setup the OpenCL libraries for your system.
 Bugs and issues can be reported to the
 [@https://github.com/kylelutz/compute/issues?state=open issue tracker].
 
-Also, read through the [link boost_compute.faq FAQ] to see if you're
-encountering a known or common issue.
+There is also a mailing list for users and developers at
+[@https://groups.google.com/forum/#!forum/boost-compute].
+
+Look through the [link boost_compute.faq FAQ] to see if you're encountering a
+known or common issue.
 
 [endsect] [/ support]
 

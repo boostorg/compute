@@ -323,7 +323,7 @@ inline kernel program::create_kernel(const std::string &name) const
     return kernel(*this, name);
 }
 
-// define get_info() specializations for kernel
+/// \internal_ define get_info() specializations for kernel
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(kernel,
     ((std::string, CL_KERNEL_FUNCTION_NAME))
     ((cl_uint, CL_KERNEL_NUM_ARGS))

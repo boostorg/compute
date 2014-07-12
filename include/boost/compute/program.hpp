@@ -651,7 +651,7 @@ private:
     cl_program m_program;
 };
 
-// define get_info() specializations for program
+/// \internal_ define get_info() specializations for program
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(program,
     ((cl_uint, CL_PROGRAM_REFERENCE_COUNT))
     ((cl_context, CL_PROGRAM_CONTEXT))

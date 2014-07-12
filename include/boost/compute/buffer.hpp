@@ -155,7 +155,7 @@ public:
     buffer clone(command_queue &queue) const;
 };
 
-// define get_info() specializations for buffer
+/// \internal_ define get_info() specializations for buffer
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(buffer,
     ((cl_mem_object_type, CL_MEM_TYPE))
     ((cl_mem_flags, CL_MEM_FLAGS))

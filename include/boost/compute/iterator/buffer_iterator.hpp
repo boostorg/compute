@@ -99,7 +99,22 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 /// \class buffer_iterator
 /// \brief An iterator for values in a buffer.
 ///
-/// \see make_buffer_iterator()
+/// The buffer_iterator class iterates over values in a memory buffer on a
+/// compute device. It is the most commonly used iterator in Boost.Compute
+/// and is used by the vector<T> and array<T, N> container classes.
+///
+/// Buffer iterators store a reference to a memory buffer along with an index
+/// into that memory buffer.
+///
+/// The buffer_iterator class allows for arbitrary OpenCL memory objects
+/// (including those created outside of Boost.Compute) to be used with the
+/// Boost.Compute algorithms (such as transform() and sort()). For example,
+/// to reverse the contents of an OpenCL memory buffer containing a set of
+/// integers:
+///
+/// \snippet test/test_buffer_iterator.cpp reverse_external_buffer
+///
+/// \see buffer, make_buffer_iterator()
 template<class T>
 class buffer_iterator : public detail::buffer_iterator_base<T>::type
 {

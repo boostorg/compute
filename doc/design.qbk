@@ -25,6 +25,9 @@ Boost.Compute also supplies a number of facilities for interoperation with
 other C and C++ libraries. See the section on [link boost_compute.interop
 interoperability] for more information.
 
+See the [link boost_compute.reference.api_overview API Overview] section for
+a full list of functions, classes, and macros provided by Boost.Compute.
+
 [endsect] [/ library architecture]
 
 [section Why OpenCL]
@@ -44,8 +47,8 @@ dynamically for the device present when the application is run rather that the
 device that was present when the code was compiled (which is often a separate
 machine).
 * Using OpenCL allows Boost.Compute to directly interoperate with other OpenCL
-libraries such as VexCL and OpenCV (as well as existing code written with
-OpenCL).
+libraries (such as VexCL and OpenCV), as well as existing code written with
+OpenCL.
 * The "thin" C++ wrapper provided by Boost.Compute allows the user to break-out
 and write their own custom kernels when the provided APIs are not suitable.
 

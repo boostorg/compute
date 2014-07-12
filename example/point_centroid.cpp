@@ -25,6 +25,11 @@ int main()
 {
     using compute::float4_;
 
+    // get default device and setup context
+    compute::device device = compute::system::default_device();
+    compute::context context(device);
+    compute::command_queue queue(context, device);
+
     // point coordinates
     float points[] = { 1.0f, 2.0f, 3.0f, 0.0f,
                        -2.0f, -3.0f, 4.0f, 0.0f,
@@ -33,19 +38,20 @@ int main()
                        3.0f, 4.0f, -5.0f, 0.0f };
 
     // create vector for five points
-    compute::vector<float4_> vector(5);
+    compute::vector<float4_> vector(5, context);
 
     // copy point data to the device
     compute::copy(
         reinterpret_cast<float4_ *>(points),
         reinterpret_cast<float4_ *>(points) + 5,
-        vector.begin()
+        vector.begin(),
+        queue
     );
 
     // calculate sum
-    float4_ sum = compute::accumulate(vector.begin(),
-                                      vector.end(),
-                                      float4_(0, 0, 0, 0));
+    float4_ sum = compute::accumulate(
+        vector.begin(), vector.end(), float4_(0, 0, 0, 0), queue
+    );
 
     // calculate centroid
     float4_ centroid;
@@ -55,6 +61,8 @@ int main()
 
     // print centroid
     std::cout << "centroid: " << centroid << std::endl;
+
+    return 0;
 }
 
 //]

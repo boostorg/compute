@@ -435,7 +435,7 @@ inline uint_ device::preferred_vector_width<double_>() const
     return get_info<uint_>(CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE);
 }
 
-// define get_info() specializations for device
+/// \internal_ define get_info() specializations for device
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
     ((cl_uint, CL_DEVICE_ADDRESS_BITS))
     ((bool, CL_DEVICE_AVAILABLE))

@@ -18,9 +18,20 @@
 namespace boost {
 namespace compute {
 
-/// Performs an inclusive scan on the elements in the range
-/// [\p first, \p last) and stores the results in the range
-/// beginning at \p result.
+/// Performs an inclusive scan of the elements in the range [\p first, \p last)
+/// and stores the results in the range beginning at \p result.
+///
+/// Each element in the output is assigned to the sum of the current value in
+/// the input with the sum of every previous value in the input.
+///
+/// \param first first element in the range to scan
+/// \param last last element in the range to scan
+/// \param result first element in the result range
+/// \param queue command queue to perform the operation
+///
+/// \return \c OutputIterator to the end of the result range
+///
+/// \snippet test/test_scan.cpp inclusive_scan_int
 ///
 /// \see exclusive_scan()
 template<class InputIterator, class OutputIterator>

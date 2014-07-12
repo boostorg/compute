@@ -227,7 +227,7 @@ private:
     cl_context m_context;
 };
 
-// define get_info() specializations for context
+/// \internal_ define get_info() specializations for context
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(context,
     ((cl_uint, CL_CONTEXT_REFERENCE_COUNT))
     ((std::vector<cl_device_id>, CL_CONTEXT_DEVICES))

@@ -212,7 +212,7 @@ private:
     cl_platform_id m_platform;
 };
 
-// define get_info() specializations for platform
+/// \internal_ define get_info() specializations for platform
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(platform,
     ((std::string, CL_PLATFORM_PROFILE))
     ((std::string, CL_PLATFORM_VERSION))

@@ -212,6 +212,11 @@ inline future<void> dispatch_fill_async(BufferIterator first,
 
 /// Fills the range [\p first, \p last) with \p value.
 ///
+/// \param first first element in the range to fill
+/// \param last last element in the range to fill
+/// \param value value to copy to each element
+/// \param queue command queue to perform the operation
+///
 /// For example, to fill a vector on the device with sevens:
 /// \code
 /// // vector on the device
@@ -221,7 +226,7 @@ inline future<void> dispatch_fill_async(BufferIterator first,
 /// boost::compute::fill(vec.begin(), vec.end(), 7, queue);
 /// \endcode
 ///
-/// \see fill_n()
+/// \see boost::compute::fill_n()
 template<class BufferIterator, class T>
 inline void fill(BufferIterator first,
                  BufferIterator last,

@@ -1446,7 +1446,7 @@ inline image2d image2d::clone(command_queue &queue) const
     return copy;
 }
 
-// define get_info() specializations for command_queue
+/// \internal_ define get_info() specializations for command_queue
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(command_queue,
     ((cl_context, CL_QUEUE_CONTEXT))
     ((cl_device_id, CL_QUEUE_DEVICE))
