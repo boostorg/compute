@@ -31,41 +31,41 @@
   <span class="keyword">typedef</span> <span class="identifier">container_type</span><span class="special">::</span><span class="identifier">value_type</span> <a name="boost.compute.stack.value_type"></a><span class="identifier">value_type</span><span class="special">;</span>    
 
   <span class="comment">// <a class="link" href="stack.html#boost.compute.stackconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="stack.html#idp34643424-bb"><span class="identifier">stack</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="stack.html#idp34643712-bb"><span class="identifier">stack</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">stack</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">stack</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> <a class="link" href="stack.html#idp34644688-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">stack</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="stack.html#idp34645952-bb"><span class="special">~</span><span class="identifier">stack</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="stack.html#idp41899792-bb"><span class="identifier">stack</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="stack.html#idp41900080-bb"><span class="identifier">stack</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">stack</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">stack</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> <a class="link" href="stack.html#idp41901056-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">stack</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="stack.html#idp41902320-bb"><span class="special">~</span><span class="identifier">stack</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="stack.html#idp34636960-bb">public member functions</a></span>
-  <span class="keyword">bool</span> <a class="link" href="stack.html#idp34637520-bb"><span class="identifier">empty</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">size_type</span> <a class="link" href="stack.html#idp34638640-bb"><span class="identifier">size</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">value_type</span> <a class="link" href="stack.html#idp34639760-bb"><span class="identifier">top</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="stack.html#idp34640880-bb"><span class="identifier">push</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="stack.html#idp34642416-bb"><span class="identifier">pop</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="stack.html#idp41893328-bb">public member functions</a></span>
+  <span class="keyword">bool</span> <a class="link" href="stack.html#idp41893888-bb"><span class="identifier">empty</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">size_type</span> <a class="link" href="stack.html#idp41895008-bb"><span class="identifier">size</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">value_type</span> <a class="link" href="stack.html#idp41896128-bb"><span class="identifier">top</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="stack.html#idp41897248-bb"><span class="identifier">push</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="stack.html#idp41898784-bb"><span class="identifier">pop</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp85151392"></a><h2>Description</h2>
+<a name="idp86975040"></a><h2>Description</h2>
 <div class="refsect2">
-<a name="idp85151808"></a><h3>
+<a name="idp86975456"></a><h3>
 <a name="boost.compute.stackconstruct-copy-destruct"></a><code class="computeroutput">stack</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><a name="idp34643424-bb"></a><span class="identifier">stack</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp34643712-bb"></a><span class="identifier">stack</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">stack</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">stack</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> <a name="idp34644688-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">stack</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp34645952-bb"></a><span class="special">~</span><span class="identifier">stack</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp41899792-bb"></a><span class="identifier">stack</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp41900080-bb"></a><span class="identifier">stack</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">stack</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">stack</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> <a name="idp41901056-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">stack</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp41902320-bb"></a><span class="special">~</span><span class="identifier">stack</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp85180912"></a><h3>
-<a name="idp34636960-bb"></a><code class="computeroutput">stack</code> public member functions</h3>
+<a name="idp87004560"></a><h3>
+<a name="idp41893328-bb"></a><code class="computeroutput">stack</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><span class="keyword">bool</span> <a name="idp34637520-bb"></a><span class="identifier">empty</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">size_type</span> <a name="idp34638640-bb"></a><span class="identifier">size</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">value_type</span> <a name="idp34639760-bb"></a><span class="identifier">top</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp34640880-bb"></a><span class="identifier">push</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span> value<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp34642416-bb"></a><span class="identifier">pop</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">bool</span> <a name="idp41893888-bb"></a><span class="identifier">empty</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">size_type</span> <a name="idp41895008-bb"></a><span class="identifier">size</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">value_type</span> <a name="idp41896128-bb"></a><span class="identifier">top</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp41897248-bb"></a><span class="identifier">push</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span> value<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp41898784-bb"></a><span class="identifier">pop</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 </div>
