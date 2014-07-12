@@ -47,7 +47,7 @@ public:
         load_program();
 
         // seed state
-        seed(queue, value);
+        seed(value, queue);
     }
 
     /// Creates a new mersenne_twister_engine object as a copy of \p other.
@@ -73,7 +73,12 @@ public:
     }
 
     /// Seeds the random number generator with \p value.
-    void seed(command_queue &queue, result_type value = default_seed)
+    ///
+    /// \param value seed value for the random-number generator
+    /// \param queue command queue to perform the operation
+    ///
+    /// If no seed value is provided, \c default_seed is used.
+    void seed(result_type value, command_queue &queue)
     {
         kernel seed_kernel = m_program.create_kernel("seed");
         seed_kernel.set_arg(0, value);
@@ -82,6 +87,12 @@ public:
         queue.enqueue_task(seed_kernel);
 
         m_state_index = 0;
+    }
+
+    /// \overload
+    void seed(command_queue &queue)
+    {
+        seed(default_seed, queue);
     }
 
     /// Generates random numbers and stores them to the range [\p first, \p last).

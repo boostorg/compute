@@ -54,7 +54,7 @@ public:
         load_program();
 
         // seed state
-        seed(value);
+        seed(value, queue);
 
         // generate multiplicands
         generate_multiplicands(queue);
@@ -85,9 +85,22 @@ public:
     }
 
     /// Seeds the random number generator with \p value.
-    void seed(result_type value = default_seed)
+    ///
+    /// \param value seed value for the random-number generator
+    /// \param queue command queue to perform the operation
+    ///
+    /// If no seed value is provided, \c default_seed is used.
+    void seed(result_type value, command_queue &queue)
     {
+        (void) queue;
+
         m_seed = value;
+    }
+
+    /// \overload
+    void seed(command_queue &queue)
+    {
+        seed(default_seed);
     }
 
     /// Generates random numbers and stores them to the range [\p first, \p last).
