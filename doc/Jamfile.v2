@@ -47,6 +47,7 @@ doxygen autodoc
     ../include/boost/compute/functional.hpp
     ../include/boost/compute/functional/field.hpp
     ../include/boost/compute/functional/get.hpp
+    ../include/boost/compute/functional/popcount.hpp
 
     ../include/boost/compute/interop/opengl.hpp
     [ glob ../include/boost/compute/interop/opengl/*.hpp ]

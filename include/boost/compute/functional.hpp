@@ -20,13 +20,14 @@
 #include <boost/compute/functional/common.hpp>
 #include <boost/compute/functional/convert.hpp>
 #include <boost/compute/functional/field.hpp>
+#include <boost/compute/functional/geometry.hpp>
 #include <boost/compute/functional/get.hpp>
 #include <boost/compute/functional/hash.hpp>
-#include <boost/compute/functional/math.hpp>
 #include <boost/compute/functional/integer.hpp>
-#include <boost/compute/functional/geometry.hpp>
-#include <boost/compute/functional/relational.hpp>
-#include <boost/compute/functional/operator.hpp>
 #include <boost/compute/functional/logical.hpp>
+#include <boost/compute/functional/math.hpp>
+#include <boost/compute/functional/operator.hpp>
+#include <boost/compute/functional/popcount.hpp>
+#include <boost/compute/functional/relational.hpp>
 
 #endif // BOOST_COMPUTE_FUNCTIONAL_HPP

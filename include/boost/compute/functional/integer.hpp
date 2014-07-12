@@ -12,7 +12,6 @@
 #define BOOST_COMPUTE_FUNCTIONAL_INTEGER_HPP
 
 #include <boost/compute/functional/detail/macros.hpp>
-#include <boost/compute/functional/detail/popcount.hpp>
 
 namespace boost {
 namespace compute {
@@ -24,12 +23,6 @@ BOOST_COMPUTE_DECLARE_BUILTIN_FUNCTION(hadd, T (T, T), class T)
 BOOST_COMPUTE_DECLARE_BUILTIN_FUNCTION(rhadd, T (T, T), class T)
 BOOST_COMPUTE_DECLARE_BUILTIN_FUNCTION(max, T (T, T), class T)
 BOOST_COMPUTE_DECLARE_BUILTIN_FUNCTION(min, T (T, T), class T)
-
-#ifdef CL_VERSION_1_2
-template<class T> class popcount : public detail::builtin_popcount<T> { };
-#else
-template<class T> class popcount : public detail::generic_popcount<T> { };
-#endif
 
 } // end compute namespace
 } // end boost namespace
