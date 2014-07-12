@@ -38,6 +38,12 @@ public:
         use_host_ptr = CL_MEM_USE_HOST_PTR,
         alloc_host_ptr = CL_MEM_ALLOC_HOST_PTR,
         copy_host_ptr = CL_MEM_COPY_HOST_PTR
+        #ifdef CL_VERSION_1_2
+        ,
+        host_write_only = CL_MEM_HOST_WRITE_ONLY,
+        host_read_only = CL_MEM_HOST_READ_ONLY,
+        host_no_access = CL_MEM_HOST_NO_ACCESS
+        #endif
     };
 
     /// Returns the underlying OpenCL memory object.
