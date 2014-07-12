@@ -27,9 +27,10 @@
   <span class="keyword">void</span> <span class="identifier">fill</span><span class="special">(</span><span class="identifier">BufferIterator</span> first<span class="special">,</span> <span class="identifier">BufferIterator</span> last<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span> value<span class="special">,</span> 
             <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue <span class="special">=</span> <span class="identifier">system</span><span class="special">::</span><span class="identifier">default_queue</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp71662816"></a><h2>Description</h2>
+<a name="idp76465280"></a><h2>Description</h2>
 <p>Fills the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) with <code class="computeroutput">value</code>.</p>
-<p>For example, to fill a vector on the device with sevens: </p>
+<p>
+For example, to fill a vector on the device with sevens: </p>
 <pre class="programlisting"><span class="comment">// vector on the device</span>
 <a class="link" href="vector.html" title="Class template vector">boost::compute::vector&lt;int&gt;</a> <span class="identifier">vec</span><span class="special">(</span><span class="number">10</span><span class="special">,</span> <span class="identifier">context</span><span class="special">)</span><span class="special">;</span>
 
@@ -37,9 +38,36 @@
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">fill</span><span class="special">(</span><span class="identifier">vec</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">vec</span><span class="special">.</span><span class="identifier">end</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="number">7</span><span class="special">,</span> <span class="identifier">queue</span><span class="special">)</span><span class="special">;</span>
 </pre>
 <p><span class="bold"><strong>See Also:</strong></span></p>
-<p>fill_n() </p>
+<p>boost::compute::fill_n() </p>
 <p>
 </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><code class="computeroutput">first</code></span></p></td>
+<td><p>first element in the range to fill </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">last</code></span></p></td>
+<td><p>last element in the range to fill </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">queue</code></span></p></td>
+<td><p>command queue to perform the operation</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">value</code></span></p></td>
+<td><p>value to copy to each element </p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr></tbody>
+</table></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

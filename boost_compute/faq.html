@@ -43,7 +43,7 @@
           The contributor guide is here: <a href="https://github.com/kylelutz/compute/blob/master/CONTRIBUTING.md" target="_top">https://github.com/kylelutz/compute/blob/master/CONTRIBUTING.md</a>
         </li>
 <li class="listitem">
-          The header reference is here: <a href="http://kylelutz.github.io/compute/compute/reference.html#header_reference" target="_top">http://kylelutz.github.io/compute/compute/reference.html#header_reference</a>
+          The reference is here: <a href="http://kylelutz.github.io/compute/compute/reference.html" target="_top">http://kylelutz.github.io/compute/compute/reference.html</a>
         </li>
 </ul></div>
 <h4>
@@ -90,6 +90,9 @@
       closer in nature to the Eigen library while Boost.Compute is closer to the
       C++ standard library. I don't feel that Boost.Compute really fills the same
       role as VexCL and in fact VexCL could be built on top of Boost.Compute.
+    </p>
+<p>
+      Also see this StackOverflow question: <a href="http://stackoverflow.com/questions/20154179/differences-between-vexcl-thrust-and-boost-compute" target="_top">http://stackoverflow.com/questions/20154179/differences-between-vexcl-thrust-and-boost-compute</a>
     </p>
 <h4>
 <a name="boost_compute.faq.h5"></a>
@@ -178,6 +181,23 @@
     </p>
 <h4>
 <a name="boost_compute.faq.h10"></a>
+      <span><a name="boost_compute.faq.does_boost_compute_support_zero_copy_memory_"></a></span><a class="link" href="faq.html#boost_compute.faq.does_boost_compute_support_zero_copy_memory_">Does
+      Boost.Compute support zero-copy memory?</a>
+    </h4>
+<p>
+      Zero-copy memory allows OpenCL kernels to directly operate on regions of host
+      memory (if supported by the platform).
+    </p>
+<p>
+      Boost.Compute supports zero-copy memory in multiple ways. The low-level interface
+      is provided by allocating <code class="computeroutput"><a class="link" href="../boost/compute/buffer.html" title="Class buffer">buffer</a></code>
+      objects with the <code class="computeroutput"><span class="identifier">CL_MEM_USE_HOST_PTR</span></code>
+      flag. The high-level interface is provided by the <code class="computeroutput"><a class="link" href="../boost/compute/mapped_view.html" title="Class template mapped_view">mapped_view&lt;T&gt;</a></code>
+      class which provides a std::vector-like interface to a region of host-memory
+      and can be used directly with all of the Boost.Compute algorithms.
+    </p>
+<h4>
+<a name="boost_compute.faq.h11"></a>
       <span><a name="boost_compute.faq.how_can_i_contribute_"></a></span><a class="link" href="faq.html#boost_compute.faq.how_can_i_contribute_">How
       can I contribute?</a>
     </h4>

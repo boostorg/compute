@@ -28,7 +28,7 @@
   <span class="identifier">copy</span><span class="special">(</span><span class="identifier">InputIterator</span> first<span class="special">,</span> <span class="identifier">InputIterator</span> last<span class="special">,</span> <span class="identifier">OutputIterator</span> result<span class="special">,</span> 
        <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue <span class="special">=</span> <span class="identifier">system</span><span class="special">::</span><span class="identifier">default_queue</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp71099056"></a><h2>Description</h2>
+<a name="idp75845888"></a><h2>Description</h2>
 <p>Copies the values in the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) to the range beginning at <code class="computeroutput">result</code>.</p>
 <p>The generic copy() function can be used for a variety of data transfer tasks and provides a standard interface to the following OpenCL functions:</p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
@@ -38,7 +38,9 @@
 </ul></div>
 <p>
 Unlike the aforementioned OpenCL functions, copy() will also work with non-contiguous data-structures (e.g. <code class="computeroutput">std::list&lt;T&gt;</code>) as well as with "fancy" iterators (e.g. <code class="computeroutput"><a class="link" href="transform_iterator.html" title="Class template transform_iterator">transform_iterator</a></code>).</p>
-<p>For example, to copy an array of <code class="computeroutput">int</code> values on the host to a vector on the device: </p>
+<p>
+
+For example, to copy an array of <code class="computeroutput">int</code> values on the host to a vector on the device: </p>
 <pre class="programlisting"><span class="comment">// array on the host</span>
 <span class="keyword">int</span> <span class="identifier">data</span><span class="special">[</span><span class="special">]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">,</span> <span class="number">4</span> <span class="special">}</span><span class="special">;</span>
 
@@ -66,6 +68,39 @@ Unlike the aforementioned OpenCL functions, copy() will also work with non-conti
 <p>copy_n(), copy_if(), copy_async() </p>
 <p>
 </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><code class="computeroutput">first</code></span></p></td>
+<td><p>first element in the range to copy </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">last</code></span></p></td>
+<td><p>last element in the range to copy </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">queue</code></span></p></td>
+<td><p>command queue to perform the operation</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">result</code></span></p></td>
+<td><p>first element in the result range </p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p><code class="computeroutput">OutputIterator</code> to the end of the result range</p></td>
+</tr>
+</tbody>
+</table></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

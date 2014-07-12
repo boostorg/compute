@@ -30,10 +30,10 @@
   <span class="keyword">void</span> <span class="identifier">sort</span><span class="special">(</span><span class="identifier">Iterator</span> first<span class="special">,</span> <span class="identifier">Iterator</span> last<span class="special">,</span> 
             <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue <span class="special">=</span> <span class="identifier">system</span><span class="special">::</span><span class="identifier">default_queue</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp74420800"></a><h2>Description</h2>
+<a name="idp79273648"></a><h2>Description</h2>
 <p>Sorts the values in the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) according to <code class="computeroutput">compare</code>.</p>
-<p>If no compare function is specified, <code class="computeroutput">less</code> is used.</p>
-<p>For example, to sort a vector on the device: </p>
+<p>
+For example, to sort a vector on the device: </p>
 <pre class="programlisting"><span class="comment">// create vector on the device with data</span>
 <span class="keyword">float</span> <span class="identifier">data</span><span class="special">[</span><span class="special">]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">2</span><span class="special">.</span><span class="identifier">f</span><span class="special">,</span> <span class="number">4</span><span class="special">.</span><span class="identifier">f</span><span class="special">,</span> <span class="number">1</span><span class="special">.</span><span class="identifier">f</span><span class="special">,</span> <span class="number">3</span><span class="special">.</span><span class="identifier">f</span> <span class="special">}</span><span class="special">;</span>
 <a class="link" href="vector.html" title="Class template vector">boost::compute::vector&lt;float&gt;</a> <span class="identifier">vec</span><span class="special">(</span><span class="identifier">data</span><span class="special">,</span> <span class="identifier">data</span> <span class="special">+</span> <span class="number">4</span><span class="special">,</span> <span class="identifier">queue</span><span class="special">)</span><span class="special">;</span>
@@ -50,6 +50,33 @@
 <p>is_sorted() </p>
 <p>
 </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><code class="computeroutput">compare</code></span></p></td>
+<td><p>comparison function (by default <code class="computeroutput">less</code>) </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">first</code></span></p></td>
+<td><p>first element in the range to sort </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">last</code></span></p></td>
+<td><p>last element in the range to sort </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">queue</code></span></p></td>
+<td><p>command queue to perform the operation</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr></tbody>
+</table></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

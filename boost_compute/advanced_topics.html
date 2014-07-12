@@ -18,6 +18,8 @@
 <a name="boost_compute.advanced_topics"></a><a class="link" href="advanced_topics.html" title="Advanced Topics">Advanced Topics</a>
 </h2></div></div></div>
 <div class="toc"><dl>
+<dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.vector_data_types">Vector
+      Data Types</a></span></dt>
 <dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.custom_functions">Custom
       Functions</a></span></dt>
 <dt><span class="section"><a href="advanced_topics.html#boost_compute.advanced_topics.custom_types">Custom Types</a></span></dt>
@@ -35,6 +37,96 @@
 <p>
       The following topics show advanced features of the Boost Compute library.
     </p>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_compute.advanced_topics.vector_data_types"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.vector_data_types" title="Vector Data Types">Vector
+      Data Types</a>
+</h3></div></div></div>
+<p>
+        In addition to the built-in scalar types (e.g. <code class="computeroutput"><span class="keyword">int</span></code>
+        and <code class="computeroutput"><span class="keyword">float</span></code>), OpenCL also provides
+        vector data types (e.g. <code class="computeroutput"><span class="identifier">int2</span></code>
+        and <code class="computeroutput"><span class="identifier">vector4</span></code>). These can be
+        used with the Boost Compute library on both the host and device.
+      </p>
+<p>
+        Boost.Compute provides typedefs for these types which take the form: <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">scalarN_</span></code> where <code class="computeroutput"><span class="identifier">scalar</span></code>
+        is a scalar data type (e.g. <code class="computeroutput"><span class="keyword">int</span></code>,
+        <code class="computeroutput"><span class="keyword">float</span></code>, <code class="computeroutput"><span class="keyword">char</span></code>)
+        and <code class="computeroutput"><span class="identifier">N</span></code> is the size of the
+        vector. Supported vector sizes are: 2, 4, 8, and 16.
+      </p>
+<p>
+        The following example shows how to transfer a set of 3D points stored as
+        an array of <code class="computeroutput"><span class="keyword">float</span></code>s on the host
+        the device and then calculate the sum of the point coordinates using the
+        <code class="computeroutput"><a class="link" href="../boost/compute/accumulate.html" title="Function accumulate">accumulate()</a></code>
+        function. The sum is transferred to the host and the centroid computed by
+        dividing by the total number of points.
+      </p>
+<p>
+        Note that even though the points are in 3D, they are stored as <code class="computeroutput"><span class="identifier">float4</span></code> due to OpenCL's alignment requirements.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">compute</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">copy</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">compute</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">accumulate</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">compute</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">vector</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">compute</span><span class="special">/</span><span class="identifier">types</span><span class="special">/</span><span class="identifier">builtin</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">;</span>
+
+<span class="comment">// the point centroid example calculates and displays the</span>
+<span class="comment">// centroid of a set of 3D points stored as float4's</span>
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="special">{</span>
+    <span class="keyword">using</span> <span class="identifier">compute</span><span class="special">::</span><span class="identifier">float4_</span><span class="special">;</span>
+
+    <span class="comment">// get default device and setup context</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">device</span> <span class="identifier">device</span> <span class="special">=</span> <span class="identifier">compute</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">default_device</span><span class="special">();</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">context</span><span class="special">(</span><span class="identifier">device</span><span class="special">);</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">command_queue</span> <span class="identifier">queue</span><span class="special">(</span><span class="identifier">context</span><span class="special">,</span> <span class="identifier">device</span><span class="special">);</span>
+
+    <span class="comment">// point coordinates</span>
+    <span class="keyword">float</span> <span class="identifier">points</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">1.0f</span><span class="special">,</span> <span class="number">2.0f</span><span class="special">,</span> <span class="number">3.0f</span><span class="special">,</span> <span class="number">0.0f</span><span class="special">,</span>
+                       <span class="special">-</span><span class="number">2.0f</span><span class="special">,</span> <span class="special">-</span><span class="number">3.0f</span><span class="special">,</span> <span class="number">4.0f</span><span class="special">,</span> <span class="number">0.0f</span><span class="special">,</span>
+                       <span class="number">1.0f</span><span class="special">,</span> <span class="special">-</span><span class="number">2.0f</span><span class="special">,</span> <span class="number">2.5f</span><span class="special">,</span> <span class="number">0.0f</span><span class="special">,</span>
+                       <span class="special">-</span><span class="number">7.0f</span><span class="special">,</span> <span class="special">-</span><span class="number">3.0f</span><span class="special">,</span> <span class="special">-</span><span class="number">2.0f</span><span class="special">,</span> <span class="number">0.0f</span><span class="special">,</span>
+                       <span class="number">3.0f</span><span class="special">,</span> <span class="number">4.0f</span><span class="special">,</span> <span class="special">-</span><span class="number">5.0f</span><span class="special">,</span> <span class="number">0.0f</span> <span class="special">};</span>
+
+    <span class="comment">// create vector for five points</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">float4_</span><span class="special">&gt;</span> <span class="identifier">vector</span><span class="special">(</span><span class="number">5</span><span class="special">,</span> <span class="identifier">context</span><span class="special">);</span>
+
+    <span class="comment">// copy point data to the device</span>
+    <span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span>
+        <span class="keyword">reinterpret_cast</span><span class="special">&lt;</span><span class="identifier">float4_</span> <span class="special">*&gt;(</span><span class="identifier">points</span><span class="special">),</span>
+        <span class="keyword">reinterpret_cast</span><span class="special">&lt;</span><span class="identifier">float4_</span> <span class="special">*&gt;(</span><span class="identifier">points</span><span class="special">)</span> <span class="special">+</span> <span class="number">5</span><span class="special">,</span>
+        <span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
+        <span class="identifier">queue</span>
+    <span class="special">);</span>
+
+    <span class="comment">// calculate sum</span>
+    <span class="identifier">float4_</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="identifier">compute</span><span class="special">::</span><span class="identifier">accumulate</span><span class="special">(</span>
+        <span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">float4_</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span><span class="special">),</span> <span class="identifier">queue</span>
+    <span class="special">);</span>
+
+    <span class="comment">// calculate centroid</span>
+    <span class="identifier">float4_</span> <span class="identifier">centroid</span><span class="special">;</span>
+    <span class="keyword">for</span><span class="special">(</span><span class="identifier">size_t</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="number">3</span><span class="special">;</span> <span class="identifier">i</span><span class="special">++){</span>
+        <span class="identifier">centroid</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">sum</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">/</span> <span class="number">5.0f</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="comment">// print centroid</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"centroid: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">centroid</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+</div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_compute.advanced_topics.custom_functions"></a><a class="link" href="advanced_topics.html#boost_compute.advanced_topics.custom_functions" title="Custom Functions">Custom
@@ -60,7 +152,7 @@
         <span class="string">"int add_four(int x) { return x + 4; }"</span>
     <span class="special">);</span>
 
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">add_four</span><span class="special">);</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">input</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">input</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">output</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">add_four</span><span class="special">,</span> <span class="identifier">queue</span><span class="special">);</span>
 </pre>
 <p>
       </p>
@@ -73,7 +165,7 @@
     <span class="keyword">return</span> <span class="identifier">x</span> <span class="special">+</span> <span class="number">4</span><span class="special">;</span>
 <span class="special">});</span>
 
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">add_four</span><span class="special">);</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">input</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">input</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">output</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">add_four</span><span class="special">,</span> <span class="identifier">queue</span><span class="special">);</span>
 </pre>
 <p>
       </p>
@@ -155,7 +247,7 @@
       </p>
 <p>
 </p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">count_if</span><span class="special">(</span><span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">_1</span> <span class="special">%</span> <span class="number">2</span> <span class="special">==</span> <span class="number">1</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">count_if</span><span class="special">(</span><span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">_1</span> <span class="special">%</span> <span class="number">2</span> <span class="special">==</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">queue</span><span class="special">);</span>
 </pre>
 <p>
       </p>
@@ -164,7 +256,7 @@
       </p>
 <p>
 </p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">_1</span> <span class="special">*</span> <span class="number">3</span> <span class="special">-</span> <span class="number">4</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">_1</span> <span class="special">*</span> <span class="number">3</span> <span class="special">-</span> <span class="number">4</span><span class="special">,</span> <span class="identifier">queue</span><span class="special">);</span>
 </pre>
 <p>
       </p>
@@ -200,14 +292,12 @@
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">host_vector</span> <span class="special">=</span> <span class="special">...</span>
 
 <span class="comment">// create a vector on the device</span>
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">device_vector</span><span class="special">(</span><span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">size</span><span class="special">());</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">device_vector</span><span class="special">(</span><span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">size</span><span class="special">(),</span> <span class="identifier">context</span><span class="special">);</span>
 
 <span class="comment">// copy data to the device asynchronously</span>
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">future</span><span class="special">&lt;</span><span class="keyword">void</span><span class="special">&gt;</span> <span class="identifier">f</span> <span class="special">=</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy_async</span><span class="special">(</span><span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
-                               <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span>
-                               <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span>
-                               <span class="identifier">queue</span><span class="special">);</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">future</span><span class="special">&lt;</span><span class="keyword">void</span><span class="special">&gt;</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy_async</span><span class="special">(</span>
+    <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">host_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">device_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">queue</span>
+<span class="special">);</span>
 
 <span class="comment">// perform other work on the host or device</span>
 <span class="comment">// ...</span>

@@ -24,7 +24,7 @@
 
 </span>BOOST_COMPUTE_ADAPT_STRUCT(type, name, members)</pre></div>
 <div class="refsect1">
-<a name="idp88488272"></a><h2>Description</h2>
+<a name="idp93814096"></a><h2>Description</h2>
 <p>The BOOST_COMPUTE_ADAPT_STRUCT() macro makes a C++ struct/class available to OpenCL kernels.</p>
 <p>
 For example, to adapt a 2D particle struct with position (x, y) and velocity (dx, dy): </p>
@@ -53,7 +53,11 @@ For example, to adapt a 2D particle struct with position (x, y) and velocity (dx
     <span class="identifier">particles</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">particles</span><span class="special">.</span><span class="identifier">end</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">sort_by_x</span><span class="special">,</span> <span class="identifier">queue</span>
 <span class="special">)</span><span class="special">;</span>
 </pre>
-<p> </p>
+<p>Due to differences in struct padding between the host compiler and the device compiler, the <code class="computeroutput">BOOST_COMPUTE_ADAPT_STRUCT()</code> macro requires that the adapted struct is packed (i.e. no padding bytes between members).</p>
+<p><span class="bold"><strong>See Also:</strong></span></p>
+<p>type_name() </p>
+<p>
+</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>

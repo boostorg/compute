@@ -29,12 +29,64 @@
                  <span class="identifier">OutputIterator</span> result<span class="special">,</span> 
                  <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue <span class="special">=</span> <span class="identifier">system</span><span class="special">::</span><span class="identifier">default_queue</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp71592592"></a><h2>Description</h2>
-<p>Performs an exclusive scan on the elements in the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) and stores the results in the range beginning at <code class="computeroutput">result</code>.</p>
+<a name="idp76346704"></a><h2>Description</h2>
+<p>Performs an exclusive scan of the elements in the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) and stores the results in the range beginning at <code class="computeroutput">result</code>.</p>
+<p>Each element in the output is assigned to the sum of all the previous values in the input.</p>
+<p>
+
+</p>
+<pre class="programlisting"><span class="comment">// setup input</span>
+<span class="keyword">int</span> <span class="identifier">data</span><span class="special">[</span><span class="special">]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">,</span> <span class="number">4</span> <span class="special">}</span><span class="special">;</span>
+<a class="link" href="vector.html" title="Class template vector">boost::compute::vector&lt;int&gt;</a> <span class="identifier">input</span><span class="special">(</span><span class="identifier">data</span><span class="special">,</span> <span class="identifier">data</span> <span class="special">+</span> <span class="number">4</span><span class="special">,</span> <span class="identifier">queue</span><span class="special">)</span><span class="special">;</span>
+
+<span class="comment">// setup output</span>
+<a class="link" href="vector.html" title="Class template vector">boost::compute::vector&lt;int&gt;</a> <span class="identifier">output</span><span class="special">(</span><span class="number">4</span><span class="special">,</span> <span class="identifier">context</span><span class="special">)</span><span class="special">;</span>
+
+<span class="comment">// scan values</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">exclusive_scan</span><span class="special">(</span>
+    <span class="identifier">input</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">input</span><span class="special">.</span><span class="identifier">end</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">output</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">queue</span>
+<span class="special">)</span><span class="special">;</span>
+
+<span class="comment">// output = [ 0, 1, 3, 6 ]</span>
+</pre>
+<p> </p>
 <p><span class="bold"><strong>See Also:</strong></span></p>
 <p>inclusive_scan() </p>
 <p>
 </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><code class="computeroutput">first</code></span></p></td>
+<td><p>first element in the range to scan </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">last</code></span></p></td>
+<td><p>last element in the range to scan </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">queue</code></span></p></td>
+<td><p>command queue to perform the operation</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">result</code></span></p></td>
+<td><p>first element in the result range </p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p><code class="computeroutput">OutputIterator</code> to the end of the result range</p></td>
+</tr>
+</tbody>
+</table></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
