@@ -77,7 +77,7 @@ endif()
 
 # qt examples
 if(${BOOST_COMPUTE_HAVE_QT})
-  find_package(Qt REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+  find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
   set(CMAKE_AUTOMOC TRUE)
   set(QT_USE_QTOPENGL TRUE)
   include(${QT_USE_FILE})

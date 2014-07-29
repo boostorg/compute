@@ -179,7 +179,7 @@ endif()
 
 # qt interop tests
 if(${BOOST_COMPUTE_HAVE_QT})
-  find_package(Qt REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+  find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
   include(${QT_USE_FILE})
   add_compute_test("interop.qt" test_interop_qt.cpp)
   target_link_libraries(test_interop_qt ${QT_LIBRARIES})
