@@ -77,20 +77,48 @@ endif()
 
 # qt examples
 if(${BOOST_COMPUTE_HAVE_QT})
-  find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
-  set(CMAKE_AUTOMOC TRUE)
-  set(QT_USE_QTOPENGL TRUE)
-  include(${QT_USE_FILE})
-  include_directories(${CMAKE_CURRENT_BINARY_DIR})
-  add_executable(qimage_blur qimage_blur.cpp)
-  target_link_libraries(qimage_blur ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES})
+  find_package(Qt REQUIRED)
+  string(SUBSTRING ${QTVERSION} 0 1 QT_MAJOR_VERSION)
 
-  set(QT_OPENGL_EXAMPLES
-    mandelbrot
-    resize_image
-  )
-  foreach(EXAMPLE ${QT_OPENGL_EXAMPLES})
-    add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
-    target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES} GL)
-  endforeach()
+  if(QT_MAJOR_VERSION STREQUAL "5")
+    # use qt5
+    find_package(Qt5Core REQUIRED)
+    find_package(Qt5Widgets REQUIRED)
+    find_package(Qt5OpenGL REQUIRED)
+    set(CMAKE_AUTOMOC TRUE)
+    include_directories(${CMAKE_CURRENT_BINARY_DIR})
+    include_directories(${Qt5OpenGL_INCLUDE_DIRS})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5OpenGL_EXECUTABLE_COMPILE_FLAGS}")
+
+    add_executable(qimage_blur qimage_blur.cpp)
+    target_link_libraries(qimage_blur ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${Qt5Widgets_LIBRARIES})
+
+    set(QT_OPENGL_EXAMPLES
+      mandelbrot
+      resize_image
+    )
+    foreach(EXAMPLE ${QT_OPENGL_EXAMPLES})
+      add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
+      target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${Qt5OpenGL_LIBRARIES} GL)
+    endforeach()
+  else()
+    # use qt4
+    find_package(Qt REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+    set(CMAKE_AUTOMOC TRUE)
+    set(QT_USE_QTOPENGL TRUE)
+    include(${QT_USE_FILE})
+    include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+    add_executable(qimage_blur qimage_blur.cpp)
+    target_link_libraries(qimage_blur ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES})
+
+    set(QT_OPENGL_EXAMPLES
+      mandelbrot
+      resize_image
+    )
+    foreach(EXAMPLE ${QT_OPENGL_EXAMPLES})
+      add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
+      target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES} GL)
+    endforeach()
+  endif()
 endif()
