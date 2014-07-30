@@ -20,6 +20,7 @@
 #include <boost/compute/algorithm/for_each.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/functional/bind.hpp>
 #include <boost/compute/iterator/zip_iterator.hpp>
 #include <boost/compute/types/pair.hpp>
 #include <boost/compute/types/tuple.hpp>
@@ -442,6 +443,22 @@ BOOST_AUTO_TEST_CASE(lambda_make_tuple)
     BOOST_CHECK_EQUAL(doubled_host_vector[1], boost::make_tuple(4, 4, 2.4f, 2.4f));
     BOOST_CHECK_EQUAL(doubled_host_vector[2], boost::make_tuple(6, 6, 4.6f, 4.6f));
     BOOST_CHECK_EQUAL(doubled_host_vector[3], boost::make_tuple(8, 8, 6.8f, 6.8f));
+}
+
+BOOST_AUTO_TEST_CASE(bind_lambda_function)
+{
+    using compute::placeholders::_1;
+    namespace lambda = compute::lambda;
+
+    int data[] = { 1, 2, 3, 4 };
+    compute::vector<int> vector(data, data + 4, queue);
+
+    compute::transform(
+        vector.begin(), vector.end(), vector.begin(),
+        compute::bind(lambda::_1 * lambda::_2, _1, 2),
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, vector, (2, 4, 6, 8));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
