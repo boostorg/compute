@@ -124,6 +124,7 @@ add_compute_test("container.vector" test_vector.cpp)
 add_compute_test("exception.opencl_error" test_opencl_error.cpp)
 
 add_compute_test("functional.as" test_functional_as.cpp)
+add_compute_test("functional.bind" test_functional_bind.cpp)
 add_compute_test("functional.convert" test_functional_convert.cpp)
 add_compute_test("functional.get" test_functional_get.cpp)
 add_compute_test("functional.hash" test_functional_hash.cpp)
