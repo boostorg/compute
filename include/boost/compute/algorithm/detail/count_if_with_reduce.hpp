@@ -35,7 +35,7 @@ template<class Predicate, class Arg>
 inline meta_kernel& operator<<(meta_kernel &kernel,
                                const invoked_countable_predicate<Predicate, Arg> &expr)
 {
-    return kernel << "convert_ulong(" << expr.predicate(expr.arg) << ")";
+    return kernel << "(" << expr.predicate(expr.arg) << " ? 1 : 0)";
 }
 
 // the countable_predicate wraps Predicate and converts its result from
