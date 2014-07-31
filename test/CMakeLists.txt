@@ -179,10 +179,22 @@ endif()
 
 # qt interop tests
 if(${BOOST_COMPUTE_HAVE_QT})
-  find_package(Qt REQUIRED)
-  string(SUBSTRING ${QTVERSION} 0 1 QT_MAJOR_VERSION)
+  find_package(Qt4 QUIET)
+  if(${QT4_FOUND})
+    # build with Qt4
+    set(BOOST_COMPUTE_USE_Qt4 ON)
+  else()
+    find_package(Qt5Widgets QUIET)
+    if(${Qt5Widgets_FOUND})
+      # build with Qt5
+      set(BOOST_COMPUTE_USE_Qt5 ON)
+    else()
+      # no valid Qt framework found
+      message(FATAL_ERROR "Did not find Qt4 or Qt5")
+    endif()
+  endif()
 
-  if(QT_MAJOR_VERSION)
+  if(BOOST_COMPUTE_USE_Qt5)
     # use qt5
     find_package(Qt5Core REQUIRED)
     find_package(Qt5Widgets REQUIRED)
@@ -198,7 +210,7 @@ if(${BOOST_COMPUTE_HAVE_QT})
     # the opengl interop test depends on qt to create the opengl context
     add_compute_test("interop.opengl" test_interop_opengl.cpp)
     target_link_libraries(test_interop_opengl ${Qt5OpenGL_LIBRARIES} GL)
-  else()
+  elseif(BOOST_COMPUTE_USE_Qt4)
     # use qt4
     find_package(Qt REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
     include(${QT_USE_FILE})

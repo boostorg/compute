@@ -77,10 +77,22 @@ endif()
 
 # qt examples
 if(${BOOST_COMPUTE_HAVE_QT})
-  find_package(Qt REQUIRED)
-  string(SUBSTRING ${QTVERSION} 0 1 QT_MAJOR_VERSION)
+  find_package(Qt4 QUIET)
+  if(${QT4_FOUND})
+  	# build with Qt4
+  	set(BOOST_COMPUTE_USE_Qt4 ON)
+  else()
+  	find_package(Qt5Widgets QUIET)
+  	if(${Qt5Widgets_FOUND})
+  		# build with Qt5
+  		set(BOOST_COMPUTE_USE_Qt5 ON)
+  	else()
+  		# no valid Qt framework found
+  		message(FATAL_ERROR "Did not find Qt4 or Qt5")
+  	endif()
+  endif()
 
-  if(QT_MAJOR_VERSION STREQUAL "5")
+  if(${BOOST_COMPUTE_USE_Qt5})
     # use qt5
     find_package(Qt5Core REQUIRED)
     find_package(Qt5Widgets REQUIRED)
@@ -101,24 +113,28 @@ if(${BOOST_COMPUTE_HAVE_QT})
       add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
       target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${Qt5OpenGL_LIBRARIES} GL)
     endforeach()
-  else()
-    # use qt4
-    find_package(Qt REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
-    set(CMAKE_AUTOMOC TRUE)
-    set(QT_USE_QTOPENGL TRUE)
-    include(${QT_USE_FILE})
-    include_directories(${CMAKE_CURRENT_BINARY_DIR})
+  elseif(${BOOST_COMPUTE_USE_Qt4})
+    find_package(Qt4 QUIET)
+	if(${Qt4_FOUND})
+      find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+      set(CMAKE_AUTOMOC TRUE)
+      set(QT_USE_QTOPENGL TRUE)
+      include(${QT_USE_FILE})
+      include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-    add_executable(qimage_blur qimage_blur.cpp)
-    target_link_libraries(qimage_blur ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES})
+      add_executable(qimage_blur qimage_blur.cpp)
+      target_link_libraries(qimage_blur ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES})
 
-    set(QT_OPENGL_EXAMPLES
-      mandelbrot
-      resize_image
-    )
-    foreach(EXAMPLE ${QT_OPENGL_EXAMPLES})
-      add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
-      target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES} GL)
-    endforeach()
+      set(QT_OPENGL_EXAMPLES
+        mandelbrot
+        resize_image
+      )
+      foreach(EXAMPLE ${QT_OPENGL_EXAMPLES})
+        add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
+        target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES} GL)
+      endforeach()
+    else()
+      message("Error: Could not find Qt4 or Qt5")
+    endif()
   endif()
 endif()
