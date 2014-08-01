@@ -200,29 +200,21 @@ if(${BOOST_COMPUTE_HAVE_QT})
     find_package(Qt5Core REQUIRED)
     find_package(Qt5Widgets REQUIRED)
     find_package(Qt5OpenGL REQUIRED)
-    set(CMAKE_AUTOMOC TRUE)
-    include_directories(${CMAKE_CURRENT_BINARY_DIR})
     include_directories(${Qt5OpenGL_INCLUDE_DIRS})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5OpenGL_EXECUTABLE_COMPILE_FLAGS}")
-
-    add_compute_test("interop.qt" test_interop_qt.cpp)
-    target_link_libraries(test_interop_qt ${Qt5Widgets_LIBRARIES})
-
-    # the opengl interop test depends on qt to create the opengl context
-    add_compute_test("interop.opengl" test_interop_opengl.cpp)
-    target_link_libraries(test_interop_opengl ${Qt5OpenGL_LIBRARIES} GL)
+    set(QT_LIBRARIES ${Qt5OpenGL_LIBRARIES})
   elseif(BOOST_COMPUTE_USE_Qt4)
     # use qt4
     find_package(Qt REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
     include(${QT_USE_FILE})
-
-    add_compute_test("interop.qt" test_interop_qt.cpp)
-    target_link_libraries(test_interop_qt ${QT_LIBRARIES})
-
-    # the opengl interop test depends on qt to create the opengl context
-    add_compute_test("interop.opengl" test_interop_opengl.cpp)
-    target_link_libraries(test_interop_opengl ${QT_LIBRARIES} GL)
   endif()
+
+  add_compute_test("interop.qt" test_interop_qt.cpp)
+  target_link_libraries(test_interop_qt ${QT_LIBRARIES})
+
+  # the opengl interop test depends on qt to create the opengl context
+  add_compute_test("interop.opengl" test_interop_opengl.cpp)
+  target_link_libraries(test_interop_opengl ${QT_LIBRARIES} GL)
 endif()
 
 # vtk interop tests
