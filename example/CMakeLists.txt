@@ -77,11 +77,39 @@ endif()
 
 # qt examples
 if(${BOOST_COMPUTE_HAVE_QT})
-  find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+
+  # look for Qt4 in the first place
+  find_package(Qt4 QUIET)
+
+  if(${QT4_FOUND})
+    # build with Qt4
+    find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+    set(QT_USE_QTOPENGL TRUE)
+    include(${QT_USE_FILE})
+  else()
+
+    # look for Qt5
+    find_package(Qt5Widgets QUIET)
+    
+    if(${Qt5Widgets_FOUND})
+      # build with Qt5
+      find_package(Qt5Core REQUIRED)
+      find_package(Qt5Widgets REQUIRED)
+      find_package(Qt5OpenGL REQUIRED)
+      include_directories(${Qt5OpenGL_INCLUDE_DIRS})
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5OpenGL_EXECUTABLE_COMPILE_FLAGS}")
+      set(QT_LIBRARIES ${Qt5OpenGL_LIBRARIES})
+    else()
+      # no valid Qt framework found
+      message(FATAL_ERROR "Error: Did not find Qt4 or Qt5")
+    endif()
+  endif()
+
+  # required by both versions
   set(CMAKE_AUTOMOC TRUE)
-  set(QT_USE_QTOPENGL TRUE)
-  include(${QT_USE_FILE})
   include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+  # add examples
   add_executable(qimage_blur qimage_blur.cpp)
   target_link_libraries(qimage_blur ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES})
 

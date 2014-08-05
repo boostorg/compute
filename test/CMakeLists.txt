@@ -180,8 +180,28 @@ endif()
 
 # qt interop tests
 if(${BOOST_COMPUTE_HAVE_QT})
-  find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
-  include(${QT_USE_FILE})
+  # look for Qt4 in the first place
+  find_package(Qt4 QUIET)
+
+  if(${QT4_FOUND})
+    find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+    include(${QT_USE_FILE})
+  else()
+    find_package(Qt5Widgets QUIET)
+
+    # look for Qt5
+    if(${Qt5Widgets_FOUND})
+      find_package(Qt5Core REQUIRED)
+      find_package(Qt5Widgets REQUIRED)
+      find_package(Qt5OpenGL REQUIRED)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5OpenGL_EXECUTABLE_COMPILE_FLAGS}")
+      set(QT_LIBRARIES ${Qt5OpenGL_LIBRARIES})
+    else()
+      # no valid Qt framework found
+      message(FATAL_ERROR "Error: Did not find Qt4 or Qt5")
+    endif()
+  endif()
+
   add_compute_test("interop.qt" test_interop_qt.cpp)
   target_link_libraries(test_interop_qt ${QT_LIBRARIES})
 
