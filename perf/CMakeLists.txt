@@ -28,6 +28,7 @@ set(BENCHMARKS
   merge
   mersenne_twister
   next_permutation
+  nth_element
   partial_sum
   partition
   partition_point
