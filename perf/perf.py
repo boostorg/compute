@@ -127,6 +127,7 @@ def run_benchmark(name, sizes, vs=[]):
                 "is_permutation",
                 "merge",
                 "next_permutation",
+                "nth_element"
                 "partial_sum",
                 "partition",
                 "partition_point",
