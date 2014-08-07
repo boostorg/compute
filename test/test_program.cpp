@@ -24,6 +24,7 @@ const char source[] =
     "__kernel void foo(__global float *x, const uint n) { }\n"
     "__kernel void bar(__global int *x, __global int *y) { }\n";
 
+
 BOOST_AUTO_TEST_CASE(get_program_info)
 {
     // create program
@@ -38,6 +39,15 @@ BOOST_AUTO_TEST_CASE(get_program_info)
     BOOST_CHECK(program.source().empty() == false);
 #endif
     BOOST_CHECK(program.get_context() == context);
+}
+
+BOOST_AUTO_TEST_CASE(program_source)
+{
+    // create program from source
+    boost::compute::program program =
+        boost::compute::program::create_with_source(source, context);
+
+    BOOST_CHECK_EQUAL(std::string(source), program.source());
 }
 
 BOOST_AUTO_TEST_CASE(create_kernel)
