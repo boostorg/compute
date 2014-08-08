@@ -23,6 +23,7 @@
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/swap_ranges.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/type_traits/detail/capture_traits.hpp>
 #include <boost/compute/detail/buffer_value.hpp>
 
 namespace boost {
@@ -243,6 +244,23 @@ struct set_kernel_arg<array<T, N> >
         kernel_.set_arg(index, array.get_buffer());
     }
 };
+
+// for capturing array<T, N> with BOOST_COMPUTE_CLOSURE()
+template<class T, size_t N>
+struct capture_traits<array<T, N> >
+{
+    static std::string type_name()
+    {
+        return std::string("__global ") + ::boost::compute::type_name<T>() + "*";
+    }
+};
+
+// meta_kernel streaming operator for array<T, N>
+template<class T, size_t N>
+meta_kernel& operator<<(meta_kernel &k, const array<T, N> &array)
+{
+  return k << k.get_buffer_identifier<T>(array.get_buffer());
+}
 
 } // end detail namespace
 } // end compute namespace

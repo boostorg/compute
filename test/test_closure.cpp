@@ -16,7 +16,10 @@
 #include <boost/compute/function.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/transform.hpp>
+#include <boost/compute/algorithm/transform_reduce.hpp>
+#include <boost/compute/container/array.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/iterator/counting_iterator.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"
@@ -108,6 +111,113 @@ BOOST_AUTO_TEST_CASE(scale_add_vec)
         return b * s + a;
     });
     compute::transform(b.begin(), b.end(), a.begin(), b.begin(), scaleAddVec, queue);
+}
+
+BOOST_AUTO_TEST_CASE(capture_vector)
+{
+    int data[] = { 6, 7, 8, 9 };
+    compute::vector<int> vec(data, data + 4, queue);
+
+    BOOST_COMPUTE_CLOSURE(int, get_vec, (int i), (vec),
+    {
+        return vec[i];
+    });
+
+    // run using a counting iterator to copy from vec to output
+    compute::vector<int> output(4, context);
+    compute::transform(
+        compute::make_counting_iterator(0),
+        compute::make_counting_iterator(4),
+        output.begin(),
+        get_vec,
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, output, (6, 7, 8, 9));
+
+    // fill vec with 4's and run again
+    compute::fill(vec.begin(), vec.end(), 4, queue);
+    compute::transform(
+        compute::make_counting_iterator(0),
+        compute::make_counting_iterator(4),
+        output.begin(),
+        get_vec,
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, output, (4, 4, 4, 4));
+}
+
+BOOST_AUTO_TEST_CASE(capture_array)
+{
+    int data[] = { 1, 2, 3, 4 };
+    compute::array<int, 4> array(context);
+    compute::copy(data, data + 4, array.begin(), queue);
+
+    BOOST_COMPUTE_CLOSURE(int, negative_array_value, (int i), (array),
+    {
+        return -array[i];
+    });
+
+    compute::vector<int> output(4, context);
+    compute::transform(
+        compute::make_counting_iterator(0),
+        compute::make_counting_iterator(4),
+        output.begin(),
+        negative_array_value,
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, output, (-1, -2, -3, -4));
+}
+
+BOOST_AUTO_TEST_CASE(triangle_area)
+{
+    using compute::uint4_;
+    using compute::float4_;
+
+    compute::vector<uint4_> triangle_indices(context);
+    compute::vector<float4_> triangle_vertices(context);
+
+    triangle_vertices.push_back(float4_(0, 0, 0, 1), queue);
+    triangle_vertices.push_back(float4_(1, 1, 0, 1), queue);
+    triangle_vertices.push_back(float4_(1, 0, 0, 1), queue);
+    triangle_vertices.push_back(float4_(2, 0, 0, 1), queue);
+
+    triangle_indices.push_back(uint4_(0, 1, 2, 0));
+    triangle_indices.push_back(uint4_(2, 1, 3, 0));
+
+    BOOST_COMPUTE_CLOSURE(float, triangle_area, (const uint4_ i), (triangle_vertices),
+    {
+        // load triangle vertices
+        const float4 a = triangle_vertices[i.x];
+        const float4 b = triangle_vertices[i.y];
+        const float4 c = triangle_vertices[i.z];
+
+        // return area of triangle
+        return length(cross(b-a, c-a)) / 2;
+    });
+
+    // compute area of each triangle
+    compute::vector<float> triangle_areas(triangle_indices.size(), context);
+
+    compute::transform(
+        triangle_indices.begin(),
+        triangle_indices.end(),
+        triangle_areas.begin(),
+        triangle_area,
+        queue
+    );
+
+    // compute total area of all triangles
+    float total_area = 0;
+
+    compute::transform_reduce(
+        triangle_indices.begin(),
+        triangle_indices.end(),
+        &total_area,
+        triangle_area,
+        compute::plus<float>(),
+        queue
+    );
+    BOOST_CHECK_CLOSE(total_area, 1.f, 1e-6);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

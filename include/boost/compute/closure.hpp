@@ -28,6 +28,7 @@
 #include <boost/compute/cl.hpp>
 #include <boost/compute/function.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
+#include <boost/compute/type_traits/detail/capture_traits.hpp>
 
 namespace boost {
 namespace compute {
@@ -229,7 +230,7 @@ struct closure_signature_argument_inserter
         // remove leading and trailing whitespace from variable name
         boost::trim(variable_name);
 
-        s << type_name<T>() << " " << variable_name;
+        s << capture_traits<T>::type_name() << " " << variable_name;
         if(n+1 < m_last){
             s << ", ";
         }
