@@ -64,6 +64,34 @@ BOOST_AUTO_TEST_CASE(add_two_and_pi)
     BOOST_CHECK_CLOSE(results[3], 9.84f, 1e-6);
 }
 
+BOOST_AUTO_TEST_CASE(add_y)
+{
+    // setup input and output vectors
+    int data[] = { 1, 2, 3, 4 };
+    compute::vector<int> input(data, data + 4, queue);
+    compute::vector<int> output(4, context);
+
+    // make closure which adds 'y' to each value
+    int y = 2;
+    BOOST_COMPUTE_CLOSURE(int, add_y, (int x), (y),
+    {
+        return x + y;
+    });
+
+    compute::transform(
+        input.begin(), input.end(), output.begin(), add_y, queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, output, (3, 4, 5, 6));
+
+    // change y and run again
+    y = 4;
+
+    compute::transform(
+        input.begin(), input.end(), output.begin(), add_y, queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, output, (5, 6, 7, 8));
+}
+
 BOOST_AUTO_TEST_CASE(scale_add_vec)
 {
     REQUIRES_OPENCL_VERSION(1,2);

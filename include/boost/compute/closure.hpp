@@ -16,6 +16,7 @@
 
 #include <boost/config.hpp>
 #include <boost/fusion/adapted/boost_tuple.hpp>
+#include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/transform.hpp>
 #include <boost/typeof/typeof.hpp>
@@ -127,12 +128,6 @@ public:
     }
 
     /// \internal_
-    void recapture(const CaptureTuple &capture)
-    {
-        m_capture = capture;
-    }
-
-    /// \internal_
     void define(std::string name, std::string value = std::string())
     {
         m_definitions[name] = value;
@@ -224,21 +219,24 @@ struct closure_signature_argument_inserter
     }
 
     template<class T>
-    void operator()(const T&)
+    void operator()(const T&) const
     {
         BOOST_ASSERT(n < m_capture_names.size());
 
-        // remove leading and trailing whitespace from variable name
-        boost::trim(m_capture_names[n]);
+        // get captured variable name
+        std::string variable_name = m_capture_names[n];
 
-        s << type_name<T>() << " " << m_capture_names[n];
+        // remove leading and trailing whitespace from variable name
+        boost::trim(variable_name);
+
+        s << type_name<T>() << " " << variable_name;
         if(n+1 < m_last){
             s << ", ";
         }
         n++;
     }
 
-    size_t n;
+    mutable size_t n;
     size_t m_last;
     std::vector<std::string> m_capture_names;
     std::stringstream &s;
@@ -248,7 +246,7 @@ template<class Signature, class CaptureTuple>
 inline std::string
 make_closure_declaration(const char *name,
                          const char *arguments,
-                         const CaptureTuple&,
+                         const CaptureTuple &capture_tuple,
                          const char *capture_string)
 {
     typedef typename
@@ -273,7 +271,7 @@ make_closure_declaration(const char *name,
     closure_signature_argument_inserter j(
         s, capture_string, boost::tuples::length<CaptureTuple>::value
     );
-    mpl::for_each<CaptureTuple>(j);
+    fusion::for_each(capture_tuple, j);
 
     s << ")";
     return s.str();
@@ -336,12 +334,12 @@ make_closure_impl(const char *name,
 #else
 #define BOOST_COMPUTE_CLOSURE(return_type, name, arguments, capture, ...) \
     ::boost::compute::closure< \
-        return_type arguments, BOOST_TYPEOF(boost::make_tuple capture) \
+        return_type arguments, BOOST_TYPEOF(boost::tie capture) \
     > name = \
         ::boost::compute::detail::make_closure_impl< \
             return_type arguments \
         >( \
-            #name, #arguments, boost::make_tuple capture, #capture, #__VA_ARGS__ \
+            #name, #arguments, boost::tie capture, #capture, #__VA_ARGS__ \
         )
 #endif
 
