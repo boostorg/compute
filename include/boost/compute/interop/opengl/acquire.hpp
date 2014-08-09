@@ -14,6 +14,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/interop/opengl/cl_gl.hpp>
 #include <boost/compute/interop/opengl/opengl_buffer.hpp>
+#include <boost/compute/wait_list.hpp>
 
 namespace boost {
 namespace compute {
@@ -21,59 +22,75 @@ namespace compute {
 /// Enqueues a command to acquire the specified OpenGL memory objects.
 ///
 /// \see_opencl_ref{clEnqueueAcquireGLObjects}
-inline void opengl_enqueue_acquire_gl_objects(size_t num_objects,
+inline event opengl_enqueue_acquire_gl_objects(size_t num_objects,
                                               const cl_mem *mem_objects,
-                                              command_queue &queue)
+                                              command_queue &queue,
+                                              const wait_list &events = wait_list())
 {
+    BOOST_ASSERT(queue != 0);
+
+    event event_;
+
     cl_int ret = clEnqueueAcquireGLObjects(queue.get(),
                                            num_objects,
                                            mem_objects,
-                                           0,
-                                           0,
-                                           0);
+                                           events.size(),
+                                           events.get_event_ptr(),
+                                           &event_.get());
     if(ret != CL_SUCCESS){
         BOOST_THROW_EXCEPTION(opencl_error(ret));
     }
+
+    return event_;
 }
 
 /// Enqueues a command to release the specified OpenGL memory objects.
 ///
 /// \see_opencl_ref{clEnqueueReleaseGLObjects}
-inline void opengl_enqueue_release_gl_objects(size_t num_objects,
+inline event opengl_enqueue_release_gl_objects(size_t num_objects,
                                               const cl_mem *mem_objects,
-                                              command_queue &queue)
+                                              command_queue &queue,
+                                              const wait_list &events = wait_list())
 {
+    BOOST_ASSERT(queue != 0);
+
+    event event_;
+
     cl_int ret = clEnqueueReleaseGLObjects(queue.get(),
                                            num_objects,
                                            mem_objects,
-                                           0,
-                                           0,
-                                           0);
+                                           events.size(),
+                                           events.get_event_ptr(),
+                                           &event_.get());
     if(ret != CL_SUCCESS){
         BOOST_THROW_EXCEPTION(opencl_error(ret));
     }
+
+    return event_;
 }
 
 /// Enqueues a command to acquire the specified OpenGL buffer.
 ///
 /// \see_opencl_ref{clEnqueueAcquireGLObjects}
-inline void opengl_enqueue_acquire_buffer(const opengl_buffer &buffer,
-                                          command_queue &queue)
+inline event opengl_enqueue_acquire_buffer(const opengl_buffer &buffer,
+                                          command_queue &queue,
+                                          const wait_list &events = wait_list())
 {
     BOOST_ASSERT(buffer.get_context() == queue.get_context());
 
-    opengl_enqueue_acquire_gl_objects(1, &buffer.get(), queue);
+    return opengl_enqueue_acquire_gl_objects(1, &buffer.get(), queue, events);
 }
 
 /// Enqueues a command to release the specified OpenGL buffer.
 ///
 /// \see_opencl_ref{clEnqueueReleaseGLObjects}
-inline void opengl_enqueue_release_buffer(const opengl_buffer &buffer,
-                                          command_queue &queue)
+inline event opengl_enqueue_release_buffer(const opengl_buffer &buffer,
+                                          command_queue &queue,
+                                          const wait_list &events = wait_list())
 {
     BOOST_ASSERT(buffer.get_context() == queue.get_context());
 
-    opengl_enqueue_release_gl_objects(1, &buffer.get(), queue);
+    return opengl_enqueue_release_gl_objects(1, &buffer.get(), queue, events);
 }
 
 } // end compute namespace
