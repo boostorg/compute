@@ -14,6 +14,7 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/algorithm/detail/merge_with_merge_path.hpp>
 #include <boost/compute/algorithm/detail/serial_merge.hpp>
 
 namespace boost {
@@ -30,9 +31,7 @@ inline OutputIterator merge(InputIterator1 first1,
                             OutputIterator result,
                             command_queue &queue = system::default_queue())
 {
-    typedef typename std::iterator_traits<InputIterator1>::value_type T1;
-
-    return merge(first1, last1, first2, last2, result, less<T1>(), queue);
+    return detail::merge_with_merge_path(first1, last1, first2, last2, result, queue);
 }
 
 /// Merges the sorted values in the range [\p first1, \p last1) with
