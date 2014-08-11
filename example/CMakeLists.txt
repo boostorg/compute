@@ -115,6 +115,7 @@ if(${BOOST_COMPUTE_HAVE_QT})
 
   set(QT_OPENGL_EXAMPLES
     mandelbrot
+    nbody
     resize_image
   )
   foreach(EXAMPLE ${QT_OPENGL_EXAMPLES})
