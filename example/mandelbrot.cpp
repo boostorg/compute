@@ -77,6 +77,7 @@ public:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
+    void keyPressEvent(QKeyEvent* event);
 
 private:
     compute::context context_;
@@ -186,6 +187,13 @@ void MandelbrotWidget::paintGL()
     glTexCoord2f(1, 1); glVertex2f(w, h);
     glTexCoord2f(1, 0); glVertex2f(w, 0);
     glEnd();
+}
+
+void MandelbrotWidget::keyPressEvent(QKeyEvent* event)
+{
+    if(event->key() == Qt::Key_Escape) {
+        this->close();
+    }
 }
 
 // the mandelbrot example shows how to create a mandelbrot image in
