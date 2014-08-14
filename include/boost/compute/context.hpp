@@ -11,6 +11,8 @@
 #ifndef BOOST_COMPUTE_CONTEXT_HPP
 #define BOOST_COMPUTE_CONTEXT_HPP
 
+#include <vector>
+
 #include <boost/throw_exception.hpp>
 
 #include <boost/compute/config.hpp>
@@ -69,6 +71,30 @@ public:
                                     default_error_handler,
                                     static_cast<void *>(this),
                                     &error);
+        if(!m_context){
+            BOOST_THROW_EXCEPTION(opencl_error(error));
+        }
+    }
+
+    /// Creates a new context for \p devices with \p properties.
+    ///
+    /// \see_opencl_ref{clCreateContext}
+    explicit context(const std::vector<device> &devices,
+                     const cl_context_properties *properties = 0)
+    {
+        BOOST_ASSERT(!devices.empty());
+
+        cl_int error = 0;
+
+        m_context = clCreateContext(
+            properties,
+            static_cast<cl_uint>(devices.size()),
+            reinterpret_cast<const cl_device_id *>(&devices[0]),
+            default_error_handler,
+            static_cast<void *>(this),
+            &error
+        );
+
         if(!m_context){
             BOOST_THROW_EXCEPTION(opencl_error(error));
         }
@@ -148,6 +174,8 @@ public:
         return const_cast<cl_context &>(m_context);
     }
 
+    /// Returns the device for the context. If the context contains multiple
+    /// devices, the first is returned.
     device get_device() const
     {
         size_t count = 0;
@@ -171,6 +199,12 @@ public:
         }
 
         return device(id);
+    }
+
+    /// Returns a vector of devices for the context.
+    std::vector<device> get_devices() const
+    {
+        return get_info<std::vector<device> >(CL_CONTEXT_DEVICES);
     }
 
     /// Returns information about the context.
