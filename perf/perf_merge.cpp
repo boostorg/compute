@@ -8,6 +8,7 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
+#include <cmath>
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -28,19 +29,16 @@ int main(int argc, char *argv[])
     boost::compute::context context(device);
     boost::compute::command_queue queue(context, device);
 
-    std::vector<int> v1 = generate_random_vector<int>(PERF_N / 2);
-    std::vector<int> v2 = generate_random_vector<int>(PERF_N / 2);
+    std::vector<int> v1 = generate_random_vector<int>(std::floor(PERF_N / 2.0));
+    std::vector<int> v2 = generate_random_vector<int>(std::ceil(PERF_N / 2.0));
     std::vector<int> v3(PERF_N);
 
     std::sort(v1.begin(), v1.end());
     std::sort(v2.begin(), v2.end());
 
-    boost::compute::vector<int> gpu_v1(PERF_N / 2, context);
-    boost::compute::vector<int> gpu_v2(PERF_N / 2, context);
+    boost::compute::vector<int> gpu_v1(v1.begin(), v1.end(), queue);
+    boost::compute::vector<int> gpu_v2(v2.begin(), v2.end(), queue);
     boost::compute::vector<int> gpu_v3(PERF_N, context);
-
-    boost::compute::copy(v1.begin(), v1.end(), gpu_v1.begin(), queue);
-    boost::compute::copy(v2.begin(), v2.end(), gpu_v2.begin(), queue);
 
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
