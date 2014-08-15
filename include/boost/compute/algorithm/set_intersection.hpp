@@ -32,9 +32,6 @@ namespace detail {
 ///
 /// Subclass of meta_kernel to perform serial set intersection after tiling
 ///
-template<class InputIterator1, class InputIterator2,
-         class InputIterator3, class InputIterator4,
-         class OutputIterator1, class OutputIterator2>
 class serial_set_intersection_kernel : meta_kernel
 {
 public:
@@ -45,6 +42,9 @@ public:
         tile_size = 4;
     }
 
+    template<class InputIterator1, class InputIterator2,
+             class InputIterator3, class InputIterator4,
+             class OutputIterator1, class OutputIterator2>
     void set_range(InputIterator1 first1,
                     InputIterator2 first2,
                     InputIterator3 tile_first1,
@@ -130,10 +130,7 @@ inline OutputIterator set_intersection(InputIterator1 first1,
     vector<uint_> tile_b((count1+count2+3)/tile_size+1, queue.get_context());
 
     // Tile the sets
-    detail::tile_sets_kernel<InputIterator1,
-                             InputIterator2,
-                             vector<uint_>::iterator,
-                             vector<uint_>::iterator> tiling_kernel;
+    detail::tile_sets_kernel tiling_kernel;
 
     tiling_kernel.set_range(first1, last1, first2, last2,
                             tile_a.begin()+1, tile_b.begin()+1);
@@ -149,12 +146,7 @@ inline OutputIterator set_intersection(InputIterator1 first1,
     fill_n(counts.end()-1, 1, 0, queue);
 
     // Find individual intersections
-    detail::serial_set_intersection_kernel<InputIterator1,
-                                            InputIterator2,
-                                            vector<uint_>::iterator,
-                                            vector<uint_>::iterator,
-                                            InputIterator1,
-                                            vector<uint_>::iterator> intersection_kernel;
+    detail::serial_set_intersection_kernel intersection_kernel;
 
     intersection_kernel.set_range(first1, first2, tile_a.begin(), tile_a.end(),
                                   tile_b.begin(), temp_result.begin(), counts.begin());
@@ -164,9 +156,7 @@ inline OutputIterator set_intersection(InputIterator1 first1,
     exclusive_scan(counts.begin(), counts.end(), counts.begin(), queue);
 
     // Compact the results
-    detail::compact_kernel<InputIterator1,
-                           vector<uint_>::iterator,
-                           OutputIterator> compact_kernel;
+    detail::compact_kernel compact_kernel;
 
     compact_kernel.set_range(temp_result.begin(), counts.begin(), counts.end(), result);
 
