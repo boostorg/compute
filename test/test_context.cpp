@@ -14,6 +14,8 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/context.hpp>
 
+namespace compute = boost::compute;
+
 BOOST_AUTO_TEST_CASE(construct_from_cl_context)
 {
     boost::compute::device device = boost::compute::system::default_device();
@@ -45,3 +47,17 @@ BOOST_AUTO_TEST_CASE(move_constructor)
     BOOST_VERIFY(cl_context(context1) == cl_context());
 }
 #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
+
+BOOST_AUTO_TEST_CASE(multiple_devices)
+{
+    const std::vector<compute::platform> &platforms = compute::system::platforms();
+    for(size_t i = 0; i < platforms.size(); i++){
+        const compute::platform &platform = platforms[i];
+
+        // create a context for containing all devices in the platform
+        compute::context ctx(platform.devices());
+
+        // check device count
+        BOOST_CHECK_EQUAL(ctx.get_devices().size(), platform.device_count());
+    }
+}
