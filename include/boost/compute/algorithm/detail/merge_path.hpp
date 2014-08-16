@@ -30,8 +30,6 @@ namespace detail {
 /// Subclass of meta_kernel to break two sets into tiles according
 /// to their merge path
 ///
-template<class InputIterator1, class InputIterator2,
-         class OutputIterator1, class OutputIterator2>
 class merge_path_kernel : public meta_kernel
 {
 public:
@@ -42,6 +40,8 @@ public:
         tile_size = 4;
     }
 
+    template<class InputIterator1, class InputIterator2,
+             class OutputIterator1, class OutputIterator2>
     void set_range(InputIterator1 first1,
                    InputIterator1 last1,
                    InputIterator2 first2,

@@ -29,9 +29,6 @@ namespace detail {
 ///
 /// Subclass of meta_kernel to perform serial merge after tiling
 ///
-template<class InputIterator1, class InputIterator2,
-         class InputIterator3, class InputIterator4,
-         class OutputIterator>
 class serial_merge_kernel : meta_kernel
 {
 public:
@@ -42,6 +39,9 @@ public:
         tile_size = 4;
     }
 
+    template<class InputIterator1, class InputIterator2,
+             class InputIterator3, class InputIterator4,
+             class OutputIterator>
     void set_range(InputIterator1 first1,
                     InputIterator2 first2,
                     InputIterator3 tile_first1,
@@ -140,10 +140,7 @@ merge_with_merge_path(InputIterator1 first1,
     vector<uint_> tile_b((count1+count2+tile_size-1)/tile_size+1, queue.get_context());
 
     // Tile the sets
-    merge_path_kernel<InputIterator1,
-                        InputIterator2,
-                        vector<uint_>::iterator,
-                        vector<uint_>::iterator> tiling_kernel;
+    merge_path_kernel tiling_kernel;
     tiling_kernel.tile_size = 1024;
     tiling_kernel.set_range(first1, last1, first2, last2,
                             tile_a.begin()+1, tile_b.begin()+1);
@@ -155,11 +152,7 @@ merge_with_merge_path(InputIterator1 first1,
     fill_n(tile_b.end()-1, 1, count2, queue);
 
     // Merge
-    serial_merge_kernel<InputIterator1,
-                        InputIterator2,
-                        vector<uint_>::iterator,
-                        vector<uint_>::iterator,
-                        OutputIterator> merge_kernel;
+    serial_merge_kernel merge_kernel;
     merge_kernel.tile_size = 1024;
     merge_kernel.set_range(first1, first2, tile_a.begin(), tile_a.end(),
                             tile_b.begin(), result);

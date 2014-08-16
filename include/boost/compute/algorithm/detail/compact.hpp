@@ -28,7 +28,6 @@ namespace detail {
 /// Subclass of meta_kernel to compact the result of set kernels to
 /// get actual sets
 ///
-template<class InputIterator1, class InputIterator2, class OutputIterator>
 class compact_kernel : public meta_kernel
 {
 public:
@@ -39,6 +38,7 @@ public:
         tile_size = 4;
     }
 
+    template<class InputIterator1, class InputIterator2, class OutputIterator>
     void set_range(InputIterator1 start,
                    InputIterator2 counts_begin,
                    InputIterator2 counts_end,
