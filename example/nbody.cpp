@@ -36,48 +36,41 @@ namespace compute = boost::compute;
 namespace po = boost::program_options;
 
 using compute::uint_;
+using compute::float4_;
 
 const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
-    __kernel void initVelocity(__global float* velocity)
+    __kernel void initVelocity(__global float4* velocity)
     {
-        velocity[get_global_id(0)*3]   = 0.0f;
-        velocity[get_global_id(0)*3+1] = 0.0f;
-        velocity[get_global_id(0)*3+2] = 0.0f;
+        velocity[get_global_id(0)].x = 0.0f;
+        velocity[get_global_id(0)].y = 0.0f;
+        velocity[get_global_id(0)].z = 0.0f;
+        velocity[get_global_id(0)].w = 0.0f;
     }
-    __kernel void updateVelocity(__global const float* position, __global float* velocity, float dt, uint N)
+    __kernel void updateVelocity(__global const float4* position, __global float4* velocity, float dt, uint N)
     {
         uint gid = get_global_id(0);
-        uint offset_1 = gid*3;
-        uint offset_2 = 0;
 
-        float fac = 0.0f;
-        float r_x = 0.0f;
-        float r_y = 0.0f;
-        float r_z = 0.0f;
-
+        float4 r;
+        float f = 0.0f;
+        r.x = 0.0f;
+        r.y = 0.0f;
+        r.z = 0.0f;
+        r.w = 0.0f;
         for(uint i = 0; i != gid; i++) {
             if(i != gid) {
-                offset_2 = i*3;
-                r_x = position[offset_2]-position[offset_1];
-                r_y = position[offset_2+1]-position[offset_1+1];
-                r_z = position[offset_2+2]-position[offset_1+2];
-                fac = sqrt(r_x*r_x+r_y*r_y+r_z*r_z+0.001f); // 0.001f is a softening factor (singularity)
-                fac *= fac*fac;
-                fac = dt/fac;
-                velocity[offset_1] += fac*r_x;
-                velocity[offset_1+1] += fac*r_y;
-                velocity[offset_1+2] += fac*r_z;
+                r = position[i]-position[gid];
+                f = length(r)+0.001f;
+                f *= f*f;
+                f = dt/f;
+                velocity[gid] += f*r;
             }
         }
     }
     __kernel void updatePosition(__global float* position, __global const float* velocity, float dt)
     {
         uint gid = get_global_id(0);
-        uint offset = gid*3;
 
-        position[offset]   += dt*velocity[offset];
-        position[offset+1] += dt*velocity[offset+1];
-        position[offset+2] += dt*velocity[offset+2];
+        position[gid] += dt*velocity[gid];
     }
 );
 
@@ -137,25 +130,28 @@ void NBodyWidget::initializeGL()
     m_program.build();
 
     // prepare random particle positions that will be transferred to the vbo
-    float* temp = new float[m_particles*3];
+    float4_* temp = new float4_[m_particles];
     boost::random::uniform_real_distribution<float> dist(-0.5f, 0.5f);
     boost::random::mt19937_64 gen;
-    for(size_t i = 0; i < m_particles*3; i++) {
-        temp[i] = dist(gen);
+    for(size_t i = 0; i < m_particles; i++) {
+        temp[i][0]= dist(gen);
+        temp[i][1] = dist(gen);
+        temp[i][2] = dist(gen);
+        temp[i][3] = dist(gen);
     }
 
     // create an OpenGL vbo
     GLuint vbo = 0;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, 3*m_particles*sizeof(float), temp, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, m_particles*sizeof(float4_), temp, GL_DYNAMIC_DRAW);
 
     // create a OpenCL buffer from the vbo
     m_position = compute::opengl_buffer(m_context, vbo);
     delete[] temp;
 
     // create buffer for velocities
-    m_velocity = compute::buffer(m_context, 3*m_particles*sizeof(float));
+    m_velocity = compute::buffer(m_context, m_particles*sizeof(float4_));
 
     // make sure velocities are 0
     compute::kernel init_kernel = m_program.create_kernel("initVelocity");
@@ -194,7 +190,7 @@ void NBodyWidget::paintGL()
     }
 
     // draw
-    glVertexPointer(3, GL_FLOAT, 0, 0);
+    glVertexPointer(3, GL_FLOAT, sizeof(float), 0);
     glEnableClientState(GL_VERTEX_ARRAY);
     glDrawArrays(GL_POINTS, 0, m_particles);
     glFinish();
