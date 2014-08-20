@@ -118,17 +118,17 @@ inline bool includes(InputIterator1 first1,
 {
     typedef typename std::iterator_traits<InputIterator1>::value_type value_type;
 
-    int tile_size = 4;
+    int tile_size = 1024;
 
     int count1 = detail::iterator_range_size(first1, last1);
     int count2 = detail::iterator_range_size(first2, last2);
 
-    vector<uint_> tile_a((count1+count2+3)/tile_size+1, queue.get_context());
-    vector<uint_> tile_b((count1+count2+3)/tile_size+1, queue.get_context());
+    vector<uint_> tile_a((count1+count2+tile_size-1)/tile_size+1, queue.get_context());
+    vector<uint_> tile_b((count1+count2+tile_size-1)/tile_size+1, queue.get_context());
 
     // Tile the sets
     detail::tile_sets_kernel tiling_kernel;
-
+    tiling_kernel.tile_size = tile_size;
     tiling_kernel.set_range(first1, last1, first2, last2,
                             tile_a.begin()+1, tile_b.begin()+1);
     fill_n(tile_a.begin(), 1, 0, queue);
@@ -138,11 +138,11 @@ inline bool includes(InputIterator1 first1,
     fill_n(tile_a.end()-1, 1, count1, queue);
     fill_n(tile_b.end()-1, 1, count2, queue);
 
-    vector<uint_> result((count1+count2+3)/tile_size, queue.get_context());
+    vector<uint_> result((count1+count2+tile_size-1)/tile_size, queue.get_context());
 
     // Find individually
     detail::serial_includes_kernel includes_kernel;
-
+    includes_kernel.tile_size = tile_size;
     includes_kernel.set_range(first1, first2, tile_a.begin(), tile_a.end(),
                                 tile_b.begin(), result.begin());
 
