@@ -41,7 +41,6 @@ int main(int argc, char *argv[])
 
     // create vector on the device and copy the data
     boost::compute::vector<int> device_vector(PERF_N, context);
-    
 
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
