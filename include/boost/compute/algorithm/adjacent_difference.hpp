@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------//
-// Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+// Copyright (c) 2013-2014 Kyle Lutz <kyle.r.lutz@gmail.com>
 //
 // Distributed under the Boost Software License, Version 1.0
 // See accompanying file LICENSE_1_0.txt or copy at
@@ -15,14 +15,57 @@
 
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/algorithm/copy.hpp>
-#include <boost/compute/iterator/detail/adjacent_transform_iterator.hpp>
+#include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/functional/operator.hpp>
 
 namespace boost {
 namespace compute {
 
-/// Stores the difference of each pair of consecutive values in the
-/// range [\p first, \p last) to the range beginning at \p result.
+/// Stores the difference of each pair of consecutive values in the range
+/// [\p first, \p last) to the range beginning at \p result. If \p op is not
+/// provided, \c minus<T> is used.
+///
+/// \param first first element in the input range
+/// \param last last element in the input range
+/// \param result first element in the output range
+/// \param op binary difference function
+/// \param queue command queue to perform the operation
+///
+/// \return \c OutputIterator to the end of the result range
+///
+/// \see adjacent_find()
+template<class InputIterator, class OutputIterator, class BinaryFunction>
+inline OutputIterator
+adjacent_difference(InputIterator first,
+                    InputIterator last,
+                    OutputIterator result,
+                    BinaryFunction op,
+                    command_queue &queue = system::default_queue())
+{
+    if(first == last){
+        return result;
+    }
+
+    size_t count = detail::iterator_range_size(first, last);
+
+    detail::meta_kernel k("adjacent_difference");
+
+    k << "const uint i = get_global_id(0);\n"
+      << "if(i == 0){\n"
+      << "    " << result[k.var<uint_>("0")] << " = " << first[k.var<uint_>("0")] << ";\n"
+      << "}\n"
+      << "else {\n"
+      << "    " << result[k.var<uint_>("i")] << " = "
+      <<               op(first[k.var<uint_>("i")], first[k.var<uint_>("i-1")]) << ";\n"
+      << "}\n";
+
+    k.exec_1d(queue, 0, count, 1);
+
+    return result + count;
+}
+
+/// \overload
 template<class InputIterator, class OutputIterator>
 inline OutputIterator
 adjacent_difference(InputIterator first,
@@ -32,14 +75,9 @@ adjacent_difference(InputIterator first,
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
-    ::boost::compute::minus<value_type> op;
-
-    return ::boost::compute::copy(
-               detail::make_adjacent_transform_iterator(first, op),
-               detail::make_adjacent_transform_iterator(last, op),
-               result,
-               queue
-           );
+    return ::boost::compute::adjacent_difference(
+        first, last, result, ::boost::compute::minus<value_type>(), queue
+    );
 }
 
 } // end compute namespace
