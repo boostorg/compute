@@ -13,18 +13,56 @@
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/adjacent_find.hpp>
+#include <boost/compute/algorithm/fill.hpp>
+#include <boost/compute/algorithm/iota.hpp>
 #include <boost/compute/container/vector.hpp>
 
 #include "context_setup.hpp"
 
+namespace compute = boost::compute;
+
 BOOST_AUTO_TEST_CASE(adjacent_find_int)
 {
     int data[] = { 1, 3, 5, 5, 6, 7, 7, 8 };
-    boost::compute::vector<int> vector(data, data + 8);
+    compute::vector<int> vec(data, data + 8, queue);
 
-    boost::compute::vector<int>::iterator iter =
-        boost::compute::adjacent_find(vector.begin(), vector.end());
-    BOOST_VERIFY(iter == vector.begin() + 2);
+    compute::vector<int>::iterator iter =
+        compute::adjacent_find(vec.begin(), vec.end(), queue);
+    BOOST_CHECK(iter == vec.begin() + 2);
+}
+
+BOOST_AUTO_TEST_CASE(adjacent_find_int2)
+{
+    using compute::int2_;
+
+    compute::vector<int2_> vec(context);
+    vec.push_back(int2_(1, 2), queue);
+    vec.push_back(int2_(3, 4), queue);
+    vec.push_back(int2_(5, 6), queue);
+    vec.push_back(int2_(7, 8), queue);
+    vec.push_back(int2_(7, 8), queue);
+
+    compute::vector<int2_>::iterator iter =
+        compute::adjacent_find(vec.begin(), vec.end(), queue);
+    BOOST_CHECK(iter == vec.begin() + 3);
+}
+
+BOOST_AUTO_TEST_CASE(adjacent_find_iota)
+{
+    compute::vector<int> vec(2048, context);
+    compute::iota(vec.begin(), vec.end(), 1, queue);
+    BOOST_VERIFY(
+        compute::adjacent_find(vec.begin(), vec.end(), queue) == vec.end()
+    );
+}
+
+BOOST_AUTO_TEST_CASE(adjacent_find_fill)
+{
+    compute::vector<int> vec(2048, context);
+    compute::fill(vec.begin(), vec.end(), 7, queue);
+    BOOST_VERIFY(
+        compute::adjacent_find(vec.begin(), vec.end(), queue) == vec.begin()
+    );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

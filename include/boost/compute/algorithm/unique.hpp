@@ -11,37 +11,56 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_UNIQUE_HPP
 #define BOOST_COMPUTE_ALGORITHM_UNIQUE_HPP
 
-#include <boost/compute/algorithm/copy.hpp>
-#include <boost/compute/algorithm/unique_copy.hpp>
-#include <boost/compute/command_queue.hpp>
-#include <boost/compute/container/vector.hpp>
-#include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/system.hpp>
+#include <boost/compute/command_queue.hpp>
+#include <boost/compute/algorithm/unique_copy.hpp>
+#include <boost/compute/container/vector.hpp>
+#include <boost/compute/functional/operator.hpp>
 
 namespace boost {
 namespace compute {
 
-/// Removes all consecutive duplicate elements from the range [first, last) 
-/// Returns an iterator for the new logical end of the range.
+/// Removes all consecutive duplicate elements (determined by \p op) from the
+/// range [first, last). If \p op is not provided, the equality operator is
+/// used.
+///
+/// \param first first element in the input range
+/// \param last last element in the input range
+/// \param op binary operator used to check for uniqueness
+/// \param queue command queue to perform the operation
+///
+/// \return \c InputIterator to the new logical end of the range
+///
+/// \see unique_copy()
+template<class InputIterator, class BinaryPredicate>
+inline InputIterator unique(InputIterator first,
+                            InputIterator last,
+                            BinaryPredicate op,
+                            command_queue &queue = system::default_queue())
+{
+    typedef typename std::iterator_traits<InputIterator>::value_type value_type;
+
+    vector<value_type> temp(first, last, queue);
+
+    return ::boost::compute::unique_copy(
+        temp.begin(), temp.end(), first, op, queue
+    );
+}
+
+/// \overload
 template<class InputIterator>
-inline InputIterator unique(InputIterator first, 
+inline InputIterator unique(InputIterator first,
                             InputIterator last,
                             command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
-    size_t count = detail::iterator_range_size(first, last);
 
-    vector<value_type> temp(count, queue.get_context());
-
-    buffer_iterator<value_type> iter = unique_copy(first, last, temp.begin(), queue);
-
-    copy(temp.begin(), iter, first, queue);
-
-    return first + detail::iterator_range_size(temp.begin(), iter);
+    return ::boost::compute::unique(
+        first, last, ::boost::compute::equal_to<value_type>(), queue
+    );
 }
 
-}
-}
+} // end compute namespace
+} // end boost namespace
 
 #endif // BOOST_COMPUTE_ALGORITHM_UNIQUE_HPP

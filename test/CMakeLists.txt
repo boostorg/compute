@@ -130,7 +130,6 @@ add_compute_test("functional.get" test_functional_get.cpp)
 add_compute_test("functional.hash" test_functional_hash.cpp)
 add_compute_test("functional.unpack" test_functional_unpack.cpp)
 
-add_compute_test("iterator.adjacent_transform_iterator" test_adjacent_transform_iterator.cpp)
 add_compute_test("iterator.buffer_iterator" test_buffer_iterator.cpp)
 add_compute_test("iterator.constant_iterator" test_constant_iterator.cpp)
 add_compute_test("iterator.counting_iterator" test_counting_iterator.cpp)
