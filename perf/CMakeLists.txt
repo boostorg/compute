@@ -24,6 +24,7 @@ set(BENCHMARKS
   includes
   inner_product
   is_permutation
+  is_sorted
   linear_congruential_engine
   merge
   mersenne_twister
