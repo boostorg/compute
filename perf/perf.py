@@ -20,8 +20,14 @@ def run_perf_process(name, size, backend = ""):
     else:
         proc = "perf_%s_%s" % (backend, name)
 
+    filename = "./perf/" + proc
+
+    
+    if not os.path.isfile(filename):
+        print "Error: failed to find ", filename, " for running"
+        return 0
     try:
-        output = subprocess.check_output(["./perf/" + proc, str(int(size))])
+        output = subprocess.check_output([filename, str(int(size))])
     except:
         return 0
 
