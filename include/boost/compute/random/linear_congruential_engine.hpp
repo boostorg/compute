@@ -143,7 +143,7 @@ public:
         (void) queue;
 
         size_t size = detail::iterator_range_size(first, last);
-        uint max_mult =
+        uint_ max_mult =
             detail::read_single_value<T>(m_multiplicands, threads-1, queue);
         while(size >= threads) {
             m_seed *= max_mult;
