@@ -16,7 +16,7 @@ library providing common containers (e.g.
 (e.g. [funcref boost::compute::transform transform()] and
 [funcref boost::compute::sort sort()]).
 
-The library also provides number of "fancy" iterators (e.g.
+The library also provides a number of "fancy" iterators (e.g.
 [classref boost::compute::transform_iterator transform_iterator] and
 [classref boost::compute::permutation_iterator permutation_iterator]) which
 enhance the functionality of the standard algorithms.
@@ -38,7 +38,7 @@ CPUs.
 
 OpenCL was chosen for a number of reasons:
 
-* Vendor-neutral, standard C++, and doesn't require a special compiler,
+* Vendor-neutral, standard C/C++, and doesn't require a special compiler,
 non-standard pragmas, or compiler extensions.
 * It is not just another parallel-library abstraction layer, it provides direct
 access to the underlying hardware.
