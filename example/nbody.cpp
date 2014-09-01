@@ -45,12 +45,8 @@ const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
     {
         uint gid = get_global_id(0);
 
-        float4 r;
+        float4 r = { 0.0f, 0.0f, 0.0f, 0.0f };
         float f = 0.0f;
-        r.x = 0.0f;
-        r.y = 0.0f;
-        r.z = 0.0f;
-        r.w = 0.0f;
         for(uint i = 0; i != gid; i++) {
             if(i != gid) {
                 r = position[i]-position[gid];
@@ -210,7 +206,7 @@ int main(int argc, char** argv)
     options.add_options()
         ("help", "show usage")
         ("particles", po::value<uint_>()->default_value(1000), "number of particles")
-        ("dt", po::value<float>()->default_value(0.001f), "width of each integration step");
+        ("dt", po::value<float>()->default_value(0.00001f), "width of each integration step");
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, options), vm);
     po::notify(vm);
