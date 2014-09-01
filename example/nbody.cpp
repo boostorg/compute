@@ -132,9 +132,9 @@ void NBodyWidget::initializeGL()
     boost::random::mt19937_64 gen;
     for(size_t i = 0; i < m_particles; i++) {
         temp[i][0] = dist(gen);
-        temp[i][1] = 0.0f;
-        temp[i][2] = 0.0f;
-        temp[i][3] = 0.0f;
+        temp[i][1] = dist(gen);
+        temp[i][2] = dist(gen);
+        temp[i][3] = 1.0f;
     }
 
     // create an OpenGL vbo
