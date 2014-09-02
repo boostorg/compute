@@ -57,11 +57,11 @@ const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
             }
         }
     }
-    __kernel void updatePosition(__global float* position, __global const float* velocity, float dt)
+    __kernel void updatePosition(__global float4* position, __global const float4* velocity, float dt)
     {
         uint gid = get_global_id(0);
 
-        position[gid] += dt*velocity[gid];
+        position[gid].xyz += dt*velocity[gid].xyz;
     }
 );
 
