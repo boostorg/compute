@@ -31,6 +31,8 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/interop/opengl.hpp>
 #include <boost/compute/source.hpp>
+#include <boost/compute/container/vector.hpp>
+#include <boost/compute/algorithm.hpp>
 
 namespace compute = boost::compute;
 namespace po = boost::program_options;
@@ -39,23 +41,12 @@ using compute::uint_;
 using compute::float4_;
 
 const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
-    __kernel void initVelocity(__global float4* velocity)
-    {
-        velocity[get_global_id(0)].x = 0.0f;
-        velocity[get_global_id(0)].y = 0.0f;
-        velocity[get_global_id(0)].z = 0.0f;
-        velocity[get_global_id(0)].w = 0.0f;
-    }
     __kernel void updateVelocity(__global const float4* position, __global float4* velocity, float dt, uint N)
     {
         uint gid = get_global_id(0);
 
-        float4 r;
+        float4 r = { 0.0f, 0.0f, 0.0f, 0.0f };
         float f = 0.0f;
-        r.x = 0.0f;
-        r.y = 0.0f;
-        r.z = 0.0f;
-        r.w = 0.0f;
         for(uint i = 0; i != gid; i++) {
             if(i != gid) {
                 r = position[i]-position[gid];
@@ -66,11 +57,11 @@ const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
             }
         }
     }
-    __kernel void updatePosition(__global float* position, __global const float* velocity, float dt)
+    __kernel void updatePosition(__global float4* position, __global const float4* velocity, float dt)
     {
         uint gid = get_global_id(0);
 
-        position[gid] += dt*velocity[gid];
+        position[gid].xyz += dt*velocity[gid].xyz;
     }
 );
 
@@ -95,7 +86,7 @@ private:
     compute::command_queue m_queue;
     compute::program m_program;
     compute::opengl_buffer m_position;
-    compute::buffer m_velocity;
+    compute::vector<float4_>* m_velocity;
     compute::kernel m_velocity_kernel;
     compute::kernel m_position_kernel;
 
@@ -116,6 +107,8 @@ NBodyWidget::NBodyWidget(std::size_t particles, float dt, QWidget* parent)
 
 NBodyWidget::~NBodyWidget()
 {
+    delete m_velocity;
+
     // delete the opengl buffer
     GLuint vbo = m_position.get_opengl_object();
     glDeleteBuffers(1, &vbo);
@@ -134,10 +127,10 @@ void NBodyWidget::initializeGL()
     boost::random::uniform_real_distribution<float> dist(-0.5f, 0.5f);
     boost::random::mt19937_64 gen;
     for(size_t i = 0; i < m_particles; i++) {
-        temp[i][0]= dist(gen);
+        temp[i][0] = dist(gen);
         temp[i][1] = dist(gen);
         temp[i][2] = dist(gen);
-        temp[i][3] = dist(gen);
+        temp[i][3] = 1.0f;
     }
 
     // create an OpenGL vbo
@@ -151,23 +144,18 @@ void NBodyWidget::initializeGL()
     delete[] temp;
 
     // create buffer for velocities
-    m_velocity = compute::buffer(m_context, m_particles*sizeof(float4_));
-
-    // make sure velocities are 0
-    compute::kernel init_kernel = m_program.create_kernel("initVelocity");
-    init_kernel.set_arg(0, m_velocity);
-    m_queue.enqueue_1d_range_kernel(init_kernel, 0, m_particles, 0);
-    m_queue.finish();
+    m_velocity = new compute::vector<float4_>(m_particles, m_context);
+    compute::fill(m_velocity->begin(), m_velocity->end(), float4_(0.0f, 0.0f, 0.0f, 0.0f), m_queue);
 
     // create compute kernels
     m_velocity_kernel = m_program.create_kernel("updateVelocity");
     m_velocity_kernel.set_arg(0, m_position);
-    m_velocity_kernel.set_arg(1, m_velocity);
+    m_velocity_kernel.set_arg(1, m_velocity->get_buffer());
     m_velocity_kernel.set_arg(2, m_dt);
     m_velocity_kernel.set_arg(3, m_particles);
     m_position_kernel = m_program.create_kernel("updatePosition");
     m_position_kernel.set_arg(0, m_position);
-    m_position_kernel.set_arg(1, m_velocity);
+    m_position_kernel.set_arg(1, m_velocity->get_buffer());
     m_position_kernel.set_arg(2, m_dt);
 }
 void NBodyWidget::resizeGL(int width, int height)
@@ -190,7 +178,7 @@ void NBodyWidget::paintGL()
     }
 
     // draw
-    glVertexPointer(3, GL_FLOAT, sizeof(float), 0);
+    glVertexPointer(4, GL_FLOAT, 0, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
     glDrawArrays(GL_POINTS, 0, m_particles);
     glFinish();
@@ -218,7 +206,7 @@ int main(int argc, char** argv)
     options.add_options()
         ("help", "show usage")
         ("particles", po::value<uint_>()->default_value(1000), "number of particles")
-        ("dt", po::value<float>()->default_value(0.001f), "width of each integration step");
+        ("dt", po::value<float>()->default_value(0.00001f), "width of each integration step");
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, options), vm);
     po::notify(vm);
