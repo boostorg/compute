@@ -39,6 +39,15 @@ BOOST_AUTO_TEST_CASE(reduce_int)
     BOOST_CHECK_EQUAL(product, 9945);
 }
 
+BOOST_AUTO_TEST_CASE(reduce_empty_vector)
+{
+    compute::vector<short> vector(context);
+
+    short sum = 0;
+    compute::reduce(vector.begin(), vector.end(), &sum, queue);
+    BOOST_CHECK_EQUAL(sum, short(0));
+}
+
 BOOST_AUTO_TEST_CASE(reduce_doctest)
 {
     int data[] = { 1, 2, 3, 4 };

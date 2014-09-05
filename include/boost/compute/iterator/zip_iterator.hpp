@@ -15,12 +15,14 @@
 #include <iterator>
 
 #include <boost/config.hpp>
-#include <boost/mpl/vector.hpp>
-#include <boost/mpl/transform.hpp>
-#include <boost/mpl/back_inserter.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/iterator/iterator_facade.hpp>
+#include <boost/mpl/back_inserter.hpp>
+#include <boost/mpl/transform.hpp>
+#include <boost/mpl/vector.hpp>
 #include <boost/preprocessor/repetition.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <boost/tuple/tuple_comparison.hpp>
 
 #include <boost/compute/config.hpp>
 #include <boost/compute/functional.hpp>
@@ -29,7 +31,6 @@
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/mpl_vector_to_tuple.hpp>
-
 
 namespace boost {
 namespace compute {
