@@ -97,7 +97,7 @@ private:
 };
 
 NBodyWidget::NBodyWidget(std::size_t particles, float dt, QWidget* parent)
-    : m_initial_draw(true), m_particles(particles), m_dt(dt), QGLWidget(parent)
+    : QGLWidget(parent), m_initial_draw(true), m_particles(particles), m_dt(dt)
 {
     // create a timer to redraw as fast as possible
     timer = new QTimer(this);
