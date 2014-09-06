@@ -43,7 +43,7 @@ inline InputIterator find_if_with_atomics(InputIterator first,
     const context &context = queue.get_context();
 
     detail::meta_kernel k("find_if");
-    size_t index_arg = k.add_arg<int *>("__global", "index");
+    size_t index_arg = k.add_arg<int *>(memory_object::global_memory, "index");
     atomic_min<uint_> atomic_min_uint;
 
     k << k.decl<const uint_>("i") << " = get_global_id(0);\n"

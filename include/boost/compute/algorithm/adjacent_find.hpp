@@ -44,7 +44,7 @@ serial_adjacent_find(InputIterator first,
     detail::meta_kernel k("serial_adjacent_find");
 
     size_t size_arg = k.add_arg<const uint_>("size");
-    size_t output_arg = k.add_arg<uint_ *>("__global", "output");
+    size_t output_arg = k.add_arg<uint_ *>(memory_object::global_memory, "output");
 
     k << k.decl<uint_>("result") << " = size;\n"
       << "for(uint i = 0; i < size - 1; i++){\n"
@@ -84,7 +84,7 @@ adjacent_find_with_atomics(InputIterator first,
 
     detail::meta_kernel k("adjacent_find_with_atomics");
 
-    size_t output_arg = k.add_arg<uint_ *>("__global", "output");
+    size_t output_arg = k.add_arg<uint_ *>(memory_object::global_memory, "output");
 
     k << "const uint i = get_global_id(0);\n"
       << "if(" << compare(first[k.expr<uint_>("i")],

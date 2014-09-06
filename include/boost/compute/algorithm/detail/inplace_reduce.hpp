@@ -49,10 +49,10 @@ inline void inplace_reduce(Iterator first,
     vector<value_type> output(block_count, context);
 
     meta_kernel k("inplace_reduce");
-    size_t input_arg = k.add_arg<value_type *>("__global", "input");
+    size_t input_arg = k.add_arg<value_type *>(memory_object::global_memory, "input");
     size_t input_size_arg = k.add_arg<const uint_>("input_size");
-    size_t output_arg = k.add_arg<value_type *>("__global", "output");
-    size_t scratch_arg = k.add_arg<value_type *>("__local", "scratch");
+    size_t output_arg = k.add_arg<value_type *>(memory_object::global_memory, "output");
+    size_t scratch_arg = k.add_arg<value_type *>(memory_object::local_memory, "scratch");
     k <<
         "const uint gid = get_global_id(0);\n" <<
         "const uint lid = get_local_id(0);\n" <<

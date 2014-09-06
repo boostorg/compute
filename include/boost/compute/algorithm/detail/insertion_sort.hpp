@@ -35,7 +35,7 @@ inline void serial_insertion_sort(Iterator first,
     }
 
     meta_kernel k("serial_insertion_sort");
-    size_t local_data_arg = k.add_arg<T *>("__local", "data");
+    size_t local_data_arg = k.add_arg<T *>(memory_object::local_memory, "data");
     size_t count_arg = k.add_arg<uint_>("n");
 
     k <<
@@ -98,8 +98,8 @@ inline void serial_insertion_sort_by_key(KeyIterator keys_first,
     }
 
     meta_kernel k("serial_insertion_sort_by_key");
-    size_t local_keys_arg = k.add_arg<key_type *>("__local", "keys");
-    size_t local_data_arg = k.add_arg<value_type *>("__local", "data");
+    size_t local_keys_arg = k.add_arg<key_type *>(memory_object::local_memory, "keys");
+    size_t local_data_arg = k.add_arg<value_type *>(memory_object::local_memory, "data");
     size_t count_arg = k.add_arg<uint_>("n");
 
     k <<

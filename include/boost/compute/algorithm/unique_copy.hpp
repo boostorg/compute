@@ -48,7 +48,7 @@ inline OutputIterator serial_unique_copy(InputIterator first,
     vector<uint_> unique_count_vector(1, context);
 
     size_t size_arg = k.add_arg<const uint_>("size");
-    size_t unique_count_arg = k.add_arg<uint_ *>("__global", "unique_count");
+    size_t unique_count_arg = k.add_arg<uint_ *>(memory_object::global_memory, "unique_count");
 
     k << k.decl<uint_>("index") << " = 0;\n"
       << k.decl<value_type>("current") << " = " << first[k.var<uint_>("0")] << ";\n"

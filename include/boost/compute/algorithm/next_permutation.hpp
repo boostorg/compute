@@ -44,7 +44,7 @@ inline InputIterator next_permutation_helper(InputIterator first,
     const context &context = queue.get_context();
 
     detail::meta_kernel k("next_permutation");
-    size_t index_arg = k.add_arg<int *>("__global", "index");
+    size_t index_arg = k.add_arg<int *>(memory_object::global_memory, "index");
     atomic_max<int_> atomic_max_int;
 
     k << k.decl<const int_>("i") << " = get_global_id(0);\n"
@@ -91,8 +91,8 @@ inline InputIterator np_ceiling(InputIterator first,
     const context &context = queue.get_context();
 
     detail::meta_kernel k("np_ceiling");
-    size_t index_arg = k.add_arg<int *>("__global", "index");
-    size_t value_arg = k.add_arg<value_type>("__private", "value");
+    size_t index_arg = k.add_arg<int *>(memory_object::global_memory, "index");
+    size_t value_arg = k.add_arg<value_type>(memory_object::private_memory, "value");
     atomic_max<int_> atomic_max_int;
 
     k << k.decl<const int_>("i") << " = get_global_id(0);\n"

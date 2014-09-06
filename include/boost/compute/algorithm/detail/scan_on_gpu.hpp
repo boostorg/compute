@@ -39,8 +39,8 @@ public:
 
         bool checked = true;
 
-        m_block_sums_arg = add_arg<T *>("__global", "block_sums");
-        m_scratch_arg = add_arg<T *>("__local", "scratch");
+        m_block_sums_arg = add_arg<T *>(memory_object::global_memory, "block_sums");
+        m_scratch_arg = add_arg<T *>(memory_object::local_memory, "scratch");
         m_block_size_arg = add_arg<const cl_uint>("block_size");
         m_count_arg = add_arg<const cl_uint>("count");
 
@@ -133,8 +133,8 @@ public:
     {
         bool checked = true;
 
-        m_output_arg = add_arg<T *>("__global", "output");
-        m_block_sums_arg = add_arg<const T *>("__global", "block_sums");
+        m_output_arg = add_arg<T *>(memory_object::global_memory, "output");
+        m_block_sums_arg = add_arg<const T *>(memory_object::global_memory, "block_sums");
         m_count_arg = add_arg<const cl_uint>("count");
 
         // work-item parameters

@@ -43,7 +43,7 @@ public:
         m_size = detail::iterator_range_size(first, last);
 
         m_size_arg = add_arg<const ulong_>("size");
-        m_counts_arg = add_arg<ulong_ *>("__global", "counts");
+        m_counts_arg = add_arg<ulong_ *>(memory_object::global_memory, "counts");
 
         *this <<
             // thread parameters

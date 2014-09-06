@@ -55,7 +55,7 @@ struct buffer_iterator_index_expr
 
     buffer_iterator_index_expr(const buffer &buffer,
                                size_t index,
-                               const std::string &address_space,
+                               const memory_object::address_space address_space,
                                const IndexExpr &expr)
         : m_buffer(buffer),
           m_index(index),
@@ -74,7 +74,7 @@ struct buffer_iterator_index_expr
 
     const buffer &m_buffer;
     size_t m_index;
-    std::string m_address_space;
+    memory_object::address_space m_address_space;
     IndexExpr m_expr;
 };
 
@@ -174,10 +174,9 @@ public:
     {
         BOOST_ASSERT(m_buffer.get());
 
-        return detail::buffer_iterator_index_expr<T, Expr>(m_buffer,
-                                                           m_index,
-                                                           "__global",
-                                                           expr);
+        return detail::buffer_iterator_index_expr<T, Expr>(
+            m_buffer, m_index, memory_object::global_memory, expr
+        );
     }
 
 private:

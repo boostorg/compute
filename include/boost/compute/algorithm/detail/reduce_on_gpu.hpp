@@ -103,7 +103,7 @@ inline void initial_reduce(InputIterator first,
     size_t count = std::distance(first, last);
     detail::meta_kernel k("initial_reduce");
     k.add_set_arg<const uint_>("count", uint_(count));
-    size_t output_arg = k.add_arg<T *>("__global", "output");
+    size_t output_arg = k.add_arg<T *>(memory_object::global_memory, "output");
 
     k <<
         k.decl<const uint_>("offset") << " = get_group_id(0) * VPT * TPB;\n" <<
@@ -175,10 +175,10 @@ inline void reduce_on_gpu(InputIterator first,
     const device &device = queue.get_device();
 
     detail::meta_kernel k("reduce");
-    k.add_arg<T*>("__global const","input");
+    k.add_arg<const T*>(memory_object::global_memory, "input");
     k.add_arg<const uint_>("offset");
     k.add_arg<const uint_>("count");
-    k.add_arg<T*>("__global","output");
+    k.add_arg<T*>(memory_object::global_memory, "output");
     k.add_arg<const uint_>("output_offset");
 
     k <<

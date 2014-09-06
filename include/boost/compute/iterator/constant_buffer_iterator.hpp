@@ -101,10 +101,9 @@ public:
         BOOST_ASSERT(m_buffer);
         BOOST_ASSERT(m_buffer->get());
 
-        return detail::buffer_iterator_index_expr<T, Expr>(*m_buffer,
-                                                           m_index,
-                                                           "__constant",
-                                                           expr);
+        return detail::buffer_iterator_index_expr<T, Expr>(
+            *m_buffer, m_index, memory_object::constant_memory, expr
+        );
     }
 
 private:
