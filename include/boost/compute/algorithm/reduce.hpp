@@ -53,8 +53,8 @@ size_t reduce(InputIterator first,
 
     if(block_count != 0){
         meta_kernel k("block_reduce");
-        size_t output_arg = k.add_arg<result_type *>("__global", "output");
-        size_t block_arg = k.add_arg<input_type *>("__local", "block");
+        size_t output_arg = k.add_arg<result_type *>(memory_object::global_memory, "output");
+        size_t block_arg = k.add_arg<input_type *>(memory_object::local_memory, "block");
 
         k <<
             "const uint gid = get_global_id(0);\n" <<
@@ -97,7 +97,7 @@ size_t reduce(InputIterator first,
         meta_kernel k("extra_serial_reduce");
         size_t count_arg = k.add_arg<uint_>("count");
         size_t offset_arg = k.add_arg<uint_>("offset");
-        size_t output_arg = k.add_arg<result_type *>("__global", "output");
+        size_t output_arg = k.add_arg<result_type *>(memory_object::global_memory, "output");
         size_t output_offset_arg = k.add_arg<uint_>("output_offset");
 
         k <<

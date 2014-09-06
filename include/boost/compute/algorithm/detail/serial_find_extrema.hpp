@@ -47,7 +47,7 @@ inline InputIterator serial_find_extrema(InputIterator first,
         "}\n" <<
         "*index = value_index;\n";
 
-    size_t index_arg_index = k.add_arg<uint_ *>("__global", "index");
+    size_t index_arg_index = k.add_arg<uint_ *>(memory_object::global_memory, "index");
     size_t size_arg_index = k.add_arg<uint_>("size");
 
     kernel kernel = k.compile(context);

@@ -45,7 +45,7 @@ inline InputIterator find_end_helper(InputIterator first,
     const context &context = queue.get_context();
 
     detail::meta_kernel k("find_end");
-    size_t index_arg = k.add_arg<int *>("__global", "index");
+    size_t index_arg = k.add_arg<int *>(memory_object::global_memory, "index");
     atomic_max<int_> atomic_max_int;
 
     k << k.decl<const int_>("i") << " = get_global_id(0);\n"

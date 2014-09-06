@@ -179,7 +179,7 @@ private:
         command_queue queue(context, context.get_device());
 
         detail::meta_kernel k("read");
-        size_t output_arg = k.add_arg<value_type *>("__global", "output");
+        size_t output_arg = k.add_arg<value_type *>(memory_object::global_memory, "output");
         k << "*output = " << m_transform(super_type::base()[k.lit(0)]) << ";";
 
         kernel kernel = k.compile(context);

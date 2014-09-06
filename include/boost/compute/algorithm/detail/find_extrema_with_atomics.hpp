@@ -49,7 +49,7 @@ inline InputIterator find_extrema_with_atomics(InputIterator first,
         "    old_index = *index;\n" <<
         "}\n";
 
-    size_t index_arg_index = k.add_arg<uint_ *>("__global", "index");
+    size_t index_arg_index = k.add_arg<uint_ *>(memory_object::global_memory, "index");
 
     kernel kernel = k.compile(context);
 

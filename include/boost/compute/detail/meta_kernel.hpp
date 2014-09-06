@@ -189,7 +189,7 @@ struct meta_kernel_buffer_info
 {
     meta_kernel_buffer_info(const buffer &buffer,
                             const std::string &id,
-                            const std::string &addr_space,
+                            memory_object::address_space addr_space,
                             size_t i)
       : m_mem(buffer.get()),
         identifier(id),
@@ -200,7 +200,7 @@ struct meta_kernel_buffer_info
 
     cl_mem m_mem;
     std::string identifier;
-    std::string address_space;
+    memory_object::address_space address_space;
     size_t index;
 };
 
@@ -387,21 +387,10 @@ public:
     }
 
     template<class T>
-    size_t add_arg(const std::string &qualifiers, const std::string &name)
+    size_t add_arg(memory_object::address_space address_space,
+                   const std::string &name)
     {
-        size_t index = add_arg<T>(name);
-        m_args[index] = qualifiers + " " + m_args[index];
-        return index;
-    }
-
-    template<class T>
-    size_t add_arg(const std::string &qualifiers,
-                   const std::string &name,
-                   const T &value)
-    {
-        size_t index = add_arg<T>(qualifiers, name);
-        set_arg<T>(index, value);
-        return index;
+        return add_arg_with_qualifiers<T>(address_space_prefix(address_space), name);
     }
 
     template<class T>
@@ -675,7 +664,8 @@ public:
 
     template<class T>
     std::string get_buffer_identifier(const buffer &buffer,
-                                      const std::string &address_space = "__global")
+                                      const memory_object::address_space address_space =
+                                          memory_object::global_memory)
     {
         // check if we've already seen buffer
         for(size_t i = 0; i < m_stored_buffers.size(); i++){
@@ -699,10 +689,11 @@ public:
         return identifier;
     }
 
-    std::string get_image_identifier(const std::string qualifiers,
-                                     const image2d &image)
+    std::string get_image_identifier(const char *qualifiers, const image2d &image)
     {
-        add_arg(qualifiers, "image", image);
+        size_t index = add_arg_with_qualifiers<image2d>(qualifiers, "image");
+
+        set_arg(index, image);
 
         return "image";
     }
@@ -854,6 +845,32 @@ public:
     #undef BOOST_COMPUTE_META_KERNEL_INSERT_FUNCTION_ARG_TYPE
     #undef BOOST_COMPUTE_META_KERNEL_STREAM_FUNCTION_ARG
     #undef BOOST_COMPUTE_META_KERNEL_INSERT_FUNCTION_ARGS
+
+    static const char* address_space_prefix(const memory_object::address_space value)
+    {
+        switch(value){
+            case memory_object::global_memory: return "__global";
+            case memory_object::local_memory: return "__local";
+            case memory_object::private_memory: return "__private";
+            case memory_object::constant_memory: return "__constant";
+        };
+
+        return 0; // unreachable
+    }
+
+private:
+    template<class T>
+    size_t add_arg_with_qualifiers(const char *qualifiers, const std::string &name)
+    {
+        size_t index = add_arg<T>(name);
+
+        // update argument type declaration with qualifiers
+        std::stringstream s;
+        s << qualifiers << " " << m_args[index];
+        m_args[index] = s.str();
+
+        return index;
+    }
 
 private:
     std::string m_name;

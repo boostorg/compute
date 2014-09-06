@@ -43,7 +43,7 @@ public:
         typedef typename std::iterator_traits<InputIterator>::value_type value_type;
         int block = (iterator_range_size(first, last)-1)/(threads-1);
 
-        m_index_arg = add_arg<uint_ *>("__global", "index");
+        m_index_arg = add_arg<uint_ *>(memory_object::global_memory, "index");
 
         atomic_min<uint_> atomic_min_uint;
 
