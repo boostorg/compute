@@ -39,6 +39,10 @@ foreach(EXAMPLE ${EXAMPLES})
   target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES})
 endforeach()
 
+# opencl test example
+add_executable(opencl_test opencl_test.cpp)
+target_link_libraries(opencl_test ${OPENCL_LIBRARIES})
+
 # eigen examples
 if(${BOOST_COMPUTE_HAVE_EIGEN})
   find_package(Eigen REQUIRED)
