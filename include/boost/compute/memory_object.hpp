@@ -46,6 +46,14 @@ public:
         #endif
     };
 
+    /// Symbolic names for the OpenCL address spaces.
+    enum address_space {
+        global_memory,
+        local_memory,
+        private_memory,
+        constant_memory
+    };
+
     /// Returns the underlying OpenCL memory object.
     cl_mem& get() const
     {
