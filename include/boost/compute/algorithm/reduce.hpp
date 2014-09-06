@@ -171,9 +171,6 @@ inline void generic_reduce(InputIterator first,
     const context &context = queue.get_context();
 
     size_t count = detail::iterator_range_size(first, last);
-    if(count == 0){
-        return;
-    }
 
     if(device.type() & device::cpu){
         boost::compute::vector<result_type> value(1, context);
@@ -266,6 +263,10 @@ inline void reduce(InputIterator first,
                    BinaryFunction function,
                    command_queue &queue = system::default_queue())
 {
+    if(first == last){
+        return;
+    }
+
     detail::dispatch_reduce(first, last, result, function, queue);
 }
 
@@ -277,6 +278,10 @@ inline void reduce(InputIterator first,
                    command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<InputIterator>::value_type T;
+
+    if(first == last){
+        return;
+    }
 
     detail::dispatch_reduce(first, last, result, plus<T>(), queue);
 }
