@@ -12,6 +12,7 @@
 #define BOOST_COMPUTE_HPP
 
 #include <boost/compute/algorithm.hpp>
+#include <boost/compute/allocator.hpp>
 #include <boost/compute/async.hpp>
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/cl.hpp>

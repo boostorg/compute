@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------//
-// Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+// Copyright (c) 2013-2014 Kyle Lutz <kyle.r.lutz@gmail.com>
 //
 // Distributed under the Boost Software License, Version 1.0
 // See accompanying file LICENSE_1_0.txt or copy at
@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_CONTAINER_ALLOCATOR_HPP
-#define BOOST_COMPUTE_CONTAINER_ALLOCATOR_HPP
+#ifndef BOOST_COMPUTE_ALLOCATOR_BUFFER_ALLOCATOR_HPP
+#define BOOST_COMPUTE_ALLOCATOR_BUFFER_ALLOCATOR_HPP
 
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/config.hpp>
@@ -20,7 +20,7 @@ namespace boost {
 namespace compute {
 
 template<class T>
-class allocator
+class buffer_allocator
 {
 public:
     typedef T value_type;
@@ -29,19 +29,19 @@ public:
     typedef std::size_t size_type;
     typedef std::ptrdiff_t difference_type;
 
-    allocator(const context &context)
+    explicit buffer_allocator(const context &context)
         : m_context(context),
           m_mem_flags(buffer::read_write)
     {
     }
 
-    allocator(const allocator<T> &other)
+    buffer_allocator(const buffer_allocator<T> &other)
         : m_context(other.m_context),
           m_mem_flags(other.m_mem_flags)
     {
     }
 
-    allocator<T>& operator=(const allocator<T> &other)
+    buffer_allocator<T>& operator=(const buffer_allocator<T> &other)
     {
         if(this != &other){
             m_context = other.m_context;
@@ -52,13 +52,13 @@ public:
     }
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
-    allocator(allocator<T>&& other) BOOST_NOEXCEPT
+    buffer_allocator(buffer_allocator<T>&& other) BOOST_NOEXCEPT
         : m_context(std::move(other.m_context)),
           m_mem_flags(other.m_mem_flags)
     {
     }
 
-    allocator<T>& operator=(allocator<T>&& other) BOOST_NOEXCEPT
+    buffer_allocator<T>& operator=(buffer_allocator<T>&& other) BOOST_NOEXCEPT
     {
         m_context = std::move(other.m_context);
         m_mem_flags = other.m_mem_flags;
@@ -67,7 +67,7 @@ public:
     }
     #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
-    ~allocator()
+    ~buffer_allocator()
     {
     }
 
@@ -111,4 +111,4 @@ private:
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_CONTAINER_ALLOCATOR_HPP
+#endif // BOOST_COMPUTE_ALLOCATOR_BUFFER_ALLOCATOR_HPP
