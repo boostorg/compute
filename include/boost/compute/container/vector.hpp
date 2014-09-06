@@ -33,7 +33,7 @@
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/fill_n.hpp>
-#include <boost/compute/container/allocator.hpp>
+#include <boost/compute/allocator/buffer_allocator.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/type_traits/detail/capture_traits.hpp>
 #include <boost/compute/detail/buffer_value.hpp>
@@ -99,7 +99,7 @@ namespace compute {
 /// \endcode
 ///
 /// \see buffer
-template<class T, class Alloc = allocator<T> >
+template<class T, class Alloc = buffer_allocator<T> >
 class vector
 {
 public:
