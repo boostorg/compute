@@ -115,6 +115,7 @@ add_compute_test("allocator.pinned_allocator" test_pinned_allocator.cpp)
 add_compute_test("async.wait" test_async_wait.cpp)
 
 add_compute_test("container.array" test_array.cpp)
+add_compute_test("container.dynamic_bitset" test_dynamic_bitset.cpp)
 add_compute_test("container.flat_map" test_flat_map.cpp)
 add_compute_test("container.flat_set" test_flat_set.cpp)
 add_compute_test("container.mapped_view" test_mapped_view.cpp)

@@ -17,6 +17,7 @@
 
 #include <boost/compute/container/array.hpp>
 #include <boost/compute/container/basic_string.hpp>
+#include <boost/compute/container/dynamic_bitset.hpp>
 #include <boost/compute/container/flat_map.hpp>
 #include <boost/compute/container/flat_set.hpp>
 #include <boost/compute/container/mapped_view.hpp>
