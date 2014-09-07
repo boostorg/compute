@@ -130,6 +130,7 @@ add_compute_test("functional.bind" test_functional_bind.cpp)
 add_compute_test("functional.convert" test_functional_convert.cpp)
 add_compute_test("functional.get" test_functional_get.cpp)
 add_compute_test("functional.hash" test_functional_hash.cpp)
+add_compute_test("functional.popcount" test_functional_popcount.cpp)
 add_compute_test("functional.unpack" test_functional_unpack.cpp)
 
 add_compute_test("iterator.buffer_iterator" test_buffer_iterator.cpp)

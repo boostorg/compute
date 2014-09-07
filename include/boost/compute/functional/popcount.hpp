@@ -37,8 +37,8 @@ public:
           // fallback to generic popcount() implementation
           << "#else\n"
           << "    " << type_name<T>() << " count = 0;\n"
-          << "    for(uint i = 0; i < sizeof(" << type_name<T>() << ") * CHAR_BIT; i++){\n"
-          << "        if(x & 1 << i){\n"
+          << "    for(" << type_name<T>() << " i = 0; i < sizeof(i) * CHAR_BIT; i++){\n"
+          << "        if(x & (" << type_name<T>() << ") 1 << i){\n"
           << "            count++;\n"
           << "        }\n"
           << "    }\n"
