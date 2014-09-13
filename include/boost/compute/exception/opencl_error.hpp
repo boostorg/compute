@@ -135,6 +135,10 @@ public:
         case CL_INVALID_LINKER_OPTIONS: return "Invalid Linker Options";
         case CL_INVALID_DEVICE_PARTITION_COUNT: return "Invalid Device Partition Count";
         #endif // CL_VERSION_1_2
+        #ifdef CL_VERSION_2_0
+        case CL_INVALID_PIPE_SIZE: return "Invalid Pipe Size";
+        case CL_INVALID_DEVICE_QUEUE: return "Invalid Device Queue";
+        #endif
         default: {
             std::stringstream s;
             s << "Unknown OpenCL Error (" << error << ")";

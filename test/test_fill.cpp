@@ -16,6 +16,7 @@
 #include <boost/compute/algorithm/fill_n.hpp>
 #include <boost/compute/async/future.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/svm.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"
@@ -181,5 +182,19 @@ BOOST_AUTO_TEST_CASE(fill_last_value)
     compute::fill_n(vec.end() - 1, 1, 7, queue);
     CHECK_RANGE_EQUAL(int, 4, vec, (0, 0, 0, 7));
 }
+
+#ifdef CL_VERSION_2_0
+BOOST_AUTO_TEST_CASE(fill_svm_buffer)
+{
+    compute::svm_ptr<int> ptr = compute::svm_alloc<int>(context, 16);
+    compute::fill_n(ptr, 16, 42, queue);
+
+    int value = 0;
+    queue.enqueue_svm_memcpy(&value, ptr.get(), sizeof(int));
+    BOOST_CHECK_EQUAL(value, 42);
+
+    compute::svm_free(context, ptr);
+}
+#endif // CL_VERSION_2_0
 
 BOOST_AUTO_TEST_SUITE_END()

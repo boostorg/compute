@@ -29,9 +29,11 @@
 #include <boost/compute/iterator.hpp>
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/lambda.hpp>
+#include <boost/compute/pipe.hpp>
 #include <boost/compute/platform.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/random.hpp>
+#include <boost/compute/svm.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/types.hpp>
 #include <boost/compute/user_event.hpp>

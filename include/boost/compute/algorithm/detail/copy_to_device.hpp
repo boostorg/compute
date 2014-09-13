@@ -18,6 +18,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/async/future.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/memory/svm_ptr.hpp>
 
 namespace boost {
 namespace compute {
@@ -79,6 +80,45 @@ inline future<DeviceIterator> copy_to_device_async(HostIterator first,
 
     return make_future(result + static_cast<difference_type>(count), event_);
 }
+
+#ifdef CL_VERSION_2_0
+// copy_to_device() specialization for svm_ptr
+template<class HostIterator, class T>
+inline svm_ptr<T> copy_to_device(HostIterator first,
+                                 HostIterator last,
+                                 svm_ptr<T> result,
+                                 command_queue &queue)
+{
+    size_t count = iterator_range_size(first, last);
+    if(count == 0){
+        return result;
+    }
+
+    queue.enqueue_svm_memcpy(
+        result.get(), ::boost::addressof(*first), count * sizeof(T)
+    );
+
+    return result + count;
+}
+
+template<class HostIterator, class T>
+inline future<svm_ptr<T> > copy_to_device_async(HostIterator first,
+                                                HostIterator last,
+                                                svm_ptr<T> result,
+                                                command_queue &queue)
+{
+    size_t count = iterator_range_size(first, last);
+    if(count == 0){
+        return result;
+    }
+
+    event event_ = queue.enqueue_svm_memcpy_async(
+        result.get(), ::boost::addressof(*first), count * sizeof(T)
+    );
+
+    return make_future(result + count, event_);
+}
+#endif // CL_VERSION_2_0
 
 } // end detail namespace
 } // end compute namespace
