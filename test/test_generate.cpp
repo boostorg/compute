@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestGenerate
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/function.hpp>
 #include <boost/compute/algorithm/generate.hpp>
 #include <boost/compute/algorithm/generate_n.hpp>

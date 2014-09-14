@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestPair
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/find.hpp>

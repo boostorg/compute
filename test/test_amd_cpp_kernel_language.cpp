@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestAmdCppKernel
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/source.hpp>

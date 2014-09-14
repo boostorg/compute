@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------//
-// Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+// Copyright (c) 2013-2014 Kyle Lutz <kyle.r.lutz@gmail.com>
 //
 // Distributed under the Boost Software License, Version 1.0
 // See accompanying file LICENSE_1_0.txt or copy at
@@ -16,24 +16,77 @@
 
 #include <boost/throw_exception.hpp>
 
-#include <boost/compute/exception.hpp>
+#include <boost/compute/cl.hpp>
+#include <boost/compute/exception/opencl_error.hpp>
 
 namespace boost {
 namespace compute {
 namespace detail {
 
-// default implementation
-template<class T, class Function, class Object, class Info>
-struct _get_object_info_impl
+template<class Function, class Object, class AuxInfo>
+struct bound_info_function
 {
-    T operator()(Function function, Object object, Info info)
+    bound_info_function(Function function, Object object, AuxInfo aux_info)
+        : m_function(function),
+          m_object(object),
+          m_aux_info(aux_info)
+    {
+    }
+
+    template<class Info>
+    cl_int operator()(Info info, size_t size, void *value, size_t *size_ret) const
+    {
+        return m_function(m_object, m_aux_info, info, size, value, size_ret);
+    }
+
+    Function m_function;
+    Object m_object;
+    AuxInfo m_aux_info;
+};
+
+template<class Function, class Object>
+struct bound_info_function<Function, Object, void>
+{
+    bound_info_function(Function function, Object object)
+        : m_function(function),
+          m_object(object)
+    {
+    }
+
+    template<class Info>
+    cl_int operator()(Info info, size_t size, void *value, size_t *size_ret) const
+    {
+        return m_function(m_object, info, size, value, size_ret);
+    }
+
+    Function m_function;
+    Object m_object;
+};
+
+template<class Function, class Object>
+inline bound_info_function<Function, Object, void>
+bind_info_function(Function f, Object o)
+{
+    return bound_info_function<Function, Object, void>(f, o);
+}
+
+template<class Function, class Object, class AuxInfo>
+inline bound_info_function<Function, Object, AuxInfo>
+bind_info_function(Function f, Object o, AuxInfo j)
+{
+    return bound_info_function<Function, Object, AuxInfo>(f, o, j);
+}
+
+// default implementation
+template<class T>
+struct get_object_info_impl
+{
+    template<class Function, class Info>
+    T operator()(Function function, Info info) const
     {
         T value;
-        cl_int ret = function(object,
-                              static_cast<cl_uint>(info),
-                              sizeof(T),
-                              &value,
-                              0);
+
+        cl_int ret = function(info, sizeof(T), &value, 0);
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -43,17 +96,15 @@ struct _get_object_info_impl
 };
 
 // specialization for bool
-template<class Function, class Object, class Info>
-struct _get_object_info_impl<bool, Function, Object, Info>
+template<>
+struct get_object_info_impl<bool>
 {
-    bool operator()(Function function, Object object, Info info)
+    template<class Function, class Info>
+    bool operator()(Function function, Info info) const
     {
         cl_bool value;
-        cl_int ret = function(object,
-                              static_cast<cl_uint>(info),
-                              sizeof(cl_bool),
-                              &value,
-                              0);
+
+        cl_int ret = function(info, sizeof(cl_bool), &value, 0);
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -63,17 +114,15 @@ struct _get_object_info_impl<bool, Function, Object, Info>
 };
 
 // specialization for std::string
-template<class Function, class Object, class Info>
-struct _get_object_info_impl<std::string, Function, Object, Info>
+template<>
+struct get_object_info_impl<std::string>
 {
-    std::string operator()(Function function, Object object, Info info)
+    template<class Function, class Info>
+    std::string operator()(Function function, Info info) const
     {
         size_t size = 0;
-        cl_int ret = function(object,
-                              static_cast<cl_uint>(info),
-                              0,
-                              0,
-                              &size);
+
+        cl_int ret = function(info, 0, 0, &size);
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -83,11 +132,8 @@ struct _get_object_info_impl<std::string, Function, Object, Info>
         }
 
         std::string value(size - 1, 0);
-        ret = function(object,
-                       static_cast<cl_uint>(info),
-                       size,
-                       &value[0],
-                       0);
+
+        ret = function(info, size, &value[0], 0);
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -97,27 +143,21 @@ struct _get_object_info_impl<std::string, Function, Object, Info>
 };
 
 // specialization for std::vector<T>
-template<class T, class Function, class Object, class Info>
-struct _get_object_info_impl<std::vector<T>, Function, Object, Info>
+template<class T>
+struct get_object_info_impl<std::vector<T> >
 {
-    std::vector<T> operator()(Function function, Object object, Info info)
+    template<class Function, class Info>
+    std::vector<T> operator()(Function function, Info info) const
     {
         size_t size = 0;
-        cl_int ret = function(object,
-                              static_cast<cl_uint>(info),
-                              0,
-                              0,
-                              &size);
+
+        cl_int ret = function(info, 0, 0, &size);
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
         std::vector<T> vector(size / sizeof(T));
-        ret = function(object,
-                       static_cast<cl_uint>(info),
-                       size,
-                       &vector[0],
-                       0);
+        ret = function(info, size, &vector[0], 0);
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
@@ -130,7 +170,13 @@ struct _get_object_info_impl<std::vector<T>, Function, Object, Info>
 template<class T, class Function, class Object, class Info>
 inline T get_object_info(Function f, Object o, Info i)
 {
-    return _get_object_info_impl<T, Function, Object, Info>()(f, o, i);
+    return get_object_info_impl<T>()(bind_info_function(f, o), i);
+}
+
+template<class T, class Function, class Object, class Info, class AuxInfo>
+inline T get_object_info(Function f, Object o, Info i, AuxInfo j)
+{
+    return get_object_info_impl<T>()(bind_info_function(f, o, j), i);
 }
 
 // returns the value type for the clGet*Info() call on Object with Enum.

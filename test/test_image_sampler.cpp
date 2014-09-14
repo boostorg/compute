@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestImageSampler
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/image_sampler.hpp>
 

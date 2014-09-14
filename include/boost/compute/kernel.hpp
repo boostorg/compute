@@ -175,20 +175,9 @@ public:
     ///
     /// \see_opencl_ref{clGetKernelArgInfo}
     template<class T>
-    T get_arg_info(size_t index, cl_kernel_arg_info info)
+    T get_arg_info(size_t index, cl_kernel_arg_info info) const
     {
-        T value;
-        cl_int ret = clGetKernelArgInfo(m_kernel,
-                                        index,
-                                        info,
-                                        sizeof(T),
-                                        &value,
-                                        0);
-        if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(opencl_error(ret));
-        }
-
-        return value;
+        return detail::get_object_info<T>(clGetKernelArgInfo, m_kernel, info, index);
     }
     #endif // CL_VERSION_1_2
 
@@ -198,18 +187,7 @@ public:
     template<class T>
     T get_work_group_info(const device &device, cl_kernel_work_group_info info)
     {
-        T value;
-        cl_int ret = clGetKernelWorkGroupInfo(m_kernel,
-                                              device.id(),
-                                              info,
-                                              sizeof(T),
-                                              &value,
-                                              0);
-        if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(opencl_error(ret));
-        }
-
-        return value;
+        return detail::get_object_info<T>(clGetKernelWorkGroupInfo, m_kernel, info, device.id());
     }
 
     /// Sets the argument at \p index to \p value with \p size.

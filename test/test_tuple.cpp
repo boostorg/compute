@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestTuple
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/tuple/tuple.hpp>
 #include <boost/tuple/tuple_io.hpp>
 #include <boost/tuple/tuple_comparison.hpp>

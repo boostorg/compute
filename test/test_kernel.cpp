@@ -18,36 +18,36 @@
 
 #include "context_setup.hpp"
 
-namespace bc = boost::compute;
+namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(name)
 {
-    bc::kernel foo = bc::kernel::create_with_source("__kernel void foo(int x) { }",
-                                                    "foo",
-                                                    context);
+    compute::kernel foo = compute::kernel::create_with_source(
+        "__kernel void foo(int x) { }", "foo", context
+    );
     BOOST_CHECK_EQUAL(foo.name(), "foo");
 
-    bc::kernel bar = bc::kernel::create_with_source("__kernel void bar(float x) { }",
-                                                    "bar",
-                                                    context);
+    compute::kernel bar = compute::kernel::create_with_source(
+        "__kernel void bar(float x) { }", "bar", context
+    );
     BOOST_CHECK_EQUAL(bar.name(), "bar");
 }
 
 BOOST_AUTO_TEST_CASE(arity)
 {
-    bc::kernel foo = bc::kernel::create_with_source("__kernel void foo(int x) { }",
-                                                    "foo",
-                                                    context);
+    compute::kernel foo = compute::kernel::create_with_source(
+        "__kernel void foo(int x) { }", "foo", context
+    );
     BOOST_CHECK_EQUAL(foo.arity(), size_t(1));
 
-    bc::kernel bar = bc::kernel::create_with_source("__kernel void bar(float x, float y) { }",
-                                                    "bar",
-                                                    context);
+    compute::kernel bar = compute::kernel::create_with_source(
+        "__kernel void bar(float x, float y) { }", "bar", context
+    );
     BOOST_CHECK_EQUAL(bar.arity(), size_t(2));
 
-    bc::kernel baz = bc::kernel::create_with_source("__kernel void baz(char x, char y, char z) { }",
-                                                    "baz",
-                                                    context);
+    compute::kernel baz = compute::kernel::create_with_source(
+        "__kernel void baz(char x, char y, char z) { }", "baz", context
+    );
     BOOST_CHECK_EQUAL(baz.arity(), size_t(3));
 }
 
@@ -60,11 +60,11 @@ BOOST_AUTO_TEST_CASE(set_buffer_arg)
         }
     );
 
-    bc::kernel foo =
-        bc::kernel::create_with_source(source, "foo", context);
+    compute::kernel foo =
+        compute::kernel::create_with_source(source, "foo", context);
 
-    bc::buffer x(context, 16);
-    bc::buffer y(context, 16);
+    compute::buffer x(context, 16);
+    compute::buffer y(context, 16);
 
     foo.set_arg(0, x);
     foo.set_arg(1, y.get());
@@ -83,14 +83,14 @@ BOOST_AUTO_TEST_CASE(get_work_group_info)
     "        scratch[lid] = input[gid];\n"
     "}\n";
 
-    boost::compute::program program =
-        boost::compute::program::create_with_source(source, context);
+    compute::program program =
+        compute::program::create_with_source(source, context);
 
     program.build();
 
-    boost::compute::kernel kernel = program.create_kernel("sum");
+    compute::kernel kernel = program.create_kernel("sum");
 
-    using boost::compute::ulong_;
+    using compute::ulong_;
 
     // get local memory size
     kernel.get_work_group_info<ulong_>(device, CL_KERNEL_LOCAL_MEM_SIZE);
@@ -104,15 +104,46 @@ BOOST_AUTO_TEST_CASE(get_work_group_info)
 #ifndef BOOST_NO_VARIADIC_TEMPLATES
 BOOST_AUTO_TEST_CASE(kernel_set_args)
 {
-    bc::kernel k =
-        bc::kernel::create_with_source(
-            "__kernel void test(int x, float y, char z) { }",
-            "test",
-            context
-        );
+    compute::kernel k = compute::kernel::create_with_source(
+        "__kernel void test(int x, float y, char z) { }", "test", context
+    );
 
     k.set_args(4, 2.4f, 'a');
 }
 #endif
+
+#ifdef CL_VERSION_1_2
+BOOST_AUTO_TEST_CASE(get_arg_info)
+{
+    const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void sum_kernel(__global const int *input,
+                                 const uint size,
+                                 __global int *result)
+        {
+            int sum = 0;
+            for(uint i = 0; i < size; i++){
+                sum += input[i];
+            }
+            *result = sum;
+        }
+    );
+
+    compute::program program =
+        compute::program::create_with_source(source, context);
+
+    program.build("-cl-kernel-arg-info");
+
+    compute::kernel kernel = program.create_kernel("sum_kernel");
+
+    BOOST_CHECK_EQUAL(kernel.get_info<CL_KERNEL_NUM_ARGS>(), 3);
+
+    BOOST_CHECK_EQUAL(kernel.get_arg_info<std::string>(0, CL_KERNEL_ARG_TYPE_NAME), "int*");
+    BOOST_CHECK_EQUAL(kernel.get_arg_info<std::string>(0, CL_KERNEL_ARG_NAME), "input");
+    BOOST_CHECK_EQUAL(kernel.get_arg_info<std::string>(1, CL_KERNEL_ARG_TYPE_NAME), "uint");
+    BOOST_CHECK_EQUAL(kernel.get_arg_info<std::string>(1, CL_KERNEL_ARG_NAME), "size");
+    BOOST_CHECK_EQUAL(kernel.get_arg_info<std::string>(2, CL_KERNEL_ARG_TYPE_NAME), "int*");
+    BOOST_CHECK_EQUAL(kernel.get_arg_info<std::string>(2, CL_KERNEL_ARG_NAME), "result");
+}
+#endif // CL_VERSION_1_2
 
 BOOST_AUTO_TEST_SUITE_END()
