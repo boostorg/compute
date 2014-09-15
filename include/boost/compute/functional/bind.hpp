@@ -15,6 +15,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/type_traits/conditional.hpp>
 
+#include <boost/compute/config.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 
 namespace boost {
@@ -203,6 +204,26 @@ struct bound_function
 
 } // end detail namespace
 
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+/// Returns a function wrapper which invokes \p f with \p args when called.
+///
+/// For example, to generate a unary function object which returns \c true
+/// when its argument is less than \c 7:
+/// \code
+/// using boost::compute;
+/// using boost::compute::placeholders::_1;
+///
+/// auto less_than_seven = bind(less<int>(), _1, 7);
+/// \endcode
+template<class F, class... Args>
+inline detail::bound_function<F, boost::tuple<Args...> >
+bind(F f, Args... args)
+{
+    typedef typename boost::tuple<Args...> ArgsTuple;
+
+    return detail::bound_function<F, ArgsTuple>(f, boost::make_tuple(args...));
+}
+#else
 template<class F, class A1>
 inline detail::bound_function<F, boost::tuple<A1> >
 bind(F f, A1 a1)
@@ -229,6 +250,7 @@ bind(F f, A1 a1, A2 a2, A3 a3)
 
     return detail::bound_function<F, Args>(f, boost::make_tuple(a1, a2, a3));
 }
+#endif // BOOST_NO_VARIADIC_TEMPLATES
 
 } // end compute namespace
 } // end boost namespace
