@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestImage2D
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/image2d.hpp>
 #include <boost/compute/algorithm/find.hpp>

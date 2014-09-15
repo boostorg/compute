@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestCommandQueue
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/program.hpp>

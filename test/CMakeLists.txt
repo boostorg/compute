@@ -10,8 +10,6 @@ endif()
 find_package(Boost 1.48 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 add_definitions(-DBOOST_TEST_DYN_LINK)
 
-add_definitions(-DBOOST_COMPUTE_DEBUG_KERNEL_COMPILATION)
-
 # enable code coverage generation (only with GCC for now)
 if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   add_definitions(-fprofile-arcs -ftest-coverage)

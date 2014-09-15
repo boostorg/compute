@@ -155,4 +155,24 @@ BOOST_AUTO_TEST_CASE(compile_and_link)
 }
 #endif // CL_VERSION_1_2
 
+BOOST_AUTO_TEST_CASE(build_log)
+{
+    const char invalid_source[] =
+        "__kernel void foo(__global int *input) { !@#$%^&*() }";
+
+    compute::program invalid_program =
+        compute::program::create_with_source(invalid_source, context);
+
+    try {
+        invalid_program.build();
+
+        // should not get here
+        BOOST_CHECK(false);
+    }
+    catch(compute::opencl_error &e){
+        std::string log = invalid_program.build_log();
+        BOOST_CHECK(!log.empty());
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()
