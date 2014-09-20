@@ -21,6 +21,8 @@
 
 #include "context_setup.hpp"
 
+namespace compute=boost::compute;
+
 BOOST_AUTO_TEST_CASE(uniform_int_distribution_doctest)
 {
     using boost::compute::uint_;
@@ -42,6 +44,31 @@ distribution.generate(vec.begin(), vec.end(), engine, queue);
     BOOST_CHECK_EQUAL(
         boost::compute::count_if(
             vec.begin(), vec.end(), _1 > 1, queue
+        ),
+        size_t(0)
+    );
+}
+
+BOOST_AUTO_TEST_CASE(issue159) {
+    using boost::compute::lambda::_1;
+
+    boost::compute::vector<int> input(10, context);
+
+    // generate random numbers between 1 and 10
+    compute::default_random_engine rng(queue);
+    compute::uniform_int_distribution<int> d(1, 10);
+    d.generate(input.begin(), input.end(), rng, queue);
+
+    BOOST_CHECK_EQUAL(
+        boost::compute::count_if(
+            input.begin(), input.end(), _1 > 10, queue
+        ),
+        size_t(0)
+    );
+
+    BOOST_CHECK_EQUAL(
+        boost::compute::count_if(
+            input.begin(), input.end(), _1 < 1, queue
         ),
         size_t(0)
     );
