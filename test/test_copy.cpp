@@ -17,6 +17,7 @@
 #include <sstream>
 #include <iterator>
 
+#include <boost/compute/svm.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/command_queue.hpp>
@@ -274,5 +275,21 @@ BOOST_AUTO_TEST_CASE(check_copy_type)
     future.wait();
     CHECK_HOST_RANGE_EQUAL(int, 8, data, (1, 2, 3, 4, 5, 6, 7, 8));
 }
+
+#ifdef CL_VERSION_2_0
+BOOST_AUTO_TEST_CASE(copy_svm_ptr)
+{
+    int data[] = { 1, 3, 2, 4 };
+
+    compute::svm_ptr<int> ptr = compute::svm_alloc<int>(context, 4);
+    compute::copy(data, data + 4, ptr, queue);
+
+    int output[] = { 0, 0, 0, 0 };
+    compute::copy(ptr, ptr + 4, output, queue);
+    CHECK_HOST_RANGE_EQUAL(int, 4, output, (1, 3, 2, 4));
+
+    compute::svm_free(context, ptr);
+}
+#endif // CL_VERSION_2_0
 
 BOOST_AUTO_TEST_SUITE_END()

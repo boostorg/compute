@@ -50,11 +50,26 @@ public:
                   cl_filter_mode filter_mode)
     {
         cl_int error = 0;
-        m_sampler = clCreateSampler(context,
-                                    normalized_coords,
-                                    addressing_mode,
-                                    filter_mode,
-                                    &error);
+
+        #ifdef CL_VERSION_2_0
+        std::vector<cl_sampler_properties> sampler_properties;
+        sampler_properties.push_back(CL_SAMPLER_NORMALIZED_COORDS);
+        sampler_properties.push_back(cl_sampler_properties(normalized_coords));
+        sampler_properties.push_back(CL_SAMPLER_ADDRESSING_MODE);
+        sampler_properties.push_back(cl_sampler_properties(addressing_mode));
+        sampler_properties.push_back(CL_SAMPLER_FILTER_MODE);
+        sampler_properties.push_back(cl_sampler_properties(filter_mode));
+        sampler_properties.push_back(cl_sampler_properties(0));
+
+        m_sampler = clCreateSamplerWithProperties(
+            context, &sampler_properties[0], &error
+        );
+        #else
+        m_sampler = clCreateSampler(
+            context, normalized_coords, addressing_mode, filter_mode, &error
+        );
+        #endif
+
         if(!m_sampler){
             BOOST_THROW_EXCEPTION(opencl_error(error));
         }

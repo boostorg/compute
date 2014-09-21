@@ -81,6 +81,10 @@ public:
     enum map_flags {
         map_read = CL_MAP_READ,
         map_write = CL_MAP_WRITE
+        #ifdef CL_VERSION_2_0
+        ,
+        map_write_invalidate_region = CL_MAP_WRITE_INVALIDATE_REGION
+        #endif
     };
 
     /// Creates a null command queue.
@@ -108,10 +112,27 @@ public:
         BOOST_ASSERT(device.id() != 0);
 
         cl_int error = 0;
-        m_queue = clCreateCommandQueue(context,
-                                       device.id(),
-                                       properties,
-                                       &error);
+
+        #ifdef CL_VERSION_2_0
+        std::vector<cl_queue_properties> queue_properties;
+        if(properties){
+            queue_properties.push_back(CL_QUEUE_PROPERTIES);
+            queue_properties.push_back(cl_queue_properties(properties));
+            queue_properties.push_back(cl_queue_properties(0));
+        }
+
+        const cl_queue_properties *queue_properties_ptr =
+            queue_properties.empty() ? 0 : &queue_properties[0];
+
+        m_queue = clCreateCommandQueueWithProperties(
+            context, device.id(), queue_properties_ptr, &error
+        );
+        #else
+        m_queue = clCreateCommandQueue(
+            context, device.id(), properties, &error
+        );
+        #endif
+
         if(!m_queue){
             BOOST_THROW_EXCEPTION(opencl_error(error));
         }
@@ -1402,6 +1423,180 @@ public:
         return event_;
     }
     #endif // CL_VERSION_1_2
+
+    #if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Enqueues a command to copy \p size bytes of data from \p src_ptr to
+    /// \p dst_ptr.
+    ///
+    /// \opencl_version_warning{2,0}
+    ///
+    /// \see_opencl2_ref{clEnqueueSVMMemcpy}
+    void enqueue_svm_memcpy(void *dst_ptr,
+                            const void *src_ptr,
+                            size_t size,
+                            const wait_list &events = wait_list())
+    {
+        cl_int ret = clEnqueueSVMMemcpy(
+            m_queue,
+            CL_TRUE,
+            dst_ptr,
+            src_ptr,
+            size,
+            events.size(),
+            events.get_event_ptr(),
+            0
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+    }
+
+    /// Enqueues a command to copy \p size bytes of data from \p src_ptr to
+    /// \p dst_ptr. The operation is performed asynchronously.
+    ///
+    /// \opencl_version_warning{2,0}
+    ///
+    /// \see_opencl2_ref{clEnqueueSVMMemcpy}
+    event enqueue_svm_memcpy_async(void *dst_ptr,
+                                   const void *src_ptr,
+                                   size_t size,
+                                   const wait_list &events = wait_list())
+    {
+        event event_;
+
+        cl_int ret = clEnqueueSVMMemcpy(
+            m_queue,
+            CL_FALSE,
+            dst_ptr,
+            src_ptr,
+            size,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return event_;
+    }
+
+    /// Enqueues a command to fill \p size bytes of data at \p svm_ptr with
+    /// \p pattern.
+    ///
+    /// \opencl_version_warning{2,0}
+    ///
+    /// \see_opencl2_ref{clEnqueueSVMMemFill}
+    event enqueue_svm_fill(void *svm_ptr,
+                           const void *pattern,
+                           size_t pattern_size,
+                           size_t size,
+                           const wait_list &events = wait_list())
+
+    {
+        event event_;
+
+        cl_int ret = clEnqueueSVMMemFill(
+            m_queue,
+            svm_ptr,
+            pattern,
+            pattern_size,
+            size,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return event_;
+    }
+
+    /// Enqueues a command to free \p svm_ptr.
+    ///
+    /// \opencl_version_warning{2,0}
+    ///
+    /// \see_opencl2_ref{clEnqueueSVMFree}
+    ///
+    /// \see svm_free()
+    event enqueue_svm_free(void *svm_ptr,
+                           const wait_list &events = wait_list())
+    {
+        event event_;
+
+        cl_int ret = clEnqueueSVMFree(
+            m_queue,
+            1,
+            &svm_ptr,
+            0,
+            0,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return event_;
+    }
+
+    /// Enqueues a command to map \p svm_ptr to the host memory space.
+    ///
+    /// \opencl_version_warning{2,0}
+    ///
+    /// \see_opencl2_ref{clEnqueueSVMMap}
+    void enqueue_svm_map(void *svm_ptr,
+                         size_t size,
+                         cl_map_flags flags,
+                         const wait_list &events = wait_list())
+    {
+        cl_int ret = clEnqueueSVMMap(
+            m_queue,
+            CL_TRUE,
+            flags,
+            svm_ptr,
+            size,
+            events.size(),
+            events.get_event_ptr(),
+            0
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+    }
+
+    /// Enqueues a command to unmap \p svm_ptr from the host memory space.
+    ///
+    /// \opencl_version_warning{2,0}
+    ///
+    /// \see_opencl2_ref{clEnqueueSVMUnmap}
+    event enqueue_svm_unmap(void *svm_ptr,
+                            const wait_list &events = wait_list())
+    {
+        event event_;
+
+        cl_int ret = clEnqueueSVMUnmap(
+            m_queue,
+            svm_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return event_;
+    }
+    #endif // CL_VERSION_2_0
 
     /// Returns \c true if the command queue is the same at \p other.
     bool operator==(const command_queue &other) const

@@ -24,9 +24,11 @@ doxygen autodoc
     ../include/boost/compute/function.hpp
     ../include/boost/compute/kernel.hpp
     ../include/boost/compute/memory_object.hpp
+    ../include/boost/compute/pipe.hpp
     ../include/boost/compute/platform.hpp
     ../include/boost/compute/program.hpp
     ../include/boost/compute/source.hpp
+    ../include/boost/compute/svm.hpp
     ../include/boost/compute/system.hpp
     ../include/boost/compute/user_event.hpp
     ../include/boost/compute/version.hpp
@@ -55,6 +57,9 @@ doxygen autodoc
     ../include/boost/compute/iterator.hpp
     [ glob ../include/boost/compute/iterator/*.hpp ]
 
+    ../include/boost/compute/memory.hpp
+    [ glob ../include/boost/compute/memory/*.hpp ]
+
     ../include/boost/compute/random.hpp
     [ glob ../include/boost/compute/random/*.hpp ]
 
@@ -80,6 +85,8 @@ doxygen autodoc
       internal_=\"INTERNAL ONLY\" \\
       opencl_ref{1}=\"<a href=\"http://www.khronos.org/registry/cl/sdk/1.2/docs/man/xhtml/\\1.html\">\\1()</a>\" \\
       see_opencl_ref{1}=\"See the documentation for \\opencl_ref{\\1} for more information.\" \\
+      opencl2_ref{1}=\"<a href=\"http://www.khronos.org/registry/cl/sdk/2.0/docs/man/xhtml/\\1.html\">\\1()</a>\" \\
+      see_opencl2_ref{1}=\"See the documentation for \\opencl2_ref{\\1} for more information.\" \\
       opencl_version_warning{2}=\"\\warning This method is only available if the OpenCL version is \\1.\\2 or later.\" \\
       "
     <xsl:param>"boost.doxygen.reftitle=Header Reference"

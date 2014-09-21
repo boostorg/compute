@@ -46,6 +46,11 @@
     [[`clGetKernelArgInfo()`] [[memberref boost::compute::kernel::get_arg_info kernel::get_arg_info<T>()]]]
     [[`clGetKernelWorkGroupInfo()`] [[memberref boost::compute::kernel::get_work_group_info kernel::get_work_group_info<T>()]]]
     [[`clSetKernelArg()`] [[memberref boost::compute::kernel::set_arg kernel::set_arg()]]]
+    [[`clSetKernelExecInfo()`] [[memberref boost::compute::kernel::set_exec_info kernel::set_exec_info()]]]
+
+    [[*Pipes*]]
+    [[`clCreatePipe()`] [[classref boost::compute::pipe pipe::pipe()]]]
+    [[`clGetPipeInfo()`] [[memberref boost::compute::pipe::get_info pipe::get_info<T>()]]]
 
     [[*Platforms*]]
     [[`clGetDeviceIDs()`] [[memberref boost::compute::platform::devices platform::devices()]]]
@@ -62,6 +67,15 @@
     [[`clBuildProgram()`] [[memberref boost::compute::program::build program::build()]]]
     [[`clCompileProgram()`] [[memberref boost::compute::program::compile program::compile()]]]
     [[`clLinkProgram()`] [[memberref boost::compute::program::link program::link()]]]
+
+    [[*Shared Virtual Memory*]]
+    [[`clSVMAlloc()`] [[funcref boost::compute::svm_alloc svm_alloc<T>()]]]
+    [[`clSVMFree()`] [[funcref boost::compute::svm_free svm_free<T>()]]]
+    [[`clEnqueueSVMFree()`] [[memberref boost::compute::command_queue::enqueue_svm_free command_queue::enqueue_svm_free()]]]
+    [[`clEnqueueSVMMemcpy()`] [[memberref boost::compute::command_queue::enqueue_svm_memcpy command_queue::enqueue_svm_memcpy()]]]
+    [[`clEnqueueSVMMemFill()`] [[memberref boost::compute::command_queue::enqueue_svm_fill command_queue::enqueue_svm_fill()]]]
+    [[`clEnqueueSVMMap()`] [[memberref boost::compute::command_queue::enqueue_svm_map command_queue::enqueue_svm_map()]]]
+    [[`clEnqueueSVMUnmap()`] [[memberref boost::compute::command_queue::enqueue_svm_unmap command_queue::enqueue_svm_unmap()]]]
 
     [[*System*]]
     [[`clGetPlatformIDs()`] [[memberref boost::compute::system::platforms system::platforms()]]]

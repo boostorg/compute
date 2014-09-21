@@ -135,8 +135,13 @@ BOOST_AUTO_TEST_CASE(kernel_profiling)
 BOOST_AUTO_TEST_CASE(construct_from_cl_command_queue)
 {
     // create cl_command_queue
+#ifdef CL_VERSION_2_0
+    cl_command_queue cl_queue =
+      clCreateCommandQueueWithProperties(context, device.id(), 0, 0);
+#else
     cl_command_queue cl_queue =
       clCreateCommandQueue(context, device.id(), 0, 0);
+#endif
     BOOST_VERIFY(cl_queue);
 
     // create boost::compute::command_queue

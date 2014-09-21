@@ -17,6 +17,7 @@
 #include <boost/compute/async/future.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/iterator/discard_iterator.hpp>
+#include <boost/compute/memory/svm_ptr.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/work_size.hpp>
 
@@ -127,6 +128,45 @@ inline future<OutputIterator> copy_on_device_async(InputIterator first,
 
     return make_future(result + std::distance(first, last), event_);
 }
+
+#ifdef CL_VERSION_2_0
+// copy_on_device() specialization for svm_ptr
+template<class T>
+inline svm_ptr<T> copy_on_device(svm_ptr<T> first,
+                                 svm_ptr<T> last,
+                                 svm_ptr<T> result,
+                                 command_queue &queue)
+{
+    size_t count = iterator_range_size(first, last);
+    if(count == 0){
+        return result;
+    }
+
+    queue.enqueue_svm_memcpy(
+        result.get(), first.get(), count * sizeof(T)
+    );
+
+    return result + count;
+}
+
+template<class T>
+inline future<svm_ptr<T> > copy_on_device_async(svm_ptr<T> first,
+                                                svm_ptr<T> last,
+                                                svm_ptr<T> result,
+                                                command_queue &queue)
+{
+    size_t count = iterator_range_size(first, last);
+    if(count == 0){
+        return result;
+    }
+
+    event event_ = queue.enqueue_svm_memcpy_async(
+        result.get(), first.get(), count * sizeof(T)
+    );
+
+    return make_future(result + count, event_);
+}
+#endif // CL_VERSION_2_0
 
 } // end detail namespace
 } // end compute namespace

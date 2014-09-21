@@ -172,6 +172,41 @@ dispatch_fill_async(BufferIterator first,
     return future<void>(event_);
 }
 
+#ifdef CL_VERSION_2_0
+// specializations for svm_ptr<T>
+template<class T>
+inline void dispatch_fill(svm_ptr<T> first,
+                          size_t count,
+                          const T &value,
+                          command_queue &queue)
+{
+    if(count == 0){
+        return;
+    }
+
+    queue.enqueue_svm_fill(
+        first.get(), &value, sizeof(T), count * sizeof(T)
+    );
+}
+
+template<class T>
+inline future<void> dispatch_fill_async(svm_ptr<T> first,
+                                        size_t count,
+                                        const T &value,
+                                        command_queue &queue)
+{
+    if(count == 0){
+        return;
+    }
+
+    event event_ = queue.enqueue_svm_fill(
+        first.get(), &value, sizeof(T), count * sizeof(T)
+    );
+
+    return future<void>(event_);
+}
+#endif // CL_VERSION_2_0
+
 // default implementations
 template<class BufferIterator, class T>
 inline void

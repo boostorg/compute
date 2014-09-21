@@ -22,6 +22,7 @@
 #include <boost/compute/type_traits/is_fundamental.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
+#include <boost/compute/memory/svm_ptr.hpp>
 
 namespace boost {
 namespace compute {
@@ -238,6 +239,20 @@ public:
         set_arg(index, sizeof(cl_sampler), static_cast<const void *>(&sampler));
     }
 
+    /// \internal_
+    template<class T>
+    void set_arg(size_t index, const svm_ptr<T> ptr)
+    {
+        #ifdef CL_VERSION_2_0
+        cl_int ret = clSetKernelArgSVMPointer(m_kernel, index, ptr.get());
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+        #else
+        BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_ARG_VALUE));
+        #endif
+    }
+
     #ifndef BOOST_NO_VARIADIC_TEMPLATES
     /// Sets the arguments for the kernel to \p args.
     template<class... T>
@@ -248,6 +263,21 @@ public:
         _set_args<0>(args...);
     }
     #endif // BOOST_NO_VARIADIC_TEMPLATES
+
+    #if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Sets additional execution information for the kernel.
+    ///
+    /// \opencl_version_warning{2,0}
+    ///
+    /// \see_opencl2_ref{clSetKernelExecInfo}
+    void set_exec_info(cl_kernel_exec_info info, size_t size, const void *value)
+    {
+        cl_int ret = clSetKernelExecInfo(m_kernel, info, size, value);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+    }
+    #endif // CL_VERSION_2_0
 
     /// Returns \c true if the kernel is the same at \p other.
     bool operator==(const kernel &other) const

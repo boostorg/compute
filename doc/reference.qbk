@@ -14,6 +14,8 @@ Header: `<boost/compute/core.hpp>`
 * [classref boost::compute::kernel kernel]
 * [classref boost::compute::memory_object memory_object]
 * [classref boost::compute::platform platform]
+* [classref boost::compute::pipe pipe]
+* [classref boost::compute::program program]
 * [classref boost::compute::program program]
 * [classref boost::compute::system system]
 * [classref boost::compute::user_event user_event]
@@ -140,6 +142,12 @@ Header: `<boost/compute/iterators.hpp>`
 * [classref boost::compute::permutation_iterator permutation_iterator<ElementIterator, IndexIterator>]
 * [classref boost::compute::transform_iterator transform_iterator<InputIterator, UnaryFunction>]
 * [classref boost::compute::zip_iterator zip_iterator<IteratorTuple>]
+
+[h3 Shared Virtual Memory]
+
+* [classref boost::compute::svm_ptr svm_ptr<T>]
+* [funcref boost::compute::svm_alloc svm_alloc<T>()]
+* [funcref boost::compute::svm_free svm_free<T>()]
 
 [h3 Macros]
 
