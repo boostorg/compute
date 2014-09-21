@@ -12,6 +12,7 @@
 #define BOOST_COMPUTE_RANDOM_UNIFORM_INT_DISTRIBUTION_HPP
 
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/container/vector.hpp>
 #include <boost/compute/function.hpp>
 #include <boost/compute/types/builtin.hpp>
 #include <boost/compute/algorithm/copy_if.hpp>
@@ -68,21 +69,24 @@ public:
                   command_queue &queue)
     {
         size_t size = std::distance(first, last);
-        vector<IntType> tmp(size, queue.get_context());
+        typedef typename Generator::result_type g_result_type;
+
+        vector<g_result_type> tmp(size, queue.get_context());
+        vector<g_result_type> tmp2(size, queue.get_context());
 
         uint_ bound = ((uint(-1))/(m_b-m_a+1))*(m_b-m_a+1);
 
-        OutputIterator new_first = first;
+        buffer_iterator<g_result_type> tmp2_iter;
 
         while(size>0)
         {
             generator.generate(tmp.begin(), tmp.begin() + size, queue);
-            new_first = copy_if(tmp.begin(), tmp.begin() + size, first,
+            tmp2_iter = copy_if(tmp.begin(), tmp.begin() + size, tmp2.begin(),
                                 _1 <= bound, queue);
-            size = std::distance(new_first, last);
+            size = std::distance(tmp2_iter, tmp2.end());
         }
 
-        BOOST_COMPUTE_FUNCTION(IntType, scale_random, (const IntType x),
+        BOOST_COMPUTE_FUNCTION(IntType, scale_random, (const g_result_type x),
         {
             return LO + (x % (HI-LO+1));
         });
@@ -90,7 +94,7 @@ public:
         scale_random.define("LO", boost::lexical_cast<std::string>(m_a));
         scale_random.define("HI", boost::lexical_cast<std::string>(m_b));
 
-        transform(first, last, first, scale_random, queue);
+        transform(tmp2.begin(), tmp2.end(), first, scale_random, queue);
     }
 
 private:
