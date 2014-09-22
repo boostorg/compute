@@ -1,6 +1,9 @@
 # build directory
 build/
 
+# python compiled files
+*.pyc
+
 # vim temp files
 .*.sw*
 
