@@ -6,12 +6,12 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
 <link rel="up" href="../../boost_compute/reference.html#header.boost.compute.memory_object_hpp" title="Header &lt;boost/compute/memory_object.hpp&gt;">
-<link rel="prev" href="kernel.html" title="Class kernel">
-<link rel="next" href="platform.html" title="Class platform">
+<link rel="prev" href="svm_ptr.html" title="Class template svm_ptr">
+<link rel="next" href="pipe.html" title="Class pipe">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="spirit-nav">
-<a accesskey="p" href="kernel.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_compute/reference.html#header.boost.compute.memory_object_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="platform.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="svm_ptr.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_compute/reference.html#header.boost.compute.memory_object_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="pipe.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 <div class="refentry">
 <a name="boost.compute.memory_object"></a><div class="titlepage"></div>
@@ -34,52 +34,56 @@
                    alloc_host_ptr = = CL_MEM_ALLOC_HOST_PTR, 
                    copy_host_ptr = = CL_MEM_COPY_HOST_PTR <span class="special">}</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="memory_object.html#idp42867184-bb">public member functions</a></span>
-  <span class="identifier">cl_mem</span> <span class="special">&amp;</span> <a class="link" href="memory_object.html#idp42867744-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">size_t</span> <a class="link" href="memory_object.html#idp42869184-bb"><span class="identifier">get_memory_size</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">cl_mem_object_type</span> <a class="link" href="memory_object.html#idp42870624-bb"><span class="identifier">get_memory_type</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">cl_mem_flags</span> <a class="link" href="memory_object.html#idp42872064-bb"><span class="identifier">get_memory_flags</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="memory_object.html#idp42873504-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">void</span> <span class="special">*</span> <a class="link" href="memory_object.html#idp42875072-bb"><span class="identifier">get_host_ptr</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">uint_</span> <a class="link" href="memory_object.html#idp42876528-bb"><span class="identifier">reference_count</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="memory_object.html#idp42877968-bb"><span class="identifier">get_memory_info</span></a><span class="special">(</span><span class="identifier">cl_mem_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="memory_object.html#idp42882160-bb"><span class="identifier">set_destructor_callback</span></a><span class="special">(</span><span class="keyword">void</span><span class="special">(</span><span class="identifier">BOOST_COMPUTE_CL_CALLBACK</span> <span class="special">*</span><span class="identifier">callback</span><span class="special">)</span><span class="special">(</span><span class="identifier">cl_mem</span> <span class="identifier">memobj</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="identifier">user_data</span><span class="special">)</span><span class="special">,</span> 
+  <span class="comment">// Symbolic names for the OpenCL address spaces. </span>
+  <span class="keyword">enum</span> <a name="boost.compute.memory_object.address_space"></a>address_space <span class="special">{</span> global_memory, local_memory, private_memory, 
+                       constant_memory <span class="special">}</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="memory_object.html#idp36386000-bb">public member functions</a></span>
+  <span class="identifier">cl_mem</span> <span class="special">&amp;</span> <a class="link" href="memory_object.html#idp36386560-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">size_t</span> <a class="link" href="memory_object.html#idp36388000-bb"><span class="identifier">get_memory_size</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">cl_mem_object_type</span> <a class="link" href="memory_object.html#idp36389440-bb"><span class="identifier">get_memory_type</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">cl_mem_flags</span> <a class="link" href="memory_object.html#idp36390880-bb"><span class="identifier">get_memory_flags</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <a class="link" href="context.html" title="Class context">context</a> <a class="link" href="memory_object.html#idp36392320-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">void</span> <span class="special">*</span> <a class="link" href="memory_object.html#idp36393888-bb"><span class="identifier">get_host_ptr</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">uint_</span> <a class="link" href="memory_object.html#idp36395344-bb"><span class="identifier">reference_count</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a class="link" href="memory_object.html#idp36396784-bb"><span class="identifier">get_memory_info</span></a><span class="special">(</span><span class="identifier">cl_mem_info</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="memory_object.html#idp36400976-bb"><span class="identifier">set_destructor_callback</span></a><span class="special">(</span><span class="keyword">void</span><span class="special">(</span><span class="identifier">BOOST_COMPUTE_CL_CALLBACK</span> <span class="special">*</span><span class="identifier">callback</span><span class="special">)</span><span class="special">(</span><span class="identifier">cl_mem</span> <span class="identifier">memobj</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="identifier">user_data</span><span class="special">)</span><span class="special">,</span> 
                                <span class="keyword">void</span> <span class="special">*</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">bool</span> <a class="link" href="memory_object.html#idp42887104-bb"><span class="keyword">operator</span><span class="special">==</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="memory_object.html" title="Class memory_object">memory_object</a> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">bool</span> <a class="link" href="memory_object.html#idp42890560-bb"><span class="keyword">operator</span><span class="special">!=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="memory_object.html" title="Class memory_object">memory_object</a> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="memory_object.html#idp36405920-bb"><span class="keyword">operator</span><span class="special">==</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="memory_object.html" title="Class memory_object">memory_object</a> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="memory_object.html#idp36409376-bb"><span class="keyword">operator</span><span class="special">!=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="memory_object.html" title="Class memory_object">memory_object</a> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp92983648"></a><h2>Description</h2>
+<a name="idp102537008"></a><h2>Description</h2>
 <p>The <a class="link" href="memory_object.html" title="Class memory_object">memory_object</a> class is the base-class for memory objects on compute devices.</p>
 <p><span class="bold"><strong>See Also:</strong></span></p>
 <p><a class="link" href="buffer.html" title="Class buffer">buffer</a>, <a class="link" href="vector.html" title="Class template vector">vector</a> </p>
 <p>
 </p>
 <div class="refsect2">
-<a name="idp92987888"></a><h3>
-<a name="idp42867184-bb"></a><code class="computeroutput">memory_object</code> public member functions</h3>
+<a name="idp102541248"></a><h3>
+<a name="idp36386000-bb"></a><code class="computeroutput">memory_object</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">cl_mem</span> <span class="special">&amp;</span> <a name="idp42867744-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the underlying OpenCL memory object. </li>
+<pre class="literallayout"><span class="identifier">cl_mem</span> <span class="special">&amp;</span> <a name="idp36386560-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the underlying OpenCL memory object. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">size_t</span> <a name="idp42869184-bb"></a><span class="identifier">get_memory_size</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the size of the memory object in bytes. </li>
+<pre class="literallayout"><span class="identifier">size_t</span> <a name="idp36388000-bb"></a><span class="identifier">get_memory_size</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the size of the memory object in bytes. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">cl_mem_object_type</span> <a name="idp42870624-bb"></a><span class="identifier">get_memory_type</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the type for the memory object. </li>
+<pre class="literallayout"><span class="identifier">cl_mem_object_type</span> <a name="idp36389440-bb"></a><span class="identifier">get_memory_type</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the type for the memory object. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">cl_mem_flags</span> <a name="idp42872064-bb"></a><span class="identifier">get_memory_flags</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the flags for the memory object. </li>
+<pre class="literallayout"><span class="identifier">cl_mem_flags</span> <a name="idp36390880-bb"></a><span class="identifier">get_memory_flags</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the flags for the memory object. </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="context.html" title="Class context">context</a> <a name="idp42873504-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the context for the memory object. </li>
+<pre class="literallayout"><a class="link" href="context.html" title="Class context">context</a> <a name="idp36392320-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the context for the memory object. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <span class="special">*</span> <a name="idp42875072-bb"></a><span class="identifier">get_host_ptr</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the host pointer associated with the memory object. </li>
+<pre class="literallayout"><span class="keyword">void</span> <span class="special">*</span> <a name="idp36393888-bb"></a><span class="identifier">get_host_ptr</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the host pointer associated with the memory object. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">uint_</span> <a name="idp42876528-bb"></a><span class="identifier">reference_count</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the reference count for the memory object. </li>
+<pre class="literallayout"><span class="identifier">uint_</span> <a name="idp36395344-bb"></a><span class="identifier">reference_count</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the reference count for the memory object. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp42877968-bb"></a><span class="identifier">get_memory_info</span><span class="special">(</span><span class="identifier">cl_mem_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <a name="idp36396784-bb"></a><span class="identifier">get_memory_info</span><span class="special">(</span><span class="identifier">cl_mem_info</span> info<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>Returns information about the memory object.</p>
 <p>See the documentation for <a href="http://www.khronos.org/registry/cl/sdk/1.2/docs/man/xhtml/clGetMemObjectInfo.html" target="_top">clGetMemObjectInfo()</a> for more information. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp42882160-bb"></a><span class="identifier">set_destructor_callback</span><span class="special">(</span><span class="keyword">void</span><span class="special">(</span><span class="identifier">BOOST_COMPUTE_CL_CALLBACK</span> <span class="special">*</span><span class="identifier">callback</span><span class="special">)</span><span class="special">(</span><span class="identifier">cl_mem</span> <span class="identifier">memobj</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="identifier">user_data</span><span class="special">)</span><span class="special">,</span> 
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp36400976-bb"></a><span class="identifier">set_destructor_callback</span><span class="special">(</span><span class="keyword">void</span><span class="special">(</span><span class="identifier">BOOST_COMPUTE_CL_CALLBACK</span> <span class="special">*</span><span class="identifier">callback</span><span class="special">)</span><span class="special">(</span><span class="identifier">cl_mem</span> <span class="identifier">memobj</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">*</span><span class="identifier">user_data</span><span class="special">)</span><span class="special">,</span> 
                              <span class="keyword">void</span> <span class="special">*</span> user_data <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span></pre>
 <p>Registers a function to be called when the memory object is deleted and its resources freed.</p>
 <p>See the documentation for <a href="http://www.khronos.org/registry/cl/sdk/1.2/docs/man/xhtml/clSetMemObjectDestructorCallback.html" target="_top">clSetMemObjectDestructorCallback()</a> for more information.</p>
@@ -94,9 +98,9 @@
 </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">bool</span> <a name="idp42887104-bb"></a><span class="keyword">operator</span><span class="special">==</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="memory_object.html" title="Class memory_object">memory_object</a> <span class="special">&amp;</span> other<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns <code class="computeroutput">true</code> if the memory object is the same as <code class="computeroutput">other</code>. </li>
+<pre class="literallayout"><span class="keyword">bool</span> <a name="idp36405920-bb"></a><span class="keyword">operator</span><span class="special">==</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="memory_object.html" title="Class memory_object">memory_object</a> <span class="special">&amp;</span> other<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns <code class="computeroutput">true</code> if the memory object is the same as <code class="computeroutput">other</code>. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">bool</span> <a name="idp42890560-bb"></a><span class="keyword">operator</span><span class="special">!=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="memory_object.html" title="Class memory_object">memory_object</a> <span class="special">&amp;</span> other<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns <code class="computeroutput">true</code> if the memory object is different from <code class="computeroutput">other</code>. </li>
+<pre class="literallayout"><span class="keyword">bool</span> <a name="idp36409376-bb"></a><span class="keyword">operator</span><span class="special">!=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="memory_object.html" title="Class memory_object">memory_object</a> <span class="special">&amp;</span> other<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns <code class="computeroutput">true</code> if the memory object is different from <code class="computeroutput">other</code>. </li>
 </ol></div>
 </div>
 </div>
@@ -111,7 +115,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="kernel.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_compute/reference.html#header.boost.compute.memory_object_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="platform.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="svm_ptr.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_compute/reference.html#header.boost.compute.memory_object_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="pipe.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

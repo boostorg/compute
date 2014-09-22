@@ -1,0 +1,109 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Background</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
+<link rel="prev" href="design.html" title="Design">
+<link rel="next" href="tutorial.html" title="Tutorial">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="spirit-nav">
+<a accesskey="p" href="design.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="tutorial.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="boost_compute.background"></a><a class="link" href="background.html" title="Background">Background</a>
+</h2></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="background.html#boost_compute.background.platform_model">Platform Model</a></span></dt>
+<dt><span class="section"><a href="background.html#boost_compute.background.memory_model">Memory Model</a></span></dt>
+<dt><span class="section"><a href="background.html#boost_compute.background.execution_model">Execution Model</a></span></dt>
+</dl></div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_compute.background.platform_model"></a><a class="link" href="background.html#boost_compute.background.platform_model" title="Platform Model">Platform Model</a>
+</h3></div></div></div>
+<h3>
+<a name="boost_compute.background.platform_model.h0"></a>
+        <span><a name="boost_compute.background.platform_model.platforms_and_devices"></a></span><a class="link" href="background.html#boost_compute.background.platform_model.platforms_and_devices">Platforms
+        and Devices</a>
+      </h3>
+<p>
+        Platforms provide an interface to the OpenCL implementation from a particular
+        vendor (such as NVIDIA or Intel). Platforms contain one or more compute devices
+        which can execute OpenCL kernel code.
+      </p>
+<p>
+        Platforms are represented in Boost.Compute with the <code class="computeroutput"><a class="link" href="../boost/compute/platform.html" title="Class platform">platform</a></code>
+        class.
+      </p>
+<p>
+        Compute devices include GPUs, multi-core CPUs, and various accelerator cards
+        (such as the Intel Xeon Phi).
+      </p>
+<p>
+        Devices are represented in Boost.Compute with the <code class="computeroutput"><a class="link" href="../boost/compute/device.html" title="Class device">device</a></code>
+        class.
+      </p>
+<h3>
+<a name="boost_compute.background.platform_model.h1"></a>
+        <span><a name="boost_compute.background.platform_model.contexts_and_memory_objects"></a></span><a class="link" href="background.html#boost_compute.background.platform_model.contexts_and_memory_objects">Contexts
+        and Memory Objects</a>
+      </h3>
+<p>
+        Contexts manage run-time objects such as memory buffers, programs, kernels
+        and command queues.
+      </p>
+<p>
+        Memory objects provide storage space for data on a compute device. The simplest
+        memory object is the buffer and provides a linear, contiguous array of data
+        (much like a C-style array).
+      </p>
+<h3>
+<a name="boost_compute.background.platform_model.h2"></a>
+        <span><a name="boost_compute.background.platform_model.programs_and_kernels"></a></span><a class="link" href="background.html#boost_compute.background.platform_model.programs_and_kernels">Programs
+        and Kernels</a>
+      </h3>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_compute.background.memory_model"></a><a class="link" href="background.html#boost_compute.background.memory_model" title="Memory Model">Memory Model</a>
+</h3></div></div></div>
+<p>
+        Memory Spaces global, local, private, constant image memory objects
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_compute.background.execution_model"></a><a class="link" href="background.html#boost_compute.background.execution_model" title="Execution Model">Execution Model</a>
+</h3></div></div></div>
+<h2>
+<a name="boost_compute.background.execution_model.h0"></a>
+        <span><a name="boost_compute.background.execution_model.command_queues"></a></span><a class="link" href="background.html#boost_compute.background.execution_model.command_queues">Command
+        Queues</a>
+      </h2>
+<p>
+        NDRange kernel global work size vs. local work size work-group vs. warp vs
+        CTA memory barriers and work-group synchronization global (inter-kernel)
+        synchronization can only be performed via sequential kernel launches by the
+        host
+      </p>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2013, 2014 Kyle Lutz<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="design.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="tutorial.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

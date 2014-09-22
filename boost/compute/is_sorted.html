@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Function template is_sorted</title>
+<title>Function is_sorted</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
@@ -16,19 +16,62 @@
 <div class="refentry">
 <a name="boost.compute.is_sorted"></a><div class="titlepage"></div>
 <div class="refnamediv">
-<h2><span class="refentrytitle">Function template is_sorted</span></h2>
+<h2><span class="refentrytitle">Function is_sorted</span></h2>
 <p>boost::compute::is_sorted</p>
 </div>
 <h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
 <div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../boost_compute/reference.html#header.boost.compute.algorithm.is_sorted_hpp" title="Header &lt;boost/compute/algorithm/is_sorted.hpp&gt;">boost/compute/algorithm/is_sorted.hpp</a>&gt;
 
 </span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator<span class="special">,</span> <span class="keyword">typename</span> Compare<span class="special">&gt;</span> 
+  <span class="keyword">bool</span> <span class="identifier">is_sorted</span><span class="special">(</span><span class="identifier">InputIterator</span> first<span class="special">,</span> <span class="identifier">InputIterator</span> last<span class="special">,</span> <span class="identifier">Compare</span> compare<span class="special">,</span> 
+                 <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue <span class="special">=</span> <span class="identifier">system</span><span class="special">::</span><span class="identifier">default_queue</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator<span class="special">&gt;</span> 
   <span class="keyword">bool</span> <span class="identifier">is_sorted</span><span class="special">(</span><span class="identifier">InputIterator</span> first<span class="special">,</span> <span class="identifier">InputIterator</span> last<span class="special">,</span> 
                  <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue <span class="special">=</span> <span class="identifier">system</span><span class="special">::</span><span class="identifier">default_queue</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp79274144"></a><h2>Description</h2>
-<p>Returns <code class="computeroutput">true</code> if the values in the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) are in sorted order. </p>
+<a name="idp88220096"></a><h2>Description</h2>
+<p>Returns <code class="computeroutput">true</code> if the values in the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) are in sorted order.</p>
+<p>
+
+</p>
+<p><span class="bold"><strong>See Also:</strong></span></p>
+<p>sort() </p>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><code class="computeroutput">compare</code></span></p></td>
+<td><p>comparison function (by default <code class="computeroutput">less</code>) </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">first</code></span></p></td>
+<td><p>first element in the range to check </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">last</code></span></p></td>
+<td><p>last element in the range to check </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">queue</code></span></p></td>
+<td><p>command queue to perform the operation</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p><code class="computeroutput">true</code> if the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) is sorted</p></td>
+</tr>
+</tbody>
+</table></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
