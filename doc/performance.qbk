@@ -1,0 +1,46 @@
+[section:performance Performance]
+
+The following tests were run with an AMD HD 7970 "Tahiti" GPU on a system
+with an Intel i7-4771 3.50GHz CPU.
+
+Source code for the benchmarks can be found under the
+[@https://github.com/kylelutz/compute/tree/master/perf perf] directory. All
+benchmarks were compiled with optimizations enabled (i.e. "gcc -O3").
+
+[h3 Accumulate]
+[$images/perf/accumulate_time_plot.png [width 850px] [align center]]
+
+[h3 Count]
+[$images/perf/count_time_plot.png [width 850px] [align center]]
+
+[h3 Inner Product]
+[$images/perf/inner_product_time_plot.png [width 850px] [align center]]
+
+[h3 Merge]
+[$images/perf/merge_time_plot.png [width 850px] [align center]]
+
+[h3 Partial Sum]
+[$images/perf/partial_sum_time_plot.png [width 850px] [align center]]
+
+[h3 Partition]
+[$images/perf/partition_time_plot.png [width 850px] [align center]]
+
+[h3 Reverse]
+[$images/perf/reverse_time_plot.png [width 850px] [align center]]
+
+[h3 Rotate]
+[$images/perf/rotate_time_plot.png [width 850px] [align center]]
+
+[h3 Set Difference]
+[$images/perf/set_difference_time_plot.png [width 850px] [align center]]
+
+[h3 Sort]
+[$images/perf/sort_time_plot.png [width 850px] [align center]]
+
+[h3 Transform]
+[$images/perf/saxpy_time_plot.png [width 850px] [align center]]
+
+[h3 Unique]
+[$images/perf/unique_time_plot.png [width 850px] [align center]]
+
+[endsect] [/ performance]

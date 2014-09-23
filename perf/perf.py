@@ -5,7 +5,6 @@
 
 import os
 import sys
-import random
 import subprocess
 
 try:
@@ -132,7 +131,7 @@ def run_benchmark(name, sizes, vs=[]):
                 "is_permutation",
                 "merge",
                 "next_permutation",
-                "nth_element"
+                "nth_element",
                 "partial_sum",
                 "partition",
                 "partition_point",
@@ -140,6 +139,7 @@ def run_benchmark(name, sizes, vs=[]):
                 "reverse",
                 "rotate",
                 "rotate_copy",
+                "saxpy",
                 "search",
                 "search_n",
                 "set_difference",

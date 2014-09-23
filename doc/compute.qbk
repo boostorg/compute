@@ -22,4 +22,5 @@
 [include porting_guide.qbk]
 [include platforms_and_compilers.qbk]
 [include reference.qbk]
+[include performance.qbk]
 [include faq.qbk]
