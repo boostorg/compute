@@ -3,8 +3,12 @@ include_directories(../include)
 set(BOOST_COMPONENTS unit_test_framework)
 
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
-    set(BOOST_COMPONENTS ${BOOST_COMPONENTS} system filesystem)
-    add_definitions(-DBOOST_COMPUTE_USE_OFFLINE_CACHE)
+  set(BOOST_COMPONENTS ${BOOST_COMPONENTS} system filesystem)
+  add_definitions(-DBOOST_COMPUTE_USE_OFFLINE_CACHE)
+endif()
+
+if(${BOOST_COMPUTE_THREAD_SAFE} AND NOT ${BOOST_COMPUTE_USE_CPP11})
+  set(BOOST_COMPONENTS ${BOOST_COMPONENTS} thread)
 endif()
 
 find_package(Boost 1.48 REQUIRED COMPONENTS ${BOOST_COMPONENTS})

@@ -129,6 +129,18 @@ which provides a std::vector-like interface to a region of host-memory and can
 be used directly with all of the Boost.Compute algorithms.
 
 
+[h3 Is Boost.Compute thread-safe?]
+
+The low-level Boost.Compute APIs offer the same thread-safety guarantees as
+the underyling OpenCL library implementation. However, the high-level APIs
+make use of a few global static objects for features such as automatic program
+caching which makes them not thread-safe by default.
+
+To compile Boost.Compute in thread-safe mode define `BOOST_COMPUTE_THREAD_SAFE`
+before including any of the Boost.Compute headers. By default this will require
+linking your application/library with the Boost.Thread library.
+
+
 [h3 How can I contribute?]
 
 We are actively seeking additional C++ developers with experience in
