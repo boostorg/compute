@@ -11,9 +11,8 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_SEARCH_HPP
 #define BOOST_COMPUTE_ALGORITHM_SEARCH_HPP
 
-#include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/detail/search_all.hpp>
-#include <boost/compute/algorithm/find_if.hpp>
+#include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
@@ -52,12 +51,9 @@ inline TextIterator search(TextIterator t_first,
     kernel.set_range(p_first, p_last, t_first, t_last, matching_indices.begin());
     kernel.exec(queue);
 
-    using boost::compute::_1;
-
-    vector<uint_>::iterator index = find_if(matching_indices.begin(),
-                                            matching_indices.end(),
-                                            _1 == 1,
-                                            queue);
+    vector<uint_>::iterator index = ::boost::compute::find(
+        matching_indices.begin(), matching_indices.end(), uint_(1), queue
+    );
 
     return t_first + detail::iterator_range_size(matching_indices.begin(), index);
 }

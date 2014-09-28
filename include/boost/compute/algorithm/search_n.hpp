@@ -13,12 +13,10 @@
 
 #include <iterator>
 
-#include <boost/compute/algorithm/copy.hpp>
-#include <boost/compute/algorithm/find_if.hpp>
+#include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
-#include <boost/compute/lambda.hpp>
 #include <boost/compute/system.hpp>
 
 namespace boost {
@@ -120,12 +118,9 @@ inline TextIterator search_n(TextIterator t_first,
     kernel.set_range(t_first, t_last, value, n, matching_indices.begin());
     kernel.exec(queue);
 
-    using boost::compute::_1;
-
-    vector<uint_>::iterator index = find_if(matching_indices.begin(),
-                                            matching_indices.end(),
-                                            _1 == 1,
-                                            queue);
+    vector<uint_>::iterator index = ::boost::compute::find(
+        matching_indices.begin(), matching_indices.end(), uint_(1), queue
+    );
 
     return t_first + detail::iterator_range_size(matching_indices.begin(), index);
 }
