@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestFunctionalBind
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/function.hpp>
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/count_if.hpp>
@@ -20,7 +22,18 @@
 #include <boost/compute/functional/bind.hpp>
 #include <boost/compute/functional/common.hpp>
 #include <boost/compute/functional/operator.hpp>
+#include <boost/compute/types/struct.hpp>
 
+// simple test struct
+struct data_struct
+{
+    int int_value;
+    float float_value;
+};
+
+BOOST_COMPUTE_ADAPT_STRUCT(data_struct, data_struct, (int_value, float_value))
+
+#include "quirks.hpp"
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
@@ -187,6 +200,33 @@ BOOST_AUTO_TEST_CASE(bind_custom_function)
         queue
     );
     CHECK_RANGE_EQUAL(int, 4, vector, (1, 2, 3, 4));
+}
+
+BOOST_AUTO_TEST_CASE(bind_struct)
+{
+    if(bug_in_struct_assignment(device)){
+        std::cerr << "skipping bind_struct test" << std::endl;
+        return;
+    }
+
+    BOOST_COMPUTE_FUNCTION(int, add_struct_value, (int x, data_struct s),
+    {
+        return s.int_value + x;
+    });
+
+    data_struct data;
+    data.int_value = 3;
+    data.float_value = 4.56f;
+
+    int input[] = { 1, 2, 3, 4 };
+    compute::vector<int> vec(input, input + 4, queue);
+
+    compute::transform(
+        vec.begin(), vec.end(), vec.begin(),
+        compute::bind(add_struct_value, _1, data),
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, vec, (4, 5, 6, 7));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

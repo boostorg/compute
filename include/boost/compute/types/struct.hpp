@@ -47,6 +47,10 @@ inline std::string adapt_struct_insert_member(T Struct::*, const char *name)
        )
 
 /// \internal_
+#define BOOST_COMPUTE_DETAIL_ADAPT_STRUCT_STREAM_MEMBER(r, data, i, elem) \
+    BOOST_PP_EXPR_IF(i, << ", ") << data.elem
+
+/// \internal_
 #define BOOST_COMPUTE_DETAIL_STRUCT_MEMBER_SIZE(s, struct_, member_) \
     sizeof(((struct_ *)0)->member_)
 
@@ -137,6 +141,16 @@ inline std::string adapt_struct_insert_member(T Struct::*, const char *name)
             kernel.add_type_declaration<type>(declaration.str()); \
         } \
     }; \
+    inline meta_kernel& operator<<(meta_kernel &k, type s) \
+    { \
+        return k << "(" << #name << "){" \
+               BOOST_PP_SEQ_FOR_EACH_I( \
+                   BOOST_COMPUTE_DETAIL_ADAPT_STRUCT_STREAM_MEMBER, \
+                   s, \
+                   BOOST_COMPUTE_PP_TUPLE_TO_SEQ(members) \
+               ) \
+               << "}"; \
+    } \
     }}}
 
 #endif // BOOST_COMPUTE_TYPES_STRUCT_HPP
