@@ -197,4 +197,11 @@ BOOST_AUTO_TEST_CASE(fill_svm_buffer)
 }
 #endif // CL_VERSION_2_0
 
+BOOST_AUTO_TEST_CASE(empty_fill)
+{
+    compute::vector<int> vec(0, context);
+    compute::fill(vec.begin(), vec.end(), 42, queue);
+    compute::fill_async(vec.begin(), vec.end(), 42, queue);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
