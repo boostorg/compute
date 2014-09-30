@@ -18,6 +18,15 @@ if(${BOOST_COMPUTE_USE_CPP11})
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
+# thread-safety options
+option(BOOST_COMPUTE_THREAD_SAFE "Compile with BOOST_COMPUTE_THREAD_SAFE defined" OFF)
+if(${BOOST_COMPUTE_THREAD_SAFE})
+  add_definitions(-DBOOST_COMPUTE_THREAD_SAFE)
+  if(${BOOST_COMPUTE_USE_CPP11})
+    add_definitions(-DBOOST_COMPUTE_HAVE_THREAD_LOCAL)
+  endif()
+endif()
+
 # optional third-party libraries
 option(BOOST_COMPUTE_HAVE_EIGEN "Have Eigen" OFF)
 option(BOOST_COMPUTE_HAVE_OPENCV "Have OpenCV" OFF)

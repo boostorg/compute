@@ -20,6 +20,7 @@
 #include <boost/compute/context.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/detail/lru_cache.hpp>
+#include <boost/compute/detail/global_static.hpp>
 
 namespace boost {
 namespace compute {
@@ -66,7 +67,7 @@ inline boost::shared_ptr<program_cache> get_program_cache(const context &context
 {
     typedef lru_cache<cl_context, boost::shared_ptr<program_cache> > cache_map;
 
-    static cache_map caches(8);
+    BOOST_COMPUTE_DETAIL_GLOBAL_STATIC(cache_map, caches, (8));
 
     boost::shared_ptr<program_cache> cache = caches.get(context.get());
     if(!cache){
