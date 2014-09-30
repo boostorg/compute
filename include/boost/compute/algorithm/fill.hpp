@@ -196,7 +196,7 @@ inline future<void> dispatch_fill_async(svm_ptr<T> first,
                                         command_queue &queue)
 {
     if(count == 0){
-        return;
+        return future<void>();
     }
 
     event event_ = queue.enqueue_svm_fill(

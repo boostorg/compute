@@ -18,6 +18,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include <boost/compute/cl.hpp>
+#include <boost/compute/device.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 
 namespace boost {

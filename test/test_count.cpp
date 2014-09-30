@@ -201,4 +201,19 @@ BOOST_AUTO_TEST_CASE(count_if_odd)
     );
 }
 
+BOOST_AUTO_TEST_CASE(count_if_with_reduce)
+{
+    compute::vector<int> vec(2048, context);
+    compute::iota(vec.begin(), vec.end(), 0, queue);
+
+    using boost::compute::lambda::_1;
+
+    BOOST_CHECK_EQUAL(
+        compute::detail::count_if_with_reduce(
+            vec.begin(), vec.end(), _1 > 1024, queue
+        ),
+        size_t(1023)
+    );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

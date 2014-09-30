@@ -55,6 +55,14 @@ BOOST_AUTO_TEST_CASE(sort_int_2)
     BOOST_CHECK(boost::compute::is_sorted(vec.begin(), vec.end()) == true);
 }
 
+BOOST_AUTO_TEST_CASE(sort_float_3)
+{
+    float data[] = { 2.3f, 0.1f, 1.2f };
+    boost::compute::vector<float> vec(data, data + 3, queue);
+    boost::compute::sort(vec.begin(), vec.end(), queue);
+    CHECK_RANGE_EQUAL(float, 3, vec, (0.1f, 1.2f, 2.3f));
+}
+
 BOOST_AUTO_TEST_CASE(sort_char_vector)
 {
     using boost::compute::char_;
