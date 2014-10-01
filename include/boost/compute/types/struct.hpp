@@ -20,6 +20,7 @@
 #include <boost/preprocessor/seq/fold_left.hpp>
 #include <boost/preprocessor/seq/transform.hpp>
 
+#include <boost/compute/type_traits/type_definition.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/variadic_macros.hpp>
@@ -124,21 +125,27 @@ inline std::string adapt_struct_insert_member(T Struct::*, const char *name)
         "BOOST_COMPUTE_ADAPT_STRUCT() does not support structs with internal padding." \
     ); \
     BOOST_COMPUTE_TYPE_NAME(type, name) \
-    namespace boost { namespace compute { namespace detail { \
+    namespace boost { namespace compute { \
+    template<> \
+    inline std::string type_definition<type>() \
+    { \
+        std::stringstream declaration; \
+        declaration << "typedef struct __attribute__((packed)) {\n" \
+                    BOOST_PP_SEQ_FOR_EACH( \
+                        BOOST_COMPUTE_DETAIL_ADAPT_STRUCT_INSERT_MEMBER, \
+                        type, \
+                        BOOST_COMPUTE_PP_TUPLE_TO_SEQ(members) \
+                    ) \
+                    << "} " << type_name<type>() << ";\n"; \
+        return declaration.str(); \
+    } \
+    namespace detail { \
     template<> \
     struct inject_type_impl<type> \
     { \
         void operator()(meta_kernel &kernel) \
         { \
-            std::stringstream declaration; \
-            declaration << "typedef struct __attribute__((packed)) {\n" \
-                        BOOST_PP_SEQ_FOR_EACH( \
-                            BOOST_COMPUTE_DETAIL_ADAPT_STRUCT_INSERT_MEMBER, \
-                            type, \
-                            BOOST_COMPUTE_PP_TUPLE_TO_SEQ(members) \
-                        ) \
-                        << "} " << type_name<type>() << ";\n"; \
-            kernel.add_type_declaration<type>(declaration.str()); \
+            kernel.add_type_declaration<type>(type_definition<type>()); \
         } \
     }; \
     inline meta_kernel& operator<<(meta_kernel &k, type s) \

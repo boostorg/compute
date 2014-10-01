@@ -16,6 +16,7 @@
 #include <boost/compute/type_traits/is_vector_type.hpp>
 #include <boost/compute/type_traits/make_vector_type.hpp>
 #include <boost/compute/type_traits/scalar_type.hpp>
+#include <boost/compute/type_traits/type_definition.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/type_traits/vector_size.hpp>
 
