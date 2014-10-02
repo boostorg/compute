@@ -14,11 +14,14 @@
 #include <boost/test/unit_test.hpp>
 
 #include <boost/compute/function.hpp>
+#include <boost/compute/source.hpp>
 #include <boost/compute/algorithm/find_if.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/functional/field.hpp>
 #include <boost/compute/types/struct.hpp>
+#include <boost/compute/type_traits/type_name.hpp>
+#include <boost/compute/type_traits/type_definition.hpp>
 
 namespace compute = boost::compute;
 
@@ -80,6 +83,45 @@ BOOST_AUTO_TEST_CASE(atom_struct)
         queue
     );
     CHECK_RANGE_EQUAL(int, 3, atomic_numbers, (1, 1, 8));
+}
+
+BOOST_AUTO_TEST_CASE(custom_kernel)
+{
+    std::vector<chemistry::Atom> data;
+    data.push_back(chemistry::Atom(1.f, 0.f, 0.f, 1));
+    data.push_back(chemistry::Atom(0.f, 1.f, 0.f, 1));
+    data.push_back(chemistry::Atom(0.f, 0.f, 0.f, 8));
+
+    compute::vector<chemistry::Atom> atoms(data.size(), context);
+    compute::copy(data.begin(), data.end(), atoms.begin(), queue);
+
+    std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void custom_kernel(__global const Atom *atoms,
+                                    __global float *distances)
+        {
+            const uint i = get_global_id(0);
+            const __global Atom *atom = &atoms[i];
+
+            const float4 center = { 0, 0, 0, 0 };
+            const float4 position = { atom->x, atom->y, atom->z, 0 };
+
+            distances[i] = distance(position, center);
+        }
+    );
+
+    // add type definition for Atom to the start of the program source
+    source = compute::type_definition<chemistry::Atom>() + "\n" + source;
+
+    compute::program program =
+        compute::program::build_with_source(source, context);
+
+    compute::vector<float> distances(atoms.size(), context);
+
+    compute::kernel custom_kernel = program.create_kernel("custom_kernel");
+    custom_kernel.set_arg(0, atoms);
+    custom_kernel.set_arg(1, distances);
+
+    queue.enqueue_1d_range_kernel(custom_kernel, 0, atoms.size(), 1);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
