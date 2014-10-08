@@ -27,27 +27,17 @@ namespace compute = boost::compute;
 int main()
 {
     // get default device and setup context
-    bool amd_device = false; 
     compute::device device = compute::system::default_device();
     compute::context context(device);
     compute::command_queue queue(context, device);
-    std::vector<compute::platform> platforms = compute::system::platforms();
+    compute::platform platform(device.get_info<CL_DEVICE_PLATFORM>());
 
-    for(size_t i = 0; i < platforms.size(); i++){
-        const compute::platform &platform = platforms[i];
-
-        std::cout << "Platform Name '" << platform.name() << "'" << std::endl;
-        std::cout << "Platform vendor '" << platform.vendor() << "'" << std::endl;
-        if ( platform.vendor() == "Advanced Micro Devices, Inc.") {
-            amd_device = true;
-            break;
-        }
-    }
-    if ( !amd_device ) { 
+    // check the platform vendor string
+    if(platform.vendor() != "Advanced Micro Devices, Inc."){
         std::cerr << "error: static C++ kernel language is only "
-              << "supported on AMD devices."
-              << std::endl;
-        return 0; 
+                  << "supported on AMD devices."
+                  << std::endl;
+        return 0;
     }
 
     // create input int values and copy them to the device
