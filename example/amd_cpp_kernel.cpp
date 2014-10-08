@@ -23,20 +23,31 @@ namespace compute = boost::compute;
 // this example shows how to use the static c++ kernel language
 // extension (currently only supported by AMD) to compile and
 // execute a templated c++ kernel.
+// Using platform vendor info to decide if this is AMD platform
 int main()
 {
     // get default device and setup context
+    bool amd_device = false; 
     compute::device device = compute::system::default_device();
     compute::context context(device);
     compute::command_queue queue(context, device);
-    std::cout << "device: " << device.name() << std::endl;
+    std::vector<compute::platform> platforms = compute::system::platforms();
 
-    // ensure we have an amd device
-    if(device.vendor() != "Advanced Micro Devices, Inc."){
+    for(size_t i = 0; i < platforms.size(); i++){
+        const compute::platform &platform = platforms[i];
+
+        std::cout << "Platform Name '" << platform.name() << "'" << std::endl;
+        std::cout << "Platform vendor '" << platform.vendor() << "'" << std::endl;
+        if ( platform.vendor() == "Advanced Micro Devices, Inc.") {
+            amd_device = true;
+            break;
+        }
+    }
+    if ( !amd_device ) { 
         std::cerr << "error: static C++ kernel language is only "
-                  << "supported on AMD devices."
-                  << std::endl;
-        return 0;
+              << "supported on AMD devices."
+              << std::endl;
+        return 0; 
     }
 
     // create input int values and copy them to the device
