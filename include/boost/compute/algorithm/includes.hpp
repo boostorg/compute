@@ -13,7 +13,7 @@
 
 #include <iterator>
 
-#include <boost/compute/algorithm/detail/tile_sets.hpp>
+#include <boost/compute/algorithm/detail/balanced_path.hpp>
 #include <boost/compute/algorithm/fill_n.hpp>
 #include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/container/vector.hpp>
@@ -127,7 +127,7 @@ inline bool includes(InputIterator1 first1,
     vector<uint_> tile_b((count1+count2+tile_size-1)/tile_size+1, queue.get_context());
 
     // Tile the sets
-    detail::tile_sets_kernel tiling_kernel;
+    detail::balanced_path_kernel tiling_kernel;
     tiling_kernel.tile_size = tile_size;
     tiling_kernel.set_range(first1, last1, first2, last2,
                             tile_a.begin()+1, tile_b.begin()+1);
