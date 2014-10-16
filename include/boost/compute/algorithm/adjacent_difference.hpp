@@ -18,6 +18,7 @@
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/functional/operator.hpp>
+#include <boost/compute/container/vector.hpp>
 
 namespace boost {
 namespace compute {
@@ -75,9 +76,20 @@ adjacent_difference(InputIterator first,
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
-    return ::boost::compute::adjacent_difference(
-        first, last, result, ::boost::compute::minus<value_type>(), queue
-    );
+    if (first == result) {
+        vector<value_type> temp(detail::iterator_range_size(first, last),
+                                queue.get_context());
+        copy(first, last, temp.begin(), queue);
+
+        return ::boost::compute::adjacent_difference(
+            temp.begin(), temp.end(), result, ::boost::compute::minus<value_type>(), queue
+        );
+    }
+    else {
+        return ::boost::compute::adjacent_difference(
+            first, last, result, ::boost::compute::minus<value_type>(), queue
+        );
+    }
 }
 
 } // end compute namespace
