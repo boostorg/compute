@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_TILE_SETS_HPP
-#define BOOST_COMPUTE_ALGORITHM_DETAIL_TILE_SETS_HPP
+#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_BALANCED_PATH_HPP
+#define BOOST_COMPUTE_ALGORITHM_DETAIL_BALANCED_PATH_HPP
 
 #include <iterator>
 
@@ -25,29 +25,31 @@ namespace compute {
 namespace detail {
 
 ///
-/// \brief Tile Sets kernel class
+/// \brief Balanced Path kernel class
 ///
-/// Subclass of meta_kernel to break two sets into tiles for use in
-/// set algorithms.
+/// Subclass of meta_kernel to break two sets into tiles according
+/// to their balanced path.
 ///
-class tile_sets_kernel : public meta_kernel
+class balanced_path_kernel : public meta_kernel
 {
 public:
     unsigned int tile_size;
 
-    tile_sets_kernel() : meta_kernel("tile_sets")
+    balanced_path_kernel() : meta_kernel("balanced_path")
     {
         tile_size = 4;
     }
 
     template<class InputIterator1, class InputIterator2,
-             class OutputIterator1, class OutputIterator2>
+             class OutputIterator1, class OutputIterator2,
+             class Compare>
     void set_range(InputIterator1 first1,
                    InputIterator1 last1,
                    InputIterator2 first2,
                    InputIterator2 last2,
                    OutputIterator1 result_a,
-                   OutputIterator2 result_b)
+                   OutputIterator2 result_b,
+                   Compare comp)
     {
         typedef typename std::iterator_traits<InputIterator1>::value_type value_type;
 
@@ -67,8 +69,8 @@ public:
             "{\n" <<
             "   a_index = (start + end)/2;\n" <<
             "   b_index = target - a_index - 1;\n" <<
-            "   if(" << first1[expr<uint_>("a_index")] <<
-            "       <=" << first2[expr<uint_>("b_index")] << ")\n" <<
+            "   if(!" << comp(first2[expr<uint_>("b_index")],
+                              first1[expr<uint_>("a_index")]) << ")\n" <<
             "       start = a_index + 1;\n" <<
             "   else end = a_index;\n" <<
             "}\n" <<
@@ -83,14 +85,14 @@ public:
             "   while(a_start<a_end)\n" <<
             "   {\n" <<
             "       a_mid = (a_start + a_end)/2;\n" <<
-            "       if(x > " << first1[expr<uint_>("a_mid")] << ")\n" <<
+            "       if(" << comp(first1[expr<uint_>("a_mid")], expr<value_type>("x")) << ")\n" <<
             "           a_start = a_mid+1;\n" <<
             "       else a_end = a_mid;\n" <<
             "   }\n" <<
             "   while(b_start<b_end)\n" <<
             "   {\n" <<
             "       b_mid = (b_start + b_end)/2;\n" <<
-            "       if(x > " << first2[expr<uint_>("b_mid")] << ")\n" <<
+            "       if(" << comp(first2[expr<uint_>("b_mid")], expr<value_type>("x")) << ")\n" <<
             "           b_start = b_mid+1;\n" <<
             "       else b_end = b_mid;\n" <<
             "   }\n" <<
@@ -103,7 +105,7 @@ public:
             "   while(temp_start < temp_end)\n" <<
             "   {\n" <<
             "       temp_mid = (temp_start + temp_end + 1)/2;\n" <<
-            "       if(x < " << first2[expr<uint_>("temp_mid")] << ")\n" <<
+            "       if(" << comp(expr<value_type>("x"), first2[expr<uint_>("temp_mid")]) << ")\n" <<
             "           temp_end = temp_mid-1;\n" <<
             "       else temp_start = temp_mid;\n" <<
             "   }\n" <<
@@ -118,6 +120,20 @@ public:
             result_a[expr<uint_>("i")] << " = a_index;\n" <<
             result_b[expr<uint_>("i")] << " = b_index;\n";
 
+    }
+
+    template<class InputIterator1, class InputIterator2,
+             class OutputIterator1, class OutputIterator2>
+    void set_range(InputIterator1 first1,
+                   InputIterator1 last1,
+                   InputIterator2 first2,
+                   InputIterator2 last2,
+                   OutputIterator1 result_a,
+                   OutputIterator2 result_b)
+    {
+        typedef typename std::iterator_traits<InputIterator1>::value_type value_type;
+        ::boost::compute::less<value_type> less_than;
+        set_range(first1, last1, first2, last2, result_a, result_b, less_than);
     }
 
     event exec(command_queue &queue)
@@ -143,4 +159,4 @@ private:
 } //end compute namespace
 } //end boost namespace
 
-#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_TILE_SETS_HPP
+#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_BALANCED_PATH_HPP
