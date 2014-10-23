@@ -39,7 +39,7 @@ inline context opengl_create_shared_context()
     // name of the OpenGL sharing extension for the system
     #if defined(__APPLE__)
     const char *cl_gl_sharing_extension = "cl_APPLE_gl_sharing";
-    #elif defined(__linux__)
+    #else
     const char *cl_gl_sharing_extension = "cl_khr_gl_sharing";
     #endif
 
@@ -77,6 +77,9 @@ inline context opengl_create_shared_context()
         #elif defined(__APPLE__)
             CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE,
                 (cl_context_properties) cgl_share_group,
+        #elif defined(WIN32)
+            CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
+            CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(), 
         #endif
             0
         };
