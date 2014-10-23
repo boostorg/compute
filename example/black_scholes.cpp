@@ -70,7 +70,7 @@ int main()
     // source code for black-scholes program
     const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
         // approximation of the cumulative normal distribution function
-        float cnd(float d)
+        static float cnd(float d)
         {
             const float A1 =  0.319381530f;
             const float A2 = -0.356563782f;
