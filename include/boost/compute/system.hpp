@@ -48,6 +48,8 @@ public:
     ///
     /// \li \c BOOST_COMPUTE_DEFAULT_DEVICE -
     ///        name of the compute device (e.g. "GTX TITAN")
+    /// \li \c BOOST_COMPUTE_DEFAULT_DEVICE_TYPE
+    ///        type of the compute device (e.g. "GPU" or "CPU")
     /// \li \c BOOST_COMPUTE_DEFAULT_PLATFORM -
     ///        name of the platform (e.g. "NVIDIA CUDA")
     /// \li \c BOOST_COMPUTE_DEFAULT_VENDOR -
