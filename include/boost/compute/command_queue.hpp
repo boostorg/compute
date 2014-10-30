@@ -1277,13 +1277,20 @@ public:
 
         event event_;
 
-        cl_int ret = clEnqueueTask(
-            m_queue,
-            kernel,
-            events.size(),
-            events.get_event_ptr(),
-            &event_.get()
+        // clEnqueueTask() was deprecated in OpenCL 2.0. In that case we
+        // just forward to the equivalent clEnqueueNDRangeKernel() call.
+        #ifdef CL_VERSION_2_0
+        size_t one = 1;
+        cl_int ret = clEnqueueNDRangeKernel(
+            m_queue, kernel, 1, 0, &one, &one,
+            events.size(), events.get_event_ptr(), &event_.get()
         );
+        #else
+        cl_int ret = clEnqueueTask(
+            m_queue, kernel, events.size(), events.get_event_ptr(), &event_.get()
+        );
+        #endif
+
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
