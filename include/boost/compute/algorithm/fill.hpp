@@ -279,6 +279,9 @@ inline void fill(BufferIterator first,
                  command_queue &queue = system::default_queue())
 {
     size_t count = detail::iterator_range_size(first, last);
+    if(count == 0){
+        return;
+    }
 
     detail::dispatch_fill(first, count, value, queue);
 }
@@ -290,6 +293,9 @@ inline future<void> fill_async(BufferIterator first,
                                command_queue &queue = system::default_queue())
 {
     size_t count = detail::iterator_range_size(first, last);
+    if(count == 0){
+        return future<void>();
+    }
 
     return detail::dispatch_fill_async(first, count, value, queue);
 }
