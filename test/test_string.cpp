@@ -30,4 +30,12 @@ BOOST_AUTO_TEST_CASE(size)
     BOOST_CHECK_EQUAL(str.length(), size_t(6));
 }
 
+BOOST_AUTO_TEST_CASE(find)
+{
+    boost::compute::string str = "string";
+    BOOST_VERIFY(!str.empty());
+    BOOST_CHECK_EQUAL(str.find('r'), 2);
+    BOOST_CHECK_NE(str.find('r'), 3);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
