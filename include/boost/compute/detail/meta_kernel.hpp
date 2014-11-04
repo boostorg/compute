@@ -584,7 +584,7 @@ public:
 
     meta_kernel& operator<<(const meta_kernel_literal<signed char> &literal)
     {
-        return *this << int(literal.value());
+        return *this << lit<char>(literal.value());
     }
 
     meta_kernel& operator<<(const meta_kernel_literal<unsigned char> &literal)
