@@ -57,6 +57,7 @@ set(BENCHMARKS
   unique
   unique_copy
   exclusive_scan
+  shuffle
 )
 
 foreach(BENCHMARK ${BENCHMARKS})
