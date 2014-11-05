@@ -146,7 +146,7 @@ int main()
     std::cout << "option 0 put price: " << put0 << std::endl;
 
     // check option prices
-    if(std::fabs(call0 - 0.0999f) > 1e-6 || std::fabs(put0 - 43.0524f) > 1e-6){
+    if(std::abs(call0 - 0.0999f) > 1e-4 || std::abs(put0 - 43.0524f) > 1e-4){
         std::cerr << "error: option prices are wrong" << std::endl;
         return -1;
     }
