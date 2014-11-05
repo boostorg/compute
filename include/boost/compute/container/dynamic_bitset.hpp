@@ -97,16 +97,16 @@ public:
     /// Returns the number of set bits (i.e. '1') in the bitset.
     size_type count(command_queue &queue) const
     {
-        size_type count = 0;
+        ulong_ count = 0;
         transform_reduce(
             m_bits.begin(),
             m_bits.end(),
             &count,
             popcount<block_type>(),
-            plus<size_type>(),
+            plus<ulong_>(),
             queue
         );
-        return count;
+        return static_cast<size_type>(count);
     }
 
     /// Resizes the bitset to contain \p num_bits. If the new size is greater
