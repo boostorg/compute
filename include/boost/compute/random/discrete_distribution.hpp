@@ -44,9 +44,6 @@ public:
         : m_n(std::distance(first, last)),
           m_probabilities(std::distance(first, last))
     {
-        typedef typename
-            std::iterator_traits<InputIterator>::value_type value_type;
-
         double sum = 0;
 
         for(InputIterator iter = first; iter!=last; iter++)
