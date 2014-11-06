@@ -116,8 +116,6 @@ inline bool includes(InputIterator1 first1,
                     InputIterator2 last2,
                     command_queue &queue = system::default_queue())
 {
-    typedef typename std::iterator_traits<InputIterator1>::value_type value_type;
-
     int tile_size = 1024;
 
     int count1 = detail::iterator_range_size(first1, last1);

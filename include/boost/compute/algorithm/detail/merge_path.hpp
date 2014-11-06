@@ -49,8 +49,6 @@ public:
                    OutputIterator1 result_a,
                    OutputIterator2 result_b)
     {
-        typedef typename std::iterator_traits<InputIterator1>::value_type value_type;
-
         m_a_count = iterator_range_size(first1, last1);
         m_a_count_arg = add_arg<uint_>("a_count");
 
