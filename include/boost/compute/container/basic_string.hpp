@@ -228,6 +228,16 @@ public:
         m_data.clear();
     }
 
+    void swap(basic_string<CharT, Traits> &other)
+    {
+        if(this != &other)
+        {
+            ::boost::compute::vector<CharT> temp_data(other.m_data);
+            other.m_data = m_data;
+            m_data = temp_data;
+        }
+    }
+
     basic_string<CharT, Traits> substr(size_type pos = 0,
                                        size_type count = npos) const
     {

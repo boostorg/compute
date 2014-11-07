@@ -15,11 +15,32 @@
 #include <boost/compute/container/basic_string.hpp>
 
 #include "context_setup.hpp"
+#include "check_macros.hpp"
 
 BOOST_AUTO_TEST_CASE(empty)
 {
     boost::compute::string str;
     BOOST_VERIFY(str.empty());
+}
+
+BOOST_AUTO_TEST_CASE(swap)
+{
+    boost::compute::string str1 = "compute";
+    boost::compute::string str2 = "boost";
+    BOOST_VERIFY(!str2.empty());
+    BOOST_VERIFY(!str2.empty()); 
+    str1.swap(str2);
+    CHECK_STRING_EQUAL(str1, "boost");
+    CHECK_STRING_EQUAL(str2, "compute");
+    str1.clear();
+    str1.swap(str2);
+    CHECK_STRING_EQUAL(str1, "compute");
+    CHECK_STRING_EQUAL(str2, "");
+    str2.swap(str1);
+    CHECK_STRING_EQUAL(str1, "");
+    CHECK_STRING_EQUAL(str2, "compute");
+    str1.swap(str1);
+    CHECK_STRING_EQUAL(str1, "");
 }
 
 BOOST_AUTO_TEST_CASE(size)
