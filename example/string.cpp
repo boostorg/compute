@@ -55,8 +55,9 @@ int main(int argc, char *argv[])
 
     bc_str = bc_str1;
 
+    std::cout << "bc_str           : ";
     //Accessing individual elements
-    for(int i=0; i<bc_str.length(); i++)
+    for(unsigned int i=0; i < bc_str.length(); i++)
         std::cout << bc_str[i];
     std::cout << "\n";
 
@@ -75,7 +76,7 @@ int main(int argc, char *argv[])
     bc_sub_str = bc_str.substr(7,14);
     std::cout << "substring        : ";
     //Accessing individual elements
-    for(int i=0; i<bc_sub_str.length(); i++)
+    for(unsigned int i=0; i<bc_sub_str.length(); i++)
         std::cout << bc_sub_str[i];
     std::cout << "\n";
 
@@ -87,9 +88,31 @@ int main(int argc, char *argv[])
     std::size_t found_pos = bc_str.find('c');
     std::cout << "c found at position   : " << found_pos <<"\n";
 
+    std::cout << "bc_str2          : ";
     //Accessing individual elements via iterator
     for(iter = bc_str2.begin(); iter != bc_str2.end(); iter++)
         std::cout << *iter;
+    std::cout << "\n\n";
+
+    std::cout << "Clearing bc_str" << "\n";
+    //string clear
+    bc_str.clear();
+
+    std::cout << "Swaping bc_str & bc_str2" << "\n";
+    //string swap
+    bc_str2.swap(bc_str);
+    std::cout << "After swap" << "\n";
+
+    std::cout << "bc_str           : ";
+    //Accessing individual elements
+    for(unsigned int i=0; i < bc_str.length(); i++)
+        std::cout << bc_str[i];
+    std::cout << "\n";
+
+    std::cout << "bc_str2          : ";
+    //Accessing individual elements
+    for(unsigned int i=0; i < bc_str2.length(); i++)
+        std::cout << bc_str2[i];
     std::cout << "\n";
 
     return 0;
