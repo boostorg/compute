@@ -23,6 +23,7 @@ set(EXAMPLES
   vector_addition
   simple_moving_average
   matrix_transpose
+  string
 )
 
 # boost library link dependencies

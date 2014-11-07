@@ -40,4 +40,13 @@
         ); \
     }
 
+#define CHECK_STRING_EQUAL(actual, expected) \
+    { \
+        std::string _actual(actual.size(), '\0'); \
+        boost::compute::copy( \
+            actual.begin(), actual.end(), _actual.begin(), queue \
+        ); \
+        BOOST_CHECK_EQUAL(_actual, expected); \
+    }
+
 #endif // BOOST_COMPUTE_TEST_CHECK_MACROS_HPP
