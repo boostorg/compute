@@ -21,7 +21,7 @@
     class name : public function<signature> \
     { \
     public: \
-        name() : function<signature>(BOOST_PP_STRINGIZE(name)) { } \
+        (name)() : function<signature>(BOOST_PP_STRINGIZE(name)) { } \
     };
 
 #define BOOST_COMPUTE_DECLARE_BUILTIN_FUNCTION_UNDERSCORE(name, signature, template_args) \
