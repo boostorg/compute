@@ -17,6 +17,9 @@
 #include <boost/compute/cl.hpp>
 #include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/system.hpp>
+#include <boost/compute/command_queue.hpp>
+#include <iosfwd>
 
 namespace boost {
 namespace compute {
@@ -258,6 +261,19 @@ public:
 private:
     ::boost::compute::vector<CharT> m_data;
 };
+
+template<class CharT, class Traits>
+std::ostream&
+operator<<(std::ostream& stream,
+           boost::compute::basic_string<CharT, Traits>const& outStr)
+{
+    command_queue queue = ::boost::compute::system::default_queue();
+    boost::compute::copy(outStr.begin(),
+                        outStr.end(),
+                        std::ostream_iterator<CharT>(stream),
+                        queue);
+    return stream;
+}
 
 } // end compute namespace
 } // end boost namespace

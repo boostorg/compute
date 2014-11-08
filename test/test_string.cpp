@@ -13,9 +13,12 @@
 
 #include <boost/compute/container/string.hpp>
 #include <boost/compute/container/basic_string.hpp>
+#include <boost/test/output_test_stream.hpp>
 
 #include "context_setup.hpp"
 #include "check_macros.hpp"
+
+using boost::test_tools::output_test_stream;
 
 BOOST_AUTO_TEST_CASE(empty)
 {
@@ -57,6 +60,15 @@ BOOST_AUTO_TEST_CASE(find)
     BOOST_VERIFY(!str.empty());
     BOOST_CHECK_EQUAL(str.find('r'), 2);
     BOOST_CHECK_NE(str.find('r'), 3);
+}
+
+BOOST_AUTO_TEST_CASE(outStream)
+{
+    output_test_stream output;
+    boost::compute::string str = "string";
+    output<<str;
+    BOOST_CHECK(output.is_equal("string"));
+    BOOST_VERIFY(!output.is_equal("!@$%"));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
