@@ -177,4 +177,13 @@ BOOST_AUTO_TEST_CASE(sort_double_vector)
     );
 }
 
+BOOST_AUTO_TEST_CASE(sort_partial_vector)
+{
+    int data[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+    boost::compute::vector<int> vec(data, data + 10, queue);
+
+    boost::compute::detail::radix_sort(vec.begin() + 2, vec.end() - 2, queue);
+    CHECK_RANGE_EQUAL(int, 10, vec, (9, 8, 2, 3, 4, 5, 6, 7, 1, 0));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
