@@ -15,10 +15,51 @@
 
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/algorithm/detail/radix_sort.hpp>
 #include <boost/compute/algorithm/detail/insertion_sort.hpp>
+#include <boost/compute/algorithm/reverse.hpp>
+#include <boost/compute/functional/operator.hpp>
 
 namespace boost {
 namespace compute {
+namespace detail {
+
+template<class Iterator, class Compare>
+inline void dispatch_stable_sort(Iterator first,
+                                 Iterator last,
+                                 Compare compare,
+                                 command_queue &queue)
+{
+    ::boost::compute::detail::serial_insertion_sort(
+        first, last, compare, queue
+    );
+}
+
+template<class T>
+inline typename boost::enable_if_c<is_radix_sortable<T>::value>::type
+dispatch_stable_sort(buffer_iterator<T> first,
+                     buffer_iterator<T> last,
+                     less<T>,
+                     command_queue &queue)
+{
+    ::boost::compute::detail::radix_sort(first, last, queue);
+}
+
+template<class T>
+inline typename boost::enable_if_c<is_radix_sortable<T>::value>::type
+dispatch_stable_sort(buffer_iterator<T> first,
+                     buffer_iterator<T> last,
+                     greater<T>,
+                     command_queue &queue)
+{
+    // radix sort in ascending order
+    ::boost::compute::detail::radix_sort(first, last, queue);
+
+    // reverse range to descending order
+    ::boost::compute::reverse(first, last, queue);
+}
+
+} // end detail namespace
 
 /// Sorts the values in the range [\p first, \p last) according to
 /// \p compare. The relative order of identical values is preserved.
@@ -30,10 +71,9 @@ inline void stable_sort(Iterator first,
                         Compare compare,
                         command_queue &queue = system::default_queue())
 {
-    return ::boost::compute::detail::serial_insertion_sort(first,
-                                                           last,
-                                                           compare,
-                                                           queue);
+    ::boost::compute::detail::dispatch_stable_sort(
+        first, last, compare, queue
+    );
 }
 
 /// \overload
@@ -46,7 +86,7 @@ inline void stable_sort(Iterator first,
 
     ::boost::compute::less<value_type> less;
 
-    return ::boost::compute::stable_sort(first, last, less, queue);
+    ::boost::compute::stable_sort(first, last, less, queue);
 }
 
 } // end compute namespace

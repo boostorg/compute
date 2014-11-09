@@ -11,6 +11,8 @@
 #ifndef BOOST_COMPUTE_TYPE_TRAITS_IS_VECTOR_TYPE_HPP
 #define BOOST_COMPUTE_TYPE_TRAITS_IS_VECTOR_TYPE_HPP
 
+#include <boost/mpl/bool.hpp>
+
 #include <boost/compute/type_traits/vector_size.hpp>
 
 namespace boost {
@@ -26,10 +28,8 @@ namespace compute {
 ///
 /// \see make_vector_type, vector_size
 template<class T>
-struct is_vector_type
+struct is_vector_type : boost::mpl::bool_<vector_size<T>::value != 1>
 {
-    /// \internal_
-    BOOST_STATIC_CONSTANT(bool, value = (vector_size<T>::value != 1));
 };
 
 } // end compute namespace

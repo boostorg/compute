@@ -23,12 +23,24 @@
 #include <boost/compute/algorithm/exclusive_scan.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
+#include <boost/compute/type_traits/is_fundamental.hpp>
+#include <boost/compute/type_traits/is_vector_type.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/detail/program_cache.hpp>
 
 namespace boost {
 namespace compute {
 namespace detail {
+
+// meta-function returning true if type T is radix-sortable
+template<class T>
+struct is_radix_sortable :
+    boost::mpl::and_<
+        typename ::boost::compute::is_fundamental<T>::type,
+        typename boost::mpl::not_<typename is_vector_type<T>::type>::type
+    >
+{
+};
 
 template<size_t N>
 struct radix_sort_value_type
