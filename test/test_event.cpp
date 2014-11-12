@@ -52,6 +52,7 @@ BOOST_AUTO_TEST_CASE(event_callback)
 #if !defined(BOOST_NO_CXX11_LAMBDAS) && !defined(BOOST_NO_LAMBDAS)
 BOOST_AUTO_TEST_CASE(lambda_callback)
 {
+    REQUIRES_OPENCL_VERSION(1,2);
     bool lambda_invoked = false;
     {
         boost::compute::event marker = queue.enqueue_marker();
@@ -73,6 +74,7 @@ event_promise_fulfiller_callback(cl_event event, cl_int status, void *user_data)
 
 BOOST_AUTO_TEST_CASE(event_to_std_future)
 {
+    REQUIRES_OPENCL_VERSION(1,2);
     std::vector<float> vector(1000, 3.14f);
     boost::compute::buffer buffer(context, 1000 * sizeof(float));
     auto event = queue.enqueue_write_buffer_async(
