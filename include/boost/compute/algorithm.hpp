@@ -47,6 +47,7 @@
 #include <boost/compute/algorithm/is_permutation.hpp>
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/algorithm/lower_bound.hpp>
+#include <boost/compute/algorithm/lexicographical_compare.hpp> 
 #include <boost/compute/algorithm/max_element.hpp>
 #include <boost/compute/algorithm/merge.hpp>
 #include <boost/compute/algorithm/min_element.hpp>

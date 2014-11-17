@@ -58,6 +58,7 @@ Header: `<boost/compute/algorithm.hpp>`
 * [funcref boost::compute::is_permutation is_permutation()]
 * [funcref boost::compute::is_sorted is_sorted()]
 * [funcref boost::compute::lower_bound lower_bound()]
+* [funcref boost::compute::lexicographical_compare lexicographical_compare()]
 * [funcref boost::compute::max_element max_element()]
 * [funcref boost::compute::merge merge()]
 * [funcref boost::compute::min_element min_element()]
