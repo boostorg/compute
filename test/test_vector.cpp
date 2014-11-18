@@ -69,6 +69,7 @@ BOOST_AUTO_TEST_CASE(array_operator)
     CHECK_RANGE_EQUAL(int, 10, vector, (42, 42, 42, 42, 42, 42, 42, 42, 42, 42));
 
     vector[0] = 9;
+    bc::system::finish();
     CHECK_RANGE_EQUAL(int, 10, vector, (9, 42, 42, 42, 42, 42, 42, 42, 42, 42));
 }
 
@@ -150,6 +151,7 @@ BOOST_AUTO_TEST_CASE(at)
     vector.push_back(1);
     vector.push_back(2);
     vector.push_back(3);
+    bc::system::finish();
     BOOST_CHECK_EQUAL(vector.at(0), 1);
     BOOST_CHECK_EQUAL(vector.at(1), 2);
     BOOST_CHECK_EQUAL(vector.at(2), 3);
@@ -230,6 +232,7 @@ BOOST_AUTO_TEST_CASE(vector_iterator)
     vector.push_back(4);
     vector.push_back(6);
     vector.push_back(8);
+    bc::system::finish();
     BOOST_CHECK_EQUAL(vector.size(), size_t(4));
     BOOST_CHECK_EQUAL(vector[0], 2);
     BOOST_CHECK_EQUAL(*vector.begin(), 2);
@@ -276,6 +279,9 @@ BOOST_AUTO_TEST_CASE(swap_between_contexts)
     compute::context ctx1(device);
     compute::context ctx2(device);
 
+    compute::command_queue queue1(ctx1, device);
+    compute::command_queue queue2(ctx2, device);
+
     compute::vector<int> vec1(32, ctx1);
     compute::vector<int> vec2(32, ctx2);
 
@@ -287,8 +293,8 @@ BOOST_AUTO_TEST_CASE(swap_between_contexts)
     BOOST_CHECK(vec1.get_allocator().get_context() == ctx2);
     BOOST_CHECK(vec2.get_allocator().get_context() == ctx1);
 
-    vec1.resize(64);
-    vec2.resize(64);
+    vec1.resize(64, queue2);
+    vec2.resize(64, queue1);
 }
 
 BOOST_AUTO_TEST_CASE(assign_from_std_vector)

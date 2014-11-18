@@ -194,7 +194,7 @@ public:
         m_data = m_allocator.allocate((std::max)(m_size, _minimum_capacity()));
 
         if(!other.empty()){
-            command_queue queue = default_queue();
+            command_queue queue = system::default_queue();
             ::boost::compute::copy(other.begin(), other.end(), begin(), queue);
             queue.finish();
         }
@@ -228,7 +228,7 @@ public:
     vector<T>& operator=(const vector<T> &other)
     {
         if(this != &other){
-            command_queue queue = default_queue();
+            command_queue queue = system::default_queue();
             resize(other.size(), queue);
             ::boost::compute::copy(other.begin(), other.end(), begin(), queue);
             queue.finish();
@@ -240,7 +240,7 @@ public:
     template<class OtherAlloc>
     vector<T>& operator=(const std::vector<T, OtherAlloc> &vector)
     {
-        command_queue queue = default_queue();
+        command_queue queue = system::default_queue();
         resize(vector.size(), queue);
         ::boost::compute::copy(vector.begin(), vector.end(), begin(), queue);
         queue.finish();
@@ -354,7 +354,7 @@ public:
     }
 
     /// Resizes the vector to \p size.
-    void resize(size_type size, command_queue &queue)
+    void resize(size_type size, command_queue &queue = system::default_queue())
     {
         if(size < capacity()){
             m_size = size;
@@ -380,14 +380,6 @@ public:
         }
     }
 
-    /// \overload
-    void resize(size_type size)
-    {
-        command_queue queue = default_queue();
-        resize(size, queue);
-        queue.finish();
-    }
-
     /// Returns \c true if the vector is empty.
     bool empty() const
     {
@@ -400,29 +392,15 @@ public:
         return m_data.get_buffer().size() / sizeof(T);
     }
 
-    void reserve(size_type size, command_queue &queue)
+    void reserve(size_type size, command_queue &queue = system::default_queue())
     {
         (void) size;
         (void) queue;
     }
 
-    void reserve(size_type size)
-    {
-        command_queue queue = default_queue();
-        reserve(size, queue);
-        queue.finish();
-    }
-
-    void shrink_to_fit(command_queue &queue)
+    void shrink_to_fit(command_queue &queue = system::default_queue())
     {
         (void) queue;
-    }
-
-    void shrink_to_fit()
-    {
-        command_queue queue = default_queue();
-        shrink_to_fit(queue);
-        queue.finish();
     }
 
     reference operator[](size_type index)
@@ -476,7 +454,7 @@ public:
     template<class InputIterator>
     void assign(InputIterator first,
                 InputIterator last,
-                command_queue &queue)
+                command_queue &queue = system::default_queue())
     {
         // resize vector for new contents
         resize(detail::iterator_range_size(first, last), queue);
@@ -485,28 +463,13 @@ public:
         ::boost::compute::copy(first, last, begin(), queue);
     }
 
-    template<class InputIterator>
-    void assign(InputIterator first, InputIterator last)
-    {
-        command_queue queue = default_queue();
-        assign(first, last, queue);
-        queue.finish();
-    }
-
-    void assign(size_type n, const T &value, command_queue &queue)
+    void assign(size_type n, const T &value, command_queue &queue = system::default_queue())
     {
         // resize vector for new contents
         resize(n, queue);
 
         // fill vector with value
         ::boost::compute::fill_n(begin(), n, value, queue);
-    }
-
-    void assign(size_type n, const T &value)
-    {
-        command_queue queue = default_queue();
-        assign(n, value, queue);
-        queue.finish();
     }
 
     /// Inserts \p value at the end of the vector (resizing if neccessary).
@@ -516,32 +479,19 @@ public:
     /// transfer to the device. It is usually better to store a set of values
     /// on the host (for example, in a \c std::vector) and then transfer them
     /// in bulk using the \c insert() method or the copy() algorithm.
-    void push_back(const T &value, command_queue &queue)
+    void push_back(const T &value, command_queue &queue = system::default_queue())
     {
         insert(end(), value, queue);
     }
 
-    /// \overload
-    void push_back(const T &value)
-    {
-        command_queue queue = default_queue();
-        push_back(value, queue);
-        queue.finish();
-    }
-
-    void pop_back(command_queue &queue)
+    void pop_back(command_queue &queue = system::default_queue())
     {
         resize(size() - 1, queue);
     }
 
-    void pop_back()
-    {
-        command_queue queue = default_queue();
-        pop_back(queue);
-        queue.finish();
-    }
-
-    iterator insert(iterator position, const T &value, command_queue &queue)
+    iterator insert(iterator position,
+                    const T &value,
+                    command_queue &queue = system::default_queue())
     {
         if(position == end()){
             resize(m_size + 1, queue);
@@ -557,14 +507,6 @@ public:
         }
 
         return position + 1;
-    }
-
-    iterator insert(iterator position, const T &value)
-    {
-        command_queue queue = default_queue();
-        iterator iter = insert(position, value, queue);
-        queue.finish();
-        return iter;
     }
 
     void insert(iterator position,
@@ -586,20 +528,13 @@ public:
         );
     }
 
-    void insert(iterator position, size_type count, const T &value)
-    {
-        command_queue queue = default_queue();
-        insert(position, count, value, queue);
-        queue.finish();
-    }
-
     /// Inserts the values in the range [\p first, \p last) into the vector at
     /// \p position using \p queue.
     template<class InputIterator>
     void insert(iterator position,
                 InputIterator first,
                 InputIterator last,
-                command_queue &queue)
+                command_queue &queue = system::default_queue())
     {
         ::boost::compute::vector<T> tmp(position, end(), queue);
 
@@ -617,29 +552,12 @@ public:
         );
     }
 
-    /// \overload
-    template<class InputIterator>
-    void insert(iterator position, InputIterator first, InputIterator last)
-    {
-        command_queue queue = default_queue();
-        insert(position, first, last, queue);
-        queue.finish();
-    }
-
-    iterator erase(iterator position, command_queue &queue)
+    iterator erase(iterator position, command_queue &queue = system::default_queue())
     {
         return erase(position, position + 1, queue);
     }
 
-    iterator erase(iterator position)
-    {
-        command_queue queue = default_queue();
-        iterator iter = erase(position, queue);
-        queue.finish();
-        return iter;
-    }
-
-    iterator erase(iterator first, iterator last, command_queue &queue)
+    iterator erase(iterator first, iterator last, command_queue &queue = system::default_queue())
     {
         if(last != end()){
             ::boost::compute::vector<T> tmp(last, end(), queue);
@@ -650,14 +568,6 @@ public:
         resize(size() - static_cast<size_type>(count), queue);
 
         return begin() + first.get_index() + count;
-    }
-
-    iterator erase(iterator first, iterator last)
-    {
-        command_queue queue = default_queue();
-        iterator iter = erase(first, last, queue);
-        queue.finish();
-        return iter;
     }
 
     /// Swaps the contents of \c *this with \p other.
@@ -683,18 +593,6 @@ public:
     const buffer& get_buffer() const
     {
         return m_data.get_buffer();
-    }
-
-    /// \internal_
-    ///
-    /// Returns a command queue usable to issue commands for the vector's
-    /// memory buffer. This is used when a member function is called without
-    /// speicifying an existing command queue to use.
-    command_queue default_queue() const
-    {
-        const context &context = m_allocator.get_context();
-        command_queue queue(context, context.get_device());
-        return queue;
     }
 
 private:

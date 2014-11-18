@@ -44,8 +44,9 @@ public:
     {
     }
 
-    flat_set(const flat_set<T> &other)
-        : m_vector(other.m_vector)
+    flat_set(const flat_set<T> &other,
+             command_queue &queue = system::default_queue())
+        : m_vector(other.m_vector, queue)
     {
     }
 
@@ -142,16 +143,10 @@ public:
         return m_vector.capacity();
     }
 
-    void reserve(size_type size, command_queue &queue)
+    void reserve(size_type size,
+                 command_queue &queue = system::default_queue())
     {
         m_vector.reserve(size, queue);
-    }
-
-    void reserve(size_type size)
-    {
-        command_queue queue = m_vector.default_queue();
-        reserve(size, queue);
-        queue.finish();
     }
 
     void shrink_to_fit()
@@ -165,7 +160,8 @@ public:
     }
 
     std::pair<iterator, bool>
-    insert(const value_type &value, command_queue &queue)
+    insert(const value_type &value,
+           command_queue &queue = system::default_queue())
     {
         iterator location = upper_bound(value, queue);
 
@@ -181,43 +177,21 @@ public:
         return std::make_pair(location, true);
     }
 
-    std::pair<iterator, bool> insert(const value_type &value)
-    {
-        command_queue queue = m_vector.default_queue();
-        std::pair<iterator, bool> result = insert(value, queue);
-        queue.finish();
-        return result;
-    }
-
-    iterator erase(const const_iterator &position, command_queue &queue)
+    iterator erase(const const_iterator &position,
+                   command_queue &queue = system::default_queue())
     {
         return erase(position, position + 1, queue);
     }
 
-    iterator erase(const const_iterator &position)
-    {
-        command_queue queue = m_vector.default_queue();
-        iterator iter = erase(position, queue);
-        queue.finish();
-        return iter;
-    }
-
     iterator erase(const const_iterator &first,
                    const const_iterator &last,
-                   command_queue &queue)
+                   command_queue &queue = system::default_queue())
     {
         return m_vector.erase(first, last, queue);
     }
 
-    iterator erase(const const_iterator &first, const const_iterator &last)
-    {
-        command_queue queue = m_vector.default_queue();
-        iterator iter = erase(first, last, queue);
-        queue.finish();
-        return iter;
-    }
-
-    size_type erase(const key_type &value, command_queue &queue)
+    size_type erase(const key_type &value,
+                    command_queue queue = system::default_queue())
     {
         iterator position = find(value, queue);
 
@@ -230,103 +204,46 @@ public:
         }
     }
 
-    size_type erase(const key_type &value)
-    {
-        command_queue queue = m_vector.default_queue();
-        size_type result = erase(value, queue);
-        queue.finish();
-        return result;
-    }
-
-    iterator find(const key_type &value, command_queue &queue)
+    iterator find(const key_type &value,
+                  command_queue queue = system::default_queue())
     {
         return ::boost::compute::find(begin(), end(), value, queue);
     }
 
-    iterator find(const key_type &value)
-    {
-        command_queue queue = m_vector.default_queue();
-        iterator iter = find(value, queue);
-        queue.finish();
-        return iter;
-    }
-
-    const_iterator find(const key_type &value, command_queue &queue) const
+    const_iterator find(const key_type &value,
+                        command_queue &queue = system::default_queue()) const
     {
         return ::boost::compute::find(begin(), end(), value, queue);
     }
 
-    const_iterator find(const key_type &value) const
-    {
-        command_queue queue = m_vector.default_queue();
-        const_iterator iter = find(value, queue);
-        queue.finish();
-        return iter;
-    }
-
-    size_type count(const key_type &value, command_queue &queue) const
+    size_type count(const key_type &value,
+                    command_queue &queue = system::default_queue()) const
     {
         return find(value, queue) != end() ? 1 : 0;
     }
 
-    size_type count(const key_type &value) const
-    {
-        command_queue queue = m_vector.default_queue();
-        size_type result = count(value, queue);
-        queue.finish();
-        return result;
-    }
-
-    iterator lower_bound(const key_type &value, command_queue &queue)
+    iterator lower_bound(const key_type &value,
+                         command_queue &queue = system::default_queue())
     {
         return ::boost::compute::lower_bound(begin(), end(), value, queue);
     }
 
-    iterator lower_bound(const key_type &value)
-    {
-        command_queue queue = m_vector.default_queue();
-        iterator iter = lower_bound(value, queue);
-        queue.finish();
-        return iter;
-    }
-
-    const_iterator lower_bound(const key_type &value, command_queue &queue) const
+    const_iterator lower_bound(const key_type &value,
+                               command_queue &queue = system::default_queue()) const
     {
         return ::boost::compute::lower_bound(begin(), end(), value, queue);
     }
 
-    const_iterator lower_bound(const key_type &value) const
-    {
-        command_queue queue = m_vector.default_queue();
-        const_iterator iter = lower_bound(value, queue);
-        queue.finish();
-        return iter;
-    }
-
-    iterator upper_bound(const key_type &value, command_queue &queue)
+    iterator upper_bound(const key_type &value,
+                         command_queue &queue = system::default_queue())
     {
         return ::boost::compute::upper_bound(begin(), end(), value, queue);
     }
 
-    iterator upper_bound(const key_type &value)
-    {
-        command_queue queue = m_vector.default_queue();
-        iterator iter = upper_bound(value, queue);
-        queue.finish();
-        return iter;
-    }
-
-    const_iterator upper_bound(const key_type &value, command_queue &queue) const
+    const_iterator upper_bound(const key_type &value,
+                               command_queue &queue = system::default_queue()) const
     {
         return ::boost::compute::upper_bound(begin(), end(), value, queue);
-    }
-
-    const_iterator upper_bound(const key_type &value) const
-    {
-        command_queue queue = m_vector.default_queue();
-        const_iterator iter = upper_bound(value, queue);
-        queue.finish();
-        return iter;
     }
 
 private:
