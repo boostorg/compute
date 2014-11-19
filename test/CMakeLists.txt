@@ -112,6 +112,7 @@ add_compute_test("algorithm.transform" test_transform.cpp)
 add_compute_test("algorithm.transform_reduce" test_transform_reduce.cpp)
 add_compute_test("algorithm.unique" test_unique.cpp)
 add_compute_test("algorithm.unique_copy" test_unique_copy.cpp)
+add_compute_test("algorithm.lexicographical_compare" test_lexicographical_compare.cpp)
 
 add_compute_test("allocator.buffer_allocator" test_buffer_allocator.cpp)
 add_compute_test("allocator.pinned_allocator" test_pinned_allocator.cpp)
