@@ -23,10 +23,12 @@
 <div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../boost_compute/reference.html#header.boost.compute.type_traits.is_vector_type_hpp" title="Header &lt;boost/compute/type_traits/is_vector_type.hpp&gt;">boost/compute/type_traits/is_vector_type.hpp</a>&gt;
 
 </span><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
-<span class="keyword">struct</span> <a class="link" href="is_vector_type.html" title="Struct template is_vector_type">is_vector_type</a> <span class="special">{</span>
+<span class="keyword">struct</span> <a class="link" href="is_vector_type.html" title="Struct template is_vector_type">is_vector_type</a> <span class="special">:</span>
+  <span class="keyword">public</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span> <span class="identifier">vector_size</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">!=</span><span class="number">1</span> <span class="special">&gt;</span>
+<span class="special">{</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp105407168"></a><h2>Description</h2>
+<a name="idp91436048"></a><h2>Description</h2>
 <p>Meta-function returning <code class="computeroutput">true</code> if <code class="computeroutput">T</code> is a vector type.</p>
 <p>For example, </p>
 <pre class="programlisting"><span class="identifier">is_vector_type</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span> <span class="special">==</span> <span class="keyword">false</span>

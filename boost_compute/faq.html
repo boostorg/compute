@@ -198,6 +198,49 @@
     </p>
 <h4>
 <a name="boost_compute.faq.h11"></a>
+      <span><a name="boost_compute.faq.is_boost_compute_thread_safe_"></a></span><a class="link" href="faq.html#boost_compute.faq.is_boost_compute_thread_safe_">Is
+      Boost.Compute thread-safe?</a>
+    </h4>
+<p>
+      The low-level Boost.Compute APIs offer the same thread-safety guarantees as
+      the underyling OpenCL library implementation. However, the high-level APIs
+      make use of a few global static objects for features such as automatic program
+      caching which makes them not thread-safe by default.
+    </p>
+<p>
+      To compile Boost.Compute in thread-safe mode define <code class="computeroutput"><span class="identifier">BOOST_COMPUTE_THREAD_SAFE</span></code>
+      before including any of the Boost.Compute headers. By default this will require
+      linking your application/library with the Boost.Thread library.
+    </p>
+<h4>
+<a name="boost_compute.faq.h12"></a>
+      <span><a name="boost_compute.faq.what_applications_libraries_use_boost_compute_"></a></span><a class="link" href="faq.html#boost_compute.faq.what_applications_libraries_use_boost_compute_">What
+      applications/libraries use Boost.Compute?</a>
+    </h4>
+<p>
+      Boost.Compute is used by a number of open-source libraries and applications
+      including:
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+          ArrayFire (<a href="http://arrayfire.com" target="_top">http://arrayfire.com</a>)
+        </li>
+<li class="listitem">
+          Ceemple (<a href="http://www.ceemple.com" target="_top">http://www.ceemple.com</a>)
+        </li>
+<li class="listitem">
+          Odeint (<a href="http://headmyshoulder.github.io/odeint-v2" target="_top">http://headmyshoulder.github.io/odeint-v2</a>)
+        </li>
+<li class="listitem">
+          VexCL (<a href="https://github.com/ddemidov/vexcl" target="_top">https://github.com/ddemidov/vexcl</a>)
+        </li>
+</ul></div>
+<p>
+      If you use Boost.Compute in your project and would like it to be listed here
+      please send an email to Kyle Lutz (kyle.r.lutz@gmail.com).
+    </p>
+<h4>
+<a name="boost_compute.faq.h13"></a>
       <span><a name="boost_compute.faq.how_can_i_contribute_"></a></span><a class="link" href="faq.html#boost_compute.faq.how_can_i_contribute_">How
       can I contribute?</a>
     </h4>
