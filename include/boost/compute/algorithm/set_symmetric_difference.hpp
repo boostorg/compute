@@ -20,7 +20,6 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
-#include <boost/compute/detail/read_write_single_value.hpp>
 #include <boost/compute/system.hpp>
 
 namespace boost {
@@ -186,7 +185,7 @@ inline OutputIterator set_symmetric_difference(InputIterator1 first1,
 
     compact_kernel.exec(queue);
 
-    return result + detail::read_single_value<uint_>(counts.get_buffer(), counts.size()-1, queue);
+    return result + (counts.end() - 1).read(queue);
 }
 
 } //end compute namespace

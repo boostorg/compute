@@ -17,7 +17,6 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/container/detail/scalar.hpp>
 #include <boost/compute/algorithm/reverse.hpp>
-#include <boost/compute/detail/read_write_single_value.hpp>
 
 namespace boost {
 namespace compute {
@@ -150,31 +149,15 @@ inline bool next_permutation(InputIterator first,
         return false;
     }
 
-    size_t first_index =
-        detail::iterator_range_size(first, first_element);
-    value_type first_value =
-        detail::read_single_value<value_type>(first.get_buffer(),
-                                              first_index,
-                                              queue);
+    value_type first_value = first_element.read(queue);
 
     InputIterator ceiling_element =
         detail::np_ceiling(first_element + 1, last, first_value, queue);
 
-    size_t ceiling_index =
-        detail::iterator_range_size(first, ceiling_element);
-    value_type ceiling_value =
-        detail::read_single_value<value_type>(first.get_buffer(),
-                                              ceiling_index,
-                                              queue);
+    value_type ceiling_value = ceiling_element.read(queue);
 
-    detail::write_single_value<value_type>(ceiling_value,
-                                           first.get_buffer(),
-                                           first_index,
-                                           queue);
-    detail::write_single_value<value_type>(first_value,
-                                           first.get_buffer(),
-                                           ceiling_index,
-                                           queue);
+    first_element.write(ceiling_value, queue);
+    ceiling_element.write(first_value, queue);
 
     reverse(first_element + 1, last, queue);
 

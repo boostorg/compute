@@ -16,7 +16,6 @@
 #include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/algorithm/partition.hpp>
 #include <boost/compute/algorithm/sort.hpp>
-#include <boost/compute/detail/read_write_single_value.hpp>
 #include <boost/compute/functional/bind.hpp>
 
 namespace boost {
@@ -37,31 +36,20 @@ inline void nth_element(Iterator first,
 
     while(1)
     {
-        value_type value = detail::read_single_value<value_type>(
-                            first.get_buffer(),
-                            first.get_index()+std::distance(first, nth),
-                            queue
-            );
+        value_type value = nth.read(queue);
 
         using boost::compute::placeholders::_1;
         Iterator new_nth = partition(first, last, bind(compare, _1, value), queue);
 
         Iterator old_nth = find(new_nth, last, value, queue);
 
-        value_type new_value = detail::read_single_value<value_type>(
-                            first.get_buffer(),
-                            first.get_index()+std::distance(first, new_nth),
-                            queue
-            );
+        value_type new_value = new_nth.read(queue);
 
         fill_n(new_nth, 1, value, queue);
         fill_n(old_nth, 1, new_value, queue);
 
-        new_value = detail::read_single_value<value_type>(
-                            first.get_buffer(),
-                            first.get_index()+std::distance(first, nth),
-                            queue
-            );
+        new_value = nth.read(queue);
+
         if(value == new_value) break;
 
         if(std::distance(first, nth) < std::distance(first, new_nth))

@@ -21,10 +21,11 @@
 #include <boost/iterator/iterator_facade.hpp>
 
 #include <boost/compute/buffer.hpp>
-#include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/buffer_value.hpp>
 #include <boost/compute/detail/is_buffer_iterator.hpp>
 #include <boost/compute/detail/is_device_iterator.hpp>
+#include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/detail/read_write_single_value.hpp>
 
 namespace boost {
 namespace compute {
@@ -165,6 +166,22 @@ public:
     size_t get_index() const
     {
         return m_index;
+    }
+
+    T read(command_queue &queue) const
+    {
+        BOOST_ASSERT(m_buffer.get());
+        BOOST_ASSERT(m_index < m_buffer.size() / sizeof(T));
+
+        return detail::read_single_value<T>(m_buffer, m_index, queue);
+    }
+
+    void write(const T &value, command_queue &queue)
+    {
+        BOOST_ASSERT(m_buffer.get());
+        BOOST_ASSERT(m_index < m_buffer.size() / sizeof(T));
+
+        detail::write_single_value<T>(value, m_buffer, m_index, queue);
     }
 
     /// \internal_
