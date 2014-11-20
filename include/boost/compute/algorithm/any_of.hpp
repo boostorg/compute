@@ -17,8 +17,14 @@
 namespace boost {
 namespace compute {
 
-/// Returns \c true if \p predicate returns \c true for any of the
-/// elements in the range [\p first, \p last).
+/// Returns \c true if \p predicate returns \c true for any of the elements in
+/// the range [\p first, \p last).
+///
+/// For example, to test if a vector contains any negative values:
+///
+/// \snippet test/test_any_all_none_of.cpp any_of
+///
+/// \see all_of(), none_of()
 template<class InputIterator, class UnaryPredicate>
 inline bool any_of(InputIterator first,
                    InputIterator last,

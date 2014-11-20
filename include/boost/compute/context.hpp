@@ -119,6 +119,7 @@ public:
         }
     }
 
+    /// Copies the context object from \p other to \c *this.
     context& operator=(const context &other)
     {
         if(this != &other){

@@ -63,4 +63,19 @@ BOOST_AUTO_TEST_CASE(any_nan_inf)
     BOOST_CHECK(compute::none_of(vector.begin(), vector.begin() + 4, isinf(_1)) == true);
 }
 
+BOOST_AUTO_TEST_CASE(any_of_doctest)
+{
+    using boost::compute::lambda::_1;
+
+    int data[] = { 1, 2, 3, 4 };
+    boost::compute::vector<int> v(data, data + 4, queue);
+
+    bool result =
+//! [any_of]
+boost::compute::any_of(v.begin(), v.end(), _1 < 0, queue);
+//! [any_of]
+
+    BOOST_CHECK(result == false);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

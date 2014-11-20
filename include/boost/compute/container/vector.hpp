@@ -689,7 +689,7 @@ public:
     ///
     /// Returns a command queue usable to issue commands for the vector's
     /// memory buffer. This is used when a member function is called without
-    /// speicifying an existing command queue to use.
+    /// specifying an existing command queue to use.
     command_queue default_queue() const
     {
         const context &context = m_allocator.get_context();
