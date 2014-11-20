@@ -62,7 +62,11 @@ public:
         desc.image_slice_pitch = 0;
         desc.num_mip_levels = 0;
         desc.num_samples = 0;
+        #ifdef CL_VERSION_2_0
+        desc.mem_object = 0;
+        #else
         desc.buffer = 0;
+        #endif
 
         m_mem = clCreateImage(context,
                               flags,
