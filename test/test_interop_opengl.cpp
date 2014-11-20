@@ -16,3 +16,12 @@
 BOOST_AUTO_TEST_CASE(opengl_buffer)
 {
 }
+
+BOOST_AUTO_TEST_CASE(unsupported_extension_error)
+{
+    try {
+        boost::compute::context context = boost::compute::opengl_create_shared_context();
+    } catch (boost::compute::unsupported_extension_error& error) {
+        BOOST_CHECK_EQUAL(std::string(error.what()).empty(), false);
+    }
+}

@@ -53,6 +53,8 @@ add_compute_test("core.system" test_system.cpp)
 add_compute_test("core.type_traits" test_type_traits.cpp)
 add_compute_test("core.user_event" test_user_event.cpp)
 add_compute_test("core.wait_list" test_wait_list.cpp)
+add_compute_test("core.context_error" test_context_error.cpp)
+add_compute_test("core.unsupported_extension" test_unsupported_extension.cpp)
 
 add_compute_test("algorithm.accumulate" test_accumulate.cpp)
 add_compute_test("algorithm.adjacent_difference" test_adjacent_difference.cpp)
@@ -217,7 +219,7 @@ if(${BOOST_COMPUTE_HAVE_QT})
 
   # the opengl interop test depends on qt to create the opengl context
   add_compute_test("interop.opengl" test_interop_opengl.cpp)
-  target_link_libraries(test_interop_opengl ${QT_LIBRARIES})
+  target_link_libraries(test_interop_opengl ${QT_LIBRARIES} GL)
 endif()
 
 # vtk interop tests
