@@ -17,8 +17,10 @@
 namespace boost {
 namespace compute {
 
-/// Returns \c true if \p predicate returns \c true for all of the
-/// elements in the range [\p first, \p last).
+/// Returns \c true if \p predicate returns \c true for all of the elements in
+/// the range [\p first, \p last).
+///
+/// \see any_of(), none_of()
 template<class InputIterator, class UnaryPredicate>
 inline bool all_of(InputIterator first,
                    InputIterator last,

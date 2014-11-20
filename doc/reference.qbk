@@ -113,7 +113,7 @@ Header: `<boost/compute/container.hpp>`
 
 * [classref boost::compute::array array<T, N>]
 * [classref boost::compute::basic_string basic_string<CharT>]
-* [classref boost::compute::dynamic_bitset dynamic_bitset<Block>]
+* [classref boost::compute::dynamic_bitset dynamic_bitset<>]
 * [classref boost::compute::flat_map flat_map<Key, T>]
 * [classref boost::compute::flat_set flat_set<T>]
 * [classref boost::compute::mapped_view mapped_view<T>]

@@ -141,6 +141,20 @@ before including any of the Boost.Compute headers. By default this will require
 linking your application/library with the Boost.Thread library.
 
 
+[h3 What applications/libraries use Boost.Compute?]
+
+Boost.Compute is used by a number of open-source libraries and applications
+including:
+
+* ArrayFire ([@http://arrayfire.com])
+* Ceemple ([@http://www.ceemple.com])
+* Odeint ([@http://headmyshoulder.github.io/odeint-v2])
+* VexCL ([@https://github.com/ddemidov/vexcl])
+
+If you use Boost.Compute in your project and would like it to be listed here
+please send an email to Kyle Lutz (kyle.r.lutz@gmail.com).
+
+
 [h3 How can I contribute?]
 
 We are actively seeking additional C++ developers with experience in
@@ -152,6 +166,5 @@ Also see the
 [@https://github.com/kylelutz/compute/blob/master/CONTRIBUTING.md contributor guide]
 and check out the list of issues at:
 [@https://github.com/kylelutz/compute/issues].
-
 
 [endsect] [/ faq ]

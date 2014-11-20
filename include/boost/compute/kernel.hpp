@@ -172,6 +172,17 @@ public:
     #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Returns information about the argument at \p index.
     ///
+    /// For example, to get the name of the first argument:
+    /// \code
+    /// std::string arg = kernel.get_arg_info<std::string>(0, CL_KERNEL_ARG_NAME);
+    /// \endcode
+    ///
+    /// Note, this function requires that the program be compiled with the
+    /// \c "-cl-kernel-arg-info" flag. For example:
+    /// \code
+    /// program.build("-cl-kernel-arg-info");
+    /// \endcode
+    ///
     /// \opencl_version_warning{1,2}
     ///
     /// \see_opencl_ref{clGetKernelArgInfo}
