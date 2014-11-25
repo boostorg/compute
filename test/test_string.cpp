@@ -54,12 +54,19 @@ BOOST_AUTO_TEST_CASE(size)
     BOOST_CHECK_EQUAL(str.length(), size_t(6));
 }
 
-BOOST_AUTO_TEST_CASE(find)
+BOOST_AUTO_TEST_CASE(find_doctest)
 {
-    boost::compute::string str = "string";
+//! [string_find]
+boost::compute::string str = "boost::compute::string";
+int pos = str.find("::");
+//! [string_find]
+    boost::compute::string pattern = "string";
     BOOST_VERIFY(!str.empty());
-    BOOST_CHECK_EQUAL(str.find('r'), 2);
-    BOOST_CHECK_NE(str.find('r'), 3);
+    BOOST_CHECK_EQUAL(str.find('o'), 1);
+    BOOST_CHECK_NE(str.find('o'), 2);
+    BOOST_CHECK_EQUAL(str.find(pattern), 16);
+    BOOST_CHECK_EQUAL(pos, 5);
+    BOOST_CHECK_EQUAL(str.find("@#$"), size_t(-1));
 }
 
 BOOST_AUTO_TEST_CASE(outStream)
