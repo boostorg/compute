@@ -27,12 +27,13 @@
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/random/mersenne_twister.hpp>
 
-#define BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION
+#ifndef Q_MOC_RUN
 #include <boost/compute/system.hpp>
 #include <boost/compute/interop/opengl.hpp>
 #include <boost/compute/source.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/algorithm.hpp>
+#endif // Q_MOC_RUN
 
 namespace compute = boost::compute;
 namespace po = boost::program_options;

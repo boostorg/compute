@@ -23,16 +23,6 @@ namespace detail {
 template<class Iterator, class Enable = void>
 struct is_buffer_iterator : public boost::false_type {};
 
-// specialization for iterator adaptors whose base iterator type is a
-// buffer iterator
-template<class Iterator>
-struct is_buffer_iterator<
-    Iterator,
-    typename boost::enable_if<
-        is_buffer_iterator<typename Iterator::base_type>
-    >::type
-> : public boost::true_type {};
-
 } // end detail namespace
 } // end compute namespace
 } // end boost namespace
