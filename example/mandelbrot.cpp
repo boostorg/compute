@@ -19,12 +19,14 @@
 #endif
 #include <QtOpenGL>
 
+#ifndef Q_MOC_RUN
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/interop/opengl.hpp>
+#endif // Q_MOC_RUN
 
 namespace compute = boost::compute;
 
