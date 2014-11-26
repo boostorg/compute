@@ -292,4 +292,18 @@ BOOST_AUTO_TEST_CASE(copy_svm_ptr)
 }
 #endif // CL_VERSION_2_0
 
+BOOST_AUTO_TEST_CASE(copy_to_vector_bool)
+{
+    using compute::uchar_;
+
+    compute::vector<uchar_> vec;
+    vec.push_back(true, queue);
+    vec.push_back(false, queue);
+
+    std::vector<bool> host_vec(vec.size());
+    compute::copy(vec.begin(), vec.end(), host_vec.begin(), queue);
+    BOOST_CHECK(host_vec[0] == true);
+    BOOST_CHECK(host_vec[1] == false);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

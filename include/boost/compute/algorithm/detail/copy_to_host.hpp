@@ -51,6 +51,19 @@ inline HostIterator copy_to_host(DeviceIterator first,
     return iterator_plus_distance(result, count);
 }
 
+// copy_to_host() specialization for std::vector<bool>
+template<class DeviceIterator>
+inline std::vector<bool>::iterator
+copy_to_host(DeviceIterator first,
+             DeviceIterator last,
+             std::vector<bool>::iterator result,
+             command_queue &queue)
+{
+    std::vector<uint8_t> temp(std::distance(first, last));
+    copy_to_host(first, last, temp.begin(), queue);
+    return std::copy(temp.begin(), temp.end(), result);
+}
+
 template<class DeviceIterator, class HostIterator>
 inline future<HostIterator> copy_to_host_async(DeviceIterator first,
                                                DeviceIterator last,
