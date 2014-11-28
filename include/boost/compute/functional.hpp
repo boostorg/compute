@@ -23,6 +23,7 @@
 #include <boost/compute/functional/geometry.hpp>
 #include <boost/compute/functional/get.hpp>
 #include <boost/compute/functional/hash.hpp>
+#include <boost/compute/functional/identity.hpp>
 #include <boost/compute/functional/integer.hpp>
 #include <boost/compute/functional/logical.hpp>
 #include <boost/compute/functional/math.hpp>
