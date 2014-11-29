@@ -1027,6 +1027,13 @@ inline meta_kernel& operator<<(meta_kernel &k,
     return k << "convert_" << type_name<T>() << "(" << expr.m_arg << ")";
 }
 
+template<class T, class Arg>
+inline meta_kernel& operator<<(meta_kernel &k,
+                               const invoked_identity<T, Arg> &expr)
+{
+    return k << expr.m_arg;
+}
+
 template<>
 struct inject_type_impl<double_>
 {
