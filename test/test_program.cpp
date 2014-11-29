@@ -11,6 +11,11 @@
 #define BOOST_TEST_MODULE TestProgram
 #include <boost/test/unit_test.hpp>
 
+// disable the automatic kernel compilation debug messages. this allows the
+// test for program to check that compilation error exceptions are properly
+// thrown when invalid kernel code is passed to program::build().
+#undef BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION
+
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
