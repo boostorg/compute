@@ -48,23 +48,7 @@ inline OutputIterator merge(InputIterator1 first1,
                             Compare comp,
                             command_queue &queue = system::default_queue())
 {
-    size_t size1 = detail::iterator_range_size(first1, last1);
-    size_t size2 = detail::iterator_range_size(first2, last2);
-
-    // handle trivial cases
-    if(size1 == 0 && size2 == 0){
-        return result;
-    }
-    else if(size1 == 0){
-        return ::boost::compute::copy(first2, last2, result, queue);
-    }
-    else if(size2 == 0){
-        return ::boost::compute::copy(first1, last1, result, queue);
-    }
-
-    return detail::serial_merge(
-        first1, last1, first2, last2, result, comp, queue
-    );
+    return detail::merge_with_merge_path(first1, last1, first2, last2, result, comp, queue);
 }
 
 /// \overload
@@ -76,7 +60,9 @@ inline OutputIterator merge(InputIterator1 first1,
                             OutputIterator result,
                             command_queue &queue = system::default_queue())
 {
-    return detail::merge_with_merge_path(first1, last1, first2, last2, result, queue);
+    typedef typename std::iterator_traits<InputIterator1>::value_type value_type;
+    less<value_type> less_than;
+    return merge(first1, last1, first2, last2, result, less_than, queue);
 }
 
 } // end compute namespace
