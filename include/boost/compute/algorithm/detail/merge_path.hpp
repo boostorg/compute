@@ -41,13 +41,15 @@ public:
     }
 
     template<class InputIterator1, class InputIterator2,
-             class OutputIterator1, class OutputIterator2>
+             class OutputIterator1, class OutputIterator2,
+             class Compare>
     void set_range(InputIterator1 first1,
                    InputIterator1 last1,
                    InputIterator2 first2,
                    InputIterator2 last2,
                    OutputIterator1 result_a,
-                   OutputIterator2 result_b)
+                   OutputIterator2 result_b,
+                   Compare comp)
     {
         m_a_count = iterator_range_size(first1, last1);
         m_a_count_arg = add_arg<uint_>("a_count");
@@ -65,14 +67,27 @@ public:
             "{\n" <<
             "   a_index = (start + end)/2;\n" <<
             "   b_index = target - a_index - 1;\n" <<
-            "   if(" << first1[expr<uint_>("a_index")] <<
-            "       <=" << first2[expr<uint_>("b_index")] << ")\n" <<
+            "   if(!(" << comp(first2[expr<uint_>("b_index")],
+                              first1[expr<uint_>("a_index")]) << "))\n" <<
             "       start = a_index + 1;\n" <<
             "   else end = a_index;\n" <<
             "}\n" <<
             result_a[expr<uint_>("i")] << " = start;\n" <<
             result_b[expr<uint_>("i")] << " = target - start;\n";
+    }
 
+    template<class InputIterator1, class InputIterator2,
+             class OutputIterator1, class OutputIterator2>
+    void set_range(InputIterator1 first1,
+                   InputIterator1 last1,
+                   InputIterator2 first2,
+                   InputIterator2 last2,
+                   OutputIterator1 result_a,
+                   OutputIterator2 result_b)
+    {
+        typedef typename std::iterator_traits<InputIterator1>::value_type value_type;
+        ::boost::compute::less<value_type> less_than;
+        set_range(first1, last1, first2, last2, result_a, result_b, less_than);
     }
 
     event exec(command_queue &queue)
