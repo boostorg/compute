@@ -154,6 +154,8 @@ void MandelbrotWidget::resizeGL(int width, int height)
 
 void MandelbrotWidget::paintGL()
 {
+    using compute::dim;
+
     float w = width();
     float h = height();
 
@@ -171,11 +173,8 @@ void MandelbrotWidget::paintGL()
     compute::opengl_enqueue_acquire_gl_objects(1, &cl_texture_.get(), queue_);
 
     // execute the mandelbrot kernel
-    const size_t global_work_offset[] = { 0, 0 };
-    const size_t global_work_size[] = { size_t(width()), size_t(height()) };
-
     queue_.enqueue_nd_range_kernel(
-        kernel, 2, global_work_offset, global_work_size, 0
+        kernel, dim(0, 0), dim(width(), height()), dim(1, 1)
     );
 
     // release the opengl texture so it can be used by opengl

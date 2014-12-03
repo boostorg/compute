@@ -42,6 +42,8 @@ compute::opengl_buffer tesselate_sphere(float radius,
                                         size_t theta_slices,
                                         compute::command_queue &queue)
 {
+    using compute::dim;
+
     const compute::context &context = queue.get_context();
 
     const size_t vertex_count = phi_slices * theta_slices;
@@ -98,10 +100,9 @@ compute::opengl_buffer tesselate_sphere(float radius,
     compute::opengl_enqueue_acquire_buffer(vertex_buffer, queue);
 
     // execute tesselate_sphere kernel
-    size_t offset[2] = { 0, 0 };
-    size_t work_size[2] = { phi_slices, theta_slices };
-    size_t group_size[2] = { 1, 1 };
-    queue.enqueue_nd_range_kernel(kernel, 2, offset, work_size, group_size);
+    queue.enqueue_nd_range_kernel(
+        kernel, dim(0, 0), dim(phi_slices, theta_slices), dim(1, 1)
+    );
 
     // release buffer so that it is accessible to OpenGL
     compute::opengl_enqueue_release_buffer(vertex_buffer, queue);

@@ -17,6 +17,7 @@
 
 #include <boost/compute/cl.hpp>
 #include <boost/compute/context.hpp>
+#include <boost/compute/extents.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/image_format.hpp>
 #include <boost/compute/memory_object.hpp>
@@ -139,6 +140,16 @@ public:
     T get_info(cl_image_info info) const
     {
         return detail::get_object_info<T>(clGetImageInfo, m_mem, info);
+    }
+
+    /// Returns the size (width, height, depth) of the image.
+    extents<3> size() const
+    {
+        extents<3> size;
+        size[0] = get_info<size_t>(CL_IMAGE_WIDTH);
+        size[1] = get_info<size_t>(CL_IMAGE_HEIGHT);
+        size[2] = get_info<size_t>(CL_IMAGE_DEPTH);
+        return size;
     }
 
     size_t get_pixel_count() const
