@@ -69,8 +69,8 @@ public:
             "{\n" <<
             "   a_index = (start + end)/2;\n" <<
             "   b_index = target - a_index - 1;\n" <<
-            "   if(!" << comp(first2[expr<uint_>("b_index")],
-                              first1[expr<uint_>("a_index")]) << ")\n" <<
+            "   if(!(" << comp(first2[expr<uint_>("b_index")],
+                              first1[expr<uint_>("a_index")]) << "))\n" <<
             "       start = a_index + 1;\n" <<
             "   else end = a_index;\n" <<
             "}\n" <<
