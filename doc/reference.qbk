@@ -19,6 +19,11 @@ Header: `<boost/compute/core.hpp>`
 * [classref boost::compute::program program]
 * [classref boost::compute::system system]
 * [classref boost::compute::user_event user_event]
+
+[h3 Utilities]
+
+* [funcref boost::compute::dim dim()]
+* [classref boost::compute::extents extents<N>]
 * [classref boost::compute::wait_list wait_list]
 
 [h3 Algorithms]

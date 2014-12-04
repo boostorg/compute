@@ -17,6 +17,7 @@
 
 #include <boost/compute/config.hpp>
 #include <boost/compute/context.hpp>
+#include <boost/compute/extents.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/image_format.hpp>
 #include <boost/compute/memory_object.hpp>
@@ -141,6 +142,15 @@ public:
     size_t width() const
     {
         return get_info<size_t>(CL_IMAGE_WIDTH);
+    }
+
+    /// Returns the size (width, height) of the image.
+    extents<2> size() const
+    {
+        extents<2> size;
+        size[0] = get_info<size_t>(CL_IMAGE_WIDTH);
+        size[1] = get_info<size_t>(CL_IMAGE_HEIGHT);
+        return size;
     }
 
     /// Returns information about the image.

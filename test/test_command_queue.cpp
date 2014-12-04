@@ -14,6 +14,7 @@
 #include <iostream>
 
 #include <boost/compute/kernel.hpp>
+#include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/command_queue.hpp>
@@ -247,6 +248,34 @@ BOOST_AUTO_TEST_CASE(copy_with_wait_list)
 
     CHECK_HOST_RANGE_EQUAL(int, 4, data1, (2, 4, 6, 8));
     CHECK_HOST_RANGE_EQUAL(int, 4, data2, (1, 3, 5, 7));
+}
+
+BOOST_AUTO_TEST_CASE(enqueue_kernel_with_extents)
+{
+    using boost::compute::dim;
+    using boost::compute::uint_;
+
+    const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void foo(__global int *output1, __global int *output2)
+        {
+            output1[get_global_id(0)] = get_local_id(0);
+            output2[get_global_id(1)] = get_local_id(1);
+        }
+    );
+
+    compute::kernel kernel =
+        compute::kernel::create_with_source(source, "foo", context);
+
+    compute::vector<uint_> output1(4, context);
+    compute::vector<uint_> output2(4, context);
+
+    kernel.set_arg(0, output1);
+    kernel.set_arg(1, output2);
+
+    queue.enqueue_nd_range_kernel(kernel, dim(0, 0), dim(4, 4), dim(2, 2));
+
+    CHECK_RANGE_EQUAL(int, 4, output1, (0, 1, 0, 1));
+    CHECK_RANGE_EQUAL(int, 4, output2, (0, 1, 0, 1));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -23,6 +23,7 @@
 #include <boost/compute/context.hpp>
 #include <boost/compute/image2d.hpp>
 #include <boost/compute/image3d.hpp>
+#include <boost/compute/extents.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/wait_list.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
@@ -1247,6 +1248,24 @@ public:
         }
 
         return event_;
+    }
+
+    /// \overload
+    template<size_t N>
+    event enqueue_nd_range_kernel(const kernel &kernel,
+                                  const extents<N> &global_work_offset,
+                                  const extents<N> &global_work_size,
+                                  const extents<N> &local_work_size,
+                                  const wait_list &events = wait_list())
+    {
+        return enqueue_nd_range_kernel(
+            kernel,
+            N,
+            global_work_offset.data(),
+            global_work_size.data(),
+            local_work_size.data(),
+            events
+        );
     }
 
     /// Convenience method which calls enqueue_nd_range_kernel() with a

@@ -21,6 +21,7 @@
 #include <boost/compute/container.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/device.hpp>
+#include <boost/compute/extents.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/image2d.hpp>
 #include <boost/compute/image3d.hpp>
