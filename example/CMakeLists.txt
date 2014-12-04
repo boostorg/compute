@@ -72,6 +72,7 @@ if(${BOOST_COMPUTE_HAVE_OPENCV})
     opencv_optical_flow 
     opencv_convolution
     opencv_sobel_filter
+    opencv_histogram
   )
 
   foreach(EXAMPLE ${OPENCV_EXAMPLES})

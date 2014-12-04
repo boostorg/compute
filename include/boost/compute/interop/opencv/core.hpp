@@ -80,6 +80,8 @@ inline image_format opencv_get_mat_image_format(const cv::Mat &mat)
             return image_format(CL_BGRA, CL_UNORM_INT16);
         case CV_32F:
             return image_format(CL_INTENSITY, CL_FLOAT);
+        case CV_32FC4:
+            return image_format(CL_RGBA, CL_FLOAT);
         case CV_8UC1:
             return image_format(CL_INTENSITY, CL_UNORM_INT8);
         default:
