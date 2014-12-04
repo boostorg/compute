@@ -39,7 +39,9 @@ inline void nth_element(Iterator first,
         value_type value = nth.read(queue);
 
         using boost::compute::placeholders::_1;
-        Iterator new_nth = partition(first, last, bind(compare, _1, value), queue);
+        Iterator new_nth = partition(
+            first, last, ::boost::compute::bind(compare, _1, value), queue
+        );
 
         Iterator old_nth = find(new_nth, last, value, queue);
 
