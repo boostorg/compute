@@ -13,10 +13,10 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/program.hpp>
-#include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/utility/source.hpp>
 
 namespace compute = boost::compute;
 

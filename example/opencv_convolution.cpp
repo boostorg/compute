@@ -15,10 +15,11 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/interop/opencv/core.hpp>
 #include <boost/compute/interop/opencv/highgui.hpp>
+#include <boost/compute/utility/source.hpp>
+
 #include <boost/program_options.hpp>
 
 namespace compute = boost::compute;

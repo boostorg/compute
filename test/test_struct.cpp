@@ -14,7 +14,6 @@
 #include <boost/test/unit_test.hpp>
 
 #include <boost/compute/function.hpp>
-#include <boost/compute/source.hpp>
 #include <boost/compute/algorithm/find_if.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
@@ -22,6 +21,7 @@
 #include <boost/compute/types/struct.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/type_traits/type_definition.hpp>
+#include <boost/compute/utility/source.hpp>
 
 namespace compute = boost::compute;
 

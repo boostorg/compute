@@ -21,7 +21,6 @@
 #include <boost/compute/container.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/device.hpp>
-#include <boost/compute/extents.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/image2d.hpp>
 #include <boost/compute/image3d.hpp>
@@ -38,8 +37,8 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/types.hpp>
 #include <boost/compute/user_event.hpp>
+#include <boost/compute/utility.hpp>
 #include <boost/compute/version.hpp>
-#include <boost/compute/wait_list.hpp>
 
 #ifdef BOOST_COMPUTE_HAVE_HDR_CL_EXT
 #include <boost/compute/cl_ext.hpp>

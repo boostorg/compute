@@ -17,12 +17,12 @@
 
 #include <boost/compute/config.hpp>
 #include <boost/compute/context.hpp>
-#include <boost/compute/extents.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/image_format.hpp>
 #include <boost/compute/memory_object.hpp>
-#include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
+#include <boost/compute/type_traits/type_name.hpp>
+#include <boost/compute/utility/extents.hpp>
 
 namespace boost {
 namespace compute {

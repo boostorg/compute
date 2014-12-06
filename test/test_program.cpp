@@ -17,9 +17,9 @@
 #undef BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION
 
 #include <boost/compute/kernel.hpp>
-#include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/program.hpp>
+#include <boost/compute/utility/source.hpp>
 
 #include "context_setup.hpp"
 

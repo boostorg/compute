@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_EXTENTS_HPP
-#define BOOST_COMPUTE_EXTENTS_HPP
+#ifndef BOOST_COMPUTE_UTILITY_EXTENTS_HPP
+#define BOOST_COMPUTE_UTILITY_EXTENTS_HPP
 
 #include <functional>
 #include <numeric>
@@ -127,49 +127,7 @@ private:
     boost::array<size_t, N> m_extents;
 };
 
-#ifndef BOOST_NO_VARIADIC_TEMPLATES
-/// The variadic dim() function provides a concise syntax for creating
-/// \ref extents objects.
-///
-/// For example,
-/// \code
-/// extents<2> region = dim(640, 480); // region == (640, 480)
-/// \endcode
-///
-/// \see extents<N>
-template<class... Args>
-inline extents<sizeof...(Args)> dim(Args... args)
-{
-    return extents<sizeof...(Args)>({ static_cast<size_t>(args)... });
-}
-#else
-// dim() function definitions for non-c++11 compilers
-#define BOOST_COMPUTE_DETAIL_ASSIGN_DIM(z, n, var) \
-    var[n] = BOOST_PP_CAT(e, n);
-
-#define BOOST_COMPUTE_DETAIL_DEFINE_DIM(z, n, var) \
-    inline extents<n> dim(BOOST_PP_ENUM_PARAMS(n, size_t e)) \
-    { \
-        extents<n> exts; \
-        BOOST_PP_REPEAT(n, BOOST_COMPUTE_DETAIL_ASSIGN_DIM, exts) \
-        return exts; \
-    }
-
-BOOST_PP_REPEAT(BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_DETAIL_DEFINE_DIM, ~)
-
-#undef BOOST_COMPUTE_DETAIL_ASSIGN_DIM
-#undef BOOST_COMPUTE_DETAIL_DEFINE_DIM
-
-#endif // BOOST_NO_VARIADIC_TEMPLATES
-
-/// \internal_
-template<size_t N>
-inline extents<N> dim()
-{
-    return extents<N>();
-}
-
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_EXTENTS_HPP
+#endif // BOOST_COMPUTE_UTILITY_EXTENTS_HPP

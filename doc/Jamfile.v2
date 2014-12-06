@@ -21,19 +21,16 @@ doxygen autodoc
     ../include/boost/compute/core.hpp
     ../include/boost/compute/device.hpp
     ../include/boost/compute/event.hpp
-    ../include/boost/compute/extents.hpp
     ../include/boost/compute/function.hpp
     ../include/boost/compute/kernel.hpp
     ../include/boost/compute/memory_object.hpp
     ../include/boost/compute/pipe.hpp
     ../include/boost/compute/platform.hpp
     ../include/boost/compute/program.hpp
-    ../include/boost/compute/source.hpp
     ../include/boost/compute/svm.hpp
     ../include/boost/compute/system.hpp
     ../include/boost/compute/user_event.hpp
     ../include/boost/compute/version.hpp
-    ../include/boost/compute/wait_list.hpp
 
     ../include/boost/compute/algorithm.hpp
     [ glob ../include/boost/compute/algorithm/*.hpp ]
@@ -69,6 +66,9 @@ doxygen autodoc
 
     ../include/boost/compute/type_traits.hpp
     [ glob ../include/boost/compute/type_traits/*.hpp ]
+
+    ../include/boost/compute/utility.hpp
+    [ glob ../include/boost/compute/utility/*.hpp ]
   :
     <doxygen:param>QUIET=YES
     <doxygen:param>WARNINGS=YES

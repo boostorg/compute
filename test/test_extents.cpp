@@ -11,7 +11,8 @@
 #define BOOST_TEST_MODULE TestExtents
 #include <boost/test/unit_test.hpp>
 
-#include <boost/compute/extents.hpp>
+#include <boost/compute/utility/dim.hpp>
+#include <boost/compute/utility/extents.hpp>
 
 #include "context_setup.hpp"
 
