@@ -8,32 +8,5 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_SOURCE_HPP
-#define BOOST_COMPUTE_SOURCE_HPP
-
-/// Stringizes OpenCL source code.
-///
-/// For example, to create a simple kernel which squares each input value:
-/// \code
-/// const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
-///     __kernel void square(const float *input, float *output)
-///     {
-///         const uint i = get_global_id(0);
-///         const float x = input[i];
-///         output[i] = x * x;
-///     }
-/// );
-///
-/// // create and build square program
-/// program square_program = program::build_with_source(source, context);
-///
-/// // create square kernel
-/// kernel square_kernel(square_program, "square");
-/// \endcode
-#ifdef BOOST_COMPUTE_DOXYGEN_INVOKED
-#define BOOST_COMPUTE_STRINGIZE_SOURCE(source)
-#else
-#define BOOST_COMPUTE_STRINGIZE_SOURCE(...) #__VA_ARGS__
-#endif
-
-#endif // BOOST_COMPUTE_SOURCE_HPP
+// deprecated, use <boost/compute/utility/source.hpp> instead
+#include <boost/compute/utility/source.hpp>

@@ -13,8 +13,8 @@
 
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/kernel.hpp>
-#include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
+#include <boost/compute/utility/source.hpp>
 
 #include "context_setup.hpp"
 

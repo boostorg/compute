@@ -23,11 +23,11 @@
 #include <boost/compute/context.hpp>
 #include <boost/compute/image2d.hpp>
 #include <boost/compute/image3d.hpp>
-#include <boost/compute/extents.hpp>
 #include <boost/compute/exception.hpp>
-#include <boost/compute/wait_list.hpp>
+#include <boost/compute/utility/wait_list.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
+#include <boost/compute/utility/extents.hpp>
 
 namespace boost {
 namespace compute {

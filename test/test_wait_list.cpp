@@ -16,10 +16,10 @@
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/system.hpp>
-#include <boost/compute/wait_list.hpp>
 #include <boost/compute/async/future.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/utility/wait_list.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"

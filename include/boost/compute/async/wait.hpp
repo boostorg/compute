@@ -12,7 +12,7 @@
 #define BOOST_COMPUTE_ASYNC_WAIT_HPP
 
 #include <boost/compute/config.hpp>
-#include <boost/compute/wait_list.hpp>
+#include <boost/compute/utility/wait_list.hpp>
 
 namespace boost {
 namespace compute {

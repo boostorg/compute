@@ -8,5 +8,12 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-// deprecated, use <boost/compute/utility/wait_list.hpp> instead
+#ifndef BOOST_COMPUTE_UTILITY_HPP
+#define BOOST_COMPUTE_UTILITY_HPP
+
+#include <boost/compute/utility/dim.hpp>
+#include <boost/compute/utility/extents.hpp>
+#include <boost/compute/utility/source.hpp>
 #include <boost/compute/utility/wait_list.hpp>
+
+#endif // BOOST_COMPUTE_UTILITY_HPP

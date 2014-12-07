@@ -15,10 +15,10 @@
 
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/program.hpp>
-#include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/vendor.hpp>
+#include <boost/compute/utility/source.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"

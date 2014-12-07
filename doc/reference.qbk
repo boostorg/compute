@@ -22,6 +22,8 @@ Header: `<boost/compute/core.hpp>`
 
 [h3 Utilities]
 
+Header: `<boost/compute/utility.hpp>`
+
 * [funcref boost::compute::dim dim()]
 * [classref boost::compute::extents extents<N>]
 * [classref boost::compute::wait_list wait_list]

@@ -14,7 +14,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/interop/opengl/cl_gl.hpp>
 #include <boost/compute/interop/opengl/opengl_buffer.hpp>
-#include <boost/compute/wait_list.hpp>
+#include <boost/compute/utility/wait_list.hpp>
 
 namespace boost {
 namespace compute {

@@ -13,7 +13,7 @@
 
 #include <iterator>
 
-#include <boost/compute/source.hpp>
+#include <boost/compute/utility/source.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/program_cache.hpp>

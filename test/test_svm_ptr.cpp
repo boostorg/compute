@@ -12,9 +12,9 @@
 #include <boost/test/unit_test.hpp>
 
 #include <boost/compute/core.hpp>
-#include <boost/compute/source.hpp>
 #include <boost/compute/svm.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/utility/source.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"

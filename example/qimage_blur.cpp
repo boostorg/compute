@@ -9,10 +9,11 @@
 #endif
 
 #ifndef Q_MOC_RUN
-#include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/image2d.hpp>
 #include <boost/compute/interop/qt.hpp>
+#include <boost/compute/utility/dim.hpp>
+#include <boost/compute/utility/source.hpp>
 #endif // Q_MOC_RUN
 
 namespace compute = boost::compute;

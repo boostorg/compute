@@ -12,11 +12,11 @@
 #include <cstdlib>
 
 #include <boost/compute/core.hpp>
-#include <boost/compute/source.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/inclusive_scan.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
+#include <boost/compute/utility/source.hpp>
 
 namespace compute = boost::compute;
 
