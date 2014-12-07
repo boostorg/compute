@@ -15,6 +15,7 @@
 #include <utility>
 
 #include <boost/compute/functional/get.hpp>
+#include <boost/compute/type_traits/type_definition.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 
@@ -45,13 +46,7 @@ struct inject_type_impl<std::pair<T1, T2> >
         kernel.inject_type<T1>();
         kernel.inject_type<T2>();
 
-        std::stringstream declaration;
-        declaration << "typedef struct {\n"
-                    << "    " << type_name<T1>() << " first;\n"
-                    << "    " << type_name<T2>() << " second;\n"
-                    << "} " << type_name<pair_type>() << ";\n";
-
-        kernel.add_type_declaration<pair_type>(declaration.str());
+        kernel.add_type_declaration<pair_type>(type_definition<pair_type>());
     }
 };
 
@@ -94,6 +89,24 @@ struct type_name_trait<std::pair<T1, T2> >
             "_t";
 
         return name.c_str();
+    }
+};
+
+// type_definition() specialization for std::pair
+template<class T1, class T2>
+struct type_definition_trait<std::pair<T1, T2> >
+{
+    static std::string value()
+    {
+        typedef std::pair<T1, T2> pair_type;
+
+        std::stringstream declaration;
+        declaration << "typedef struct {\n"
+                    << "    " << type_name<T1>() << " first;\n"
+                    << "    " << type_name<T2>() << " second;\n"
+                    << "} " << type_name<pair_type>() << ";\n";
+
+        return declaration.str();
     }
 };
 
