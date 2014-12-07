@@ -15,10 +15,19 @@
 
 namespace boost {
 namespace compute {
+namespace detail {
+
+template<class T>
+struct type_definition_trait;
+
+} // end detail namespace
 
 /// Returns the OpenCL type definition for \p T.
 template<class T>
-std::string type_definition();
+inline std::string type_definition()
+{
+    return detail::type_definition_trait<T>::value();
+}
 
 } // end compute namespace
 } // end boost namespace
