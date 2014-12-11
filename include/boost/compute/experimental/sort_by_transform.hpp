@@ -13,12 +13,11 @@
 
 #include <iterator>
 
-#include <boost/utility/result_of.hpp>
-
 #include <boost/compute/algorithm/sort_by_key.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/type_traits/result_of.hpp>
 
 namespace boost {
 namespace compute {
@@ -32,7 +31,7 @@ inline void sort_by_transform(Iterator first,
                               command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<Iterator>::value_type value_type;
-    typedef typename boost::tr1_result_of<Transform(value_type)>::type key_type;
+    typedef typename boost::compute::result_of<Transform(value_type)>::type key_type;
 
     size_t n = detail::iterator_range_size(first, last);
     if(n < 2){

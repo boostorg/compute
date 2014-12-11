@@ -196,6 +196,7 @@ Header: `<boost/compute/type_traits.hpp>`
 * [classref boost::compute::is_fundamental is_fundamental<T>]
 * [classref boost::compute::is_vector_type is_vector_type<T>]
 * [classref boost::compute::make_vector_type make_vector_type<T, N>]
+* [classref boost::compute::result_of result_of<F(Args...)>]
 * [classref boost::compute::scalar_type scalar_type<T>]
 * [funcref boost::compute::type_name type_name<T>()]
 

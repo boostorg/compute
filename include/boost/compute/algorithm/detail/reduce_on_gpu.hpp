@@ -20,6 +20,7 @@
 #include <boost/compute/detail/vendor.hpp>
 #include <boost/compute/detail/work_size.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/type_traits/result_of.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 
 namespace boost {
@@ -98,7 +99,7 @@ inline void initial_reduce(InputIterator first,
     (void) reduce_kernel;
 
     typedef typename std::iterator_traits<InputIterator>::value_type Arg;
-    typedef typename boost::tr1_result_of<Function(Arg, Arg)>::type T;
+    typedef typename ::boost::compute::result_of<Function(Arg, Arg)>::type T;
 
     size_t count = std::distance(first, last);
     detail::meta_kernel k("initial_reduce");

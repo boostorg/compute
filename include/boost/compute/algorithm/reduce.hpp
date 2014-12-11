@@ -13,8 +13,6 @@
 
 #include <iterator>
 
-#include <boost/utility/result_of.hpp>
-
 #include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
@@ -26,6 +24,7 @@
 #include <boost/compute/algorithm/detail/reduce_on_gpu.hpp>
 #include <boost/compute/algorithm/detail/serial_reduce.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/type_traits/result_of.hpp>
 
 namespace boost {
 namespace compute {
@@ -43,7 +42,7 @@ size_t reduce(InputIterator first,
         std::iterator_traits<InputIterator>::value_type
         input_type;
     typedef typename
-        boost::tr1_result_of<BinaryFunction(input_type, input_type)>::type
+        boost::compute::result_of<BinaryFunction(input_type, input_type)>::type
         result_type;
 
     const context &context = queue.get_context();
@@ -123,7 +122,7 @@ size_t reduce(InputIterator first,
 
 template<class InputIterator, class BinaryFunction>
 inline vector<
-    typename boost::tr1_result_of<
+    typename boost::compute::result_of<
         BinaryFunction(
             typename std::iterator_traits<InputIterator>::value_type,
             typename std::iterator_traits<InputIterator>::value_type
@@ -140,7 +139,7 @@ block_reduce(InputIterator first,
         std::iterator_traits<InputIterator>::value_type
         input_type;
     typedef typename
-        boost::tr1_result_of<BinaryFunction(input_type, input_type)>::type
+        boost::compute::result_of<BinaryFunction(input_type, input_type)>::type
         result_type;
 
     const context &context = queue.get_context();
@@ -164,7 +163,7 @@ inline void generic_reduce(InputIterator first,
         std::iterator_traits<InputIterator>::value_type
         input_type;
     typedef typename
-        boost::tr1_result_of<BinaryFunction(input_type, input_type)>::type
+        boost::compute::result_of<BinaryFunction(input_type, input_type)>::type
         result_type;
 
     const device &device = queue.get_device();

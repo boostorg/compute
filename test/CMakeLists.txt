@@ -171,6 +171,8 @@ add_compute_test("types.pair" test_pair.cpp)
 add_compute_test("types.tuple" test_tuple.cpp)
 add_compute_test("types.struct" test_struct.cpp)
 
+add_compute_test("type_traits.result_of" test_result_of.cpp)
+
 add_compute_test("experimental.clamp_range" test_clamp_range.cpp)
 add_compute_test("experimental.malloc" test_malloc.cpp)
 add_compute_test("experimental.sort_by_transform" test_sort_by_transform.cpp)

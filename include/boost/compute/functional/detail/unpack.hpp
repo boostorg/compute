@@ -13,6 +13,7 @@
 
 #include <boost/compute/functional/get.hpp>
 #include <boost/compute/type_traits/is_vector_type.hpp>
+#include <boost/compute/type_traits/result_of.hpp>
 #include <boost/compute/type_traits/vector_size.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 
@@ -77,7 +78,7 @@ struct unpacked
     {
         typedef typename detail::get_result_type<0, TupleArg>::type T1;
 
-        typedef typename boost::tr1_result_of<Function(T1)>::type type;
+        typedef typename boost::compute::result_of<Function(T1)>::type type;
     };
 
     template<class TupleArg>
@@ -86,7 +87,7 @@ struct unpacked
         typedef typename detail::get_result_type<0, TupleArg>::type T1;
         typedef typename detail::get_result_type<1, TupleArg>::type T2;
 
-        typedef typename boost::tr1_result_of<Function(T1, T2)>::type type;
+        typedef typename boost::compute::result_of<Function(T1, T2)>::type type;
     };
 
     template<class TupleArg>
@@ -96,7 +97,7 @@ struct unpacked
         typedef typename detail::get_result_type<1, TupleArg>::type T2;
         typedef typename detail::get_result_type<2, TupleArg>::type T3;
 
-        typedef typename boost::tr1_result_of<Function(T1, T2, T3)>::type type;
+        typedef typename boost::compute::result_of<Function(T1, T2, T3)>::type type;
     };
 
     template<class Signature>

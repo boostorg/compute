@@ -20,6 +20,7 @@
 #include <boost/compute/function.hpp>
 #include <boost/compute/lambda/result_of.hpp>
 #include <boost/compute/lambda/functional.hpp>
+#include <boost/compute/type_traits/result_of.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 
@@ -152,7 +153,7 @@ namespace detail {
 template<class Expr, class Arg>
 struct invoked_unary_expression
 {
-    typedef typename ::boost::tr1_result_of<Expr(Arg)>::type result_type;
+    typedef typename ::boost::compute::result_of<Expr(Arg)>::type result_type;
 
     invoked_unary_expression(const Expr &expr, const Arg &arg)
         : m_expr(expr),
@@ -178,7 +179,7 @@ operator<<(boost::compute::detail::meta_kernel &kernel,
 template<class Expr, class Arg1, class Arg2>
 struct invoked_binary_expression
 {
-    typedef typename ::boost::tr1_result_of<Expr(Arg1, Arg2)>::type result_type;
+    typedef typename ::boost::compute::result_of<Expr(Arg1, Arg2)>::type result_type;
 
     invoked_binary_expression(const Expr &expr,
                               const Arg1 &arg1,
