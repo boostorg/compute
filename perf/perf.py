@@ -129,6 +129,7 @@ def run_benchmark(name, sizes, vs=[]):
                 "includes",
                 "inner_product",
                 "is_permutation",
+                "max_element",
                 "merge",
                 "next_permutation",
                 "nth_element",
