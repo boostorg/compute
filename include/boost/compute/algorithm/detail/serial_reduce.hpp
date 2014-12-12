@@ -14,6 +14,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/type_traits/result_of.hpp>
 
 namespace boost {
 namespace compute {
@@ -29,7 +30,7 @@ inline void serial_reduce(InputIterator first,
     typedef typename
         std::iterator_traits<InputIterator>::value_type T;
     typedef typename
-        boost::tr1_result_of<BinaryFunction(T, T)>::type result_type;
+        ::boost::compute::result_of<BinaryFunction(T, T)>::type result_type;
 
     const context &context = queue.get_context();
     size_t count = detail::iterator_range_size(first, last);

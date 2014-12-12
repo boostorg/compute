@@ -13,8 +13,6 @@
 
 #include <iterator>
 
-#include <boost/utility/result_of.hpp>
-
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>

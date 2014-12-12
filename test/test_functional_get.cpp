@@ -13,12 +13,12 @@
 
 #include <boost/type_traits.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/utility/result_of.hpp>
 
 #include <boost/compute/types/pair.hpp>
 #include <boost/compute/types/tuple.hpp>
 #include <boost/compute/types/builtin.hpp>
 #include <boost/compute/functional/get.hpp>
+#include <boost/compute/type_traits/result_of.hpp>
 
 namespace compute = boost::compute;
 
@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(get_vector_result_type)
 {
     BOOST_STATIC_ASSERT((
         boost::is_same<
-            boost::tr1_result_of<
+            boost::compute::result_of<
                 compute::get<0>(compute::float4_)
             >::type,
             float
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(get_vector_result_type)
     ));
     BOOST_STATIC_ASSERT((
         boost::is_same<
-            boost::tr1_result_of<
+            boost::compute::result_of<
                 compute::get<1>(compute::int2_)
             >::type,
             int
@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE(get_pair_result_type)
 {
     BOOST_STATIC_ASSERT((
         boost::is_same<
-            boost::tr1_result_of<
+            boost::compute::result_of<
                 compute::get<0>(std::pair<int, float>)
             >::type,
             int
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(get_pair_result_type)
     ));
     BOOST_STATIC_ASSERT((
         boost::is_same<
-            boost::tr1_result_of<
+            boost::compute::result_of<
                 compute::get<1>(std::pair<compute::float2_, compute::char4_>)
             >::type,
             compute::char4_
@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE(get_tuple_result_type)
 {
     BOOST_STATIC_ASSERT((
         boost::is_same<
-            boost::tr1_result_of<
+            boost::compute::result_of<
                 compute::get<0>(boost::tuple<int, int, double>)
             >::type,
             int
@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(get_tuple_result_type)
     ));
     BOOST_STATIC_ASSERT((
         boost::is_same<
-            boost::tr1_result_of<
+            boost::compute::result_of<
                 compute::get<2>(boost::tuple<char, int, float>)
             >::type,
             float

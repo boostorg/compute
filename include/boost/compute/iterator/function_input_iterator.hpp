@@ -15,11 +15,11 @@
 #include <iterator>
 
 #include <boost/config.hpp>
-#include <boost/utility/result_of.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/is_device_iterator.hpp>
+#include <boost/compute/type_traits/result_of.hpp>
 
 namespace boost {
 namespace compute {
@@ -37,16 +37,16 @@ class function_input_iterator_base
 public:
     typedef ::boost::iterator_facade<
         ::boost::compute::function_input_iterator<Function>,
-        typename ::boost::tr1_result_of<Function()>::type,
+        typename ::boost::compute::result_of<Function()>::type,
         ::std::random_access_iterator_tag,
-        typename ::boost::tr1_result_of<Function()>::type
+        typename ::boost::compute::result_of<Function()>::type
     > type;
 };
 
 template<class Function>
 struct function_input_iterator_expr
 {
-    typedef typename ::boost::tr1_result_of<Function()>::type result_type;
+    typedef typename ::boost::compute::result_of<Function()>::type result_type;
 
     function_input_iterator_expr(const Function &function)
         : m_function(function)

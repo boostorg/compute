@@ -15,7 +15,6 @@
 #include <iterator>
 
 #include <boost/config.hpp>
-#include <boost/utility/result_of.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 
 #include <boost/compute/functional.hpp>
@@ -24,6 +23,7 @@
 #include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
 #include <boost/compute/iterator/detail/get_base_iterator_buffer.hpp>
+#include <boost/compute/type_traits/result_of.hpp>
 
 namespace boost {
 namespace compute {
@@ -40,7 +40,7 @@ struct make_transform_iterator_value_type
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
-    typedef typename boost::tr1_result_of<UnaryFunction(value_type)>::type type;
+    typedef typename boost::compute::result_of<UnaryFunction(value_type)>::type type;
 };
 
 // helper class which defines the iterator_adaptor super-class
