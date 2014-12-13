@@ -12,6 +12,7 @@
 #define BOOST_COMPUTE_DETAIL_VENDOR_HPP
 
 #include <boost/compute/device.hpp>
+#include <boost/compute/platform.hpp>
 
 namespace boost {
 namespace compute {
@@ -26,11 +27,7 @@ inline bool is_nvidia_device(const device &device)
 // returns true if the device is an amd cpu or gpu
 inline bool is_amd_device(const device &device)
 {
-    platform device_platform(
-        device.get_info<cl_platform_id>(CL_DEVICE_PLATFORM)
-    );
-
-    return device_platform.vendor() == "Advanced Micro Devices, Inc.";
+    return device.platform().vendor() == "Advanced Micro Devices, Inc.";
 }
 
 } // end detail namespace

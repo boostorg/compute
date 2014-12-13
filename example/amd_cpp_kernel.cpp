@@ -30,10 +30,9 @@ int main()
     compute::device device = compute::system::default_device();
     compute::context context(device);
     compute::command_queue queue(context, device);
-    compute::platform platform(device.get_info<CL_DEVICE_PLATFORM>());
 
     // check the platform vendor string
-    if(platform.vendor() != "Advanced Micro Devices, Inc."){
+    if(device.platform().vendor() != "Advanced Micro Devices, Inc."){
         std::cerr << "error: static C++ kernel language is only "
                   << "supported on AMD devices."
                   << std::endl;
