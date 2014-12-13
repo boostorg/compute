@@ -22,11 +22,11 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/exclusive_scan.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/type_traits/type_name.hpp>
+#include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/type_traits/is_fundamental.hpp>
 #include <boost/compute/type_traits/is_vector_type.hpp>
-#include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/program_cache.hpp>
+#include <boost/compute/type_traits/type_name.hpp>
+#include <boost/compute/utility/program_cache.hpp>
 
 namespace boost {
 namespace compute {
@@ -219,9 +219,6 @@ inline void radix_sort_impl(const buffer_iterator<T> first,
 
     const context &context = queue.get_context();
 
-    boost::shared_ptr<program_cache> cache =
-        detail::get_program_cache(context);
-
     size_t count = detail::iterator_range_size(first, last);
 
     // sort parameters
@@ -240,39 +237,36 @@ inline void radix_sort_impl(const buffer_iterator<T> first,
 
     // load (or create) radix sort program
     std::string cache_key =
-        std::string("radix_sort_") + type_name<value_type>();
-
+        std::string("__boost_radix_sort_") + type_name<value_type>();
 
     if(sort_by_key){
         cache_key += std::string("_with_") + type_name<T2>();
     }
 
-    program radix_sort_program = cache->get(cache_key);
+    std::stringstream options;
+    options << "-DK_BITS=" << k;
+    options << " -DT=" << type_name<sort_type>();
+    options << " -DBLOCK_SIZE=" << block_size;
 
-    if(!radix_sort_program.get()){
-        std::stringstream options;
-        options << "-DK_BITS=" << k;
-        options << " -DT=" << type_name<sort_type>();
-        options << " -DBLOCK_SIZE=" << block_size;
-
-        if(boost::is_floating_point<value_type>::value){
-            options << " -DIS_FLOATING_POINT";
-        }
-
-        if(boost::is_signed<value_type>::value){
-            options << " -DIS_SIGNED";
-        }
-
-        if(sort_by_key){
-            options << " -DSORT_BY_KEY";
-            options << " -DT2=" << type_name<T2>();
-        }
-
-        radix_sort_program =
-            program::build_with_source(radix_sort_source, context, options.str());
-
-        cache->insert(cache_key, radix_sort_program);
+    if(boost::is_floating_point<value_type>::value){
+        options << " -DIS_FLOATING_POINT";
     }
+
+    if(boost::is_signed<value_type>::value){
+        options << " -DIS_SIGNED";
+    }
+
+    if(sort_by_key){
+        options << " -DSORT_BY_KEY";
+        options << " -DT2=" << type_name<T2>();
+    }
+
+    // load (or create) radix sort program
+    boost::shared_ptr<program_cache> cache =
+        program_cache::get_global_cache(context);
+
+    program radix_sort_program =
+        cache->get_or_build(cache_key, options.str(), radix_sort_source, context);
 
     kernel count_kernel(radix_sort_program, "count");
     kernel scan_kernel(radix_sort_program, "scan");

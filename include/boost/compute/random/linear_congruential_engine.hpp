@@ -20,8 +20,8 @@
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/program_cache.hpp>
 #include <boost/compute/iterator/discard_iterator.hpp>
+#include <boost/compute/utility/program_cache.hpp>
 
 namespace boost {
 namespace compute {
@@ -191,36 +191,32 @@ private:
     /// \internal_
     void load_program()
     {
-        boost::shared_ptr<detail::program_cache> cache =
-            detail::get_program_cache(m_context);
+        boost::shared_ptr<program_cache> cache =
+            program_cache::get_global_cache(m_context);
+
         std::string cache_key =
-            std::string("linear_congruential_engine_") + type_name<T>();
+            std::string("__boost_linear_congruential_engine_") + type_name<T>();
 
-        m_program = cache->get(cache_key);
-        if(!m_program.get()){
-            const char source[] =
-                "__kernel void multiplicand(__global uint *multiplicands)\n"
-                "{\n"
-                "    uint a = 1099087573;\n"
-                "    multiplicands[0] = a;\n"
-                "    for(uint i = 1; i < 1024; i++){\n"
-                "        multiplicands[i] = a * multiplicands[i-1];\n"
-                "    }\n"
-                "}\n"
+        const char source[] =
+            "__kernel void multiplicand(__global uint *multiplicands)\n"
+            "{\n"
+            "    uint a = 1099087573;\n"
+            "    multiplicands[0] = a;\n"
+            "    for(uint i = 1; i < 1024; i++){\n"
+            "        multiplicands[i] = a * multiplicands[i-1];\n"
+            "    }\n"
+            "}\n"
 
-                "__kernel void fill(const uint seed,\n"
-                "                   __global uint *multiplicands,\n"
-                "                   __global uint *result,"
-                "                   const uint offset)\n"
-                "{\n"
-                "    const uint i = get_global_id(0);\n"
-                "    result[offset+i] = seed * multiplicands[i];\n"
-                "}\n";
+            "__kernel void fill(const uint seed,\n"
+            "                   __global uint *multiplicands,\n"
+            "                   __global uint *result,"
+            "                   const uint offset)\n"
+            "{\n"
+            "    const uint i = get_global_id(0);\n"
+            "    result[offset+i] = seed * multiplicands[i];\n"
+            "}\n";
 
-            m_program = program::build_with_source(source, m_context);
-
-            cache->insert(cache_key, m_program);
-        }
+        m_program = cache->get_or_build(cache_key, std::string(), source, m_context);
     }
 
 private:

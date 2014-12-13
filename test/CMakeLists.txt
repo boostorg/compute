@@ -57,6 +57,7 @@ add_compute_test("core.type_traits" test_type_traits.cpp)
 add_compute_test("core.user_event" test_user_event.cpp)
 
 add_compute_test("utility.extents" test_extents.cpp)
+add_compute_test("utility.program_cache" test_program_cache.cpp)
 add_compute_test("utility.wait_list" test_wait_list.cpp)
 
 add_compute_test("algorithm.accumulate" test_accumulate.cpp)
@@ -180,7 +181,6 @@ add_compute_test("experimental.tabulate" test_tabulate.cpp)
 add_compute_test("experimental.transform_if" test_transform_if.cpp)
 
 add_compute_test("ext.lambda" test_lambda.cpp)
-add_compute_test("ext.program_cache" test_program_cache.cpp)
 add_compute_test("ext.amd_cpp_kernel_language" test_amd_cpp_kernel_language.cpp)
 
 # eigen interop tests
