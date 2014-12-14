@@ -508,7 +508,7 @@ public:
         std::string hash;
         {
             device   d(context.get_device());
-            platform p(d.get_info<cl_platform_id>(CL_DEVICE_PLATFORM));
+            platform p = d.platform();
 
             std::ostringstream src;
             src << "// " << p.name() << " v" << p.version() << "\n"

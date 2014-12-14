@@ -22,11 +22,7 @@
 // returns true if the device is a POCL device
 inline bool is_pocl_device(const boost::compute::device &device)
 {
-    boost::compute::platform platform(
-        device.get_info<cl_platform_id>(CL_DEVICE_PLATFORM)
-    );
-
-    return platform.name() == "Portable Computing Language";
+    return device.platform().name() == "Portable Computing Language";
 }
 
 // AMD platforms have a bug when using struct assignment. this affects

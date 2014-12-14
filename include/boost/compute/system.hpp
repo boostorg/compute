@@ -219,7 +219,7 @@ private:
                     if (device.type() != device::cpu)
                         continue;
 
-                if (platform && !matches(device_platform(device).name(), platform))
+                if (platform && !matches(device.platform().name(), platform))
                     continue;
 
                 if (vendor && !matches(device.vendor(), vendor))
@@ -245,12 +245,6 @@ private:
 
         // return the first device found
         return devices_[0];
-    }
-
-    /// \internal_
-    static platform device_platform(const device &device)
-    {
-        return platform(device.get_info<cl_platform_id>(CL_DEVICE_PLATFORM));
     }
 
     /// \internal_

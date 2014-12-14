@@ -35,6 +35,12 @@ boost::compute::device gpu = boost::compute::system::default_device();
     BOOST_CHECK(gpu.id());
 }
 
+BOOST_AUTO_TEST_CASE(device_platform)
+{
+    boost::compute::platform p = boost::compute::system::platforms().at(0);
+    BOOST_CHECK(p == p.devices().at(0).platform());
+}
+
 BOOST_AUTO_TEST_CASE(get_device_name)
 {
     boost::compute::device gpu = boost::compute::system::default_device();
