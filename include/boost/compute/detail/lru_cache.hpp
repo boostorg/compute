@@ -15,6 +15,8 @@
 #include <list>
 #include <utility>
 
+#include <boost/optional.hpp>
+
 namespace boost {
 namespace compute {
 namespace detail {
@@ -56,6 +58,11 @@ public:
         return m_map.empty();
     }
 
+    bool contains(const key_type &key)
+    {
+        return m_map.find(key) != m_map.end();
+    }
+
     void insert(const key_type &key, const value_type &value)
     {
         typename map_type::iterator i = m_map.find(key);
@@ -72,13 +79,13 @@ public:
         }
     }
 
-    value_type get(const key_type &key)
+    boost::optional<value_type> get(const key_type &key)
     {
         // lookup value in the cache
         typename map_type::iterator i = m_map.find(key);
         if(i == m_map.end()){
             // value not in cache
-            return value_type();
+            return boost::none;
         }
 
         // return the value, but first update its place in the most

@@ -11,10 +11,9 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/detail/program_cache.hpp>
-#include <boost/compute/container/vector.hpp>
 #include <boost/compute/algorithm/any_of.hpp>
-
+#include <boost/compute/container/vector.hpp>
+#include <boost/compute/utility/program_cache.hpp>
 
 namespace boost {
 namespace compute {
@@ -51,7 +50,8 @@ inline bool dispatch_lexicographical_compare(InputIterator1 first1,
 {
     const boost::compute::context &context = queue.get_context();
 
-    boost::shared_ptr<program_cache> cache = detail::get_program_cache(context);
+    boost::shared_ptr<program_cache> cache =
+        program_cache::get_global_cache(context);
 
     size_t iterator_size1 = iterator_range_size(first1, last1);
     size_t iterator_size2 = iterator_range_size(first2, last2);
@@ -69,23 +69,16 @@ inline bool dispatch_lexicographical_compare(InputIterator1 first1,
 
     // load (or create) lexicographical compare program
     std::string cache_key =
-            std::string("lexicographical_compare") + type_name<value_type1>()
-            + type_name<value_type2>();
+            std::string("__boost_lexicographical_compare")
+            + type_name<value_type1>() + type_name<value_type2>();
 
-    program lexicographical_compare_program = cache->get(cache_key);
+    std::stringstream options;
+    options << " -DT1=" << type_name<value_type1>();
+    options << " -DT2=" << type_name<value_type2>();
 
-    if(!lexicographical_compare_program.get())
-    {
-
-        std::stringstream options;
-        options << " -DT1=" << type_name<value_type1>();
-        options << " -DT2=" << type_name<value_type2>();
-
-        lexicographical_compare_program =
-                program::build_with_source(lexicographical_compare_source,
-                                           context, options.str());
-        cache->insert(cache_key, lexicographical_compare_program);
-    }
+    program lexicographical_compare_program = cache->get_or_build(
+        cache_key, options.str(), lexicographical_compare_source, context
+    );
 
     kernel lexicographical_compare_kernel(lexicographical_compare_program,
                                           "lexicographical_compare");

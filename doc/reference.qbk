@@ -26,6 +26,7 @@ Header: `<boost/compute/utility.hpp>`
 
 * [funcref boost::compute::dim dim()]
 * [classref boost::compute::extents extents<N>]
+* [classref boost::compute::program_cache program_cache]
 * [classref boost::compute::wait_list wait_list]
 
 [h3 Algorithms]

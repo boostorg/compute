@@ -20,8 +20,8 @@
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/detail/program_cache.hpp>
 #include <boost/compute/iterator/discard_iterator.hpp>
+#include <boost/compute/utility/program_cache.hpp>
 
 namespace boost {
 namespace compute {
@@ -176,64 +176,60 @@ private:
     /// \internal_
     void load_program()
     {
-        boost::shared_ptr<detail::program_cache> cache =
-            detail::get_program_cache(m_context);
+        boost::shared_ptr<program_cache> cache =
+            program_cache::get_global_cache(m_context);
+
         std::string cache_key =
-            std::string("mersenne_twister_engine_") + type_name<T>();
+            std::string("__boost_mersenne_twister_engine_") + type_name<T>();
 
-        m_program = cache->get(cache_key);
-        if(!m_program.get()){
-            const char source[] =
-                "static uint twiddle(uint u, uint v)\n"
-                "{\n"
-                "    return (((u & 0x80000000U) | (v & 0x7FFFFFFFU)) >> 1) ^\n"
-                "           ((v & 1U) ? 0x9908B0DFU : 0x0U);\n"
-                "}\n"
+        const char source[] =
+            "static uint twiddle(uint u, uint v)\n"
+            "{\n"
+            "    return (((u & 0x80000000U) | (v & 0x7FFFFFFFU)) >> 1) ^\n"
+            "           ((v & 1U) ? 0x9908B0DFU : 0x0U);\n"
+            "}\n"
 
-                "__kernel void generate_state(__global uint *state)\n"
-                "{\n"
-                "    const uint n = 624;\n"
-                "    const uint m = 397;\n"
-                "    for(uint i = 0; i < (n - m); i++)\n"
-                "        state[i] = state[i+m] ^ twiddle(state[i], state[i+1]);\n"
-                "    for(uint i = n - m; i < (n - 1); i++)\n"
-                "        state[i] = state[i+m-n] ^ twiddle(state[i], state[i+1]);\n"
-                "    state[n-1] = state[m-1] ^ twiddle(state[n-1], state[0]);\n"
-                "}\n"
+            "__kernel void generate_state(__global uint *state)\n"
+            "{\n"
+            "    const uint n = 624;\n"
+            "    const uint m = 397;\n"
+            "    for(uint i = 0; i < (n - m); i++)\n"
+            "        state[i] = state[i+m] ^ twiddle(state[i], state[i+1]);\n"
+            "    for(uint i = n - m; i < (n - 1); i++)\n"
+            "        state[i] = state[i+m-n] ^ twiddle(state[i], state[i+1]);\n"
+            "    state[n-1] = state[m-1] ^ twiddle(state[n-1], state[0]);\n"
+            "}\n"
 
-                "__kernel void seed(const uint s, __global uint *state)\n"
-                "{\n"
-                "    const uint n = 624;\n"
-                "    state[0] = s & 0xFFFFFFFFU;\n"
-                "    for(uint i = 1; i < n; i++){\n"
-                "        state[i] = 1812433253U * (state[i-1] ^ (state[i-1] >> 30)) + i;\n"
-                "        state[i] &= 0xFFFFFFFFU;\n"
-                "    }\n"
-                "    generate_state(state);\n"
-                "}\n"
+            "__kernel void seed(const uint s, __global uint *state)\n"
+            "{\n"
+            "    const uint n = 624;\n"
+            "    state[0] = s & 0xFFFFFFFFU;\n"
+            "    for(uint i = 1; i < n; i++){\n"
+            "        state[i] = 1812433253U * (state[i-1] ^ (state[i-1] >> 30)) + i;\n"
+            "        state[i] &= 0xFFFFFFFFU;\n"
+            "    }\n"
+            "    generate_state(state);\n"
+            "}\n"
 
-                "static uint random_number(__global uint *state, const uint p)\n"
-                "{\n"
-                "    uint x = state[p];\n"
-                "    x ^= (x >> 11);\n"
-                "    x ^= (x << 7) & 0x9D2C5680U;\n"
-                "    x ^= (x << 15) & 0xEFC60000U;\n"
-                "    return x ^ (x >> 18);\n"
-                "}\n"
+            "static uint random_number(__global uint *state, const uint p)\n"
+            "{\n"
+            "    uint x = state[p];\n"
+            "    x ^= (x >> 11);\n"
+            "    x ^= (x << 7) & 0x9D2C5680U;\n"
+            "    x ^= (x << 15) & 0xEFC60000U;\n"
+            "    return x ^ (x >> 18);\n"
+            "}\n"
 
-                "__kernel void fill(__global uint *state,\n"
-                "                   const uint state_index,\n"
-                "                   __global uint *vector,\n"
-                "                   const uint offset)\n"
-                "{\n"
-                "    const uint i = get_global_id(0);\n"
-                "    vector[offset+i] = random_number(state, state_index + i);\n"
-                "}\n";
+            "__kernel void fill(__global uint *state,\n"
+            "                   const uint state_index,\n"
+            "                   __global uint *vector,\n"
+            "                   const uint offset)\n"
+            "{\n"
+            "    const uint i = get_global_id(0);\n"
+            "    vector[offset+i] = random_number(state, state_index + i);\n"
+            "}\n";
 
-            m_program = program::build_with_source(source, m_context);
-
-            cache->insert(cache_key, m_program);
-        }
+        m_program = cache->get_or_build(cache_key, std::string(), source, m_context);
     }
 
 private:
