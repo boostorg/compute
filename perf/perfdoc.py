@@ -56,7 +56,7 @@ if __name__ == '__main__':
         pass
 
     for algorithm in algorithms:
-        print "running '%s'" % (algorithm)
+        print("running '%s'" % (algorithm))
         report = run_benchmark(algorithm, sizes, ["stl"])
         plot_to_file(report, "perf_plots/%s_time_plot.png" % algorithm)
 
