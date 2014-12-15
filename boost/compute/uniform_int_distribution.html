@@ -29,18 +29,18 @@
   <span class="keyword">typedef</span> <span class="identifier">IntType</span> <a name="boost.compute.uniform_int_distribution.result_type"></a><span class="identifier">result_type</span><span class="special">;</span>
 
   <span class="comment">// <a class="link" href="uniform_int_distribution.html#boost.compute.uniform_int_distributionconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="uniform_int_distribution.html#idp54911744-bb"><span class="identifier">uniform_int_distribution</span></a><span class="special">(</span><span class="identifier">IntType</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">IntType</span> <span class="special">=</span> <span class="number">1</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="uniform_int_distribution.html#idp54915344-bb"><span class="special">~</span><span class="identifier">uniform_int_distribution</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="uniform_int_distribution.html#idp56349744-bb"><span class="identifier">uniform_int_distribution</span></a><span class="special">(</span><span class="identifier">IntType</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">IntType</span> <span class="special">=</span> <span class="number">1</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="uniform_int_distribution.html#idp56353344-bb"><span class="special">~</span><span class="identifier">uniform_int_distribution</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="uniform_int_distribution.html#idp54901472-bb">public member functions</a></span>
-  <span class="identifier">result_type</span> <a class="link" href="uniform_int_distribution.html#idp54902032-bb"><span class="identifier">a</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">result_type</span> <a class="link" href="uniform_int_distribution.html#idp54903472-bb"><span class="identifier">b</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="uniform_int_distribution.html#idp56339472-bb">public member functions</a></span>
+  <span class="identifier">result_type</span> <a class="link" href="uniform_int_distribution.html#idp56340032-bb"><span class="identifier">a</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">result_type</span> <a class="link" href="uniform_int_distribution.html#idp56341472-bb"><span class="identifier">b</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
   <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> OutputIterator<span class="special">,</span> <span class="keyword">typename</span> Generator<span class="special">&gt;</span> 
-    <span class="keyword">void</span> <a class="link" href="uniform_int_distribution.html#idp54904912-bb"><span class="identifier">generate</span></a><span class="special">(</span><span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">Generator</span> <span class="special">&amp;</span><span class="special">,</span> 
+    <span class="keyword">void</span> <a class="link" href="uniform_int_distribution.html#idp56342912-bb"><span class="identifier">generate</span></a><span class="special">(</span><span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">Generator</span> <span class="special">&amp;</span><span class="special">,</span> 
                   <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp90804240"></a><h2>Description</h2>
+<a name="idp96858992"></a><h2>Description</h2>
 <p>The following example shows how to setup a uniform int distribution to produce random integers 0 and 1.</p>
 <pre class="programlisting"><span class="comment">// initialize the default random engine</span>
 <a class="link" href="mersenne_twister_engine.html" title="Class template mersenne_twister_engine">boost::compute::default_random_engine</a> <span class="identifier">engine</span><span class="special">(</span><span class="identifier">queue</span><span class="special">)</span><span class="special">;</span>
@@ -52,30 +52,30 @@
 <span class="identifier">distribution</span><span class="special">.</span><span class="identifier">generate</span><span class="special">(</span><span class="identifier">vec</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">vec</span><span class="special">.</span><span class="identifier">end</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">engine</span><span class="special">,</span> <span class="identifier">queue</span><span class="special">)</span><span class="special">;</span>
 </pre>
 <div class="refsect2">
-<a name="idp90827952"></a><h3>
+<a name="idp96882704"></a><h3>
 <a name="boost.compute.uniform_int_distributionconstruct-copy-destruct"></a><code class="computeroutput">uniform_int_distribution</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp54911744-bb"></a><span class="identifier">uniform_int_distribution</span><span class="special">(</span><span class="identifier">IntType</span> a <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">IntType</span> b <span class="special">=</span> <span class="number">1</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idp56349744-bb"></a><span class="identifier">uniform_int_distribution</span><span class="special">(</span><span class="identifier">IntType</span> a <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">IntType</span> b <span class="special">=</span> <span class="number">1</span><span class="special">)</span><span class="special">;</span></pre>
 <p>Creates a new uniform distribution producing numbers in the range [<code class="computeroutput">a</code>, <code class="computeroutput">b</code>]. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp54915344-bb"></a><span class="special">~</span><span class="identifier">uniform_int_distribution</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the <code class="computeroutput"><a class="link" href="uniform_int_distribution.html" title="Class template uniform_int_distribution">uniform_int_distribution</a></code> object. </li>
+<pre class="literallayout"><a name="idp56353344-bb"></a><span class="special">~</span><span class="identifier">uniform_int_distribution</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the <code class="computeroutput"><a class="link" href="uniform_int_distribution.html" title="Class template uniform_int_distribution">uniform_int_distribution</a></code> object. </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp90845584"></a><h3>
-<a name="idp54901472-bb"></a><code class="computeroutput">uniform_int_distribution</code> public member functions</h3>
+<a name="idp96900400"></a><h3>
+<a name="idp56339472-bb"></a><code class="computeroutput">uniform_int_distribution</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">result_type</span> <a name="idp54902032-bb"></a><span class="identifier">a</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the minimum value of the distribution. </li>
+<pre class="literallayout"><span class="identifier">result_type</span> <a name="idp56340032-bb"></a><span class="identifier">a</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the minimum value of the distribution. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">result_type</span> <a name="idp54903472-bb"></a><span class="identifier">b</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the maximum value of the distribution. </li>
+<pre class="literallayout"><span class="identifier">result_type</span> <a name="idp56341472-bb"></a><span class="identifier">b</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the maximum value of the distribution. </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> OutputIterator<span class="special">,</span> <span class="keyword">typename</span> Generator<span class="special">&gt;</span> 
-  <span class="keyword">void</span> <a name="idp54904912-bb"></a><span class="identifier">generate</span><span class="special">(</span><span class="identifier">OutputIterator</span> first<span class="special">,</span> <span class="identifier">OutputIterator</span> last<span class="special">,</span> 
+  <span class="keyword">void</span> <a name="idp56342912-bb"></a><span class="identifier">generate</span><span class="special">(</span><span class="identifier">OutputIterator</span> first<span class="special">,</span> <span class="identifier">OutputIterator</span> last<span class="special">,</span> 
                 <span class="identifier">Generator</span> <span class="special">&amp;</span> generator<span class="special">,</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue<span class="special">)</span><span class="special">;</span></pre>
 <p>Generates uniformily distributed integers and stores them to the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>). </p>
 </li>

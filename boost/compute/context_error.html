@@ -26,15 +26,15 @@
 <span class="keyword">class</span> <a class="link" href="context_error.html" title="Class context_error">context_error</a> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">exception</span> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="context_error.html#boost.compute.context_errorconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="context_error.html#idp53915856-bb"><span class="identifier">context_error</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="context_error.html#idp53919664-bb"><span class="special">~</span><span class="identifier">context_error</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="context_error.html#idp55353104-bb"><span class="identifier">context_error</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="context_error.html#idp55356912-bb"><span class="special">~</span><span class="identifier">context_error</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="context_error.html#idp53911648-bb">public member functions</a></span>
-  <span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span> <a class="link" href="context_error.html#idp53912208-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a class="link" href="context_error.html#idp53914256-bb"><span class="identifier">what</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="context_error.html#idp55348896-bb">public member functions</a></span>
+  <span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span> <a class="link" href="context_error.html#idp55349456-bb"><span class="identifier">get_context</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a class="link" href="context_error.html#idp55351504-bb"><span class="identifier">what</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp85074240"></a><h2>Description</h2>
+<a name="idp91129728"></a><h2>Description</h2>
 <p>The <a class="link" href="context_error.html" title="Class context_error">context_error</a> exception is thrown when the OpenCL context encounters an error condition. Boost.Compute is notified of these error conditions by registering an error handler when creating context objects (via the <code class="computeroutput">pfn_notify</code> argument to the <code class="computeroutput">clCreateContext()</code> function).</p>
 <p>This exception is different than the <a class="link" href="opencl_error.html" title="Class opencl_error">opencl_error</a> exception which is thrown as a result of error caused when calling a single OpenCL API function.</p>
 <p><span class="bold"><strong>See Also:</strong></span></p>
@@ -42,28 +42,28 @@
 <p>
 </p>
 <div class="refsect2">
-<a name="idp85080624"></a><h3>
+<a name="idp91136112"></a><h3>
 <a name="boost.compute.context_errorconstruct-copy-destruct"></a><code class="computeroutput">context_error</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp53915856-bb"></a><span class="identifier">context_error</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span> context<span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> errinfo<span class="special">,</span> 
+<pre class="literallayout"><a name="idp55353104-bb"></a><span class="identifier">context_error</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span> context<span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> errinfo<span class="special">,</span> 
               <span class="keyword">const</span> <span class="keyword">void</span> <span class="special">*</span> private_info<span class="special">,</span> <span class="identifier">size_t</span> private_info_size<span class="special">)</span><span class="special">;</span></pre>Creates a new context error exception object. </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp53919664-bb"></a><span class="special">~</span><span class="identifier">context_error</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the context error object. </li>
+<pre class="literallayout"><a name="idp55356912-bb"></a><span class="special">~</span><span class="identifier">context_error</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the context error object. </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp85100032"></a><h3>
-<a name="idp53911648-bb"></a><code class="computeroutput">context_error</code> public member functions</h3>
+<a name="idp91155520"></a><h3>
+<a name="idp55348896-bb"></a><code class="computeroutput">context_error</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span> <a name="idp53912208-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">const</span> <a class="link" href="context.html" title="Class context">context</a> <span class="special">*</span> <a name="idp55349456-bb"></a><span class="identifier">get_context</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>Returns a pointer to the context object which generated the error notification. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a name="idp53914256-bb"></a><span class="identifier">what</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns a string with a description of the error. </li>
+<pre class="literallayout"><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a name="idp55351504-bb"></a><span class="identifier">what</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns a string with a description of the error. </li>
 </ol></div>
 </div>
 </div>
