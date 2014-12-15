@@ -75,7 +75,7 @@ class Report:
         if not any_valid_samples:
             return
 
-        pylab.plot(x, y, marker='o', label=name)
+        pylab.loglog(x, y, marker='o', label=name)
         pylab.xlabel("Size")
         pylab.ylabel("Time (ms)")
         pylab.title(self.name)
@@ -100,7 +100,7 @@ class Report:
         if not any_valid_samples:
             return
 
-        pylab.plot(x, y, marker='o', label=name)
+        pylab.loglog(x, y, marker='o', label=name)
         pylab.xlabel("Size")
         pylab.ylabel("Rate (values/s)")
         pylab.title(self.name)
@@ -195,7 +195,7 @@ if __name__ == '__main__':
             report.plot_rate(competitor)
 
     if plot:
-        pylab.legend()
+        pylab.legend(loc='upper left')
         pylab.show()
     else:
         report.display()

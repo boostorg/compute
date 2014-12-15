@@ -26,7 +26,7 @@ def plot_to_file(report, filename):
             x.append(sample[0])
             y.append(sample[1])
 
-        pylab.plot(x, y, marker='o', label=run_to_label[run])
+        pylab.loglog(x, y, marker='o', label=run_to_label[run])
 
     pylab.xlabel("Size")
     pylab.ylabel("Time (ms)")
