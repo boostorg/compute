@@ -15,10 +15,11 @@ def plot_to_file(report, filename):
 
     run_to_label = {
         "stl" : "C++ STL",
+        "thrust" : "Thrust",
         "compute" : "Boost.Compute"
     }
 
-    for run in report.samples.keys():
+    for run in sorted(report.samples.keys()):
         x = []
         y = []
 
@@ -57,6 +58,6 @@ if __name__ == '__main__':
 
     for algorithm in algorithms:
         print("running '%s'" % (algorithm))
-        report = run_benchmark(algorithm, sizes, ["stl"])
+        report = run_benchmark(algorithm, sizes, ["stl", "thrust"])
         plot_to_file(report, "perf_plots/%s_time_plot.png" % algorithm)
 
