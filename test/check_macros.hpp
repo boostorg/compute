@@ -20,7 +20,7 @@
     { \
         type _actual[size]; \
         boost::compute::copy( \
-            actual.begin(), actual.end(), _actual, queue \
+            actual.begin(), actual.begin()+size, _actual, queue \
         ); \
         const type _expected[size] = { \
             BOOST_PP_REPEAT(size, LIST_ARRAY_VALUES, (size, expected)) \
