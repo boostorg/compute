@@ -56,13 +56,10 @@
             <code class="computeroutput"><a class="link" href="../boost/compute/memory_object.html" title="Class memory_object">memory_object</a></code>
           </li>
 <li class="listitem">
-            <code class="computeroutput"><a class="link" href="../boost/compute/platform.html" title="Class platform">platform</a></code>
-          </li>
-<li class="listitem">
             <code class="computeroutput"><a class="link" href="../boost/compute/pipe.html" title="Class pipe">pipe</a></code>
           </li>
 <li class="listitem">
-            <code class="computeroutput"><a class="link" href="../boost/compute/program.html" title="Class program">program</a></code>
+            <code class="computeroutput"><a class="link" href="../boost/compute/platform.html" title="Class platform">platform</a></code>
           </li>
 <li class="listitem">
             <code class="computeroutput"><a class="link" href="../boost/compute/program.html" title="Class program">program</a></code>
@@ -395,7 +392,7 @@
             <code class="computeroutput"><a class="link" href="../boost/compute/opencl_error.html" title="Class opencl_error">opencl_error</a></code>
           </li>
 <li class="listitem">
-            <code class="computeroutput"><a class="link" href="../boost/compute/unsupported_ex_idp55380848.html" title="Class unsupported_extension_error">unsupported_extension_error</a></code>
+            <code class="computeroutput"><a class="link" href="../boost/compute/unsupported_ex_idp29178384.html" title="Class unsupported_extension_error">unsupported_extension_error</a></code>
           </li>
 </ul></div>
 <h4>
@@ -480,19 +477,19 @@
             <code class="computeroutput"><a class="link" href="../boost/compute/opengl_buffer.html" title="Class opengl_buffer">opengl_buffer</a></code>
           </li>
 <li class="listitem">
-            <code class="computeroutput"><a class="link" href="../boost/compute/opengl_create__idp55182608.html" title="Function opengl_create_shared_context">opengl_create_shared_context()</a></code>
+            <code class="computeroutput"><a class="link" href="../boost/compute/opengl_create__idp28972384.html" title="Function opengl_create_shared_context">opengl_create_shared_context()</a></code>
           </li>
 <li class="listitem">
-            <code class="computeroutput"><a class="link" href="../boost/compute/opengl_enqueue_idp55464080.html" title="Function opengl_enqueue_acquire_buffer">opengl_enqueue_acquire_buffer()</a></code>
+            <code class="computeroutput"><a class="link" href="../boost/compute/opengl_enqueue_idp29391760.html" title="Function opengl_enqueue_acquire_buffer">opengl_enqueue_acquire_buffer()</a></code>
           </li>
 <li class="listitem">
-            <code class="computeroutput"><a class="link" href="../boost/compute/opengl_enqueue_idp55450224.html" title="Function opengl_enqueue_acquire_gl_objects">opengl_enqueue_acquire_gl_objects()</a></code>
+            <code class="computeroutput"><a class="link" href="../boost/compute/opengl_enqueue_idp29377904.html" title="Function opengl_enqueue_acquire_gl_objects">opengl_enqueue_acquire_gl_objects()</a></code>
           </li>
 <li class="listitem">
-            <code class="computeroutput"><a class="link" href="../boost/compute/opengl_enqueue_idp55470768.html" title="Function opengl_enqueue_release_buffer">opengl_enqueue_release_buffer()</a></code>
+            <code class="computeroutput"><a class="link" href="../boost/compute/opengl_enqueue_idp29398448.html" title="Function opengl_enqueue_release_buffer">opengl_enqueue_release_buffer()</a></code>
           </li>
 <li class="listitem">
-            <code class="computeroutput"><a class="link" href="../boost/compute/opengl_enqueue_idp55457152.html" title="Function opengl_enqueue_release_gl_objects">opengl_enqueue_acquire_gl_objects()</a></code>
+            <code class="computeroutput"><a class="link" href="../boost/compute/opengl_enqueue_idp29384832.html" title="Function opengl_enqueue_release_gl_objects">opengl_enqueue_acquire_gl_objects()</a></code>
           </li>
 <li class="listitem">
             <code class="computeroutput"><a class="link" href="../boost/compute/opengl_renderbuffer.html" title="Class opengl_renderbuffer">opengl_renderbuffer</a></code>
@@ -644,6 +641,9 @@
 <dt><span class="section"><a href="reference.html#header.boost.compute.algorithm.unique_hpp">Header &lt;boost/compute/algorithm/unique.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.algorithm.unique_copy_hpp">Header &lt;boost/compute/algorithm/unique_copy.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.algorithm.upper_bound_hpp">Header &lt;boost/compute/algorithm/upper_bound.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.allocator_hpp">Header &lt;boost/compute/allocator.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.allocator.buffer_allocator_hpp">Header &lt;boost/compute/allocator/buffer_allocator.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.allocator.pinned_allocator_hpp">Header &lt;boost/compute/allocator/pinned_allocator.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.async_hpp">Header &lt;boost/compute/async.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.async.future_hpp">Header &lt;boost/compute/async/future.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.async.wait_hpp">Header &lt;boost/compute/async/wait.hpp&gt;</a></span></dt>
@@ -673,9 +673,22 @@
 <dt><span class="section"><a href="reference.html#header.boost.compute.exception.unsupported_extension_error_hpp">Header &lt;boost/compute/exception/unsupported_extension_error.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.function_hpp">Header &lt;boost/compute/function.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.functional_hpp">Header &lt;boost/compute/functional.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.as_hpp">Header &lt;boost/compute/functional/as.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.atomic_hpp">Header &lt;boost/compute/functional/atomic.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.bind_hpp">Header &lt;boost/compute/functional/bind.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.common_hpp">Header &lt;boost/compute/functional/common.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.convert_hpp">Header &lt;boost/compute/functional/convert.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.functional.field_hpp">Header &lt;boost/compute/functional/field.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.geometry_hpp">Header &lt;boost/compute/functional/geometry.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.functional.get_hpp">Header &lt;boost/compute/functional/get.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.hash_hpp">Header &lt;boost/compute/functional/hash.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.identity_hpp">Header &lt;boost/compute/functional/identity.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.integer_hpp">Header &lt;boost/compute/functional/integer.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.logical_hpp">Header &lt;boost/compute/functional/logical.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.math_hpp">Header &lt;boost/compute/functional/math.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.operator_hpp">Header &lt;boost/compute/functional/operator.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.functional.popcount_hpp">Header &lt;boost/compute/functional/popcount.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.compute.functional.relational_hpp">Header &lt;boost/compute/functional/relational.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.interop.opengl_hpp">Header &lt;boost/compute/interop/opengl.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.interop.opengl.acquire_hpp">Header &lt;boost/compute/interop/opengl/acquire.hpp&gt;</a></span></dt>
 <dt><span class="section"><a href="reference.html#header.boost.compute.interop.opengl.opengl_buffer_hpp">Header &lt;boost/compute/interop/opengl/opengl_buffer.hpp&gt;</a></span></dt>
@@ -1677,6 +1690,29 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.allocator_hpp"></a>Header &lt;<a href="../../../boost/compute/allocator.hpp" target="_top">boost/compute/allocator.hpp</a>&gt;</h4></div></div></div>
+<p>Meta-header to include all Boost.Compute allocator headers. </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.allocator.buffer_allocator_hpp"></a>Header &lt;<a href="../../../boost/compute/allocator/buffer_allocator.hpp" target="_top">boost/compute/allocator/buffer_allocator.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/buffer_allocator.html" title="Class template buffer_allocator">buffer_allocator</a><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.allocator.pinned_allocator_hpp"></a>Header &lt;<a href="../../../boost/compute/allocator/pinned_allocator.hpp" target="_top">boost/compute/allocator/pinned_allocator.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/pinned_allocator.html" title="Class template pinned_allocator">pinned_allocator</a><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
 <a name="header.boost.compute.async_hpp"></a>Header &lt;<a href="../../../boost/compute/async.hpp" target="_top">boost/compute/async.hpp</a>&gt;</h4></div></div></div>
 <p>Meta-header to include all Boost.Compute async headers. </p>
 </div>
@@ -1754,7 +1790,7 @@
       <span class="keyword">class</span> <a class="link" href="../boost/compute/basic_string.html" title="Class template basic_string">basic_string</a><span class="special">;</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> CharT<span class="special">,</span> <span class="keyword">typename</span> Traits<span class="special">&gt;</span> 
       <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span> <span class="special">&amp;</span> 
-      <a name="boost.compute.operator_idp54545552"></a><span class="keyword">operator</span><span class="special">&lt;&lt;</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span> <span class="special">&amp;</span> stream<span class="special">,</span> 
+      <a name="boost.compute.operator_idp28334176"></a><span class="keyword">operator</span><span class="special">&lt;&lt;</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span> <span class="special">&amp;</span> stream<span class="special">,</span> 
                  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span> <span class="identifier">CharT</span><span class="special">,</span> <span class="identifier">Traits</span> <span class="special">&gt;</span><span class="keyword">const</span> <span class="special">&amp;</span> outStr<span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
@@ -1765,7 +1801,7 @@
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Block <span class="special">=</span> <span class="identifier">ulong_</span><span class="special">,</span> 
-             <span class="keyword">typename</span> Alloc <span class="special">=</span> <span class="identifier">buffer_allocator</span><span class="special">&lt;</span><span class="identifier">Block</span><span class="special">&gt;</span> <span class="special">&gt;</span> 
+             <span class="keyword">typename</span> Alloc <span class="special">=</span> <a class="link" href="../boost/compute/buffer_allocator.html" title="Class template buffer_allocator">buffer_allocator</a><span class="special">&lt;</span><span class="identifier">Block</span><span class="special">&gt;</span> <span class="special">&gt;</span> 
       <span class="keyword">class</span> <a class="link" href="../boost/compute/dynamic_bitset.html" title="Class template dynamic_bitset">dynamic_bitset</a><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
@@ -1829,7 +1865,7 @@
 <a name="header.boost.compute.container.vector_hpp"></a>Header &lt;<a href="../../../boost/compute/container/vector.hpp" target="_top">boost/compute/container/vector.hpp</a>&gt;</h4></div></div></div>
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="keyword">typename</span> Alloc <span class="special">=</span> <span class="identifier">buffer_allocator</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/vector.html" title="Class template vector">vector</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="keyword">typename</span> Alloc <span class="special">=</span> <a class="link" href="../boost/compute/buffer_allocator.html" title="Class template buffer_allocator">buffer_allocator</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/vector.html" title="Class template vector">vector</a><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -1847,7 +1883,7 @@
 <a name="header.boost.compute.interop.opengl.context_hpp"></a>Header &lt;<a href="../../../boost/compute/interop/opengl/context.hpp" target="_top">boost/compute/interop/opengl/context.hpp</a>&gt;</h4></div></div></div>
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
-    <a class="link" href="../boost/compute/context.html" title="Class context">context</a> <a class="link" href="../boost/compute/opengl_create__idp55182608.html" title="Function opengl_create_shared_context"><span class="identifier">opengl_create_shared_context</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+    <a class="link" href="../boost/compute/context.html" title="Class context">context</a> <a class="link" href="../boost/compute/opengl_create__idp28972384.html" title="Function opengl_create_shared_context"><span class="identifier">opengl_create_shared_context</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -1902,7 +1938,7 @@
 <a name="header.boost.compute.exception.unsupported_extension_error_hpp"></a>Header &lt;<a href="../../../boost/compute/exception/unsupported_extension_error.hpp" target="_top">boost/compute/exception/unsupported_extension_error.hpp</a>&gt;</h4></div></div></div>
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
-    <span class="keyword">class</span> <a class="link" href="../boost/compute/unsupported_ex_idp55380848.html" title="Class unsupported_extension_error">unsupported_extension_error</a><span class="special">;</span>
+    <span class="keyword">class</span> <a class="link" href="../boost/compute/unsupported_ex_idp29178384.html" title="Class unsupported_extension_error">unsupported_extension_error</a><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -1928,6 +1964,59 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.as_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/as.hpp" target="_top">boost/compute/functional/as.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">struct</span> <a class="link" href="../boost/compute/as.html" title="Struct template as">as</a><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.atomic_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/atomic.hpp" target="_top">boost/compute/functional/atomic.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/atomic_add.html" title="Class template atomic_add">atomic_add</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/atomic_sub.html" title="Class template atomic_sub">atomic_sub</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/atomic_xchg.html" title="Class template atomic_xchg">atomic_xchg</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/atomic_inc.html" title="Class template atomic_inc">atomic_inc</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/atomic_dec.html" title="Class template atomic_dec">atomic_dec</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/atomic_cmpxchg.html" title="Class template atomic_cmpxchg">atomic_cmpxchg</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/atomic_max.html" title="Class template atomic_max">atomic_max</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/atomic_min.html" title="Class template atomic_min">atomic_min</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/atomic_and.html" title="Class template atomic_and">atomic_and</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/atomic_or.html" title="Class template atomic_or">atomic_or</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/atomic_xor.html" title="Class template atomic_xor">atomic_xor</a><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.bind_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/bind.hpp" target="_top">boost/compute/functional/bind.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">struct</span> <a class="link" href="../boost/compute/is_placeholder.html" title="Struct template is_placeholder">is_placeholder</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> F<span class="special">,</span> <span class="keyword">class</span><span class="special">...</span> Args<span class="special">&gt;</span> <span class="emphasis"><em><span class="identifier">unspecified</span></em></span> <a class="link" href="../boost/compute/bind.html" title="Function template bind"><span class="identifier">bind</span></a><span class="special">(</span><span class="identifier">F</span><span class="special">,</span> <span class="identifier">Args</span><span class="special">...</span><span class="special">)</span><span class="special">;</span>
+    <span class="keyword">namespace</span> <span class="identifier">placeholders</span> <span class="special">{</span>
+      placeholder<span class="special">&lt;</span> <span class="number">0</span> <span class="special">&gt;</span> <span class="keyword">const</span> <a class="link" href="../boost/compute/placeholders/_1.html" title="Global _1">_1</a><span class="special">;</span>
+      placeholder<span class="special">&lt;</span> <span class="number">1</span> <span class="special">&gt;</span> <span class="keyword">const</span> <a class="link" href="../boost/compute/placeholders/_2.html" title="Global _2">_2</a><span class="special">;</span>
+    <span class="special">}</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.common_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/common.hpp" target="_top">boost/compute/functional/common.hpp</a>&gt;</h4></div></div></div></div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.convert_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/convert.hpp" target="_top">boost/compute/functional/convert.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">struct</span> <a class="link" href="../boost/compute/convert.html" title="Struct template convert">convert</a><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
 <a name="header.boost.compute.functional.field_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/field.hpp" target="_top">boost/compute/functional/field.hpp</a>&gt;</h4></div></div></div>
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
@@ -1935,6 +2024,8 @@
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.geometry_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/geometry.hpp" target="_top">boost/compute/functional/geometry.hpp</a>&gt;</h4></div></div></div></div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="header.boost.compute.functional.get_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/get.hpp" target="_top">boost/compute/functional/get.hpp</a>&gt;</h4></div></div></div>
@@ -1946,6 +2037,46 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.hash_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/hash.hpp" target="_top">boost/compute/functional/hash.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Key<span class="special">&gt;</span> <span class="keyword">struct</span> <a class="link" href="../boost/compute/hash.html" title="Struct template hash">hash</a><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.identity_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/identity.hpp" target="_top">boost/compute/functional/identity.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/identity.html" title="Class template identity">identity</a><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.integer_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/integer.hpp" target="_top">boost/compute/functional/integer.hpp</a>&gt;</h4></div></div></div></div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.logical_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/logical.hpp" target="_top">boost/compute/functional/logical.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Predicate<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/unary_negate.html" title="Class template unary_negate">unary_negate</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Predicate<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/binary_negate.html" title="Class template binary_negate">binary_negate</a><span class="special">;</span>
+
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">struct</span> <a class="link" href="../boost/compute/logical_not.html" title="Struct template logical_not">logical_not</a><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Predicate<span class="special">&gt;</span> 
+      <a class="link" href="../boost/compute/unary_negate.html" title="Class template unary_negate">unary_negate</a><span class="special">&lt;</span> <span class="identifier">Predicate</span> <span class="special">&gt;</span> <a class="link" href="../boost/compute/not1.html" title="Function template not1"><span class="identifier">not1</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Predicate</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Predicate<span class="special">&gt;</span> 
+      <a class="link" href="../boost/compute/binary_negate.html" title="Class template binary_negate">binary_negate</a><span class="special">&lt;</span> <span class="identifier">Predicate</span> <span class="special">&gt;</span> <a class="link" href="../boost/compute/not2.html" title="Function template not2"><span class="identifier">not2</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Predicate</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.math_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/math.hpp" target="_top">boost/compute/functional/math.hpp</a>&gt;</h4></div></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.operator_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/operator.hpp" target="_top">boost/compute/functional/operator.hpp</a>&gt;</h4></div></div></div></div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
 <a name="header.boost.compute.functional.popcount_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/popcount.hpp" target="_top">boost/compute/functional/popcount.hpp</a>&gt;</h4></div></div></div>
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
@@ -1953,6 +2084,8 @@
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.compute.functional.relational_hpp"></a>Header &lt;<a href="../../../boost/compute/functional/relational.hpp" target="_top">boost/compute/functional/relational.hpp</a>&gt;</h4></div></div></div></div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="header.boost.compute.interop.opengl_hpp"></a>Header &lt;<a href="../../../boost/compute/interop/opengl.hpp" target="_top">boost/compute/interop/opengl.hpp</a>&gt;</h4></div></div></div>
@@ -1963,16 +2096,16 @@
 <a name="header.boost.compute.interop.opengl.acquire_hpp"></a>Header &lt;<a href="../../../boost/compute/interop/opengl/acquire.hpp" target="_top">boost/compute/interop/opengl/acquire.hpp</a>&gt;</h4></div></div></div>
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
-    <a class="link" href="../boost/compute/event.html" title="Class event">event</a> <a class="link" href="../boost/compute/opengl_enqueue_idp55450224.html" title="Function opengl_enqueue_acquire_gl_objects"><span class="identifier">opengl_enqueue_acquire_gl_objects</span></a><span class="special">(</span><span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">cl_mem</span> <span class="special">*</span><span class="special">,</span> 
+    <a class="link" href="../boost/compute/event.html" title="Class event">event</a> <a class="link" href="../boost/compute/opengl_enqueue_idp29377904.html" title="Function opengl_enqueue_acquire_gl_objects"><span class="identifier">opengl_enqueue_acquire_gl_objects</span></a><span class="special">(</span><span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">cl_mem</span> <span class="special">*</span><span class="special">,</span> 
                                             <a class="link" href="../boost/compute/command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">,</span> 
                                             <span class="keyword">const</span> <a class="link" href="../boost/compute/wait_list.html" title="Class wait_list">wait_list</a> <span class="special">&amp;</span> <span class="special">=</span> <a class="link" href="../boost/compute/wait_list.html" title="Class wait_list">wait_list</a><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span>
-    <a class="link" href="../boost/compute/event.html" title="Class event">event</a> <a class="link" href="../boost/compute/opengl_enqueue_idp55457152.html" title="Function opengl_enqueue_release_gl_objects"><span class="identifier">opengl_enqueue_release_gl_objects</span></a><span class="special">(</span><span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">cl_mem</span> <span class="special">*</span><span class="special">,</span> 
+    <a class="link" href="../boost/compute/event.html" title="Class event">event</a> <a class="link" href="../boost/compute/opengl_enqueue_idp29384832.html" title="Function opengl_enqueue_release_gl_objects"><span class="identifier">opengl_enqueue_release_gl_objects</span></a><span class="special">(</span><span class="identifier">size_t</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">cl_mem</span> <span class="special">*</span><span class="special">,</span> 
                                             <a class="link" href="../boost/compute/command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">,</span> 
                                             <span class="keyword">const</span> <a class="link" href="../boost/compute/wait_list.html" title="Class wait_list">wait_list</a> <span class="special">&amp;</span> <span class="special">=</span> <a class="link" href="../boost/compute/wait_list.html" title="Class wait_list">wait_list</a><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span>
-    <a class="link" href="../boost/compute/event.html" title="Class event">event</a> <a class="link" href="../boost/compute/opengl_enqueue_idp55464080.html" title="Function opengl_enqueue_acquire_buffer"><span class="identifier">opengl_enqueue_acquire_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="../boost/compute/opengl_buffer.html" title="Class opengl_buffer">opengl_buffer</a> <span class="special">&amp;</span><span class="special">,</span> 
+    <a class="link" href="../boost/compute/event.html" title="Class event">event</a> <a class="link" href="../boost/compute/opengl_enqueue_idp29391760.html" title="Function opengl_enqueue_acquire_buffer"><span class="identifier">opengl_enqueue_acquire_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="../boost/compute/opengl_buffer.html" title="Class opengl_buffer">opengl_buffer</a> <span class="special">&amp;</span><span class="special">,</span> 
                                         <a class="link" href="../boost/compute/command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">,</span> 
                                         <span class="keyword">const</span> <a class="link" href="../boost/compute/wait_list.html" title="Class wait_list">wait_list</a> <span class="special">&amp;</span> <span class="special">=</span> <a class="link" href="../boost/compute/wait_list.html" title="Class wait_list">wait_list</a><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span>
-    <a class="link" href="../boost/compute/event.html" title="Class event">event</a> <a class="link" href="../boost/compute/opengl_enqueue_idp55470768.html" title="Function opengl_enqueue_release_buffer"><span class="identifier">opengl_enqueue_release_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="../boost/compute/opengl_buffer.html" title="Class opengl_buffer">opengl_buffer</a> <span class="special">&amp;</span><span class="special">,</span> 
+    <a class="link" href="../boost/compute/event.html" title="Class event">event</a> <a class="link" href="../boost/compute/opengl_enqueue_idp29398448.html" title="Function opengl_enqueue_release_buffer"><span class="identifier">opengl_enqueue_release_buffer</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="../boost/compute/opengl_buffer.html" title="Class opengl_buffer">opengl_buffer</a> <span class="special">&amp;</span><span class="special">,</span> 
                                         <a class="link" href="../boost/compute/command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">,</span> 
                                         <span class="keyword">const</span> <a class="link" href="../boost/compute/wait_list.html" title="Class wait_list">wait_list</a> <span class="special">&amp;</span> <span class="special">=</span> <a class="link" href="../boost/compute/wait_list.html" title="Class wait_list">wait_list</a><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
@@ -2016,11 +2149,8 @@
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/buffer_iterator.html" title="Class template buffer_iterator">buffer_iterator</a><span class="special">;</span>
-
-    <span class="comment">// Creates a new <a class="link" href="../boost/compute/buffer_iterator.html" title="Class template buffer_iterator">buffer_iterator</a> for <code class="computeroutput">buffer</code> at <code class="computeroutput">index</code>. </span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
-      <a class="link" href="../boost/compute/buffer_iterator.html" title="Class template buffer_iterator">buffer_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> 
-      <a name="boost.compute.make_buffer_iterator"></a><span class="identifier">make_buffer_iterator</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="../boost/compute/buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> <span class="identifier">size_t</span> index <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
+      <a class="link" href="../boost/compute/buffer_iterator.html" title="Class template buffer_iterator">buffer_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a class="link" href="../boost/compute/make_buffer_iterator.html" title="Function template make_buffer_iterator"><span class="identifier">make_buffer_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="../boost/compute/buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -2031,8 +2161,8 @@
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/constant_buffer_iterator.html" title="Class template constant_buffer_iterator">constant_buffer_iterator</a><span class="special">;</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
-      <span class="identifier">constant_buffer_iterator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> 
-      <a name="boost.compute.make_constant__idp55621584"></a><span class="identifier">make_constant_buffer_iterator</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="../boost/compute/buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span> buffer<span class="special">,</span> <span class="identifier">size_t</span> index <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
+      <a class="link" href="../boost/compute/constant_buffer_iterator.html" title="Class template constant_buffer_iterator">constant_buffer_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> 
+      <a class="link" href="../boost/compute/make_constant__idp29561984.html" title="Function template make_constant_buffer_iterator"><span class="identifier">make_constant_buffer_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="../boost/compute/buffer.html" title="Class buffer">buffer</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -2042,11 +2172,8 @@
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/constant_iterator.html" title="Class template constant_iterator">constant_iterator</a><span class="special">;</span>
-
-    <span class="comment">// Returns a new constant iterator with <code class="computeroutput">value</code> at <code class="computeroutput">index</code>. </span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
-      <a class="link" href="../boost/compute/constant_iterator.html" title="Class template constant_iterator">constant_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> 
-      <a name="boost.compute.make_constant_iterator"></a><span class="identifier">make_constant_iterator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span> value<span class="special">,</span> <span class="identifier">size_t</span> index <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
+      <a class="link" href="../boost/compute/constant_iterator.html" title="Class template constant_iterator">constant_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a class="link" href="../boost/compute/make_constant_iterator.html" title="Function template make_constant_iterator"><span class="identifier">make_constant_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -2057,7 +2184,7 @@
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/counting_iterator.html" title="Class template counting_iterator">counting_iterator</a><span class="special">;</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
-      <span class="identifier">counting_iterator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a name="boost.compute.make_counting_iterator"></a><span class="identifier">make_counting_iterator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span> init<span class="special">)</span><span class="special">;</span>
+      <a class="link" href="../boost/compute/counting_iterator.html" title="Class template counting_iterator">counting_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a class="link" href="../boost/compute/make_counting_iterator.html" title="Function template make_counting_iterator"><span class="identifier">make_counting_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -2067,9 +2194,7 @@
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">class</span> <a class="link" href="../boost/compute/discard_iterator.html" title="Class discard_iterator">discard_iterator</a><span class="special">;</span>
-
-    <span class="comment">// Returns a new discard iterator with <code class="computeroutput">index</code>. </span>
-    <a class="link" href="../boost/compute/discard_iterator.html" title="Class discard_iterator">discard_iterator</a> <a name="boost.compute.make_discard_iterator"></a><span class="identifier">make_discard_iterator</span><span class="special">(</span><span class="identifier">size_t</span> index <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
+    <a class="link" href="../boost/compute/discard_iterator.html" title="Class discard_iterator">discard_iterator</a> <a class="link" href="../boost/compute/make_discard_iterator.html" title="Function make_discard_iterator"><span class="identifier">make_discard_iterator</span></a><span class="special">(</span><span class="identifier">size_t</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -2080,9 +2205,8 @@
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Function<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/function_input_iterator.html" title="Class template function_input_iterator">function_input_iterator</a><span class="special">;</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Function<span class="special">&gt;</span> 
-      <span class="identifier">function_input_iterator</span><span class="special">&lt;</span> <span class="identifier">Function</span> <span class="special">&gt;</span> 
-      <a name="boost.compute.make_function__idp55715136"></a><span class="identifier">make_function_input_iterator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Function</span> <span class="special">&amp;</span> function<span class="special">,</span> 
-                                   <span class="identifier">size_t</span> index <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
+      <a class="link" href="../boost/compute/function_input_iterator.html" title="Class template function_input_iterator">function_input_iterator</a><span class="special">&lt;</span> <span class="identifier">Function</span> <span class="special">&gt;</span> 
+      <a class="link" href="../boost/compute/make_function__idp29689456.html" title="Function template make_function_input_iterator"><span class="identifier">make_function_input_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Function</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="special">=</span> <span class="number">0</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -2094,8 +2218,8 @@
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> ElementIterator<span class="special">,</span> <span class="keyword">typename</span> IndexIterator<span class="special">&gt;</span> 
       <span class="keyword">class</span> <a class="link" href="../boost/compute/permutation_iterator.html" title="Class template permutation_iterator">permutation_iterator</a><span class="special">;</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> ElementIterator<span class="special">,</span> <span class="keyword">typename</span> IndexIterator<span class="special">&gt;</span> 
-      <span class="identifier">permutation_iterator</span><span class="special">&lt;</span> <span class="identifier">ElementIterator</span><span class="special">,</span> <span class="identifier">IndexIterator</span> <span class="special">&gt;</span> 
-      <a name="boost.compute.make_permutation_iterator"></a><span class="identifier">make_permutation_iterator</span><span class="special">(</span><span class="identifier">ElementIterator</span> e<span class="special">,</span> <span class="identifier">IndexIterator</span> i<span class="special">)</span><span class="special">;</span>
+      <a class="link" href="../boost/compute/permutation_iterator.html" title="Class template permutation_iterator">permutation_iterator</a><span class="special">&lt;</span> <span class="identifier">ElementIterator</span><span class="special">,</span> <span class="identifier">IndexIterator</span> <span class="special">&gt;</span> 
+      <a class="link" href="../boost/compute/make_permutation_iterator.html" title="Function template make_permutation_iterator"><span class="identifier">make_permutation_iterator</span></a><span class="special">(</span><span class="identifier">ElementIterator</span><span class="special">,</span> <span class="identifier">IndexIterator</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -2106,11 +2230,9 @@
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator<span class="special">,</span> <span class="keyword">typename</span> UnaryFunction<span class="special">&gt;</span> 
       <span class="keyword">class</span> <a class="link" href="../boost/compute/transform_iterator.html" title="Class template transform_iterator">transform_iterator</a><span class="special">;</span>
-
-    <span class="comment">// Returns a transform iterator for <code class="computeroutput">iterator</code> with <code class="computeroutput">transform</code>. </span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator<span class="special">,</span> <span class="keyword">typename</span> UnaryFunction<span class="special">&gt;</span> 
       <a class="link" href="../boost/compute/transform_iterator.html" title="Class template transform_iterator">transform_iterator</a><span class="special">&lt;</span> <span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">UnaryFunction</span> <span class="special">&gt;</span> 
-      <a name="boost.compute.make_transform_iterator"></a><span class="identifier">make_transform_iterator</span><span class="special">(</span><span class="identifier">InputIterator</span> iterator<span class="special">,</span> <span class="identifier">UnaryFunction</span> transform<span class="special">)</span><span class="special">;</span>
+      <a class="link" href="../boost/compute/make_transform_iterator.html" title="Function template make_transform_iterator"><span class="identifier">make_transform_iterator</span></a><span class="special">(</span><span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">UnaryFunction</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -2121,7 +2243,7 @@
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> IteratorTuple<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/compute/zip_iterator.html" title="Class template zip_iterator">zip_iterator</a><span class="special">;</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> IteratorTuple<span class="special">&gt;</span> 
-      <span class="identifier">zip_iterator</span><span class="special">&lt;</span> <span class="identifier">IteratorTuple</span> <span class="special">&gt;</span> <a name="boost.compute.make_zip_iterator"></a><span class="identifier">make_zip_iterator</span><span class="special">(</span><span class="identifier">IteratorTuple</span> iterators<span class="special">)</span><span class="special">;</span>
+      <a class="link" href="../boost/compute/zip_iterator.html" title="Class template zip_iterator">zip_iterator</a><span class="special">&lt;</span> <span class="identifier">IteratorTuple</span> <span class="special">&gt;</span> <a class="link" href="../boost/compute/make_zip_iterator.html" title="Function template make_zip_iterator"><span class="identifier">make_zip_iterator</span></a><span class="special">(</span><span class="identifier">IteratorTuple</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -2163,8 +2285,6 @@
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
     <span class="keyword">class</span> <a class="link" href="../boost/compute/pipe.html" title="Class pipe">pipe</a><span class="special">;</span>
-     <a name="boost.compute.BOOST_COMPUTE__idp55987840"></a><span class="identifier">BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS</span><span class="special">(</span><a class="link" href="../boost/compute/pipe.html" title="Class pipe">pipe</a><span class="special">,</span> 
-                                                          <span class="special">(</span><span class="special">(</span><span class="identifier">cl_uint</span><span class="special">,</span> <span class="identifier">CL_PIPE_PACKET_SIZE</span><span class="special">)</span><span class="special">)</span><span class="special">(</span><span class="special">(</span><span class="identifier">cl_uint</span><span class="special">,</span> <span class="identifier">CL_PIPE_MAX_PACKETS</span><span class="special">)</span><span class="special">)</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
@@ -2339,9 +2459,7 @@
 <a name="header.boost.compute.type_traits.type_definition_hpp"></a>Header &lt;<a href="../../../boost/compute/type_traits/type_definition.hpp" target="_top">boost/compute/type_traits/type_definition.hpp</a>&gt;</h4></div></div></div>
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">compute</span> <span class="special">{</span>
-
-    <span class="comment">// Returns the OpenCL type definition for <code class="computeroutput">T</code>. </span>
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="boost.compute.type_definition"></a><span class="identifier">type_definition</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../boost/compute/type_definition.html" title="Function template type_definition"><span class="identifier">type_definition</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>

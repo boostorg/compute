@@ -26,17 +26,17 @@
 <span class="keyword">class</span> <a class="link" href="bernoulli_distribution.html" title="Class template bernoulli_distribution">bernoulli_distribution</a> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="bernoulli_distribution.html#boost.compute.bernoulli_distributionconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="bernoulli_distribution.html#idp56182880-bb"><span class="identifier">bernoulli_distribution</span></a><span class="special">(</span><span class="identifier">RealType</span> <span class="special">=</span> <span class="number">0</span><span class="special">.</span><span class="number">25f</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="bernoulli_distribution.html#idp56184448-bb"><span class="special">~</span><span class="identifier">bernoulli_distribution</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="bernoulli_distribution.html#idp30189120-bb"><span class="identifier">bernoulli_distribution</span></a><span class="special">(</span><span class="identifier">RealType</span> <span class="special">=</span> <span class="number">0</span><span class="special">.</span><span class="number">25f</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="bernoulli_distribution.html#idp30190688-bb"><span class="special">~</span><span class="identifier">bernoulli_distribution</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="bernoulli_distribution.html#idp56174080-bb">public member functions</a></span>
-  <span class="identifier">RealType</span> <a class="link" href="bernoulli_distribution.html#idp56174640-bb"><span class="identifier">p</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="bernoulli_distribution.html#idp30180320-bb">public member functions</a></span>
+  <span class="identifier">RealType</span> <a class="link" href="bernoulli_distribution.html#idp30180880-bb"><span class="identifier">p</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
   <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> OutputIterator<span class="special">,</span> <span class="keyword">typename</span> Generator<span class="special">&gt;</span> 
-    <span class="keyword">void</span> <a class="link" href="bernoulli_distribution.html#idp56176064-bb"><span class="identifier">generate</span></a><span class="special">(</span><span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">Generator</span> <span class="special">&amp;</span><span class="special">,</span> 
+    <span class="keyword">void</span> <a class="link" href="bernoulli_distribution.html#idp30182304-bb"><span class="identifier">generate</span></a><span class="special">(</span><span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">Generator</span> <span class="special">&amp;</span><span class="special">,</span> 
                   <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp95972624"></a><h2>Description</h2>
+<a name="idp106793280"></a><h2>Description</h2>
 <p>The following example shows how to setup a bernoulli distribution to produce random boolean values with parameter p = 0.25</p>
 <pre class="programlisting"><span class="comment">// initialize the default random engine</span>
 <a class="link" href="mersenne_twister_engine.html" title="Class template mersenne_twister_engine">boost::compute::default_random_engine</a> <span class="identifier">engine</span><span class="special">(</span><span class="identifier">queue</span><span class="special">)</span><span class="special">;</span>
@@ -49,26 +49,26 @@
 <span class="identifier">distribution</span><span class="special">.</span><span class="identifier">generate</span><span class="special">(</span><span class="identifier">vec</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">vec</span><span class="special">.</span><span class="identifier">end</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">engine</span><span class="special">,</span> <span class="identifier">queue</span><span class="special">)</span><span class="special">;</span>
 </pre>
 <div class="refsect2">
-<a name="idp95996912"></a><h3>
+<a name="idp106817664"></a><h3>
 <a name="boost.compute.bernoulli_distributionconstruct-copy-destruct"></a><code class="computeroutput">bernoulli_distribution</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp56182880-bb"></a><span class="identifier">bernoulli_distribution</span><span class="special">(</span><span class="identifier">RealType</span> p <span class="special">=</span> <span class="number">0</span><span class="special">.</span><span class="number">25f</span><span class="special">)</span><span class="special">;</span></pre>Creates a new bernoulli distribution. </li>
+<pre class="literallayout"><a name="idp30189120-bb"></a><span class="identifier">bernoulli_distribution</span><span class="special">(</span><span class="identifier">RealType</span> p <span class="special">=</span> <span class="number">0</span><span class="special">.</span><span class="number">25f</span><span class="special">)</span><span class="special">;</span></pre>Creates a new bernoulli distribution. </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp56184448-bb"></a><span class="special">~</span><span class="identifier">bernoulli_distribution</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the <code class="computeroutput"><a class="link" href="bernoulli_distribution.html" title="Class template bernoulli_distribution">bernoulli_distribution</a></code> object. </li>
+<pre class="literallayout"><a name="idp30190688-bb"></a><span class="special">~</span><span class="identifier">bernoulli_distribution</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the <code class="computeroutput"><a class="link" href="bernoulli_distribution.html" title="Class template bernoulli_distribution">bernoulli_distribution</a></code> object. </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp96011424"></a><h3>
-<a name="idp56174080-bb"></a><code class="computeroutput">bernoulli_distribution</code> public member functions</h3>
+<a name="idp106832384"></a><h3>
+<a name="idp30180320-bb"></a><code class="computeroutput">bernoulli_distribution</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">RealType</span> <a name="idp56174640-bb"></a><span class="identifier">p</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the value of the parameter p. </li>
+<pre class="literallayout"><span class="identifier">RealType</span> <a name="idp30180880-bb"></a><span class="identifier">p</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the value of the parameter p. </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> OutputIterator<span class="special">,</span> <span class="keyword">typename</span> Generator<span class="special">&gt;</span> 
-  <span class="keyword">void</span> <a name="idp56176064-bb"></a><span class="identifier">generate</span><span class="special">(</span><span class="identifier">OutputIterator</span> first<span class="special">,</span> <span class="identifier">OutputIterator</span> last<span class="special">,</span> 
+  <span class="keyword">void</span> <a name="idp30182304-bb"></a><span class="identifier">generate</span><span class="special">(</span><span class="identifier">OutputIterator</span> first<span class="special">,</span> <span class="identifier">OutputIterator</span> last<span class="special">,</span> 
                 <span class="identifier">Generator</span> <span class="special">&amp;</span> generator<span class="special">,</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue<span class="special">)</span><span class="special">;</span></pre>
 <p>Generates bernoulli distributed booleans and stores them in the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>). </p>
 </li>

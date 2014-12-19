@@ -6,18 +6,18 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
 <link rel="up" href="../../boost_compute/reference.html#header.boost.compute.iterator.counting_iterator_hpp" title="Header &lt;boost/compute/iterator/counting_iterator.hpp&gt;">
-<link rel="prev" href="constant_iterator.html" title="Class template constant_iterator">
-<link rel="next" href="discard_iterator.html" title="Class discard_iterator">
+<link rel="prev" href="make_constant_iterator.html" title="Function template make_constant_iterator">
+<link rel="next" href="make_counting_iterator.html" title="Function template make_counting_iterator">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="spirit-nav">
-<a accesskey="p" href="constant_iterator.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_compute/reference.html#header.boost.compute.iterator.counting_iterator_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="discard_iterator.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="make_constant_iterator.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_compute/reference.html#header.boost.compute.iterator.counting_iterator_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="make_counting_iterator.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 <div class="refentry">
 <a name="boost.compute.counting_iterator"></a><div class="titlepage"></div>
 <div class="refnamediv">
 <h2><span class="refentrytitle">Class template counting_iterator</span></h2>
-<p>boost::compute::counting_iterator</p>
+<p>boost::compute::counting_iterator &#8212; The <a class="link" href="counting_iterator.html" title="Class template counting_iterator">counting_iterator</a> class implements a counting iterator. </p>
 </div>
 <h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
 <div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../boost_compute/reference.html#header.boost.compute.iterator.counting_iterator_hpp" title="Header &lt;boost/compute/iterator/counting_iterator.hpp&gt;">boost/compute/iterator/counting_iterator.hpp</a>&gt;
@@ -31,55 +31,72 @@
   <span class="keyword">typedef</span> <span class="identifier">super_type</span><span class="special">::</span><span class="identifier">difference_type</span> <a name="boost.compute.counting_iterator.difference_type"></a><span class="identifier">difference_type</span><span class="special">;</span>
 
   <span class="comment">// <a class="link" href="counting_iterator.html#boost.compute.counting_iteratorconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="counting_iterator.html#idp55657344-bb"><span class="identifier">counting_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="counting_iterator.html#idp55658320-bb"><span class="identifier">counting_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">counting_iterator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">counting_iterator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> <a class="link" href="counting_iterator.html#idp55659312-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">counting_iterator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="counting_iterator.html#idp55660608-bb"><span class="special">~</span><span class="identifier">counting_iterator</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="counting_iterator.html#idp29616368-bb"><span class="identifier">counting_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="counting_iterator.html#idp29617344-bb"><span class="identifier">counting_iterator</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="counting_iterator.html" title="Class template counting_iterator">counting_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="counting_iterator.html" title="Class template counting_iterator">counting_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> <a class="link" href="counting_iterator.html#idp29618768-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="counting_iterator.html" title="Class template counting_iterator">counting_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="counting_iterator.html#idp29620768-bb"><span class="special">~</span><span class="identifier">counting_iterator</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="counting_iterator.html#idp55652720-bb">public member functions</a></span>
-  <span class="identifier">size_t</span> <a class="link" href="counting_iterator.html#idp55653280-bb"><span class="identifier">get_index</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Expr<span class="special">&gt;</span> <span class="emphasis"><em><span class="identifier">unspecified</span></em></span> <a class="link" href="counting_iterator.html#idp55654400-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Expr</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="counting_iterator.html#idp29611744-bb">public member functions</a></span>
+  <span class="identifier">size_t</span> <a class="link" href="counting_iterator.html#idp29612304-bb"><span class="identifier">get_index</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Expr<span class="special">&gt;</span> <span class="emphasis"><em><span class="identifier">unspecified</span></em></span> <a class="link" href="counting_iterator.html#idp29613424-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Expr</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="counting_iterator.html#idp55660896-bb">private member functions</a></span>
-  <span class="identifier">reference</span> <a class="link" href="counting_iterator.html#idp55661472-bb"><span class="identifier">dereference</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">bool</span> <a class="link" href="counting_iterator.html#idp55662592-bb"><span class="identifier">equal</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">counting_iterator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="counting_iterator.html#idp55664416-bb"><span class="identifier">increment</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="counting_iterator.html#idp55665264-bb"><span class="identifier">decrement</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="counting_iterator.html#idp55666112-bb"><span class="identifier">advance</span></a><span class="special">(</span><span class="identifier">difference_type</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">difference_type</span> <a class="link" href="counting_iterator.html#idp55667648-bb"><span class="identifier">distance_to</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">counting_iterator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="counting_iterator.html#idp29621056-bb">private member functions</a></span>
+  <span class="identifier">reference</span> <a class="link" href="counting_iterator.html#idp29621632-bb"><span class="identifier">dereference</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="counting_iterator.html#idp29622752-bb"><span class="identifier">equal</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="counting_iterator.html" title="Class template counting_iterator">counting_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="counting_iterator.html#idp29625008-bb"><span class="identifier">increment</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="counting_iterator.html#idp29625856-bb"><span class="identifier">decrement</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="counting_iterator.html#idp29626704-bb"><span class="identifier">advance</span></a><span class="special">(</span><span class="identifier">difference_type</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">difference_type</span> <a class="link" href="counting_iterator.html#idp29628240-bb"><span class="identifier">distance_to</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="counting_iterator.html" title="Class template counting_iterator">counting_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp92921248"></a><h2>Description</h2>
+<a name="idp103525744"></a><h2>Description</h2>
+<p>A counting iterator returns an internal value (initialized with <code class="computeroutput">init</code>) which is incremented each time the iterator is incremented.</p>
+<p>For example, this could be used to implement the iota() algorithm in terms of the copy() algorithm by copying from a range of counting iterators:</p>
+<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">make_counting_iterator</span><span class="special">;</span>
+
+<a class="link" href="vector.html" title="Class template vector">boost::compute::vector&lt;int&gt;</a> <span class="identifier">result</span><span class="special">(</span><span class="number">5</span><span class="special">,</span> <span class="identifier">context</span><span class="special">)</span><span class="special">;</span>
+
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span>
+    <span class="identifier">make_counting_iterator</span><span class="special">(</span><span class="number">1</span><span class="special">)</span><span class="special">,</span> <span class="identifier">make_counting_iterator</span><span class="special">(</span><span class="number">6</span><span class="special">)</span><span class="special">,</span> <span class="identifier">result</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">queue</span>
+<span class="special">)</span><span class="special">;</span>
+
+<span class="comment">// result == { 1, 2, 3, 4, 5 }</span>
+</pre>
+<p> </p>
+<p><span class="bold"><strong>See Also:</strong></span></p>
+<p>make_counting_iterator() </p>
+<p>
+</p>
 <div class="refsect2">
-<a name="idp92921664"></a><h3>
+<a name="idp103553248"></a><h3>
 <a name="boost.compute.counting_iteratorconstruct-copy-destruct"></a><code class="computeroutput">counting_iterator</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><a name="idp55657344-bb"></a><span class="identifier">counting_iterator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span> init<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp55658320-bb"></a><span class="identifier">counting_iterator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">counting_iterator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">counting_iterator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> <a name="idp55659312-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">counting_iterator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp55660608-bb"></a><span class="special">~</span><span class="identifier">counting_iterator</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp29616368-bb"></a><span class="identifier">counting_iterator</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="special">&amp;</span> init<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp29617344-bb"></a><span class="identifier">counting_iterator</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="counting_iterator.html" title="Class template counting_iterator">counting_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a class="link" href="counting_iterator.html" title="Class template counting_iterator">counting_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> <a name="idp29618768-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="counting_iterator.html" title="Class template counting_iterator">counting_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idp29620768-bb"></a><span class="special">~</span><span class="identifier">counting_iterator</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp92952896"></a><h3>
-<a name="idp55652720-bb"></a><code class="computeroutput">counting_iterator</code> public member functions</h3>
+<a name="idp103584832"></a><h3>
+<a name="idp29611744-bb"></a><code class="computeroutput">counting_iterator</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><span class="identifier">size_t</span> <a name="idp55653280-bb"></a><span class="identifier">get_index</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Expr<span class="special">&gt;</span> <span class="emphasis"><em><span class="identifier">unspecified</span></em></span> <a name="idp55654400-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Expr</span> <span class="special">&amp;</span> expr<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">size_t</span> <a name="idp29612304-bb"></a><span class="identifier">get_index</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Expr<span class="special">&gt;</span> <span class="emphasis"><em><span class="identifier">unspecified</span></em></span> <a name="idp29613424-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Expr</span> <span class="special">&amp;</span> expr<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp92970944"></a><h3>
-<a name="idp55660896-bb"></a><code class="computeroutput">counting_iterator</code> private member functions</h3>
+<a name="idp103602704"></a><h3>
+<a name="idp29621056-bb"></a><code class="computeroutput">counting_iterator</code> private member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><span class="identifier">reference</span> <a name="idp55661472-bb"></a><span class="identifier">dereference</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">bool</span> <a name="idp55662592-bb"></a><span class="identifier">equal</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">counting_iterator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp55664416-bb"></a><span class="identifier">increment</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp55665264-bb"></a><span class="identifier">decrement</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp55666112-bb"></a><span class="identifier">advance</span><span class="special">(</span><span class="identifier">difference_type</span> n<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">difference_type</span> <a name="idp55667648-bb"></a><span class="identifier">distance_to</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">counting_iterator</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">reference</span> <a name="idp29621632-bb"></a><span class="identifier">dereference</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">bool</span> <a name="idp29622752-bb"></a><span class="identifier">equal</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="counting_iterator.html" title="Class template counting_iterator">counting_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp29625008-bb"></a><span class="identifier">increment</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp29625856-bb"></a><span class="identifier">decrement</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp29626704-bb"></a><span class="identifier">advance</span><span class="special">(</span><span class="identifier">difference_type</span> n<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">difference_type</span> <a name="idp29628240-bb"></a><span class="identifier">distance_to</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="counting_iterator.html" title="Class template counting_iterator">counting_iterator</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&amp;</span> other<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 </div>
@@ -94,7 +111,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="constant_iterator.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_compute/reference.html#header.boost.compute.iterator.counting_iterator_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="discard_iterator.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="make_constant_iterator.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_compute/reference.html#header.boost.compute.iterator.counting_iterator_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="make_counting_iterator.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
