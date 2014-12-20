@@ -150,7 +150,11 @@ private:
     size_t m_index;
 };
 
-/// Returns a new discard iterator with \p index.
+/// Returns a new discard_iterator with \p index.
+///
+/// \param index the index of the iterator
+///
+/// \return a \c discard_iterator at \p index
 inline discard_iterator make_discard_iterator(size_t index = 0)
 {
     return discard_iterator(index);

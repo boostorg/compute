@@ -125,6 +125,36 @@ inline T dispatch_accumulate(InputIterator first,
 ///
 /// If no function is specified, \c plus will be used.
 ///
+/// \param first first element in the input range
+/// \param last last element in the input range
+/// \param init initial value
+/// \param function binary reduction function
+/// \param queue command queue to perform the operation
+///
+/// \return the accumulated result value
+///
+/// In specific situations the call to \c accumulate() can be automatically
+/// optimized to a call to the more efficient \c reduce() algorithm. This
+/// occurs when the binary reduction function is recognized as associative
+/// (such as the \c plus<int> function).
+///
+/// Note that because floating-point addition is not associative, calling
+/// \c accumulate() with \c plus<float> results in a less efficient serial
+/// reduction algorithm being executed. If a slight loss in precision is
+/// acceptable, the more efficient parallel \c reduce() algorithm should be
+/// used instead.
+///
+/// For example:
+/// \code
+/// // with vec = boost::compute::vector<int>
+/// accumulate(vec.begin(), vec.end(), 0, plus<int>());   // fast
+/// reduce(vec.begin(), vec.end(), &result, plus<int>()); // fast
+///
+/// // with vec = boost::compute::vector<float>
+/// accumulate(vec.begin(), vec.end(), 0, plus<float>());   // slow
+/// reduce(vec.begin(), vec.end(), &result, plus<float>()); // fast
+/// \endcode
+///
 /// \see reduce()
 template<class InputIterator, class T, class BinaryFunction>
 inline T accumulate(InputIterator first,

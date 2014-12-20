@@ -66,6 +66,18 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
 } // end detail namespace
 
+/// \class counting_iterator
+/// \brief The counting_iterator class implements a counting iterator.
+///
+/// A counting iterator returns an internal value (initialized with \p init)
+/// which is incremented each time the iterator is incremented.
+///
+/// For example, this could be used to implement the iota() algorithm in terms
+/// of the copy() algorithm by copying from a range of counting iterators:
+///
+/// \snippet test/test_counting_iterator.cpp iota_with_copy
+///
+/// \see make_counting_iterator()
 template<class T>
 class counting_iterator : public detail::counting_iterator_base<T>::type
 {
@@ -146,6 +158,17 @@ private:
     T m_init;
 };
 
+/// Returns a new counting_iterator starting at \p init.
+///
+/// \param init the initial value
+///
+/// \return a counting_iterator with \p init.
+///
+/// For example, to create a counting iterator which returns unsigned integers
+/// and increments from one:
+/// \code
+/// auto iter = make_counting_iterator<uint_>(1);
+/// \endcode
 template<class T>
 inline counting_iterator<T> make_counting_iterator(const T &init)
 {

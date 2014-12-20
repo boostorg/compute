@@ -47,6 +47,14 @@ public:
 /// \class constant_iterator
 /// \brief An iterator with a constant value.
 ///
+/// The constant_iterator class provides an iterator which returns a constant
+/// value when dereferenced.
+///
+/// For example, this could be used to implement the fill() algorithm in terms
+/// of the copy() algorithm by copying from a range of constant iterators:
+///
+/// \snippet test/test_constant_iterator.cpp fill_with_copy
+///
 /// \see make_constant_iterator()
 template<class T>
 class constant_iterator : public detail::constant_iterator_base<T>::type
@@ -140,7 +148,12 @@ private:
     size_t m_index;
 };
 
-/// Returns a new constant iterator with \p value at \p index.
+/// Returns a new constant_iterator with \p value at \p index.
+///
+/// \param value the constant value
+/// \param index the iterators index
+///
+/// \return a \c constant_iterator with \p value
 template<class T>
 inline constant_iterator<T>
 make_constant_iterator(const T &value, size_t index = 0)

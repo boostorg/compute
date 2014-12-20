@@ -76,8 +76,13 @@ struct hash_impl
 /// The return type is \c ulong_ (the OpenCL unsigned long type).
 template<class Key> struct hash;
 
+/// \internal_
 template<> struct hash<int_> : detail::hash_impl<int_> { };
+
+/// \internal_
 template<> struct hash<uint_> : detail::hash_impl<uint_> { };
+
+/// \internal_
 template<> struct hash<float_> : detail::hash_impl<float_> { };
 
 } // end compute namespace

@@ -22,9 +22,19 @@
 namespace boost {
 namespace compute {
 
-/// The dynamic_bitset class contains a resizable bit array.
+/// \class dynamic_bitset
+/// \brief The dynamic_bitset class contains a resizable bit array.
 ///
-/// \see vector<T>
+/// For example, to create a dynamic-bitset with space for 1000 bits on the
+/// device:
+/// \code
+/// boost::compute::dynamic_bitset<> bits(1000, queue);
+/// \endcode
+///
+/// The Boost.Compute \c dynamic_bitset class provides a STL-like API and is
+/// modeled after the \c boost::dynamic_bitset class from Boost.
+///
+/// \see \ref vector "vector<T>"
 template<class Block = ulong_, class Alloc = buffer_allocator<Block> >
 class dynamic_bitset
 {

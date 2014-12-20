@@ -43,6 +43,16 @@ public:
 
 } // end detail namespace
 
+/// \class constant_buffer_iterator
+/// \brief An iterator for a buffer in the \c constant memory space.
+///
+/// The constant_buffer_iterator class provides an iterator for values in a
+/// buffer in the \c constant memory space.
+///
+/// For iterating over values in the \c global memory space (the most common
+/// case), use the buffer_iterator class.
+///
+/// \see buffer_iterator
 template<class T>
 class constant_buffer_iterator :
     public detail::constant_buffer_iterator_base<T>::type
@@ -160,6 +170,12 @@ private:
     size_t m_index;
 };
 
+/// Creates a new constant_buffer_iterator for \p buffer at \p index.
+///
+/// \param buffer the \ref buffer object
+/// \param index the index in the buffer
+///
+/// \return a \c constant_buffer_iterator for \p buffer at \p index
 template<class T>
 inline constant_buffer_iterator<T>
 make_constant_buffer_iterator(const buffer &buffer, size_t index = 0)

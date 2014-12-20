@@ -102,7 +102,8 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 ///
 /// The buffer_iterator class iterates over values in a memory buffer on a
 /// compute device. It is the most commonly used iterator in Boost.Compute
-/// and is used by the vector<T> and array<T, N> container classes.
+/// and is used by the \ref vector "vector<T>" and \ref array "array<T, N>"
+/// container classes.
 ///
 /// Buffer iterators store a reference to a memory buffer along with an index
 /// into that memory buffer.
@@ -241,7 +242,12 @@ private:
     size_t m_index;
 };
 
-/// Creates a new buffer_iterator for \p buffer at \p index.
+/// Creates a new \ref buffer_iterator for \p buffer at \p index.
+///
+/// \param buffer the \ref buffer object
+/// \param index the index in the buffer
+///
+/// \return a \c buffer_iterator for \p buffer at \p index
 template<class T>
 inline buffer_iterator<T>
 make_buffer_iterator(const buffer &buffer, size_t index = 0)

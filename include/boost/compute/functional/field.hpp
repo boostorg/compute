@@ -55,7 +55,7 @@ struct invoked_field
 /// field<int2_>("xz");
 /// \endcode
 ///
-/// \see get<N>()
+/// \see \ref get "get<N>"
 template<class T>
 class field
 {

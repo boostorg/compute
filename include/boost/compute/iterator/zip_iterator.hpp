@@ -160,6 +160,14 @@ void decrement_iterator(Iterator &i)
 
 } // end detail namespace
 
+/// \class zip_iterator
+/// \brief A zip iterator adaptor.
+///
+/// The zip_iterator class combines values from multiple input iterators. When
+/// dereferenced it returns a tuple containing each value at the current
+/// position in each input range.
+///
+/// \see make_zip_iterator()
 template<class IteratorTuple>
 class zip_iterator : public detail::zip_iterator_base<IteratorTuple>::type
 {
@@ -250,6 +258,19 @@ private:
     IteratorTuple m_iterators;
 };
 
+/// Creates a zip_iterator for \p iterators.
+///
+/// \param iterators a tuple of input iterators to zip together
+///
+/// \return a \c zip_iterator for \p iterators
+///
+/// For example, to zip together iterators from three vectors (\c a, \c b, and
+/// \p c):
+/// \code
+/// auto zipped = boost::compute::make_zip_iterator(
+///     boost::make_tuple(a.begin(), b.begin(), c.begin())
+/// );
+/// \endcode
 template<class IteratorTuple>
 inline zip_iterator<IteratorTuple>
 make_zip_iterator(IteratorTuple iterators)
