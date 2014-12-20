@@ -26,17 +26,10 @@ namespace compute {
 /// \p result.
 ///
 /// For example, to calculate the absolute value for each element in a vector:
-/// \code
-/// int data[] = { -1, -2, -3, -4 };
-/// boost::compute::vector<int> vec(data, data + 4, queue);
 ///
-/// using boost::compute::abs;
+/// \snippet test/test_transform.cpp transform_abs
 ///
-/// // calculate the absolute value for each element in-place
-/// boost::compute::transform(
-///     vec.begin(), vec.end(), vec.begin(), abs<int>(), queue
-/// );
-/// \endcode
+/// \see copy()
 template<class InputIterator, class OutputIterator, class UnaryOperator>
 inline OutputIterator transform(InputIterator first,
                                 InputIterator last,

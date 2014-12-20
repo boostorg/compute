@@ -65,6 +65,14 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
 } // end detail namespace
 
+/// \class function_input_iterator
+/// \brief Iterator which returns the result of a function when dereferenced
+///
+/// For example:
+///
+/// \snippet test/test_function_input_iterator.cpp generate_42
+///
+/// \see make_function_input_iterator()
 template<class Function>
 class function_input_iterator :
     public detail::function_input_iterator_base<Function>::type
@@ -155,6 +163,12 @@ private:
     size_t m_index;
 };
 
+/// Returns a function_input_iterator with \p function.
+///
+/// \param function function to execute when dereferenced
+/// \param index index of the iterator
+///
+/// \return a \c function_input_iterator with \p function
 template<class Function>
 inline function_input_iterator<Function>
 make_function_input_iterator(const Function &function, size_t index = 0)

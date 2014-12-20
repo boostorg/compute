@@ -18,7 +18,7 @@ namespace boost {
 namespace compute {
 
 #ifndef BOOST_NO_VARIADIC_TEMPLATES
-/// The variadic dim() function provides a concise syntax for creating
+/// The variadic \c dim() function provides a concise syntax for creating
 /// \ref extents objects.
 ///
 /// For example,
@@ -26,7 +26,7 @@ namespace compute {
 /// extents<2> region = dim(640, 480); // region == (640, 480)
 /// \endcode
 ///
-/// \see extents<N>
+/// \see \ref extents "extents<N>"
 template<class... Args>
 inline extents<sizeof...(Args)> dim(Args... args)
 {

@@ -14,11 +14,13 @@
 #include <boost/compute/cl.hpp>
 #include <boost/compute/function.hpp>
 
+#ifndef BOOST_COMPUTE_DOXYGEN_INVOKED
 #ifdef CL_VERSION_1_1
   #define BOOST_COMPUTE_DETAIL_ATOMIC_PREFIX "atomic_"
 #else
   #define BOOST_COMPUTE_DETAIL_ATOMIC_PREFIX "atom_"
 #endif
+#endif // BOOST_COMPUTE_DOXYGEN_INVOKED
 
 namespace boost {
 namespace compute {

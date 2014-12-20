@@ -25,6 +25,20 @@
 namespace boost {
 namespace compute {
 
+/// \class basic_string
+/// \brief A template for a dynamically-sized character sequence.
+///
+/// The \c basic_string class provides a generic template for a dynamically-
+/// sized character sequence. This is most commonly used through the \c string
+/// typedef (for \c basic_string<char>).
+///
+/// For example, to create a string on the device with its contents copied
+/// from a C-string on the host:
+/// \code
+/// boost::compute::string str("hello, world!");
+/// \endcode
+///
+/// \see \ref vector "vector<T>"
 template<class CharT, class Traits = std::char_traits<CharT> >
 class basic_string
 {

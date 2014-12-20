@@ -12,6 +12,16 @@ following command:
 git clone git://github.com/kylelutz/compute.git
 ``
 
+Ubuntu users can install Boost.Compute from the PPA:
+
+``
+# add the boost.compute ppa
+sudo add-apt-repository ppa:kylelutz/compute
+
+# update and install boost-compute
+sudo apt-get update && sudo apt-get install boost-compute
+``
+
 [section Compilation and Usage]
 
 Boost.Compute is a header-only library, so no linking is required. To use the
@@ -41,6 +51,43 @@ namespace and can be brought into global scope with:
 ``
 using namespace boost::compute;
 ``
+
+[endsect]
+
+[section Configuration Macros]
+
+Boost.Compute provides a number of optional features which can be configured
+with the following macros.
+
+[table
+    [[Macro] [Description]]
+    [
+        [[^BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION]][
+            When defined, if program::build() fails, the program source and
+            build log will be written to stdout.
+        ]
+    ]
+    [
+        [[^BOOST_COMPUTE_HAVE_THREAD_LOCAL]][
+            Enables the use of C++11 [^thread_local] storage specifier.
+        ]
+    ]
+    [
+        [[^BOOST_COMPUTE_THREAD_SAFE]][
+            Builds Boost.Compute in a thread-safe mode. This requires either
+            support for C++11 thread-local storage (via defining the
+            [^BOOST_COMPUTE_HAVE_THREAD_LOCAL] macro) or linking with
+            Boost.Thread.
+        ]
+    ]
+    [
+        [[^BOOST_COMPUTE_USE_OFFLINE_CACHE]][
+            Enables the offline-cache which stores compiled binaries on disk.
+            This option requires linking with Boost.Filesystem and
+            Boost.System.
+        ]
+    ]
+]
 
 [endsect]
 

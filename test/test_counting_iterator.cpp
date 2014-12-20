@@ -80,4 +80,21 @@ BOOST_AUTO_TEST_CASE(copy)
     );
 }
 
+BOOST_AUTO_TEST_CASE(iota_with_copy_doctest)
+{
+//! [iota_with_copy]
+using boost::compute::make_counting_iterator;
+
+boost::compute::vector<int> result(5, context);
+
+boost::compute::copy(
+    make_counting_iterator(1), make_counting_iterator(6), result.begin(), queue
+);
+
+// result == { 1, 2, 3, 4, 5 }
+//! [iota_with_copy]
+
+    CHECK_RANGE_EQUAL(int, 5, result, (1, 2, 3, 4, 5));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -76,6 +76,19 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
 } // end detail namespace
 
+/// \class permutation_iterator
+/// \brief The permutation_iterator class provides a permuation iterator
+///
+/// A permutation iterator iterates over a value range and an index range. When
+/// dereferenced, it returns the value from the value range using the current
+/// index from the index range.
+///
+/// For example, to reverse a range using the copy() algorithm and a permutation
+/// sequence:
+///
+/// \snippet test/test_permutation_iterator.cpp reverse_range
+///
+/// \see make_permutation_iterator()
 template<class ElementIterator, class IndexIterator>
 class permutation_iterator
     : public detail::permutation_iterator_base<ElementIterator,
@@ -155,6 +168,12 @@ private:
     IndexIterator m_map;
 };
 
+/// Returns a permutation_iterator for \p e using indices from \p i.
+///
+/// \param e the element range iterator
+/// \param i the index range iterator
+///
+/// \return a \c permutation_iterator for \p e using \p i
 template<class ElementIterator, class IndexIterator>
 inline permutation_iterator<ElementIterator, IndexIterator>
 make_permutation_iterator(ElementIterator e, IndexIterator i)
