@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------//
-// Copyright (c) 2014 Roshan <thisisroshansmail@gmail.com>
+// Copyright (c) 2013-2014 Kyle Lutz <kyle.r.lutz@gmail.com>
 //
 // Distributed under the Boost Software License, Version 1.0
 // See accompanying file LICENSE_1_0.txt or copy at
@@ -8,9 +8,14 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#include <vector>
 #include <algorithm>
-#include <iostream>
+#include <cstdlib>
+
+#include <thrust/copy.h>
+#include <thrust/device_vector.h>
+#include <thrust/generate.h>
+#include <thrust/host_vector.h>
+#include <thrust/unique.h>
 
 #include "perf.hpp"
 
@@ -24,31 +29,21 @@ int main(int argc, char *argv[])
     perf_parse_args(argc, argv);
 
     std::cout << "size: " << PERF_N << std::endl;
+    thrust::host_vector<int> h_vec(PERF_N);
+    std::generate(h_vec.begin(), h_vec.end(), rand_int);
 
-    std::vector<int> v1(std::floor(PERF_N / 2.0));
-    std::vector<int> v2(std::ceil(PERF_N / 2.0));
-
-    std::generate(v1.begin(), v1.end(), rand_int);
-    std::generate(v2.begin(), v2.end(), rand_int);
-
-    std::sort(v1.begin(), v1.end());
-    std::sort(v2.begin(), v2.end());
-
-    std::vector<int> v3(PERF_N);
-    std::vector<int>::iterator v3_end;
+    thrust::device_vector<int> d_vec(PERF_N);
 
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
+        d_vec = h_vec;
+
         t.start();
-        v3_end = std::set_difference(
-            v1.begin(), v1.end(),
-            v2.begin(), v2.end(),
-            v3.begin()
-        );
+        thrust::unique(d_vec.begin(), d_vec.end());
+        cudaDeviceSynchronize();
         t.stop();
     }
     std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
-    std::cout << "size: " << std::distance(v3.begin(), v3_end) << std::endl;
 
     return 0;
 }

@@ -49,6 +49,10 @@ int main(int argc, char *argv[])
 
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
+        boost::compute::copy(
+            host_vector.begin(), host_vector.end(), device_vector.begin(), queue
+        );
+
         t.start();
         boost::compute::partition(
             device_vector.begin(), device_vector.end(), _1 < 10, queue
