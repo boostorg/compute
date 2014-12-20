@@ -30,18 +30,18 @@
 
   <span class="comment">// <a class="link" href="discrete_distribution.html#boost.compute.discrete_distributionconstruct-copy-destruct">construct/copy/destruct</a></span>
   <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator<span class="special">&gt;</span> 
-    <a class="link" href="discrete_distribution.html#idp30213792-bb"><span class="identifier">discrete_distribution</span></a><span class="special">(</span><span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">InputIterator</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="discrete_distribution.html#idp30217664-bb"><span class="special">~</span><span class="identifier">discrete_distribution</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+    <a class="link" href="discrete_distribution.html#idp53177808-bb"><span class="identifier">discrete_distribution</span></a><span class="special">(</span><span class="identifier">InputIterator</span><span class="special">,</span> <span class="identifier">InputIterator</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="discrete_distribution.html#idp53181680-bb"><span class="special">~</span><span class="identifier">discrete_distribution</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="discrete_distribution.html#idp30203552-bb">public member functions</a></span>
-  <span class="identifier">result_type</span> <a class="link" href="discrete_distribution.html#idp30204112-bb"><span class="identifier">n</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <span class="keyword">double</span> <span class="special">&gt;</span> <a class="link" href="discrete_distribution.html#idp30205536-bb"><span class="identifier">probabilities</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="discrete_distribution.html#idp53167568-bb">public member functions</a></span>
+  <span class="identifier">result_type</span> <a class="link" href="discrete_distribution.html#idp53168128-bb"><span class="identifier">n</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <span class="keyword">double</span> <span class="special">&gt;</span> <a class="link" href="discrete_distribution.html#idp53169552-bb"><span class="identifier">probabilities</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
   <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> OutputIterator<span class="special">,</span> <span class="keyword">typename</span> Generator<span class="special">&gt;</span> 
-    <span class="keyword">void</span> <a class="link" href="discrete_distribution.html#idp30206960-bb"><span class="identifier">generate</span></a><span class="special">(</span><span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">Generator</span> <span class="special">&amp;</span><span class="special">,</span> 
+    <span class="keyword">void</span> <a class="link" href="discrete_distribution.html#idp53170976-bb"><span class="identifier">generate</span></a><span class="special">(</span><span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">OutputIterator</span><span class="special">,</span> <span class="identifier">Generator</span> <span class="special">&amp;</span><span class="special">,</span> 
                   <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp106936080"></a><h2>Description</h2>
+<a name="idp115294528"></a><h2>Description</h2>
 <p>The following example shows how to setup a discrete distribution to produce 0 and 1 with equal probability</p>
 <pre class="programlisting"><span class="comment">// initialize the default random engine</span>
 <a class="link" href="mersenne_twister_engine.html" title="Class template mersenne_twister_engine">boost::compute::default_random_engine</a> <span class="identifier">engine</span><span class="special">(</span><span class="identifier">queue</span><span class="special">)</span><span class="special">;</span>
@@ -57,31 +57,31 @@
 <span class="identifier">distribution</span><span class="special">.</span><span class="identifier">generate</span><span class="special">(</span><span class="identifier">vec</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">vec</span><span class="special">.</span><span class="identifier">end</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">engine</span><span class="special">,</span> <span class="identifier">queue</span><span class="special">)</span><span class="special">;</span>
 </pre>
 <div class="refsect2">
-<a name="idp106968864"></a><h3>
+<a name="idp115327312"></a><h3>
 <a name="boost.compute.discrete_distributionconstruct-copy-destruct"></a><code class="computeroutput">discrete_distribution</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> InputIterator<span class="special">&gt;</span> 
-  <a name="idp30213792-bb"></a><span class="identifier">discrete_distribution</span><span class="special">(</span><span class="identifier">InputIterator</span> first<span class="special">,</span> <span class="identifier">InputIterator</span> last<span class="special">)</span><span class="special">;</span></pre>
+  <a name="idp53177808-bb"></a><span class="identifier">discrete_distribution</span><span class="special">(</span><span class="identifier">InputIterator</span> first<span class="special">,</span> <span class="identifier">InputIterator</span> last<span class="special">)</span><span class="special">;</span></pre>
 <p>Creates a new discrete distribution with weights given by the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>) </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp30217664-bb"></a><span class="special">~</span><span class="identifier">discrete_distribution</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the <code class="computeroutput"><a class="link" href="discrete_distribution.html" title="Class template discrete_distribution">discrete_distribution</a></code> object. </li>
+<pre class="literallayout"><a name="idp53181680-bb"></a><span class="special">~</span><span class="identifier">discrete_distribution</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the <code class="computeroutput"><a class="link" href="discrete_distribution.html" title="Class template discrete_distribution">discrete_distribution</a></code> object. </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp106986624"></a><h3>
-<a name="idp30203552-bb"></a><code class="computeroutput">discrete_distribution</code> public member functions</h3>
+<a name="idp115345136"></a><h3>
+<a name="idp53167568-bb"></a><code class="computeroutput">discrete_distribution</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">result_type</span> <a name="idp30204112-bb"></a><span class="identifier">n</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the value of n. </li>
+<pre class="literallayout"><span class="identifier">result_type</span> <a name="idp53168128-bb"></a><span class="identifier">n</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the value of n. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <span class="keyword">double</span> <span class="special">&gt;</span> <a name="idp30205536-bb"></a><span class="identifier">probabilities</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the probabilities. </li>
+<pre class="literallayout"><span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span> <span class="keyword">double</span> <span class="special">&gt;</span> <a name="idp53169552-bb"></a><span class="identifier">probabilities</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the probabilities. </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> OutputIterator<span class="special">,</span> <span class="keyword">typename</span> Generator<span class="special">&gt;</span> 
-  <span class="keyword">void</span> <a name="idp30206960-bb"></a><span class="identifier">generate</span><span class="special">(</span><span class="identifier">OutputIterator</span> first<span class="special">,</span> <span class="identifier">OutputIterator</span> last<span class="special">,</span> 
+  <span class="keyword">void</span> <a name="idp53170976-bb"></a><span class="identifier">generate</span><span class="special">(</span><span class="identifier">OutputIterator</span> first<span class="special">,</span> <span class="identifier">OutputIterator</span> last<span class="special">,</span> 
                 <span class="identifier">Generator</span> <span class="special">&amp;</span> generator<span class="special">,</span> <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue<span class="special">)</span><span class="special">;</span></pre>
 <p>Generates uniformily distributed integers and stores them to the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>). </p>
 </li>

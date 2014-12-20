@@ -7,11 +7,11 @@
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Compute">
 <link rel="up" href="../../boost_compute/reference.html#header.boost.compute.exception.opencl_error_hpp" title="Header &lt;boost/compute/exception/opencl_error.hpp&gt;">
 <link rel="prev" href="context_error.html" title="Class context_error">
-<link rel="next" href="unsupported_ex_idp29178384.html" title="Class unsupported_extension_error">
+<link rel="next" href="unsupported_ex_idp52142400.html" title="Class unsupported_extension_error">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="spirit-nav">
-<a accesskey="p" href="context_error.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_compute/reference.html#header.boost.compute.exception.opencl_error_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="unsupported_ex_idp29178384.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="context_error.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_compute/reference.html#header.boost.compute.exception.opencl_error_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="unsupported_ex_idp52142400.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 <div class="refentry">
 <a name="boost.compute.opencl_error"></a><div class="titlepage"></div>
@@ -26,53 +26,53 @@
 <span class="keyword">class</span> <a class="link" href="opencl_error.html" title="Class opencl_error">opencl_error</a> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">exception</span> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="opencl_error.html#boost.compute.opencl_errorconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <span class="keyword">explicit</span> <a class="link" href="opencl_error.html#idp29166816-bb"><span class="identifier">opencl_error</span></a><span class="special">(</span><span class="identifier">cl_int</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="opencl_error.html#idp29169536-bb"><span class="special">~</span><span class="identifier">opencl_error</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="opencl_error.html#idp52130832-bb"><span class="identifier">opencl_error</span></a><span class="special">(</span><span class="identifier">cl_int</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="opencl_error.html#idp52133552-bb"><span class="special">~</span><span class="identifier">opencl_error</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="opencl_error.html#idp29161792-bb">public member functions</a></span>
-  <span class="identifier">cl_int</span> <a class="link" href="opencl_error.html#idp29162352-bb"><span class="identifier">error_code</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="opencl_error.html#idp29163776-bb"><span class="identifier">error_string</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a class="link" href="opencl_error.html#idp29165216-bb"><span class="identifier">what</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="opencl_error.html#idp52125808-bb">public member functions</a></span>
+  <span class="identifier">cl_int</span> <a class="link" href="opencl_error.html#idp52126368-bb"><span class="identifier">error_code</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="opencl_error.html#idp52127792-bb"><span class="identifier">error_string</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a class="link" href="opencl_error.html#idp52129232-bb"><span class="identifier">what</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="opencl_error.html#idp29170848-bb">public static functions</a></span>
-  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="opencl_error.html#idp29171408-bb"><span class="identifier">to_string</span></a><span class="special">(</span><span class="identifier">cl_int</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="opencl_error.html#idp52134864-bb">public static functions</a></span>
+  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="opencl_error.html#idp52135424-bb"><span class="identifier">to_string</span></a><span class="special">(</span><span class="identifier">cl_int</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp100768864"></a><h2>Description</h2>
+<a name="idp109188416"></a><h2>Description</h2>
 <p>The <a class="link" href="opencl_error.html" title="Class opencl_error">opencl_error</a> class represents an error returned from an OpenCL function.</p>
 <p><span class="bold"><strong>See Also:</strong></span></p>
 <p><a class="link" href="context_error.html" title="Class context_error">context_error</a> </p>
 <p>
 </p>
 <div class="refsect2">
-<a name="idp100772432"></a><h3>
+<a name="idp109191984"></a><h3>
 <a name="boost.compute.opencl_errorconstruct-copy-destruct"></a><code class="computeroutput">opencl_error</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp29166816-bb"></a><span class="identifier">opencl_error</span><span class="special">(</span><span class="identifier">cl_int</span> error<span class="special">)</span><span class="special">;</span></pre>Creates a new <code class="computeroutput"><a class="link" href="opencl_error.html" title="Class opencl_error">opencl_error</a></code> exception object for <code class="computeroutput">error</code>. </li>
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp52130832-bb"></a><span class="identifier">opencl_error</span><span class="special">(</span><span class="identifier">cl_int</span> error<span class="special">)</span><span class="special">;</span></pre>Creates a new <code class="computeroutput"><a class="link" href="opencl_error.html" title="Class opencl_error">opencl_error</a></code> exception object for <code class="computeroutput">error</code>. </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp29169536-bb"></a><span class="special">~</span><span class="identifier">opencl_error</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the <code class="computeroutput"><a class="link" href="opencl_error.html" title="Class opencl_error">opencl_error</a></code> object. </li>
+<pre class="literallayout"><a name="idp52133552-bb"></a><span class="special">~</span><span class="identifier">opencl_error</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destroys the <code class="computeroutput"><a class="link" href="opencl_error.html" title="Class opencl_error">opencl_error</a></code> object. </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp100787472"></a><h3>
-<a name="idp29161792-bb"></a><code class="computeroutput">opencl_error</code> public member functions</h3>
+<a name="idp109207024"></a><h3>
+<a name="idp52125808-bb"></a><code class="computeroutput">opencl_error</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp29162352-bb"></a><span class="identifier">error_code</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the numeric error code. </li>
+<pre class="literallayout"><span class="identifier">cl_int</span> <a name="idp52126368-bb"></a><span class="identifier">error_code</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns the numeric error code. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp29163776-bb"></a><span class="identifier">error_string</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns a string description of the error. </li>
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp52127792-bb"></a><span class="identifier">error_string</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns a string description of the error. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a name="idp29165216-bb"></a><span class="identifier">what</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns a C-string description of the error. </li>
+<pre class="literallayout"><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> <a name="idp52129232-bb"></a><span class="identifier">what</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Returns a C-string description of the error. </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp100807632"></a><h3>
-<a name="idp29170848-bb"></a><code class="computeroutput">opencl_error</code> public static functions</h3>
+<a name="idp109227184"></a><h3>
+<a name="idp52134864-bb"></a><code class="computeroutput">opencl_error</code> public static functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp29171408-bb"></a><span class="identifier">to_string</span><span class="special">(</span><span class="identifier">cl_int</span> error<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp52135424-bb"></a><span class="identifier">to_string</span><span class="special">(</span><span class="identifier">cl_int</span> error<span class="special">)</span><span class="special">;</span></pre>
 <p>Static function which converts the numeric OpenCL error code <code class="computeroutput">error</code> to a human-readable string.</p>
 <p>For example: </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">opencl_error</span><span class="special">::</span><span class="identifier">to_string</span><span class="special">(</span><span class="identifier">CL_INVALID_KERNEL_ARGS</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
@@ -93,7 +93,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="context_error.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_compute/reference.html#header.boost.compute.exception.opencl_error_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="unsupported_ex_idp29178384.html"><img src="../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="context_error.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_compute/reference.html#header.boost.compute.exception.opencl_error_hpp"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="unsupported_ex_idp52142400.html"><img src="../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

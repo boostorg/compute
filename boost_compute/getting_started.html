@@ -21,6 +21,8 @@
 <dt><span class="section"><a href="getting_started.html#boost_compute.getting_started.downloading">Downloading</a></span></dt>
 <dt><span class="section"><a href="getting_started.html#boost_compute.getting_started.compilation_and_usage">Compilation
       and Usage</a></span></dt>
+<dt><span class="section"><a href="getting_started.html#boost_compute.getting_started.configuration_macros">Configuration
+      Macros</a></span></dt>
 <dt><span class="section"><a href="getting_started.html#boost_compute.getting_started.installation">Installation</a></span></dt>
 <dt><span class="section"><a href="getting_started.html#boost_compute.getting_started.support">Support</a></span></dt>
 </dl></div>
@@ -98,6 +100,89 @@
 </pre>
 <p>
       </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_compute.getting_started.configuration_macros"></a><a class="link" href="getting_started.html#boost_compute.getting_started.configuration_macros" title="Configuration Macros">Configuration
+      Macros</a>
+</h3></div></div></div>
+<p>
+        Boost.Compute provides a number of optional features which can be configured
+        with the following macros.
+      </p>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+                <p>
+                  Macro
+                </p>
+              </th>
+<th>
+                <p>
+                  Description
+                </p>
+              </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+                <p>
+                  <code class="literal">BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION</code>
+                </p>
+              </td>
+<td>
+                <p>
+                  When defined, if program::build() fails, the program source and
+                  build log will be written to stdout.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="literal">BOOST_COMPUTE_HAVE_THREAD_LOCAL</code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Enables the use of C++11 <code class="literal">thread_local</code> storage
+                  specifier.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="literal">BOOST_COMPUTE_THREAD_SAFE</code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Builds Boost.Compute in a thread-safe mode. This requires either
+                  support for C++11 thread-local storage (via defining the <code class="literal">BOOST_COMPUTE_HAVE_THREAD_LOCAL</code>
+                  macro) or linking with Boost.Thread.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="literal">BOOST_COMPUTE_USE_OFFLINE_CACHE</code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Enables the offline-cache which stores compiled binaries on disk.
+                  This option requires linking with Boost.Filesystem and Boost.System.
+                </p>
+              </td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">

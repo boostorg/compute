@@ -32,20 +32,52 @@
   <span class="keyword">void</span> <span class="identifier">reduce</span><span class="special">(</span><span class="identifier">InputIterator</span> first<span class="special">,</span> <span class="identifier">InputIterator</span> last<span class="special">,</span> <span class="identifier">OutputIterator</span> result<span class="special">,</span> 
               <a class="link" href="command_queue.html" title="Class command_queue">command_queue</a> <span class="special">&amp;</span> queue <span class="special">=</span> <span class="identifier">system</span><span class="special">::</span><span class="identifier">default_queue</span><span class="special">(</span><span class="special">)</span><span class="special">)</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp90119040"></a><h2>Description</h2>
+<a name="idp98439872"></a><h2>Description</h2>
 <p>Returns the result of applying <code class="computeroutput">function</code> to the elements in the range [<code class="computeroutput">first</code>, <code class="computeroutput">last</code>).</p>
 <p>If no function is specified, <code class="computeroutput">plus</code> will be used.</p>
-<p>The difference between the reduce() function and the accumulate() function is that reduce() requires the binary operator to be commutative.</p>
+<p>
+The <code class="computeroutput">reduce()</code> algorithm assumes that the binary reduction function is associative. When used with non-associative functions the result may be non-deterministic and vary in precision. Notably this affects the <code class="computeroutput">plus&lt;float&gt;()</code> function as floating-point addition is not associative and may produce slightly different results than a serial algorithm.</p>
 <p>This algorithm supports both host and device iterators for the result argument. This allows for values to be reduced and copied to the host all with a single function call.</p>
 <p>For example, to calculate the sum of the values in a device vector and copy the result to a value on the host:</p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">compute</span><span class="special">::</span><span class="identifier">reduce</span><span class="special">(</span><span class="identifier">vec</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="identifier">vec</span><span class="special">.</span><span class="identifier">end</span><span class="special">(</span><span class="special">)</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">sum</span><span class="special">,</span> <span class="identifier">queue</span><span class="special">)</span><span class="special">;</span>
 </pre>
-<p> </p>
+<p> Note that while the the <code class="computeroutput">reduce()</code> algorithm is conceptually identical to the <code class="computeroutput">accumulate()</code> algorithm, its implementation is substantially more efficient on parallel hardware. For more information, see the documentation on the <code class="computeroutput">accumulate()</code> algorithm.</p>
 <p><span class="bold"><strong>See Also:</strong></span></p>
 <p>accumulate() </p>
 <p>
 </p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><code class="computeroutput">first</code></span></p></td>
+<td><p>first element in the input range </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">function</code></span></p></td>
+<td><p>binary reduction function </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">last</code></span></p></td>
+<td><p>last element in the input range </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">queue</code></span></p></td>
+<td><p>command queue to perform the operation</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">result</code></span></p></td>
+<td><p>iterator pointing to the output </p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr></tbody>
+</table></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
