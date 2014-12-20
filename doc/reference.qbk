@@ -53,6 +53,7 @@ Header: `<boost/compute/algorithm.hpp>`
 * [funcref boost::compute::find_if find_if()]
 * [funcref boost::compute::find_if_not find_if_not()]
 * [funcref boost::compute::for_each for_each()]
+* [funcref boost::compute::for_each_n for_each_n()]
 * [funcref boost::compute::gather gather()]
 * [funcref boost::compute::generate generate()]
 * [funcref boost::compute::generate_n generate_n()]
