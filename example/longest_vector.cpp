@@ -15,7 +15,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/functional/geometry.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace compute = boost::compute;
 

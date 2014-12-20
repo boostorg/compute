@@ -167,7 +167,7 @@ add_compute_test("random.normal_distribution" test_normal_distribution.cpp)
 add_compute_test("random.uniform_int_distribution" test_uniform_int_distribution.cpp)
 add_compute_test("random.uniform_real_distribution" test_uniform_real_distribution.cpp)
 
-add_compute_test("types.builtin" test_types.cpp)
+add_compute_test("types.fundamental" test_types.cpp)
 add_compute_test("types.complex" test_complex.cpp)
 add_compute_test("types.pair" test_pair.cpp)
 add_compute_test("types.tuple" test_tuple.cpp)

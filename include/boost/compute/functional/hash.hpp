@@ -12,7 +12,7 @@
 #define BOOST_COMPUTE_FUNCTIONAL_HASH_HPP
 
 #include <boost/compute/function.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace boost {
 namespace compute {

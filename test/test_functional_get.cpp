@@ -16,7 +16,7 @@
 
 #include <boost/compute/types/pair.hpp>
 #include <boost/compute/types/tuple.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 #include <boost/compute/functional/get.hpp>
 #include <boost/compute/type_traits/result_of.hpp>
 
