@@ -46,7 +46,6 @@ if __name__ == '__main__':
         "reverse",
         "rotate",
         "saxpy",
-        "set_difference",
         "sort",
         "unique",
     ]

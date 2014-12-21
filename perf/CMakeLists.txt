@@ -117,11 +117,17 @@ if(${BOOST_COMPUTE_HAVE_CUDA})
   set(CUDA_BENCHMARKS
     thrust_accumulate
     thrust_count
-    thrust_inner_product
-    thrust_partial_sum
-    thrust_saxpy
-    thrust_sort
     thrust_exclusive_scan
+    thrust_inner_product
+    thrust_merge
+    thrust_partial_sum
+    thrust_partition
+    thrust_reverse
+    thrust_rotate
+    thrust_saxpy
+    thrust_set_difference
+    thrust_sort
+    thrust_unique
   )
 
   foreach(BENCHMARK ${CUDA_BENCHMARKS})
