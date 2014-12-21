@@ -16,7 +16,7 @@
 #include <boost/compute/algorithm/sort_by_key.hpp>
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 #include "perf.hpp"
 

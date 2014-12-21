@@ -13,7 +13,7 @@
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/function.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 #include <boost/compute/algorithm/accumulate.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/transform.hpp>

@@ -13,7 +13,7 @@
 
 #include <boost/preprocessor/cat.hpp>
 
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace boost {
 namespace compute {

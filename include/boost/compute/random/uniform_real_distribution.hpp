@@ -13,7 +13,7 @@
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/function.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace boost {
 namespace compute {

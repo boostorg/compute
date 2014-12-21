@@ -13,7 +13,7 @@
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/function.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 
 namespace boost {
