@@ -13,10 +13,11 @@
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/function.hpp>
-#include <boost/compute/types/fundamental.hpp>
 #include <boost/compute/algorithm/accumulate.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/transform.hpp>
+#include <boost/compute/detail/literal.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace boost {
 namespace compute {
@@ -90,15 +91,12 @@ public:
         for(size_t i=0; i<m_n; i++)
         {
             source = source +
-                "if(rno <= " +
-                    boost::lexical_cast<std::string>(m_probabilities[i]) +
-                    ")\n" +
-                "   return " + boost::lexical_cast<std::string>(i) +
-                        ";\n";
+                "if(rno <= " + detail::make_literal<float>(m_probabilities[i]) + ")\n" +
+                "   return " + detail::make_literal(i) + ";\n";
         }
 
         source = source +
-            "return " + boost::lexical_cast<std::string>(m_n-1) + ";\n" +
+            "return " + detail::make_literal(m_n - 1) + ";\n" +
             "}\n";
 
         BOOST_COMPUTE_FUNCTION(IntType, scale_random, (const uint_ x), {});

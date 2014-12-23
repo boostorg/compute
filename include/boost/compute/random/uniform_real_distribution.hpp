@@ -13,6 +13,7 @@
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/function.hpp>
+#include <boost/compute/detail/literal.hpp>
 #include <boost/compute/types/fundamental.hpp>
 
 namespace boost {
@@ -71,8 +72,8 @@ public:
             return LO + (convert_RealType(x) / MAX_RANDOM) * (HI - LO);
         });
 
-        scale_random.define("LO", boost::lexical_cast<std::string>(m_a));
-        scale_random.define("HI", boost::lexical_cast<std::string>(m_b));
+        scale_random.define("LO", detail::make_literal(m_a));
+        scale_random.define("HI", detail::make_literal(m_b));
         scale_random.define("MAX_RANDOM", "UINT_MAX");
         scale_random.define(
             "convert_RealType", std::string("convert_") + type_name<RealType>()

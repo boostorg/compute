@@ -251,6 +251,13 @@ private:
                           size_t cb,
                           void *user_data)
     {
+    #ifdef __APPLE__
+        // on apple, every single opencl failure is reported through the
+        // context error handler. in order to let failures propogate
+        // via opencl_error, we don't throw context_errors from here.
+        return;
+    #endif
+
         context *this_ = static_cast<context *>(user_data);
 
         BOOST_THROW_EXCEPTION(

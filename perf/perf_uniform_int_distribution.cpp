@@ -30,10 +30,10 @@ int main(int argc, char *argv[])
     compute::context context(device);
     compute::command_queue queue(context, device);
 
-    compute::vector<unsigned int> vector(PERF_N, context);
+    compute::vector<compute::uint_> vector(PERF_N, context);
 
     compute::default_random_engine rng(queue);
-    compute::uniform_int_distribution<uint> dist(0, 1);
+    compute::uniform_int_distribution<compute::uint_> dist(0, 1);
 
     perf_timer t;
     t.start();

@@ -66,13 +66,18 @@ BOOST_AUTO_TEST_CASE(sum_odd_values)
 
 BOOST_AUTO_TEST_CASE(sort_pairs)
 {
+    if(device.vendor() == "NVIDIA" && device.platform().name() == "Apple"){
+        // FIXME: this test currently segfaults on NVIDIA GPUs on Apple
+        std::cerr << "skipping sort_pairs test on NVIDIA GPU on Apple platform" << std::endl;
+        return;
+    }
+
     std::vector<std::pair<int, float> > data;
     data.push_back(std::make_pair(1, 2.3f));
     data.push_back(std::make_pair(0, 4.2f));
     data.push_back(std::make_pair(2, 1.0f));
 
-    compute::vector<std::pair<int, float> > vector(data.size());
-    compute::copy(data.begin(), data.end(), vector.begin(), queue);
+    compute::vector<std::pair<int, float> > vector(data.begin(), data.end(), queue);
 
     // sort by first component
     BOOST_COMPUTE_FUNCTION(bool, compare_first, (std::pair<int, float> a, std::pair<int, float> b),

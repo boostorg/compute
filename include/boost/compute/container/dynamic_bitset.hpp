@@ -160,10 +160,10 @@ public:
 
         // update block value
         if(value){
-            block_value |= (1 << bit);
+            block_value |= (size_type(1) << bit);
         }
         else {
-            block_value &= ~(1 << bit);
+            block_value &= ~(size_type(1) << bit);
         }
 
         // store new block
@@ -179,7 +179,7 @@ public:
         block_type block_value;
         copy_n(m_bits.begin() + block, 1, &block_value, queue);
 
-        return block_value & (1 << bit);
+        return block_value & (size_type(1) << bit);
     }
 
     /// Flips the value of the bit at position \p n.
