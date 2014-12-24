@@ -21,15 +21,14 @@ namespace compute {
 namespace detail {
 
 const char lexicographical_compare_source[] =
-"__kernel void lexicographical_compare(uint size1,\n"
-"                                      uint size2,\n"
+"__kernel void lexicographical_compare(const uint size1,\n"
+"                                      const uint size2,\n"
 "                                      __global const T1 *range1,\n"
 "                                      __global const T2 *range2,\n"
 "                                      __global bool *result_buf)\n"
 "{\n"
-"   const int i = get_global_id(0);\n"
-"   if((i != size1) && (i != size2))\n"
-"   {\n"
+"   const uint i = get_global_id(0);\n"
+"   if((i != size1) && (i != size2)){\n"
         //Individual elements are compared and results are stored in parallel.
         //0 is true
 "       if(range1[i] < range2[i])\n"
@@ -83,8 +82,8 @@ inline bool dispatch_lexicographical_compare(InputIterator1 first1,
     kernel lexicographical_compare_kernel(lexicographical_compare_program,
                                           "lexicographical_compare");
 
-    lexicographical_compare_kernel.set_arg(0, (uint)iterator_size1);
-    lexicographical_compare_kernel.set_arg(1, (uint)iterator_size2);
+    lexicographical_compare_kernel.set_arg<uint_>(0, iterator_size1);
+    lexicographical_compare_kernel.set_arg<uint_>(1, iterator_size2);
     lexicographical_compare_kernel.set_arg(2, first1.get_buffer());
     lexicographical_compare_kernel.set_arg(3, first2.get_buffer());
     lexicographical_compare_kernel.set_arg(4, result_vector.get_buffer());

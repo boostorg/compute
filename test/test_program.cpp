@@ -119,6 +119,10 @@ BOOST_AUTO_TEST_CASE(compile_and_link)
 
     // create the library program
     const char library_source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
+        // for some reason the apple opencl compilers complains if a prototype
+        // for the square() function is not available, so we add it here
+        T square(T);
+
         // generic square function definition
         T square(T x) { return x * x; }
     );

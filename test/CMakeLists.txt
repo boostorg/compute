@@ -2,6 +2,11 @@ include_directories(../include)
 
 set(BOOST_COMPONENTS unit_test_framework)
 
+if(${BOOST_COMPUTE_USE_CPP11})
+  # allow tests to use C++11 features
+  add_definitions(-DBOOST_COMPUTE_USE_CPP11)
+endif()
+
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
   set(BOOST_COMPONENTS ${BOOST_COMPONENTS} system filesystem)
   add_definitions(-DBOOST_COMPUTE_USE_OFFLINE_CACHE)

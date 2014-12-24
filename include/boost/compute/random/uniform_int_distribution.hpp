@@ -74,7 +74,7 @@ public:
         vector<g_result_type> tmp(size, queue.get_context());
         vector<g_result_type> tmp2(size, queue.get_context());
 
-        uint_ bound = ((uint(-1))/(m_b-m_a+1))*(m_b-m_a+1);
+        uint_ bound = ((uint_(-1))/(m_b-m_a+1))*(m_b-m_a+1);
 
         buffer_iterator<g_result_type> tmp2_iter;
 
