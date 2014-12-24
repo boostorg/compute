@@ -162,6 +162,7 @@ add_compute_test("iterator.permutation_iterator" test_permutation_iterator.cpp)
 add_compute_test("iterator.transform_iterator" test_transform_iterator.cpp)
 add_compute_test("iterator.zip_iterator" test_zip_iterator.cpp)
 
+add_compute_test("memory.local_buffer" test_local_buffer.cpp)
 add_compute_test("memory.svm_ptr" test_svm_ptr.cpp)
 
 add_compute_test("random.bernoulli_distribution" test_bernoulli_distribution.cpp)
