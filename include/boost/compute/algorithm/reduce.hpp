@@ -24,6 +24,7 @@
 #include <boost/compute/algorithm/detail/reduce_on_gpu.hpp>
 #include <boost/compute/algorithm/detail/serial_reduce.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/memory/local_buffer.hpp>
 #include <boost/compute/type_traits/result_of.hpp>
 
 namespace boost {
@@ -81,7 +82,7 @@ size_t reduce(InputIterator first,
 
         kernel kernel = k.compile(context);
         kernel.set_arg(output_arg, result.get_buffer());
-        kernel.set_arg(block_arg, block_size * sizeof(input_type), 0);
+        kernel.set_arg(block_arg, local_buffer<input_type>(block_size));
 
         queue.enqueue_1d_range_kernel(kernel,
                                       0,

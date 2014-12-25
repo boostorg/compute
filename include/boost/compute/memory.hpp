@@ -15,6 +15,7 @@
 ///
 /// Meta-header to include all Boost.Compute memory headers.
 
+#include <boost/compute/memory/local_buffer.hpp>
 #include <boost/compute/memory/svm_ptr.hpp>
 
 #endif // BOOST_COMPUTE_MEMORY_HPP
