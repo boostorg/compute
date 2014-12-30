@@ -37,7 +37,7 @@ class bernoulli_distribution
 public:
 
     /// Creates a new bernoulli distribution
-    bernoulli_distribution(RealType p = 0.25f)
+    bernoulli_distribution(RealType p = 0.5f)
         : m_p(p)
     {
     }
