@@ -19,7 +19,7 @@
 #include <boost/iterator/iterator_facade.hpp>
 
 #include <boost/compute/detail/meta_kernel.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -161,21 +161,9 @@ make_constant_iterator(const T &value, size_t index = 0)
     return constant_iterator<T>(value, index);
 }
 
-namespace detail {
-
-// is_device_iterator specialization for constant_iterator
-template<class Iterator>
-struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            constant_iterator<typename Iterator::value_type>,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
-
-} // end detail namespace
+/// \internal_ (is_device_iterator specialization for constant_iterator)
+template<class T>
+struct is_device_iterator<constant_iterator<T> > : boost::true_type {};
 
 } // end compute namespace
 } // end boost namespace

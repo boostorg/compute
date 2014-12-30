@@ -49,6 +49,19 @@ BOOST_AUTO_TEST_CASE(value_type)
     ));
 }
 
+BOOST_AUTO_TEST_CASE(base_type)
+{
+    BOOST_STATIC_ASSERT((
+        boost::is_same<
+            boost::compute::permutation_iterator<
+                boost::compute::buffer_iterator<int>,
+                boost::compute::buffer_iterator<int>
+            >::base_type,
+            boost::compute::buffer_iterator<int>
+        >::value
+    ));
+}
+
 BOOST_AUTO_TEST_CASE(copy)
 {
     int input_data[] = { 3, 4, 2, 1, 5 };

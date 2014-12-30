@@ -19,7 +19,7 @@
 #include <boost/iterator/iterator_facade.hpp>
 
 #include <boost/compute/detail/meta_kernel.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -160,13 +160,10 @@ inline discard_iterator make_discard_iterator(size_t index = 0)
     return discard_iterator(index);
 }
 
-namespace detail {
-
-// is_device_iterator specialization for discard_iterator
+/// internal_ (is_device_iterator specialization for discard_iterator)
 template<>
-struct is_device_iterator<discard_iterator> : public boost::true_type {};
+struct is_device_iterator<discard_iterator> : boost::true_type {};
 
-} // end detail namespace
 } // end compute namespace
 } // end boost namespace
 

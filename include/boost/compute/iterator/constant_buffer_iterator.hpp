@@ -18,6 +18,7 @@
 
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -183,6 +184,10 @@ make_constant_buffer_iterator(const buffer &buffer, size_t index = 0)
     return constant_buffer_iterator<T>(buffer, index);
 }
 
+/// \internal_ (is_device_iterator specialization for constant_buffer_iterator)
+template<class T>
+struct is_device_iterator<constant_buffer_iterator<T> > : boost::true_type {};
+
 namespace detail {
 
 // is_buffer_iterator specialization for constant_buffer_iterator
@@ -197,20 +202,7 @@ struct is_buffer_iterator<
     >::type
 > : public boost::true_type {};
 
-// is_device_iterator specialization for constant_buffer_iterator
-template<class Iterator>
-struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            constant_buffer_iterator<typename Iterator::value_type>,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
-
 } // end detail namespace
-
 } // end compute namespace
 } // end boost namespace
 

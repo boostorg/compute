@@ -18,6 +18,7 @@
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/iterator/discard_iterator.hpp>
 #include <boost/compute/memory/svm_ptr.hpp>
+#include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/work_size.hpp>
 

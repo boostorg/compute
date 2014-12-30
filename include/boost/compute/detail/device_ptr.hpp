@@ -17,8 +17,8 @@
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/config.hpp>
 #include <boost/compute/detail/is_buffer_iterator.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -191,7 +191,7 @@ private:
     size_t m_index;
 };
 
-// is_buffer_iterator specialization for buffer_iterator
+// is_buffer_iterator specialization for device_ptr
 template<class Iterator>
 struct is_buffer_iterator<
     Iterator,
@@ -203,19 +203,12 @@ struct is_buffer_iterator<
     >::type
 > : public boost::true_type {};
 
-// is_device_iterator specialization for buffer_iterator
-template<class Iterator>
-struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            device_ptr<typename Iterator::value_type>,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
-
 } // end detail namespace
+
+// is_device_iterator specialization for device_ptr
+template<class T>
+struct is_device_iterator<detail::device_ptr<T> > : boost::true_type {};
+
 } // end compute namespace
 } // end boost namespace
 

@@ -12,7 +12,7 @@
 #define BOOST_COMPUTE_MEMORY_SVM_PTR_HPP
 
 #include <boost/compute/cl.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -70,21 +70,10 @@ private:
     T *m_ptr;
 };
 
-namespace detail {
+/// \internal_ (is_device_iterator specialization for svm_ptr)
+template<class T>
+struct is_device_iterator<svm_ptr<T> > : boost::true_type {};
 
-// is_device_iterator specialization for svm_ptr
-template<class Iterator>
-struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            svm_ptr<typename Iterator::value_type>,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
-
-} // end detail namespace
 } // end compute namespace
 } // end boost namespace
 

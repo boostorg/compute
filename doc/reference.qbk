@@ -194,6 +194,7 @@ Header: `<boost/compute/random.hpp>`
 
 Header: `<boost/compute/type_traits.hpp>`
 
+* [classref boost::compute::is_device_iterator is_device_iterator<Iterator>]
 * [classref boost::compute::is_fundamental is_fundamental<T>]
 * [classref boost::compute::is_vector_type is_vector_type<T>]
 * [classref boost::compute::make_vector_type make_vector_type<T, N>]
