@@ -52,6 +52,14 @@ BOOST_AUTO_TEST_CASE(local_buffer_arg)
     kernel.set_arg(0, compute::local_buffer<float>(32));
     kernel.set_arg(1, global_buf);
 
+    // some implementations don't correctly report dynamically-set local buffer sizes
+    if(kernel.get_work_group_info<cl_ulong>(device, CL_KERNEL_LOCAL_MEM_SIZE) == 0){
+        std::cerr << "skipping checks for local memory size, device reports "
+                  << "zero after setting dynamically-sized local buffer size"
+                  << std::endl;
+        return;
+    }
+
     // check actual memory size
     BOOST_CHECK_GE(
         kernel.get_work_group_info<cl_ulong>(device, CL_KERNEL_LOCAL_MEM_SIZE),
