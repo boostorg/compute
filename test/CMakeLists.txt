@@ -187,8 +187,25 @@ add_compute_test("experimental.sort_by_transform" test_sort_by_transform.cpp)
 add_compute_test("experimental.tabulate" test_tabulate.cpp)
 add_compute_test("experimental.transform_if" test_transform_if.cpp)
 
-add_compute_test("ext.lambda" test_lambda.cpp)
-add_compute_test("ext.amd_cpp_kernel_language" test_amd_cpp_kernel_language.cpp)
+# miscellaneous tests
+add_compute_test("misc.amd_cpp_kernel_language" test_amd_cpp_kernel_language.cpp)
+add_compute_test("misc.lambda" test_lambda.cpp)
+add_compute_test("misc.user_defined_types" test_user_defined_types.cpp)
+
+# Check for linkage problems
+add_executable(test_multiple_objects
+    test_multiple_objects1.cpp
+    test_multiple_objects2.cpp
+    )
+target_link_libraries(test_multiple_objects
+    ${OPENCL_LIBRARIES}
+    ${Boost_LIBRARIES}
+    )
+# link with coverage library
+if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  target_link_libraries(test_multiple_objects -fprofile-arcs -ftest-coverage)
+endif()
+add_test("misc.multiple_objects" test_multiple_objects)
 
 # eigen interop tests
 if(${BOOST_COMPUTE_HAVE_EIGEN})
@@ -244,21 +261,3 @@ if(${BOOST_COMPUTE_HAVE_VTK})
   add_compute_test("interop.vtk" test_interop_vtk.cpp)
   target_link_libraries(test_interop_vtk ${VTK_LIBRARIES})
 endif()
-
-# tests for particular bugs/issues
-add_compute_test("issue.user_defined_types" test_user_defined_types.cpp)
-
-# Check for linkage problems
-add_executable(test_multiple_objects
-    test_multiple_objects1.cpp
-    test_multiple_objects2.cpp
-    )
-target_link_libraries(test_multiple_objects
-    ${OPENCL_LIBRARIES}
-    ${Boost_LIBRARIES}
-    )
-# link with coverage library
-if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  target_link_libraries(test_multiple_objects -fprofile-arcs -ftest-coverage)
-endif()
-add_test("issue.multiple_objects" test_multiple_objects)
