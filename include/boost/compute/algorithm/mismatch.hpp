@@ -64,6 +64,25 @@ mismatch(InputIterator1 first1,
     return std::make_pair(iter, first2 + std::distance(first1, iter));
 }
 
+/// \overload
+template<class InputIterator1, class InputIterator2>
+inline std::pair<InputIterator1, InputIterator2>
+mismatch(InputIterator1 first1,
+         InputIterator1 last1,
+         InputIterator2 first2,
+         InputIterator2 last2,
+         command_queue &queue = system::default_queue())
+{
+    if(std::distance(first1, last1) < std::distance(first2, last2)){
+        return ::boost::compute::mismatch(first1, last1, first2, queue);
+    }
+    else {
+        return ::boost::compute::mismatch(
+            first1, first1 + std::distance(first2, last2), first2, queue
+        );
+    }
+}
+
 } // end compute namespace
 } // end boost namespace
 
