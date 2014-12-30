@@ -13,8 +13,8 @@
 
 #include <iterator>
 
-#include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/is_contiguous_iterator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {

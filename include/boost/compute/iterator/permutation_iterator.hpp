@@ -21,9 +21,9 @@
 #include <boost/compute/functional.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/is_buffer_iterator.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
 #include <boost/compute/iterator/detail/get_base_iterator_buffer.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -181,22 +181,10 @@ make_permutation_iterator(ElementIterator e, IndexIterator i)
     return permutation_iterator<ElementIterator, IndexIterator>(e, i);
 }
 
-namespace detail {
-
-// is_device_iterator specialization for permutation_iterator
-template<class Iterator>
+/// \internal_ (is_device_iterator specialization for permutation_iterator)
+template<class ElementIterator, class IndexIterator>
 struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            permutation_iterator<typename Iterator::base_type,
-                                 typename Iterator::index_iterator>,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
-
-} // end detail namespace
+    permutation_iterator<ElementIterator, IndexIterator> > : boost::true_type {};
 
 } // end compute namespace
 } // end boost namespace

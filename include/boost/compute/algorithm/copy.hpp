@@ -22,14 +22,14 @@
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/async/future.hpp>
-#include <boost/compute/iterator/buffer_iterator.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
-#include <boost/compute/detail/is_contiguous_iterator.hpp>
-#include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/algorithm/detail/copy_to_host.hpp>
 #include <boost/compute/algorithm/detail/copy_on_device.hpp>
 #include <boost/compute/algorithm/detail/copy_to_device.hpp>
+#include <boost/compute/algorithm/detail/copy_to_host.hpp>
+#include <boost/compute/async/future.hpp>
+#include <boost/compute/detail/is_contiguous_iterator.hpp>
+#include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
