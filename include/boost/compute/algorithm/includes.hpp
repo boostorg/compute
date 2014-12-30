@@ -100,7 +100,9 @@ private:
 /// \brief Includes algorithm
 ///
 /// Finds if the sorted range [first1, last1) includes the sorted
-/// range [first2, last2)
+/// range [first2, last2). In other words, it checks if [first1, last1) is
+/// a superset of [first2, last2).
+///
 /// \return True, if [first1, last1) includes [first2, last2). False otherwise.
 ///
 /// \param first1 Iterator pointing to start of first set
