@@ -92,13 +92,12 @@ dispatch_copy_async(InputIterator first,
                         is_device_iterator<OutputIterator>::value
                     >::type* = 0)
 {
-    if(is_contiguous_iterator<InputIterator>::value){
-        return copy_to_device_async(first, last, result, queue);
-    }
-    else {
-        BOOST_ASSERT(false && "copy_async() is not supported for non-contiguous iterators");
-        return future<OutputIterator>();
-    }
+    BOOST_STATIC_ASSERT_MSG(
+        is_contiguous_iterator<InputIterator>::value,
+        "copy_async() is only supported for contiguous host iterators"
+    );
+
+    return copy_to_device_async(first, last, result, queue);
 }
 
 // device -> host
@@ -138,13 +137,12 @@ dispatch_copy_async(InputIterator first,
                        !is_device_iterator<OutputIterator>::value
                     >::type* = 0)
 {
-    if(is_contiguous_iterator<OutputIterator>::value){
-        return copy_to_host_async(first, last, result, queue);
-    }
-    else {
-        BOOST_ASSERT(false && "copy_async() is not supported for non-contiguous iterators");
-        return future<OutputIterator>();
-    }
+    BOOST_STATIC_ASSERT_MSG(
+        is_contiguous_iterator<OutputIterator>::value,
+        "copy_async() is only supported for contiguous host iterators"
+    );
+
+    return copy_to_host_async(first, last, result, queue);
 }
 
 // device -> device
