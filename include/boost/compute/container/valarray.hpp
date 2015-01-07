@@ -90,7 +90,19 @@ public:
     ~valarray()
     {
     }
+ 
+ valarray<T>& operator+=(const valarray<T> &rhs)
++    {
++        buffer_iterator<T> lhsit = begin();
++        buffer_iterator<T> rhsit = rhs.begin();
+         buffer_iterator<T> lhsen = end();
+using boost::compute::plus;
 
++       transform(lhsit, lhsen, rhsit, lhsit, plus<T>, 
+            command_queue & queue = system::default_queue());
+            
+    }
++
     size_t size() const
     {
         return m_buffer.size() / sizeof(T);
