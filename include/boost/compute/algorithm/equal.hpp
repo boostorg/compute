@@ -32,6 +32,21 @@ inline bool equal(InputIterator1 first1,
                                       queue).first == last1;
 }
 
+/// \overload
+template<class InputIterator1, class InputIterator2>
+inline bool equal(InputIterator1 first1,
+                  InputIterator1 last1,
+                  InputIterator2 first2,
+                  InputIterator2 last2,
+                  command_queue &queue = system::default_queue())
+{
+    if(std::distance(first1, last1) != std::distance(first2, last2)){
+        return false;
+    }
+
+    return ::boost::compute::equal(first1, last1, first2, queue);
+}
+
 } // end compute namespace
 } // end boost namespace
 

@@ -19,7 +19,7 @@
 #include <boost/iterator/iterator_facade.hpp>
 
 #include <boost/compute/detail/meta_kernel.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -46,6 +46,14 @@ public:
 
 /// \class constant_iterator
 /// \brief An iterator with a constant value.
+///
+/// The constant_iterator class provides an iterator which returns a constant
+/// value when dereferenced.
+///
+/// For example, this could be used to implement the fill() algorithm in terms
+/// of the copy() algorithm by copying from a range of constant iterators:
+///
+/// \snippet test/test_constant_iterator.cpp fill_with_copy
 ///
 /// \see make_constant_iterator()
 template<class T>
@@ -140,7 +148,12 @@ private:
     size_t m_index;
 };
 
-/// Returns a new constant iterator with \p value at \p index.
+/// Returns a new constant_iterator with \p value at \p index.
+///
+/// \param value the constant value
+/// \param index the iterators index
+///
+/// \return a \c constant_iterator with \p value
 template<class T>
 inline constant_iterator<T>
 make_constant_iterator(const T &value, size_t index = 0)
@@ -148,21 +161,9 @@ make_constant_iterator(const T &value, size_t index = 0)
     return constant_iterator<T>(value, index);
 }
 
-namespace detail {
-
-// is_device_iterator specialization for constant_iterator
-template<class Iterator>
-struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            constant_iterator<typename Iterator::value_type>,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
-
-} // end detail namespace
+/// \internal_ (is_device_iterator specialization for constant_iterator)
+template<class T>
+struct is_device_iterator<constant_iterator<T> > : boost::true_type {};
 
 } // end compute namespace
 } // end boost namespace

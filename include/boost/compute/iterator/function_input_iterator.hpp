@@ -18,7 +18,7 @@
 #include <boost/iterator/iterator_facade.hpp>
 
 #include <boost/compute/detail/meta_kernel.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 #include <boost/compute/type_traits/result_of.hpp>
 
 namespace boost {
@@ -65,6 +65,14 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
 } // end detail namespace
 
+/// \class function_input_iterator
+/// \brief Iterator which returns the result of a function when dereferenced
+///
+/// For example:
+///
+/// \snippet test/test_function_input_iterator.cpp generate_42
+///
+/// \see make_function_input_iterator()
 template<class Function>
 class function_input_iterator :
     public detail::function_input_iterator_base<Function>::type
@@ -155,6 +163,12 @@ private:
     size_t m_index;
 };
 
+/// Returns a function_input_iterator with \p function.
+///
+/// \param function function to execute when dereferenced
+/// \param index index of the iterator
+///
+/// \return a \c function_input_iterator with \p function
 template<class Function>
 inline function_input_iterator<Function>
 make_function_input_iterator(const Function &function, size_t index = 0)
@@ -162,21 +176,9 @@ make_function_input_iterator(const Function &function, size_t index = 0)
     return function_input_iterator<Function>(function, index);
 }
 
-namespace detail {
-
-// is_device_iterator specialization for function_input_iterator
-template<class Iterator>
-struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            function_input_iterator<typename Iterator::function>,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
-
-} // end detail namespace
+/// \internal_ (is_device_iterator specialization for function_input_iterator)
+template<class Function>
+struct is_device_iterator<function_input_iterator<Function> > : boost::true_type {};
 
 } // end compute namespace
 } // end boost namespace

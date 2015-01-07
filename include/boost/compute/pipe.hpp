@@ -127,6 +127,7 @@ public:
     typename detail::get_object_info_type<pipe, Enum>::type get_info() const;
 };
 
+/// \internal_ define get_info() specializations for pipe
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(pipe,
     ((cl_uint, CL_PIPE_PACKET_SIZE))
     ((cl_uint, CL_PIPE_MAX_PACKETS))

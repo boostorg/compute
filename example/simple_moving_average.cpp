@@ -32,7 +32,7 @@ compute::program make_sma_program(const compute::context& context)
         {
             const int gid = get_global_id(0);
 
-            float cumValues = 0.;
+            float cumValues = 0.f;
             int endIdx = gid + wSize/2;
             int startIdx = gid -1 - wSize/2;
 

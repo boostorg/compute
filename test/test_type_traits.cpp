@@ -24,7 +24,6 @@
 #include <boost/compute/iterator/constant_iterator.hpp>
 #include <boost/compute/detail/is_buffer_iterator.hpp>
 #include <boost/compute/detail/is_contiguous_iterator.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
 
 namespace bc = boost::compute;
 
@@ -119,10 +118,14 @@ BOOST_AUTO_TEST_CASE(is_buffer_iterator)
 
 BOOST_AUTO_TEST_CASE(is_device_iterator)
 {
-    using boost::compute::detail::is_device_iterator;
+    using boost::compute::is_device_iterator;
 
     BOOST_STATIC_ASSERT(is_device_iterator<boost::compute::buffer_iterator<int> >::value == true);
+    BOOST_STATIC_ASSERT(is_device_iterator<const boost::compute::buffer_iterator<int> >::value == true);
     BOOST_STATIC_ASSERT(is_device_iterator<boost::compute::constant_iterator<int> >::value == true);
-    BOOST_STATIC_ASSERT(is_device_iterator<std::vector<int>::iterator>::value == false);
+    BOOST_STATIC_ASSERT(is_device_iterator<const boost::compute::constant_iterator<int> >::value == true);
     BOOST_STATIC_ASSERT(is_device_iterator<float *>::value == false);
+    BOOST_STATIC_ASSERT(is_device_iterator<const float *>::value == false);
+    BOOST_STATIC_ASSERT(is_device_iterator<std::vector<int>::iterator>::value == false);
+    BOOST_STATIC_ASSERT(is_device_iterator<const std::vector<int>::iterator>::value == false);
 }

@@ -18,6 +18,8 @@ namespace compute {
 
 /// \class future
 /// \brief Holds the result of an asynchronous computation.
+///
+/// \see event, wait_list
 template<class T>
 class future
 {

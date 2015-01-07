@@ -100,9 +100,6 @@ BOOST_AUTO_TEST_CASE(partition_device_equally)
         return;
     }
 
-    // ensure device is not a sub-device
-    BOOST_CHECK(device.is_subdevice() == false);
-
     // check that the device supports partitioning equally
     if(!supports_partition_type(device, CL_DEVICE_PARTITION_EQUALLY)){
         std::cout << "skipping test: "
@@ -110,6 +107,9 @@ BOOST_AUTO_TEST_CASE(partition_device_equally)
                   << std::endl;
         return;
     }
+
+    // ensure device is not a sub-device
+    BOOST_CHECK(device.is_subdevice() == false);
 
     // partition default device into sub-devices with two compute units each
     std::vector<boost::compute::device>
@@ -199,9 +199,6 @@ BOOST_AUTO_TEST_CASE(partition_by_affinity_domain)
         return;
     }
 
-    // ensure device is not a sub-device
-    BOOST_CHECK(device.is_subdevice() == false);
-
     // check that the device supports splitting by affinity domains
     if(!supports_partition_type(device, CL_DEVICE_AFFINITY_DOMAIN_NEXT_PARTITIONABLE)){
         std::cout << "skipping test: "
@@ -209,6 +206,9 @@ BOOST_AUTO_TEST_CASE(partition_by_affinity_domain)
                   << std::endl;
         return;
     }
+
+    // ensure device is not a sub-device
+    BOOST_CHECK(device.is_subdevice() == false);
 
     std::vector<boost::compute::device> sub_devices =
         device.partition_by_affinity_domain(

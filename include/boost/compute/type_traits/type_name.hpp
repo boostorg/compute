@@ -14,7 +14,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/stringize.hpp>
 
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace boost {
 namespace compute {
@@ -81,13 +81,17 @@ BOOST_COMPUTE_DEFINE_BUILTIN_TYPE_NAME_FUNCTION(void)
 
 } // end detail namespace
 
-/// Returns the OpenCL type name for the type \p T as a string.
+/// Returns the OpenCL type name for the type \c T as a string.
+///
+/// \return a string containing the type name for \c T
 ///
 /// For example:
 /// \code
 /// type_name<float>() == "float"
 /// type_name<float4_>() == "float4"
 /// \endcode
+///
+/// \see type_definition<T>()
 template<class T>
 inline const char* type_name()
 {

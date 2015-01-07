@@ -13,7 +13,7 @@
 
 #include <boost/type_traits/common_type.hpp>
 
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace boost {
 

@@ -13,7 +13,7 @@
 
 #include <cstddef>
 
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 #include <boost/compute/type_traits/scalar_type.hpp>
 
 namespace boost {
@@ -44,6 +44,8 @@ struct invoked_get
 
 /// Returns the \c N'th element of an aggregate type (e.g. scalarN,
 /// pair, tuple, etc.).
+///
+/// \see \ref field "field<T>"
 template<size_t N>
 struct get
 {

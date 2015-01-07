@@ -53,6 +53,7 @@ struct invoked_binary_operator
 
 } // end detail namespace
 
+/// \internal_
 #define BOOST_COMPUTE_DECLARE_BINARY_OPERATOR(name, op, return_type, arg_type) \
     template<class arg_type> \
     class name : public function<return_type (arg_type, arg_type)> \

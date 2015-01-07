@@ -19,7 +19,7 @@
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/reverse.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/iterator/constant_iterator.hpp>
+#include <boost/compute/iterator/buffer_iterator.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"

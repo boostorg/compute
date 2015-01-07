@@ -14,7 +14,7 @@
 #include <complex>
 
 #include <boost/compute/functional.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 #include <boost/compute/type_traits/make_vector_type.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>

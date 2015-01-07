@@ -23,9 +23,9 @@
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/detail/buffer_value.hpp>
 #include <boost/compute/detail/is_buffer_iterator.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -102,7 +102,8 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 ///
 /// The buffer_iterator class iterates over values in a memory buffer on a
 /// compute device. It is the most commonly used iterator in Boost.Compute
-/// and is used by the vector<T> and array<T, N> container classes.
+/// and is used by the \ref vector "vector<T>" and \ref array "array<T, N>"
+/// container classes.
 ///
 /// Buffer iterators store a reference to a memory buffer along with an index
 /// into that memory buffer.
@@ -241,13 +242,22 @@ private:
     size_t m_index;
 };
 
-/// Creates a new buffer_iterator for \p buffer at \p index.
+/// Creates a new \ref buffer_iterator for \p buffer at \p index.
+///
+/// \param buffer the \ref buffer object
+/// \param index the index in the buffer
+///
+/// \return a \c buffer_iterator for \p buffer at \p index
 template<class T>
 inline buffer_iterator<T>
 make_buffer_iterator(const buffer &buffer, size_t index = 0)
 {
     return buffer_iterator<T>(buffer, index);
 }
+
+/// \internal_ (is_device_iterator specialization for buffer_iterator)
+template<class T>
+struct is_device_iterator<buffer_iterator<T> > : boost::true_type {};
 
 namespace detail {
 
@@ -263,20 +273,7 @@ struct is_buffer_iterator<
     >::type
 > : public boost::true_type {};
 
-// is_device_iterator specialization for buffer_iterator
-template<class Iterator>
-struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            buffer_iterator<typename Iterator::value_type>,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
-
 } // end detail namespace
-
 } // end compute namespace
 } // end boost namespace
 

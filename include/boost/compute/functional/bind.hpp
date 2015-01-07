@@ -22,6 +22,7 @@ namespace boost {
 namespace compute {
 namespace placeholders {
 
+/// \internal_
 template<int I>
 struct placeholder : boost::integral_constant<int, I>
 {
@@ -33,11 +34,13 @@ placeholder<1> const _2;
 
 } // end placeholders namespace
 
+/// Meta-function returning \c true if \c T is a placeholder type.
 template<class T>
 struct is_placeholder : boost::false_type
 {
 };
 
+/// \internal_
 template<int I>
 struct is_placeholder<placeholders::placeholder<I> > : boost::true_type
 {
@@ -210,10 +213,10 @@ struct bound_function
 /// For example, to generate a unary function object which returns \c true
 /// when its argument is less than \c 7:
 /// \code
-/// using boost::compute;
+/// using boost::compute::less;
 /// using boost::compute::placeholders::_1;
 ///
-/// auto less_than_seven = bind(less<int>(), _1, 7);
+/// auto less_than_seven = boost::compute::bind(less<int>(), _1, 7);
 /// \endcode
 template<class F, class... Args>
 inline detail::bound_function<F, boost::tuple<Args...> >

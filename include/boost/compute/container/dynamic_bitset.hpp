@@ -17,14 +17,24 @@
 #include <boost/compute/algorithm/transform_reduce.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/functional/integer.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace boost {
 namespace compute {
 
-/// The dynamic_bitset class contains a resizable bit array.
+/// \class dynamic_bitset
+/// \brief The dynamic_bitset class contains a resizable bit array.
 ///
-/// \see vector<T>
+/// For example, to create a dynamic-bitset with space for 1000 bits on the
+/// device:
+/// \code
+/// boost::compute::dynamic_bitset<> bits(1000, queue);
+/// \endcode
+///
+/// The Boost.Compute \c dynamic_bitset class provides a STL-like API and is
+/// modeled after the \c boost::dynamic_bitset class from Boost.
+///
+/// \see \ref vector "vector<T>"
 template<class Block = ulong_, class Alloc = buffer_allocator<Block> >
 class dynamic_bitset
 {
@@ -150,10 +160,10 @@ public:
 
         // update block value
         if(value){
-            block_value |= (1 << bit);
+            block_value |= (size_type(1) << bit);
         }
         else {
-            block_value &= ~(1 << bit);
+            block_value &= ~(size_type(1) << bit);
         }
 
         // store new block
@@ -169,7 +179,7 @@ public:
         block_type block_value;
         copy_n(m_bits.begin() + block, 1, &block_value, queue);
 
-        return block_value & (1 << bit);
+        return block_value & (size_type(1) << bit);
     }
 
     /// Flips the value of the bit at position \p n.

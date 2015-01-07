@@ -32,7 +32,19 @@ namespace compute {
 /// \class array
 /// \brief A fixed-size container.
 ///
-/// \see vector<T>
+/// The array container is very similar to the \ref vector container except
+/// its size is fixed at compile-time rather than being dynamically resizable
+/// at run-time.
+///
+/// For example, to create a fixed-size array with eight values on the device:
+/// \code
+/// boost::compute::array<int, 8> values(context);
+/// \endcode
+///
+/// The Boost.Compute \c array class provides a STL-like API and is modeled
+/// after the \c std::array class from the C++ standard library.
+///
+/// \see \ref vector "vector<T>"
 template<class T, std::size_t N>
 class array
 {

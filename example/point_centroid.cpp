@@ -15,7 +15,7 @@
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/accumulate.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace compute = boost::compute;
 

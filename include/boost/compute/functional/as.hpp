@@ -28,11 +28,16 @@ struct invoked_as
 
 } // end detail namespace
 
+/// The \ref as function converts its argument to type \c T (similar to
+/// reinterpret_cast<T>).
+///
+/// \see \ref convert "convert<T>"
 template<class T>
 struct as
 {
     typedef T result_type;
 
+    /// \internal_
     template<class Arg>
     detail::invoked_as<T, Arg> operator()(const Arg &arg) const
     {

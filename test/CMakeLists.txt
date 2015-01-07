@@ -2,6 +2,11 @@ include_directories(../include)
 
 set(BOOST_COMPONENTS unit_test_framework)
 
+if(${BOOST_COMPUTE_USE_CPP11})
+  # allow tests to use C++11 features
+  add_definitions(-DBOOST_COMPUTE_USE_CPP11)
+endif()
+
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
   set(BOOST_COMPONENTS ${BOOST_COMPONENTS} system filesystem)
   add_definitions(-DBOOST_COMPUTE_USE_OFFLINE_CACHE)
@@ -152,10 +157,12 @@ add_compute_test("iterator.buffer_iterator" test_buffer_iterator.cpp)
 add_compute_test("iterator.constant_iterator" test_constant_iterator.cpp)
 add_compute_test("iterator.counting_iterator" test_counting_iterator.cpp)
 add_compute_test("iterator.discard_iterator" test_discard_iterator.cpp)
+add_compute_test("iterator.function_input_iterator" test_function_input_iterator.cpp)
 add_compute_test("iterator.permutation_iterator" test_permutation_iterator.cpp)
 add_compute_test("iterator.transform_iterator" test_transform_iterator.cpp)
 add_compute_test("iterator.zip_iterator" test_zip_iterator.cpp)
 
+add_compute_test("memory.local_buffer" test_local_buffer.cpp)
 add_compute_test("memory.svm_ptr" test_svm_ptr.cpp)
 
 add_compute_test("random.bernoulli_distribution" test_bernoulli_distribution.cpp)
@@ -166,7 +173,7 @@ add_compute_test("random.normal_distribution" test_normal_distribution.cpp)
 add_compute_test("random.uniform_int_distribution" test_uniform_int_distribution.cpp)
 add_compute_test("random.uniform_real_distribution" test_uniform_real_distribution.cpp)
 
-add_compute_test("types.builtin" test_types.cpp)
+add_compute_test("types.fundamental" test_types.cpp)
 add_compute_test("types.complex" test_complex.cpp)
 add_compute_test("types.pair" test_pair.cpp)
 add_compute_test("types.tuple" test_tuple.cpp)
@@ -180,8 +187,25 @@ add_compute_test("experimental.sort_by_transform" test_sort_by_transform.cpp)
 add_compute_test("experimental.tabulate" test_tabulate.cpp)
 add_compute_test("experimental.transform_if" test_transform_if.cpp)
 
-add_compute_test("ext.lambda" test_lambda.cpp)
-add_compute_test("ext.amd_cpp_kernel_language" test_amd_cpp_kernel_language.cpp)
+# miscellaneous tests
+add_compute_test("misc.amd_cpp_kernel_language" test_amd_cpp_kernel_language.cpp)
+add_compute_test("misc.lambda" test_lambda.cpp)
+add_compute_test("misc.user_defined_types" test_user_defined_types.cpp)
+
+# Check for linkage problems
+add_executable(test_multiple_objects
+    test_multiple_objects1.cpp
+    test_multiple_objects2.cpp
+    )
+target_link_libraries(test_multiple_objects
+    ${OPENCL_LIBRARIES}
+    ${Boost_LIBRARIES}
+    )
+# link with coverage library
+if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  target_link_libraries(test_multiple_objects -fprofile-arcs -ftest-coverage)
+endif()
+add_test("misc.multiple_objects" test_multiple_objects)
 
 # eigen interop tests
 if(${BOOST_COMPUTE_HAVE_EIGEN})
@@ -237,21 +261,3 @@ if(${BOOST_COMPUTE_HAVE_VTK})
   add_compute_test("interop.vtk" test_interop_vtk.cpp)
   target_link_libraries(test_interop_vtk ${VTK_LIBRARIES})
 endif()
-
-# tests for particular bugs/issues
-add_compute_test("issue.user_defined_types" test_user_defined_types.cpp)
-
-# Check for linkage problems
-add_executable(test_multiple_objects
-    test_multiple_objects1.cpp
-    test_multiple_objects2.cpp
-    )
-target_link_libraries(test_multiple_objects
-    ${OPENCL_LIBRARIES}
-    ${Boost_LIBRARIES}
-    )
-# link with coverage library
-if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  target_link_libraries(test_multiple_objects -fprofile-arcs -ftest-coverage)
-endif()
-add_test("issue.multiple_objects" test_multiple_objects)

@@ -56,17 +56,17 @@ class kernel;
 /// \endcode
 ///
 /// Once a program object has been succesfully created, it can be compiled
-/// using the build() method:
+/// using the \c build() method:
 /// \code
 /// // build the program
 /// foo_program.build();
 /// \endcode
 ///
-/// Kernel objects can be created from compiled programs using the kernel
-/// class's constructor:
+/// Once the program is built, \ref kernel objects can be created using the
+/// \c create_kernel() method by passing their name:
 /// \code
 /// // create a kernel from the compiled program
-/// boost::compute::kernel foo_kernel(foo_program, "foo");
+/// boost::compute::kernel foo_kernel = foo_program.create_kernel("foo");
 /// \endcode
 ///
 /// \see kernel

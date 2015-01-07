@@ -23,6 +23,7 @@
 #include <boost/compute/container/mapped_view.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {

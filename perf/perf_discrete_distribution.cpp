@@ -30,12 +30,12 @@ int main(int argc, char *argv[])
     compute::context context(device);
     compute::command_queue queue(context, device);
 
-    compute::vector<unsigned int> vector(PERF_N, context);
+    compute::vector<compute::uint_> vector(PERF_N, context);
 
     int weights[] = {1, 1};
 
     compute::default_random_engine rng(queue);
-    compute::discrete_distribution<uint> dist(weights, weights+2);
+    compute::discrete_distribution<compute::uint_> dist(weights, weights+2);
 
     perf_timer t;
     t.start();

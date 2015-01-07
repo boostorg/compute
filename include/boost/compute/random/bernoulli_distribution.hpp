@@ -13,8 +13,9 @@
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/function.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/detail/literal.hpp>
 
 namespace boost {
 namespace compute {
@@ -36,7 +37,7 @@ class bernoulli_distribution
 public:
 
     /// Creates a new bernoulli distribution
-    bernoulli_distribution(RealType p = 0.25f)
+    bernoulli_distribution(RealType p = 0.5f)
         : m_p(p)
     {
     }
@@ -70,7 +71,7 @@ public:
             return (convert_RealType(x) / MAX_RANDOM) < PARAM;
         });
 
-        scale_random.define("PARAM", boost::lexical_cast<std::string>(m_p));
+        scale_random.define("PARAM", detail::make_literal(m_p));
         scale_random.define("MAX_RANDOM", "UINT_MAX");
         scale_random.define(
             "convert_RealType", std::string("convert_") + type_name<RealType>()

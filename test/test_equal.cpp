@@ -12,6 +12,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <boost/compute/algorithm/equal.hpp>
+#include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/container/string.hpp>
 #include <boost/compute/container/vector.hpp>
 
@@ -38,6 +39,20 @@ BOOST_AUTO_TEST_CASE(equal_string)
 
     BOOST_CHECK(boost::compute::equal(a.begin(), a.end(), b.begin()) == true);
     BOOST_CHECK(boost::compute::equal(a.begin(), a.end(), c.begin()) == false);
+}
+
+BOOST_AUTO_TEST_CASE(equal_different_range_sizes)
+{
+    boost::compute::vector<int> a(10, context);
+    boost::compute::vector<int> b(20, context);
+
+    boost::compute::fill(a.begin(), a.end(), 3, queue);
+    boost::compute::fill(b.begin(), b.end(), 3, queue);
+
+    BOOST_CHECK(boost::compute::equal(a.begin(), a.end(), b.begin(), b.end(), queue) == false);
+    BOOST_CHECK(boost::compute::equal(a.begin(), a.end(), a.begin(), a.end(), queue) == true);
+    BOOST_CHECK(boost::compute::equal(b.begin(), b.end(), a.begin(), a.end(), queue) == false);
+    BOOST_CHECK(boost::compute::equal(b.begin(), b.end(), b.begin(), b.end(), queue) == true);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

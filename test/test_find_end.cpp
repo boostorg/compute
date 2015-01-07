@@ -15,7 +15,7 @@
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/algorithm/find_end.hpp>
 #include <boost/compute/container/vector.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"

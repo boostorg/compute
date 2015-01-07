@@ -14,10 +14,11 @@
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/container/vector.hpp>
-#include <boost/compute/iterator/buffer_iterator.hpp>
-#include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/algorithm/detail/scan_on_cpu.hpp>
+#include <boost/compute/container/vector.hpp>
+#include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/memory/local_buffer.hpp>
+#include <boost/compute/iterator/buffer_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -214,7 +215,7 @@ inline OutputIterator scan_impl(InputIterator first,
         local_scan_kernel(first, last, result, exclusive);
 
     ::boost::compute::kernel kernel = local_scan_kernel.compile(context);
-    kernel.set_arg(local_scan_kernel.m_scratch_arg, block_size * sizeof(value_type), 0);
+    kernel.set_arg(local_scan_kernel.m_scratch_arg, local_buffer<value_type>(block_size));
     kernel.set_arg(local_scan_kernel.m_block_sums_arg, block_sums);
     kernel.set_arg(local_scan_kernel.m_block_size_arg, static_cast<cl_uint>(block_size));
     kernel.set_arg(local_scan_kernel.m_count_arg, static_cast<cl_uint>(count));

@@ -31,10 +31,10 @@ int main(int argc, char *argv[])
     compute::command_queue queue(context, device);
 
     // create vector on the device
-    compute::vector<unsigned int> vector(PERF_N, context);
+    compute::vector<compute::uint_> vector(PERF_N, context);
 
     // create mersenne twister engine
-    compute::linear_congruential_engine<uint> rng(queue);
+    compute::linear_congruential_engine<compute::uint_> rng(queue);
 
     // generate random numbers
     perf_timer t;

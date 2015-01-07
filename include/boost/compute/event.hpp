@@ -18,13 +18,32 @@
 #include <boost/compute/detail/duration.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace boost {
 namespace compute {
 
 /// \class event
-/// \brief An event on a compute device.
+/// \brief An event corresponding to an operation on a compute device
+///
+/// Event objects are used to track operations running on the device (such as
+/// kernel executions and memory transfers). Event objects are returned by the
+/// various \c enqueue_* methods of the command_queue class.
+///
+/// Events can be used to synchronize operations between the host and the
+/// device. The \c wait() method will block execution on the host until the
+/// operation corresponding to the event on the device has completed. The
+/// status of the operation can also be polled with the \c status() method.
+///
+/// Event objects can also be used for performance profiling. In order to use
+/// events for profiling, the command queue must be constructed with the
+/// \c CL_QUEUE_PROFILING_ENABLE flag. Then the \c duration() method can be
+/// used to retrieve the total duration of the operation on the device:
+/// \code
+/// std::cout << "time = " << e.duration<std::chrono::milliseconds>().count() << "ms\n";
+/// \endcode
+///
+/// \see \ref future "future<T>", wait_list
 class event
 {
 public:
