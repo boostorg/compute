@@ -98,7 +98,7 @@ public:
          buffer_iterator<T> lhsen = end();
 using boost::compute::plus;
 
-+       transform(lhsit, lhsen, rhsit, lhsit, plus<T>, 
++       transform(lhsit, lhsen, rhsit, lhsit, plus<T>(), 
             command_queue & queue = system::default_queue());
             
     }
