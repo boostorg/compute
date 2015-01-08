@@ -96,9 +96,9 @@ public:
 +        const context &context = m_buffer.get_context();
     command_queue queue(context, context.get_device());
     valarray<T> result(size(), context);
-    transform(begin(), end(), rhs.begin(), plus<T>(), queue);
+    transform(begin(), end(), rhs.begin(),result.begin(), plus<T>(), queue);
     queue.finish();
-    return *result;
+    return result;
     
     }
     
@@ -107,9 +107,9 @@ public:
 +   const context &context = m_buffer.get_context();
     command_queue queue(context, context.get_device());
     valarray<T> result(size(), context);
-    transform(begin(), end(), rhs.begin(), minus<T>(), queue);
+    transform(begin(), end(), rhs.begin(),result.begin(), minus<T>(), queue);
     queue.finish();
-    return *result;
+    return result;
     
     }
     
