@@ -91,19 +91,28 @@ public:
     {
     }
  
- valarray<T>& operator+=(const valarray<T> &rhs)
+ valarray<T> operator+(const valarray<T> &rhs)
 +    {
-+        buffer_iterator<T> lhsit = begin();
-+        buffer_iterator<T> rhsit = rhs.begin();
-         buffer_iterator<T> lhsen = end();
-using boost::compute::plus;
-
-+       transform(lhsit, lhsen, rhsit, lhsit, plus<T>(), 
-            command_queue & queue = system::default_queue());
-            
-            return *this;
-            
++        const context &context = m_buffer.get_context();
+    command_queue queue(context, context.get_device());
+    valarray<T> result(size(), context);
+    transform(begin(), end(), other.begin(), plus<T>(), queue);
+    queue.finish();
+    return result;
+    
     }
+    
+     valarray<T> operator-(const valarray<T> &rhs)
++    {
++        const context &context = m_buffer.get_context();
+    command_queue queue(context, context.get_device());
+    valarray<T> result(size(), context);
+    transform(begin(), end(), other.begin(), minus<T>(), queue);
+    queue.finish();
+    return result;
+    
+    }
+    
 +
     size_t size() const
     {
