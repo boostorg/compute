@@ -91,7 +91,7 @@ public:
     {
     }
  
- valarray<T> operator+(const valarray<T> &rhs) const
+    valarray<T> operator+(const valarray<T> &rhs) const
 +    {
 +        const context &context = m_buffer.get_context();
     command_queue queue(context, context.get_device());
@@ -109,7 +109,7 @@ public:
     valarray<T> result(size(), context);
     transform(begin(), end(), rhs.begin(), minus<T>(), queue);
     queue.finish();
-    return result;
+    return *result;
     
     }
     
