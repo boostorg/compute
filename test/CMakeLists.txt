@@ -129,6 +129,7 @@ add_compute_test("allocator.buffer_allocator" test_buffer_allocator.cpp)
 add_compute_test("allocator.pinned_allocator" test_pinned_allocator.cpp)
 
 add_compute_test("async.wait" test_async_wait.cpp)
+add_compute_test("async.wait_guard" test_async_wait_guard.cpp)
 
 add_compute_test("container.array" test_array.cpp)
 add_compute_test("container.dynamic_bitset" test_dynamic_bitset.cpp)
