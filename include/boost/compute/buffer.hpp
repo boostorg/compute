@@ -153,6 +153,26 @@ public:
     /// Creates a new buffer with a copy of the data in \c *this. Uses
     /// \p queue to perform the copy.
     buffer clone(command_queue &queue) const;
+
+    buffer create_subbuffer(cl_mem_flags flags, size_t origin,
+                            size_t size)
+    {
+        cl_int error = 0;
+
+        cl_buffer_region region = { origin, size };
+
+        cl_mem mem = clCreateSubBuffer(m_mem,
+                                       flags,
+                                       CL_BUFFER_CREATE_TYPE_REGION,
+                                       &region,
+                                       &error);
+
+        if(!mem){
+            BOOST_THROW_EXCEPTION(opencl_error(error));
+        }
+
+        return buffer(mem, false);
+    }
 };
 
 /// \internal_ define get_info() specializations for buffer
