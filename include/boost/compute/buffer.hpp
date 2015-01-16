@@ -154,9 +154,23 @@ public:
     /// \p queue to perform the copy.
     buffer clone(command_queue &queue) const;
 
+    #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Creates a new buffer out of this buffer.
+    /// The new buffer is a sub region of this buffer.
+    /// \p flags The mem_flags which should be used to create the new buffer
+    /// \p origin The start index in this buffer
+    /// \p size The size of the new sub buffer
+    ///
+    /// \see_opencl_ref{clCreateSubBuffer}
+    ///
+    /// \opencl_version_warning{1,1}
     buffer create_subbuffer(cl_mem_flags flags, size_t origin,
                             size_t size)
     {
+        BOOST_ASSERT(origin + size <= this->size());
+        BOOST_ASSERT(origin % (get_context().
+                               get_device().
+                               get_info<CL_DEVICE_MEM_BASE_ADDR_ALIGN>() / 8) == 0);
         cl_int error = 0;
 
         cl_buffer_region region = { origin, size };
@@ -173,6 +187,7 @@ public:
 
         return buffer(mem, false);
     }
+  #endif // CL_VERSION_1_1
 };
 
 /// \internal_ define get_info() specializations for buffer
