@@ -24,6 +24,7 @@
 #include <boost/compute/algorithm/detail/reduce_on_gpu.hpp>
 #include <boost/compute/algorithm/detail/serial_reduce.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/memory/local_buffer.hpp>
 #include <boost/compute/type_traits/result_of.hpp>
 
 namespace boost {
@@ -81,7 +82,7 @@ size_t reduce(InputIterator first,
 
         kernel kernel = k.compile(context);
         kernel.set_arg(output_arg, result.get_buffer());
-        kernel.set_arg(block_arg, block_size * sizeof(input_type), 0);
+        kernel.set_arg(block_arg, local_buffer<input_type>(block_size));
 
         queue.enqueue_1d_range_kernel(kernel,
                                       0,
@@ -241,9 +242,17 @@ inline void dispatch_reduce(InputIterator first,
 ///
 /// If no function is specified, \c plus will be used.
 ///
-/// The difference between the reduce() function and the accumulate()
-/// function is that reduce() requires the binary operator to be
-/// commutative.
+/// \param first first element in the input range
+/// \param last last element in the input range
+/// \param result iterator pointing to the output
+/// \param function binary reduction function
+/// \param queue command queue to perform the operation
+///
+/// The \c reduce() algorithm assumes that the binary reduction function is
+/// associative. When used with non-associative functions the result may
+/// be non-deterministic and vary in precision. Notably this affects the
+/// \c plus<float>() function as floating-point addition is not associative
+/// and may produce slightly different results than a serial algorithm.
 ///
 /// This algorithm supports both host and device iterators for the
 /// result argument. This allows for values to be reduced and copied
@@ -253,6 +262,11 @@ inline void dispatch_reduce(InputIterator first,
 /// copy the result to a value on the host:
 ///
 /// \snippet test/test_reduce.cpp sum_int
+///
+/// Note that while the the \c reduce() algorithm is conceptually identical to
+/// the \c accumulate() algorithm, its implementation is substantially more
+/// efficient on parallel hardware. For more information, see the documentation
+/// on the \c accumulate() algorithm.
 ///
 /// \see accumulate()
 template<class InputIterator, class OutputIterator, class BinaryFunction>

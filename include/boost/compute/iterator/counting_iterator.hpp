@@ -19,7 +19,7 @@
 #include <boost/iterator/iterator_facade.hpp>
 
 #include <boost/compute/detail/meta_kernel.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -66,6 +66,18 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 
 } // end detail namespace
 
+/// \class counting_iterator
+/// \brief The counting_iterator class implements a counting iterator.
+///
+/// A counting iterator returns an internal value (initialized with \p init)
+/// which is incremented each time the iterator is incremented.
+///
+/// For example, this could be used to implement the iota() algorithm in terms
+/// of the copy() algorithm by copying from a range of counting iterators:
+///
+/// \snippet test/test_counting_iterator.cpp iota_with_copy
+///
+/// \see make_counting_iterator()
 template<class T>
 class counting_iterator : public detail::counting_iterator_base<T>::type
 {
@@ -146,27 +158,26 @@ private:
     T m_init;
 };
 
+/// Returns a new counting_iterator starting at \p init.
+///
+/// \param init the initial value
+///
+/// \return a counting_iterator with \p init.
+///
+/// For example, to create a counting iterator which returns unsigned integers
+/// and increments from one:
+/// \code
+/// auto iter = make_counting_iterator<uint_>(1);
+/// \endcode
 template<class T>
 inline counting_iterator<T> make_counting_iterator(const T &init)
 {
     return counting_iterator<T>(init);
 }
 
-namespace detail {
-
-// is_device_iterator specialization for counting_iterator
-template<class Iterator>
-struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            counting_iterator<typename Iterator::value_type>,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
-
-} // end detail namespace
+/// \internal_ (is_device_iterator specialization for counting_iterator)
+template<class T>
+struct is_device_iterator<counting_iterator<T> > : boost::true_type {};
 
 } // end compute namespace
 } // end boost namespace

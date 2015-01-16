@@ -28,11 +28,16 @@ struct invoked_convert
 
 } // end detail namespace
 
+/// The \ref convert function converts its argument to type \c T (similar to
+/// static_cast<T>).
+///
+/// \see \ref as "as<T>"
 template<class T>
 struct convert
 {
     typedef T result_type;
 
+    /// \internal_
     template<class Arg>
     detail::invoked_convert<T, Arg> operator()(const Arg &arg) const
     {

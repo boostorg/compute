@@ -230,6 +230,13 @@ public:
     /// This method is also specialized for device container types such as
     /// vector<T> and array<T, N>. This allows for them to be passed directly
     /// as kernel arguments without having to extract their underlying buffer.
+    ///
+    /// For setting local memory arguments (e.g. "__local float *buf"), the
+    /// local_buffer<T> class may be used:
+    /// \code
+    /// // set argument to a local buffer with storage for 32 float's
+    /// kernel.set_arg(0, local_buffer<float>(32));
+    /// \endcode
     template<class T>
     void set_arg(size_t index, const T &value)
     {

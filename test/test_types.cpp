@@ -14,7 +14,7 @@
 #include <string>
 #include <sstream>
 
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 BOOST_AUTO_TEST_CASE(vector_ctor)
 {

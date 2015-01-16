@@ -16,6 +16,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/memory/local_buffer.hpp>
 
 namespace boost {
 namespace compute {
@@ -98,7 +99,7 @@ inline void inplace_reduce(Iterator first,
         kernel.set_arg(input_arg, *input_buffer);
         kernel.set_arg(input_size_arg, static_cast<uint_>(input_size));
         kernel.set_arg(output_arg, *output_buffer);
-        kernel.set_arg(scratch_arg, block_size * sizeof(value_type), 0);
+        kernel.set_arg(scratch_arg, local_buffer<value_type>(block_size));
 
         queue.enqueue_1d_range_kernel(kernel,
                                       0,

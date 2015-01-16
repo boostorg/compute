@@ -20,9 +20,9 @@
 #include <boost/compute/functional.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/is_buffer_iterator.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
 #include <boost/compute/iterator/detail/get_base_iterator_buffer.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 #include <boost/compute/type_traits/result_of.hpp>
 
 namespace boost {
@@ -95,7 +95,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 /// \class transform_iterator
 /// \brief A transform iterator adaptor.
 ///
-/// The transform_iterator adaptor applys a unary function to each element
+/// The transform_iterator adaptor applies a unary function to each element
 /// produced from the underlying iterator when dereferenced.
 ///
 /// For example, to copy from an input range to an output range while taking
@@ -106,8 +106,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 /// \see buffer_iterator, make_transform_iterator()
 template<class InputIterator, class UnaryFunction>
 class transform_iterator :
-    public detail::transform_iterator_base<InputIterator,
-                                           UnaryFunction>::type
+    public detail::transform_iterator_base<InputIterator, UnaryFunction>::type
 {
 public:
     typedef typename
@@ -197,7 +196,18 @@ private:
     UnaryFunction m_transform;
 };
 
-/// Returns a transform iterator for \p iterator with \p transform.
+/// Returns a transform_iterator for \p iterator with \p transform.
+///
+/// \param iterator the underlying iterator
+/// \param transform the unary transform function
+///
+/// \return a \c transform_iterator for \p iterator with \p transform
+///
+/// For example, to create an iterator which returns the square-root of each
+/// value in a \c vector<int>:
+/// \code
+/// auto sqrt_iterator = make_transform_iterator(vec.begin(), sqrt<int>());
+/// \endcode
 template<class InputIterator, class UnaryFunction>
 inline transform_iterator<InputIterator, UnaryFunction>
 make_transform_iterator(InputIterator iterator, UnaryFunction transform)
@@ -206,22 +216,11 @@ make_transform_iterator(InputIterator iterator, UnaryFunction transform)
                               UnaryFunction>(iterator, transform);
 }
 
-namespace detail {
-
-// is_device_iterator specialization for transform_iterator
-template<class Iterator>
+/// \internal_ (is_device_iterator specialization for transform_iterator)
+template<class InputIterator, class UnaryFunction>
 struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            transform_iterator<typename Iterator::base_type,
-                               typename Iterator::unary_function>,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
+    transform_iterator<InputIterator, UnaryFunction> > : boost::true_type {};
 
-} // end detail namespace
 } // end compute namespace
 } // end boost namespace
 

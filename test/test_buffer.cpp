@@ -123,6 +123,23 @@ BOOST_AUTO_TEST_CASE(destructor_callback)
     }
     BOOST_CHECK(invoked == true);
 }
+
+BOOST_AUTO_TEST_CASE(create_subbuffer)
+{
+    size_t base_addr_align = device.get_info<CL_DEVICE_MEM_BASE_ADDR_ALIGN>() / 8;
+    size_t multiplier = 16;
+    size_t buffer_size = base_addr_align * multiplier;
+    size_t subbuffer_size = 64;
+    boost::compute::buffer buffer(context, buffer_size);
+
+    for(size_t i = 0; i < multiplier; ++i)
+    {
+        boost::compute::buffer subbuffer = buffer.create_subbuffer(
+              boost::compute::buffer::read_write, base_addr_align * i, subbuffer_size);
+        BOOST_CHECK(buffer.get() != subbuffer.get());
+        BOOST_CHECK_EQUAL(subbuffer.size(), subbuffer_size);
+    }
+}
 #endif // CL_VERSION_1_1
 
 BOOST_AUTO_TEST_CASE(create_buffer_doctest)

@@ -73,4 +73,24 @@ BOOST_AUTO_TEST_CASE(copy)
     );
 }
 
+BOOST_AUTO_TEST_CASE(fill_with_copy_doctest)
+{
+//! [fill_with_copy]
+using boost::compute::make_constant_iterator;
+
+boost::compute::vector<int> result(5, context);
+
+boost::compute::copy(
+    make_constant_iterator(42, 0),
+    make_constant_iterator(42, result.size()),
+    result.begin(),
+    queue
+);
+
+// result == { 42, 42, 42, 42, 42 }
+//! [fill_with_copy]
+
+    CHECK_RANGE_EQUAL(int, 5, result, (42, 42, 42, 42, 42));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

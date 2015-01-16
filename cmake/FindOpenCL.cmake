@@ -61,7 +61,13 @@ ELSE (APPLE)
 	# to the library
 	FIND_PATH(OPENCL_INCLUDE_DIRS CL/cl.h PATHS ${_OPENCL_INC_CAND} "/usr/local/cuda/include" "/opt/cuda/include" "/opt/AMDAPP/include" ENV OpenCL_INCPATH)
 	FIND_PATH(_OPENCL_CPP_INCLUDE_DIRS CL/cl.hpp PATHS ${_OPENCL_INC_CAND} "/usr/local/cuda/include" "/opt/cuda/include" "/opt/AMDAPP/include" ENV OpenCL_INCPATH)
-
+	# for Mali GPUs, libmali must be linked 
+	FIND_LIBRARY(OPENCL_LIBRARIES_MALI mali
+		PATHS ENV LD_LIBRARY_PATH ENV OpenCL_LIBPATH "/usr/lib64"
+	)
+	IF (OPENCL_LIBRARIES_MALI)
+		SET(OPENCL_LIBRARIES ${OPENCL_LIBRARIES} ${OPENCL_LIBRARIES_MALI})
+	ENDIF (OPENCL_LIBRARIES_MALI)
     ENDIF (WIN32)
 
 ENDIF (APPLE)

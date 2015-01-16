@@ -35,6 +35,9 @@ doxygen autodoc
     ../include/boost/compute/algorithm.hpp
     [ glob ../include/boost/compute/algorithm/*.hpp ]
 
+    ../include/boost/compute/allocator.hpp
+    [ glob ../include/boost/compute/allocator/*.hpp ]
+
     ../include/boost/compute/async.hpp
     [ glob ../include/boost/compute/async/*.hpp ]
 
@@ -45,9 +48,7 @@ doxygen autodoc
     [ glob ../include/boost/compute/exception/*.hpp ]
 
     ../include/boost/compute/functional.hpp
-    ../include/boost/compute/functional/field.hpp
-    ../include/boost/compute/functional/get.hpp
-    ../include/boost/compute/functional/popcount.hpp
+    [ glob ../include/boost/compute/functional/*.hpp ]
 
     ../include/boost/compute/interop/opengl.hpp
     [ glob ../include/boost/compute/interop/opengl/*.hpp ]

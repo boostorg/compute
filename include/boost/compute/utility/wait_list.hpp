@@ -36,7 +36,7 @@ template<class T> class future;
 /// clEnqueueNDRangeKernel(..., events.get_event_ptr(), events.size(), ...);
 /// \endcode
 ///
-/// \see event, future<T>
+/// \see event, \ref future "future<T>"
 class wait_list
 {
 public:

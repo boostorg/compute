@@ -11,6 +11,7 @@
 #define BOOST_TEST_MODULE TestMismatch
 #include <boost/test/unit_test.hpp>
 
+#include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/mismatch.hpp>
 #include <boost/compute/container/vector.hpp>
 
@@ -32,6 +33,31 @@ BOOST_AUTO_TEST_CASE(mismatch_int)
     BOOST_CHECK_EQUAL(int(*location.first), int(4));
     BOOST_CHECK(location.second == vector2.begin() + 3);
     BOOST_CHECK_EQUAL(int(*location.second), int(7));
+}
+
+BOOST_AUTO_TEST_CASE(mismatch_different_range_sizes)
+{
+    boost::compute::vector<int> a(10, context);
+    boost::compute::vector<int> b(20, context);
+
+    boost::compute::fill(a.begin(), a.end(), 3, queue);
+    boost::compute::fill(b.begin(), b.end(), 3, queue);
+
+    typedef boost::compute::vector<int>::iterator iter;
+
+    std::pair<iter, iter> location;
+
+    location = boost::compute::mismatch(
+        a.begin(), a.end(), b.begin(), b.end(), queue
+    );
+    BOOST_CHECK(location.first == a.end());
+    BOOST_CHECK(location.second == b.begin() + 10);
+
+    location = boost::compute::mismatch(
+        b.begin(), b.end(), a.begin(), a.end(), queue
+    );
+    BOOST_CHECK(location.first == b.begin() + 10);
+    BOOST_CHECK(location.second == a.end());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

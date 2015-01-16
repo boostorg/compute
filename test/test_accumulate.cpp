@@ -11,9 +11,12 @@
 #define BOOST_TEST_MODULE TestAccumulate
 #include <boost/test/unit_test.hpp>
 
+#include <numeric>
+
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/accumulate.hpp>
 #include <boost/compute/algorithm/iota.hpp>
+#include <boost/compute/container/mapped_view.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/counting_iterator.hpp>
 
@@ -247,6 +250,50 @@ BOOST_AUTO_TEST_CASE(min_max)
         vec.begin(), vec.end(), 10.f, max<float>(), queue
     );
     BOOST_CHECK_EQUAL(max_value, 10.f);
+}
+
+template<class T>
+void ensure_std_accumulate_equality(const std::vector<T> &data,
+                                    boost::compute::command_queue &queue)
+{
+    boost::compute::mapped_view<T> view(&data[0], data.size(), queue.get_context());
+
+    BOOST_CHECK_EQUAL(
+        std::accumulate(data.begin(), data.end(), 0),
+        boost::compute::accumulate(view.begin(), view.end(), 0, queue)
+    );
+}
+
+BOOST_AUTO_TEST_CASE(std_accumulate_equality)
+{
+    // test accumulate() with int
+    int data1[] = { 1, 2, 3, 4 };
+    std::vector<int> vec1(data1, data1 + 4);
+    ensure_std_accumulate_equality(vec1, queue);
+
+    vec1.resize(10000);
+    std::fill(vec1.begin(), vec1.end(), 2);
+    ensure_std_accumulate_equality(vec1, queue);
+
+    // test accumulate() with float
+    float data2[] = { 1.2f, 2.3f, 4.5f, 6.7f, 8.9f };
+    std::vector<float> vec2(data2, data2 + 5);
+    ensure_std_accumulate_equality(vec2, queue);
+
+    vec2.resize(10000);
+    std::fill(vec2.begin(), vec2.end(), 1.01f);
+    ensure_std_accumulate_equality(vec2, queue);
+
+    // test accumulate() with double
+    if(device.supports_extension("cl_khr_fp64")){
+        double data3[] = { 1.2, 2.3, 4.5, 6.7, 8.9 };
+        std::vector<double> vec3(data3, data3 + 5);
+        ensure_std_accumulate_equality(vec3, queue);
+
+        vec3.resize(10000);
+        std::fill(vec3.begin(), vec3.end(), 2.02);
+        ensure_std_accumulate_equality(vec3, queue);
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()

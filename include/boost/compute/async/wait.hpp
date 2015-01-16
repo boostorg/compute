@@ -37,8 +37,10 @@ inline void insert_events_variadic(wait_list &l, Event&& event, Rest&&... rest)
 } // end detail namespace
 
 #ifndef BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
-/// Blocks until all events have completed. Events can either be event
-/// objects or future objects.
+/// Blocks until all events have completed. Events can either be \ref event
+/// objects or \ref future "future<T>" objects.
+///
+/// \see event, wait_list
 template<class... Events>
 inline void wait_for_all(Events&&... events)
 {

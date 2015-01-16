@@ -36,6 +36,7 @@
 #include <boost/compute/algorithm/find_if.hpp>
 #include <boost/compute/algorithm/find_if_not.hpp>
 #include <boost/compute/algorithm/for_each.hpp>
+#include <boost/compute/algorithm/for_each_n.hpp>
 #include <boost/compute/algorithm/gather.hpp>
 #include <boost/compute/algorithm/generate.hpp>
 #include <boost/compute/algorithm/generate_n.hpp>

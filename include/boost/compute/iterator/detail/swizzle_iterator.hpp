@@ -22,9 +22,9 @@
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/type_traits/make_vector_type.hpp>
 #include <boost/compute/detail/is_buffer_iterator.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
 #include <boost/compute/iterator/detail/get_base_iterator_buffer.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -176,22 +176,12 @@ make_swizzle_iterator(InputIterator iterator, const std::string &components)
     return swizzle_iterator<InputIterator, Size>(iterator, components);
 }
 
-// is_device_iterator specialization for swizzle_iterator
-template<class Iterator>
-struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            swizzle_iterator<
-                typename Iterator::base_type,
-                Iterator::vector_size
-            >,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
-
 } // end detail namespace
+
+// is_device_iterator specialization for swizzle_iterator
+template<size_t Size, class InputIterator>
+struct is_device_iterator<detail::swizzle_iterator<InputIterator, Size> > : boost::true_type {};
+
 } // end compute namespace
 } // end boost namespace
 

@@ -193,15 +193,14 @@ BOOST_AUTO_TEST_CASE(move_ctor)
 }
 #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && \
-    !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#ifdef BOOST_COMPUTE_USE_CPP11
 BOOST_AUTO_TEST_CASE(initializer_list_ctor)
 {
     bc::vector<int> vector = { 2, 4, 6, 8 };
     BOOST_CHECK_EQUAL(vector.size(), size_t(4));
     CHECK_RANGE_EQUAL(int, 4, vector, (2, 4, 6, 8));
 }
-#endif // !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+#endif // BOOST_COMPUTE_USE_CPP11
 
 BOOST_AUTO_TEST_CASE(vector_double)
 {

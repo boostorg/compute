@@ -16,7 +16,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/random/default_random_engine.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace compute = boost::compute;
 

@@ -13,7 +13,7 @@
 
 #include <boost/compute/algorithm/reduce.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace boost {
 namespace compute {
