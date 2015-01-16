@@ -18,6 +18,7 @@
 
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -43,6 +44,16 @@ public:
 
 } // end detail namespace
 
+/// \class constant_buffer_iterator
+/// \brief An iterator for a buffer in the \c constant memory space.
+///
+/// The constant_buffer_iterator class provides an iterator for values in a
+/// buffer in the \c constant memory space.
+///
+/// For iterating over values in the \c global memory space (the most common
+/// case), use the buffer_iterator class.
+///
+/// \see buffer_iterator
 template<class T>
 class constant_buffer_iterator :
     public detail::constant_buffer_iterator_base<T>::type
@@ -160,12 +171,22 @@ private:
     size_t m_index;
 };
 
+/// Creates a new constant_buffer_iterator for \p buffer at \p index.
+///
+/// \param buffer the \ref buffer object
+/// \param index the index in the buffer
+///
+/// \return a \c constant_buffer_iterator for \p buffer at \p index
 template<class T>
 inline constant_buffer_iterator<T>
 make_constant_buffer_iterator(const buffer &buffer, size_t index = 0)
 {
     return constant_buffer_iterator<T>(buffer, index);
 }
+
+/// \internal_ (is_device_iterator specialization for constant_buffer_iterator)
+template<class T>
+struct is_device_iterator<constant_buffer_iterator<T> > : boost::true_type {};
 
 namespace detail {
 
@@ -181,20 +202,7 @@ struct is_buffer_iterator<
     >::type
 > : public boost::true_type {};
 
-// is_device_iterator specialization for constant_buffer_iterator
-template<class Iterator>
-struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            constant_buffer_iterator<typename Iterator::value_type>,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
-
 } // end detail namespace
-
 } // end compute namespace
 } // end boost namespace
 

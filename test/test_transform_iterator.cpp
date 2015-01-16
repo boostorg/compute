@@ -50,6 +50,18 @@ BOOST_AUTO_TEST_CASE(value_type)
     ));
 }
 
+BOOST_AUTO_TEST_CASE(base_type)
+{
+    BOOST_STATIC_ASSERT((
+        boost::is_same<
+            boost::compute::transform_iterator<
+                boost::compute::buffer_iterator<int>, boost::compute::abs<int>
+            >::base_type,
+            boost::compute::buffer_iterator<int>
+        >::value
+    ));
+}
+
 BOOST_AUTO_TEST_CASE(copy)
 {
     int data[] = { 1, -2, 3, -4, 5 };

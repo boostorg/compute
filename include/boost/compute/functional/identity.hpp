@@ -37,7 +37,7 @@ struct invoked_identity
 /// transform(input.begin(), input.end(), output.begin(), identity<int>(), queue);
 /// \endcode
 ///
-/// \see as<T>(), convert<T>()
+/// \see \ref as "as<T>", \ref convert "convert<T>"
 template<class T>
 class identity
 {

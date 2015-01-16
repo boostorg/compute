@@ -279,4 +279,23 @@ BOOST_AUTO_TEST_CASE(field)
     BOOST_CHECK_EQUAL(uint2_(output[1]), uint2_(5, 7));
 }
 
+BOOST_AUTO_TEST_CASE(transform_abs_doctest)
+{
+//! [transform_abs]
+int data[] = { -1, -2, -3, -4 };
+boost::compute::vector<int> vec(data, data + 4, queue);
+
+using boost::compute::abs;
+
+// calculate the absolute value for each element in-place
+boost::compute::transform(
+    vec.begin(), vec.end(), vec.begin(), abs<int>(), queue
+);
+
+// vec == { 1, 2, 3, 4 }
+//! [transform_abs]
+
+    CHECK_RANGE_EQUAL(int, 4, vec, (1, 2, 3, 4));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -81,6 +81,7 @@ private:
 
 } // end detail namespace
 
+/// \internal_
 template<class Arg, class Result>
 struct unary_function
 {
@@ -88,6 +89,7 @@ struct unary_function
     typedef Result result_type;
 };
 
+/// \internal_
 template<class Arg1, class Arg2, class Result>
 struct binary_function
 {
@@ -96,6 +98,7 @@ struct binary_function
     typedef Result result_type;
 };
 
+/// \internal_
 template<class Arg1, class Arg2, class Arg3, class Result>
 struct ternary_function
 {
@@ -105,6 +108,9 @@ struct ternary_function
     typedef Result result_type;
 };
 
+/// The unary_negate function adaptor negates a unary function.
+///
+/// \see not1()
 template<class Predicate>
 class unary_negate : public unary_function<void, int>
 {
@@ -114,6 +120,7 @@ public:
     {
     }
 
+    /// \internal_
     template<class Arg>
     detail::invoked_unary_negate_function<Predicate, Arg>
     operator()(const Arg &arg) const
@@ -128,6 +135,9 @@ private:
     Predicate m_pred;
 };
 
+/// The binnary_negate function adaptor negates a binary function.
+///
+/// \see not2()
 template<class Predicate>
 class binary_negate : public binary_function<void, void, int>
 {
@@ -137,6 +147,7 @@ public:
     {
     }
 
+    /// \internal_
     template<class Arg1, class Arg2>
     detail::invoked_binary_negate_function<Predicate, Arg1, Arg2>
     operator()(const Arg1 &arg1, const Arg2 &arg2) const
@@ -152,21 +163,35 @@ private:
     Predicate m_pred;
 };
 
+/// Returns a unary_negate adaptor around \p predicate.
+///
+/// \param predicate the unary function to wrap
+///
+/// \return a unary_negate wrapper around \p predicate
 template<class Predicate>
 inline unary_negate<Predicate> not1(const Predicate &predicate)
 {
     return unary_negate<Predicate>(predicate);
 }
 
+/// Returns a binary_negate adaptor around \p predicate.
+///
+/// \param predicate the binary function to wrap
+///
+/// \return a binary_negate wrapper around \p predicate
 template<class Predicate>
 inline binary_negate<Predicate> not2(const Predicate &predicate)
 {
     return binary_negate<Predicate>(predicate);
 }
 
+/// The logical_not function negates its argument and returns it.
+///
+/// \see not1(), not2()
 template<class T>
 struct logical_not : public unary_function<T, int>
 {
+    /// \internal_
     template<class Expr>
     detail::invoked_function<int, boost::tuple<Expr> >
     operator()(const Expr &expr) const

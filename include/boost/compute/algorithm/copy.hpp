@@ -22,14 +22,14 @@
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/async/future.hpp>
-#include <boost/compute/iterator/buffer_iterator.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
-#include <boost/compute/detail/is_contiguous_iterator.hpp>
-#include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/algorithm/detail/copy_to_host.hpp>
 #include <boost/compute/algorithm/detail/copy_on_device.hpp>
 #include <boost/compute/algorithm/detail/copy_to_device.hpp>
+#include <boost/compute/algorithm/detail/copy_to_host.hpp>
+#include <boost/compute/async/future.hpp>
+#include <boost/compute/detail/is_contiguous_iterator.hpp>
+#include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -92,13 +92,12 @@ dispatch_copy_async(InputIterator first,
                         is_device_iterator<OutputIterator>::value
                     >::type* = 0)
 {
-    if(is_contiguous_iterator<InputIterator>::value){
-        return copy_to_device_async(first, last, result, queue);
-    }
-    else {
-        BOOST_ASSERT(false && "copy_async() is not supported for non-contiguous iterators");
-        return future<OutputIterator>();
-    }
+    BOOST_STATIC_ASSERT_MSG(
+        is_contiguous_iterator<InputIterator>::value,
+        "copy_async() is only supported for contiguous host iterators"
+    );
+
+    return copy_to_device_async(first, last, result, queue);
 }
 
 // device -> host
@@ -138,13 +137,12 @@ dispatch_copy_async(InputIterator first,
                        !is_device_iterator<OutputIterator>::value
                     >::type* = 0)
 {
-    if(is_contiguous_iterator<OutputIterator>::value){
-        return copy_to_host_async(first, last, result, queue);
-    }
-    else {
-        BOOST_ASSERT(false && "copy_async() is not supported for non-contiguous iterators");
-        return future<OutputIterator>();
-    }
+    BOOST_STATIC_ASSERT_MSG(
+        is_contiguous_iterator<OutputIterator>::value,
+        "copy_async() is only supported for contiguous host iterators"
+    );
+
+    return copy_to_host_async(first, last, result, queue);
 }
 
 // device -> device

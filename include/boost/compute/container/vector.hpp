@@ -71,10 +71,12 @@ namespace compute {
 /// boost::compute::vector<int> vec(data, data + 4, queue);
 /// \endcode
 ///
-/// The Boost.Compute vector class provides a STL-like API and is modeled
-/// after the std::vector class from the C++ standard library. It can be used
-/// with any of the STL-like algorithms provided by Boost.Compute including
-/// copy(), transform(), and sort() (among many others). For example:
+/// The Boost.Compute \c vector class provides a STL-like API and is modeled
+/// after the \c std::vector class from the C++ standard library. It can be
+/// used with any of the STL-like algorithms provided by Boost.Compute
+/// including \c copy(), \c transform(), and \c sort() (among many others).
+///
+/// For example:
 /// \code
 /// // a vector on a compute device
 /// boost::compute::vector<float> vec = ...
@@ -98,7 +100,7 @@ namespace compute {
 /// boost::compute::fill(vec.begin(), vec.end(), 1, queue);
 /// \endcode
 ///
-/// \see buffer
+/// \see \ref array "array<T, N>", buffer
 template<class T, class Alloc = buffer_allocator<T> >
 class vector
 {

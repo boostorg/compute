@@ -25,21 +25,22 @@ int main(int argc, char *argv[])
 
     std::cout << "size: " << PERF_N << std::endl;
 
-    std::vector<int> v1(PERF_N);
+    std::vector<int> v1(std::floor(PERF_N / 2.0));
+    std::vector<int> v2(std::ceil(PERF_N / 2.0));
+
     std::generate(v1.begin(), v1.end(), rand_int);
-
-    std::vector<int> v2(PERF_N);
     std::generate(v2.begin(), v2.end(), rand_int);
-
-    std::vector<int> v3(PERF_N);
 
     std::sort(v1.begin(), v1.end());
     std::sort(v2.begin(), v2.end());
 
+    std::vector<int> v3(PERF_N);
+    std::vector<int>::iterator v3_end;
+
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
         t.start();
-        std::set_difference(
+        v3_end = std::set_difference(
             v1.begin(), v1.end(),
             v2.begin(), v2.end(),
             v3.begin()
@@ -47,6 +48,7 @@ int main(int argc, char *argv[])
         t.stop();
     }
     std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
+    std::cout << "size: " << std::distance(v3.begin(), v3_end) << std::endl;
 
     return 0;
 }

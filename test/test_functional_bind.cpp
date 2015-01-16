@@ -68,7 +68,12 @@ BOOST_AUTO_TEST_CASE(transform_pow_two)
         compute::bind(compute::pow<float>(), 2.0f, _1),
         queue
     );
-    CHECK_RANGE_EQUAL(float, 4, vector, (4.0f, 8.0f, 16.0f, 32.0f));
+
+    compute::copy(vector.begin(), vector.end(), data, queue);
+    BOOST_CHECK_CLOSE(data[0], 4.0f, 1e-4);
+    BOOST_CHECK_CLOSE(data[1], 8.0f, 1e-4);
+    BOOST_CHECK_CLOSE(data[2], 16.0f, 1e-4);
+    BOOST_CHECK_CLOSE(data[3], 32.0f, 1e-4);
 }
 
 BOOST_AUTO_TEST_CASE(find_if_equal)

@@ -15,8 +15,8 @@
 ///
 /// Meta-header to include all Boost.Compute types headers.
 
-#include <boost/compute/types/builtin.hpp>
 #include <boost/compute/types/complex.hpp>
+#include <boost/compute/types/fundamental.hpp>
 #include <boost/compute/types/pair.hpp>
 #include <boost/compute/types/struct.hpp>
 #include <boost/compute/types/tuple.hpp>

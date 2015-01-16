@@ -11,7 +11,7 @@
 #ifndef BOOST_COMPUTE_TYPE_TRAITS_IS_FUNDAMENTAL_HPP
 #define BOOST_COMPUTE_TYPE_TRAITS_IS_FUNDAMENTAL_HPP
 
-#include <boost/compute/types/builtin.hpp>
+#include <boost/compute/types/fundamental.hpp>
 
 namespace boost {
 namespace compute {

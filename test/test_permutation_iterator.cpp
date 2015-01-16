@@ -49,6 +49,19 @@ BOOST_AUTO_TEST_CASE(value_type)
     ));
 }
 
+BOOST_AUTO_TEST_CASE(base_type)
+{
+    BOOST_STATIC_ASSERT((
+        boost::is_same<
+            boost::compute::permutation_iterator<
+                boost::compute::buffer_iterator<int>,
+                boost::compute::buffer_iterator<int>
+            >::base_type,
+            boost::compute::buffer_iterator<int>
+        >::value
+    ));
+}
+
 BOOST_AUTO_TEST_CASE(copy)
 {
     int input_data[] = { 3, 4, 2, 1, 5 };
@@ -65,6 +78,33 @@ BOOST_AUTO_TEST_CASE(copy)
         queue
     );
     CHECK_RANGE_EQUAL(int, 5, output, (1, 2, 3, 4, 5));
+}
+
+BOOST_AUTO_TEST_CASE(reverse_range_doctest)
+{
+    int values_data[] = { 10, 20, 30, 40 };
+    int indices_data[] = { 3, 2, 1, 0 };
+
+    boost::compute::vector<int> values(values_data, values_data + 4, queue);
+    boost::compute::vector<int> indices(indices_data, indices_data + 4, queue);
+
+    boost::compute::vector<int> result(4, context);
+
+//! [reverse_range]
+// values =  { 10, 20, 30, 40 }
+// indices = { 3, 2, 1, 0 }
+
+boost::compute::copy(
+    boost::compute::make_permutation_iterator(values.begin(), indices.begin()),
+    boost::compute::make_permutation_iterator(values.end(), indices.end()),
+    result.begin(),
+    queue
+);
+
+// result == { 40, 30, 20, 10 }
+//! [reverse_range]
+
+    CHECK_RANGE_EQUAL(int, 4, result, (40, 30, 20, 10));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

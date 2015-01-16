@@ -23,8 +23,8 @@
 #include <boost/compute/image2d.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/image_sampler.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 #include <boost/compute/type_traits/make_vector_type.hpp>
-#include <boost/compute/detail/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -193,19 +193,12 @@ make_pixel_input_iterator(const image2d &image, size_t index = 0)
     return pixel_input_iterator<T>(image, index);
 }
 
-// is_device_iterator specialization for pixel_input_iterator
-template<class Iterator>
-struct is_device_iterator<
-    Iterator,
-    typename boost::enable_if<
-        boost::is_same<
-            pixel_input_iterator<typename Iterator::value_type>,
-            typename boost::remove_const<Iterator>::type
-        >
-    >::type
-> : public boost::true_type {};
-
 } // end detail namespace
+
+// is_device_iterator specialization for pixel_input_iterator
+template<class T>
+struct is_device_iterator<detail::pixel_input_iterator<T> > : boost::true_type {};
+
 } // end compute namespace
 } // end boost namespace
 

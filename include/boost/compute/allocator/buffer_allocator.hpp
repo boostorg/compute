@@ -19,6 +19,10 @@
 namespace boost {
 namespace compute {
 
+/// \class buffer_allocator
+/// \brief The buffer_allocator class allocates memory with \ref buffer objects
+///
+/// \see buffer
 template<class T>
 class buffer_allocator
 {
