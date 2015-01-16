@@ -123,6 +123,22 @@ BOOST_AUTO_TEST_CASE(destructor_callback)
     }
     BOOST_CHECK(invoked == true);
 }
+
+static void BOOST_COMPUTE_CL_CALLBACK
+destructor_templated_callback_function(bool *flag)
+{
+    *flag = true;
+}
+
+BOOST_AUTO_TEST_CASE(destructor_templated_callback)
+{
+    bool invoked = false;
+    {
+        boost::compute::buffer buf(context, 128);
+        buf.set_destructor_callback(boost::bind(destructor_templated_callback_function, &invoked));
+    }
+    BOOST_CHECK(invoked == true);
+}
 #endif // CL_VERSION_1_1
 
 BOOST_AUTO_TEST_CASE(create_buffer_doctest)

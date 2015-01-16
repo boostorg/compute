@@ -16,6 +16,7 @@
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
+#include <boost/bind.hpp>
 
 namespace boost {
 namespace compute {
@@ -122,6 +123,21 @@ public:
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
+    /// Registers a function to be called when the memory object is deleted
+    /// and its resources freed.
+    ///
+    /// The function specified by \p callback must be invokable with zero
+    /// arguments (e.g. \c callback()).
+    ///
+    /// \opencl_version_warning{1,1}
+    template<class Function>
+    void set_destructor_callback(Function callback)
+    {
+        set_destructor_callback(
+            destructor_callback_invoker,
+            new boost::function<void()>(callback)
+        );
+    }
     #endif // CL_VERSION_1_1
 
     /// Returns \c true if the memory object is the same as \p other.
@@ -135,6 +151,21 @@ public:
     {
         return m_mem != other.m_mem;
     }
+
+private:
+    #ifdef CL_VERSION_1_1
+    /// \internal_
+    static void BOOST_COMPUTE_CL_CALLBACK
+    destructor_callback_invoker(cl_mem, void *user_data)
+    {
+        boost::function<void()> *callback =
+            static_cast<boost::function<void()> *>(user_data);
+
+        (*callback)();
+
+        delete callback;
+    }
+    #endif // CL_VERSION_1_1
 
 protected:
     /// \internal_
