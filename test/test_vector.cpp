@@ -312,4 +312,21 @@ BOOST_AUTO_TEST_CASE(assign_constant_value)
     CHECK_RANGE_EQUAL(float, 3, device_vector, (6.28f, 6.28f, 6.28f));
 }
 
+BOOST_AUTO_TEST_CASE(resize_throw_exception)
+{
+    // create vector with eight items
+    int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    compute::vector<int> vec(data, data + 8, queue);
+
+    // try to resize to 2x larger than the global memory size
+    BOOST_CHECK_THROW(
+        vec.resize((device.global_memory_size() / sizeof(int)) * 2),
+        boost::compute::opencl_error
+    );
+
+    // ensure vector data is still the same
+    BOOST_CHECK_EQUAL(vec.size(), 8);
+    CHECK_RANGE_EQUAL(int, 8, vec, (1, 2, 3, 4, 5, 6, 7, 8));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
