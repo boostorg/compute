@@ -16,5 +16,6 @@
 /// Meta-header to include all Boost.Compute async headers.
 
 #include <boost/compute/async/future.hpp>
+#include <boost/compute/async/wait_guard.hpp>
 
 #endif // BOOST_COMPUTE_ASYNC_HPP

@@ -16,7 +16,6 @@
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
-#include <boost/bind.hpp>
 
 namespace boost {
 namespace compute {

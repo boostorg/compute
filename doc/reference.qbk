@@ -114,6 +114,7 @@ Header: `<boost/compute/async.hpp>`
 
 * [classref boost::compute::future future<T>]
 * [funcref boost::compute::wait_for_all wait_for_all()]
+* [classref boost::compute::wait_guard wait_guard<Waitable>]
 
 [h3 Containers]
 
