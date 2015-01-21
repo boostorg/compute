@@ -11,6 +11,8 @@
 #ifndef BOOST_COMPUTE_ASYNC_WAIT_GUARD_HPP
 #define BOOST_COMPUTE_ASYNC_WAIT_GUARD_HPP
 
+#include <boost/noncopyable.hpp>
+
 namespace boost {
 namespace compute {
 
