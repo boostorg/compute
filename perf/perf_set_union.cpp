@@ -36,39 +36,40 @@ int main(int argc, char *argv[])
     std::cout << "device: " << device.name() << std::endl;
 
     // create vectors of random numbers on the host
-    std::vector<int> host_vector(PERF_N/2);
-    std::generate(host_vector.begin(), host_vector.end(), rand_int);
-    std::sort(host_vector.begin(), host_vector.end());
-
-    std::vector<int> host_vector2(PERF_N/2);
-    std::generate(host_vector2.begin(), host_vector2.end(), rand_int);
-    std::sort(host_vector2.begin(), host_vector2.end());
+    std::vector<int> v1(std::floor(PERF_N / 2.0));
+    std::vector<int> v2(std::ceil(PERF_N / 2.0));
+    std::generate(v1.begin(), v1.end(), rand_int);
+    std::generate(v2.begin(), v2.end(), rand_int);
+    std::sort(v1.begin(), v1.end());
+    std::sort(v2.begin(), v2.end());
 
     // create vectors on the device and copy the data
-    boost::compute::vector<int> device_vector(PERF_N/2, context);
+    boost::compute::vector<int> gpu_v1(std::floor(PERF_N / 2.0), context);
+    boost::compute::vector<int> gpu_v2(std::ceil(PERF_N / 2.0), context);
+
     boost::compute::copy(
-        host_vector.begin(), host_vector.end(), device_vector.begin(), queue
+        v1.begin(), v1.end(), gpu_v1.begin(), queue
+    );
+    boost::compute::copy(
+        v2.begin(), v2.end(), gpu_v2.begin(), queue
     );
 
-    boost::compute::vector<int> device_vector2(PERF_N/2, context);
-    boost::compute::copy(
-        host_vector2.begin(), host_vector2.end(), device_vector2.begin(), queue
-    );
-
-    boost::compute::vector<int> result(PERF_N, context);
+    boost::compute::vector<int> gpu_v3(PERF_N, context);
+    boost::compute::vector<int>::iterator gpu_v3_end;
 
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
         t.start();
-        boost::compute::set_union(
-            device_vector.begin(), device_vector.begin(),
-            device_vector2.begin(), device_vector2.end(),
-            result.begin(), queue
+        gpu_v3_end = boost::compute::set_union(
+            gpu_v1.begin(), gpu_v1.end(),
+            gpu_v2.begin(), gpu_v2.end(),
+            gpu_v3.begin(), queue
         );
         queue.finish();
         t.stop();
     }
     std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
+    std::cout << "size: " << std::distance(gpu_v3.begin(), gpu_v3_end) << std::endl;
 
     return 0;
 }
