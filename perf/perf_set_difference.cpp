@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
     std::sort(v2.begin(), v2.end());
 
     // create vectors on the device and copy the data
-    boost::compute::vector<int> gpu_v1(PERF_N, context);
-    boost::compute::vector<int> gpu_v2(PERF_N, context);
+    boost::compute::vector<int> gpu_v1(std::floor(PERF_N / 2.0), context);
+    boost::compute::vector<int> gpu_v2(std::ceil(PERF_N / 2.0), context);
 
     boost::compute::copy(
         v1.begin(), v1.end(), gpu_v1.begin(), queue
