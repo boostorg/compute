@@ -1654,8 +1654,8 @@ private:
 
 inline buffer buffer::clone(command_queue &queue) const
 {
-    buffer copy(this->get_context(), this->size());
-    queue.enqueue_copy_buffer(*this, copy, 0, 0, this->size());
+    buffer copy(get_context(), size(), get_memory_flags());
+    queue.enqueue_copy_buffer(*this, copy, 0, 0, size());
     return copy;
 }
 

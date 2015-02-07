@@ -100,6 +100,7 @@ BOOST_AUTO_TEST_CASE(clone_buffer)
     boost::compute::buffer buffer2 = buffer1.clone(queue);
     BOOST_CHECK(buffer1.get() != buffer2.get());
     BOOST_CHECK_EQUAL(buffer1.size(), buffer2.size());
+    BOOST_CHECK(buffer1.get_memory_flags() == buffer2.get_memory_flags());
 }
 
 #ifdef CL_VERSION_1_1
