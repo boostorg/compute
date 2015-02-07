@@ -26,14 +26,13 @@
 #include <boost/preprocessor/repetition.hpp>
 
 #include <boost/compute/kernel.hpp>
-#include <boost/compute/image2d.hpp>
-#include <boost/compute/image3d.hpp>
 #include <boost/compute/closure.hpp>
 #include <boost/compute/function.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/type_traits.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/image_sampler.hpp>
+#include <boost/compute/image/image2d.hpp>
+#include <boost/compute/image/image_sampler.hpp>
 #include <boost/compute/memory_object.hpp>
 #include <boost/compute/detail/device_ptr.hpp>
 #include <boost/compute/detail/sha1.hpp>

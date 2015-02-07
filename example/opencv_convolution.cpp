@@ -202,10 +202,10 @@ int main(int argc, char *argv[])
     // Be sure what will be your ouput image/frame size
     compute::image2d dev_output_image(
                 context,
-                compute::image2d::write_only,
-                dev_input_image.get_format(),
                 dev_input_image.width(),
-                dev_input_image.height()
+                dev_input_image.height(),
+                dev_input_image.format(),
+                compute::image2d::write_only
                 );
 
     filter_kernel.set_arg(0, dev_input_image);

@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------//
-// Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+// Copyright (c) 2013-2015 Kyle Lutz <kyle.r.lutz@gmail.com>
 //
 // Distributed under the Boost Software License, Version 1.0
 // See accompanying file LICENSE_1_0.txt or copy at
@@ -14,40 +14,61 @@
 #include <iostream>
 
 #include <boost/compute/system.hpp>
-#include <boost/compute/image2d.hpp>
-#include <boost/compute/algorithm/find.hpp>
-#include <boost/compute/algorithm/count.hpp>
-#include <boost/compute/iterator/detail/pixel_input_iterator.hpp>
+#include <boost/compute/image/image2d.hpp>
+#include <boost/compute/utility/dim.hpp>
 
 #include "quirks.hpp"
 #include "context_setup.hpp"
 
-namespace bc = boost::compute;
 namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(image2d_get_supported_formats)
 {
-    REQUIRES_OPENCL_VERSION(1,2);
+    const std::vector<compute::image_format> formats =
+        compute::image2d::get_supported_formats(context);
+}
 
-    std::vector<bc::image_format> formats =
-        bc::image2d::get_supported_formats(context, bc::image2d::read_only);
-    BOOST_CHECK(!formats.empty());
+BOOST_AUTO_TEST_CASE(create_image_doctest)
+{
+    try {
+//! [create_image]
+// create 8-bit RGBA image format
+boost::compute::image_format rgba8(CL_RGBA, CL_UNSIGNED_INT8);
+
+// create 640x480 image object
+boost::compute::image2d img(context, 640, 480, rgba8);
+//! [create_image]
+
+        // verify image has been created and format is correct
+        BOOST_CHECK(img.get() != cl_mem());
+        BOOST_CHECK(img.format() == rgba8);
+        BOOST_CHECK_EQUAL(img.width(), 640);
+        BOOST_CHECK_EQUAL(img.height(), 480);
+    }
+    catch(compute::opencl_error &e){
+        if(e.error_code() == CL_IMAGE_FORMAT_NOT_SUPPORTED){
+            // image format not supported by device
+            return;
+        }
+
+        // some other error, rethrow
+        throw;
+    }
 }
 
 BOOST_AUTO_TEST_CASE(get_info)
 {
-    REQUIRES_OPENCL_VERSION(1,2);
+    compute::image_format format(CL_RGBA, CL_UNSIGNED_INT8);
 
-    bc::image2d image(
-        context,
-        bc::image2d::read_only,
-        bc::image_format(
-            bc::image_format::rgba,
-            bc::image_format::unorm_int8
-        ),
-        48,
-        64
+    if(!compute::image2d::is_supported_format(format, context)){
+        std::cerr << "skipping get_info test, image format not supported" << std::endl;
+        return;
+    }
+
+    compute::image2d image(
+        context, 48, 64, format, compute::image2d::read_only
     );
+
     BOOST_CHECK_EQUAL(image.get_info<size_t>(CL_IMAGE_WIDTH), size_t(48));
     BOOST_CHECK_EQUAL(image.get_info<size_t>(CL_IMAGE_HEIGHT), size_t(64));
     BOOST_CHECK_EQUAL(image.get_info<size_t>(CL_IMAGE_DEPTH), size_t(0));
@@ -55,43 +76,42 @@ BOOST_AUTO_TEST_CASE(get_info)
     BOOST_CHECK_EQUAL(image.get_info<size_t>(CL_IMAGE_SLICE_PITCH), size_t(0));
     BOOST_CHECK_EQUAL(image.get_info<size_t>(CL_IMAGE_ELEMENT_SIZE), size_t(4));
 
+    BOOST_CHECK(image.format() == format);
     BOOST_CHECK_EQUAL(image.width(), size_t(48));
     BOOST_CHECK_EQUAL(image.height(), size_t(64));
-
-    BOOST_CHECK(bc::image_format(
-                    image.get_info<cl_image_format>(CL_IMAGE_FORMAT)) ==
-                bc::image_format(
-                    bc::image_format::rgba, bc::image_format::unorm_int8));
 }
 
 BOOST_AUTO_TEST_CASE(clone_image)
 {
-    REQUIRES_OPENCL_VERSION(1,2);
+    compute::image_format format(CL_RGBA, CL_UNORM_INT8);
+
+    if(!compute::image2d::is_supported_format(format, context)){
+        std::cerr << "skipping clone_image test, image format not supported" << std::endl;
+        return;
+    }
 
     // image data
     unsigned int data[] = { 0x0000ffff, 0xff00ffff,
                             0x00ff00ff, 0xffffffff };
 
     // create image on the device
-    compute::image2d image(
-        context,
-        CL_MEM_READ_WRITE,
-        compute::image_format(CL_RGBA, CL_UNORM_INT8),
-        2,
-        2
-    );
+    compute::image2d image(context, 2, 2, format);
+
+    // ensure we have a valid image object
+    BOOST_REQUIRE(image.get() != cl_mem());
 
     // copy image data to the device
-    size_t origin[2] = { 0, 0 };
-    size_t region[2] = { 2, 2 };
-    queue.enqueue_write_image(image, origin, region, 0, data);
+    queue.enqueue_write_image(image, image.origin(), image.size(), data);
 
     // clone image
     compute::image2d copy = image.clone(queue);
 
+    // ensure image format is the same
+    BOOST_CHECK(copy.format() == image.format());
+
     // read cloned image data back to the host
     unsigned int cloned_data[4];
-    queue.enqueue_read_image(copy, origin, region, 0, cloned_data);
+    queue.enqueue_read_image(copy, image.origin(), image.size(), cloned_data);
 
     // ensure original data and cloned data are the same
     BOOST_CHECK_EQUAL(cloned_data[0], data[0]);
@@ -100,101 +120,43 @@ BOOST_AUTO_TEST_CASE(clone_image)
     BOOST_CHECK_EQUAL(cloned_data[3], data[3]);
 }
 
-BOOST_AUTO_TEST_CASE(count_with_pixel_iterator)
+#ifdef CL_VERSION_1_2
+BOOST_AUTO_TEST_CASE(fill_image)
 {
-    REQUIRES_OPENCL_VERSION(1,2);
+    compute::image_format format(CL_RGBA, CL_UNSIGNED_INT8);
 
-    if(is_pocl_device(device)){
-        std::cerr << "skipping count_with_pixel_iterator test" << std::endl;
+    if(!compute::image2d::is_supported_format(format, context)){
+        std::cerr << "skipping fill_image test, image format not supported" << std::endl;
         return;
     }
 
-    unsigned int data[] = { 0x00000000, 0x000000ff, 0xff0000ff,
-                            0xffff00ff, 0x000000ff, 0xff0000ff,
-                            0xff0000ff, 0x00ff00ff, 0x0000ffff };
+    compute::image2d img(context, 640, 480, format);
 
-    bc::image2d image(
-        context,
-        bc::image2d::read_only | bc::image2d::use_host_ptr,
-        bc::image_format(
-            bc::image_format::rgba,
-            bc::image_format::unorm_int8
-        ),
-        3,
-        3,
-        3 * 4,
-        data
-    );
+    // fill image with black
+    compute::uint4_ black(0, 0, 0, 255);
+    queue.enqueue_fill_image(img, &black, img.origin(), img.size());
 
-    BOOST_CHECK_EQUAL(
-        bc::count(bc::detail::make_pixel_input_iterator<float>(image, 0),
-                  bc::detail::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
-                  bc::float4_(0, 0, 0, 0)),
-        size_t(1));
-    BOOST_CHECK_EQUAL(
-        bc::count(bc::detail::make_pixel_input_iterator<float>(image, 0),
-                  bc::detail::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
-                  bc::float4_(1, 0, 0, 0)),
-        size_t(2));
-    BOOST_CHECK_EQUAL(
-        bc::count(bc::detail::make_pixel_input_iterator<float>(image, 0),
-                  bc::detail::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
-                  bc::float4_(1, 0, 0, 1)),
-        size_t(3));
-    BOOST_CHECK_EQUAL(
-        bc::count(bc::detail::make_pixel_input_iterator<float>(image, 0),
-                  bc::detail::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
-                  bc::float4_(1, 1, 0, 0)),
-        size_t(1));
-    BOOST_CHECK_EQUAL(
-        bc::count(bc::detail::make_pixel_input_iterator<float>(image, 0),
-                  bc::detail::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
-                  bc::float4_(1, 0, 1, 1)),
-        size_t(1));
+    // read value of first pixel
+    compute::uchar4_ first_pixel;
+    queue.enqueue_read_image(img, compute::dim(0), compute::dim(1), &first_pixel);
+    BOOST_CHECK_EQUAL(first_pixel, compute::uchar4_(0, 0, 0, 255));
+
+    // fill image with white
+    compute::uint4_ white(255, 255, 255, 255);
+    queue.enqueue_fill_image(img, &white, img.origin(), img.size());
+
+    // read value of first pixel
+    queue.enqueue_read_image(img, compute::dim(0), compute::dim(1), &first_pixel);
+    BOOST_CHECK_EQUAL(first_pixel, compute::uchar4_(255, 255, 255, 255));
 }
-
-BOOST_AUTO_TEST_CASE(find_with_pixel_iterator)
-{
-    REQUIRES_OPENCL_VERSION(1,2);
-
-    if(is_pocl_device(device)){
-        std::cerr << "skipping find_with_pixel_iterator test" << std::endl;
-        return;
-    }
-
-    unsigned int data[] = { 0x00000000, 0x000000ff, 0xff0000ff,
-                            0xffff00ff, 0x000000ff, 0xff0000ff,
-                            0xff0000ff, 0x00ff00ff, 0x0000ffff };
-
-    bc::image2d image(
-        context,
-        bc::image2d::read_only | bc::image2d::use_host_ptr,
-        bc::image_format(
-            bc::image_format::rgba,
-            bc::image_format::unorm_int8
-        ),
-        3,
-        3,
-        3 * 4,
-        data
-    );
-    BOOST_CHECK_EQUAL(
-        std::distance(
-            bc::detail::make_pixel_input_iterator<float>(image),
-            bc::find(bc::detail::make_pixel_input_iterator<float>(image, 0),
-                     bc::detail::make_pixel_input_iterator<float>(image, image.get_pixel_count()),
-                     bc::float4_(1, 0, 1, 1))
-            ),
-        ptrdiff_t(3));
-}
+#endif
 
 // check type_name() for image2d
-BOOST_AUTO_TEST_CASE(complex_type_name)
+BOOST_AUTO_TEST_CASE(image2d_type_name)
 {
     BOOST_CHECK(
         std::strcmp(
-            boost::compute::type_name<boost::compute::image2d>(),
-            "image2d_t"
+            boost::compute::type_name<boost::compute::image2d>(), "image2d_t"
         ) == 0
     );
 }

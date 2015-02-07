@@ -11,9 +11,10 @@
 #ifndef BOOST_COMPUTE_INTEROP_OPENGL_OPENGL_RENDERBUFFER_HPP
 #define BOOST_COMPUTE_INTEROP_OPENGL_OPENGL_RENDERBUFFER_HPP
 
-#include <boost/compute/memory_object.hpp>
+#include <boost/compute/image/image_object.hpp>
 #include <boost/compute/interop/opengl/gl.hpp>
 #include <boost/compute/interop/opengl/cl_gl.hpp>
+#include <boost/compute/utility/extents.hpp>
 
 namespace boost {
 namespace compute {
@@ -21,18 +22,18 @@ namespace compute {
 /// \class opengl_renderbuffer
 ///
 /// A OpenCL buffer for accessing an OpenGL renderbuffer object.
-class opengl_renderbuffer : public memory_object
+class opengl_renderbuffer : public image_object
 {
 public:
     /// Creates a null OpenGL renderbuffer object.
     opengl_renderbuffer()
-        : memory_object()
+        : image_object()
     {
     }
 
     /// Creates a new OpenGL renderbuffer object for \p mem.
     explicit opengl_renderbuffer(cl_mem mem, bool retain = true)
-        : memory_object(mem, retain)
+        : image_object(mem, retain)
     {
     }
 
@@ -57,7 +58,7 @@ public:
 
     /// Creates a new OpenGL renderbuffer object as a copy of \p other.
     opengl_renderbuffer(const opengl_renderbuffer &other)
-        : memory_object(other)
+        : image_object(other)
     {
     }
 
@@ -65,7 +66,7 @@ public:
     opengl_renderbuffer& operator=(const opengl_renderbuffer &other)
     {
         if(this != &other){
-            memory_object::operator=(other);
+            image_object::operator=(other);
         }
 
         return *this;
@@ -74,6 +75,21 @@ public:
     /// Destroys the OpenGL buffer object.
     ~opengl_renderbuffer()
     {
+    }
+
+    /// Returns the size (width, height) of the renderbuffer.
+    extents<2> size() const
+    {
+        extents<2> size;
+        size[0] = get_image_info<size_t>(CL_IMAGE_WIDTH);
+        size[1] = get_image_info<size_t>(CL_IMAGE_HEIGHT);
+        return size;
+    }
+
+    /// Returns the origin of the renderbuffer (\c 0, \c 0).
+    extents<2> origin() const
+    {
+        return extents<2>();
     }
 
     /// Returns the OpenGL memory object ID.
@@ -99,15 +115,9 @@ public:
 
 namespace detail {
 
-// set_kernel_arg specialization for opengl_renderbuffer
+// set_kernel_arg() specialization for opengl_renderbuffer
 template<>
-struct set_kernel_arg<opengl_renderbuffer>
-{
-    void operator()(kernel &kernel_, size_t index, const opengl_renderbuffer &buffer_)
-    {
-        kernel_.set_arg(index, buffer_.get());
-    }
-};
+struct set_kernel_arg<opengl_renderbuffer> : public set_kernel_arg<image_object> { };
 
 } // end detail namespace
 } // end compute namespace

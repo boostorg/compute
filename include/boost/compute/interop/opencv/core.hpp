@@ -13,8 +13,12 @@
 
 #include <opencv2/core/core.hpp>
 
-#include <boost/compute/image_format.hpp>
+#include <boost/throw_exception.hpp>
+
 #include <boost/compute/algorithm/copy_n.hpp>
+#include <boost/compute/exception/opencl_error.hpp>
+#include <boost/compute/image/image2d.hpp>
+#include <boost/compute/image/image_format.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 
 namespace boost {
@@ -52,10 +56,7 @@ inline void opencv_copy_mat_to_image(const cv::Mat &mat,
     BOOST_ASSERT(mat.isContinuous());
     BOOST_ASSERT(image.get_context() == queue.get_context());
 
-    size_t origin[2] = { 0, 0 };
-    size_t region[2] = { image.width(), image.height() };
-
-    queue.enqueue_write_image(image, origin, region, 0, mat.data);
+    queue.enqueue_write_image(image, image.origin(), image.size(), mat.data);
 }
 
 inline void opencv_copy_image_to_mat(const image2d &image,
@@ -65,10 +66,7 @@ inline void opencv_copy_image_to_mat(const image2d &image,
     BOOST_ASSERT(mat.isContinuous());
     BOOST_ASSERT(image.get_context() == queue.get_context());
 
-    size_t origin[2] = { 0, 0 };
-    size_t region[2] = { image.width(), image.height() };
-
-    queue.enqueue_read_image(image, origin, region, 0, mat.data);
+    queue.enqueue_read_image(image, image.origin(), image.size(), mat.data);
 }
 
 inline image_format opencv_get_mat_image_format(const cv::Mat &mat)
@@ -84,9 +82,9 @@ inline image_format opencv_get_mat_image_format(const cv::Mat &mat)
             return image_format(CL_RGBA, CL_FLOAT);
         case CV_8UC1:
             return image_format(CL_INTENSITY, CL_UNORM_INT8);
-        default:
-            return image_format();
     }
+
+    BOOST_THROW_EXCEPTION(opencl_error(CL_IMAGE_FORMAT_NOT_SUPPORTED));
 }
 
 inline cv::Mat opencv_create_mat_with_image2d(const image2d &image,
@@ -130,9 +128,7 @@ inline image2d opencv_create_image2d_with_mat(const cv::Mat &mat,
     const context &context = queue.get_context();
     const image_format format = opencv_get_mat_image_format(mat);
 
-    image2d image(
-        context, flags, format, mat.cols, mat.rows
-    );
+    image2d image(context, mat.cols, mat.rows, format, flags);
 
     opencv_copy_mat_to_image(mat, image, queue);
 

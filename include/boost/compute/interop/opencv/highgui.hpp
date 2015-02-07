@@ -13,7 +13,6 @@
 
 #include <opencv2/highgui/highgui.hpp>
 
-#include <boost/compute/image2d.hpp>
 #include <boost/compute/interop/opencv/core.hpp>
 
 namespace boost {

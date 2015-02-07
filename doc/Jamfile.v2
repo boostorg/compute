@@ -53,6 +53,9 @@ doxygen autodoc
     ../include/boost/compute/interop/opengl.hpp
     [ glob ../include/boost/compute/interop/opengl/*.hpp ]
 
+    ../include/boost/compute/image.hpp
+    [ glob ../include/boost/compute/image/*.hpp ]
+
     ../include/boost/compute/iterator.hpp
     [ glob ../include/boost/compute/iterator/*.hpp ]
 

@@ -11,10 +11,11 @@
 #ifndef BOOST_COMPUTE_INTEROP_OPENGL_OPENGL_TEXTURE_HPP
 #define BOOST_COMPUTE_INTEROP_OPENGL_OPENGL_TEXTURE_HPP
 
-#include <boost/compute/memory_object.hpp>
+#include <boost/compute/image/image_object.hpp>
 #include <boost/compute/interop/opengl/gl.hpp>
 #include <boost/compute/interop/opengl/cl_gl.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
+#include <boost/compute/utility/extents.hpp>
 
 namespace boost {
 namespace compute {
@@ -22,18 +23,18 @@ namespace compute {
 /// \class opengl_texture
 ///
 /// A OpenCL image2d for accessing an OpenGL texture object.
-class opengl_texture : public memory_object
+class opengl_texture : public image_object
 {
 public:
     /// Creates a null OpenGL texture object.
     opengl_texture()
-        : memory_object()
+        : image_object()
     {
     }
 
     /// Creates a new OpenGL texture object for \p mem.
     explicit opengl_texture(cl_mem mem, bool retain = true)
-        : memory_object(mem, retain)
+        : image_object(mem, retain)
     {
     }
 
@@ -72,7 +73,7 @@ public:
 
     /// Creates a new OpenGL texture object as a copy of \p other.
     opengl_texture(const opengl_texture &other)
-        : memory_object(other)
+        : image_object(other)
     {
     }
 
@@ -80,7 +81,7 @@ public:
     opengl_texture& operator=(const opengl_texture &other)
     {
         if(this != &other){
-            memory_object::operator=(other);
+            image_object::operator=(other);
         }
 
         return *this;
@@ -89,6 +90,21 @@ public:
     /// Destroys the texture object.
     ~opengl_texture()
     {
+    }
+
+    /// Returns the size (width, height) of the texture.
+    extents<2> size() const
+    {
+        extents<2> size;
+        size[0] = get_image_info<size_t>(CL_IMAGE_WIDTH);
+        size[1] = get_image_info<size_t>(CL_IMAGE_HEIGHT);
+        return size;
+    }
+
+    /// Returns the origin of the texture (\c 0, \c 0).
+    extents<2> origin() const
+    {
+        return extents<2>();
     }
 
     /// Returns information about the texture.
@@ -103,15 +119,9 @@ public:
 
 namespace detail {
 
-// set_kernel_arg specialization for opengl_texture
+// set_kernel_arg() specialization for opengl_texture
 template<>
-struct set_kernel_arg<opengl_texture>
-{
-    void operator()(kernel &kernel_, size_t index, const opengl_texture &texture)
-    {
-        kernel_.set_arg(index, texture.get());
-    }
-};
+struct set_kernel_arg<opengl_texture> : public set_kernel_arg<image_object> { };
 
 } // end detail namespace
 } // end compute namespace

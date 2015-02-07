@@ -93,11 +93,7 @@ int main()
 
     // create output image
     compute::image2d image(
-        context,
-        CL_MEM_READ_WRITE,
-        compute::image_format(CL_RGBA, CL_UNSIGNED_INT8),
-        width,
-        height
+        context, width, height, compute::image_format(CL_RGBA, CL_UNSIGNED_INT8)
     );
 
     // program with two kernels, one to fill the image with white, and then

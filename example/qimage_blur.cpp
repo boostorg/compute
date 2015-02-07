@@ -10,7 +10,7 @@
 
 #ifndef Q_MOC_RUN
 #include <boost/compute/system.hpp>
-#include <boost/compute/image2d.hpp>
+#include <boost/compute/image/image2d.hpp>
 #include <boost/compute/interop/qt.hpp>
 #include <boost/compute/utility/dim.hpp>
 #include <boost/compute/utility/source.hpp>
@@ -114,12 +114,8 @@ int main(int argc, char *argv[])
         compute::qt_qimage_format_to_image_format(qimage.format());
 
     // create input and output images on the gpu
-    compute::image2d input_image(
-        context, compute::image2d::read_write, format, width, height
-    );
-    compute::image2d output_image(
-        context, compute::image2d::read_write, format, width, height
-    );
+    compute::image2d input_image(context, width, height, format);
+    compute::image2d output_image(context, width, height, format);
 
     // copy host qimage to gpu image
     compute::qt_copy_qimage_to_image2d(qimage, input_image, queue);
