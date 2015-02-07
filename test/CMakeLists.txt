@@ -141,8 +141,9 @@ add_compute_test("container.string" test_string.cpp)
 add_compute_test("container.valarray" test_valarray.cpp)
 add_compute_test("container.vector" test_vector.cpp)
 
-add_compute_test("exception.opencl_error" test_opencl_error.cpp)
 add_compute_test("exception.context_error" test_context_error.cpp)
+add_compute_test("exception.no_device_found" test_no_device_found.cpp)
+add_compute_test("exception.opencl_error" test_opencl_error.cpp)
 add_compute_test("exception.unsupported_extension" test_unsupported_extension.cpp)
 
 add_compute_test("functional.as" test_functional_as.cpp)

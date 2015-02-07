@@ -136,6 +136,7 @@ Header: `<boost/compute/container.hpp>`
 Header: `<boost/compute/exception.hpp>`
 
 * [classref boost::compute::context_error context_error]
+* [classref boost::compute::no_device_found no_device_found]
 * [classref boost::compute::opencl_error opencl_error]
 * [classref boost::compute::unsupported_extension_error unsupported_extension_error]
 

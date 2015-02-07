@@ -16,6 +16,7 @@
 #include <cstdlib>
 
 #include <boost/foreach.hpp>
+#include <boost/throw_exception.hpp>
 
 #include <boost/compute/cl.hpp>
 #include <boost/compute/device.hpp>
@@ -23,6 +24,7 @@
 #include <boost/compute/platform.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/getenv.hpp>
+#include <boost/compute/exception/no_device_found.hpp>
 
 namespace boost {
 namespace compute {
@@ -59,6 +61,9 @@ public:
     /// is called. Calling this function multiple times will always result in
     /// the same device being returned.
     ///
+    /// If no OpenCL device is found on the system, a no_device_found exception
+    /// is thrown.
+    ///
     /// For example, to print the name of the default compute device on the
     /// system:
     /// \code
@@ -76,6 +81,8 @@ public:
     }
 
     /// Returns the device with \p name.
+    ///
+    /// \throws no_device_found if no device with \p name is found.
     static device find_device(const std::string &name)
     {
         BOOST_FOREACH(const device &device, devices()){
@@ -84,7 +91,7 @@ public:
             }
         }
 
-        return device();
+        BOOST_THROW_EXCEPTION(no_device_found());
     }
 
     /// Returns a vector containing all of the compute devices on
@@ -197,7 +204,7 @@ private:
         // get a list of all devices on the system
         const std::vector<device> devices_ = devices();
         if(devices_.empty()){
-            return device();
+            BOOST_THROW_EXCEPTION(no_device_found());
         }
 
         // check for device from environment variable
