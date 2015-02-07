@@ -50,17 +50,29 @@ public:
     {
     }
 
-    /// Returns a pointer to the context object which generated the error
-    /// notification.
-    const context* get_context() const throw()
-    {
-        return m_context;
-    }
-
     /// Returns a string with a description of the error.
     const char* what() const throw()
     {
         return m_errinfo;
+    }
+
+    /// Returns a pointer to the context object which generated the error
+    /// notification.
+    const context* get_context_ptr() const throw()
+    {
+        return m_context;
+    }
+
+    /// Returns a pointer to the private info memory block.
+    const void* get_private_info_ptr() const throw()
+    {
+        return m_private_info;
+    }
+
+    /// Returns the size of the private info memory block.
+    const size_t get_private_info_size() const throw()
+    {
+        return m_private_info_size;
     }
 
 private:

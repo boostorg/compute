@@ -17,7 +17,7 @@
 
 #include <boost/compute/config.hpp>
 #include <boost/compute/device.hpp>
-#include <boost/compute/exception/context_error.hpp>
+#include <boost/compute/exception/opencl_error.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
 
 namespace boost {
@@ -65,12 +65,8 @@ public:
         cl_device_id device_id = device.id();
 
         cl_int error = 0;
-        m_context = clCreateContext(properties,
-                                    1,
-                                    &device_id,
-                                    default_error_handler,
-                                    static_cast<void *>(this),
-                                    &error);
+        m_context = clCreateContext(properties, 1, &device_id, 0, 0, &error);
+
         if(!m_context){
             BOOST_THROW_EXCEPTION(opencl_error(error));
         }
@@ -90,8 +86,8 @@ public:
             properties,
             static_cast<cl_uint>(devices.size()),
             reinterpret_cast<const cl_device_id *>(&devices[0]),
-            default_error_handler,
-            static_cast<void *>(this),
+            0,
+            0,
             &error
         );
 
@@ -238,31 +234,6 @@ public:
     operator cl_context() const
     {
         return m_context;
-    }
-
-private:
-    // this function is registered as the default error handler for every
-    // context when it is created. user_data is the 'this' pointer for the
-    // associated context object. this function simply throws an exception
-    // containing the context error information.
-    static void BOOST_COMPUTE_CL_CALLBACK
-    default_error_handler(const char *errinfo,
-                          const void *private_info,
-                          size_t cb,
-                          void *user_data)
-    {
-    #ifdef __APPLE__
-        // on apple, every single opencl failure is reported through the
-        // context error handler. in order to let failures propogate
-        // via opencl_error, we don't throw context_errors from here.
-        return;
-    #endif
-
-        context *this_ = static_cast<context *>(user_data);
-
-        BOOST_THROW_EXCEPTION(
-            context_error(this_, errinfo, private_info, cb)
-        );
     }
 
 private:
