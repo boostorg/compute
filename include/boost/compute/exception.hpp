@@ -16,6 +16,7 @@
 /// Meta-header to include all Boost.Compute exception headers.
 
 #include <boost/compute/exception/context_error.hpp>
+#include <boost/compute/exception/no_device_found.hpp>
 #include <boost/compute/exception/opencl_error.hpp>
 #include <boost/compute/exception/unsupported_extension_error.hpp>
 
