@@ -22,10 +22,7 @@
 #include <boost/compute/context.hpp>
 #include <boost/compute/device.hpp>
 #include <boost/compute/functional.hpp>
-#include <boost/compute/image2d.hpp>
-#include <boost/compute/image3d.hpp>
-#include <boost/compute/image_format.hpp>
-#include <boost/compute/image_sampler.hpp>
+#include <boost/compute/image.hpp>
 #include <boost/compute/iterator.hpp>
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/lambda.hpp>

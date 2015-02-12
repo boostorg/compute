@@ -203,10 +203,10 @@ int main(int argc, char *argv[])
     // Create output image
     compute::image2d dev_output_image(
                 context,
-                compute::image2d::write_only,
-                dev_previous_image.get_format(),
                 dev_previous_image.width(),
-                dev_previous_image.height()
+                dev_previous_image.height(),
+                dev_previous_image.format(),
+                compute::image2d::write_only
                 );
 
     compute::program optical_program =

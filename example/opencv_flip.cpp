@@ -55,10 +55,10 @@ int main(int argc, char *argv[])
     // create output image
     compute::image2d output_image(
         context,
-        compute::image2d::write_only,
-        input_image.get_format(),
         input_image.width(),
-        input_image.height()
+        input_image.height(),
+        input_image.format(),
+        compute::image2d::write_only
     );
 
     // create flip program

@@ -11,9 +11,13 @@
 #ifndef BOOST_COMPUTE_INTEROP_QT_QIMAGE_HPP
 #define BOOST_COMPUTE_INTEROP_QT_QIMAGE_HPP
 
-#include <boost/compute/image2d.hpp>
-#include <boost/compute/image_format.hpp>
+#include <boost/throw_exception.hpp>
+
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/exception/opencl_error.hpp>
+#include <boost/compute/image/image2d.hpp>
+#include <boost/compute/image/image_format.hpp>
+#include <boost/compute/utility/dim.hpp>
 
 #include <QImage>
 
@@ -26,7 +30,7 @@ inline image_format qt_qimage_format_to_image_format(const QImage::Format &forma
         return image_format(image_format::bgra, image_format::unorm_int8);
     }
 
-    return image_format();
+    BOOST_THROW_EXCEPTION(opencl_error(CL_IMAGE_FORMAT_NOT_SUPPORTED));
 }
 
 inline QImage::Format qt_image_format_to_qimage_format(const image_format &format)
@@ -47,21 +51,16 @@ inline void qt_copy_qimage_to_image2d(const QImage &qimage,
                                       image2d &image,
                                       command_queue &queue)
 {
-    size_t origin[] = { 0, 0 };
-    size_t region[] = { image.width(), image.height() };
-
-    queue.enqueue_write_image(image, origin, region, 0, qimage.constBits());
+    queue.enqueue_write_image(image, image.origin(), image.size(), qimage.constBits());
 }
 
 inline void qt_copy_image2d_to_qimage(const image2d &image,
                                       QImage &qimage,
                                       command_queue &queue)
 {
-    size_t origin[] = { 0, 0 };
-    size_t region[] = { static_cast<size_t>(qimage.width()),
-                        static_cast<size_t>(qimage.height()) };
-
-    queue.enqueue_read_image(image, origin, region, 0, qimage.bits());
+    queue.enqueue_read_image(
+        image, dim(0, 0), dim(qimage.width(), qimage.height()), qimage.bits()
+    );
 }
 
 } // end compute namespace

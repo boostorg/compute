@@ -8,5 +8,18 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-// deprecated, use <boost/compute/image/image_sampler.hpp> instead
+#ifndef BOOST_COMPUTE_IMAGE_HPP
+#define BOOST_COMPUTE_IMAGE_HPP
+
+/// \file
+///
+/// Meta-header to include all Boost.Compute image headers.
+
+#include <boost/compute/image/image1d.hpp>
+#include <boost/compute/image/image2d.hpp>
+#include <boost/compute/image/image3d.hpp>
+#include <boost/compute/image/image_format.hpp>
+#include <boost/compute/image/image_object.hpp>
 #include <boost/compute/image/image_sampler.hpp>
+
+#endif // BOOST_COMPUTE_IMAGE_HPP

@@ -154,6 +154,17 @@ Header: `<boost/compute/iterators.hpp>`
 * [classref boost::compute::transform_iterator transform_iterator<InputIterator, UnaryFunction>]
 * [classref boost::compute::zip_iterator zip_iterator<IteratorTuple>]
 
+[h3 Images]
+
+Header: `<boost/compute/image.hpp>`
+
+* [classref boost::compute::image1d image1d]
+* [classref boost::compute::image2d image2d]
+* [classref boost::compute::image3d image3d]
+* [classref boost::compute::image_format image_format]
+* [classref boost::compute::image_object image_object]
+* [classref boost::compute::image_sampler image_sampler]
+
 [h3 Shared Virtual Memory]
 
 * [classref boost::compute::svm_ptr svm_ptr<T>]

@@ -97,13 +97,7 @@ namespace detail {
 
 // set_kernel_arg specialization for opengl_buffer
 template<>
-struct set_kernel_arg<opengl_buffer>
-{
-    void operator()(kernel &kernel_, size_t index, const opengl_buffer &buffer_)
-    {
-        kernel_.set_arg(index, buffer_.get());
-    }
-};
+struct set_kernel_arg<opengl_buffer> : set_kernel_arg<memory_object> { };
 
 } // end detail namespace
 } // end compute namespace
