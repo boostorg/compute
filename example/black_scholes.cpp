@@ -145,11 +145,14 @@ int main()
     std::cout << "option 0 call price: " << call0 << std::endl;
     std::cout << "option 0 put price: " << put0 << std::endl;
 
-    // due to the differences in the random-number generators between linux and
-    // mac os x, we will get different "expected" results for this example
+    // due to the differences in the random-number generators between Operating Systems
+    // and/or compilers, we will get different "expected" results for this example
 #ifdef __APPLE__
     double expected_call0 = 0.000249461;
     double expected_put0 = 26.2798;
+#elif _MSC_VER
+    double expected_call0 = 8.21412;
+    double expected_put0 = 2.25904;
 #else
     double expected_call0 = 0.0999f;
     double expected_put0 = 43.0524f;
