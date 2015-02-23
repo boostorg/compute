@@ -71,7 +71,22 @@ struct radix_sort_value_type<8>
     typedef ulong_ type;
 };
 
+template<typename T>
+inline const char* enable_double()
+{
+    return " -DT2_double=0";
+}
+
+template<>
+inline const char* enable_double<double>()
+{
+    return " -DT2_double=1";
+}
+
 const char radix_sort_source[] =
+"#if T2_double\n"
+"#pragma OPENCL EXTENSION cl_khr_fp64 : enable\n"
+"#endif\n"
 "#define K2_BITS (1 << K_BITS)\n"
 "#define RADIX_MASK ((((T)(1)) << K_BITS) - 1)\n"
 "#define SIGN_BIT ((sizeof(T) * CHAR_BIT) - 1)\n"
@@ -259,6 +274,7 @@ inline void radix_sort_impl(const buffer_iterator<T> first,
     if(sort_by_key){
         options << " -DSORT_BY_KEY";
         options << " -DT2=" << type_name<T2>();
+        options << enable_double<T2>();
     }
 
     // load (or create) radix sort program
