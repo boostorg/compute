@@ -8,6 +8,7 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <iostream>
 #include <vector>

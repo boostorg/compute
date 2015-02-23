@@ -47,6 +47,7 @@ BOOST_AUTO_TEST_CASE(any_nan_inf)
     using ::boost::compute::_1;
     using ::boost::compute::lambda::isinf;
     using ::boost::compute::lambda::isnan;
+    using ::boost::compute::lambda::isfinite;
 
     float nan = std::sqrt(-1.f);
     float inf = std::numeric_limits<float>::infinity();

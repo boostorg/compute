@@ -32,6 +32,17 @@ inline extents<sizeof...(Args)> dim(Args... args)
 {
     return extents<sizeof...(Args)>({ static_cast<size_t>(args)... });
 }
+
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1800)
+// for some inexplicable reason passing one parameter to 'dim' variadic template 
+// generates compile error on msvc 2013 update 4
+template<class T>
+inline extents<1> dim(T arg)
+{
+    return extents<1>(static_cast<size_t>(arg));
+}
+#endif // BOOST_WORKAROUND(BOOST_MSVC, <= 1800)
+
 #else
 // dim() function definitions for non-c++11 compilers
 #define BOOST_COMPUTE_DETAIL_ASSIGN_DIM(z, n, var) \
