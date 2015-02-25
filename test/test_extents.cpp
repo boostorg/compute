@@ -11,6 +11,9 @@
 #define BOOST_TEST_MODULE TestExtents
 #include <boost/test/unit_test.hpp>
 
+#include <algorithm>
+#include <vector>
+
 #include <boost/compute/utility/dim.hpp>
 #include <boost/compute/utility/extents.hpp>
 
@@ -77,6 +80,17 @@ BOOST_AUTO_TEST_CASE(empty_dim)
     BOOST_CHECK(compute::dim<1>() == compute::dim(0));
     BOOST_CHECK(compute::dim<2>() == compute::dim(0, 0));
     BOOST_CHECK(compute::dim<3>() == compute::dim(0, 0, 0));
+}
+
+BOOST_AUTO_TEST_CASE(copy_to_vector)
+{
+    compute::extents<3> exts = compute::dim(4, 5, 6);
+
+    std::vector<size_t> vec(3);
+    std::copy(exts.begin(), exts.end(), vec.begin());
+    BOOST_CHECK_EQUAL(vec[0], 4);
+    BOOST_CHECK_EQUAL(vec[1], 5);
+    BOOST_CHECK_EQUAL(vec[2], 6);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

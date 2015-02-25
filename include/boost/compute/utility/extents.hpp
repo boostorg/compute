@@ -35,6 +35,9 @@ class extents
 public:
     typedef size_t size_type;
     static const size_type static_size = N;
+    typedef boost::array<size_t, N> array_type;
+    typedef typename array_type::iterator iterator;
+    typedef typename array_type::const_iterator const_iterator;
 
     /// Creates an extents object with each component set to zero.
     ///
@@ -99,6 +102,36 @@ public:
         return m_extents.data();
     }
 
+    iterator begin()
+    {
+        return m_extents.begin();
+    }
+
+    const_iterator begin() const
+    {
+        return m_extents.begin();
+    }
+
+    const_iterator cbegin() const
+    {
+        return m_extents.cbegin();
+    }
+
+    iterator end()
+    {
+        return m_extents.end();
+    }
+
+    const_iterator end() const
+    {
+        return m_extents.end();
+    }
+
+    const_iterator cend() const
+    {
+        return m_extents.cend();
+    }
+
     /// Returns a reference to the extent at \p index.
     size_t& operator[](size_t index)
     {
@@ -124,7 +157,7 @@ public:
     }
 
 private:
-    boost::array<size_t, N> m_extents;
+    array_type m_extents;
 };
 
 } // end compute namespace
