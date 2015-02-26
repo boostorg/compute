@@ -127,6 +127,10 @@ void ImageWidget::initializeGL()
 
 void ImageWidget::resizeGL(int width, int height)
 {
+    // scale height/width based on device pixel ratio
+    width /= windowHandle()->devicePixelRatio();
+    height /= windowHandle()->devicePixelRatio();
+
     // resize viewport
     glViewport(0, 0, width, height);
 
