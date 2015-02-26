@@ -19,6 +19,11 @@
 #include <boost/compute/exception/unsupported_extension_error.hpp>
 #include <boost/compute/interop/opengl/cl_gl.hpp>
 
+#ifdef __APPLE__
+#include <OpenCL/cl_gl_ext.h>
+#include <OpenGL/OpenGL.h>
+#endif
+
 #ifdef __linux__
 #include <GL/glx.h>
 #endif
@@ -37,12 +42,31 @@ namespace compute {
 inline context opengl_create_shared_context()
 {
     // name of the OpenGL sharing extension for the system
-    #if defined(__APPLE__)
+#if defined(__APPLE__)
     const char *cl_gl_sharing_extension = "cl_APPLE_gl_sharing";
-    #else
+#else
     const char *cl_gl_sharing_extension = "cl_khr_gl_sharing";
-    #endif
+#endif
 
+#if defined(__APPLE__)
+    // get OpenGL share group
+    CGLContextObj cgl_current_context = CGLGetCurrentContext();
+    CGLShareGroupObj cgl_share_group = CGLGetShareGroup(cgl_current_context);
+
+    cl_context_properties properties[] = {
+        CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE,
+        (cl_context_properties) cgl_share_group,
+        0
+    };
+
+    cl_int error = 0;
+    cl_context cl_gl_context = clCreateContext(properties, 0, 0, 0, 0, &error);
+    if(!cl_gl_context){
+        BOOST_THROW_EXCEPTION(opencl_error(error));
+    }
+
+    return context(cl_gl_context, false);
+#else
     typedef cl_int(*GetGLContextInfoKHRFunction)(
         const cl_context_properties*, cl_gl_context_info, size_t, void *, size_t *
     );
@@ -62,21 +86,12 @@ inline context opengl_create_shared_context()
             continue;
         }
 
-        // get OpenGL share group (needed for Apple)
-        #ifdef __APPLE__
-        CGLContextObj cgl_current_context = CGLGetCurrentContext();
-        CGLShareGroupObj cgl_share_group = CGLGetShareGroup(cgl_current_context);
-        #endif
-
         // create context properties listing the platform and current OpenGL display
         cl_context_properties properties[] = {
             CL_CONTEXT_PLATFORM, (cl_context_properties) platform.id(),
         #if defined(__linux__)
             CL_GL_CONTEXT_KHR, (cl_context_properties) glXGetCurrentContext(),
             CL_GLX_DISPLAY_KHR, (cl_context_properties) glXGetCurrentDisplay(),
-        #elif defined(__APPLE__)
-            CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE,
-                (cl_context_properties) cgl_share_group,
         #elif defined(WIN32)
             CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
             CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(), 
@@ -106,6 +121,7 @@ inline context opengl_create_shared_context()
         // return CL-GL sharing context
         return context(gpu, properties);
     }
+#endif
 
     // no CL-GL sharing capable devices found
     BOOST_THROW_EXCEPTION(
