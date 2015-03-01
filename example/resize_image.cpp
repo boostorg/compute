@@ -127,9 +127,11 @@ void ImageWidget::initializeGL()
 
 void ImageWidget::resizeGL(int width, int height)
 {
+#if QT_VERSION >= 0x050000
     // scale height/width based on device pixel ratio
     width /= windowHandle()->devicePixelRatio();
     height /= windowHandle()->devicePixelRatio();
+#endif
 
     // resize viewport
     glViewport(0, 0, width, height);
