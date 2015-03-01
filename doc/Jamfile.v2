@@ -3,12 +3,6 @@ import boostbook ;
 import doxygen ;
 import modules ;
 
-xml compute
-  :
-    compute.qbk
-  :
-  ;
-
 doxygen autodoc
   :
     ../include/boost/compute.hpp
@@ -96,6 +90,8 @@ doxygen autodoc
       "
     <xsl:param>"boost.doxygen.reftitle=Header Reference"
   ;
+
+xml compute : compute.qbk : ;
 
 boostbook standalone
     :

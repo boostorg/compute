@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestUserDefinedTypes
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/function.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/sort.hpp>
