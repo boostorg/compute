@@ -1,0 +1,36 @@
+# (C) Copyright 2015: Kyle Lutz
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+import testing ;
+
+lib boost_unit_test_framework ;
+
+project boost/compute/test
+    : source-location .
+    : requirements
+        <include>.
+        <include>../include
+        <define>BOOST_TEST_DYN_LINK
+        <linkflags>"-lboost_unit_test_framework"
+    ;
+
+rule test_all
+{
+    local all_rules = ;
+
+    for local fileb in [ glob *.cpp ]
+    {
+        all_rules += [ run $(fileb)
+        :
+        :
+        :
+            <host-os>linux:<linkflags>"-lOpenCL"
+            <host-os>darwin:<linkflags>"-framework OpenCL"
+        ] ;
+    }
+
+    return $(all_rules) ;
+}
+
+test-suite compute : [ test_all r ] :  ;

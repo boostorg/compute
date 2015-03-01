@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestLocalBuffer
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/core.hpp>
 #include <boost/compute/memory/local_buffer.hpp>
 #include <boost/compute/utility/source.hpp>
