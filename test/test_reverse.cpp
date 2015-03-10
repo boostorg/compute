@@ -68,6 +68,14 @@ BOOST_AUTO_TEST_CASE(reverse_copy_int)
         bc::reverse_copy(a.begin(), a.end(), b.begin());
     BOOST_CHECK(iter == b.end());
     CHECK_RANGE_EQUAL(int, 5, b, (4, 3, 2, 1, 0));
+
+    iter = bc::reverse_copy(b.begin() + 1, b.end(), a.begin() + 1);
+    BOOST_CHECK(iter == a.end());
+    CHECK_RANGE_EQUAL(int, 5, a, (0, 0, 1, 2, 3));
+
+    iter = bc::reverse_copy(a.begin(), a.end() - 1, b.begin());
+    BOOST_CHECK(iter == (b.end() - 1));
+    CHECK_RANGE_EQUAL(int, 5, b, (2, 1, 0, 0, 0));
 }
 
 BOOST_AUTO_TEST_CASE(reverse_copy_counting_iterator)
