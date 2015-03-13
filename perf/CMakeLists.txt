@@ -41,6 +41,7 @@ set(BENCHMARKS
   partition_point
   prev_permutation
   reverse
+  reverse_copy
   rotate
   rotate_copy
   host_sort
@@ -80,6 +81,7 @@ set(STL_BENCHMARKS
   stl_partition
   stl_prev_permutation
   stl_reverse
+  stl_reverse_copy
   stl_rotate
   stl_rotate_copy
   stl_saxpy
@@ -123,6 +125,7 @@ if(${BOOST_COMPUTE_HAVE_CUDA})
     thrust_partial_sum
     thrust_partition
     thrust_reverse
+    thrust_reverse_copy
     thrust_rotate
     thrust_saxpy
     thrust_set_difference
