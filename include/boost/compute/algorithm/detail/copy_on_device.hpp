@@ -20,6 +20,7 @@
 #include <boost/compute/memory/svm_ptr.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
+#include <boost/compute/detail/parameter_cache.hpp>
 #include <boost/compute/detail/work_size.hpp>
 
 namespace boost {
@@ -42,12 +43,21 @@ template<class InputIterator, class OutputIterator>
 class copy_kernel : public meta_kernel
 {
 public:
-    copy_kernel()
+    copy_kernel(const device &device)
         : meta_kernel("copy")
     {
         m_count = 0;
-        m_vpt = 4;
-        m_tpb = 128;
+
+        typedef typename std::iterator_traits<InputIterator>::value_type input_type;
+
+        boost::shared_ptr<parameter_cache> parameters =
+            detail::parameter_cache::get_global_cache(device);
+
+        std::string cache_key =
+            "__boost_copy_kernel_" + boost::lexical_cast<std::string>(sizeof(input_type));
+
+        m_vpt = parameters->get(cache_key, "vpt", 4);
+        m_tpb = parameters->get(cache_key, "tpb", 128);
     }
 
     void set_range(InputIterator first,
@@ -97,7 +107,9 @@ inline OutputIterator copy_on_device(InputIterator first,
                                      OutputIterator result,
                                      command_queue &queue)
 {
-    copy_kernel<InputIterator, OutputIterator> kernel;
+    const device &device = queue.get_device();
+
+    copy_kernel<InputIterator, OutputIterator> kernel(device);
 
     kernel.set_range(first, last, result);
     kernel.exec(queue);
@@ -122,7 +134,9 @@ inline future<OutputIterator> copy_on_device_async(InputIterator first,
                                                    OutputIterator result,
                                                    command_queue &queue)
 {
-    copy_kernel<InputIterator, OutputIterator> kernel;
+    const device &device = queue.get_device();
+
+    copy_kernel<InputIterator, OutputIterator> kernel(device);
 
     kernel.set_range(first, last, result);
     event event_ = kernel.exec(queue);

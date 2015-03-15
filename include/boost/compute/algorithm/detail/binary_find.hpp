@@ -15,6 +15,7 @@
 #include <boost/compute/algorithm/find_if.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/detail/parameter_cache.hpp>
 
 namespace boost {
 namespace compute {
@@ -28,11 +29,9 @@ namespace detail{
 class binary_find_kernel : public meta_kernel
 {
 public:
-    size_t threads;
-
-    binary_find_kernel() : meta_kernel("binary_find")
+    binary_find_kernel(size_t threads) : meta_kernel("binary_find")
     {
-        threads = 128;
+        m_threads = threads;
     }
 
     template<class InputIterator, class UnaryPredicate>
@@ -41,7 +40,7 @@ public:
                    UnaryPredicate predicate)
     {
         typedef typename std::iterator_traits<InputIterator>::value_type value_type;
-        int block = (iterator_range_size(first, last)-1)/(threads-1);
+        int block = (iterator_range_size(first, last)-1)/(m_threads-1);
 
         m_index_arg = add_arg<uint_ *>(memory_object::global_memory, "index");
 
@@ -60,10 +59,11 @@ public:
     {
         set_arg(m_index_arg, index.get_buffer());
 
-        return exec_1d(queue, 0, threads);
+        return exec_1d(queue, 0, m_threads);
     }
 
 private:
+    size_t m_threads;
     size_t m_index_arg;
 };
 
@@ -84,8 +84,15 @@ inline InputIterator binary_find(InputIterator first,
                                  UnaryPredicate predicate,
                                  command_queue &queue = system::default_queue())
 {
+    const device &device = queue.get_device();
+
+    boost::shared_ptr<parameter_cache> parameters =
+        detail::parameter_cache::get_global_cache(device);
+
+    const std::string cache_key = "__boost_binary_find";
+
     size_t find_if_limit = 128;
-    size_t threads = 128;
+    size_t threads = parameters->get(cache_key, "tpb", 128);
     size_t count = iterator_range_size(first, last);
 
     while(count > find_if_limit) {
@@ -93,7 +100,7 @@ inline InputIterator binary_find(InputIterator first,
         scalar<uint_> index(queue.get_context());
         index.write(static_cast<uint_>(count), queue);
 
-        binary_find_kernel kernel;
+        binary_find_kernel kernel(threads);
         kernel.set_range(first, last, predicate);
         kernel.exec(queue, index);
 

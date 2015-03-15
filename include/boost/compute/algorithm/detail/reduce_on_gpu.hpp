@@ -13,15 +13,15 @@
 
 #include <iterator>
 
+#include <boost/compute/utility/source.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/vendor.hpp>
+#include <boost/compute/detail/parameter_cache.hpp>
 #include <boost/compute/detail/work_size.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
-#include <boost/compute/type_traits/result_of.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/utility/program_cache.hpp>
-#include <boost/compute/utility/source.hpp>
 
 namespace boost {
 namespace compute {
@@ -99,7 +99,7 @@ inline void initial_reduce(InputIterator first,
     (void) reduce_kernel;
 
     typedef typename std::iterator_traits<InputIterator>::value_type Arg;
-    typedef typename ::boost::compute::result_of<Function(Arg, Arg)>::type T;
+    typedef typename boost::tr1_result_of<Function(Arg, Arg)>::type T;
 
     size_t count = std::distance(first, last);
     detail::meta_kernel k("initial_reduce");
@@ -174,6 +174,7 @@ inline void reduce_on_gpu(InputIterator first,
                           command_queue &queue)
 {
     const device &device = queue.get_device();
+    const context &context = queue.get_context();
 
     detail::meta_kernel k("reduce");
     k.add_arg<const T*>(memory_object::global_memory, "input");
@@ -210,27 +211,33 @@ inline void reduce_on_gpu(InputIterator first,
          "    output[output_offset + get_group_id(0)] = scratch[0];\n" <<
          "}\n";
 
-    uint_ vpt = 8;
-    uint_ tpb = 128;
+    std::string cache_key = std::string("__boost_reduce_on_gpu_") + type_name<T>();
 
-    size_t count = std::distance(first, last);
+    // load parameters
+    boost::shared_ptr<parameter_cache> parameters =
+        detail::parameter_cache::get_global_cache(device);
 
-    const context &context = queue.get_context();
+    uint_ vpt = parameters->get(cache_key, "vpt", 8);
+    uint_ tpb = parameters->get(cache_key, "tpb", 128);
 
-    // load (or create) reduce program
+    // reduce program compiler flags
+    std::stringstream options;
+    options << "-DT=" << type_name<T>()
+            << " -DVPT=" << vpt
+            << " -DTPB=" << tpb;
+
+    // load program
     boost::shared_ptr<program_cache> cache =
         program_cache::get_global_cache(context);
 
-    std::string cache_key = std::string("__boost_reduce_on_gpu_") + type_name<T>();
-
-    std::stringstream options;
-    options << "-DT=" << type_name<T>() << " -DVPT=" << vpt << " -DTPB=" << tpb;
-
-    program reduce_program =
-        cache->get_or_build(cache_key, options.str(), k.source(), context);
+    program reduce_program = cache->get_or_build(
+        cache_key, options.str(), k.source(), context
+    );
 
     // create reduce kernel
     kernel reduce_kernel(reduce_program, "reduce");
+
+    size_t count = std::distance(first, last);
 
     // first pass, reduce from input to ping
     buffer ping(context, std::ceil(float(count) / vpt / tpb) * sizeof(T));
