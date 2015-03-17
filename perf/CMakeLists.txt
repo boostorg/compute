@@ -1,6 +1,6 @@
 include_directories(../include)
 
-set(PERF_BOOST_COMPONENTS system timer chrono)
+set(PERF_BOOST_COMPONENTS system timer chrono program_options)
 
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
   set(PERF_BOOST_COMPONENTS ${PERF_BOOST_COMPONENTS} filesystem)
