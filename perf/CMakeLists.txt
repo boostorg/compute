@@ -30,10 +30,8 @@ set(BENCHMARKS
   inner_product
   is_permutation
   is_sorted
-  linear_congruential_engine
   max_element
   merge
-  mersenne_twister
   next_permutation
   nth_element
   partial_sum
@@ -45,6 +43,7 @@ set(BENCHMARKS
   rotate
   rotate_copy
   host_sort
+  random_number_engine
   saxpy
   search
   search_n

@@ -95,4 +95,14 @@ public:
     std::vector<boost::timer::nanosecond_type> times;
 };
 
+// returns the rate (in MB/s) for processing 'count' items of type 'T'
+// in 'time' nanoseconds
+template<class T>
+double perf_rate(const size_t count, perf_timer::nanosecond_type time)
+{
+    const size_t byte_count = count * sizeof(T);
+
+    return (double(byte_count) / 1024 / 1024) / (time / 1e9);
+}
+
 #endif // PERF_HPP
