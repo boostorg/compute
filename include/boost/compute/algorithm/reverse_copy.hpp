@@ -28,8 +28,6 @@ struct reverse_copy_kernel : public meta_kernel
     reverse_copy_kernel(Iterator first, Iterator last, OutputIterator result)
         : meta_kernel("reverse_copy")
     {
-        typedef typename std::iterator_traits<Iterator>::value_type value_type;
-
         // store size of the range
         m_size = detail::iterator_range_size(first, last);
         add_set_arg<const cl_uint>("size", static_cast<const cl_uint>(m_size));
