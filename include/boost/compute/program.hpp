@@ -516,7 +516,8 @@ public:
                 << "// " << options << "\n\n"
                 << source;
 
-            hash = detail::sha1(src.str());
+            // Gets rebuilt if either source, or device (indicated by name) or compile options change
+            hash = detail::sha1(src.str() + context.device.name().str() + options.str());
         }
 
         // Try to get cached program binaries:

@@ -82,6 +82,25 @@ public:
         m_cache.clear();
     }
 
+    /// Clears persistent cache by deleting the boost_compute folder
+    void clear_persistent_cache()
+    {
+#ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
+        // Path delimiter symbol for the current OS.
+        static const std::string delim = boost::filesystem::path("/").make_preferred().string();
+
+        // Path to appdata folder.
+#ifdef WIN32
+        static const std::string appdata = detail::getenv("APPDATA") 
+            + delim + "boost_compute";
+#else
+        static const std::string appdata = detail::getenv("HOME")
+            + delim + ".boost_compute";
+#endif
+        boost::filesystem::remove_all(appdata);
+#endif
+    }
+
     /// Returns the program object with \p key. Returns a null optional if no
     /// program with \p key exists in the cache.
     boost::optional<program> get(const std::string &key)
