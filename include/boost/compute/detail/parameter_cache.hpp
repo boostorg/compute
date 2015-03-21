@@ -24,7 +24,7 @@
 #include <boost/compute/version.hpp>
 
 #ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
-#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #include <boost/compute/detail/path.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>

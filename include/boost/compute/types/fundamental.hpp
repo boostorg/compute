@@ -14,7 +14,10 @@
 #include <cstring>
 #include <ostream>
 
-#include <boost/preprocessor.hpp>
+#include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/comma.hpp>
+#include <boost/preprocessor/repetition.hpp>
+#include <boost/preprocessor/stringize.hpp>
 
 #include <boost/compute/cl.hpp>
 
