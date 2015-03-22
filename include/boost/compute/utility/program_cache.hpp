@@ -83,7 +83,7 @@ public:
     }
 
     /// Clears persistent cache by deleting the boost_compute folder
-    void clear_persistent_cache()
+    static void clear_persistent_cache()
     {
 #ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
         // Path delimiter symbol for the current OS.
@@ -97,7 +97,17 @@ public:
         static const std::string appdata = detail::getenv("HOME")
             + delim + ".boost_compute";
 #endif
-        boost::filesystem::remove_all(appdata);
+        try
+        {
+            if(boost::filesystem::exists(appdata))
+            {
+               boost::filesystem::remove_all(appdata);
+            }  
+        }
+        catch(boost::filesystem::filesystem_error const & err)
+        {
+            std::cout<<err.what()<<std::endl;
+        }
 #endif
     }
 
