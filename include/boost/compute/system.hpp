@@ -15,7 +15,6 @@
 #include <vector>
 #include <cstdlib>
 
-#include <boost/foreach.hpp>
 #include <boost/throw_exception.hpp>
 
 #include <boost/compute/cl.hpp>
@@ -85,7 +84,10 @@ public:
     /// \throws no_device_found if no device with \p name is found.
     static device find_device(const std::string &name)
     {
-        BOOST_FOREACH(const device &device, devices()){
+        const std::vector<device> devices = system::devices();
+        for(size_t i = 0; i < devices.size(); i++){
+            const device& device = devices[i];
+
             if(device.name() == name){
                 return device;
             }
@@ -108,10 +110,13 @@ public:
     {
         std::vector<device> devices;
 
-        BOOST_FOREACH(const platform &platform, platforms()){
-            BOOST_FOREACH(const device &device, platform.devices()){
-                devices.push_back(device);
-            }
+        const std::vector<platform> platforms = system::platforms();
+        for(size_t i = 0; i < platforms.size(); i++){
+            const std::vector<device> platform_devices = platforms[i].devices();
+
+            devices.insert(
+                devices.end(), platform_devices.begin(), platform_devices.end()
+            );
         }
 
         return devices;
@@ -122,8 +127,9 @@ public:
     {
         size_t count = 0;
 
-        BOOST_FOREACH(const platform &platform, platforms()){
-            count += platform.device_count();
+        const std::vector<platform> platforms = system::platforms();
+        for(size_t i = 0; i < platforms.size(); i++){
+            count += platforms[i].device_count();
         }
 
         return count;
@@ -214,7 +220,8 @@ private:
         const char *vendor   = detail::getenv("BOOST_COMPUTE_DEFAULT_VENDOR");
 
         if(name || type || platform || vendor){
-            BOOST_FOREACH(const device &device, devices_){
+            for(size_t i = 0; i < devices_.size(); i++){
+                const device& device = devices_[i];
                 if (name && !matches(device.name(), name))
                     continue;
 
@@ -237,14 +244,18 @@ private:
         }
 
         // find the first gpu device
-        BOOST_FOREACH(const device &device, devices_){
+        for(size_t i = 0; i < devices_.size(); i++){
+            const device& device = devices_[i];
+
             if(device.type() == device::gpu){
                 return device;
             }
         }
 
         // find the first cpu device
-        BOOST_FOREACH(const device &device, devices_){
+        for(size_t i = 0; i < devices_.size(); i++){
+            const device& device = devices_[i];
+
             if(device.type() == device::cpu){
                 return device;
             }

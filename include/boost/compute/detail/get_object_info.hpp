@@ -14,6 +14,9 @@
 #include <string>
 #include <vector>
 
+#include <boost/preprocessor/seq/for_each.hpp>
+#include <boost/preprocessor/tuple/elem.hpp>
+
 #include <boost/throw_exception.hpp>
 
 #include <boost/compute/cl.hpp>

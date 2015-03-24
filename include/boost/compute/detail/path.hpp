@@ -11,7 +11,8 @@
 #ifndef BOOST_COMPUTE_DETAIL_PATH_HPP
 #define BOOST_COMPUTE_DETAIL_PATH_HPP
 
-#include <boost/filesystem.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
 #include <boost/compute/detail/getenv.hpp>
 
 namespace boost {

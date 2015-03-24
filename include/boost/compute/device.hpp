@@ -11,11 +11,12 @@
 #ifndef BOOST_COMPUTE_DEVICE_HPP
 #define BOOST_COMPUTE_DEVICE_HPP
 
+#include <algorithm>
 #include <string>
 #include <vector>
 
-#include <boost/range/algorithm.hpp>
-#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 #include <boost/compute/config.hpp>
 #include <boost/compute/exception.hpp>
@@ -213,7 +214,8 @@ public:
     {
         const std::vector<std::string> extensions = this->extensions();
 
-        return boost::find(extensions, name) != extensions.end();
+        return std::find(
+            extensions.begin(), extensions.end(), name) != extensions.end();
     }
 
     /// Returns the number of address bits.
