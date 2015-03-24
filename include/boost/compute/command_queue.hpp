@@ -118,24 +118,27 @@ public:
         cl_int error = 0;
 
         #ifdef CL_VERSION_2_0
-        std::vector<cl_queue_properties> queue_properties;
-        if(properties){
-            queue_properties.push_back(CL_QUEUE_PROPERTIES);
-            queue_properties.push_back(cl_queue_properties(properties));
-            queue_properties.push_back(cl_queue_properties(0));
-        }
+        if (device.check_version(2, 0)){
+            std::vector<cl_queue_properties> queue_properties;
+            if(properties){
+                queue_properties.push_back(CL_QUEUE_PROPERTIES);
+                queue_properties.push_back(cl_queue_properties(properties));
+                queue_properties.push_back(cl_queue_properties(0));
+            }
 
-        const cl_queue_properties *queue_properties_ptr =
-            queue_properties.empty() ? 0 : &queue_properties[0];
+            const cl_queue_properties *queue_properties_ptr =
+                queue_properties.empty() ? 0 : &queue_properties[0];
 
-        m_queue = clCreateCommandQueueWithProperties(
-            context, device.id(), queue_properties_ptr, &error
-        );
-        #else
-        m_queue = clCreateCommandQueue(
-            context, device.id(), properties, &error
-        );
+            m_queue = clCreateCommandQueueWithProperties(
+                context, device.id(), queue_properties_ptr, &error
+            );
+        } else
         #endif
+        {
+            m_queue = clCreateCommandQueue(
+                context, device.id(), properties, &error
+            );
+        }
 
         if(!m_queue){
             BOOST_THROW_EXCEPTION(opencl_error(error));
