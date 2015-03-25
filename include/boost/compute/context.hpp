@@ -175,27 +175,13 @@ public:
     /// devices, the first is returned.
     device get_device() const
     {
-        size_t count = 0;
-        clGetContextInfo(m_context,
-                         CL_CONTEXT_DEVICES,
-                         0,
-                         0,
-                         &count);
-        if(count == 0){
+        std::vector<device> devices = get_devices();
+
+        if(devices.empty()) {
             return device();
         }
 
-        cl_device_id id;
-        clGetContextInfo(m_context,
-                         CL_CONTEXT_DEVICES,
-                         sizeof(cl_device_id),
-                         &id,
-                         0);
-        if(id == 0){
-            return device();
-        }
-
-        return device(id);
+        return devices.front();
     }
 
     /// Returns a vector of devices for the context.
