@@ -1208,12 +1208,16 @@ public:
     event enqueue_marker()
     {
         event event_;
+        cl_int ret = CL_SUCCESS;
 
         #ifdef CL_VERSION_1_2
-        cl_int ret = clEnqueueMarkerWithWaitList(m_queue, 0, 0, &event_.get());
-        #else
-        cl_int ret = clEnqueueMarker(m_queue, &event_.get());
+        if(get_device().check_version(1, 2)){
+            ret = clEnqueueMarkerWithWaitList(m_queue, 0, 0, &event_.get());
+        } else
         #endif
+        {
+            ret = clEnqueueMarker(m_queue, &event_.get());
+        }
 
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
