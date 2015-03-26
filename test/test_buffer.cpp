@@ -168,9 +168,9 @@ BOOST_AUTO_TEST_CASE(create_subbuffer)
 
 BOOST_AUTO_TEST_CASE(create_buffer_doctest)
 {
-    //! [constructor]
-    boost::compute::buffer buf(context, 32 * sizeof(float));
-    //! [constructor]
+//! [constructor]
+boost::compute::buffer buf(context, 32 * sizeof(float));
+//! [constructor]
 
     BOOST_CHECK_EQUAL(buf.size(), 32 * sizeof(float));
 }
