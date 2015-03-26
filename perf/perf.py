@@ -118,6 +118,7 @@ def run_benchmark(name, sizes, vs=[]):
             "accumulate",
             "count",
             "exclusive_scan",
+            "find",
             "inner_product",
             "merge",
             "partial_sum",
@@ -136,6 +137,7 @@ def run_benchmark(name, sizes, vs=[]):
         "stl": [
             "accumulate",
             "count",
+            "find",
             "find_end",
             "includes",
             "inner_product",

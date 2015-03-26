@@ -25,6 +25,7 @@ set(BENCHMARKS
   erase_remove
   exclusive_scan
   fill
+  find
   find_end
   includes
   inner_product
@@ -70,6 +71,7 @@ endforeach()
 set(STL_BENCHMARKS
   stl_accumulate
   stl_count
+  stl_find
   stl_find_end
   stl_includes
   stl_inner_product
@@ -118,6 +120,7 @@ if(${BOOST_COMPUTE_HAVE_CUDA})
     thrust_accumulate
     thrust_count
     thrust_exclusive_scan
+    thrust_find
     thrust_inner_product
     thrust_merge
     thrust_partial_sum
