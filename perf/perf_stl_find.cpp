@@ -33,13 +33,26 @@ int main(int argc, char *argv[])
 
     // trying to find element that isn't in vector (worst-case scenario)
     int wanted = rand_int_max + 1;
+
+    // result
+    std::vector<int>::iterator host_result_it;
+
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
         t.start();
-        std::find(host_vector.begin(), host_vector.end(), wanted);
+        host_result_it = std::find(host_vector.begin(), host_vector.end(), wanted);
         t.stop();
     }
     std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
+
+    // verify
+    if(host_result_it != host_vector.end()){
+        std::cout << "ERROR: "
+                  << "host_result_iterator != "
+                  << "host_vector.end()"
+                  << std::endl;
+        return -1;
+    }
 
     return 0;
 }

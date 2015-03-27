@@ -54,31 +54,32 @@ int main(int argc, char *argv[])
     int wanted = rand_int_max + 1;
 
     // device iterator
-    boost::compute::vector<int>::iterator device_it;
+    boost::compute::vector<int>::iterator device_result_it;
 
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
         t.start();
-        device_it = boost::compute::find(
-            device_vector.begin(), device_vector.end(), wanted, queue
-        );
+        device_result_it = boost::compute::find(device_vector.begin(),
+                                                device_vector.end(),
+                                                wanted,
+                                                queue);
         queue.finish();
         t.stop();
     }
     std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
 
     // verify if found index is correct by comparing it with std::find() result
-    size_t host_index = std::distance(host_vector.begin(),
-                                      std::find(host_vector.begin(),
-                                                host_vector.end(),
-                                                wanted));
-    size_t device_index = device_it.get_index();
+    size_t host_result_index = std::distance(host_vector.begin(),
+                                             std::find(host_vector.begin(),
+                                                       host_vector.end(),
+                                                       wanted));
+    size_t device_result_index = device_result_it.get_index();
 
-    if(device_index != host_index){
+    if(device_result_index != host_result_index){
         std::cout << "ERROR: "
-                  << "device_index (" << device_index << ") "
+                  << "device_result_index (" << device_result_index << ") "
                   << "!= "
-                  << "host_index (" << host_index << ")"
+                  << "host_result_index (" << host_result_index << ")"
                   << std::endl;
         return -1;
     }

@@ -40,14 +40,26 @@ int main(int argc, char *argv[])
     // trying to find element that isn't in vector (worst-case scenario)
     int wanted = rand_int_max + 1;
     
+    // result
+    thrust::device_vector<int>::iterator device_result_it;
+    
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
         t.start();
-        thrust::find(v.begin(), v.end(), wanted);
+        device_result_it = thrust::find(v.begin(), v.end(), wanted);
         cudaDeviceSynchronize();
         t.stop();
     }
     std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
 
+    // verify
+    if(device_result_it != v.end()){
+        std::cout << "ERROR: "
+                  << "device_result_iterator != "
+                  << "v.end()"
+                  << std::endl;
+        return -1;
+    }
+    
     return 0;
 }
