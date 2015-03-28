@@ -47,7 +47,7 @@
 namespace boost {
 namespace compute {
 
-/// \class threefry_rng_engine
+/// \class threefry_engine
 /// \brief Threefry pseudorandom number generator.
 template<class T = uint_>
 class threefry_engine

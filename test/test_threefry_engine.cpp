@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(generate_uint)
 
     rng.generate(queue, vector_ctr.begin(), vector_ctr.end(), vector_key.begin(), vector_key.end());
     CHECK_RANGE_EQUAL(
-        uint_, 20, vector,
+        uint_, 20, vector_ctr,
         (uint_(0x6b200159),
          uint_(0x99ba4efe),
          uint_(0x508efb2c),
