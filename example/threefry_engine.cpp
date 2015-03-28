@@ -9,7 +9,7 @@
 //---------------------------------------------------------------------------//
 
 
-#include <boost/compute/random/threefry.hpp>
+#include <boost/compute/random/threefry_engine.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/context.hpp>
@@ -23,7 +23,7 @@ int main()
     boost::compute::device device = boost::compute::system::default_device();
     boost::compute::context context(device);
     boost::compute::command_queue queue(context, device);
-    boost::compute::random::threefry rng(queue);
+    boost::compute::threefry_engine<> rng(queue);
     boost::compute::vector<uint_> vector_ctr(20, context);
     boost::compute::vector<uint_> vector_key(20, context);
     

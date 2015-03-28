@@ -173,7 +173,7 @@ add_compute_test("random.bernoulli_distribution" test_bernoulli_distribution.cpp
 add_compute_test("random.discrete_distribution" test_discrete_distribution.cpp)
 add_compute_test("random.linear_congruential_engine" test_linear_congruential_engine.cpp)
 add_compute_test("random.mersenne_twister_engine" test_mersenne_twister_engine.cpp)
-add_compute_test("random.threefry" test_threefry.cpp)
+add_compute_test("random.threefry_engine" test_threefry_engine.cpp)
 add_compute_test("random.normal_distribution" test_normal_distribution.cpp)
 add_compute_test("random.uniform_int_distribution" test_uniform_int_distribution.cpp)
 add_compute_test("random.uniform_real_distribution" test_uniform_real_distribution.cpp)

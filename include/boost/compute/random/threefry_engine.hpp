@@ -46,15 +46,14 @@
 
 namespace boost {
 namespace compute {
-namespace random {
-
 
 /// \class threefry_rng_engine
 /// \brief Threefry pseudorandom number generator.
-template<class T>
+template<class T = uint_>
 class threefry_engine
 {
 public:
+    static const size_t threads = 1024;
     typedef T result_type;
 
     /// Creates a new threefry_engine and seeds it with \p value.
@@ -67,7 +66,8 @@ public:
 
     /// Creates a new threefry_engine object as a copy of \p other.
     threefry_engine(const threefry_engine<T> &other)
-        : m_context(other.m_context)
+        : m_context(other.m_context),
+          m_program(other.m_program)
     {
     }
 
@@ -76,6 +76,7 @@ public:
     {
         if(this != &other){
             m_context = other.m_context;
+            m_program = other.m_program;
         }
 
         return *this;
@@ -200,24 +201,27 @@ private:
             "    return X;\n"
             "}\n"
 
-            "__kernel void generate_rng(__global uint *ctr, __global uint *key, const uint size) {\n"
+            "__kernel void generate_rng(__global uint *ctr, __global uint *key, const uint offset) {\n"
             "    threefry2x32_ctr_t in;\n"
             "    threefry2x32_key_t k;\n"
-            "    for(uint i = 0; i < size; i+=2) {\n"
-            "        in.v[0] = ctr[i];\n"
-            "        in.v[1] = ctr[i+1];\n"
-            "        k.v[0] = key[i];\n"
-            "        k.v[1] = key[i+1];\n"
-            "        in = threefry2x32_R(20, in, k);\n"
-            "        ctr[i] = in.v[0];\n"
-            "        ctr[i+1] = in.v[1];\n"
-            "    }\n"
+            "    const uint i = get_global_id(0);\n"
+            "    in.v[0] = ctr[2 * (offset + i)];\n"
+            "    in.v[1] = ctr[2 * (offset + i) + 1];\n"
+            "    k.v[0] = key[2 * (offset + i)];\n"
+            "    k.v[1] = key[2 * (offset + i) + 1];\n"
+            "    in = threefry2x32_R(20, in, k);\n"
+            "    ctr[2 * (offset + i)] = in.v[0];\n"
+            "    ctr[2 * (offset + i) + 1] = in.v[1];\n"
             "}\n";
 
         m_program = cache->get_or_build(cache_key, std::string(), source, m_context);
     }
 
 public:
+
+
+    /// Generates Threefry random numbers using both the counter and key values, and then stores
+    /// them to the range [\p first_ctr, \p last_ctr).
     template<class OutputIterator>
     void generate(command_queue &queue, OutputIterator first_ctr, OutputIterator last_ctr, OutputIterator first_key, OutputIterator last_key) {
         const size_t size_ctr = detail::iterator_range_size(first_ctr, last_ctr);
@@ -226,10 +230,30 @@ public:
             return;
         }
         kernel rng_kernel = m_program.create_kernel("generate_rng");
+       
         rng_kernel.set_arg(0, first_ctr.get_buffer());
         rng_kernel.set_arg(1, first_key.get_buffer());
-        rng_kernel.set_arg(2, static_cast<const uint_>(size_ctr));
-        queue.enqueue_1d_range_kernel(rng_kernel, 0, 1, 0);
+        size_t offset = 0;
+
+        for(;;){
+            size_t count = 0;
+            size_t size = size_ctr/2;
+            if(size > threads){
+                count = threads;
+            }
+            else {
+                count = size;
+            }
+            rng_kernel.set_arg(2, static_cast<const uint_>(offset));
+            queue.enqueue_1d_range_kernel(rng_kernel, 0, count, 0);
+
+            offset += count;
+
+            if(offset >= size){
+                break;
+            }
+
+        }
     }
 
 private:
@@ -237,9 +261,6 @@ private:
     program m_program;
 };
 
-typedef threefry_engine<uint_> threefry;
-
-} // end random namespace
 } // end compute namespace
 } // end boost namespace
 
