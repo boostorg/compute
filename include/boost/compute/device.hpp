@@ -188,11 +188,12 @@ public:
         return get_info<std::string>(CL_DEVICE_VERSION);
     }
 
-    /// Returns the device version number. (eg. 1.1 is 101, 1.2 is 102, 2.0 is 200)
-    uint_ version_number() const
+    /// Returns the device version number: major * 100 + minor (eg. 1.1 is 101, 1.2 is 102, 2.0 is 200)
+    uint_ get_version() const
     {
         if (m_version == 0) {
-            std::stringstream ss(version());
+            std::string strversion(version());
+            std::stringstream ss(strversion);
             ushort_ major, minor;
             ss.ignore(7); // 'OpenCL '
             ss >> major;
@@ -296,7 +297,7 @@ public:
     bool is_subdevice() const
     {
     #if defined(CL_VERSION_1_2)
-        if (version_number() >= 102)
+        if (get_version() >= 102)
             return get_info<cl_device_id>(CL_DEVICE_PARENT_DEVICE) != 0;
         else
     #endif // CL_VERSION_1_2
@@ -336,7 +337,7 @@ public:
     std::vector<device>
     partition(const cl_device_partition_property *properties) const
     {
-        if (version_number() < 102)
+        if (get_version() < 102)
             return std::vector<device>();
 
         // get sub-device count

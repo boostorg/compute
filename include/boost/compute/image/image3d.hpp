@@ -52,7 +52,7 @@ public:
         cl_int error = 0;
 
         #ifdef CL_VERSION_1_2
-        if (context.version_number() >= 102)
+        if (context.get_version() >= 102)
         {
             cl_image_desc desc;
             desc.image_type = CL_MEM_OBJECT_IMAGE3D;
@@ -109,7 +109,7 @@ public:
         cl_int error = 0;
 
         #ifdef CL_VERSION_1_2
-        if (context.version_number() >= 102)
+        if (context.get_version() >= 102)
         {
             cl_image_desc desc;
             desc.image_type = CL_MEM_OBJECT_IMAGE3D;
