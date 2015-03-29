@@ -118,24 +118,29 @@ public:
         cl_int error = 0;
 
         #ifdef CL_VERSION_2_0
-        std::vector<cl_queue_properties> queue_properties;
-        if(properties){
-            queue_properties.push_back(CL_QUEUE_PROPERTIES);
-            queue_properties.push_back(cl_queue_properties(properties));
-            queue_properties.push_back(cl_queue_properties(0));
+        if (device.version_number() >= 200)
+        {
+            std::vector<cl_queue_properties> queue_properties;
+            if(properties){
+                queue_properties.push_back(CL_QUEUE_PROPERTIES);
+                queue_properties.push_back(cl_queue_properties(properties));
+                queue_properties.push_back(cl_queue_properties(0));
+            }
+
+            const cl_queue_properties *queue_properties_ptr =
+                queue_properties.empty() ? 0 : &queue_properties[0];
+
+            m_queue = clCreateCommandQueueWithProperties(
+                context, device.id(), queue_properties_ptr, &error
+            );
         }
-
-        const cl_queue_properties *queue_properties_ptr =
-            queue_properties.empty() ? 0 : &queue_properties[0];
-
-        m_queue = clCreateCommandQueueWithProperties(
-            context, device.id(), queue_properties_ptr, &error
-        );
-        #else
-        m_queue = clCreateCommandQueue(
-            context, device.id(), properties, &error
-        );
+        else
         #endif
+        {
+            m_queue = clCreateCommandQueue(
+                context, device.id(), properties, &error
+            );
+        }
 
         if(!m_queue){
             BOOST_THROW_EXCEPTION(opencl_error(error));
@@ -605,20 +610,20 @@ public:
     /// Enqueues a command to map \p buffer into the host address space.
     ///
     /// \see_opencl_ref{clEnqueueMapBuffer}
-    void* enqueue_map_buffer(const buffer &buffer,
+    void* enqueue_map_buffer(const buffer &buffer_,
                              cl_map_flags flags,
                              size_t offset,
                              size_t size,
                              const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
-        BOOST_ASSERT(offset + size <= buffer.size());
-        BOOST_ASSERT(buffer.get_context() == this->get_context());
+        BOOST_ASSERT(offset + size <= buffer_.size());
+        BOOST_ASSERT(buffer_.get_context() == this->get_context());
 
         cl_int ret = 0;
         void *pointer = clEnqueueMapBuffer(
             m_queue,
-            buffer.get(),
+            buffer_.get(),
             CL_TRUE,
             flags,
             offset,
@@ -636,16 +641,78 @@ public:
         return pointer;
     }
 
+    /// Enqueues a command to map \p image into the host address space.
+    ///
+    /// \see_opencl_ref{clEnqueueMapImage}
+    void* enqueue_map_image(const image_object &image,
+                            cl_map_flags flags,
+                            const size_t *origin,
+                            const size_t *region,
+                            size_t *row_pitch,
+                            size_t *slice_pitch = NULL,
+                            const wait_list &events = wait_list())
+    {
+        BOOST_ASSERT(m_queue != 0);
+        BOOST_ASSERT(image.get_context() == this->get_context());
+
+        cl_int ret = 0;
+        void *pointer = clEnqueueMapImage(
+            m_queue,
+            image.get(),
+            CL_TRUE,
+            flags,
+            origin,
+            region,
+            row_pitch,
+            slice_pitch,
+            events.size(),
+            events.get_event_ptr(),
+            0,
+            &ret
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return pointer;
+    }
+
+
+    /// \overload
+    template<size_t N>
+    void* enqueue_map_image(const image_object& image,
+                            cl_map_flags flags,
+                            const extents<N> origin,
+                            const extents<N> region,
+                            size_t *row_pitch,
+                            size_t *slice_pitch = NULL,
+                            const wait_list &events = wait_list())
+    {
+        BOOST_STATIC_ASSERT(N <= 3);
+        BOOST_ASSERT(image.get_context() == this->get_context());
+
+        size_t origin3[3] = { 0, 0, 0 };
+        size_t region3[3] = { 1, 1, 1 };
+
+        std::copy(origin.data(), origin.data() + N, origin3);
+        std::copy(region.data(), region.data() + N, region3);
+
+        return enqueue_map_image(
+            image, flags ,origin3, region3, row_pitch, slice_pitch, events
+        );
+    }
+
     /// Enqueues a command to unmap \p buffer from the host memory space.
     ///
     /// \see_opencl_ref{clEnqueueUnmapMemObject}
-    event enqueue_unmap_buffer(const buffer &buffer,
+    event enqueue_unmap_buffer(const memory_object &mem_object,
                                void *mapped_ptr,
                                const wait_list &events = wait_list())
     {
-        BOOST_ASSERT(buffer.get_context() == this->get_context());
+        BOOST_ASSERT(mem_object.get_context() == this->get_context());
 
-        return enqueue_unmap_mem_object(buffer.get(), mapped_ptr, events);
+        return enqueue_unmap_mem_object(mem_object.get(), mapped_ptr, events);
     }
 
     /// Enqueues a command to unmap \p mem from the host memory space.
@@ -721,6 +788,7 @@ public:
                              size_t slice_pitch = 0,
                              const wait_list &events = wait_list())
     {
+        BOOST_STATIC_ASSERT(N <= 3);
         BOOST_ASSERT(image.get_context() == this->get_context());
 
         size_t origin3[3] = { 0, 0, 0 };
@@ -780,6 +848,7 @@ public:
                               const size_t input_slice_pitch = 0,
                               const wait_list &events = wait_list())
     {
+        BOOST_STATIC_ASSERT(N <= 3);
         BOOST_ASSERT(image.get_context() == this->get_context());
 
         size_t origin3[3] = { 0, 0, 0 };
@@ -835,6 +904,7 @@ public:
                              const extents<N> region,
                              const wait_list &events = wait_list())
     {
+        BOOST_STATIC_ASSERT(N <= 3);
         BOOST_ASSERT(src_image.get_context() == this->get_context());
         BOOST_ASSERT(dst_image.get_context() == this->get_context());
         BOOST_ASSERT_MSG(src_image.format() == dst_image.format(),
@@ -932,6 +1002,7 @@ public:
                              const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
+        BOOST_ASSERT(image.get_context() == this->get_context());
 
         event event_;
 
@@ -961,6 +1032,7 @@ public:
                              const extents<N> region,
                              const wait_list &events = wait_list())
     {
+        BOOST_STATIC_ASSERT(N <= 3);
         BOOST_ASSERT(image.get_context() == this->get_context());
 
         size_t origin3[3] = { 0, 0, 0 };
@@ -1085,20 +1157,26 @@ public:
         BOOST_ASSERT(kernel.get_context() == this->get_context());
 
         event event_;
+        cl_int ret;
 
         // clEnqueueTask() was deprecated in OpenCL 2.0. In that case we
         // just forward to the equivalent clEnqueueNDRangeKernel() call.
         #ifdef CL_VERSION_2_0
-        size_t one = 1;
-        cl_int ret = clEnqueueNDRangeKernel(
-            m_queue, kernel, 1, 0, &one, &one,
-            events.size(), events.get_event_ptr(), &event_.get()
-        );
-        #else
-        cl_int ret = clEnqueueTask(
-            m_queue, kernel, events.size(), events.get_event_ptr(), &event_.get()
-        );
+        if (this->get_context().get_device().version_number() >= 200)
+        {
+            size_t one = 1;
+            ret = clEnqueueNDRangeKernel(
+                        m_queue, kernel, 1, 0, &one, &one,
+                        events.size(), events.get_event_ptr(), &event_.get()
+                        );
+        }
+        else
         #endif
+        {
+            ret = clEnqueueTask(
+                        m_queue, kernel, events.size(), events.get_event_ptr(), &event_.get()
+                        );
+        }
 
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
@@ -1430,12 +1508,6 @@ public:
     operator cl_command_queue() const
     {
         return m_queue;
-    }
-
-    /// \internal_
-    bool check_device_version(int major, int minor) const
-    {
-        return get_device().check_version(major, minor);
     }
 
 private:
