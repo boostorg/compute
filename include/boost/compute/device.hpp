@@ -92,6 +92,7 @@ public:
             #endif
 
             m_id = other.m_id;
+            m_version = other.m_version;
 
             #ifdef CL_VERSION_1_2
             if(m_id && is_subdevice()){
@@ -106,9 +107,10 @@ public:
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// Move-constructs a new device object from \p other.
     device(device&& other) BOOST_NOEXCEPT
-        : m_id(other.m_id)
+        : m_id(other.m_id),  m_version(other.m_version)
     {
         other.m_id = 0;
+        other.m_version = 0;
     }
 
     /// Move-assigns the device from \p other to \c *this.
@@ -121,7 +123,9 @@ public:
         #endif // CL_VERSION_1_2
 
         m_id = other.m_id;
+        m_version = other.m_version;
         other.m_id = 0;
+        other.m_version = 0;
 
         return *this;
     }
