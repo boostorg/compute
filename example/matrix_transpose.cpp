@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
     kernel.set_arg(1, d_output);
 
     compute::event start;
-    start = queue.enqueue_nd_range_kernel(kernel, 2, 0, global_work_size, local_work_size);
+    start = queue.enqueue_nd_range_kernel_async(kernel, 2, 0, global_work_size, local_work_size);
     queue.finish();
     uint64_t elapsed = start.duration<boost::chrono::nanoseconds>().count();
 
@@ -298,7 +298,7 @@ int main(int argc, char *argv[])
     kernel.set_arg(0, d_input);
     kernel.set_arg(1, d_output);
 
-    start = queue.enqueue_nd_range_kernel(kernel, 2, 0, global_work_size, local_work_size);
+    start = queue.enqueue_nd_range_kernel_async(kernel, 2, 0, global_work_size, local_work_size);
     queue.finish();
     elapsed = start.duration<boost::chrono::nanoseconds>().count();
     std::cout << "  Elapsed: " << elapsed << " ns" << std::endl;
@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
     kernel.set_arg(0, d_input);
     kernel.set_arg(1, d_output);
 
-    start = queue.enqueue_nd_range_kernel(kernel, 2, 0, global_work_size, local_work_size);
+    start = queue.enqueue_nd_range_kernel_async(kernel, 2, 0, global_work_size, local_work_size);
     queue.finish();
     elapsed = start.duration<boost::chrono::nanoseconds>().count();
     std::cout << "  Elapsed: " << elapsed << " ns" << std::endl;
@@ -332,7 +332,7 @@ int main(int argc, char *argv[])
     kernel.set_arg(0, d_input);
     kernel.set_arg(1, d_output);
 
-    start = queue.enqueue_nd_range_kernel(kernel, 2, 0, global_work_size, local_work_size);
+    start = queue.enqueue_nd_range_kernel_async(kernel, 2, 0, global_work_size, local_work_size);
     queue.finish();
     elapsed = start.duration<boost::chrono::nanoseconds>().count();
     std::cout << "  Elapsed: " << elapsed << " ns" << std::endl;

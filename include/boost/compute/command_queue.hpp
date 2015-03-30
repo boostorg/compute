@@ -1094,11 +1094,11 @@ public:
     /// \overload
     template<size_t N>
     void enqueue_nd_range_kernel(const kernel &kernel,
-                                  const extents<N> &global_work_offset,
-                                  const extents<N> &global_work_size,
-                                  const extents<N> &local_work_size,
-                                  const wait_list &events = wait_list(),
-                                  cl_event * clevent = NULL)
+                                 const extents<N> &global_work_offset,
+                                 const extents<N> &global_work_size,
+                                 const extents<N> &local_work_size,
+                                 const wait_list &events = wait_list(),
+                                 cl_event * clevent = NULL)
     {
         BOOST_STATIC_ASSERT(N > 0);
         enqueue_nd_range_kernel(
@@ -1110,6 +1110,51 @@ public:
             events,
             clevent
         );
+    }
+
+    /// Enqueues a kernel for execution.
+    ///
+    /// \see_opencl_ref{clEnqueueNDRangeKernel}
+    event enqueue_nd_range_kernel_async(const kernel &kernel,
+                                  size_t work_dim,
+                                  const size_t *global_work_offset,
+                                  const size_t *global_work_size,
+                                  const size_t *local_work_size,
+                                  const wait_list &events = wait_list())
+    {
+        event event_;
+
+        enqueue_nd_range_kernel(kernel,
+                                work_dim,
+                                global_work_offset,
+                                global_work_size,
+                                local_work_size,
+                                events,
+                                &event_.get());
+        return event_;
+    }
+
+    /// \overload
+    template<size_t N>
+    event enqueue_nd_range_kernel_async(const kernel &kernel,
+                                  const extents<N> &global_work_offset,
+                                  const extents<N> &global_work_size,
+                                  const extents<N> &local_work_size,
+                                  const wait_list &events = wait_list())
+    {
+        event event_;
+
+        enqueue_nd_range_kernel(
+            kernel,
+            N,
+            global_work_offset.data(),
+            global_work_size.data(),
+            (local_work_size[0] == 0) ? NULL : local_work_size.data(),
+            events,
+            &event_.get()
+        );
+
+        return event_;
     }
 
     /// Convenience method which calls enqueue_nd_range_kernel() with a
@@ -1130,6 +1175,23 @@ public:
             events,
             clevent
         );
+    }
+
+    event enqueue_1d_range_kernel_async(const kernel &kernel,
+                                  size_t global_work_offset,
+                                  size_t global_work_size,
+                                  size_t local_work_size,
+                                  const wait_list &events = wait_list())
+    {
+        event event_;
+        enqueue_1d_range_kernel(kernel,
+                                      global_work_offset,
+                                      global_work_size,
+                                      local_work_size,
+                                      events,
+                                      &event_.get());
+        return event_;
+
     }
 
     /// Enqueues a kernel to execute using a single work-item.

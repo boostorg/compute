@@ -636,7 +636,7 @@ public:
 
         ::boost::compute::kernel kernel = compile(context);
 
-        return queue.enqueue_1d_range_kernel(
+        return queue.enqueue_1d_range_kernel_async(
                    kernel,
                    global_work_offset,
                    global_work_size,
@@ -653,7 +653,7 @@ public:
 
         ::boost::compute::kernel kernel = compile(context);
 
-        return queue.enqueue_1d_range_kernel(
+        return queue.enqueue_1d_range_kernel_async(
                    kernel,
                    global_work_offset,
                    global_work_size,
