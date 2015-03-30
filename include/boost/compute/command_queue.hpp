@@ -1495,6 +1495,14 @@ public:
         return m_queue;
     }
 
+    /// \internal_
+    bool check_device_version(int major, int minor) const
+    {
+        int ver = static_cast<int>(get_version());
+        int check = major * 100 + minor;
+        return check <= ver;
+    }
+
 private:
     cl_command_queue m_queue;
     mutable uint_ m_version;

@@ -422,6 +422,14 @@ public:
         return m_id != other.m_id;
     }
 
+    /// \internal_
+    bool check_version(int major, int minor) const
+    {
+        int ver = static_cast<int>(get_version());
+        int check = major * 100 + minor;
+        return check <= ver;
+    }
+
 private:
     cl_device_id m_id;
     mutable uint_ m_version; // Cached ICD OpenCL version number
