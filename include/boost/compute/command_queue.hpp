@@ -1071,6 +1071,7 @@ public:
                                   cl_event * clevent = NULL)
     {
         BOOST_ASSERT(m_queue != 0);
+        BOOST_ASSERT(work_dim > 0);
         BOOST_ASSERT(kernel.get_context() == this->get_context());
 
         cl_int ret = clEnqueueNDRangeKernel(
@@ -1099,12 +1100,13 @@ public:
                                   const wait_list &events = wait_list(),
                                   cl_event * clevent = NULL)
     {
+        BOOST_STATIC_ASSERT(N > 0);
         enqueue_nd_range_kernel(
             kernel,
             N,
             global_work_offset.data(),
             global_work_size.data(),
-            local_work_size.data(),
+            (local_work_size[0] == 0) ? NULL : local_work_size.data(),
             events,
             clevent
         );
