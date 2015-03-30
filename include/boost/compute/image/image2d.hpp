@@ -59,38 +59,43 @@ public:
         cl_int error = 0;
 
         #ifdef CL_VERSION_1_2
-        cl_image_desc desc;
-        desc.image_type = CL_MEM_OBJECT_IMAGE2D;
-        desc.image_width = image_width;
-        desc.image_height = image_height;
-        desc.image_depth = 1;
-        desc.image_array_size = 0;
-        desc.image_row_pitch = image_row_pitch;
-        desc.image_slice_pitch = 0;
-        desc.num_mip_levels = 0;
-        desc.num_samples = 0;
-        #ifdef CL_VERSION_2_0
-        desc.mem_object = 0;
-        #else
-        desc.buffer = 0;
-        #endif
+        if (context.get_version() >= 102)
+        {
+            cl_image_desc desc;
+            desc.image_type = CL_MEM_OBJECT_IMAGE2D;
+            desc.image_width = image_width;
+            desc.image_height = image_height;
+            desc.image_depth = 1;
+            desc.image_array_size = 0;
+            desc.image_row_pitch = image_row_pitch;
+            desc.image_slice_pitch = 0;
+            desc.num_mip_levels = 0;
+            desc.num_samples = 0;
+            #ifdef CL_VERSION_2_0
+            desc.mem_object = 0;
+            #else
+            desc.buffer = 0;
+            #endif
 
-        m_mem = clCreateImage(context,
-                              flags,
-                              format.get_format_ptr(),
-                              &desc,
-                              host_ptr,
-                              &error);
-        #else
-        m_mem = clCreateImage2D(context,
-                                flags,
-                                format.get_format_ptr(),
-                                image_width,
-                                image_height,
-                                image_row_pitch,
-                                host_ptr,
-                                &error);
+            m_mem = clCreateImage(context,
+                                  flags,
+                                  format.get_format_ptr(),
+                                  &desc,
+                                  host_ptr,
+                                  &error);
+        }
+        else
         #endif
+        {
+            m_mem = clCreateImage2D(context,
+                                    flags,
+                                    format.get_format_ptr(),
+                                    image_width,
+                                    image_height,
+                                    image_row_pitch,
+                                    host_ptr,
+                                    &error);
+        }
 
         if(!m_mem){
             BOOST_THROW_EXCEPTION(opencl_error(error));
@@ -109,38 +114,43 @@ public:
         cl_int error = 0;
 
         #ifdef CL_VERSION_1_2
-        cl_image_desc desc;
-        desc.image_type = CL_MEM_OBJECT_IMAGE2D;
-        desc.image_width = image_width;
-        desc.image_height = image_height;
-        desc.image_depth = 1;
-        desc.image_array_size = 0;
-        desc.image_row_pitch = image_row_pitch;
-        desc.image_slice_pitch = 0;
-        desc.num_mip_levels = 0;
-        desc.num_samples = 0;
-        #ifdef CL_VERSION_2_0
-        desc.mem_object = 0;
-        #else
-        desc.buffer = 0;
-        #endif
+        if (context.get_version() >= 102)
+        {
+            cl_image_desc desc;
+            desc.image_type = CL_MEM_OBJECT_IMAGE2D;
+            desc.image_width = image_width;
+            desc.image_height = image_height;
+            desc.image_depth = 1;
+            desc.image_array_size = 0;
+            desc.image_row_pitch = image_row_pitch;
+            desc.image_slice_pitch = 0;
+            desc.num_mip_levels = 0;
+            desc.num_samples = 0;
+            #ifdef CL_VERSION_2_0
+            desc.mem_object = 0;
+            #else
+            desc.buffer = 0;
+            #endif
 
-        m_mem = clCreateImage(context,
-                              flags,
-                              format.get_format_ptr(),
-                              &desc,
-                              host_ptr,
-                              &error);
-        #else
-        m_mem = clCreateImage2D(context,
-                                flags,
-                                format.get_format_ptr(),
-                                image_width,
-                                image_height,
-                                image_row_pitch,
-                                host_ptr,
-                                &error);
+            m_mem = clCreateImage(context,
+                                  flags,
+                                  format.get_format_ptr(),
+                                  &desc,
+                                  host_ptr,
+                                  &error);
+        }
+        else
         #endif
+        {
+            m_mem = clCreateImage2D(context,
+                                    flags,
+                                    format.get_format_ptr(),
+                                    image_width,
+                                    image_height,
+                                    image_row_pitch,
+                                    host_ptr,
+                                    &error);
+        }
 
         if(!m_mem){
             BOOST_THROW_EXCEPTION(opencl_error(error));
