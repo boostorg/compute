@@ -652,7 +652,7 @@ public:
         void *pointer = clEnqueueMapImage(
             m_queue,
             image.get(),
-            clevent ? CL_TRUE : CL_FALSE,
+            clevent ? CL_FALSE : CL_TRUE,
             flags,
             origin,
             region,
