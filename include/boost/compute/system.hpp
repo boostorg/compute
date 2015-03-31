@@ -94,6 +94,22 @@ public:
         BOOST_THROW_EXCEPTION(no_device_found());
     }
 
+    /// Returns the device with \p name contained in its name and
+    /// a minimun version of \p min_version (eg. 1.1 is 101, 1.2 is 102, 2.0 is 200).
+    ///
+    /// \throws no_device_found if no device with \p name is found.
+    static device find_device(const std::string &name, uint_ min_version = 100)
+    {
+        BOOST_FOREACH(const device &device, devices()){
+            if(device.name().find(name.c_str()) != std::string::npos
+                    && device.get_version() >= min_version){
+                return device;
+            }
+        }
+
+        BOOST_THROW_EXCEPTION(no_device_found());
+    }
+
     /// Returns a vector containing all of the compute devices on
     /// the system.
     ///
