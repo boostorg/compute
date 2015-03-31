@@ -514,7 +514,7 @@ public:
 		size_t src_offset,
 		size_t dst_offset,
 		size_t size,
-		const wait_list &events)
+		const wait_list &events = wait_list())
 	{
 		event event_;
 
