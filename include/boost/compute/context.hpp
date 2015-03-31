@@ -83,11 +83,19 @@ public:
 
         cl_int error = 0;
 
+        std::vector<cl_device_id> device_ids;
+        std::string name, version;
+        for (size_t i = 0; i < devices.size(); ++i) {
+            const device &dev = devices[i];
+            name = dev.name();
+            version = dev.version();
+            device_ids.push_back(devices[i].get());
+        }
         m_version = 0;
         m_context = clCreateContext(
             properties,
-            static_cast<cl_uint>(devices.size()),
-            reinterpret_cast<const cl_device_id *>(&devices[0]),
+            static_cast<cl_uint>(device_ids.size()),
+            reinterpret_cast<const cl_device_id *>(&device_ids[0]),
             0,
             0,
             &error
@@ -207,7 +215,12 @@ public:
     /// Returns a vector of devices for the context.
     std::vector<device> get_devices() const
     {
-        return get_info<std::vector<device> >(CL_CONTEXT_DEVICES);
+        std::vector<device> out;
+        std::vector<cl_device_id> id_vector = get_info<std::vector<cl_device_id> >(CL_CONTEXT_DEVICES);
+        for (std::vector<cl_device_id>::iterator it = id_vector.begin(); it != id_vector.end(); ++it) {
+            out.push_back(device(*it));
+        }
+        return out;
     }
 
     /// Returns information about the context.
