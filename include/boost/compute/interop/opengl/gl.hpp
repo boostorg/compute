@@ -14,6 +14,10 @@
 #if defined(__APPLE__)
 #include <OpenGL/gl.h>
 #else
+#if defined(_WIN32)
+// Avoid error: 'APIENTRY' : illegal use of type 'void'
+#include "windows.h"
+#endif
 #include <GL/gl.h>
 #endif
 

@@ -509,6 +509,26 @@ public:
         }
     }
 
+	event enqueue_copy_buffer_async(const buffer &src_buffer,
+		const buffer &dst_buffer,
+		size_t src_offset,
+		size_t dst_offset,
+		size_t size,
+		const wait_list &events)
+	{
+		event event_;
+
+		enqueue_copy_buffer(src_buffer,
+			dst_buffer,
+			src_offset,
+			dst_offset,
+			size,
+			events,
+			&event_.get());
+
+		return event_;
+	}
+
     #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to copy a rectangular region from
     /// \p src_buffer to \p dst_buffer.
@@ -596,6 +616,26 @@ public:
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
+
+	event enqueue_fill_buffer_async(const buffer &buffer,
+		const void *pattern,
+		size_t pattern_size,
+		size_t offset,
+		size_t size,
+		const wait_list &events = wait_list())
+	{
+		event event_;
+
+		enqueue_fill_buffer(buffer,
+			pattern,
+			pattern_size,
+			offset,
+			size,
+			events,
+			&event_.get());
+
+		return event_;
+	}
     #endif // CL_VERSION_1_2
 
     /// Enqueues a command to map \p buffer into the host address space.

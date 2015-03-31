@@ -10,14 +10,9 @@
 
 #include <iostream>
 
-#define GL_GLEXT_PROTOTYPES
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-#else
-#include <GL/gl.h>
-#include <GL/glext.h>
-#endif
+//#define GL_GLEXT_PROTOTYPES
+#include <boost/compute/interop/opengl/gl.hpp>
+#include <boost/compute/interop/opengl/cl_gl_ext.hpp>
 
 #include <QtGlobal>
 #if QT_VERSION >= 0x050000
@@ -193,8 +188,8 @@ void NBodyWidget::updateParticles()
 {
     // enqueue kernels to update particles and make sure that the command queue is finished
     compute::opengl_enqueue_acquire_buffer(m_position, m_queue);
-    m_queue.enqueue_1d_range_kernel(m_velocity_kernel, 0, m_particles, 0).wait();
-    m_queue.enqueue_1d_range_kernel(m_position_kernel, 0, m_particles, 0).wait();
+    m_queue.enqueue_1d_range_kernel_async(m_velocity_kernel, 0, m_particles, 0).wait();
+    m_queue.enqueue_1d_range_kernel_async(m_position_kernel, 0, m_particles, 0).wait();
     m_queue.finish();
     compute::opengl_enqueue_release_buffer(m_position, m_queue);
 }
