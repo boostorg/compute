@@ -339,7 +339,7 @@ public:
         BOOST_ASSERT(buffer.get_context() == this->get_context());
         BOOST_ASSERT(host_ptr != 0);
 
-        if (get_version() < 101)
+        if (get_version() < 110)
             BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_DEVICE));
 
         cl_int ret = clEnqueueReadBufferRect(
@@ -446,7 +446,7 @@ public:
         BOOST_ASSERT(buffer.get_context() == this->get_context());
         BOOST_ASSERT(host_ptr != 0);
 
-        if (get_version() < 101)
+        if (get_version() < 110)
             BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_DEVICE));
 
         cl_int ret = clEnqueueWriteBufferRect(
@@ -552,7 +552,7 @@ public:
         BOOST_ASSERT(src_buffer.get_context() == this->get_context());
         BOOST_ASSERT(dst_buffer.get_context() == this->get_context());
 
-        if (get_version() < 101)
+        if (get_version() < 110)
             BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_DEVICE));
 
         cl_int ret = clEnqueueCopyBufferRect(
@@ -597,7 +597,7 @@ public:
         BOOST_ASSERT(offset + size <= buffer.size());
         BOOST_ASSERT(buffer.get_context() == this->get_context());
 
-        if (get_version() < 102)
+        if (get_version() < 120)
             BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_DEVICE));
 
         cl_int ret = clEnqueueFillBuffer(
@@ -1025,7 +1025,7 @@ public:
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(image.get_context() == this->get_context());
 
-        if (get_version() < 102)
+        if (get_version() < 120)
             BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_DEVICE));
 
         cl_int ret = clEnqueueFillImage(
@@ -1080,7 +1080,7 @@ public:
     {
         BOOST_ASSERT(m_queue != 0);
 
-        if (get_version() < 102)
+        if (get_version() < 120)
             BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_DEVICE));
 
         cl_int ret = clEnqueueMigrateMemObjects(
@@ -1343,7 +1343,7 @@ public:
         BOOST_ASSERT(m_queue != 0);
 
         #ifdef CL_VERSION_1_2
-        if (get_version() >= 102)
+        if (get_version() >= 120)
             clEnqueueBarrierWithWaitList(m_queue, 0, 0, 0);
         else
         #endif
@@ -1359,7 +1359,7 @@ public:
     {
         BOOST_ASSERT(m_queue != 0);
 
-        if (get_version() < 102)
+        if (get_version() < 120)
             BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_DEVICE));
 
         clEnqueueBarrierWithWaitList(
@@ -1374,7 +1374,7 @@ public:
     {
         cl_int ret;
         #ifdef CL_VERSION_1_2
-        if (get_version() >= 102)
+        if (get_version() >= 120)
             ret = clEnqueueMarkerWithWaitList(m_queue, 0, 0, clevent);
         else
         #endif
@@ -1393,7 +1393,7 @@ public:
     void enqueue_marker(const wait_list &events,
                          cl_event * clevent = NULL)
     {
-        if (get_version() < 102)
+        if (get_version() < 120)
             BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_DEVICE));
 
         cl_int ret = clEnqueueMarkerWithWaitList(

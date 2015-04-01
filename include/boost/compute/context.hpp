@@ -255,7 +255,7 @@ public:
         return m_context;
     }
 
-    /// Returns the device version number. (eg. 1.1 is 101, 1.2 is 102, 2.0 is 200)
+    /// Returns the device version number. (eg. 1.1 is 110, 1.2 is 120, 2.0 is 200, 3.11 is 311)
     uint_ get_version() const
     {
         if (m_version == 0)
