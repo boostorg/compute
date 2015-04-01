@@ -98,7 +98,7 @@ public:
     /// a minimun version of \p min_version (eg. 1.1 is 101, 1.2 is 102, 2.0 is 200).
     ///
     /// \throws no_device_found if no device with \p name is found.
-    static device find_device(const std::string &name, uint_ min_version = 100)
+    static device find_device_name(const std::string &name, uint_ min_version = 100)
     {
         BOOST_FOREACH(const device &device, devices()){
             if(device.name().find(name.c_str()) != std::string::npos
