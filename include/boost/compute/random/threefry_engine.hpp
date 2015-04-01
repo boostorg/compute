@@ -42,6 +42,7 @@
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/utility/program_cache.hpp>
+#include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/discard_iterator.hpp>
 
 namespace boost {
@@ -256,6 +257,40 @@ public:
         }
     }
 
+    template<class OutputIterator>
+    void generate(command_queue &queue, OutputIterator first_ctr, OutputIterator last_ctr) {
+        const size_t size_ctr = detail::iterator_range_size(first_ctr, last_ctr);
+        if(!size_ctr) {
+            return;
+        }
+        boost::compute::vector<uint_> vector_key(size_ctr, m_context);
+        vector_key.assign(size_ctr, 0, queue);
+        kernel rng_kernel = m_program.create_kernel("generate_rng");
+
+        rng_kernel.set_arg(0, first_ctr.get_buffer());
+        rng_kernel.set_arg(1, vector_key);
+        size_t offset = 0;
+
+        for(;;){
+            size_t count = 0;
+            size_t size = size_ctr/2;
+            if(size > threads){
+                count = threads;
+            }
+            else {
+                count = size;
+            }
+            rng_kernel.set_arg(2, static_cast<const uint_>(offset));
+            queue.enqueue_1d_range_kernel(rng_kernel, 0, count, 0);
+
+            offset += count;
+
+            if(offset >= size){
+                break;
+            }
+
+        }
+    }
 private:
     context m_context;
     program m_program;
