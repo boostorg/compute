@@ -197,7 +197,7 @@ public:
     ///
     /// \see_opencl_ref{clGetKernelWorkGroupInfo}
     template<class T>
-    T get_work_group_info(const device &device, cl_kernel_work_group_info info)
+    T get_work_group_info(const device &device, cl_kernel_work_group_info info) const
     {
         return detail::get_object_info<T>(clGetKernelWorkGroupInfo, m_kernel, info, device.id());
     }
