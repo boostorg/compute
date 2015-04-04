@@ -15,9 +15,10 @@
 
 #include <boost/static_assert.hpp>
 
+#include <boost/preprocessor/expr_if.hpp>
 #include <boost/preprocessor/stringize.hpp>
-#include <boost/preprocessor/seq/for_each.hpp>
 #include <boost/preprocessor/seq/fold_left.hpp>
+#include <boost/preprocessor/seq/for_each.hpp>
 #include <boost/preprocessor/seq/transform.hpp>
 
 #include <boost/compute/type_traits/type_definition.hpp>
