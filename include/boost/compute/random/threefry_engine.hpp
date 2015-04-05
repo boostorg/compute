@@ -224,7 +224,7 @@ public:
     /// Generates Threefry random numbers using both the counter and key values, and then stores
     /// them to the range [\p first_ctr, \p last_ctr).
     template<class OutputIterator>
-    void generate(command_queue &queue, OutputIterator first_ctr, OutputIterator last_ctr, OutputIterator first_key, OutputIterator last_key) {
+    void generate(OutputIterator first_ctr, OutputIterator last_ctr, OutputIterator first_key, OutputIterator last_key, command_queue &queue) {
         const size_t size_ctr = detail::iterator_range_size(first_ctr, last_ctr);
         const size_t size_key = detail::iterator_range_size(first_key, last_key);
         if(!size_ctr || !size_key || (size_ctr != size_key)) {
@@ -258,7 +258,7 @@ public:
     }
 
     template<class OutputIterator>
-    void generate(command_queue &queue, OutputIterator first_ctr, OutputIterator last_ctr) {
+    void generate(OutputIterator first_ctr, OutputIterator last_ctr, command_queue &queue) {
         const size_t size_ctr = detail::iterator_range_size(first_ctr, last_ctr);
         if(!size_ctr) {
             return;

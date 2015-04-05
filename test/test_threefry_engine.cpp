@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(generate_uint)
 
     boost::compute::copy(ctr, ctr+20, vector_ctr.begin(), queue);
 
-    rng.generate(queue, vector_ctr.begin(), vector_ctr.end());
+    rng.generate(vector_ctr.begin(), vector_ctr.end(), queue);
     CHECK_RANGE_EQUAL(
         uint_, 20, vector_ctr,
         (uint_(0x6b200159),

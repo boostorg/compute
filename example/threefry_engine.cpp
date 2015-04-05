@@ -32,7 +32,7 @@ int main()
         ctr[i*2+1] = 0;
     }
     boost::compute::copy(ctr, ctr+20, vector_ctr.begin(), queue);
-    rng.generate(queue, vector_ctr.begin(), vector_ctr.end());
+    rng.generate(vector_ctr.begin(), vector_ctr.end(), queue);
     boost::compute::copy(vector_ctr.begin(), vector_ctr.end(), ctr, queue);
 
     for(int i = 0; i < 10; i++) {
