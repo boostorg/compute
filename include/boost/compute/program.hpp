@@ -28,9 +28,9 @@
 #ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
 #include <sstream>
 #include <boost/optional.hpp>
-#include <boost/filesystem.hpp>
 #include <boost/compute/platform.hpp>
 #include <boost/compute/detail/getenv.hpp>
+#include <boost/compute/detail/path.hpp>
 #include <boost/compute/detail/sha1.hpp>
 #endif
 
@@ -558,41 +558,10 @@ public:
 
 private:
 #ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
-    // Path delimiter symbol for the current OS.
-    static const std::string& path_delim() {
-        static const std::string delim =
-            boost::filesystem::path("/").make_preferred().string();
-        return delim;
-    }
-
-    // Path to appdata folder.
-    static inline const std::string& appdata_path() {
-#ifdef WIN32
-        static const std::string appdata = detail::getenv("APPDATA")
-            + path_delim() + "boost_compute";
-#else
-        static const std::string appdata = detail::getenv("HOME")
-            + path_delim() + ".boost_compute";
-#endif
-        return appdata;
-    }
-
-    // Path to cached binaries.
-    static std::string program_binary_path(const std::string &hash, bool create = false)
-    {
-        std::string dir = appdata_path()    + path_delim()
-                        + hash.substr(0, 2) + path_delim()
-                        + hash.substr(2);
-
-        if (create) boost::filesystem::create_directories(dir);
-
-        return dir + path_delim();
-    }
-
     // Saves program binaries for future reuse.
     static void save_program_binary(const std::string &hash, const program &prog)
     {
-        std::string fname = program_binary_path(hash, true) + "kernel";
+        std::string fname = detail::program_binary_path(hash, true) + "kernel";
         std::ofstream bfile(fname.c_str(), std::ios::binary);
         if (!bfile) return;
 
@@ -608,7 +577,7 @@ private:
             const std::string &hash, const context &ctx
             )
     {
-        std::string fname = program_binary_path(hash) + "kernel";
+        std::string fname = detail::program_binary_path(hash) + "kernel";
         std::ifstream bfile(fname.c_str(), std::ios::binary);
         if (!bfile) return boost::optional<program>();
 

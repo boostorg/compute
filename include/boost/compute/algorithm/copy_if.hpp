@@ -11,86 +11,12 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_COPY_IF_HPP
 #define BOOST_COMPUTE_ALGORITHM_COPY_IF_HPP
 
-#include <boost/compute/cl.hpp>
-#include <boost/compute/system.hpp>
-#include <boost/compute/command_queue.hpp>
-#include <boost/compute/algorithm/count.hpp>
-#include <boost/compute/algorithm/count_if.hpp>
-#include <boost/compute/algorithm/exclusive_scan.hpp>
-#include <boost/compute/container/vector.hpp>
-#include <boost/compute/detail/meta_kernel.hpp>
-#include <boost/compute/detail/iterator_range_size.hpp>
-#include <boost/compute/iterator/discard_iterator.hpp>
+#include <boost/compute/algorithm/transform_if.hpp>
+#include <boost/compute/functional/identity.hpp>
 
 namespace boost {
 namespace compute {
 namespace detail {
-
-template<class InputIterator, class OutputIterator, class Predicate>
-inline OutputIterator copy_if_impl(InputIterator first,
-                                   InputIterator last,
-                                   OutputIterator result,
-                                   Predicate predicate,
-                                   bool copyIndex,
-                                   command_queue &queue)
-{
-    typedef typename std::iterator_traits<OutputIterator>::difference_type difference_type;
-
-    size_t count = detail::iterator_range_size(first, last);
-    if(count == 0){
-        return result;
-    }
-
-    const context &context = queue.get_context();
-
-    // storage for destination indices
-    ::boost::compute::vector<cl_uint> indices(count, context);
-
-    // write counts
-    ::boost::compute::detail::meta_kernel k1("copy_if_write_counts");
-    k1 << indices.begin()[k1.get_global_id(0)] << " = "
-           << predicate(first[k1.get_global_id(0)]) << " ? 1 : 0;\n";
-    k1.exec_1d(queue, 0, count);
-
-    // count number of elements to be copied
-    size_t copied_element_count =
-        ::boost::compute::count(indices.begin(), indices.end(), 1, queue);
-
-    // scan indices
-    ::boost::compute::exclusive_scan(indices.begin(),
-                                     indices.end(),
-                                     indices.begin(),
-                                     queue);
-
-    // copy values
-    ::boost::compute::detail::meta_kernel k2("copy_if_do_copy");
-    k2 << "if(" << predicate(first[k2.get_global_id(0)]) << ")" <<
-          "    " << result[indices.begin()[k2.get_global_id(0)]] << "=";
-
-    if(copyIndex){
-        k2 << k2.get_global_id(0) << ";\n";
-    }
-    else {
-        k2 << first[k2.get_global_id(0)] << ";\n";
-    }
-
-    k2.exec_1d(queue, 0, count);
-
-    return result + static_cast<difference_type>(copied_element_count);
-}
-
-template<class InputIterator, class Predicate>
-inline discard_iterator copy_if_impl(InputIterator first,
-                                     InputIterator last,
-                                     discard_iterator result,
-                                     Predicate predicate,
-                                     bool copyIndex,
-                                     command_queue &queue)
-{
-    (void) copyIndex;
-
-    return result + count_if(first, last, predicate, queue);
-}
 
 // like the copy_if() algorithm but writes the indices of the values for which
 // predicate returns true.
@@ -101,7 +27,11 @@ inline OutputIterator copy_index_if(InputIterator first,
                                     Predicate predicate,
                                     command_queue &queue = system::default_queue())
 {
-    return detail::copy_if_impl(first, last, result, predicate, true, queue);
+    typedef typename std::iterator_traits<InputIterator>::value_type T;
+
+    return detail::transform_if_impl(
+        first, last, result, identity<T>(), predicate, true, queue
+    );
 }
 
 } // end detail namespace
@@ -115,7 +45,11 @@ inline OutputIterator copy_if(InputIterator first,
                               Predicate predicate,
                               command_queue &queue = system::default_queue())
 {
-    return detail::copy_if_impl(first, last, result, predicate, false, queue);
+    typedef typename std::iterator_traits<InputIterator>::value_type T;
+
+    return ::boost::compute::transform_if(
+        first, last, result, identity<T>(), predicate, queue
+    );
 }
 
 } // end compute namespace

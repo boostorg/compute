@@ -23,9 +23,10 @@
 #include <boost/compute/algorithm/exclusive_scan.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/detail/parameter_cache.hpp>
+#include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/type_traits/is_fundamental.hpp>
 #include <boost/compute/type_traits/is_vector_type.hpp>
-#include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/utility/program_cache.hpp>
 
 namespace boost {
@@ -232,19 +233,9 @@ inline void radix_sort_impl(const buffer_iterator<T> first,
     typedef T value_type;
     typedef typename radix_sort_value_type<sizeof(T)>::type sort_type;
 
+    const device &device = queue.get_device();
     const context &context = queue.get_context();
 
-    size_t count = detail::iterator_range_size(first, last);
-
-    // sort parameters
-    const uint_ k = 4;
-    const uint_ k2 = 1 << k;
-    const uint_ block_size = 128;
-
-    uint_ block_count = static_cast<uint_>(count / block_size);
-    if(block_count * block_size != count){
-        block_count++;
-    }
 
     // if we have a valid values iterator then we are doing a
     // sort by key and have to set up the values buffer
@@ -258,6 +249,17 @@ inline void radix_sort_impl(const buffer_iterator<T> first,
         cache_key += std::string("_with_") + type_name<T2>();
     }
 
+    boost::shared_ptr<program_cache> cache =
+        program_cache::get_global_cache(context);
+    boost::shared_ptr<parameter_cache> parameters =
+        detail::parameter_cache::get_global_cache(device);
+
+    // sort parameters
+    const uint_ k = parameters->get(cache_key, "k", 4);
+    const uint_ k2 = 1 << k;
+    const uint_ block_size = parameters->get(cache_key, "tpb", 128);
+
+    // sort program compiler options
     std::stringstream options;
     options << "-DK_BITS=" << k;
     options << " -DT=" << type_name<sort_type>();
@@ -277,16 +279,21 @@ inline void radix_sort_impl(const buffer_iterator<T> first,
         options << enable_double<T2>();
     }
 
-    // load (or create) radix sort program
-    boost::shared_ptr<program_cache> cache =
-        program_cache::get_global_cache(context);
-
-    program radix_sort_program =
-        cache->get_or_build(cache_key, options.str(), radix_sort_source, context);
+    // load radix sort program
+    program radix_sort_program = cache->get_or_build(
+        cache_key, options.str(), radix_sort_source, context
+    );
 
     kernel count_kernel(radix_sort_program, "count");
     kernel scan_kernel(radix_sort_program, "scan");
     kernel scatter_kernel(radix_sort_program, "scatter");
+
+    size_t count = detail::iterator_range_size(first, last);
+
+    uint_ block_count = static_cast<uint_>(count / block_size);
+    if(block_count * block_size != count){
+        block_count++;
+    }
 
     // setup temporary buffers
     vector<value_type> output(count, context);

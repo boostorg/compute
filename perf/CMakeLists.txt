@@ -1,6 +1,6 @@
 include_directories(../include)
 
-set(PERF_BOOST_COMPONENTS system timer chrono)
+set(PERF_BOOST_COMPONENTS system timer chrono program_options)
 
 if (${BOOST_COMPUTE_USE_OFFLINE_CACHE})
   set(PERF_BOOST_COMPONENTS ${PERF_BOOST_COMPONENTS} filesystem)
@@ -25,15 +25,14 @@ set(BENCHMARKS
   erase_remove
   exclusive_scan
   fill
+  find
   find_end
   includes
   inner_product
   is_permutation
   is_sorted
-  linear_congruential_engine
   max_element
   merge
-  mersenne_twister
   next_permutation
   nth_element
   partial_sum
@@ -41,9 +40,11 @@ set(BENCHMARKS
   partition_point
   prev_permutation
   reverse
+  reverse_copy
   rotate
   rotate_copy
   host_sort
+  random_number_engine
   saxpy
   search
   search_n
@@ -70,6 +71,7 @@ endforeach()
 set(STL_BENCHMARKS
   stl_accumulate
   stl_count
+  stl_find
   stl_find_end
   stl_includes
   stl_inner_product
@@ -80,6 +82,7 @@ set(STL_BENCHMARKS
   stl_partition
   stl_prev_permutation
   stl_reverse
+  stl_reverse_copy
   stl_rotate
   stl_rotate_copy
   stl_saxpy
@@ -118,11 +121,13 @@ if(${BOOST_COMPUTE_HAVE_CUDA})
     thrust_accumulate
     thrust_count
     thrust_exclusive_scan
+    thrust_find
     thrust_inner_product
     thrust_merge
     thrust_partial_sum
     thrust_partition
     thrust_reverse
+    thrust_reverse_copy
     thrust_rotate
     thrust_saxpy
     thrust_set_difference

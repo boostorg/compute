@@ -14,6 +14,9 @@
 #include <string>
 #include <utility>
 
+#include <boost/preprocessor/enum.hpp>
+#include <boost/preprocessor/expr_if.hpp>
+#include <boost/preprocessor/repetition.hpp>
 #include <boost/tuple/tuple.hpp>
 
 #include <boost/compute/config.hpp>
@@ -24,8 +27,6 @@
 #ifndef BOOST_COMPUTE_DETAIL_NO_STD_TUPLE
 #include <tuple>
 #endif
-
-#include <boost/preprocessor/repetition.hpp>
 
 namespace boost {
 namespace compute {
