@@ -89,6 +89,9 @@ int main(int argc, char *argv[])
     else if(engine == "linear_congruential_engine"){
         perf_random_number_engine<compute::linear_congruential_engine<> >(size, trials, queue);
     }
+    else if(engine == "threefry_engine"){
+        perf_random_number_engine<compute::threefry_engine<> >(size, trials, queue);
+    }
     else {
         std::cerr << "error: unknown random number engine '" << engine << "'" << std::endl;
         return -1;
