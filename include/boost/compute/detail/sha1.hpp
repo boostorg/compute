@@ -19,20 +19,31 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-// Returns SHA1 hash of the string parameter.
-inline std::string sha1(const std::string &src) {
-    boost::uuids::detail::sha1 sha1;
-    sha1.process_bytes(src.c_str(), src.size());
+// Accumulates SHA1 hash of the passed strings.
+class sha1 {
+    public:
+        sha1(const std::string &s = "") {
+            if (!s.empty()) this->process(s);
+        }
 
-    unsigned int hash[5];
-    sha1.get_digest(hash);
+        sha1& process(const std::string &s) {
+            h.process_bytes(s.c_str(), s.size());
+            return *this;
+        }
 
-    std::ostringstream buf;
-    for(int i = 0; i < 5; ++i)
-        buf << std::hex << std::setfill('0') << std::setw(8) << hash[i];
+        operator std::string() {
+            unsigned int digest[5];
+            h.get_digest(digest);
 
-    return buf.str();
-}
+            std::ostringstream buf;
+            for(int i = 0; i < 5; ++i)
+                buf << std::hex << std::setfill('0') << std::setw(8) << digest[i];
+
+            return buf.str();
+        }
+    private:
+        boost::uuids::detail::sha1 h;
+};
 
 } // end detail namespace
 } // end compute namespace
