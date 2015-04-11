@@ -128,9 +128,9 @@ public:
 
     /// Inserts the event from \p future into the wait-list.
     template<class T>
-    void insert(const future<T> &future)
+    void insert(const future<T> &future_)
     {
-        insert(future.get_event());
+        insert(future_.get_event());
     }
 
     /// Blocks until all of the events in the wait-list have completed.
