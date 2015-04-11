@@ -1015,7 +1015,7 @@ public:
     /// \see_opencl_ref{clEnqueueFillImage}
     ///
     /// \opencl_version_warning{1,2}
-    void enqueue_fill_image(image_object& image,
+    void enqueue_fill_image(const image_object& image,
                              const void *fill_color,
                              const size_t *origin,
                              const size_t *region,
@@ -1046,7 +1046,7 @@ public:
 
     /// \overload
     template<size_t N>
-    void enqueue_fill_image(image_object& image,
+    void enqueue_fill_image(const image_object& image,
                              const void *fill_color,
                              const extents<N> origin,
                              const extents<N> region,
