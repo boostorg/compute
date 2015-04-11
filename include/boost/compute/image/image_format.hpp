@@ -110,6 +110,18 @@ public:
         return &m_format;
     }
 
+    /// Returns the imgage channel order.
+    channel_order get_channel_order() const
+    {
+        return static_cast<channel_order>(m_format.image_channel_order);
+    }
+
+    /// Returns the imgage channel data type.
+    channel_data_type get_channel_data_type() const
+    {
+        return static_cast<channel_data_type>(m_format.image_channel_data_type);
+    }
+
     /// Returns \c true if \c *this is the same as \p other.
     bool operator==(const image_format &other) const
     {
