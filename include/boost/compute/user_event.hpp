@@ -27,6 +27,11 @@ namespace compute {
 class user_event : public event
 {
 public:
+    /// Creates a null user_event object.
+    user_event() : event()
+    {
+    }
+
     /// Creates a new user-event object.
     ///
     /// \see_opencl_ref{clCreateUserEvent}
@@ -72,7 +77,7 @@ public:
     /// Sets the execution status for the user-event.
     ///
     /// \see_opencl_ref{clSetUserEventStatus}
-    void set_status(cl_int execution_status)
+    void set_status(cl_int execution_status) const
     {
         cl_int ret = clSetUserEventStatus(m_event, execution_status);
         if(ret != CL_SUCCESS){
