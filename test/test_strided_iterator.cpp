@@ -8,7 +8,7 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#define BOOST_TEST_MODULE TestSkipIterator
+#define BOOST_TEST_MODULE TestStridedIterator
 #include <boost/test/unit_test.hpp>
 
 #include <iterator>
@@ -55,6 +55,51 @@ BOOST_AUTO_TEST_CASE(base_type)
     ));
 }
 
+BOOST_AUTO_TEST_CASE(make_strided_iterator_end)
+{
+    int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    boost::compute::vector<int> vec(data, data + 8, queue);
+
+    // stride equals 3
+    boost::compute::strided_iterator<boost::compute::vector<int>::iterator> end =
+        boost::compute::make_strided_iterator_end(vec.begin(),
+                                                  vec.end(),
+                                                  3);
+    // end should be vec.begin() + 9 which one step after last element
+    // accessible through strided_iterator, i.e. vec.begin()+6
+    BOOST_CHECK(boost::compute::make_strided_iterator(vec.begin()+9, 3) ==
+                end);
+
+    // stride equals 2
+    end = boost::compute::make_strided_iterator_end(vec.begin(),
+                                                    vec.end(),
+                                                    2);
+    // end should be vec.end(), because vector size is divisible by 2
+    BOOST_CHECK(boost::compute::make_strided_iterator(vec.end(), 2) == end);
+
+    // stride equals 1000
+    end = boost::compute::make_strided_iterator_end(vec.begin(),
+                                                    vec.end(),
+                                                    1000);
+    // end should be vec.begin() + 1000, because stride > vector size
+    BOOST_CHECK(boost::compute::make_strided_iterator(vec.begin()+1000, 1000) ==
+                end);
+
+
+    // test boost::compute::make_strided_iterator_end with copy(..)
+
+    boost::compute::vector<int> result(4, context);
+
+    // copy every other element to result
+    boost::compute::copy(
+        boost::compute::make_strided_iterator(vec.begin()+1, 2),
+        boost::compute::make_strided_iterator_end(vec.begin()+1, vec.end(), 2),
+        result.begin(),
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, result, (2, 4, 6, 8));
+}
+
 BOOST_AUTO_TEST_CASE(copy)
 {
     int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
@@ -71,14 +116,14 @@ BOOST_AUTO_TEST_CASE(copy)
     );
     CHECK_RANGE_EQUAL(int, 4, result, (1, 3, 5, 7));
 
-    // copy every other element to result
+    // copy every 3rd element to result
     boost::compute::copy(
         boost::compute::make_strided_iterator(vec.begin(), 3),
-        boost::compute::make_strided_iterator(vec.begin()+6, 3),
+        boost::compute::make_strided_iterator(vec.begin()+9, 3),
         result.begin(),
         queue
     );
-    CHECK_RANGE_EQUAL(int, 2, result, (1, 4));
+    CHECK_RANGE_EQUAL(int, 3, result, (1, 4, 7));
 }
 
 BOOST_AUTO_TEST_CASE(distance)
@@ -99,13 +144,6 @@ BOOST_AUTO_TEST_CASE(distance)
             boost::compute::make_strided_iterator(vec.end(), 2)
         ),
         std::ptrdiff_t(4)
-    );
-    BOOST_CHECK_EQUAL(
-        std::distance(
-            boost::compute::make_strided_iterator(vec.begin(), 4),
-            boost::compute::make_strided_iterator(vec.end(), 4)
-        ),
-        std::ptrdiff_t(2)
     );
 
     BOOST_CHECK_EQUAL(

@@ -106,7 +106,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 /// \class strided_iterator
 /// \brief Iterator adaptor which skips over multiple elements each time it is incremented.
 ///
-/// TODO
+/// TODO: Description
 ///
 ///
 /// \see buffer_iterator, make_strided_iterator()
@@ -127,7 +127,7 @@ public:
           m_stride(static_cast<difference_type>(stride))
     {
         // stride must be greater than zero
-        BOOST_ASSERT_MSG(stride > 0, "Stride value must be greater than zero");
+        BOOST_ASSERT_MSG(stride > 0, "Stride must be greater than zero");
     }
 
     strided_iterator(const strided_iterator<Iterator> &other)
@@ -213,15 +213,15 @@ private:
 
 /// Returns a strided_iterator for \p iterator with \p stride.
 ///
-/// TODO: Better description.
+/// TODO: Description
 ///
 /// \param iterator
 /// \param stride
 ///
 /// \return a \c strided_iterator for \p iterator with \p stride.
 ///
-/// For example, to create an iterator which iterates over every second
-/// value in a \c vector<int>:
+/// For example, to create an iterator which iterates over every other
+/// element in a \c vector<int>:
 /// \code
 /// auto strided_iterator = make_strided_iterator(vec.begin(), 2);
 /// \endcode
@@ -230,6 +230,53 @@ inline strided_iterator<Iterator>
 make_strided_iterator(Iterator iterator, typename std::iterator_traits<Iterator>::difference_type stride)
 {
     return strided_iterator<Iterator>(iterator, stride);
+}
+
+/// Returns a strided_iterator which refers to element that would follow
+/// the last element accessible through strided_iterator for \p first iterator
+/// with \p stride.
+///
+/// \param first the iterator referring to the first element accessible
+///        through strided_iterator for \p first with \p stride
+/// \param last the iterator referring to the last element that may be accessible
+///        through strided_iterator for \p first with \p stride
+/// \param stride the iteration step
+///
+/// \return a \c strided_iterator referring to element that would follow
+///         the last element accessible through strided_iterator for \p first
+///         iterator with \p stride.
+///
+/// It can be helpful when iterating over strided_iterator:
+/// \code
+/// // vec.size() may not be divisible by 3
+/// auto strided_iterator_begin = make_strided_iterator(vec.begin(), 3);
+/// auto strided_iterator_end = make_strided_iterator_end(vec.end(), 3);
+///
+/// // copy every 3rd element to result
+/// boost::compute::copy(
+///         strided_iterator_begin,
+///         strided_iterator_end,
+///         result.begin(),
+///         queue
+/// );
+/// \endcode
+template<class Iterator>
+strided_iterator<Iterator>
+make_strided_iterator_end(Iterator first, Iterator last, typename std::iterator_traits<Iterator>::difference_type stride)
+{
+    typedef typename std::iterator_traits<Iterator>::difference_type difference_type;
+
+    // calculate distance from end to the last element that would be
+    // accessible through strided_iterator.
+    difference_type range = std::distance(first, last);
+    difference_type d = (range - 1) / stride;
+    d *= stride;
+    d -= range;
+    // advance from end to the element that would follow the last
+    // accessible element
+    Iterator end_for_strided_iterator = last;
+    std::advance(end_for_strided_iterator, d + stride);
+    return strided_iterator<Iterator>(end_for_strided_iterator, stride);
 }
 
 /// \internal_ (is_device_iterator specialization for transform_iterator)
