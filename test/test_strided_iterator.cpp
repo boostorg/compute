@@ -55,6 +55,61 @@ BOOST_AUTO_TEST_CASE(base_type)
     ));
 }
 
+BOOST_AUTO_TEST_CASE(distance)
+{
+    int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    boost::compute::vector<int> vec(data, data + 8, queue);
+
+    BOOST_CHECK_EQUAL(
+         std::distance(
+             boost::compute::make_strided_iterator(vec.begin(), 1),
+             boost::compute::make_strided_iterator(vec.end(), 1)
+         ),
+         std::ptrdiff_t(8)
+    );
+    BOOST_CHECK_EQUAL(
+        std::distance(
+            boost::compute::make_strided_iterator(vec.begin(), 2),
+            boost::compute::make_strided_iterator(vec.end(), 2)
+        ),
+        std::ptrdiff_t(4)
+    );
+
+    BOOST_CHECK_EQUAL(
+        std::distance(
+            boost::compute::make_strided_iterator(vec.begin(), 3),
+            boost::compute::make_strided_iterator(vec.begin()+6, 3)
+        ),
+        std::ptrdiff_t(2)
+    );
+}
+
+BOOST_AUTO_TEST_CASE(copy)
+{
+    int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    boost::compute::vector<int> vec(data, data + 8, queue);
+
+    boost::compute::vector<int> result(4, context);
+
+    // copy every other element to result
+    boost::compute::copy(
+        boost::compute::make_strided_iterator(vec.begin(), 2),
+        boost::compute::make_strided_iterator(vec.end(), 2),
+        result.begin(),
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 4, result, (1, 3, 5, 7));
+
+    // copy every 3rd element to result
+    boost::compute::copy(
+        boost::compute::make_strided_iterator(vec.begin(), 3),
+        boost::compute::make_strided_iterator(vec.begin()+9, 3),
+        result.begin(),
+        queue
+    );
+    CHECK_RANGE_EQUAL(int, 3, result, (1, 4, 7));
+}
+
 BOOST_AUTO_TEST_CASE(make_strided_iterator_end)
 {
     int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
@@ -65,7 +120,7 @@ BOOST_AUTO_TEST_CASE(make_strided_iterator_end)
         boost::compute::make_strided_iterator_end(vec.begin(),
                                                   vec.end(),
                                                   3);
-    // end should be vec.begin() + 9 which one step after last element
+    // end should be vec.begin() + 9 which is one step after last element
     // accessible through strided_iterator, i.e. vec.begin()+6
     BOOST_CHECK(boost::compute::make_strided_iterator(vec.begin()+9, 3) ==
                 end);
@@ -99,61 +154,5 @@ BOOST_AUTO_TEST_CASE(make_strided_iterator_end)
     );
     CHECK_RANGE_EQUAL(int, 4, result, (2, 4, 6, 8));
 }
-
-BOOST_AUTO_TEST_CASE(copy)
-{
-    int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-    boost::compute::vector<int> vec(data, data + 8, queue);
-
-    boost::compute::vector<int> result(4, context);
-
-    // copy every other element to result
-    boost::compute::copy(
-        boost::compute::make_strided_iterator(vec.begin(), 2),
-        boost::compute::make_strided_iterator(vec.end(), 2),
-        result.begin(),
-        queue
-    );
-    CHECK_RANGE_EQUAL(int, 4, result, (1, 3, 5, 7));
-
-    // copy every 3rd element to result
-    boost::compute::copy(
-        boost::compute::make_strided_iterator(vec.begin(), 3),
-        boost::compute::make_strided_iterator(vec.begin()+9, 3),
-        result.begin(),
-        queue
-    );
-    CHECK_RANGE_EQUAL(int, 3, result, (1, 4, 7));
-}
-
-BOOST_AUTO_TEST_CASE(distance)
-{
-    int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-    boost::compute::vector<int> vec(data, data + 8, queue);
-
-    BOOST_CHECK_EQUAL(
-         std::distance(
-             boost::compute::make_strided_iterator(vec.begin(), 1),
-             boost::compute::make_strided_iterator(vec.end(), 1)
-         ),
-         std::ptrdiff_t(8)
-    );
-    BOOST_CHECK_EQUAL(
-        std::distance(
-            boost::compute::make_strided_iterator(vec.begin(), 2),
-            boost::compute::make_strided_iterator(vec.end(), 2)
-        ),
-        std::ptrdiff_t(4)
-    );
-
-    BOOST_CHECK_EQUAL(
-        std::distance(
-            boost::compute::make_strided_iterator(vec.begin(), 3),
-            boost::compute::make_strided_iterator(vec.begin()+6, 3)
-        ),
-        std::ptrdiff_t(2)
-    );
-}
-
 
 BOOST_AUTO_TEST_SUITE_END()

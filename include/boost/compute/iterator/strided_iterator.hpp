@@ -8,8 +8,8 @@
 // See http://kylelutz.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ITERATOR_strided_ITERATOR_HPP
-#define BOOST_COMPUTE_ITERATOR_strided_ITERATOR_HPP
+#ifndef BOOST_COMPUTE_ITERATOR_STRIDED_ITERATOR_HPP
+#define BOOST_COMPUTE_ITERATOR_STRIDED_ITERATOR_HPP
 
 #include <cstddef>
 #include <iterator>
@@ -46,8 +46,7 @@ public:
     > type;
 };
 
-// helper class for including stride value in index
-// expression
+// helper class for including stride value in index expression
 template<class IndexExpr, class Stride>
 struct stride_expr
 {
@@ -104,12 +103,12 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 } // end detail namespace
 
 /// \class strided_iterator
-/// \brief Iterator adaptor which skips over multiple elements each time it is incremented.
+/// \brief An iterator adaptor with adjustable iteration step.
 ///
-/// TODO: Description
+/// The strided iterator adaptor skips over multiple elements each time
+/// it is incremented or decremented.
 ///
-///
-/// \see buffer_iterator, make_strided_iterator()
+/// \see buffer_iterator, make_strided_iterator(), make_strided_iterator_end()
 template<class Iterator>
 class strided_iterator :
     public detail::strided_iterator_base<Iterator>::type
@@ -213,10 +212,8 @@ private:
 
 /// Returns a strided_iterator for \p iterator with \p stride.
 ///
-/// TODO: Description
-///
-/// \param iterator
-/// \param stride
+/// \param iterator the underlying iterator
+/// \param stride the iteration step for strided_iterator
 ///
 /// \return a \c strided_iterator for \p iterator with \p stride.
 ///
@@ -236,10 +233,12 @@ make_strided_iterator(Iterator iterator, typename std::iterator_traits<Iterator>
 /// the last element accessible through strided_iterator for \p first iterator
 /// with \p stride.
 ///
+/// Parameter \p stride must be greater than zero.
+///
 /// \param first the iterator referring to the first element accessible
 ///        through strided_iterator for \p first with \p stride
-/// \param last the iterator referring to the last element that may be accessible
-///        through strided_iterator for \p first with \p stride
+/// \param last the iterator referring to the last element that may be
+////       accessible through strided_iterator for \p first with \p stride
 /// \param stride the iteration step
 ///
 /// \return a \c strided_iterator referring to element that would follow
@@ -255,7 +254,9 @@ make_strided_iterator(Iterator iterator, typename std::iterator_traits<Iterator>
 /// // copy every 3rd element to result
 /// boost::compute::copy(
 ///         strided_iterator_begin,
-///         strided_iterator_end,
+///         strided_iterator_end,ided_iterator referring to element that would follow
+///         the last element accessible through strided_iterator for \p first
+///         iterator with \p stride.
 ///         result.begin(),
 ///         queue
 /// );
@@ -279,7 +280,7 @@ make_strided_iterator_end(Iterator first, Iterator last, typename std::iterator_
     return strided_iterator<Iterator>(end_for_strided_iterator, stride);
 }
 
-/// \internal_ (is_device_iterator specialization for transform_iterator)
+/// \internal_ (is_device_iterator specialization for strided_iterator)
 template<class Iterator>
 struct is_device_iterator<strided_iterator<Iterator> > : boost::true_type {};
 
