@@ -1009,6 +1009,94 @@ public:
         }
     }
 
+    /// The function specified by \p walk_elemets must be invokable with arguments
+    /// (void *pElem, size_t x, size_t y, size_t z),
+    /// like std::function<void(void *, size_t, size_t, size_t)>.
+    template<class Function>
+    void enqueue_walk_image(const image_object& image,
+                            Function walk_elemets,
+                            cl_map_flags flags,
+                            const size_t *origin,
+                            const size_t *region,
+                            const wait_list &events = wait_list(),
+                            event * pevent = NULL)
+    {
+        BOOST_ASSERT(m_queue != 0);
+        BOOST_ASSERT(image.get_context() == this->get_context());
+
+        size_t row_pitch = 0;
+        size_t slice_pitch = 0;
+        compute::event map_event, *pmap_event = NULL;
+        compute::user_event user_event;
+        compute::wait_list unmap_wait;
+
+        if (pevent) {
+            // Async exec
+            user_event = compute::user_event(get_context());
+            unmap_wait.insert(user_event);
+            pmap_event = &map_event;
+        }
+
+        char * const pImage3D = reinterpret_cast<char *>(
+                   enqueue_map_image(
+                        image,
+                        flags,
+                        origin,
+                        region,
+                        &row_pitch,
+                        &slice_pitch,
+                        events,
+                        pmap_event)
+                    );
+
+        size_t element_size = image.get_image_info<size_t>(CL_IMAGE_ELEMENT_SIZE);
+
+        auto func = [=]()
+        {
+            // Walks all the image elements
+            char * pImage2D = pImage3D;
+            for(size_t d = origin[2]; d < region[2]; ++d) {
+                 char * pImage1D = pImage2D;
+                for(size_t h = origin[1]; h < region[1]; ++h) {
+                    char *pElem = pImage1D;
+                    for(size_t w = origin[0]; w < region[0]; ++w) {
+                        walk_elemets((void *)pElem, w, h, d);
+                        pElem += element_size;
+                    }
+                    pImage1D += row_pitch;
+                }
+                pImage2D += slice_pitch;
+            }
+            if(pevent) {
+                user_event.set_status(compute::event::complete);
+            }
+        };
+
+        if (pevent) {
+            // Async exec
+            pmap_event->set_callback(func);
+        } else {
+            func();
+        }
+        enqueue_unmap_buffer(image, pImage3D, unmap_wait, pevent);
+    }
+
+    /// Enqueues a command to fill \p image with \p fill_color.
+    void enqueue_fill_image_walking(const image_object& image,
+                             const void *fill_color,
+                             const size_t *origin,
+                             const size_t *region,
+                             const wait_list &events = wait_list(),
+                             event * event_ = NULL)
+    {
+        size_t element_size = image.get_image_info<size_t>(CL_IMAGE_ELEMENT_SIZE);
+        enqueue_walk_image(image, [=](void *pelem, size_t, size_t, size_t)
+        {
+            std::copy_n(static_cast<const char *>(fill_color), element_size, static_cast<char *>(pelem));
+        },
+        compute::command_queue::map_write, origin, region, events, event_);
+    }
+
     #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to fill \p image with \p fill_color.
     ///
@@ -1022,25 +1110,35 @@ public:
                              const wait_list &events = wait_list(),
                              event * event_ = NULL)
     {
-        BOOST_ASSERT(m_queue != 0);
-        BOOST_ASSERT(image.get_context() == this->get_context());
-
         if (get_version() < 120)
-            BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_DEVICE));
+        {
+            // fallback
+            enqueue_fill_image_walking(image,
+                                       fill_color,
+                                       origin,
+                                       region,
+                                       events,
+                                       event_);
+        }
+        else
+        {
+            BOOST_ASSERT(m_queue != 0);
+            BOOST_ASSERT(image.get_context() == this->get_context());
 
-        cl_int ret = clEnqueueFillImage(
-            m_queue,
-            image.get(),
-            fill_color,
-            origin,
-            region,
-            events.size(),
-            events.get_event_ptr(),
-            event_ ? &event_->get() : NULL
-        );
+            cl_int ret = clEnqueueFillImage(
+                        m_queue,
+                        image.get(),
+                        fill_color,
+                        origin,
+                        region,
+                        events.size(),
+                        events.get_event_ptr(),
+                        event_ ? &event_->get() : NULL
+                                 );
 
-        if(ret != CL_SUCCESS){
-            BOOST_THROW_EXCEPTION(opencl_error(ret));
+            if(ret != CL_SUCCESS){
+                BOOST_THROW_EXCEPTION(opencl_error(ret));
+            }
         }
     }
 
