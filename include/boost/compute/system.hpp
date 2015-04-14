@@ -80,29 +80,23 @@ public:
         return default_device;
     }
 
-    /// Returns the device with \p name.
-    ///
-    /// \throws no_device_found if no device with \p name is found.
-    static device find_device(const std::string &name)
-    {
-        BOOST_FOREACH(const device &device, devices()){
-            if(device.name() == name){
-                return device;
-            }
-        }
-
-        BOOST_THROW_EXCEPTION(no_device_found());
-    }
-
-    /// Returns the device with \p name contained in its name and
+    /// Returns the device with \p device_name contained in its name
+    /// with \p platform_name contained in its platform name
+    /// with a matching \p device_type and
     /// a minimun version of \p min_version (eg. 1.1 is 101, 1.2 is 102, 2.0 is 200).
     ///
     /// \throws no_device_found if no device with \p name is found.
-    static device find_device_name(const std::string &name, uint_ min_version = 100)
+    static device find_device(const std::string &device_name = std::string(),
+                              const std::string &platform_name = std::string(),
+                              device::type device_type = device::all,
+                              uint_ min_version = 100)
     {
         BOOST_FOREACH(const device &device, devices()){
-            if(device.name().find(name.c_str()) != std::string::npos
-                    && device.get_version() >= min_version){
+            std::string platform_name_ = device.platform().name();
+            if((platform_name.empty() || platform_name_.find(platform_name.c_str()) != std::string::npos)
+              && (device_name.empty() || device.name().find(device_name.c_str()) != std::string::npos)
+              && (device.get_type() & device_type)
+              && device.get_version() >= min_version){
                 return device;
             }
         }
@@ -235,11 +229,11 @@ private:
                     continue;
 
                 if (type && matches(std::string("GPU"), type))
-                    if (device.type() != device::gpu)
+                    if (device.get_type() != device::gpu)
                         continue;
 
                 if (type && matches(std::string("CPU"), type))
-                    if (device.type() != device::cpu)
+                    if (device.get_type() != device::cpu)
                         continue;
 
                 if (platform && !matches(device.platform().name(), platform))
@@ -254,14 +248,14 @@ private:
 
         // find the first gpu device
         BOOST_FOREACH(const device &device, devices_){
-            if(device.type() == device::gpu){
+            if(device.get_type() == device::gpu){
                 return device;
             }
         }
 
         // find the first cpu device
         BOOST_FOREACH(const device &device, devices_){
-            if(device.type() == device::cpu){
+            if(device.get_type() == device::cpu){
                 return device;
             }
         }
