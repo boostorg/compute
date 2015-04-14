@@ -45,9 +45,12 @@ class device
 {
 public:
     enum type {
+        default_type = CL_DEVICE_TYPE_DEFAULT,
         cpu = CL_DEVICE_TYPE_CPU,
         gpu = CL_DEVICE_TYPE_GPU,
-        accelerator = CL_DEVICE_TYPE_ACCELERATOR
+        accelerator = CL_DEVICE_TYPE_ACCELERATOR,
+        custom = CL_DEVICE_TYPE_CUSTOM,
+        all = CL_DEVICE_TYPE_ALL
     };
 
     /// Creates a null device object.
@@ -156,7 +159,7 @@ public:
     }
 
     /// Returns the type of the device.
-    cl_device_type type() const
+    cl_device_type get_type() const
     {
         return get_info<cl_device_type>(CL_DEVICE_TYPE);
     }
