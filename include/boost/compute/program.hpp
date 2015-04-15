@@ -505,19 +505,16 @@ public:
     {
 #ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
         // Get hash string for the kernel.
-        std::string hash;
-        {
-            device   d(context.get_device());
-            platform p = d.platform();
+        device   d = context.get_device();
+        platform p = d.platform();
 
-            std::ostringstream src;
-            src << "// " << p.name() << " v" << p.version() << "\n"
-                << "// " << context.get_device().name() << "\n"
-                << "// " << options << "\n\n"
-                << source;
-
-            hash = detail::sha1(src.str());
-        }
+        detail::sha1 hash;
+        hash.process( p.name()    )
+            .process( p.version() )
+            .process( d.name()    )
+            .process( options     )
+            .process( source      )
+            ;
 
         // Try to get cached program binaries:
         try {
