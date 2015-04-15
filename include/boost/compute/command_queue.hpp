@@ -1026,13 +1026,13 @@ public:
 
         size_t row_pitch = 0;
         size_t slice_pitch = 0;
-        compute::event map_event, *pmap_event = NULL;
-        compute::user_event user_event;
-        compute::wait_list unmap_wait;
+        event map_event, *pmap_event = NULL;
+        user_event user_event;
+        wait_list unmap_wait;
 
         if (pevent) {
             // Async exec
-            user_event = compute::user_event(get_context());
+            user_event = user_event(get_context());
             unmap_wait.insert(user_event);
             pmap_event = &map_event;
         }
@@ -1068,7 +1068,7 @@ public:
                 pImage2D += slice_pitch;
             }
             if(pevent) {
-                user_event.set_status(compute::event::complete);
+                user_event.set_status(event::complete);
             }
         };
 
@@ -1094,7 +1094,7 @@ public:
         {
             std::copy_n(static_cast<const char *>(fill_color), element_size, static_cast<char *>(pelem));
         },
-        compute::command_queue::map_write, origin, region, events, event_);
+        command_queue::map_write, origin, region, events, event_);
     }
 
     #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
