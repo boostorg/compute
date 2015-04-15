@@ -249,7 +249,7 @@ make_strided_iterator(Iterator iterator, typename std::iterator_traits<Iterator>
 /// \code
 /// // vec.size() may not be divisible by 3
 /// auto strided_iterator_begin = make_strided_iterator(vec.begin(), 3);
-/// auto strided_iterator_end = make_strided_iterator_end(vec.end(), 3);
+/// auto strided_iterator_end = make_strided_iterator_end(vec.begin(), vec.end(), 3);
 ///
 /// // copy every 3rd element to result
 /// boost::compute::copy(
@@ -287,4 +287,4 @@ struct is_device_iterator<strided_iterator<Iterator> > : boost::true_type {};
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_ITERATOR_TRANSFORM_ITERATOR_HPP
+#endif // BOOST_COMPUTE_ITERATOR_STRIDED_ITERATOR_HPP
