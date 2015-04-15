@@ -49,7 +49,9 @@ public:
         cpu = CL_DEVICE_TYPE_CPU,
         gpu = CL_DEVICE_TYPE_GPU,
         accelerator = CL_DEVICE_TYPE_ACCELERATOR,
+#ifdef CL_DEVICE_TYPE_CUSTOM
         custom = CL_DEVICE_TYPE_CUSTOM,
+#endif
         all = CL_DEVICE_TYPE_ALL
     };
 
