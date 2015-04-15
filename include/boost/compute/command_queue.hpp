@@ -14,10 +14,12 @@
 #include <cstddef>
 #include <algorithm>
 
+#include <boost/config.hpp>
 #include <boost/assert.hpp>
 
 #include <boost/compute/config.hpp>
 #include <boost/compute/event.hpp>
+#include <boost/compute/user_event.hpp>
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/device.hpp>
 #include <boost/compute/kernel.hpp>
@@ -1027,13 +1029,15 @@ public:
         size_t row_pitch = 0;
         size_t slice_pitch = 0;
         event map_event, *pmap_event = NULL;
-        user_event user_event;
+        user_event user_ev;
         wait_list unmap_wait;
+        size_t origin3[3] = { origin[0], origin[1], origin[2] };
+        size_t region3[3] = { region[0], region[1], region[2] };
 
         if (pevent) {
             // Async exec
-            user_event = user_event(get_context());
-            unmap_wait.insert(user_event);
+            user_ev = user_event(get_context());
+            unmap_wait.insert(user_ev);
             pmap_event = &map_event;
         }
 
@@ -1051,15 +1055,68 @@ public:
 
         size_t element_size = image.get_image_info<size_t>(CL_IMAGE_ELEMENT_SIZE);
 
+#ifdef BOOST_NO_CXX11_LAMBDAS
+        // Resolve the lambda syntax sugar
+        struct walk_image
+        {
+            Function m_walk_elemets;
+            char * m_pImage3D;
+            size_t m_origin3[3];
+            size_t m_region3[3];
+            size_t m_row_pitch;
+            size_t m_slice_pitch;
+            size_t m_element_size;
+            user_event m_user_ev;
+            walk_image(Function walk_elemets,
+                       char * pImage3D,
+                       const size_t *origin,
+                       const size_t *region,
+                       size_t row_pitch,
+                       size_t slice_pitch,
+                       size_t element_size,
+                       user_event user_ev) :
+                m_walk_elemets(walk_elemets),
+                m_pImage3D(pImage3D),
+                m_row_pitch(row_pitch),
+                m_slice_pitch(slice_pitch),
+                m_element_size(element_size),
+                m_user_ev(user_ev)
+            {
+                std::copy_n(origin, 3, m_origin3);
+                std::copy_n(region, 3, m_region3);
+            }
+            void operator () () const
+            {
+                // Walks all the image elements
+                char * pImage2D = m_pImage3D;
+                for(size_t d = m_origin3[2]; d < m_region3[2]; ++d) {
+                     char * pImage1D = pImage2D;
+                    for(size_t h = m_origin3[1]; h < m_region3[1]; ++h) {
+                        char *pElem = pImage1D;
+                        for(size_t w = m_origin3[0]; w < m_region3[0]; ++w) {
+                            m_walk_elemets((void *)pElem, w, h, d);
+                            pElem += m_element_size;
+                        }
+                        pImage1D += m_row_pitch;
+                    }
+                    pImage2D += m_slice_pitch;
+                }
+                if(m_user_ev.get()) {
+                    m_user_ev.set_status(event::complete);
+                }
+            }
+        };
+        walk_image func(walk_elemets, pImage3D, origin3, region3, row_pitch, slice_pitch, element_size, user_ev);
+#else
         auto func = [=]()
         {
             // Walks all the image elements
             char * pImage2D = pImage3D;
-            for(size_t d = origin[2]; d < region[2]; ++d) {
+            for(size_t d = origin3[2]; d < region3[2]; ++d) {
                  char * pImage1D = pImage2D;
-                for(size_t h = origin[1]; h < region[1]; ++h) {
+                for(size_t h = origin3[1]; h < region3[1]; ++h) {
                     char *pElem = pImage1D;
-                    for(size_t w = origin[0]; w < region[0]; ++w) {
+                    for(size_t w = origin3[0]; w < region3[0]; ++w) {
                         walk_elemets((void *)pElem, w, h, d);
                         pElem += element_size;
                     }
@@ -1068,10 +1125,10 @@ public:
                 pImage2D += slice_pitch;
             }
             if(pevent) {
-                user_event.set_status(event::complete);
+                user_ev.set_status(event::complete);
             }
         };
-
+#endif
         if (pevent) {
             // Async exec
             pmap_event->set_callback(func);
@@ -1090,11 +1147,21 @@ public:
                              event * event_ = NULL)
     {
         size_t element_size = image.get_image_info<size_t>(CL_IMAGE_ELEMENT_SIZE);
-        enqueue_walk_image(image, [=](void *pelem, size_t, size_t, size_t)
+        struct fillc
         {
-            std::copy_n(static_cast<const char *>(fill_color), element_size, static_cast<char *>(pelem));
-        },
-        command_queue::map_write, origin, region, events, event_);
+            size_t m_element_size;
+            char m_fill_color[16];
+            fillc(size_t element_size, const void * fill_color) : m_element_size(element_size)
+            {
+                std::copy_n(static_cast<const char *>(fill_color), 16, static_cast<char *>(m_fill_color));
+            }
+            void operator () (void *pelem, size_t, size_t, size_t) const
+            {
+                // Bug: m_fill_color must be converted
+                std::copy_n(m_fill_color, m_element_size, static_cast<char *>(pelem));
+            }
+        };
+        enqueue_walk_image(image, fillc(element_size, fill_color), command_queue::map_write, origin, region, events, event_);
     }
 
     #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
