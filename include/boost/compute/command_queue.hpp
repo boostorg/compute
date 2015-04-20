@@ -1031,8 +1031,8 @@ public:
         event map_event, *pmap_event = NULL;
         user_event user_ev;
         wait_list unmap_wait;
-        size_t origin3[3] = { origin[0], origin[1], origin[2] };
-        size_t region3[3] = { region[0], region[1], region[2] };
+        extents<3> origin3 = { origin[0], origin[1], origin[2] };
+        extents<3> region3 = { region[0], region[1], region[2] };
 
         if (pevent) {
             // Async exec
@@ -1139,7 +1139,7 @@ public:
     }
 
     /// Enqueues a command to fill \p image with \p fill_color.
-    void enqueue_fill_image_walking(const image_object& image,
+    void enqueue_rawfill_image_walking(const image_object& image,
                              const void *fill_color,
                              const size_t *origin,
                              const size_t *region,
@@ -1164,6 +1164,29 @@ public:
         enqueue_walk_image(image, fillc(element_size, fill_color), command_queue::map_write, origin, region, events, event_);
     }
 
+    /// \overload
+    template<size_t N>
+    void enqueue_rawfill_image_walking(const image_object& image,
+                             const void *fill_color,
+                             const extents<N> origin,
+                             const extents<N> region,
+                             const wait_list &events = wait_list(),
+                             event * event_ = NULL)
+    {
+        BOOST_STATIC_ASSERT(N <= 3);
+        BOOST_ASSERT(image.get_context() == this->get_context());
+
+        size_t origin3[3] = { 0, 0, 0 };
+        size_t region3[3] = { 1, 1, 1 };
+
+        std::copy(origin.data(), origin.data() + N, origin3);
+        std::copy(region.data(), region.data() + N, region3);
+
+        enqueue_rawfill_image_walking(
+            image, fill_color, origin3, region3, events, event_
+        );
+    }
+
     #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to fill \p image with \p fill_color.
     ///
@@ -1179,13 +1202,7 @@ public:
     {
         if (get_version() < 120)
         {
-            // fallback
-            enqueue_fill_image_walking(image,
-                                       fill_color,
-                                       origin,
-                                       region,
-                                       events,
-                                       event_);
+            BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_DEVICE));
         }
         else
         {
