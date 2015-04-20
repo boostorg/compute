@@ -81,6 +81,7 @@ public:
         }
         else
     #endif
+        (void) context; (void) image_width; (void) format; (void) flags; (void) host_ptr;
         // image1d objects are only supported in OpenCL 1.2 and later
         BOOST_THROW_EXCEPTION(opencl_error(CL_IMAGE_FORMAT_NOT_SUPPORTED));
     }
@@ -157,6 +158,7 @@ public:
     #ifdef CL_VERSION_1_2
         return image_object::get_supported_formats(context, CL_MEM_OBJECT_IMAGE1D, flags);
     #else
+        (void) context; (void) flags;
         return std::vector<image_format>();
     #endif
     }
@@ -172,6 +174,7 @@ public:
             format, context, CL_MEM_OBJECT_IMAGE1D, flags
         );
     #else
+        (void) format; (void) context; (void) flags;
         return false;
     #endif
     }

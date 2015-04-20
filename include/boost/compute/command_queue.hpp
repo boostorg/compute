@@ -1017,9 +1017,9 @@ public:
     template<class Function>
     void enqueue_walk_image(const image_object& image,
                             Function walk_elemets,
-                            cl_map_flags flags,
-                            const size_t *origin,
-                            const size_t *region,
+                            cl_map_flags flags = compute::command_queue::map_read,
+                            const size_t *origin = NULL,
+                            const size_t *region = NULL,
                             const wait_list &events = wait_list(),
                             event * pevent = NULL)
     {
@@ -1031,8 +1031,16 @@ public:
         event map_event, *pmap_event = NULL;
         user_event user_ev;
         wait_list unmap_wait;
-        extents<3> origin3 = { origin[0], origin[1], origin[2] };
-        extents<3> region3 = { region[0], region[1], region[2] };
+        extents<3> origin3 = { 0, 0, 0 };
+        extents<3> region3 = { image.width(), std::max((size_t)1, image.height()), std::max((size_t)1, image.depth()) };
+
+        if (origin) {
+            origin3[0] = origin[0]; origin3[1] = origin[1]; origin3[2] = origin[2];
+        }
+
+        if (region) {
+            region3[0] = region[0]; region3[1] = region[1]; region3[2] = region[2];
+        }
 
         if (pevent) {
             // Async exec
@@ -1045,8 +1053,8 @@ public:
                    enqueue_map_image(
                         image,
                         flags,
-                        origin,
-                        region,
+                        origin3.data(),
+                        region3.data(),
                         &row_pitch,
                         &slice_pitch,
                         events,
