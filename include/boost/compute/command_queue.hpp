@@ -1011,6 +1011,62 @@ public:
         }
     }
 
+
+#ifdef BOOST_NO_CXX11_LAMBDAS
+    // Resolve the lambda syntax sugar
+    template<class Function>
+    struct walk_image
+    {
+        Function m_walk_elemets;
+        char * m_pImage3D;
+        size_t m_origin3[3];
+        size_t m_region3[3];
+        size_t m_row_pitch;
+        size_t m_slice_pitch;
+        size_t m_element_size;
+        user_event m_user_ev;
+        walk_image(Function walk_elemets,
+                   char * pImage3D,
+                   const size_t *origin,
+                   const size_t *region,
+                   size_t row_pitch,
+                   size_t slice_pitch,
+                   size_t element_size,
+                   user_event user_ev) :
+            m_walk_elemets(walk_elemets),
+            m_pImage3D(pImage3D),
+            m_row_pitch(row_pitch),
+            m_slice_pitch(slice_pitch),
+            m_element_size(element_size),
+            m_user_ev(user_ev)
+        {
+            std::copy(origin, origin + 3, m_origin3);
+            std::copy(region, region + 3, m_region3);
+        }
+
+        void operator () () const
+        {
+            // Walks all the image elements
+            char * pImage2D = m_pImage3D;
+            for(size_t d = m_origin3[2]; d < m_region3[2]; ++d) {
+                 char * pImage1D = pImage2D;
+                for(size_t h = m_origin3[1]; h < m_region3[1]; ++h) {
+                    char *pElem = pImage1D;
+                    for(size_t w = m_origin3[0]; w < m_region3[0]; ++w) {
+                        m_walk_elemets((void *)pElem, w, h, d);
+                        pElem += m_element_size;
+                    }
+                    pImage1D += m_row_pitch;
+                }
+                pImage2D += m_slice_pitch;
+            }
+            if(m_user_ev.get()) {
+                m_user_ev.set_status(event::complete);
+            }
+        }
+    };
+#endif
+
     /// The function specified by \p walk_elemets must be invokable with arguments
     /// (void *pElem, size_t x, size_t y, size_t z),
     /// like std::function<void(void *, size_t, size_t, size_t)>.
@@ -1067,57 +1123,7 @@ public:
         size_t element_size = image.get_image_info<size_t>(CL_IMAGE_ELEMENT_SIZE);
 
 #ifdef BOOST_NO_CXX11_LAMBDAS
-        // Resolve the lambda syntax sugar
-        struct walk_image
-        {
-            Function m_walk_elemets;
-            char * m_pImage3D;
-            size_t m_origin3[3];
-            size_t m_region3[3];
-            size_t m_row_pitch;
-            size_t m_slice_pitch;
-            size_t m_element_size;
-            user_event m_user_ev;
-            walk_image(Function walk_elemets,
-                       char * pImage3D,
-                       const size_t *origin,
-                       const size_t *region,
-                       size_t row_pitch,
-                       size_t slice_pitch,
-                       size_t element_size,
-                       user_event user_ev) :
-                m_walk_elemets(walk_elemets),
-                m_pImage3D(pImage3D),
-                m_row_pitch(row_pitch),
-                m_slice_pitch(slice_pitch),
-                m_element_size(element_size),
-                m_user_ev(user_ev)
-            {
-                std::copy(origin, origin + 3, m_origin3);
-                std::copy(region, region + 3, m_region3);
-            }
-            void operator () () const
-            {
-                // Walks all the image elements
-                char * pImage2D = m_pImage3D;
-                for(size_t d = m_origin3[2]; d < m_region3[2]; ++d) {
-                     char * pImage1D = pImage2D;
-                    for(size_t h = m_origin3[1]; h < m_region3[1]; ++h) {
-                        char *pElem = pImage1D;
-                        for(size_t w = m_origin3[0]; w < m_region3[0]; ++w) {
-                            m_walk_elemets((void *)pElem, w, h, d);
-                            pElem += m_element_size;
-                        }
-                        pImage1D += m_row_pitch;
-                    }
-                    pImage2D += m_slice_pitch;
-                }
-                if(m_user_ev.get()) {
-                    m_user_ev.set_status(event::complete);
-                }
-            }
-        };
-        walk_image func(walk_elemets, pImage3D, origin3, region3, row_pitch, slice_pitch, element_size, user_ev);
+        walk_image<Function> func(walk_elemets, pImage3D, origin3.data(), region3.data(), row_pitch, slice_pitch, element_size, user_ev);
 #else
         auto func = [=]()
         {
@@ -1149,6 +1155,31 @@ public:
         enqueue_unmap_buffer(image, pImage3D, unmap_wait, pevent);
     }
 
+    struct fillc
+    {
+        size_t m_element_size;
+        char m_fill_color[16];
+        fillc(const fillc & o) : m_element_size(o.m_element_size)
+        {
+            const char * origin = static_cast<const char *>(o.m_fill_color);
+            std::copy(origin, origin + 16, static_cast<char *>(m_fill_color));
+        }
+
+        fillc(size_t element_size, const void * fill_color) : m_element_size(element_size)
+        {
+            const char * origin = static_cast<const char *>(fill_color);
+            std::copy(origin, origin + 16, static_cast<char *>(m_fill_color));
+        }
+        void operator () (void *pelem, size_t, size_t, size_t) const
+        {
+            std::copy(m_fill_color, m_fill_color + m_element_size, static_cast<char *>(pelem));
+        }
+        void operator () (void *pelem, size_t, size_t, size_t)
+        {
+            std::copy(m_fill_color, m_fill_color + m_element_size, static_cast<char *>(pelem));
+        }
+    };
+
     /// Enqueues a command to fill \p image with \p fill_color.
     void enqueue_rawfill_image_walking(const image_object& image,
                              const void *fill_color,
@@ -1158,31 +1189,10 @@ public:
                              event * event_ = NULL)
     {
         size_t element_size = image.get_image_info<size_t>(CL_IMAGE_ELEMENT_SIZE);
-        struct fillc
-        {
-            size_t m_element_size;
-            char m_fill_color[16];
-            fillc(const fillc & o) : m_element_size(o.m_element_size)
-            {
-                const char * origin = static_cast<const char *>(o.m_fill_color);
-                std::copy(origin, origin + 16, static_cast<char *>(m_fill_color));
-            }
 
-            fillc(size_t element_size, const void * fill_color) : m_element_size(element_size)
-            {
-                const char * origin = static_cast<const char *>(fill_color);
-                std::copy(origin, origin + 16, static_cast<char *>(m_fill_color));
-            }
-            void operator () (void *pelem, size_t, size_t, size_t) const
-            {
-                std::copy(m_fill_color, m_fill_color + m_element_size, static_cast<char *>(pelem));
-            }
-            void operator () (void *pelem, size_t, size_t, size_t)
-            {
-                std::copy(m_fill_color, m_fill_color + m_element_size, static_cast<char *>(pelem));
-            }
-        };
-        enqueue_walk_image(image, fillc(element_size, fill_color), command_queue::map_write, origin, region, events, event_);
+        fillc f(element_size, fill_color);
+
+        enqueue_walk_image(image, f, command_queue::map_write, origin, region, events, event_);
     }
 
     /// \overload
