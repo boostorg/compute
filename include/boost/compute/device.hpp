@@ -44,7 +44,7 @@ class platform;
 class device
 {
 public:
-    enum type {
+    enum device_type {
         default_type = CL_DEVICE_TYPE_DEFAULT,
         cpu = CL_DEVICE_TYPE_CPU,
         gpu = CL_DEVICE_TYPE_GPU,
@@ -161,7 +161,7 @@ public:
     }
 
     /// Returns the type of the device.
-    cl_device_type get_type() const
+    cl_device_type type() const
     {
         return get_info<cl_device_type>(CL_DEVICE_TYPE);
     }

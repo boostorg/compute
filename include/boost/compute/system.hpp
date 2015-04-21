@@ -88,14 +88,14 @@ public:
     /// \throws no_device_found if no device with \p name is found.
     static device find_device(const std::string &device_name = std::string(),
                               const std::string &platform_name = std::string(),
-                              device::type device_type = device::all,
+                              device::device_type device_type = device::all,
                               uint_ min_version = 100)
     {
         BOOST_FOREACH(const device &device, devices()){
             std::string platform_name_ = device.platform().name();
             if((platform_name.empty() || platform_name_.find(platform_name.c_str()) != std::string::npos)
               && (device_name.empty() || device.name().find(device_name.c_str()) != std::string::npos)
-              && (device.get_type() & device_type)
+              && (device.type() & device_type)
               && device.get_version() >= min_version){
                 return device;
             }
@@ -229,11 +229,11 @@ private:
                     continue;
 
                 if (type && matches(std::string("GPU"), type))
-                    if (device.get_type() != device::gpu)
+                    if (device.type() != device::gpu)
                         continue;
 
                 if (type && matches(std::string("CPU"), type))
-                    if (device.get_type() != device::cpu)
+                    if (device.type() != device::cpu)
                         continue;
 
                 if (platform && !matches(device.platform().name(), platform))
@@ -248,14 +248,14 @@ private:
 
         // find the first gpu device
         BOOST_FOREACH(const device &device, devices_){
-            if(device.get_type() == device::gpu){
+            if(device.type() == device::gpu){
                 return device;
             }
         }
 
         // find the first cpu device
         BOOST_FOREACH(const device &device, devices_){
-            if(device.get_type() == device::cpu){
+            if(device.type() == device::cpu){
                 return device;
             }
         }

@@ -1012,7 +1012,7 @@ public:
     }
 
 
-#ifdef BOOST_NO_CXX11_LAMBDAS
+#if defined(BOOST_NO_CXX11_LAMBDAS) || !defined(BOOST_COMPUTE_USE_CPP11)
     // Resolve the lambda syntax sugar
     template<class Function>
     struct walk_image
@@ -1122,7 +1122,7 @@ public:
 
         size_t element_size = image.get_image_info<size_t>(CL_IMAGE_ELEMENT_SIZE);
 
-#ifdef BOOST_NO_CXX11_LAMBDAS
+#if defined(BOOST_NO_CXX11_LAMBDAS) || !defined(BOOST_COMPUTE_USE_CPP11)
         walk_image<Function> func(walk_elemets, pImage3D, origin3.data(), region3.data(), row_pitch, slice_pitch, element_size, user_ev);
 #else
         auto func = [=]()
