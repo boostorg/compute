@@ -170,9 +170,9 @@ public:
     }
 
     /// Returns the status of the event.
-    cl_int status() const
+    execution_status status() const
     {
-        return get_info<cl_int>(CL_EVENT_COMMAND_EXECUTION_STATUS);
+        return static_cast<execution_status>(get_info<cl_int>(CL_EVENT_COMMAND_EXECUTION_STATUS));
     }
 
     /// Returns the command type for the event.
@@ -210,7 +210,7 @@ public:
 
     /// Blocks until the actions corresponding to the event have
     /// completed.
-    void wait()
+    void wait() const
     {
         cl_int ret = clWaitForEvents(1, &m_event);
         if(ret != CL_SUCCESS){
@@ -230,7 +230,7 @@ public:
                           cl_event event, cl_int status, void *user_data
                       ),
                       cl_int status = CL_COMPLETE,
-                      void *user_data = 0)
+                      void *user_data = 0) const
     {
         cl_int ret = clSetEventCallback(m_event, status, callback, user_data);
         if(ret != CL_SUCCESS){
@@ -246,7 +246,7 @@ public:
     ///
     /// \opencl_version_warning{1,1}
     template<class Function>
-    void set_callback(Function callback, cl_int status = CL_COMPLETE)
+    void set_callback(Function callback, cl_int status = CL_COMPLETE) const
     {
         set_callback(
             event_callback_invoker,
@@ -294,7 +294,7 @@ public:
     }
 
     /// \internal_ (deprecated)
-    cl_int get_status() const
+    execution_status get_status() const
     {
         return status();
     }

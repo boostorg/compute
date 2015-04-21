@@ -44,22 +44,27 @@ class platform;
 class device
 {
 public:
-    enum type {
+    enum device_type {
+        default_type = CL_DEVICE_TYPE_DEFAULT,
         cpu = CL_DEVICE_TYPE_CPU,
         gpu = CL_DEVICE_TYPE_GPU,
-        accelerator = CL_DEVICE_TYPE_ACCELERATOR
+        accelerator = CL_DEVICE_TYPE_ACCELERATOR,
+#ifdef CL_DEVICE_TYPE_CUSTOM
+        custom = CL_DEVICE_TYPE_CUSTOM,
+#endif
+        all = CL_DEVICE_TYPE_ALL
     };
 
     /// Creates a null device object.
     device()
-        : m_id(0)
+        : m_id(0), m_version(0)
     {
     }
 
     /// Creates a new device object for \p id. If \p retain is \c true,
     /// the reference count for the device will be incremented.
     explicit device(cl_device_id id, bool retain = true)
-        : m_id(id)
+        : m_id(id), m_version(0)
     {
         #ifdef CL_VERSION_1_2
         if(m_id && retain && is_subdevice()){
@@ -72,7 +77,7 @@ public:
 
     /// Creates a new device object as a copy of \p other.
     device(const device &other)
-        : m_id(other.m_id)
+        : m_id(other.m_id), m_version(other.m_version)
     {
         #ifdef CL_VERSION_1_2
         if(m_id && is_subdevice()){
@@ -92,6 +97,7 @@ public:
             #endif
 
             m_id = other.m_id;
+            m_version = other.m_version;
 
             #ifdef CL_VERSION_1_2
             if(m_id && is_subdevice()){
@@ -106,9 +112,10 @@ public:
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// Move-constructs a new device object from \p other.
     device(device&& other) BOOST_NOEXCEPT
-        : m_id(other.m_id)
+        : m_id(other.m_id),  m_version(other.m_version)
     {
         other.m_id = 0;
+        other.m_version = 0;
     }
 
     /// Move-assigns the device from \p other to \c *this.
@@ -118,10 +125,12 @@ public:
         if(m_id && is_subdevice()){
             clReleaseDevice(m_id);
         }
-        #endif
+        #endif // CL_VERSION_1_2
 
         m_id = other.m_id;
+        m_version = other.m_version;
         other.m_id = 0;
+        other.m_version = 0;
 
         return *this;
     }
@@ -136,7 +145,7 @@ public:
                 clReleaseDevice(m_id)
             );
         }
-        #endif
+        #endif // CL_VERSION_1_2
     }
 
     /// Returns the ID of the device.
@@ -186,6 +195,25 @@ public:
     std::string version() const
     {
         return get_info<std::string>(CL_DEVICE_VERSION);
+    }
+
+    /// Returns the device version number: major.minor * 100 (eg. 1.1 is 110, 1.2 is 120, 2.0 is 200, 3.01 is 301)
+    uint_ get_version() const
+    {
+        if (m_version == 0) {
+            std::string strversion(version());
+            std::stringstream ss(strversion);
+            ushort_ major, minor;
+            ss.ignore(7); // 'OpenCL '
+            ss >> major;
+            ss.ignore(1); // '.'
+            bool is_zero = ss.peek() == '0';
+            ss >> minor;
+            if (!is_zero && minor < 10)
+                minor *= 10;
+            m_version = major * 100 + minor; // cache
+        }
+        return m_version;
     }
 
     /// Returns the driver version string.
@@ -281,17 +309,11 @@ public:
     bool is_subdevice() const
     {
     #if defined(CL_VERSION_1_2)
-        try {
+        if (get_version() >= 120)
             return get_info<cl_device_id>(CL_DEVICE_PARENT_DEVICE) != 0;
-        }
-        catch(opencl_error&){
-            // the get_info() call above will throw if the device's opencl version
-            // is less than 1.2 (in which case it can't be a sub-device).
+        else
+    #endif // CL_VERSION_1_2
             return false;
-        }
-    #else
-        return false;
-    #endif
     }
 
     /// Returns information about the device.
@@ -327,6 +349,9 @@ public:
     std::vector<device>
     partition(const cl_device_partition_property *properties) const
     {
+        if (get_version() < 120)
+            return std::vector<device>();
+
         // get sub-device count
         uint_ count = 0;
         int_ ret = clCreateSubDevices(m_id, properties, 0, 0, &count);
@@ -408,21 +433,14 @@ public:
     /// \internal_
     bool check_version(int major, int minor) const
     {
-        std::stringstream stream;
-        stream << version();
-
-        int actual_major, actual_minor;
-        stream.ignore(7); // 'OpenCL '
-        stream >> actual_major;
-        stream.ignore(1); // '.'
-        stream >> actual_minor;
-
-        return actual_major > major ||
-               (actual_major == major && actual_minor >= minor);
+        int ver = static_cast<int>(get_version());
+        int check = major * 100 + minor;
+        return check <= ver;
     }
 
 private:
     cl_device_id m_id;
+    mutable uint_ m_version; // Cached ICD OpenCL version number
 };
 
 /// \internal_

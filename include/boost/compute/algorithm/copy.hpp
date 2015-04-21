@@ -250,7 +250,7 @@ dispatch_copy_async(InputIterator first,
     }
 
     event event_ =
-        queue.enqueue_copy_buffer(
+		queue.enqueue_copy_buffer_async(
             first.get_buffer(),
             result.get_buffer(),
             first.get_index() * sizeof(value_type),

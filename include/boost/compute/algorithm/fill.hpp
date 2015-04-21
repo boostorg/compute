@@ -163,11 +163,11 @@ dispatch_fill_async(BufferIterator first,
     size_t offset = static_cast<size_t>(first.get_index());
 
     event event_ =
-        queue.enqueue_fill_buffer(first.get_buffer(),
-                                  &pattern,
-                                  sizeof(value_type),
-                                  offset * sizeof(value_type),
-                                  count * sizeof(value_type));
+		queue.enqueue_fill_buffer_async(first.get_buffer(),
+                                        &pattern,
+                                        sizeof(value_type),
+                                        offset * sizeof(value_type),
+                                        count * sizeof(value_type));
 
     return future<void>(event_);
 }

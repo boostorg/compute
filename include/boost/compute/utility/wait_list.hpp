@@ -97,7 +97,7 @@ public:
     /// Returns the number of events in the wait-list.
     uint_ size() const
     {
-        return m_events.size();
+        return static_cast<uint_>(m_events.size());
     }
 
     /// Removes all of the events from the wait-list.
@@ -128,9 +128,9 @@ public:
 
     /// Inserts the event from \p future into the wait-list.
     template<class T>
-    void insert(const future<T> &future)
+    void insert(const future<T> &future_)
     {
-        insert(future.get_event());
+        insert(future_.get_event());
     }
 
     /// Blocks until all of the events in the wait-list have completed.

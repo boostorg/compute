@@ -151,6 +151,15 @@ public:
         return m_mem != other.m_mem;
     }
 
+    /// Swaps \c this memory object with the \p other
+    memory_object& swap(memory_object &other)
+    {
+        cl_mem temp = m_mem;
+        m_mem = other.m_mem;
+        other.m_mem = temp;
+        return *this;
+    }
+
 private:
     #ifdef CL_VERSION_1_1
     /// \internal_

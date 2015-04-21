@@ -105,11 +105,11 @@ BOOST_AUTO_TEST_CASE(kernel_profiling)
     size_t global_work_size = 8;
 
     boost::compute::event event =
-        queue.enqueue_nd_range_kernel(kernel,
-                                      size_t(1),
-                                      &global_work_offset,
-                                      &global_work_size,
-                                      0);
+        queue.enqueue_nd_range_kernel_async(kernel,
+                                            size_t(1),
+                                            &global_work_offset,
+                                            &global_work_size,
+                                            0);
 
     // wait until kernel is finished
     event.wait();

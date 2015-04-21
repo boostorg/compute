@@ -11,6 +11,10 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_ACCUMULATE_HPP
 #define BOOST_COMPUTE_ALGORITHM_ACCUMULATE_HPP
 
+#ifdef _WIN32
+#define NOMINMAX
+#endif
+
 #include <boost/preprocessor/seq/for_each.hpp>
 
 #include <boost/compute/system.hpp>

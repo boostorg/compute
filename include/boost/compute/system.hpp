@@ -80,13 +80,23 @@ public:
         return default_device;
     }
 
-    /// Returns the device with \p name.
+    /// Returns the device with \p device_name contained in its name
+    /// with \p platform_name contained in its platform name
+    /// with a matching \p device_type and
+    /// a minimun version of \p min_version (eg. 1.1 is 101, 1.2 is 102, 2.0 is 200).
     ///
     /// \throws no_device_found if no device with \p name is found.
-    static device find_device(const std::string &name)
+    static device find_device(const std::string &device_name = std::string(),
+                              const std::string &platform_name = std::string(),
+                              device::device_type device_type = device::all,
+                              uint_ min_version = 100)
     {
         BOOST_FOREACH(const device &device, devices()){
-            if(device.name() == name){
+            std::string platform_name_ = device.platform().name();
+            if((platform_name.empty() || platform_name_.find(platform_name.c_str()) != std::string::npos)
+              && (device_name.empty() || device.name().find(device_name.c_str()) != std::string::npos)
+              && (device.type() & device_type)
+              && device.get_version() >= min_version){
                 return device;
             }
         }
