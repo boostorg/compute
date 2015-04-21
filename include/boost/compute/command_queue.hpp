@@ -1031,8 +1031,11 @@ public:
         event map_event, *pmap_event = NULL;
         user_event user_ev;
         wait_list unmap_wait;
-        extents<3> origin3 = { 0, 0, 0 };
-        extents<3> region3 = { image.width(), std::max((size_t)1, image.height()), std::max((size_t)1, image.depth()) };
+        extents<3> origin3( 0 );
+        extents<3> region3;
+        region3[0] = image.width();
+        region3[1] = (size_t)std::max((size_t)1, image.height());
+        region3[2] = (size_t)std::max((size_t)1, image.depth());
 
         if (origin) {
             origin3[0] = origin[0]; origin3[1] = origin[1]; origin3[2] = origin[2];
@@ -1090,8 +1093,8 @@ public:
                 m_element_size(element_size),
                 m_user_ev(user_ev)
             {
-                std::copy_n(origin, 3, m_origin3);
-                std::copy_n(region, 3, m_region3);
+                std::copy(origin, origin + 3, m_origin3);
+                std::copy(region, region + 3, m_region3);
             }
             void operator () () const
             {
@@ -1159,14 +1162,24 @@ public:
         {
             size_t m_element_size;
             char m_fill_color[16];
+            fillc(const fillc & o) : m_element_size(o.m_element_size)
+            {
+                const char * origin = static_cast<const char *>(o.m_fill_color);
+                std::copy(origin, origin + 16, static_cast<char *>(m_fill_color));
+            }
+
             fillc(size_t element_size, const void * fill_color) : m_element_size(element_size)
             {
-                std::copy_n(static_cast<const char *>(fill_color), 16, static_cast<char *>(m_fill_color));
+                const char * origin = static_cast<const char *>(fill_color);
+                std::copy(origin, origin + 16, static_cast<char *>(m_fill_color));
             }
             void operator () (void *pelem, size_t, size_t, size_t) const
             {
-                // Bug: m_fill_color must be converted
-                std::copy_n(m_fill_color, m_element_size, static_cast<char *>(pelem));
+                std::copy(m_fill_color, m_fill_color + m_element_size, static_cast<char *>(pelem));
+            }
+            void operator () (void *pelem, size_t, size_t, size_t)
+            {
+                std::copy(m_fill_color, m_fill_color + m_element_size, static_cast<char *>(pelem));
             }
         };
         enqueue_walk_image(image, fillc(element_size, fill_color), command_queue::map_write, origin, region, events, event_);
