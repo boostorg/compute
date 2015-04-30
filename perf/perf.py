@@ -128,6 +128,18 @@ def run_benchmark(name, sizes, vs=[]):
             "sort",
             "unique"
         ],
+        "bolt" : [
+            "accumulate",
+            "count",
+            "exclusive_scan",
+            "fill",
+            "inner_product",
+            "max_element",
+            "merge",
+            "partial_sum",
+            "saxpy",
+            "sort"
+        ],
         "tbb": [
             "accumulate",
             "merge",
@@ -187,7 +199,7 @@ if __name__ == '__main__':
 
     sizes = sorted(sizes)
 
-    competitors = ["tbb", "thrust", "stl"]
+    competitors = ["bolt", "tbb", "thrust", "stl"]
 
     report = run_benchmark(test, sizes, competitors)
 
