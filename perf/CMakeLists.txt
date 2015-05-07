@@ -8,6 +8,12 @@ endif()
 
 if(${BOOST_COMPUTE_THREAD_SAFE} AND NOT ${BOOST_COMPUTE_USE_CPP11})
   set(PERF_BOOST_COMPONENTS ${PERF_BOOST_COMPONENTS} thread)
+elseif(${BOOST_COMPUTE_HAVE_BOLT} AND ${BOOST_COMPUTE_USE_CPP11})
+  set(PERF_BOOST_COMPONENTS ${PERF_BOOST_COMPONENTS} thread)	
+endif()
+
+if(${BOOST_COMPUTE_HAVE_BOLT} AND ${BOOST_COMPUTE_USE_CPP11})
+  set(PERF_BOOST_COMPONENTS ${PERF_BOOST_COMPONENTS} date_time) 
 endif()
 
 find_package(Boost 1.48 REQUIRED COMPONENTS ${PERF_BOOST_COMPONENTS})
@@ -98,7 +104,7 @@ set(STL_BENCHMARKS
   stl_unique_copy
 )
 
-# stl benchmarks which rerquire c++11
+# stl benchmarks which require c++11
 if(${BOOST_COMPUTE_USE_CPP11})
   list(APPEND
     STL_BENCHMARKS
@@ -158,4 +164,31 @@ if(${BOOST_COMPUTE_HAVE_TBB})
     add_executable(${PERF_TARGET} perf_${BENCHMARK}.cpp)
     target_link_libraries(${PERF_TARGET} ${TBB_LIBRARIES} ${Boost_LIBRARIES})
   endforeach()
+endif()
+
+# bolt c++ template lib benchmarks (for comparison)
+if(${BOOST_COMPUTE_HAVE_BOLT} AND ${BOOST_COMPUTE_USE_CPP11})
+  find_package(Bolt REQUIRED)
+  include_directories(${BOLT_INCLUDE_DIRS})
+
+  set(BOLT_BENCHMARKS
+    bolt_accumulate
+    bolt_count
+    bolt_exclusive_scan
+    bolt_fill
+    bolt_inner_product
+    bolt_max_element
+    bolt_merge
+    bolt_partial_sum
+    bolt_saxpy
+    bolt_sort
+  )
+
+  foreach(BENCHMARK ${BOLT_BENCHMARKS})
+    set(PERF_TARGET perf_${BENCHMARK})
+    add_executable(${PERF_TARGET} perf_${BENCHMARK}.cpp)
+    target_link_libraries(${PERF_TARGET} ${OPENCL_LIBRARIES} ${BOLT_LIBRARIES} ${Boost_LIBRARIES})
+  endforeach()
+elseif(${BOOST_COMPUTE_HAVE_BOLT} AND NOT ${BOOST_COMPUTE_USE_CPP11})
+  message(WARNING "BOOST_COMPUTE_USE_CPP11 must be ON for building Bolt C++ Template Library performance tests.")
 endif()

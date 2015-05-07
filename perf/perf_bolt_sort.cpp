@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------//
-// Copyright (c) 2013-2014 Kyle Lutz <kyle.r.lutz@gmail.com>
+// Copyright (c) 2015 Jakub Szuppe <j.szuppe@gmail.com>
 //
 // Distributed under the Boost Software License, Version 1.0
 // See accompanying file LICENSE_1_0.txt or copy at
@@ -10,12 +10,11 @@
 
 #include <algorithm>
 #include <cstdlib>
+#include <vector>
 
-#include <thrust/copy.h>
-#include <thrust/device_vector.h>
-#include <thrust/generate.h>
-#include <thrust/host_vector.h>
-#include <thrust/scan.h>
+#include <bolt/cl/sort.h>
+#include <bolt/cl/copy.h>
+#include <bolt/cl/device_vector.h>
 
 #include "perf.hpp"
 
@@ -24,24 +23,28 @@ int main(int argc, char *argv[])
     perf_parse_args(argc, argv);
 
     std::cout << "size: " << PERF_N << std::endl;
-    thrust::host_vector<int> h_vec = generate_random_vector<int>(PERF_N);
 
-    // transfer data to the device
-    thrust::device_vector<int> d_vec = h_vec;
+    ::cl::Device device = bolt::cl::control::getDefault().getDevice();
+    std::cout << "device: " << device.getInfo<CL_DEVICE_NAME>() << std::endl;
+
+    // create host vector
+    std::vector<int> h_vec = generate_random_vector<int>(PERF_N);
+    // create device vector
+    bolt::cl::device_vector<int> d_vec(PERF_N);
 
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
-        d_vec = h_vec;
+        // transfer data to the device
+        bolt::cl::copy(h_vec.begin(), h_vec.end(), d_vec.begin());
 
         t.start();
-        thrust::exclusive_scan(d_vec.begin(), d_vec.end(), d_vec.begin());
-        cudaDeviceSynchronize();
+        bolt::cl::sort(d_vec.begin(), d_vec.end());
         t.stop();
     }
     std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
 
     // transfer data back to host
-    thrust::copy(d_vec.begin(), d_vec.end(), h_vec.begin());
+    bolt::cl::copy(d_vec.begin(), d_vec.end(), h_vec.begin());
 
     return 0;
 }
