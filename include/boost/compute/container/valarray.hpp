@@ -17,17 +17,17 @@
 #include <boost/static_assert.hpp>
 
 #include <boost/compute/buffer.hpp>
-#include <boost/compute/functional.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/max_element.hpp>
 #include <boost/compute/algorithm/min_element.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/algorithm/accumulate.hpp>
+#include <boost/compute/detail/buffer_value.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/functional/bind.hpp>
-#include <boost/compute/detail/buffer_value.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/type_traits.hpp>
 
 namespace boost {
 namespace compute {
@@ -101,6 +101,7 @@ public:
 
     valarray<T> operator+() const
     {
+        //  This operator can be used with any type.
         valarray<T> result(size());
         copy(begin(), end(), result.begin());
         return result;
@@ -108,17 +109,26 @@ public:
 
     valarray<T> operator-() const
     {
+        BOOST_STATIC_ASSERT_MSG(
+            is_fundamental<T>::value,
+            "This operator can be used with all OpenCL built-in scalar"
+            " and vector types"
+        );
         valarray<T> result(size());
-        transform(begin(), end(), result.begin(),
-            bind(minus<T>(), T(0), placeholders::_1));
+        BOOST_COMPUTE_FUNCTION(T, unary_minus, (T x),
+        {
+            return -x;
+        });
+        transform(begin(), end(), result.begin(), unary_minus);
         return result;
     }
 
     valarray<T> operator~() const
     {
         BOOST_STATIC_ASSERT_MSG(
-            !is_floating_point<T>::value,
-            "This operator can't be used with floating point types"
+            (is_fundamental<T>::value && !is_floating_point<T>::value),
+            "This operator can be used with all OpenCL built-in scalar"
+            " and vector types except the built-in scalar and vector float types"
         );
         valarray<T> result(size());
         BOOST_COMPUTE_FUNCTION(T, bitwise_not, (T x),
@@ -134,6 +144,11 @@ public:
     /// 1 means true, 0 means false.
     valarray<char> operator!() const
     {
+        BOOST_STATIC_ASSERT_MSG(
+            is_fundamental<T>::value,
+            "This operator can be used with all OpenCL built-in scalar"
+            " and vector types"
+        );
         valarray<char> result(size());
         BOOST_COMPUTE_FUNCTION(char, logical_not, (T x),
         {
@@ -255,7 +270,7 @@ private:
     { \
         assert \
         transform(begin(), end(), begin(), \
-            bind(op_name<T>(), placeholders::_1, val)); \
+            ::boost::compute::bind(op_name<T>(), placeholders::_1, val)); \
         return *this; \
     } \
     \
@@ -270,7 +285,13 @@ private:
 
 /// \internal_
 #define BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT_ANY(op, op_name) \
-    BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(op, op_name, ) \
+    BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(op, op_name, \
+        BOOST_STATIC_ASSERT_MSG( \
+            is_fundamental<T>::value, \
+            "This operator can be used with all OpenCL built-in scalar" \
+            " and vector types" \
+        ); \
+    )
 
 /// \internal_
 /// For some operators class T can't be floating point type.
@@ -278,8 +299,9 @@ private:
 #define BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT_NO_FP(op, op_name) \
     BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(op, op_name, \
         BOOST_STATIC_ASSERT_MSG( \
-            !is_floating_point<T>::value, \
-            "This operator can't be used with floating point types" \
+            (is_fundamental<T>::value && !is_floating_point<T>::value), \
+            "This operator can be used with all OpenCL built-in scalar" \
+            " and vector types except the built-in scalar and vector float types" \
         ); \
     )
 
@@ -300,7 +322,7 @@ BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT_NO_FP(>>, shift_right)
 BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(%, modulus,
     BOOST_STATIC_ASSERT_MSG(
         is_integral<T>::value,
-        "This operator can be used only with integer types"
+        "This operator can be used only with OpenCL built-in integer types"
     );
 )
 
@@ -328,7 +350,7 @@ BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(%, modulus,
         assert \
         valarray<T> result(rhs.size()); \
         transform(&rhs[0], &rhs[rhs.size()], &result[0], \
-            bind(op_name<T>(), val, placeholders::_1)); \
+            ::boost::compute::bind(op_name<T>(), val, placeholders::_1)); \
         return result; \
     } \
     \
@@ -338,9 +360,19 @@ BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(%, modulus,
         assert \
         valarray<T> result(lhs.size()); \
         transform(&lhs[0], &lhs[lhs.size()], &result[0], \
-            bind(op_name<T>(), placeholders::_1, val)); \
+            ::boost::compute::bind(op_name<T>(), placeholders::_1, val)); \
         return result; \
     }
+
+/// \internal_
+#define BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR_ANY(op, op_name) \
+    BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR(op, op_name, \
+        BOOST_STATIC_ASSERT_MSG( \
+            is_fundamental<T>::value, \
+            "This operator can be used with all OpenCL built-in scalar" \
+            " and vector types" \
+        ); \
+    )
 
 /// \internal_
 /// For some operators class T can't be floating point type.
@@ -348,14 +380,11 @@ BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(%, modulus,
 #define BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR_NO_FP(op, op_name) \
     BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR(op, op_name, \
         BOOST_STATIC_ASSERT_MSG( \
-            !is_floating_point<T>::value, \
-            "This operator can't be used with floating point types" \
+            is_fundamental<T>::value && !is_floating_point<T>::value, \
+            "This operator can be used with all OpenCL built-in scalar" \
+            " and vector types except the built-in scalar and vector float types" \
         ); \
     )
-
-/// \internal_
-#define BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR_ANY(op, op_name) \
-    BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR(op, op_name, ) \
 
 // defining binary operators for valarray
 BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR_ANY(+, plus)
@@ -383,6 +412,11 @@ BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR_NO_FP(>>, shift_right)
     template<class T> \
     valarray<char> operator op (const valarray<T>& lhs, const valarray<T>& rhs) \
     { \
+        BOOST_STATIC_ASSERT_MSG( \
+            is_fundamental<T>::value, \
+            "This operator can be used with all OpenCL built-in scalar" \
+            " and vector types" \
+        ); \
         valarray<char> result(lhs.size()); \
         transform(&lhs[0], &lhs[lhs.size()], &rhs[0], \
             &result[0], op_name<T>()); \
@@ -392,18 +426,28 @@ BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR_NO_FP(>>, shift_right)
     template<class T> \
     valarray<char> operator op (const T& val, const valarray<T>& rhs) \
     { \
+        BOOST_STATIC_ASSERT_MSG( \
+            is_fundamental<T>::value, \
+            "This operator can be used with all OpenCL built-in scalar" \
+            " and vector types" \
+        ); \
         valarray<char> result(rhs.size()); \
         transform(&rhs[0], &rhs[rhs.size()], &result[0], \
-            bind(op_name<T>(), val, placeholders::_1)); \
+            ::boost::compute::bind(op_name<T>(), val, placeholders::_1)); \
         return result; \
     } \
     \
     template<class T> \
     valarray<char> operator op (const valarray<T>& lhs, const T& val) \
     { \
+        BOOST_STATIC_ASSERT_MSG( \
+            is_fundamental<T>::value, \
+            "This operator can be used with all OpenCL built-in scalar" \
+            " and vector types" \
+        ); \
         valarray<char> result(lhs.size()); \
         transform(&lhs[0], &lhs[lhs.size()], &result[0], \
-            bind(op_name<T>(), placeholders::_1, val)); \
+            ::boost::compute::bind(op_name<T>(), placeholders::_1, val)); \
         return result; \
     }
 
