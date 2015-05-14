@@ -15,6 +15,7 @@
 #include <valarray>
 
 #include <boost/static_assert.hpp>
+#include <boost/type_traits.hpp>
 
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/algorithm/copy.hpp>
@@ -126,7 +127,8 @@ public:
     valarray<T> operator~() const
     {
         BOOST_STATIC_ASSERT_MSG(
-            (is_fundamental<T>::value && !is_floating_point<T>::value),
+            is_fundamental<T>::value &&
+                !is_floating_point<typename scalar_type<T>::type>::value,
             "This operator can be used with all OpenCL built-in scalar"
             " and vector types except the built-in scalar and vector float types"
         );
@@ -299,7 +301,8 @@ private:
 #define BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT_NO_FP(op, op_name) \
     BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(op, op_name, \
         BOOST_STATIC_ASSERT_MSG( \
-            (is_fundamental<T>::value && !is_floating_point<T>::value), \
+            is_fundamental<T>::value && \
+                !is_floating_point<typename scalar_type<T>::type>::value, \
             "This operator can be used with all OpenCL built-in scalar" \
             " and vector types except the built-in scalar and vector float types" \
         ); \
@@ -321,7 +324,7 @@ BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT_NO_FP(>>, shift_right)
 // See OpenCL specification.
 BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(%, modulus,
     BOOST_STATIC_ASSERT_MSG(
-        is_integral<T>::value,
+        is_integral<typename scalar_type<T>::type>::value,
         "This operator can be used only with OpenCL built-in integer types"
     );
 )
@@ -380,7 +383,8 @@ BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(%, modulus,
 #define BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR_NO_FP(op, op_name) \
     BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR(op, op_name, \
         BOOST_STATIC_ASSERT_MSG( \
-            is_fundamental<T>::value && !is_floating_point<T>::value, \
+            is_fundamental<T>::value && \
+                !is_floating_point<typename scalar_type<T>::type>::value, \
             "This operator can be used with all OpenCL built-in scalar" \
             " and vector types except the built-in scalar and vector float types" \
         ); \
