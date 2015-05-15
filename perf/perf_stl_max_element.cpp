@@ -28,13 +28,16 @@ int main(int argc, char *argv[])
     std::vector<int> host_vector(PERF_N);
     std::generate(host_vector.begin(), host_vector.end(), rand_int);
 
+    int max = 0;
+
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
         t.start();
-        std::max_element(host_vector.begin(), host_vector.end());
+        max = *(std::max_element(host_vector.begin(), host_vector.end()));
         t.stop();
     }
     std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
+    std::cout << "max: " << max << std::endl;
 
     return 0;
 }
