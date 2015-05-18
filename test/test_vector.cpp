@@ -5,7 +5,7 @@
 // See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt
 //
-// See http://kylelutz.github.com/compute for more information.
+// See http://boostorg.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
 #define BOOST_TEST_MODULE TestVector
@@ -269,7 +269,7 @@ BOOST_AUTO_TEST_CASE(vector_erase_remove)
     CHECK_RANGE_EQUAL(int, 3, vector, (3, 5, 1));
 }
 
-// see issue #132 (https://github.com/kylelutz/compute/issues/132)
+// see issue #132 (https://github.com/boostorg/compute/issues/132)
 BOOST_AUTO_TEST_CASE(swap_between_contexts)
 {
     compute::context ctx1(device);

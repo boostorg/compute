@@ -35,6 +35,6 @@ To explicitly enable variadic support for Boost.Preprocessor add
 [endsect]
 
 If you have an additional platform you would like to see supported please
-[@https://github.com/kylelutz/compute/issues/new submit] a bug-report.
+[@https://github.com/boostorg/compute/issues/new submit] a bug-report.
 
 [endsect]

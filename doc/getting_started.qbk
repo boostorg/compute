@@ -9,7 +9,7 @@ following command:
 [endsect]
 
 ``
-git clone git://github.com/kylelutz/compute.git
+git clone git://github.com/boostorg/compute.git
 ``
 
 Ubuntu users can install Boost.Compute from the PPA:
@@ -116,7 +116,7 @@ Ensure you also find and setup the OpenCL libraries for your system.
 [section Support]
 
 Bugs and issues can be reported to the
-[@https://github.com/kylelutz/compute/issues?state=open issue tracker].
+[@https://github.com/boostorg/compute/issues?state=open issue tracker].
 
 There is also a mailing list for users and developers at
 [@https://groups.google.com/forum/#!forum/boost-compute].

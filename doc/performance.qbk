@@ -4,7 +4,7 @@ The following tests were run with an NVIDIA Tesla K40c GPU on a system
 with an Intel Core i7 920 2.67GHz CPU.
 
 Source code for the benchmarks can be found under the
-[@https://github.com/kylelutz/compute/tree/master/perf perf] directory. All
+[@https://github.com/boostorg/compute/tree/master/perf perf] directory. All
 benchmarks were compiled with optimizations enabled (i.e. "gcc -O3").
 
 [h3 Accumulate]
