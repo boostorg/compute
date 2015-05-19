@@ -1,0 +1,18 @@
+clone_folder: C:\boost.compute
+platform:
+  - x86
+  - x64
+os:
+  - Visual Studio 2015 CTP 6
+configuration:
+  - Debug
+  - Release
+before_build:
+  - ps: Start-FileDownload 'http://registrationcenter.intel.com/irc_nas/5198/opencl_runtime_15.1_x64_setup.msi'
+  - ps: msiexec /i opencl_runtime_15.1_x64_setup.msi /v
+  - dir cl.h /s
+  - mkdir build && cd build
+  - cmake .. -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON
+  - cmake --build .
+test_script:
+  - ctest
