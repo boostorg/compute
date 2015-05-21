@@ -169,7 +169,7 @@ endif()
 # bolt c++ template lib benchmarks (for comparison)
 if(${BOOST_COMPUTE_HAVE_BOLT} AND ${BOOST_COMPUTE_USE_CPP11})
   find_package(Bolt REQUIRED)
-  include_directories(${BOLT_INCLUDE_DIRS})
+  include_directories(SYSTEM ${BOLT_INCLUDE_DIRS})
 
   set(BOLT_BENCHMARKS
     bolt_accumulate
