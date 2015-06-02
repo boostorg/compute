@@ -5,7 +5,7 @@
 // See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt
 //
-// See http://kylelutz.github.com/compute for more information.
+// See http://boostorg.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
 #ifndef BOOST_COMPUTE_DETAIL_META_KERNEL_HPP
@@ -335,7 +335,8 @@ public:
         std::string source = this->source();
 
         // generate cache key
-        std::string cache_key = "__boost_meta_kernel_" + detail::sha1(source);
+        std::string cache_key = "__boost_meta_kernel_" +
+            static_cast<std::string>(detail::sha1(source));
 
         // load program cache
         boost::shared_ptr<program_cache> cache =

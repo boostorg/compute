@@ -5,7 +5,7 @@
 // See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt
 //
-// See http://kylelutz.github.com/compute for more information.
+// See http://boostorg.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
 #ifndef BOOST_COMPUTE_FUNCTIONAL_OPERATORS_HPP
@@ -92,6 +92,8 @@ BOOST_COMPUTE_DECLARE_BINARY_OPERATOR(logical_or, "||", T, T)
 BOOST_COMPUTE_DECLARE_BINARY_OPERATOR(bit_and, "&", T, T)
 BOOST_COMPUTE_DECLARE_BINARY_OPERATOR(bit_or, "|", T, T)
 BOOST_COMPUTE_DECLARE_BINARY_OPERATOR(bit_xor, "^", T, T)
+BOOST_COMPUTE_DECLARE_BINARY_OPERATOR(shift_left, "<<", T, T)
+BOOST_COMPUTE_DECLARE_BINARY_OPERATOR(shift_right, ">>", T, T)
 
 } // end compute namespace
 } // end boost namespace

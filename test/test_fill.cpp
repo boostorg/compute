@@ -5,11 +5,13 @@
 // See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt
 //
-// See http://kylelutz.github.com/compute for more information.
+// See http://boostorg.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
 #define BOOST_TEST_MODULE TestFill
 #include <boost/test/unit_test.hpp>
+#include <boost/test/test_case_template.hpp>
+#include <boost/mpl/list.hpp>
 
 #include <boost/compute/algorithm/equal.hpp>
 #include <boost/compute/algorithm/fill.hpp>
@@ -17,89 +19,218 @@
 #include <boost/compute/async/future.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/svm.hpp>
+#include <boost/compute/type_traits.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
-namespace compute = boost::compute;
 
-BOOST_AUTO_TEST_CASE(fill_int)
-{
-    bc::vector<int> vector(1000);
-    bc::fill(vector.begin(), vector.end(), 0);
-    bc::system::finish();
-    BOOST_CHECK_EQUAL(vector.front(), 0);
-    BOOST_CHECK_EQUAL(vector.back(), 0);
+typedef boost::mpl::list
+        <bc::char_, bc::uchar_, bc::int_, bc::uint_,
+         bc::long_, bc::ulong_, bc::float_, bc::double_>
+        scalar_types;
 
-    bc::fill(vector.begin(), vector.end(), 100);
+template<class T>
+inline void test_fill(T v1, T v2, T v3, bc::command_queue queue) {
+    bc::vector<T> vector(4);
+    bc::fill(vector.begin(), vector.end(), v1);
     bc::system::finish();
-    BOOST_CHECK_EQUAL(vector.front(), 100);
-    BOOST_CHECK_EQUAL(vector.back(), 100);
+    CHECK_RANGE_EQUAL(T, 4, vector, (v1, v1, v1, v1));
 
-    bc::fill(vector.begin() + 500, vector.end(), 42);
+    vector.resize(1000);
+    bc::fill(vector.begin(), vector.end(), v2);
     bc::system::finish();
-    BOOST_CHECK_EQUAL(vector.front(), 100);
-    BOOST_CHECK_EQUAL(vector[499], 100);
-    BOOST_CHECK_EQUAL(vector[500], 42);
-    BOOST_CHECK_EQUAL(vector.back(), 42);
+    BOOST_CHECK_EQUAL(vector.front(), v2);
+    BOOST_CHECK_EQUAL(vector.back(), v2);
+
+    bc::fill(vector.begin() + 500, vector.end(), v3);
+    bc::system::finish();
+    BOOST_CHECK_EQUAL(vector.front(), v2);
+    BOOST_CHECK_EQUAL(vector[499], v2);
+    BOOST_CHECK_EQUAL(vector[500], v3);
+    BOOST_CHECK_EQUAL(vector.back(), v3);
 }
 
-BOOST_AUTO_TEST_CASE(fill_int2)
+BOOST_AUTO_TEST_CASE_TEMPLATE( fill_scalar, S, scalar_types )
 {
-    using bc::int2_;
-
-    bc::vector<int2_> vector(10);
-    bc::fill(vector.begin(), vector.end(), int2_(4, 2));
-    CHECK_RANGE_EQUAL(int2_, 10, vector,
-        (int2_(4, 2),
-         int2_(4, 2),
-         int2_(4, 2),
-         int2_(4, 2),
-         int2_(4, 2),
-         int2_(4, 2),
-         int2_(4, 2),
-         int2_(4, 2),
-         int2_(4, 2),
-         int2_(4, 2))
-    );
-
-    bc::fill(vector.begin(), vector.end(), int2_(-2, -4));
-    CHECK_RANGE_EQUAL(int2_, 10, vector,
-        (int2_(-2, -4),
-         int2_(-2, -4),
-         int2_(-2, -4),
-         int2_(-2, -4),
-         int2_(-2, -4),
-         int2_(-2, -4),
-         int2_(-2, -4),
-         int2_(-2, -4),
-         int2_(-2, -4),
-         int2_(-2, -4))
-    );
+    S v1 = S(1.5f);
+    S v2 = S(2.5f);
+    S v3 = S(42.0f);
+    test_fill(v1, v2, v3, queue);
 }
 
-BOOST_AUTO_TEST_CASE(fill_n_float)
+BOOST_AUTO_TEST_CASE_TEMPLATE( fill_vec2, S, scalar_types )
 {
-    bc::vector<float> vector(4);
-    bc::fill_n(vector.begin(), 4, 1.5f);
-    CHECK_RANGE_EQUAL(float, 4, vector, (1.5f, 1.5f, 1.5f, 1.5f));
+    typedef typename bc::make_vector_type<S, 2>::type T;
+    S s1 = S(1.5f);
+    S s2 = S(2.5f);
+    S s3 = S(42.0f);
+    S s4 = S(84.0f);
 
-    bc::fill_n(vector.begin(), 3, 2.75f);
-    CHECK_RANGE_EQUAL(float, 4, vector, (2.75f, 2.75f, 2.75f, 1.5f));
+    T v1 = T(s1, s2);
+    T v2 = T(s3, s4);
+    T v3 = T(s2, s1);
+    test_fill(v1, v2, v3, queue);
+}
 
-    bc::fill_n(vector.begin() + 1, 2, -3.2f);
-    CHECK_RANGE_EQUAL(float, 4, vector, (2.75f, -3.2f, -3.2f, 1.5f));
+BOOST_AUTO_TEST_CASE_TEMPLATE( fill_vec4, S, scalar_types )
+{
+    typedef typename bc::make_vector_type<S, 4>::type T;
+    S s1 = S(1.5f);
+    S s2 = S(2.5f);
+    S s3 = S(42.0f);
+    S s4 = S(84.0f);
 
-    bc::fill_n(vector.begin(), 4, 0.0f);
-    CHECK_RANGE_EQUAL(float, 4, vector, (0.0f, 0.0f, 0.0f, 0.0f));
+    T v1 = T(s1, s2, s3, s4);
+    T v2 = T(s3, s4, s1, s2);
+    T v3 = T(s4, s3, s2, s1);
+    test_fill(v1, v2, v3, queue);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE( fill_vec8, S, scalar_types )
+{
+    typedef typename bc::make_vector_type<S, 8>::type T;
+    S s1 = S(1.5f);
+    S s2 = S(2.5f);
+    S s3 = S(42.0f);
+    S s4 = S(84.0f);
+    S s5 = S(122.5f);
+    S s6 = S(131.5f);
+    S s7 = S(142.0f);
+    S s8 = S(254.0f);
+
+    T v1 = T(s1, s2, s3, s4, s5, s6, s7, s8);
+    T v2 = T(s3, s4, s1, s2, s7, s8, s5, s6);
+    T v3 = T(s4, s3, s2, s1, s8, s7, s6, s5);
+    test_fill(v1, v2, v3, queue);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE( fill_vec16, S, scalar_types )
+{
+    typedef typename bc::make_vector_type<S, 16>::type T;
+    S s1 = S(1.5f);
+    S s2 = S(2.5f);
+    S s3 = S(42.0f);
+    S s4 = S(84.0f);
+    S s5 = S(122.5f);
+    S s6 = S(131.5f);
+    S s7 = S(142.0f);
+    S s8 = S(254.0f);
+
+    T v1 = T(s1, s2, s3, s4, s5, s6, s7, s8, s1, s2, s3, s4, s5, s6, s7, s8);
+    T v2 = T(s3, s4, s1, s2, s7, s8, s5, s6, s4, s3, s2, s1, s8, s7, s6, s5);
+    T v3 = T(s4, s3, s2, s1, s8, s7, s6, s5, s8, s7, s6, s5, s4, s3, s2, s1);
+    test_fill(v1, v2, v3, queue);
+}
+
+template<class T>
+inline void test_fill_n(T v1, T v2, T v3, bc::command_queue queue) {
+    bc::vector<T> vector(4);
+    bc::fill_n(vector.begin(), 4, v1);
+    bc::system::finish();
+    CHECK_RANGE_EQUAL(T, 4, vector, (v1, v1, v1, v1));
+
+    bc::fill_n(vector.begin(), 3, v2);
+    bc::system::finish();
+    CHECK_RANGE_EQUAL(T, 4, vector, (v2, v2, v2, v1));
+
+    bc::fill_n(vector.begin() + 1, 2, v3);
+    bc::system::finish();
+    CHECK_RANGE_EQUAL(T, 4, vector, (v2, v3, v3, v1));
+
+    bc::fill_n(vector.begin(), 4, v2);
+    bc::system::finish();
+    CHECK_RANGE_EQUAL(T, 4, vector, (v2, v2, v2, v2));
+
+    // fill last element
+    bc::fill_n(vector.end() - 1, 1, v3);
+    bc::system::finish();
+    CHECK_RANGE_EQUAL(T, 4, vector, (v2, v2, v2, v3));
+
+    // fill first element
+    bc::fill_n(vector.begin(), 1, v1);
+    bc::system::finish();
+    CHECK_RANGE_EQUAL(T, 4, vector, (v1, v2, v2, v3));
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE( fill_n_scalar, S, scalar_types )
+{
+    S v1 = S(1.5f);
+    S v2 = S(2.5f);
+    S v3 = S(42.0f);
+    test_fill_n(v1, v2, v3, queue);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE( fill_n_vec2, S, scalar_types )
+{
+    typedef typename bc::make_vector_type<S, 2>::type T;
+    S s1 = S(1.5f);
+    S s2 = S(2.5f);
+    S s3 = S(42.0f);
+    S s4 = S(84.0f);
+
+    T v1 = T(s1, s2);
+    T v2 = T(s3, s4);
+    T v3 = T(s2, s1);
+    test_fill_n(v1, v2, v3, queue);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE( fill_n_vec4, S, scalar_types )
+{
+    typedef typename bc::make_vector_type<S, 4>::type T;
+    S s1 = S(1.5f);
+    S s2 = S(2.5f);
+    S s3 = S(42.0f);
+    S s4 = S(84.0f);
+
+    T v1 = T(s1, s2, s3, s4);
+    T v2 = T(s3, s4, s1, s2);
+    T v3 = T(s4, s3, s2, s1);
+    test_fill_n(v1, v2, v3, queue);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE( fill_n_vec8, S, scalar_types )
+{
+    typedef typename bc::make_vector_type<S, 8>::type T;
+    S s1 = S(1.5f);
+    S s2 = S(2.5f);
+    S s3 = S(42.0f);
+    S s4 = S(84.0f);
+    S s5 = S(122.5f);
+    S s6 = S(131.5f);
+    S s7 = S(142.0f);
+    S s8 = S(254.0f);
+
+    T v1 = T(s1, s2, s3, s4, s5, s6, s7, s8);
+    T v2 = T(s3, s4, s1, s2, s7, s8, s5, s6);
+    T v3 = T(s4, s3, s2, s1, s8, s7, s6, s5);
+    test_fill_n(v1, v2, v3, queue);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE( fill_n_vec16, S, scalar_types )
+{
+    typedef typename bc::make_vector_type<S, 16>::type T;
+    S s1 = S(1.5f);
+    S s2 = S(2.5f);
+    S s3 = S(42.0f);
+    S s4 = S(84.0f);
+    S s5 = S(122.5f);
+    S s6 = S(131.5f);
+    S s7 = S(142.0f);
+    S s8 = S(254.0f);
+
+    T v1 = T(s1, s2, s3, s4, s5, s6, s7, s8, s1, s2, s3, s4, s5, s6, s7, s8);
+    T v2 = T(s3, s4, s1, s2, s7, s8, s5, s6, s4, s3, s2, s1, s8, s7, s6, s5);
+    T v3 = T(s4, s3, s2, s1, s8, s7, s6, s5, s8, s7, s6, s5, s4, s3, s2, s1);
+    test_fill_n(v1, v2, v3, queue);
 }
 
 BOOST_AUTO_TEST_CASE(check_fill_type)
 {
-    compute::vector<int> vector(5, context);
-    compute::future<void> future =
-        compute::fill_async(vector.begin(), vector.end(), 42, queue);
+    bc::vector<int> vector(5, context);
+    bc::future<void> future =
+        bc::fill_async(vector.begin(), vector.end(), 42, queue);
     future.wait();
 
     #ifdef CL_VERSION_1_2
@@ -114,94 +245,67 @@ BOOST_AUTO_TEST_CASE(check_fill_type)
     #endif
 }
 
-BOOST_AUTO_TEST_CASE(fill_uchar4)
-{
-    using compute::uchar4_;
-
-    // fill vector with uchar4 pattern
-    compute::vector<uchar4_> vec(4, context);
-    compute::fill(vec.begin(), vec.end(), uchar4_(32, 64, 128, 255), queue);
-
-    // check results
-    std::vector<uchar4_> result(4);
-    compute::copy(vec.begin(), vec.end(), result.begin(), queue);
-    BOOST_CHECK_EQUAL(result[0], uchar4_(32, 64, 128, 255));
-    BOOST_CHECK_EQUAL(result[1], uchar4_(32, 64, 128, 255));
-    BOOST_CHECK_EQUAL(result[2], uchar4_(32, 64, 128, 255));
-    BOOST_CHECK_EQUAL(result[3], uchar4_(32, 64, 128, 255));
-}
-
 BOOST_AUTO_TEST_CASE(fill_clone_buffer)
 {
     int data[] = { 1, 2, 3, 4 };
-    compute::vector<int> vec(data, data + 4, queue);
+    bc::vector<int> vec(data, data + 4, queue);
     CHECK_RANGE_EQUAL(int, 4, vec, (1, 2, 3, 4));
 
-    compute::buffer cloned_buffer = vec.get_buffer().clone(queue);
+    bc::buffer cloned_buffer = vec.get_buffer().clone(queue);
     BOOST_CHECK(
-        compute::equal(
+        bc::equal(
             vec.begin(),
             vec.end(),
-            compute::make_buffer_iterator<int>(cloned_buffer, 0),
+            bc::make_buffer_iterator<int>(cloned_buffer, 0),
             queue
         )
     );
 
-    compute::fill(vec.begin(), vec.end(), 5, queue);
+    bc::fill(vec.begin(), vec.end(), 5, queue);
     BOOST_CHECK(
-        !compute::equal(
+        !bc::equal(
             vec.begin(),
             vec.end(),
-            compute::make_buffer_iterator<int>(cloned_buffer, 0),
+            bc::make_buffer_iterator<int>(cloned_buffer, 0),
             queue
         )
     );
 
-    compute::fill(
-        compute::make_buffer_iterator<int>(cloned_buffer, 0),
-        compute::make_buffer_iterator<int>(cloned_buffer, 4),
+    bc::fill(
+        bc::make_buffer_iterator<int>(cloned_buffer, 0),
+        bc::make_buffer_iterator<int>(cloned_buffer, 4),
         5,
         queue
     );
     BOOST_CHECK(
-        compute::equal(
+        bc::equal(
             vec.begin(),
             vec.end(),
-            compute::make_buffer_iterator<int>(cloned_buffer, 0),
+            bc::make_buffer_iterator<int>(cloned_buffer, 0),
             queue
         )
     );
-}
-
-BOOST_AUTO_TEST_CASE(fill_last_value)
-{
-    compute::vector<int> vec(4, context);
-    compute::fill_n(vec.begin(), 4, 0, queue);
-    CHECK_RANGE_EQUAL(int, 4, vec, (0, 0, 0, 0));
-
-    compute::fill_n(vec.end() - 1, 1, 7, queue);
-    CHECK_RANGE_EQUAL(int, 4, vec, (0, 0, 0, 7));
 }
 
 #ifdef CL_VERSION_2_0
 BOOST_AUTO_TEST_CASE(fill_svm_buffer)
 {
-    compute::svm_ptr<int> ptr = compute::svm_alloc<int>(context, 16);
-    compute::fill_n(ptr, 16, 42, queue);
+    bc::svm_ptr<int> ptr = bc::svm_alloc<int>(context, 16);
+    bc::fill_n(ptr, 16, 42, queue);
 
     int value = 0;
     queue.enqueue_svm_memcpy(&value, ptr.get(), sizeof(int));
     BOOST_CHECK_EQUAL(value, 42);
 
-    compute::svm_free(context, ptr);
+    bc::svm_free(context, ptr);
 }
 #endif // CL_VERSION_2_0
 
 BOOST_AUTO_TEST_CASE(empty_fill)
 {
-    compute::vector<int> vec(0, context);
-    compute::fill(vec.begin(), vec.end(), 42, queue);
-    compute::fill_async(vec.begin(), vec.end(), 42, queue);
+    bc::vector<int> vec(0, context);
+    bc::fill(vec.begin(), vec.end(), 42, queue);
+    bc::fill_async(vec.begin(), vec.end(), 42, queue);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

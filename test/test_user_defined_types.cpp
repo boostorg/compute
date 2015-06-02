@@ -5,7 +5,7 @@
 // See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt
 //
-// See http://kylelutz.github.com/compute for more information.
+// See http://boostorg.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
 #define BOOST_TEST_MODULE TestUserDefinedTypes
@@ -67,7 +67,7 @@ BOOST_COMPUTE_FUNCTION(bool, compare_UDD_device, (UDD lhs, UDD rhs),
     return lhs.a < rhs.a;
 });
 
-// see: issue #11 (https://github.com/kylelutz/compute/issues/11)
+// see: issue #11 (https://github.com/boostorg/compute/issues/11)
 BOOST_AUTO_TEST_CASE(issue_11)
 {
     // get default device and setup context

@@ -6,7 +6,7 @@ We value your feedback about issues you encounter. The more information you
 provide the easier it is for developers to resolve the problem.
 
 Issues should be reported to the [issue tracker](
-https://github.com/kylelutz/compute/issues?state=open).
+https://github.com/boostorg/compute/issues?state=open).
 
 Issues can also be used to submit feature requests.
 

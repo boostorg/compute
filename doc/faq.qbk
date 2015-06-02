@@ -3,16 +3,16 @@
 [h3 How do I report a bug, issue, or feature request?]
 
 Please submit an issue on the GitHub issue tracker at
-[@https://github.com/kylelutz/compute/issues].
+[@https://github.com/boostorg/compute/issues].
 
 
 [h3 Where can I find more documentation?]
 
-* The main documentation is here: [@http://kylelutz.github.io/compute/]
-* The README is here: [@https://github.com/kylelutz/compute/blob/master/README.md]
-* The wiki is here: [@https://github.com/kylelutz/compute/wiki]
-* The contributor guide is here: [@https://github.com/kylelutz/compute/blob/master/CONTRIBUTING.md]
-* The reference is here: [@http://kylelutz.github.io/compute/compute/reference.html]
+* The main documentation is here: [@http://boostorg.github.io/compute/]
+* The README is here: [@https://github.com/boostorg/compute/blob/master/README.md]
+* The wiki is here: [@https://github.com/boostorg/compute/wiki]
+* The contributor guide is here: [@https://github.com/boostorg/compute/blob/master/CONTRIBUTING.md]
+* The reference is here: [@http://boostorg.github.io/compute/compute/reference.html]
 
 
 [h3 Where is the best place to ask questions about the library?]
@@ -163,8 +163,8 @@ GPGPU and parallel-computing.
 Please send an email to Kyle Lutz (kyle.r.lutz@gmail.com) for more information.
 
 Also see the
-[@https://github.com/kylelutz/compute/blob/master/CONTRIBUTING.md contributor guide]
+[@https://github.com/boostorg/compute/blob/master/CONTRIBUTING.md contributor guide]
 and check out the list of issues at:
-[@https://github.com/kylelutz/compute/issues].
+[@https://github.com/boostorg/compute/issues].
 
 [endsect] [/ faq ]

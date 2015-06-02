@@ -164,6 +164,7 @@ add_compute_test("iterator.counting_iterator" test_counting_iterator.cpp)
 add_compute_test("iterator.discard_iterator" test_discard_iterator.cpp)
 add_compute_test("iterator.function_input_iterator" test_function_input_iterator.cpp)
 add_compute_test("iterator.permutation_iterator" test_permutation_iterator.cpp)
+add_compute_test("iterator.strided_iterator" test_strided_iterator.cpp)
 add_compute_test("iterator.transform_iterator" test_transform_iterator.cpp)
 add_compute_test("iterator.zip_iterator" test_zip_iterator.cpp)
 

@@ -48,6 +48,7 @@ option(BOOST_COMPUTE_HAVE_QT "Have Qt" OFF)
 option(BOOST_COMPUTE_HAVE_VTK "Have VTK" OFF)
 option(BOOST_COMPUTE_HAVE_CUDA "Have CUDA" OFF)
 option(BOOST_COMPUTE_HAVE_TBB "Have TBB" OFF)
+option(BOOST_COMPUTE_HAVE_BOLT "Have BOLT" OFF)
 
 include_directories(include)
 
