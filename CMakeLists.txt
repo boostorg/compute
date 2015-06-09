@@ -96,7 +96,7 @@ configure_file(
 # install cmake config file
 install(
   FILES ${BoostCompute_BINARY_DIR}/BoostComputeConfig.cmake
-  DESTINATION share/cmake/BoostCompute
+  DESTINATION lib/cmake/BoostCompute
 )
 
 # install header files
