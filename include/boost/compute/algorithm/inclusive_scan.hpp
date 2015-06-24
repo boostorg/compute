@@ -11,6 +11,7 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_INCLUSIVE_SCAN_HPP
 #define BOOST_COMPUTE_ALGORITHM_INCLUSIVE_SCAN_HPP
 
+#include <boost/compute/functional.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/detail/scan.hpp>
@@ -27,13 +28,38 @@ namespace compute {
 /// \param first first element in the range to scan
 /// \param last last element in the range to scan
 /// \param result first element in the result range
+/// \param binary_op associative binary operator
 /// \param queue command queue to perform the operation
 ///
 /// \return \c OutputIterator to the end of the result range
 ///
+/// The default operation is to add the elements up.
+///
 /// \snippet test/test_scan.cpp inclusive_scan_int
 ///
+/// But different associative operation can be specified as \p binary_op
+/// instead (e.g., multiplication, maximum, minimum).
+///
+/// \snippet test/test_scan.cpp inclusive_scan_int_multiplies
+///
 /// \see exclusive_scan()
+template<class InputIterator, class OutputIterator, class BinaryOperator>
+inline OutputIterator
+inclusive_scan(InputIterator first,
+               InputIterator last,
+               OutputIterator result,
+               BinaryOperator binary_op,
+               command_queue &queue = system::default_queue())
+{
+    typedef typename
+        std::iterator_traits<OutputIterator>::value_type output_type;
+
+    return detail::scan(first, last, result, false,
+                        output_type(0), binary_op,
+                        queue);
+}
+
+/// \overload
 template<class InputIterator, class OutputIterator>
 inline OutputIterator
 inclusive_scan(InputIterator first,
@@ -41,7 +67,12 @@ inclusive_scan(InputIterator first,
                OutputIterator result,
                command_queue &queue = system::default_queue())
 {
-    return detail::scan(first, last, result, false, queue);
+    typedef typename
+        std::iterator_traits<OutputIterator>::value_type output_type;
+
+    return detail::scan(first, last, result, false,
+                        output_type(0), boost::compute::plus<output_type>(),
+                        queue);
 }
 
 } // end compute namespace
