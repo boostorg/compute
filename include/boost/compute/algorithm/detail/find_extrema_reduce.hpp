@@ -131,7 +131,7 @@ inline size_t find_extrema_reduce(InputIterator first,
 
     k <<
         "#pragma unroll\n"
-        "for(" << k.decl<uint_>("offset") << " = " << work_group_size << " / 2; offset > 0; " <<
+        "for(" << k.decl<uint_>("offset") << " = " << uint_(work_group_size) << " / 2; offset > 0; " <<
              "offset = offset / 2) {\n" <<
              "if((lid < offset) && ((lid + offset) < group_offset)) { \n" <<
                  k.decl<input_type>("mine") << " = block[lid];\n" <<
