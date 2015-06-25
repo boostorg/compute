@@ -21,7 +21,8 @@ namespace detail {
 // returns true if the device is an nvidia gpu
 inline bool is_nvidia_device(const device &device)
 {
-    return device.vendor() == "NVIDIA Corporation";
+    std::string nvidia("NVIDIA");
+    return device.vendor().compare(0, nvidia.size(), nvidia) == 0;
 }
 
 // returns true if the device is an amd cpu or gpu
