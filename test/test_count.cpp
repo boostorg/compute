@@ -32,13 +32,13 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(count_int)
 {
     int data[] = { 1, 2, 1, 2, 3 };
-    bc::vector<int> vector(data, data + 5);
-    BOOST_CHECK_EQUAL(bc::count(vector.begin(), vector.end(), 1), size_t(2));
-    BOOST_CHECK_EQUAL(bc::count(vector.begin(), vector.end(), 2), size_t(2));
-    BOOST_CHECK_EQUAL(bc::count(vector.begin(), vector.end(), 3), size_t(1));
-    BOOST_CHECK_EQUAL(bc::count(vector.begin() + 1, vector.end(), 1), size_t(1));
-    BOOST_CHECK_EQUAL(bc::count(vector.begin() + 1, vector.end() - 1, 3), size_t(0));
-    BOOST_CHECK_EQUAL(bc::count(vector.begin() + 1, vector.end() - 1, 2), size_t(2));
+    bc::vector<int> vector(data, data + 5, queue);
+    BOOST_CHECK_EQUAL(bc::count(vector.begin(), vector.end(), 1, queue), size_t(2));
+    BOOST_CHECK_EQUAL(bc::count(vector.begin(), vector.end(), 2, queue), size_t(2));
+    BOOST_CHECK_EQUAL(bc::count(vector.begin(), vector.end(), 3, queue), size_t(1));
+    BOOST_CHECK_EQUAL(bc::count(vector.begin() + 1, vector.end(), 1, queue), size_t(1));
+    BOOST_CHECK_EQUAL(bc::count(vector.begin() + 1, vector.end() - 1, 3, queue), size_t(0));
+    BOOST_CHECK_EQUAL(bc::count(vector.begin() + 1, vector.end() - 1, 2, queue), size_t(2));
 }
 
 BOOST_AUTO_TEST_CASE(count_constant_int_range)
@@ -63,10 +63,10 @@ BOOST_AUTO_TEST_CASE(count_constant_int_range)
 BOOST_AUTO_TEST_CASE(count_if_greater_than_two)
 {
     float data[] = { 1.0f, 2.5f, -1.0f, 3.0f, 5.0f, -8.0f };
-    bc::vector<float> vector(data, data + 5);
+    bc::vector<float> vector(data, data + 5, queue);
 
     BOOST_CHECK_EQUAL(
-        bc::count_if(vector.begin(), vector.end(), bc::_1 > 2.0f),
+        bc::count_if(vector.begin(), vector.end(), bc::_1 > 2.0f, queue),
         size_t(3)
     );
 }
@@ -80,35 +80,36 @@ BOOST_AUTO_TEST_CASE(count_int4)
                    4, 5, 6, 7,
                    0, 3, 2, 2 };
     bc::vector<bc::int4_> vector(reinterpret_cast<bc::int4_ *>(data),
-                                 reinterpret_cast<bc::int4_ *>(data) + 6);
+                                 reinterpret_cast<bc::int4_ *>(data) + 6,
+                                 queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(6));
 
     BOOST_CHECK_EQUAL(
-        bc::count(vector.begin(), vector.end(), bc::int4_(1, 2, 3, 4)),
+        bc::count(vector.begin(), vector.end(), bc::int4_(1, 2, 3, 4), queue),
         size_t(2)
     );
     BOOST_CHECK_EQUAL(
-        bc::count(vector.begin(), vector.end(), bc::int4_(4, 5, 6, 7)),
+        bc::count(vector.begin(), vector.end(), bc::int4_(4, 5, 6, 7), queue),
         size_t(2)
     );
     BOOST_CHECK_EQUAL(
-        bc::count(vector.begin(), vector.end(), bc::int4_(7, 8, 9, 1)),
+        bc::count(vector.begin(), vector.end(), bc::int4_(7, 8, 9, 1), queue),
         size_t(1)
     );
     BOOST_CHECK_EQUAL(
-        bc::count(vector.begin(), vector.end(), bc::int4_(0, 3, 2, 2)),
+        bc::count(vector.begin(), vector.end(), bc::int4_(0, 3, 2, 2), queue),
         size_t(1)
     );
     BOOST_CHECK_EQUAL(
-        bc::count(vector.begin(), vector.end(), bc::int4_(3, 4, 4, 5)),
+        bc::count(vector.begin(), vector.end(), bc::int4_(3, 4, 4, 5), queue),
         size_t(0)
     );
     BOOST_CHECK_EQUAL(
-        bc::count(vector.begin(), vector.end(), bc::int4_(1, 2, 3, 0)),
+        bc::count(vector.begin(), vector.end(), bc::int4_(1, 2, 3, 0), queue),
         size_t(0)
     );
     BOOST_CHECK_EQUAL(
-        bc::count(vector.begin(), vector.end(), bc::int4_(1, 9, 8, 7)),
+        bc::count(vector.begin(), vector.end(), bc::int4_(1, 9, 8, 7), queue),
         size_t(0)
     );
 }
@@ -116,11 +117,11 @@ BOOST_AUTO_TEST_CASE(count_int4)
 BOOST_AUTO_TEST_CASE(count_newlines)
 {
     std::string string = "abcdefg\nhijklmn\nopqrs\ntuv\nwxyz\n";
-    compute::vector<char> data(string.size());
-    compute::copy(string.begin(), string.end(), data.begin());
+    compute::vector<char> data(string.size(), context);
+    compute::copy(string.begin(), string.end(), data.begin(), queue);
 
     BOOST_CHECK_EQUAL(
-        compute::count(data.begin(), data.end(), '\n'),
+        compute::count(data.begin(), data.end(), '\n', queue),
         size_t(5)
     );
 }
@@ -130,27 +131,27 @@ BOOST_AUTO_TEST_CASE(count_uchar)
     using boost::compute::uchar_;
 
     unsigned char data[] = { 0x00, 0x10, 0x2F, 0x10, 0x01, 0x00, 0x01, 0x00 };
-    compute::vector<uchar_> vector(8);
-    compute::copy(data, data + 8, vector.begin());
+    compute::vector<uchar_> vector(8, context);
+    compute::copy(data, data + 8, vector.begin(), queue);
 
     BOOST_CHECK_EQUAL(
-        compute::count(vector.begin(), vector.end(), 0x00),
+        compute::count(vector.begin(), vector.end(), 0x00, queue),
         size_t(3)
     );
     BOOST_CHECK_EQUAL(
-        compute::count(vector.begin(), vector.end(), 0x10),
+        compute::count(vector.begin(), vector.end(), 0x10, queue),
         size_t(2)
     );
     BOOST_CHECK_EQUAL(
-        compute::count(vector.begin(), vector.end(), 0x2F),
+        compute::count(vector.begin(), vector.end(), 0x2F, queue),
         size_t(1)
     );
     BOOST_CHECK_EQUAL(
-        compute::count(vector.begin(), vector.end(), 0x01),
+        compute::count(vector.begin(), vector.end(), 0x01, queue),
         size_t(2)
     );
     BOOST_CHECK_EQUAL(
-        compute::count(vector.begin(), vector.end(), 0xFF),
+        compute::count(vector.begin(), vector.end(), 0xFF, queue),
         size_t(0)
     );
 }
@@ -166,22 +167,23 @@ BOOST_AUTO_TEST_CASE(count_vector_component)
 
     using boost::compute::int2_;
 
-    compute::vector<int2_> vector(4);
+    compute::vector<int2_> vector(4, context);
     compute::copy(
         reinterpret_cast<int2_ *>(data),
         reinterpret_cast<int2_ *>(data) + 4,
-        vector.begin()
+        vector.begin(),
+        queue
     );
 
     using boost::compute::lambda::_1;
     using boost::compute::lambda::get;
 
     BOOST_CHECK_EQUAL(
-        compute::count_if(vector.begin(), vector.end(), get<0>(_1) < 4),
+        compute::count_if(vector.begin(), vector.end(), get<0>(_1) < 4, queue),
         size_t(2)
     );
     BOOST_CHECK_EQUAL(
-        compute::count_if(vector.begin(), vector.end(), get<1>(_1) > 3),
+        compute::count_if(vector.begin(), vector.end(), get<1>(_1) > 3, queue),
         size_t(3)
     );
 }

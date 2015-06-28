@@ -24,11 +24,11 @@ BOOST_AUTO_TEST_CASE(unique_copy_int)
 {
     int data[] = {1, 6, 6, 4, 2, 2, 4};
 
-    bc::vector<int> input(data, data + 7);
-    bc::vector<int> result(5);
+    bc::vector<int> input(data, data + 7, queue);
+    bc::vector<int> result(5, context);
     
     bc::vector<int>::iterator iter =
-        bc::unique_copy(input.begin(), input.end(), result.begin());
+        bc::unique_copy(input.begin(), input.end(), result.begin(), queue);
     
     BOOST_VERIFY(iter == result.begin() + 5);
     CHECK_RANGE_EQUAL(int, 5, result, (1, 6, 4, 2, 4));

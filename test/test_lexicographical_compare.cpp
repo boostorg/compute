@@ -48,25 +48,28 @@ BOOST_AUTO_TEST_CASE(lexicographical_compare_number)
     int data3[] = { 1, 2, 3, 4, 5 };
     int data4[] = { 9, 2, 3, 4, 5, 100 };
 
-    boost::compute::vector<int> vector1(data1, data1 + 6);
-    boost::compute::vector<int> vector2(data2, data2 + 6);
-    boost::compute::vector<int> vector3(data3, data3 + 5);
-    boost::compute::vector<int> vector4(data4, data4 + 6);
+    boost::compute::vector<int> vector1(data1, data1 + 6, queue);
+    boost::compute::vector<int> vector2(data2, data2 + 6, queue);
+    boost::compute::vector<int> vector3(data3, data3 + 5, queue);
+    boost::compute::vector<int> vector4(data4, data4 + 6, queue);
 
     BOOST_CHECK(boost::compute::lexicographical_compare(vector1.begin(),
                                                         vector1.end(),
                                                         vector2.begin(),
-                                                        vector2.end()) == true);
+                                                        vector2.end(),
+                                                        queue) == true);
 
     BOOST_CHECK(boost::compute::lexicographical_compare(vector1.begin(),
                                                         vector1.end(),
                                                         vector3.begin(),
-                                                        vector3.end()) == false);
+                                                        vector3.end(),
+                                                        queue) == false);
 
     BOOST_CHECK(boost::compute::lexicographical_compare(vector3.begin(),
                                                         vector3.end(),
                                                         vector4.begin(),
-                                                        vector4.end()) == true);
+                                                        vector4.end(),
+                                                        queue) == true);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

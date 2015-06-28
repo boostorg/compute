@@ -28,7 +28,7 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(any_all_none_of)
 {
     int data[] = { 1, 2, 3, 4, 5, 6 };
-    bc::vector<int> v(data, data + 6);
+    bc::vector<int> v(data, data + 6, queue);
 
     using ::boost::compute::_1;
 
@@ -53,15 +53,22 @@ BOOST_AUTO_TEST_CASE(any_nan_inf)
     float inf = std::numeric_limits<float>::infinity();
 
     float data[] = { 1.2f, 2.3f, nan, nan, 3.4f, inf, 4.5f, inf };
-    compute::vector<float> vector(data, data + 8);
+    compute::vector<float> vector(data, data + 8, queue);
 
-    BOOST_CHECK(compute::any_of(vector.begin(), vector.end(), isinf(_1) || isnan(_1)) == true);
-    BOOST_CHECK(compute::any_of(vector.begin(), vector.end(), isfinite(_1)) == true);
-    BOOST_CHECK(compute::all_of(vector.begin(), vector.end(), isfinite(_1)) == false);
-    BOOST_CHECK(compute::all_of(vector.begin(), vector.begin() + 2, isfinite(_1)) == true);
-    BOOST_CHECK(compute::all_of(vector.begin() + 2, vector.begin() + 4, isnan(_1)) == true);
-    BOOST_CHECK(compute::none_of(vector.begin(), vector.end(), isinf(_1)) == false);
-    BOOST_CHECK(compute::none_of(vector.begin(), vector.begin() + 4, isinf(_1)) == true);
+    BOOST_CHECK(compute::any_of(vector.begin(), vector.end(),
+                                isinf(_1) || isnan(_1), queue) == true);
+    BOOST_CHECK(compute::any_of(vector.begin(), vector.end(),
+                                isfinite(_1), queue) == true);
+    BOOST_CHECK(compute::all_of(vector.begin(), vector.end(),
+                                isfinite(_1), queue) == false);
+    BOOST_CHECK(compute::all_of(vector.begin(), vector.begin() + 2,
+                                isfinite(_1), queue) == true);
+    BOOST_CHECK(compute::all_of(vector.begin() + 2, vector.begin() + 4,
+                                isnan(_1), queue) == true);
+    BOOST_CHECK(compute::none_of(vector.begin(), vector.end(),
+                                 isinf(_1), queue) == false);
+    BOOST_CHECK(compute::none_of(vector.begin(), vector.begin() + 4,
+                                 isinf(_1), queue) == true);
 }
 
 BOOST_AUTO_TEST_CASE(any_of_doctest)

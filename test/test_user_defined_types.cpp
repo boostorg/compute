@@ -67,15 +67,13 @@ BOOST_COMPUTE_FUNCTION(bool, compare_UDD_device, (UDD lhs, UDD rhs),
     return lhs.a < rhs.a;
 });
 
+#include "check_macros.hpp"
+#include "context_setup.hpp"
+
 // see: issue #11 (https://github.com/boostorg/compute/issues/11)
 BOOST_AUTO_TEST_CASE(issue_11)
 {
-    // get default device and setup context
-    compute::device gpu = compute::system::default_device();
-    compute::context context(gpu);
-    compute::command_queue queue(context, gpu);
-
-    if(gpu.vendor() == "NVIDIA" && gpu.platform().name() == "Apple"){
+    if(device.vendor() == "NVIDIA" && device.platform().name() == "Apple"){
         // FIXME: this test currently segfaults on NVIDIA GPUs on Apple
         std::cerr << "skipping issue test on NVIDIA GPU on Apple platform" << std::endl;
         return;
@@ -120,3 +118,5 @@ BOOST_AUTO_TEST_CASE(issue_11)
         BOOST_CHECK_EQUAL(tmp[i], host_vector[i]);
     }
 }
+
+BOOST_AUTO_TEST_SUITE_END()
