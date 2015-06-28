@@ -29,10 +29,10 @@ BOOST_AUTO_TEST_CASE(concept_check)
 
 BOOST_AUTO_TEST_CASE(size)
 {
-    boost::compute::array<int, 0> empty_array;
+    boost::compute::array<int, 0> empty_array(context);
     BOOST_CHECK_EQUAL(empty_array.size(), size_t(0));
 
-    boost::compute::array<int, 10> array10;
+    boost::compute::array<int, 10> array10(context);
     BOOST_CHECK_EQUAL(array10.size(), size_t(10));
 }
 

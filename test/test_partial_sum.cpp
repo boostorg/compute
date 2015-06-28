@@ -28,12 +28,12 @@ namespace bc = boost::compute;
 BOOST_AUTO_TEST_CASE(partial_sum_int)
 {
     int data[] = { 1, 2, 5, 3, 9, 1, 4, 2 };
-    bc::vector<int> a(8);
-    bc::copy(data, data + 8, a.begin());
+    bc::vector<int> a(8, context);
+    bc::copy(data, data + 8, a.begin(), queue);
 
-    bc::vector<int> b(a.size());
+    bc::vector<int> b(a.size(), context);
     bc::vector<int>::iterator iter =
-        bc::partial_sum(a.begin(), a.end(), b.begin());
+        bc::partial_sum(a.begin(), a.end(), b.begin(), queue);
     BOOST_CHECK(iter == b.end());
     CHECK_RANGE_EQUAL(int, 8, b, (1, 3, 8, 11, 20, 21, 25, 27));
 }

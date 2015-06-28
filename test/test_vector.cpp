@@ -38,24 +38,24 @@ BOOST_AUTO_TEST_CASE(concept_check)
 
 BOOST_AUTO_TEST_CASE(size)
 {
-    bc::vector<int> empty_vector;
+    bc::vector<int> empty_vector(context);
     BOOST_CHECK_EQUAL(empty_vector.size(), size_t(0));
     BOOST_CHECK_EQUAL(empty_vector.empty(), true);
 
-    bc::vector<int> int_vector(10);
+    bc::vector<int> int_vector(10, context);
     BOOST_CHECK_EQUAL(int_vector.size(), size_t(10));
     BOOST_CHECK_EQUAL(int_vector.empty(), false);
 }
 
 BOOST_AUTO_TEST_CASE(resize)
 {
-    bc::vector<int> int_vector(10);
+    bc::vector<int> int_vector(10, context);
     BOOST_CHECK_EQUAL(int_vector.size(), size_t(10));
 
-    int_vector.resize(20);
+    int_vector.resize(20, queue);
     BOOST_CHECK_EQUAL(int_vector.size(), size_t(20));
 
-    int_vector.resize(5);
+    int_vector.resize(5, queue);
     BOOST_CHECK_EQUAL(int_vector.size(), size_t(5));
 }
 
@@ -75,21 +75,21 @@ BOOST_AUTO_TEST_CASE(array_operator)
 BOOST_AUTO_TEST_CASE(front_and_back)
 {
     int int_data[] = { 1, 2, 3, 4, 5 };
-    bc::vector<int> int_vector(5);
-    bc::copy(int_data, int_data + 5, int_vector.begin());
-    bc::system::finish();
+    bc::vector<int> int_vector(5, context);
+    bc::copy(int_data, int_data + 5, int_vector.begin(), queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(int_vector.front(), 1);
     BOOST_CHECK_EQUAL(int_vector.back(), 5);
 
-    bc::fill(int_vector.begin(), int_vector.end(), 10);
-    bc::system::finish();
+    bc::fill(int_vector.begin(), int_vector.end(), 10, queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(int_vector.front(), 10);
     BOOST_CHECK_EQUAL(int_vector.back(), 10);
 
     float float_data[] = { 1.1f, 2.2f, 3.3f, 4.4f, 5.5f };
-    bc::vector<float> float_vector(5);
-    bc::copy(float_data, float_data + 5, float_vector.begin());
-    bc::system::finish();
+    bc::vector<float> float_vector(5, context);
+    bc::copy(float_data, float_data + 5, float_vector.begin(), queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(float_vector.front(), 1.1f);
     BOOST_CHECK_EQUAL(float_vector.back(), 5.5f);
 }
@@ -102,40 +102,41 @@ BOOST_AUTO_TEST_CASE(host_iterator_constructor)
     host_vector.push_back(30);
     host_vector.push_back(40);
 
-    bc::vector<int> device_vector(host_vector.begin(), host_vector.end());
+    bc::vector<int> device_vector(host_vector.begin(), host_vector.end(),
+                                  queue);
     CHECK_RANGE_EQUAL(int, 4, device_vector, (10, 20, 30, 40));
 }
 
 BOOST_AUTO_TEST_CASE(device_iterator_constructor)
 {
     int data[] = { 1, 5, 10, 15 };
-    bc::vector<int> a(data, data + 4);
+    bc::vector<int> a(data, data + 4, queue);
     CHECK_RANGE_EQUAL(int, 4, a, (1, 5, 10, 15));
 
-    bc::vector<int> b(a.begin(), a.end());
+    bc::vector<int> b(a.begin(), a.end(), queue);
     CHECK_RANGE_EQUAL(int, 4, b, (1, 5, 10, 15));
 }
 
 BOOST_AUTO_TEST_CASE(push_back)
 {
-    bc::vector<int> vector;
+    bc::vector<int> vector(context);
     BOOST_VERIFY(vector.empty());
 
-    vector.push_back(12);
+    vector.push_back(12, queue);
     BOOST_VERIFY(!vector.empty());
     BOOST_CHECK_EQUAL(vector.size(), size_t(1));
     CHECK_RANGE_EQUAL(int, 1, vector, (12));
 
-    vector.push_back(24);
+    vector.push_back(24, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(2));
     CHECK_RANGE_EQUAL(int, 2, vector, (12, 24));
 
-    vector.push_back(36);
+    vector.push_back(36, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(3));
     CHECK_RANGE_EQUAL(int, 3, vector, (12, 24, 36));
 
     for(int i = 0; i < 100; i++){
-        vector.push_back(i);
+        vector.push_back(i, queue);
     }
     BOOST_CHECK_EQUAL(vector.size(), size_t(103));
     BOOST_CHECK_EQUAL(vector[0], 12);
@@ -146,10 +147,10 @@ BOOST_AUTO_TEST_CASE(push_back)
 
 BOOST_AUTO_TEST_CASE(at)
 {
-    bc::vector<int> vector;
-    vector.push_back(1);
-    vector.push_back(2);
-    vector.push_back(3);
+    bc::vector<int> vector(context);
+    vector.push_back(1, queue);
+    vector.push_back(2, queue);
+    vector.push_back(3, queue);
     BOOST_CHECK_EQUAL(vector.at(0), 1);
     BOOST_CHECK_EQUAL(vector.at(1), 2);
     BOOST_CHECK_EQUAL(vector.at(2), 3);
@@ -159,22 +160,22 @@ BOOST_AUTO_TEST_CASE(at)
 BOOST_AUTO_TEST_CASE(erase)
 {
     int data[] = { 1, 2, 5, 7, 9 };
-    bc::vector<int> vector(data, data + 5);
-    bc::system::finish();
+    bc::vector<int> vector(data, data + 5, queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(vector.size(), 5);
 
-    vector.erase(vector.begin() + 1);
+    vector.erase(vector.begin() + 1, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(4));
     CHECK_RANGE_EQUAL(int, 4, vector, (1, 5, 7, 9));
 
-    vector.erase(vector.begin() + 2, vector.end());
+    vector.erase(vector.begin() + 2, vector.end(), queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(2));
     CHECK_RANGE_EQUAL(int, 2, vector, (1, 5));
 }
 
 BOOST_AUTO_TEST_CASE(max_size)
 {
-    bc::vector<int> vector(100);
+    bc::vector<int> vector(100, context);
     BOOST_CHECK_EQUAL(vector.size(), size_t(100));
     BOOST_VERIFY(vector.max_size() > vector.size());
 }
@@ -208,27 +209,27 @@ BOOST_AUTO_TEST_CASE(vector_double)
         return;
     }
 
-    bc::vector<double> vector;
-    vector.push_back(1.21);
-    vector.push_back(3.14);
-    vector.push_back(7.89);
+    bc::vector<double> vector(context);
+    vector.push_back(1.21, queue);
+    vector.push_back(3.14, queue);
+    vector.push_back(7.89, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(3));
     CHECK_RANGE_EQUAL(double, 3, vector, (1.21, 3.14, 7.89));
 
-    bc::vector<double> other = vector;
+    bc::vector<double> other(vector.begin(), vector.end(), queue);
     CHECK_RANGE_EQUAL(double, 3, other, (1.21, 3.14, 7.89));
 
-    bc::fill(other.begin(), other.end(), 8.95);
+    bc::fill(other.begin(), other.end(), 8.95, queue);
     CHECK_RANGE_EQUAL(double, 3, other, (8.95, 8.95, 8.95));
 }
 
 BOOST_AUTO_TEST_CASE(vector_iterator)
 {
-    bc::vector<int> vector;
-    vector.push_back(2);
-    vector.push_back(4);
-    vector.push_back(6);
-    vector.push_back(8);
+    bc::vector<int> vector(context);
+    vector.push_back(2, queue);
+    vector.push_back(4, queue);
+    vector.push_back(6, queue);
+    vector.push_back(8, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(4));
     BOOST_CHECK_EQUAL(vector[0], 2);
     BOOST_CHECK_EQUAL(*vector.begin(), 2);
@@ -247,23 +248,23 @@ BOOST_AUTO_TEST_CASE(vector_iterator)
 BOOST_AUTO_TEST_CASE(vector_erase_remove)
 {
     int data[] = { 2, 6, 3, 4, 2, 4, 5, 6, 1 };
-    bc::vector<int> vector(data, data + 9);
+    bc::vector<int> vector(data, data + 9, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(9));
 
     // remove 4's
-    vector.erase(bc::remove(vector.begin(), vector.end(), 4), vector.end());
+    vector.erase(bc::remove(vector.begin(), vector.end(), 4, queue), vector.end());
     BOOST_CHECK_EQUAL(vector.size(), size_t(7));
-    BOOST_VERIFY(bc::find(vector.begin(), vector.end(), 4) == vector.end());
+    BOOST_VERIFY(bc::find(vector.begin(), vector.end(), 4, queue) == vector.end());
 
     // remove 2's
-    vector.erase(bc::remove(vector.begin(), vector.end(), 2), vector.end());
+    vector.erase(bc::remove(vector.begin(), vector.end(), 2, queue), vector.end());
     BOOST_CHECK_EQUAL(vector.size(), size_t(5));
-    BOOST_VERIFY(bc::find(vector.begin(), vector.end(), 2) == vector.end());
+    BOOST_VERIFY(bc::find(vector.begin(), vector.end(), 2, queue) == vector.end());
 
     // remove 6's
-    vector.erase(bc::remove(vector.begin(), vector.end(), 6), vector.end());
+    vector.erase(bc::remove(vector.begin(), vector.end(), 6, queue), vector.end());
     BOOST_CHECK_EQUAL(vector.size(), size_t(3));
-    BOOST_VERIFY(bc::find(vector.begin(), vector.end(), 6) == vector.end());
+    BOOST_VERIFY(bc::find(vector.begin(), vector.end(), 6, queue) == vector.end());
 
     // check the rest of the values
     CHECK_RANGE_EQUAL(int, 3, vector, (3, 5, 1));

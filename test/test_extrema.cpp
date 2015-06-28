@@ -26,40 +26,41 @@
 BOOST_AUTO_TEST_CASE(int_min_max)
 {
     int data[] = { 9, 15, 1, 4 };
-    boost::compute::vector<int> vector(data, data + 4);
+    boost::compute::vector<int> vector(data, data + 4, queue);
 
     boost::compute::vector<int>::iterator min_iter =
-        boost::compute::min_element(vector.begin(), vector.end());
+        boost::compute::min_element(vector.begin(), vector.end(), queue);
     BOOST_CHECK(min_iter == vector.begin() + 2);
     BOOST_CHECK_EQUAL(*min_iter, 1);
 
     boost::compute::vector<int>::iterator max_iter =
-        boost::compute::max_element(vector.begin(), vector.end());
+        boost::compute::max_element(vector.begin(), vector.end(), queue);
     BOOST_CHECK(max_iter == vector.begin() + 1);
     BOOST_CHECK_EQUAL(*max_iter, 15);
 }
 
 BOOST_AUTO_TEST_CASE(iota_min_max)
 {
-    boost::compute::vector<int> vector(5000);
+    boost::compute::vector<int> vector(5000, context);
 
     // fill with 0 -> 4999
-    boost::compute::iota(vector.begin(), vector.end(), 0);
+    boost::compute::iota(vector.begin(), vector.end(), 0, queue);
 
     boost::compute::vector<int>::iterator min_iter =
-        boost::compute::min_element(vector.begin(), vector.end());
+        boost::compute::min_element(vector.begin(), vector.end(), queue);
     BOOST_CHECK(min_iter == vector.begin());
     BOOST_CHECK_EQUAL(*min_iter, 0);
 
     boost::compute::vector<int>::iterator max_iter =
-        boost::compute::max_element(vector.begin(), vector.end());
+        boost::compute::max_element(vector.begin(), vector.end(), queue);
     BOOST_CHECK(max_iter == vector.end() - 1);
     BOOST_CHECK_EQUAL(*max_iter, 4999);
 
     min_iter =
         boost::compute::min_element(
             vector.begin() + 1000,
-            vector.end() - 1000
+            vector.end() - 1000,
+            queue
         );
     BOOST_CHECK(min_iter == vector.begin() + 1000);
     BOOST_CHECK_EQUAL(*min_iter, 1000);
@@ -67,20 +68,21 @@ BOOST_AUTO_TEST_CASE(iota_min_max)
     max_iter =
         boost::compute::max_element(
             vector.begin() + 1000,
-            vector.end() - 1000
+            vector.end() - 1000,
+            queue
         );
     BOOST_CHECK(max_iter == vector.begin() + 3999);
     BOOST_CHECK_EQUAL(*max_iter, 3999);
 
     // fill with -2500 -> 2499
-    boost::compute::iota(vector.begin(), vector.end(), -2500);
+    boost::compute::iota(vector.begin(), vector.end(), -2500, queue);
     min_iter =
-        boost::compute::min_element(vector.begin(), vector.end());
+        boost::compute::min_element(vector.begin(), vector.end(), queue);
     BOOST_CHECK(min_iter == vector.begin());
     BOOST_CHECK_EQUAL(*min_iter, -2500);
 
     max_iter =
-        boost::compute::max_element(vector.begin(), vector.end());
+        boost::compute::max_element(vector.begin(), vector.end(), queue);
     BOOST_CHECK(max_iter == vector.end() - 1);
     BOOST_CHECK_EQUAL(*max_iter, 2499);
 }
@@ -95,7 +97,8 @@ BOOST_AUTO_TEST_CASE(max_vector_length)
                      1.9f, 1.9f };
     boost::compute::vector<boost::compute::float2_> vector(
         reinterpret_cast<boost::compute::float2_ *>(data),
-        reinterpret_cast<boost::compute::float2_ *>(data) + 5
+        reinterpret_cast<boost::compute::float2_ *>(data) + 5,
+        queue
     );
 
     // find length of the longest vector
@@ -113,7 +116,8 @@ BOOST_AUTO_TEST_CASE(max_vector_length)
             boost::compute::make_transform_iterator(
                 vector.end(),
                 boost::compute::length<boost::compute::float2_>()
-            )
+            ),
+            queue
         );
     BOOST_CHECK(
         max_iter == boost::compute::make_transform_iterator(
@@ -134,7 +138,8 @@ BOOST_AUTO_TEST_CASE(max_vector_length)
             boost::compute::make_transform_iterator(
                 vector.end(),
                 boost::compute::length<boost::compute::float2_>()
-            )
+            ),
+            queue
         );
     BOOST_CHECK(
         min_iter == boost::compute::make_transform_iterator(
@@ -152,7 +157,7 @@ BOOST_AUTO_TEST_CASE(max_bits_set)
     using boost::compute::uint_;
 
     uint_ data[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-    boost::compute::vector<uint_> vector(data, data + 10);
+    boost::compute::vector<uint_> vector(data, data + 10, queue);
 
     boost::compute::vector<uint_>::iterator iter =
         boost::compute::max_element(
@@ -163,7 +168,8 @@ BOOST_AUTO_TEST_CASE(max_bits_set)
             boost::compute::make_transform_iterator(
                 vector.end(),
                 boost::compute::popcount<uint_>()
-            )
+            ),
+            queue
         ).base();
 
     BOOST_CHECK(iter == vector.begin() + 7);

@@ -133,7 +133,8 @@ BOOST_AUTO_TEST_CASE(copy)
                 float_vector.end()
             )
         ),
-        tuple_vector.begin()
+        tuple_vector.begin(),
+        queue
     );
 
     // copy tuple vector to host
@@ -142,7 +143,8 @@ BOOST_AUTO_TEST_CASE(copy)
     boost::compute::copy(
         tuple_vector.begin(),
         tuple_vector.end(),
-        host_vector.begin()
+        host_vector.begin(),
+        queue
     );
 
     // check tuple values

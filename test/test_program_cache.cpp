@@ -14,12 +14,14 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/utility/program_cache.hpp>
 
+#include "context_setup.hpp"
+
 namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(setup)
 {
     // get default context
-    compute::context ctx = compute::system::default_context();
+    compute::context ctx = context;
 
     // get program cache
     boost::shared_ptr<compute::program_cache> cache =
@@ -93,3 +95,5 @@ BOOST_AUTO_TEST_CASE(evict)
     BOOST_CHECK(cache.get("d") == boost::none);
     BOOST_CHECK(cache.get("e") == boost::none);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

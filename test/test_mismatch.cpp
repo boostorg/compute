@@ -22,13 +22,14 @@ BOOST_AUTO_TEST_CASE(mismatch_int)
     int data1[] = { 1, 2, 3, 4, 5, 6 };
     int data2[] = { 1, 2, 3, 7, 5, 6 };
 
-    boost::compute::vector<int> vector1(data1, data1 + 6);
-    boost::compute::vector<int> vector2(data2, data2 + 6);
+    boost::compute::vector<int> vector1(data1, data1 + 6, queue);
+    boost::compute::vector<int> vector2(data2, data2 + 6, queue);
 
     typedef boost::compute::vector<int>::iterator iter;
 
     std::pair<iter, iter> location =
-        boost::compute::mismatch(vector1.begin(), vector1.end(), vector2.begin());
+        boost::compute::mismatch(vector1.begin(), vector1.end(),
+                                 vector2.begin(), queue);
     BOOST_CHECK(location.first == vector1.begin() + 3);
     BOOST_CHECK_EQUAL(int(*location.first), int(4));
     BOOST_CHECK(location.second == vector2.begin() + 3);

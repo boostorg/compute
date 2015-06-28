@@ -29,13 +29,14 @@ BOOST_AUTO_TEST_CASE(copy_complex_vector)
     host_vector.push_back(std::complex<float>(1.0f, -2.0f));
     host_vector.push_back(std::complex<float>(-2.0f, -1.0f));
 
-    boost::compute::vector<std::complex<float> > device_vector;
+    boost::compute::vector<std::complex<float> > device_vector(context);
     boost::compute::copy(
         host_vector.begin(),
         host_vector.end(),
-        device_vector.begin()
+        device_vector.begin(),
+        queue
     );
-    boost::compute::system::finish();
+    queue.finish();
     BOOST_CHECK_EQUAL(std::complex<float>(device_vector[0]), std::complex<float>(1.0f, 2.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(device_vector[1]), std::complex<float>(-2.0f, 1.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(device_vector[2]), std::complex<float>(1.0f, -2.0f));
@@ -45,13 +46,14 @@ BOOST_AUTO_TEST_CASE(copy_complex_vector)
 // fills a vector of complex<float>'s on the device with a constant value
 BOOST_AUTO_TEST_CASE(fill_complex_vector)
 {
-    boost::compute::vector<std::complex<float> > vector(6);
+    boost::compute::vector<std::complex<float> > vector(6, context);
     boost::compute::fill(
         vector.begin(),
         vector.end(),
-        std::complex<float>(2.0f, 5.0f)
+        std::complex<float>(2.0f, 5.0f),
+        queue
     );
-    boost::compute::system::finish();
+    queue.finish();
     BOOST_CHECK_EQUAL(std::complex<float>(vector[0]), std::complex<float>(2.0f, 5.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(vector[1]), std::complex<float>(2.0f, 5.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(vector[2]), std::complex<float>(2.0f, 5.0f));
@@ -64,36 +66,38 @@ BOOST_AUTO_TEST_CASE(fill_complex_vector)
 // transform with the real() and imag() functions
 BOOST_AUTO_TEST_CASE(extract_real_and_imag)
 {
-    boost::compute::vector<std::complex<float> > vector;
-    vector.push_back(std::complex<float>(1.0f, 3.0f));
-    vector.push_back(std::complex<float>(3.0f, 1.0f));
-    vector.push_back(std::complex<float>(5.0f, -1.0f));
-    vector.push_back(std::complex<float>(7.0f, -3.0f));
-    vector.push_back(std::complex<float>(9.0f, -5.0f));
+    boost::compute::vector<std::complex<float> > vector(context);
+    vector.push_back(std::complex<float>(1.0f, 3.0f), queue);
+    vector.push_back(std::complex<float>(3.0f, 1.0f), queue);
+    vector.push_back(std::complex<float>(5.0f, -1.0f), queue);
+    vector.push_back(std::complex<float>(7.0f, -3.0f), queue);
+    vector.push_back(std::complex<float>(9.0f, -5.0f), queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(5));
 
-    boost::compute::vector<float> reals(5);
+    boost::compute::vector<float> reals(5, context);
     boost::compute::transform(
         vector.begin(),
         vector.end(),
         reals.begin(),
-        boost::compute::real<float>()
+        boost::compute::real<float>(),
+        queue
     );
-    boost::compute::system::finish();
+    queue.finish();
     BOOST_CHECK_EQUAL(float(reals[0]), float(1.0f));
     BOOST_CHECK_EQUAL(float(reals[1]), float(3.0f));
     BOOST_CHECK_EQUAL(float(reals[2]), float(5.0f));
     BOOST_CHECK_EQUAL(float(reals[3]), float(7.0f));
     BOOST_CHECK_EQUAL(float(reals[4]), float(9.0f));
 
-    boost::compute::vector<float> imags(5);
+    boost::compute::vector<float> imags(5, context);
     boost::compute::transform(
         vector.begin(),
         vector.end(),
         imags.begin(),
-        boost::compute::imag<float>()
+        boost::compute::imag<float>(),
+        queue
     );
-    boost::compute::system::finish();
+    queue.finish();
     BOOST_CHECK_EQUAL(float(imags[0]), float(3.0f));
     BOOST_CHECK_EQUAL(float(imags[1]), float(1.0f));
     BOOST_CHECK_EQUAL(float(imags[2]), float(-1.0f));
@@ -104,22 +108,23 @@ BOOST_AUTO_TEST_CASE(extract_real_and_imag)
 // compute the complex conjugate of a vector of complex<float>'s
 BOOST_AUTO_TEST_CASE(complex_conj)
 {
-    boost::compute::vector<std::complex<float> > input;
-    input.push_back(std::complex<float>(1.0f, 3.0f));
-    input.push_back(std::complex<float>(3.0f, 1.0f));
-    input.push_back(std::complex<float>(5.0f, -1.0f));
-    input.push_back(std::complex<float>(7.0f, -3.0f));
-    input.push_back(std::complex<float>(9.0f, -5.0f));
+    boost::compute::vector<std::complex<float> > input(context);
+    input.push_back(std::complex<float>(1.0f, 3.0f), queue);
+    input.push_back(std::complex<float>(3.0f, 1.0f), queue);
+    input.push_back(std::complex<float>(5.0f, -1.0f), queue);
+    input.push_back(std::complex<float>(7.0f, -3.0f), queue);
+    input.push_back(std::complex<float>(9.0f, -5.0f), queue);
     BOOST_CHECK_EQUAL(input.size(), size_t(5));
 
-    boost::compute::vector<std::complex<float> > output(5);
+    boost::compute::vector<std::complex<float> > output(5, context);
     boost::compute::transform(
         input.begin(),
         input.end(),
         output.begin(),
-        boost::compute::conj<float>()
+        boost::compute::conj<float>(),
+        queue
     );
-    boost::compute::system::finish();
+    queue.finish();
     BOOST_CHECK_EQUAL(std::complex<float>(output[0]), std::complex<float>(1.0f, -3.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(output[1]), std::complex<float>(3.0f, -1.0f));
     BOOST_CHECK_EQUAL(std::complex<float>(output[2]), std::complex<float>(5.0f, 1.0f));
@@ -141,12 +146,12 @@ BOOST_AUTO_TEST_CASE(complex_type_name)
 BOOST_AUTO_TEST_CASE(transform_multiply)
 {
     boost::compute::vector<std::complex<float> > x(context);
-    x.push_back(std::complex<float>(1.0f, 2.0f));
-    x.push_back(std::complex<float>(-2.0f, 5.0f));
+    x.push_back(std::complex<float>(1.0f, 2.0f), queue);
+    x.push_back(std::complex<float>(-2.0f, 5.0f), queue);
 
     boost::compute::vector<std::complex<float> > y(context);
-    y.push_back(std::complex<float>(3.0f, 4.0f));
-    y.push_back(std::complex<float>(2.0f, -1.0f));
+    y.push_back(std::complex<float>(3.0f, 4.0f), queue);
+    y.push_back(std::complex<float>(2.0f, -1.0f), queue);
 
     boost::compute::vector<std::complex<float> > z(2, context);
 
