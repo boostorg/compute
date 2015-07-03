@@ -27,14 +27,14 @@ namespace bc = boost::compute;
 BOOST_AUTO_TEST_CASE(partition_float_vector)
 {
     bc::vector<float> vector(context);
-    vector.push_back(1.0f);
-    vector.push_back(2.0f);
-    vector.push_back(-1.0f);
-    vector.push_back(-2.0f);
-    vector.push_back(3.0f);
-    vector.push_back(4.0f);
-    vector.push_back(-3.0f);
-    vector.push_back(-4.0f);
+    vector.push_back(1.0f, queue);
+    vector.push_back(2.0f, queue);
+    vector.push_back(-1.0f, queue);
+    vector.push_back(-2.0f, queue);
+    vector.push_back(3.0f, queue);
+    vector.push_back(4.0f, queue);
+    vector.push_back(-3.0f, queue);
+    vector.push_back(-4.0f, queue);
 
     // verify is_partitioned()
     BOOST_VERIFY(bc::is_partitioned(vector.begin(),
@@ -70,11 +70,11 @@ BOOST_AUTO_TEST_CASE(partition_small_vector)
     bc::vector<float> vector(context);
     bc::partition(vector.begin(), vector.end(), bc::signbit_<float>(), queue);
 
-    vector.push_back(1.0f);
+    vector.push_back(1.0f, queue);
     bc::partition(vector.begin(), vector.end(), bc::signbit_<float>(), queue);
     CHECK_RANGE_EQUAL(float, 1, vector, (1.0f));
 
-    vector.push_back(-1.0f);
+    vector.push_back(-1.0f, queue);
     bc::partition(vector.begin(), vector.end(), bc::signbit_<float>(), queue);
     CHECK_RANGE_EQUAL(float, 2, vector, (-1.0f, 1.0f));
 }

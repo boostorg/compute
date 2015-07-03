@@ -33,28 +33,28 @@ BOOST_AUTO_TEST_CASE(concept_check)
 
 BOOST_AUTO_TEST_CASE(insert)
 {
-    boost::compute::flat_map<int, float> map;
-    map.insert(std::make_pair(1, 1.1f));
-    map.insert(std::make_pair(-1, -1.1f));
-    map.insert(std::make_pair(3, 3.3f));
-    map.insert(std::make_pair(2, 2.2f));
+    boost::compute::flat_map<int, float> map(context);
+    map.insert(std::make_pair(1, 1.1f), queue);
+    map.insert(std::make_pair(-1, -1.1f), queue);
+    map.insert(std::make_pair(3, 3.3f), queue);
+    map.insert(std::make_pair(2, 2.2f), queue);
     BOOST_CHECK_EQUAL(map.size(), size_t(4));
     BOOST_CHECK(map.find(-1) == map.begin() + 0);
     BOOST_CHECK(map.find(1) == map.begin() + 1);
     BOOST_CHECK(map.find(2) == map.begin() + 2);
     BOOST_CHECK(map.find(3) == map.begin() + 3);
 
-    map.insert(std::make_pair(2, -2.2f));
+    map.insert(std::make_pair(2, -2.2f), queue);
     BOOST_CHECK_EQUAL(map.size(), size_t(4));
 }
 
 BOOST_AUTO_TEST_CASE(at)
 {
-    boost::compute::flat_map<int, float> map;
-    map.insert(std::make_pair(1, 1.1f));
-    map.insert(std::make_pair(4, 4.4f));
-    map.insert(std::make_pair(3, 3.3f));
-    map.insert(std::make_pair(2, 2.2f));
+    boost::compute::flat_map<int, float> map(context);
+    map.insert(std::make_pair(1, 1.1f), queue);
+    map.insert(std::make_pair(4, 4.4f), queue);
+    map.insert(std::make_pair(3, 3.3f), queue);
+    map.insert(std::make_pair(2, 2.2f), queue);
     BOOST_CHECK_EQUAL(float(map.at(1)), float(1.1f));
     BOOST_CHECK_EQUAL(float(map.at(2)), float(2.2f));
     BOOST_CHECK_EQUAL(float(map.at(3)), float(3.3f));

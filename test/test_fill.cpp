@@ -33,19 +33,19 @@ typedef boost::mpl::list
 
 template<class T>
 inline void test_fill(T v1, T v2, T v3, bc::command_queue queue) {
-    bc::vector<T> vector(4);
-    bc::fill(vector.begin(), vector.end(), v1);
-    bc::system::finish();
+    bc::vector<T> vector(4, queue.get_context());
+    bc::fill(vector.begin(), vector.end(), v1, queue);
+    queue.finish();
     CHECK_RANGE_EQUAL(T, 4, vector, (v1, v1, v1, v1));
 
-    vector.resize(1000);
-    bc::fill(vector.begin(), vector.end(), v2);
-    bc::system::finish();
+    vector.resize(1000, queue);
+    bc::fill(vector.begin(), vector.end(), v2, queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(vector.front(), v2);
     BOOST_CHECK_EQUAL(vector.back(), v2);
 
-    bc::fill(vector.begin() + 500, vector.end(), v3);
-    bc::system::finish();
+    bc::fill(vector.begin() + 500, vector.end(), v3, queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(vector.front(), v2);
     BOOST_CHECK_EQUAL(vector[499], v2);
     BOOST_CHECK_EQUAL(vector[500], v3);
@@ -126,31 +126,31 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fill_vec16, S, scalar_types )
 
 template<class T>
 inline void test_fill_n(T v1, T v2, T v3, bc::command_queue queue) {
-    bc::vector<T> vector(4);
-    bc::fill_n(vector.begin(), 4, v1);
-    bc::system::finish();
+    bc::vector<T> vector(4, queue.get_context());
+    bc::fill_n(vector.begin(), 4, v1, queue);
+    queue.finish();
     CHECK_RANGE_EQUAL(T, 4, vector, (v1, v1, v1, v1));
 
-    bc::fill_n(vector.begin(), 3, v2);
-    bc::system::finish();
+    bc::fill_n(vector.begin(), 3, v2, queue);
+    queue.finish();
     CHECK_RANGE_EQUAL(T, 4, vector, (v2, v2, v2, v1));
 
-    bc::fill_n(vector.begin() + 1, 2, v3);
-    bc::system::finish();
+    bc::fill_n(vector.begin() + 1, 2, v3, queue);
+    queue.finish();
     CHECK_RANGE_EQUAL(T, 4, vector, (v2, v3, v3, v1));
 
-    bc::fill_n(vector.begin(), 4, v2);
-    bc::system::finish();
+    bc::fill_n(vector.begin(), 4, v2, queue);
+    queue.finish();
     CHECK_RANGE_EQUAL(T, 4, vector, (v2, v2, v2, v2));
 
     // fill last element
-    bc::fill_n(vector.end() - 1, 1, v3);
-    bc::system::finish();
+    bc::fill_n(vector.end() - 1, 1, v3, queue);
+    queue.finish();
     CHECK_RANGE_EQUAL(T, 4, vector, (v2, v2, v2, v3));
 
     // fill first element
-    bc::fill_n(vector.begin(), 1, v1);
-    bc::system::finish();
+    bc::fill_n(vector.begin(), 1, v1, queue);
+    queue.finish();
     CHECK_RANGE_EQUAL(T, 4, vector, (v1, v2, v2, v3));
 }
 

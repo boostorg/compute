@@ -36,28 +36,28 @@ BOOST_AUTO_TEST_CASE(insert)
 {
     bc::flat_set<int> set(context);
     typedef bc::flat_set<int>::iterator iterator;
-    std::pair<iterator, bool> location = set.insert(12);
+    std::pair<iterator, bool> location = set.insert(12, queue);
     BOOST_CHECK(location.first == set.begin());
     BOOST_CHECK(location.second == true);
     BOOST_CHECK_EQUAL(*location.first, 12);
     BOOST_CHECK_EQUAL(set.size(), size_t(1));
 
-    location = set.insert(12);
+    location = set.insert(12, queue);
     BOOST_CHECK(location.first == set.begin());
     BOOST_CHECK(location.second == false);
     BOOST_CHECK_EQUAL(set.size(), size_t(1));
 
-    location = set.insert(4);
+    location = set.insert(4, queue);
     BOOST_CHECK(location.first == set.begin());
     BOOST_CHECK(location.second == true);
     BOOST_CHECK_EQUAL(set.size(), size_t(2));
 
-    location = set.insert(12);
+    location = set.insert(12, queue);
     BOOST_CHECK(location.first == set.begin() + 1);
     BOOST_CHECK(location.second == false);
     BOOST_CHECK_EQUAL(set.size(), size_t(2));
 
-    location = set.insert(9);
+    location = set.insert(9, queue);
     BOOST_CHECK(location.first == set.begin() + 1);
     BOOST_CHECK(location.second == true);
     BOOST_CHECK_EQUAL(set.size(), size_t(3));
@@ -67,35 +67,40 @@ BOOST_AUTO_TEST_CASE(erase)
 {
     bc::flat_set<int> set(context);
     typedef bc::flat_set<int>::iterator iterator;
-    set.insert(1);
-    set.insert(2);
-    set.insert(3);
-    set.insert(4);
-    set.insert(5);
+    set.insert(1, queue);
+    set.insert(2, queue);
+    set.insert(3, queue);
+    set.insert(4, queue);
+    set.insert(5, queue);
     BOOST_CHECK_EQUAL(set.size(), size_t(5));
 
-    iterator i = set.erase(set.begin());
+    iterator i = set.erase(set.begin(), queue);
+    queue.finish();
     BOOST_CHECK(i == set.begin() + 1);
     BOOST_CHECK_EQUAL(set.size(), size_t(4));
     BOOST_CHECK_EQUAL(*set.begin(), 2);
 
-    size_t count = set.erase(3);
+    size_t count = set.erase(3, queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(count, size_t(1));
     BOOST_CHECK_EQUAL(set.size(), size_t(3));
     BOOST_CHECK_EQUAL(*set.begin(), 2);
 
-    count = set.erase(9);
+    count = set.erase(9, queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(count, size_t(0));
     BOOST_CHECK_EQUAL(set.size(), size_t(3));
     BOOST_CHECK_EQUAL(*set.begin(), 2);
 
-    i = set.erase(set.begin() + 1);
+    i = set.erase(set.begin() + 1, queue);
+    queue.finish();
     BOOST_CHECK(i == set.begin() + 2);
     BOOST_CHECK_EQUAL(set.size(), size_t(2));
     BOOST_CHECK_EQUAL(*set.begin(), 2);
     BOOST_CHECK_EQUAL(*(set.end() - 1), 5);
 
-    set.erase(set.begin(), set.end());
+    set.erase(set.begin(), set.end(), queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(set.size(), size_t(0));
 }
 

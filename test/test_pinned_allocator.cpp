@@ -20,8 +20,8 @@ namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(vector_with_pinned_allocator)
 {
-    compute::vector<int, compute::pinned_allocator<int> > vector;
-    vector.push_back(12);
+    compute::vector<int, compute::pinned_allocator<int> > vector(context);
+    vector.push_back(12, queue);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

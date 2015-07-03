@@ -18,15 +18,13 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/lambda.hpp>
 
+#include "context_setup.hpp"
+
 namespace compute = boost::compute;
 
 BOOST_AUTO_TEST_CASE(random_fill_float)
 {
     using compute::lambda::_1;
-
-    compute::device device = compute::system::default_device();
-    compute::context context(device);
-    compute::command_queue queue(context, device);
 
     compute::vector<float> vector(10, context);
 
@@ -74,3 +72,5 @@ BOOST_AUTO_TEST_CASE(random_fill_float)
         size_t(0)
     );
 }
+
+BOOST_AUTO_TEST_SUITE_END()
