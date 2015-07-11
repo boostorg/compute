@@ -123,6 +123,7 @@ def run_benchmark(name, sizes, vs=[]):
             "merge",
             "partial_sum",
             "partition",
+            "reduce_by_key",
             "reverse",
             "reverse_copy",
             "rotate",
@@ -139,6 +140,7 @@ def run_benchmark(name, sizes, vs=[]):
             "max_element",
             "merge",
             "partial_sum",
+            "reduce_by_key",
             "saxpy",
             "sort"
         ],
