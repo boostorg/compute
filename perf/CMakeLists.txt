@@ -51,6 +51,7 @@ set(BENCHMARKS
   rotate_copy
   host_sort
   random_number_engine
+  reduce_by_key
   saxpy
   search
   search_n
@@ -132,6 +133,7 @@ if(${BOOST_COMPUTE_HAVE_CUDA})
     thrust_merge
     thrust_partial_sum
     thrust_partition
+    thrust_reduce_by_key
     thrust_reverse
     thrust_reverse_copy
     thrust_rotate
@@ -180,6 +182,7 @@ if(${BOOST_COMPUTE_HAVE_BOLT} AND ${BOOST_COMPUTE_USE_CPP11})
     bolt_max_element
     bolt_merge
     bolt_partial_sum
+    bolt_reduce_by_key
     bolt_saxpy
     bolt_sort
   )
