@@ -62,13 +62,13 @@ public:
     }
 
     /// Returns the minimum value of the distribution.
-    result_type min() const
+    result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const
     {
         return -std::numeric_limits<RealType>::infinity();
     }
 
     /// Returns the maximum value of the distribution.
-    result_type max() const
+    result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const
     {
         return std::numeric_limits<RealType>::infinity();
     }

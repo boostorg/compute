@@ -63,8 +63,8 @@ bool check_results(const std::vector<float>& values, const std::vector<float>& s
     bool res = true;
     for(int idx = 0 ; idx < size ; ++idx)
     {
-        int start = std::max(idx - semiWidth,0);
-        int end = std::min(idx + semiWidth,size-1);
+        int start = (std::max)(idx - semiWidth,0);
+        int end = (std::min)(idx + semiWidth,size-1);
         float res = 0;
         for(int j = start ; j <= end ; ++j)
         {

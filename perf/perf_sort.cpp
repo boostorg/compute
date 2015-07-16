@@ -59,7 +59,7 @@ void tune_sort(const std::vector<T>& data,
 
     const compute::uint_ tpbs[] = { 32, 64, 128, 256, 512, 1024 };
 
-    double min_time = std::numeric_limits<double>::max();
+    double min_time = (std::numeric_limits<double>::max)();
     compute::uint_ best_tpb = 0;
 
     for(size_t i = 0; i < sizeof(tpbs) / sizeof(*tpbs); i++){

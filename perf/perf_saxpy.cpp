@@ -76,7 +76,7 @@ void tune_saxpy(const compute::vector<T>& x,
     const compute::uint_ tpbs[] = { 4, 8, 16, 32, 64, 128, 256, 512, 1024 };
     const compute::uint_ vpts[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
 
-    double min_time = std::numeric_limits<double>::max();
+    double min_time = (std::numeric_limits<double>::max)();
     compute::uint_ best_tpb = 0;
     compute::uint_ best_vpt = 0;
 
