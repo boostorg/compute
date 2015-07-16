@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(next_permutation_int)
     bc::vector<bc::int_> vector(dataset, dataset + 5, queue);
 
     bool result =
-    	bc::next_permutation(vector.begin(), vector.begin() + 5, queue);
+        bc::next_permutation(vector.begin(), vector.begin() + 5, queue);
 
     CHECK_RANGE_EQUAL(int, 5, vector, (1, 3, 4, 5, 2));
     BOOST_VERIFY(result == true);
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(next_permutation_string)
     bc::vector<bc::char_> vector(dataset, dataset + 4, queue);
 
     bool result =
-    	bc::next_permutation(vector.begin(), vector.begin() + 4, queue);
+        bc::next_permutation(vector.begin(), vector.begin() + 4, queue);
 
     CHECK_RANGE_EQUAL(char, 4, vector, ('a', 'a', 'b', 'a'));
     BOOST_VERIFY(result == true);

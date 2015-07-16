@@ -36,7 +36,7 @@ const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE (
                                   CLK_ADDRESS_CLAMP_TO_EDGE   |
                                   CLK_FILTER_NEAREST;
 
-        // Store each work-item’s unique row and column
+        // Store each work-item's unique row and column
         int x   = get_global_id(0);
         int y   = get_global_id(1);
 
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
     {
         std::cout<<"Build Error: "<<std::endl
                  <<filter_program.build_log();
-	return -1;
+    return -1;
     }
 
     // create fliter kernel and set arguments

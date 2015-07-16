@@ -1,3 +1,13 @@
+//---------------------------------------------------------------------------//
+// Copyright (c) 2014 Kyle Lutz <kyle.r.lutz@gmail.com>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//
+// See http://boostorg.github.com/compute for more information.
+//---------------------------------------------------------------------------//
+
 #include <algorithm>
 #include <iostream>
 #include <vector>
@@ -17,7 +27,7 @@ struct ParallelMergeRange {
     Iterator out;               // where to put merged sequence
     bool empty()   const {return (end1-begin1)+(end2-begin2)==0;}
     bool is_divisible() const {
-        return std::min( end1-begin1, end2-begin2 ) > grainsize;
+        return (std::min)( end1-begin1, end2-begin2 ) > grainsize;
     }
     ParallelMergeRange( ParallelMergeRange& r, split ) {
         if( r.end1-r.begin1 < r.end2-r.begin2 ) {

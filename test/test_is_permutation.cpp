@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(is_permutation_int)
     bc::vector<bc::int_> vector2(dataset2, dataset2 + 5, queue);
 
     bool result =
-    	bc::is_permutation(vector1.begin(), vector1.begin() + 5,
+        bc::is_permutation(vector1.begin(), vector1.begin() + 5,
                            vector2.begin(), vector2.begin() + 5, queue);
 
     BOOST_VERIFY(result == true);
