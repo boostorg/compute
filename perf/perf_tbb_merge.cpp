@@ -17,7 +17,7 @@ struct ParallelMergeRange {
     Iterator out;               // where to put merged sequence
     bool empty()   const {return (end1-begin1)+(end2-begin2)==0;}
     bool is_divisible() const {
-        return std::min( end1-begin1, end2-begin2 ) > grainsize;
+        return (std::min)( end1-begin1, end2-begin2 ) > grainsize;
     }
     ParallelMergeRange( ParallelMergeRange& r, split ) {
         if( r.end1-r.begin1 < r.end2-r.begin2 ) {

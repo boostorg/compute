@@ -40,7 +40,7 @@ public:
     /// Creates a new uniform distribution producing numbers in the range
     /// [\p a, \p b].
     explicit uniform_int_distribution(IntType a = 0,
-                                      IntType b = std::numeric_limits<IntType>::max())
+                                      IntType b = (std::numeric_limits<IntType>::max)())
         : m_a(a),
           m_b(b)
     {
