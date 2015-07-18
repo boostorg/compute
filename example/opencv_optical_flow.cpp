@@ -45,8 +45,8 @@ const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE (
         float4 previous_pixel   = read_imagef(previous_image,
                                               sampler,
                                               coords);
-        int2 x1 	= (int2)(offset, 0.f);
-        int2 y1 	= (int2)(0.f, offset);
+        int2 x1     = (int2)(offset, 0.f);
+        int2 y1     = (int2)(0.f, offset);
 
         //get the difference
         float4 curdif = previous_pixel - current_pixel;

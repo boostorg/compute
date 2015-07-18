@@ -24,7 +24,7 @@
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 
-#ifndef BOOST_COMPUTE_DETAIL_NO_STD_TUPLE
+#ifndef BOOST_COMPUTE_NO_STD_TUPLE
 #include <tuple>
 #endif
 
@@ -86,7 +86,7 @@ BOOST_PP_REPEAT_FROM_TO(1, BOOST_COMPUTE_MAX_ARITY, BOOST_COMPUTE_INJECT_IMPL, ~
 #undef BOOST_COMPUTE_INJECT_DECL
 #undef BOOST_COMPUTE_INJECT_TYPE
 
-#ifdef BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
+#ifdef BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 // type_name() specializations for boost::tuple (without variadic templates)
 #define BOOST_COMPUTE_PRINT_TYPE(z, n, unused)                                 \
             + type_name<T ## n>() + "_"
@@ -154,9 +154,9 @@ struct type_name_trait<boost::tuple<T...>>
         return s.str();
     }
 };
-#endif // BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
+#endif // BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 
-#ifndef BOOST_COMPUTE_DETAIL_NO_STD_TUPLE
+#ifndef BOOST_COMPUTE_NO_STD_TUPLE
 // type_name<> specialization for std::tuple<T...>
 template<class... T>
 struct type_name_trait<std::tuple<T...>>
@@ -181,7 +181,7 @@ struct type_name_trait<std::tuple<T...>>
         return s.str();
     }
 };
-#endif // BOOST_COMPUTE_DETAIL_NO_STD_TUPLE
+#endif // BOOST_COMPUTE_NO_STD_TUPLE
 
 // get<N>() result type specialization for boost::tuple<>
 #define BOOST_COMPUTE_GET_RESULT_TYPE(z, n, unused)                            \

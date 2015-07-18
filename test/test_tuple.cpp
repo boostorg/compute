@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE(fill_tuple_vector)
     BOOST_CHECK_EQUAL(host_output[4], boost::make_tuple('z', 4, 3.14f));
 }
 
-#ifndef BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
+#ifndef BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 BOOST_AUTO_TEST_CASE(variadic_tuple)
 {
     BOOST_CHECK_EQUAL(
@@ -126,9 +126,9 @@ BOOST_AUTO_TEST_CASE(variadic_tuple)
         "boost_tuple_char_short_int_float_t"
     );
 }
-#endif // BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
+#endif // BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 
-#ifndef BOOST_COMPUTE_DETAIL_NO_STD_TUPLE
+#ifndef BOOST_COMPUTE_NO_STD_TUPLE
 BOOST_AUTO_TEST_CASE(std_tuple)
 {
     BOOST_CHECK_EQUAL(
@@ -136,6 +136,6 @@ BOOST_AUTO_TEST_CASE(std_tuple)
         "std_tuple_char_short_int_float_t"
     );
 }
-#endif // BOOST_COMPUTE_DETAIL_NO_STD_TUPLE
+#endif // BOOST_COMPUTE_NO_STD_TUPLE
 
 BOOST_AUTO_TEST_SUITE_END()

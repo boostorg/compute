@@ -214,7 +214,7 @@ BOOST_AUTO_TEST_CASE(min_and_max)
 
     BOOST_COMPUTE_FUNCTION(int2_, min_and_max, (int2_ accumulator, const int value),
     {
-        return (int2)(min(accumulator.x, value), max(accumulator.y, value));
+        return (int2)((min)(accumulator.x, value), (max)(accumulator.y, value));
     });
 
     int2_ result = boost::compute::accumulate(
@@ -233,12 +233,12 @@ BOOST_AUTO_TEST_CASE(min_max)
     using ::boost::compute::max;
 
     float min_value = boost::compute::accumulate(
-        vec.begin(), vec.end(), std::numeric_limits<float>::max(), min<float>(), queue
+        vec.begin(), vec.end(), (std::numeric_limits<float>::max)(), min<float>(), queue
     );
     BOOST_CHECK_EQUAL(min_value, 0.1f);
 
     float max_value = boost::compute::accumulate(
-        vec.begin(), vec.end(), std::numeric_limits<float>::min(), max<float>(), queue
+        vec.begin(), vec.end(), (std::numeric_limits<float>::min()), max<float>(), queue
     );
     BOOST_CHECK_EQUAL(max_value, 9.6f);
 
