@@ -207,7 +207,7 @@ struct bound_function
 
 } // end detail namespace
 
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+#if !defined(BOOST_COMPUTE_NO_VARIADIC_TEMPLATES) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
 /// Returns a function wrapper which invokes \p f with \p args when called.
 ///
 /// For example, to generate a unary function object which returns \c true
@@ -253,7 +253,7 @@ bind(F f, A1 a1, A2 a2, A3 a3)
 
     return detail::bound_function<F, Args>(f, boost::make_tuple(a1, a2, a3));
 }
-#endif // BOOST_NO_VARIADIC_TEMPLATES
+#endif // BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 
 } // end compute namespace
 } // end boost namespace

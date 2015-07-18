@@ -13,7 +13,7 @@
 
 #include <boost/config.hpp>
 
-#if !defined(BOOST_NO_CXX11_HDR_CHRONO) && !defined(BOOST_NO_0X_HDR_CHRONO)
+#ifndef BOOST_COMPUTE_NO_HDR_CHRONO
 #include <chrono>
 #endif
 
@@ -23,7 +23,7 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-#if !defined(BOOST_NO_CXX11_HDR_CHRONO) && !defined(BOOST_NO_0X_HDR_CHRONO)
+#ifndef BOOST_COMPUTE_NO_HDR_CHRONO
 template<class Rep, class Period>
 inline std::chrono::duration<Rep, Period>
 make_duration_from_nanoseconds(std::chrono::duration<Rep, Period>, size_t nanoseconds)
@@ -32,7 +32,7 @@ make_duration_from_nanoseconds(std::chrono::duration<Rep, Period>, size_t nanose
         std::chrono::nanoseconds(nanoseconds)
     );
 }
-#endif // BOOST_NO_CXX11_HDR_CHRONO
+#endif // BOOST_COMPUTE_NO_HDR_CHRONO
 
 template<class Rep, class Period>
 inline boost::chrono::duration<Rep, Period>

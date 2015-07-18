@@ -271,7 +271,7 @@ public:
         #endif
     }
 
-    #ifndef BOOST_NO_VARIADIC_TEMPLATES
+    #ifndef BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
     /// Sets the arguments for the kernel to \p args.
     template<class... T>
     void set_args(T&&... args)
@@ -280,7 +280,7 @@ public:
 
         _set_args<0>(args...);
     }
-    #endif // BOOST_NO_VARIADIC_TEMPLATES
+    #endif // BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 
     #if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Sets additional execution information for the kernel.

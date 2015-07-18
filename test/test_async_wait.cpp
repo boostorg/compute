@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(empty)
 {
 }
 
-#ifndef BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
+#ifndef BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 BOOST_AUTO_TEST_CASE(wait_for_copy)
 {
     // wait list
@@ -67,6 +67,6 @@ BOOST_AUTO_TEST_CASE(wait_for_copy)
     // check data on the device
     CHECK_RANGE_EQUAL(int, 8, vector, (1, 2, 3, 4, 5, 6, 7, 8));
 }
-#endif // BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
+#endif // BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 
 BOOST_AUTO_TEST_SUITE_END()
