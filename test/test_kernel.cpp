@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE(get_work_group_info)
     BOOST_CHECK(work_group_size >= 1);
 }
 
-#ifndef BOOST_NO_VARIADIC_TEMPLATES
+#ifndef BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 BOOST_AUTO_TEST_CASE(kernel_set_args)
 {
     compute::kernel k = compute::kernel::create_with_source(
@@ -110,7 +110,7 @@ BOOST_AUTO_TEST_CASE(kernel_set_args)
 
     k.set_args(4, 2.4f, 'a');
 }
-#endif
+#endif // BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 
 #ifdef CL_VERSION_1_2
 BOOST_AUTO_TEST_CASE(get_arg_info)

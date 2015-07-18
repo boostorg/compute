@@ -16,8 +16,7 @@
 
 #include <boost/compute/config.hpp>
 
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && \
-    !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#ifndef BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
 #include <initializer_list>
 #endif
 
@@ -61,8 +60,7 @@ public:
         m_extents.fill(value);
     }
 
-    #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && \
-        !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+    #ifndef BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
     /// Creates an extents object with \p values.
     extents(std::initializer_list<size_t> values)
     {
@@ -70,7 +68,7 @@ public:
 
         std::copy(values.begin(), values.end(), m_extents.begin());
     }
-    #endif
+    #endif // BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
 
     /// Returns the size (i.e. dimensionality) of the extents array.
     size_type size() const

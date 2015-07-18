@@ -20,8 +20,7 @@
 
 #include <boost/compute/config.hpp>
 
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && \
-    !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#ifndef BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
 #include <initializer_list>
 #endif
 
@@ -214,8 +213,7 @@ public:
         ::boost::compute::copy(vector.begin(), vector.end(), begin(), queue);
     }
 
-    #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && \
-        !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+    #ifndef BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
     vector(std::initializer_list<T> list,
            command_queue &queue = system::default_queue())
         : m_size(list.size()),
@@ -225,7 +223,7 @@ public:
 
         ::boost::compute::copy(list.begin(), list.end(), begin(), queue);
     }
-    #endif // !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+    #endif // BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
 
     vector<T>& operator=(const vector<T> &other)
     {

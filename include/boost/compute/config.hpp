@@ -20,21 +20,22 @@
 #error Boost.Compute requires Boost version 1.48 or later
 #endif
 
-// the BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES macro is defined
+// the BOOST_COMPUTE_NO_VARIADIC_TEMPLATES macro is defined
 // if the compiler does not *fully* support variadic templates
-#if defined(BOOST_NO_VARIADIC_TEMPLATES) || \
+#if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) || \
+    defined(BOOST_NO_VARIADIC_TEMPLATES) || \
     (defined(__GNUC__) && !defined(__clang__) && \
      __GNUC__ == 4 && __GNUC_MINOR__ <= 6)
-  #define BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES
-#endif
+  #define BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
+#endif // BOOST_NO_CXX11_VARIADIC_TEMPLATES
 
-// the BOOST_COMPUTE_DETAIL_NO_STD_TUPLE macro is defined if the
+// the BOOST_COMPUTE_NO_STD_TUPLE macro is defined if the
 // compiler/stdlib does not support std::tuple
 #if defined(BOOST_NO_CXX11_HDR_TUPLE) || \
     defined(BOOST_NO_0X_HDR_TUPLE) || \
-    defined(BOOST_COMPUTE_DETAIL_NO_VARIADIC_TEMPLATES)
-  #define BOOST_COMPUTE_DETAIL_NO_STD_TUPLE
-#endif
+    defined(BOOST_COMPUTE_NO_VARIADIC_TEMPLATES)
+  #define BOOST_COMPUTE_NO_STD_TUPLE
+#endif // BOOST_NO_CXX11_HDR_TUPLE
 
 // defines BOOST_COMPUTE_CL_CALLBACK to the value of CL_CALLBACK
 // if it is defined (it was added in OpenCL 1.1). this is used to
@@ -55,5 +56,15 @@
     (defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || defined(BOOST_NO_RVALUE_REFERENCES))
 #  define BOOST_COMPUTE_NO_RVALUE_REFERENCES
 #endif // BOOST_NO_CXX11_RVALUE_REFERENCES
+
+#if defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) || \
+    defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#  define BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
+#endif // BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+
+#if defined(BOOST_NO_CXX11_HDR_CHRONO) || \
+    defined(BOOST_NO_0X_HDR_CHRONO)
+#  define BOOST_COMPUTE_NO_HDR_CHRONO
+#endif // BOOST_NO_CXX11_HDR_CHRONO
 
 #endif // BOOST_COMPUTE_CONFIG_HPP
