@@ -15,6 +15,19 @@
 #include <boost/compute/algorithm/sort.hpp>
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/types/struct.hpp>
+
+struct Particle
+{
+    Particle(): x(0.f), y(0.f) { }
+    Particle(float _x, float _y): x(_x), y(_y) { }
+
+    float x;
+    float y;
+};
+
+// adapt struct for OpenCL
+BOOST_COMPUTE_ADAPT_STRUCT(Particle, Particle, (x, y))
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"
@@ -275,6 +288,76 @@ BOOST_AUTO_TEST_CASE(sort_host_vector)
     std::vector<int> vector(data, data + 8);
     boost::compute::sort(vector.begin(), vector.end(), queue);
     CHECK_RANGE_EQUAL(int, 8, vector, (0, 1, 2, 3, 4, 5, 6, 7));
+}
+
+BOOST_AUTO_TEST_CASE(sort_custom_struct)
+{
+    // function to compare particles by their x-coordinate
+    BOOST_COMPUTE_FUNCTION(bool, sort_by_x, (Particle a, Particle b),
+    {
+        return a.x < b.x;
+    });
+
+    std::vector<Particle> particles;
+    particles.push_back(Particle(0.1f, 0.f));
+    particles.push_back(Particle(-0.4f, 0.f));
+    particles.push_back(Particle(10.0f, 0.f));
+    particles.push_back(Particle(0.001f, 0.f));
+
+    boost::compute::vector<Particle> vector(4, context);
+    boost::compute::copy(particles.begin(), particles.end(), vector.begin(), queue);
+    BOOST_CHECK_EQUAL(vector.size(), size_t(4));
+    BOOST_CHECK(
+        boost::compute::is_sorted(vector.begin(), vector.end(),
+                                  sort_by_x, queue) == false
+    );
+
+    boost::compute::sort(vector.begin(), vector.end(), sort_by_x, queue);
+    BOOST_CHECK(
+        boost::compute::is_sorted(vector.begin(), vector.end(),
+                                  sort_by_x, queue) == true
+    );
+    boost::compute::copy(vector.begin(), vector.end(), particles.begin(), queue);
+    BOOST_CHECK_CLOSE(particles[0].x, -0.4f, 0.1);
+    BOOST_CHECK_CLOSE(particles[1].x, 0.001f, 0.1);
+    BOOST_CHECK_CLOSE(particles[2].x, 0.1f, 0.1);
+    BOOST_CHECK_CLOSE(particles[3].x, 10.0f, 0.1);
+}
+
+BOOST_AUTO_TEST_CASE(sort_int2)
+{
+    using bc::int2_;
+
+    BOOST_COMPUTE_FUNCTION(bool, sort_int2, (int2_ a, int2_ b),
+    {
+        return a.x < b.x;
+    });
+
+    const size_t size = 100;
+    std::vector<int2_> host(size, int2_(0, 0));
+    host[0] = int2_(100.f, 0.f);
+    host[size/4] = int2_(20.f, 0.f);
+    host[(size*3)/4] = int2_(9.f, 0.f);
+    host[size-3] = int2_(-10.0f, 0.f);
+
+    boost::compute::vector<int2_> vector(size, context);
+    boost::compute::copy(host.begin(), host.end(), vector.begin(), queue);
+    BOOST_CHECK_EQUAL(vector.size(), size);
+    BOOST_CHECK(
+        boost::compute::is_sorted(vector.begin(), vector.end(),
+                                  sort_int2, queue) == false
+    );
+
+    boost::compute::sort(vector.begin(), vector.end(), sort_int2, queue);
+    BOOST_CHECK(
+        boost::compute::is_sorted(vector.begin(), vector.end(),
+                                  sort_int2, queue) == true
+    );
+    boost::compute::copy(vector.begin(), vector.end(), host.begin(), queue);
+    BOOST_CHECK_CLOSE(host[0][0], -10.f, 0.1);
+    BOOST_CHECK_CLOSE(host[(size - 3)][0], 9.f, 0.1);
+    BOOST_CHECK_CLOSE(host[(size - 2)][0], 20.f, 0.1);
+    BOOST_CHECK_CLOSE(host[(size - 1)][0], 100.f, 0.1);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
