@@ -14,6 +14,7 @@
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/algorithm/detail/merge_with_merge_path.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
@@ -81,6 +82,39 @@ inline void merge_blocks(Iterator first,
 }
 
 template<class Iterator, class Compare>
+inline void dispatch_merge_blocks(Iterator first,
+                                  Iterator result,
+                                  Compare compare,
+                                  size_t count,
+                                  const size_t block_size,
+                                  const size_t input_size_threshold,
+                                  const size_t blocks_no_threshold,
+                                  command_queue &queue)
+{
+    const size_t blocks_no = static_cast<size_t>(
+        std::ceil(float(count) / block_size)
+    );
+    // merge with merge path should used only for the large arrays and at the
+    // end of merging part when there are only a few big blocks left to be merged
+    if(blocks_no <= blocks_no_threshold && count >= input_size_threshold){
+        Iterator last = first + count;
+        for(size_t i = 0; i < count; i+= 2*block_size)
+        {
+            Iterator first1 = (std::min)(first + i, last);
+            Iterator last1 = (std::min)(first1 + block_size, last);
+            Iterator first2 = last1;
+            Iterator last2 = (std::min)(first2 + block_size, last);
+            Iterator block_result = (std::min)(result + i, result + count);
+            merge_with_merge_path(first1, last1, first2, last2,
+                                  block_result, compare, queue);
+        }
+    }
+    else {
+        merge_blocks(first, result, compare, count, block_size, queue);
+    }
+}
+
+template<class Iterator, class Compare>
 inline void block_insertion_sort(Iterator first,
                                  Compare compare,
                                  const size_t count,
@@ -119,6 +153,7 @@ inline void block_insertion_sort(Iterator first,
     queue.enqueue_1d_range_kernel(kernel, 0, global_size, 0);
 }
 
+// This sort is stable.
 template<class Iterator, class Compare>
 inline void merge_sort_on_cpu(Iterator first,
                               Iterator last,
@@ -146,25 +181,39 @@ inline void merge_sort_on_cpu(Iterator first,
     boost::shared_ptr<parameter_cache> parameters =
         detail::parameter_cache::get_global_cache(device);
 
+    // When there is merge_with_path_blocks_no_threshold or less blocks left to
+    // merge AND input size is merge_with_merge_path_input_size_threshold or more
+    // merge_with_merge_path() algorithm is used to merge sorted blocks;
+    // otherwise merge_blocks() is used.
+    const size_t merge_with_path_blocks_no_threshold =
+        parameters->get(cache_key, "merge_with_merge_path_blocks_no_threshold", 8);
+    const size_t merge_with_path_input_size_threshold =
+        parameters->get(cache_key, "merge_with_merge_path_input_size_threshold", 2097152);
+
     const size_t block_size =
         parameters->get(cache_key, "insertion_sort_block_size", 64);
     block_insertion_sort(first, compare, count, block_size, queue);
 
     // temporary buffer for merge result
     vector<value_type> temp(count, context);
-    bool result_in_temp = false;
+    bool result_in_temporary_buffer = false;
 
     for(size_t i = block_size; i < count; i *= 2){
-        result_in_temp = !result_in_temp;
-        if(result_in_temp) {
-            merge_blocks(first, temp.begin(), compare, count, i, queue);
+        result_in_temporary_buffer = !result_in_temporary_buffer;
+        if(result_in_temporary_buffer) {
+            dispatch_merge_blocks(first, temp.begin(), compare, count, i,
+                                  merge_with_path_input_size_threshold,
+                                  merge_with_path_blocks_no_threshold,
+                                  queue);
         } else {
-            merge_blocks(temp.begin(), first, compare, count, i, queue);
+            dispatch_merge_blocks(temp.begin(), first, compare, count, i,
+                                  merge_with_path_input_size_threshold,
+                                  merge_with_path_blocks_no_threshold,
+                                  queue);
         }
     }
 
-    // if the result is in temp buffer we need to copy it to input
-    if(result_in_temp) {
+    if(result_in_temporary_buffer) {
         copy(temp.begin(), temp.end(), first, queue);
     }
 }
