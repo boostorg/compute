@@ -17,6 +17,7 @@
 
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
+#include <boost/compute/algorithm/detail/merge_sort_on_cpu.hpp>
 #include <boost/compute/algorithm/detail/radix_sort.hpp>
 #include <boost/compute/algorithm/detail/insertion_sort.hpp>
 #include <boost/compute/algorithm/reverse.hpp>
@@ -30,13 +31,13 @@ namespace compute {
 namespace detail {
 
 template<class T>
-inline void dispatch_device_sort(buffer_iterator<T> first,
-                                 buffer_iterator<T> last,
-                                 less<T>,
-                                 command_queue &queue,
-                                 typename boost::enable_if_c<
-                                     is_radix_sortable<T>::value
-                                 >::type* = 0)
+inline void dispatch_gpu_sort(buffer_iterator<T> first,
+                              buffer_iterator<T> last,
+                              less<T>,
+                              command_queue &queue,
+                              typename boost::enable_if_c<
+                                  is_radix_sortable<T>::value
+                              >::type* = 0)
 {
     size_t count = detail::iterator_range_size(first, last);
 
@@ -53,13 +54,13 @@ inline void dispatch_device_sort(buffer_iterator<T> first,
 }
 
 template<class T>
-inline void dispatch_device_sort(buffer_iterator<T> first,
-                                 buffer_iterator<T> last,
-                                 greater<T> compare,
-                                 command_queue &queue,
-                                 typename boost::enable_if_c<
-                                     is_radix_sortable<T>::value
-                                 >::type* = 0)
+inline void dispatch_gpu_sort(buffer_iterator<T> first,
+                              buffer_iterator<T> last,
+                              greater<T> compare,
+                              command_queue &queue,
+                              typename boost::enable_if_c<
+                                  is_radix_sortable<T>::value
+                              >::type* = 0)
 {
     size_t count = detail::iterator_range_size(first, last);
 
@@ -82,10 +83,10 @@ inline void dispatch_device_sort(buffer_iterator<T> first,
 }
 
 template<class Iterator, class Compare>
-inline void dispatch_device_sort(Iterator first,
-                                 Iterator last,
-                                 Compare compare,
-                                 command_queue &queue)
+inline void dispatch_gpu_sort(Iterator first,
+                              Iterator last,
+                              Compare compare,
+                              command_queue &queue)
 {
     ::boost::compute::detail::serial_insertion_sort(
         first, last, compare, queue
@@ -102,7 +103,11 @@ inline void dispatch_sort(Iterator first,
                               is_device_iterator<Iterator>
                           >::type* = 0)
 {
-    dispatch_device_sort(first, last, compare, queue);
+    if(queue.get_device().type() & device::gpu) {
+        dispatch_gpu_sort(first, last, compare, queue);
+        return;
+    }
+    ::boost::compute::detail::merge_sort_on_cpu(first, last, compare, queue);
 }
 
 // sort() for host iterators
@@ -125,7 +130,7 @@ inline void dispatch_sort(Iterator first,
     );
 
     // sort mapped buffer
-    dispatch_device_sort(view.begin(), view.end(), compare, queue);
+    dispatch_sort(view.begin(), view.end(), compare, queue);
 
     // return results to host
     view.map(queue);
