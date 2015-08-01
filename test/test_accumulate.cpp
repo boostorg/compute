@@ -238,7 +238,7 @@ BOOST_AUTO_TEST_CASE(min_max)
     BOOST_CHECK_EQUAL(min_value, 0.1f);
 
     float max_value = boost::compute::accumulate(
-        vec.begin(), vec.end(), (std::numeric_limits<float>::min()), max<float>(), queue
+        vec.begin(), vec.end(), (std::numeric_limits<float>::min)(), max<float>(), queue
     );
     BOOST_CHECK_EQUAL(max_value, 9.6f);
 
