@@ -16,6 +16,8 @@
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/detail/merge_with_merge_path.hpp>
 #include <boost/compute/algorithm/detail/serial_merge.hpp>
+#include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/detail/parameter_cache.hpp>
 
 namespace boost {
 namespace compute {
@@ -48,6 +50,38 @@ inline OutputIterator merge(InputIterator1 first1,
                             Compare comp,
                             command_queue &queue = system::default_queue())
 {
+    typedef typename std::iterator_traits<InputIterator1>::value_type input1_type;
+    typedef typename std::iterator_traits<InputIterator2>::value_type input2_type;
+    typedef typename std::iterator_traits<OutputIterator>::value_type output_type;
+
+    const device &device = queue.get_device();
+
+    std::string cache_key =
+        std::string("__boost_merge_") + type_name<input1_type>() + "_"
+        + type_name<input2_type>() + "_" + type_name<output_type>();
+    boost::shared_ptr<detail::parameter_cache> parameters =
+        detail::parameter_cache::get_global_cache(device);
+
+    // default serial merge threshold depends on device type
+    size_t default_serial_merge_threshold = 32768;
+    if(device.type() & device::gpu) {
+        default_serial_merge_threshold = 2048;
+    }
+
+    // loading serial merge threshold parameter
+    const size_t serial_merge_threshold =
+                   parameters->get(cache_key, "serial_merge_threshold",
+                                   default_serial_merge_threshold);
+
+    // choosing merge algorithm
+    const size_t total_count =
+        detail::iterator_range_size(first1, last1)
+        + detail::iterator_range_size(first2, last2);
+    // for small inputs serial merge turns out to outperform
+    // merge with merge path algorithm
+    if(total_count <= serial_merge_threshold){
+       return detail::serial_merge(first1, last1, first2, last2, result, comp, queue);
+    }
     return detail::merge_with_merge_path(first1, last1, first2, last2, result, comp, queue);
 }
 

@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
     boost::compute::device device = boost::compute::system::default_device();
     boost::compute::context context(device);
     boost::compute::command_queue queue(context, device);
+    std::cout << "device: " << device.name() << std::endl;
 
     std::vector<int> v1 = generate_random_vector<int>(std::floor(PERF_N / 2.0));
     std::vector<int> v2 = generate_random_vector<int>(std::ceil(PERF_N / 2.0));
@@ -48,6 +49,7 @@ int main(int argc, char *argv[])
                               gpu_v3.begin(),
                               queue
         );
+        queue.finish();
         t.stop();
     }
     std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
