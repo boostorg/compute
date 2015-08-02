@@ -23,14 +23,20 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-template<class Iterator, class Compare>
-inline void merge_blocks(Iterator first,
-                         Iterator result,
+template<class KeyIterator, class ValueIterator, class Compare>
+inline void merge_blocks(KeyIterator keys_first,
+                         ValueIterator values_first,
+                         KeyIterator keys_result,
+                         ValueIterator values_result,
                          Compare compare,
                          size_t count,
                          const size_t block_size,
+                         const bool sort_by_key,
                          command_queue &queue)
 {
+    (void) values_result;
+    (void) values_first;
+
     meta_kernel k("merge_sort_on_cpu_merge_blocks");
     size_t count_arg = k.add_arg<const uint_>("count");
     size_t block_size_arg = k.add_arg<uint_>("block_size");
@@ -44,28 +50,52 @@ inline void merge_blocks(Iterator first,
 
         // merging block 1 and block 2 (stable)
         "while(b1_start < b1_end && b2_start < b2_end){\n" <<
-        "    if( " << compare(first[k.var<uint_>("b2_start")],
-                              first[k.var<uint_>("b1_start")]) << "){\n" <<
-        "        " << result[k.var<uint_>("result_idx")] <<  " = " <<
-                      first[k.var<uint_>("b2_start")] << ";\n" <<
+        "    if( " << compare(keys_first[k.var<uint_>("b2_start")],
+                              keys_first[k.var<uint_>("b1_start")]) << "){\n" <<
+        "        " << keys_result[k.var<uint_>("result_idx")] <<  " = " <<
+                      keys_first[k.var<uint_>("b2_start")] << ";\n";
+    if(sort_by_key){
+        k <<
+        "        " << values_result[k.var<uint_>("result_idx")] <<  " = " <<
+                      values_first[k.var<uint_>("b2_start")] << ";\n";
+    }
+    k <<
         "        b2_start++;\n" <<
         "    }\n" <<
         "    else {\n" <<
-        "        " << result[k.var<uint_>("result_idx")] <<  " = " <<
-                      first[k.var<uint_>("b1_start")] << ";\n" <<
+        "        " << keys_result[k.var<uint_>("result_idx")] <<  " = " <<
+                      keys_first[k.var<uint_>("b1_start")] << ";\n";
+    if(sort_by_key){
+        k <<
+        "        " << values_result[k.var<uint_>("result_idx")] <<  " = " <<
+                      values_first[k.var<uint_>("b1_start")] << ";\n";
+    }
+    k <<
         "        b1_start++;\n" <<
         "    }\n" <<
         "    result_idx++;\n" <<
         "}\n" <<
         "while(b1_start < b1_end){\n" <<
-        "   " << result[k.var<uint_>("result_idx")] <<  " = " <<
-                 first[k.var<uint_>("b1_start")] << ";\n" <<
+        "    " << keys_result[k.var<uint_>("result_idx")] <<  " = " <<
+                 keys_first[k.var<uint_>("b1_start")] << ";\n";
+    if(sort_by_key){
+        k <<
+        "    " << values_result[k.var<uint_>("result_idx")] <<  " = " <<
+                      values_first[k.var<uint_>("b1_start")] << ";\n";
+    }
+    k <<
         "    b1_start++;\n" <<
         "    result_idx++;\n" <<
         "}\n" <<
         "while(b2_start < b2_end){\n" <<
-        "   " << result[k.var<uint_>("result_idx")] <<  " = " <<
-                 first[k.var<uint_>("b2_start")] << ";\n" <<
+        "    " << keys_result[k.var<uint_>("result_idx")] <<  " = " <<
+                 keys_first[k.var<uint_>("b2_start")] << ";\n";
+    if(sort_by_key){
+        k <<
+        "    " << values_result[k.var<uint_>("result_idx")] <<  " = " <<
+                      values_first[k.var<uint_>("b2_start")] << ";\n";
+    }
+    k <<
         "    b2_start++;\n" <<
         "    result_idx++;\n" <<
         "}\n";
@@ -79,6 +109,20 @@ inline void merge_blocks(Iterator first,
         std::ceil(float(count) / (2 * block_size))
     );
     queue.enqueue_1d_range_kernel(kernel, 0, global_size, 0);
+}
+
+template<class Iterator, class Compare>
+inline void merge_blocks(Iterator first,
+                         Iterator result,
+                         Compare compare,
+                         size_t count,
+                         const size_t block_size,
+                         const bool sort_by_key,
+                         command_queue &queue)
+{
+    // dummy iterator as it's not sort by key
+    Iterator dummy;
+    merge_blocks(first, dummy, result, dummy, compare, count, block_size, false, queue);
 }
 
 template<class Iterator, class Compare>
@@ -110,18 +154,23 @@ inline void dispatch_merge_blocks(Iterator first,
         }
     }
     else {
-        merge_blocks(first, result, compare, count, block_size, queue);
+        merge_blocks(first, result, compare, count, block_size, false, queue);
     }
 }
 
-template<class Iterator, class Compare>
-inline void block_insertion_sort(Iterator first,
+template<class KeyIterator, class ValueIterator, class Compare>
+inline void block_insertion_sort(KeyIterator keys_first,
+                                 ValueIterator values_first,
                                  Compare compare,
                                  const size_t count,
                                  const size_t block_size,
+                                 const bool sort_by_key,
                                  command_queue &queue)
 {
-    typedef typename std::iterator_traits<Iterator>::value_type T;
+    (void) values_first;
+
+    typedef typename std::iterator_traits<KeyIterator>::value_type K;
+    typedef typename std::iterator_traits<ValueIterator>::value_type T;
 
     meta_kernel k("merge_sort_on_cpu_block_insertion_sort");
     size_t count_arg = k.add_arg<uint_>("count");
@@ -133,15 +182,34 @@ inline void block_insertion_sort(Iterator first,
 
         // block insertion sort (stable)
         "for(uint i = start+1; i < end; i++){\n" <<
-        "    " << k.decl<const T>("value") << " = " << first[k.var<uint_>("i")] << ";\n" <<
+        "    " << k.decl<const K>("key") << " = " <<
+                  keys_first[k.var<uint_>("i")] << ";\n";
+    if(sort_by_key){
+        k <<
+        "    " << k.decl<const T>("value") << " = " <<
+                  values_first[k.var<uint_>("i")] << ";\n";
+    }
+    k <<
         "    uint pos = i;\n" <<
         "    while(pos > start && " <<
-                   compare(k.var<const T>("value"),
-                           first[k.var<uint_>("pos-1")]) << "){\n" <<
-        "        " << first[k.var<uint_>("pos")] << " = " << first[k.var<uint_>("pos-1")] << ";\n" <<
+                   compare(k.var<const K>("key"),
+                           keys_first[k.var<uint_>("pos-1")]) << "){\n" <<
+        "        " << keys_first[k.var<uint_>("pos")] << " = " <<
+                      keys_first[k.var<uint_>("pos-1")] << ";\n";
+    if(sort_by_key){
+        k <<
+        "        " << values_first[k.var<uint_>("pos")] << " = " <<
+                      values_first[k.var<uint_>("pos-1")] << ";\n";
+    }
+    k <<
         "        pos--;\n" <<
         "    }\n" <<
-        "    " << first[k.var<uint_>("pos")] << " = value;\n" <<
+        "    " << keys_first[k.var<uint_>("pos")] << " = key;\n";
+    if(sort_by_key) {
+        k <<
+        "    " << values_first[k.var<uint_>("pos")] << " = value;\n";
+    }
+    k <<
         "}\n"; // block insertion sort
 
     const context &context = queue.get_context();
@@ -151,6 +219,18 @@ inline void block_insertion_sort(Iterator first,
 
     const size_t global_size = static_cast<size_t>(std::ceil(float(count) / block_size));
     queue.enqueue_1d_range_kernel(kernel, 0, global_size, 0);
+}
+
+template<class Iterator, class Compare>
+inline void block_insertion_sort(Iterator first,
+                                 Compare compare,
+                                 const size_t count,
+                                 const size_t block_size,
+                                 command_queue &queue)
+{
+    // dummy iterator as it's not sort by key
+    Iterator dummy;
+    block_insertion_sort(first, dummy, compare, count, block_size, false, queue);
 }
 
 // This sort is stable.
@@ -215,6 +295,67 @@ inline void merge_sort_on_cpu(Iterator first,
 
     if(result_in_temporary_buffer) {
         copy(temp.begin(), temp.end(), first, queue);
+    }
+}
+
+// This sort is stable.
+template<class KeyIterator, class ValueIterator, class Compare>
+inline void merge_sort_by_key_on_cpu(KeyIterator keys_first,
+                                     KeyIterator keys_last,
+                                     ValueIterator values_first,
+                                     Compare compare,
+                                     command_queue &queue)
+{
+    typedef typename std::iterator_traits<KeyIterator>::value_type key_type;
+    typedef typename std::iterator_traits<ValueIterator>::value_type value_type;
+
+    size_t count = iterator_range_size(keys_first, keys_last);
+    if(count < 2){
+        return;
+    }
+    // for small input size only insertion sort is performed
+    else if(count <= 512){
+        block_insertion_sort(keys_first, values_first, compare,
+                             count, count, true, queue);
+        return;
+    }
+
+    const context &context = queue.get_context();
+    const device &device = queue.get_device();
+
+    // loading parameters
+    std::string cache_key =
+        std::string("__boost_merge_sort_by_key_on_cpu_") + type_name<value_type>()
+        + "_with_" + type_name<key_type>();
+    boost::shared_ptr<parameter_cache> parameters =
+        detail::parameter_cache::get_global_cache(device);
+
+    const size_t block_size =
+        parameters->get(cache_key, "insertion_sort_by_key_block_size", 64);
+    block_insertion_sort(keys_first, values_first, compare,
+                         count, block_size, true, queue);
+
+    // temporary buffer for merge results
+    vector<value_type> values_temp(count, context);
+    vector<key_type> keys_temp(count, context);
+    bool result_in_temporary_buffer = false;
+
+    for(size_t i = block_size; i < count; i *= 2){
+        result_in_temporary_buffer = !result_in_temporary_buffer;
+        if(result_in_temporary_buffer) {
+            merge_blocks(keys_first, values_first,
+                         keys_temp.begin(), values_temp.begin(),
+                         compare, count, i, true, queue);
+        } else {
+            merge_blocks(keys_temp.begin(), values_temp.begin(),
+                         keys_first, values_first,
+                         compare, count, i, true, queue);
+        }
+    }
+
+    if(result_in_temporary_buffer) {
+        copy(keys_temp.begin(), keys_temp.end(), keys_first, queue);
+        copy(values_temp.begin(), values_temp.end(), values_first, queue);
     }
 }
 
