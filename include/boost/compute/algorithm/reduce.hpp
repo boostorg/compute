@@ -198,16 +198,6 @@ inline void generic_reduce(InputIterator first,
     }
 }
 
-template<class InputIterator, class T>
-inline void dispatch_reduce(InputIterator first,
-                            InputIterator last,
-                            const buffer_iterator<T> result,
-                            const plus<T> &function,
-                            command_queue &queue)
-{
-    reduce_on_gpu(first, last, result, function, queue);
-}
-
 template<class InputIterator, class OutputIterator, class T>
 inline void dispatch_reduce(InputIterator first,
                             InputIterator last,
@@ -216,10 +206,16 @@ inline void dispatch_reduce(InputIterator first,
                             command_queue &queue)
 {
     const context &context = queue.get_context();
+    const device &device = queue.get_device();
 
     // reduce to temporary buffer on device
     array<T, 1> tmp(context);
-    dispatch_reduce(first, last, tmp.begin(), function, queue);
+    if(device.type() & device::cpu){
+        detail::serial_reduce(first, last, tmp.begin(), function, queue);
+    }
+    else {
+        reduce_on_gpu(first, last, tmp.begin(), function, queue);
+    }
 
     // copy to result iterator
     copy_n(tmp.begin(), 1, result, queue);
