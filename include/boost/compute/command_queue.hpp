@@ -249,16 +249,18 @@ public:
     /// \see_opencl_ref{clEnqueueReadBuffer}
     ///
     /// \see copy()
-    void enqueue_read_buffer(const buffer &buffer,
-                             size_t offset,
-                             size_t size,
-                             void *host_ptr,
-                             const wait_list &events = wait_list())
+    event enqueue_read_buffer(const buffer &buffer,
+                              size_t offset,
+                              size_t size,
+                              void *host_ptr,
+                              const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(size <= buffer.size());
         BOOST_ASSERT(buffer.get_context() == this->get_context());
         BOOST_ASSERT(host_ptr != 0);
+
+        event event_;
 
         cl_int ret = clEnqueueReadBuffer(
             m_queue,
@@ -269,12 +271,14 @@ public:
             host_ptr,
             events.size(),
             events.get_event_ptr(),
-            0
+            &event_.get()
         );
 
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
+
+        return event_;
     }
 
     /// Enqueues a command to read data from \p buffer to host memory. The
@@ -322,20 +326,22 @@ public:
     /// \see_opencl_ref{clEnqueueReadBufferRect}
     ///
     /// \opencl_version_warning{1,1}
-    void enqueue_read_buffer_rect(const buffer &buffer,
-                                  const size_t buffer_origin[3],
-                                  const size_t host_origin[3],
-                                  const size_t region[3],
-                                  size_t buffer_row_pitch,
-                                  size_t buffer_slice_pitch,
-                                  size_t host_row_pitch,
-                                  size_t host_slice_pitch,
-                                  void *host_ptr,
-                                  const wait_list &events = wait_list())
+    event enqueue_read_buffer_rect(const buffer &buffer,
+                                   const size_t buffer_origin[3],
+                                   const size_t host_origin[3],
+                                   const size_t region[3],
+                                   size_t buffer_row_pitch,
+                                   size_t buffer_slice_pitch,
+                                   size_t host_row_pitch,
+                                   size_t host_slice_pitch,
+                                   void *host_ptr,
+                                   const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(buffer.get_context() == this->get_context());
         BOOST_ASSERT(host_ptr != 0);
+
+        event event_;
 
         cl_int ret = clEnqueueReadBufferRect(
             m_queue,
@@ -351,12 +357,14 @@ public:
             host_ptr,
             events.size(),
             events.get_event_ptr(),
-            0
+            &event_.get()
         );
 
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
+
+        return event_;
     }
     #endif // CL_VERSION_1_1
 
@@ -365,16 +373,18 @@ public:
     /// \see_opencl_ref{clEnqueueWriteBuffer}
     ///
     /// \see copy()
-    void enqueue_write_buffer(const buffer &buffer,
-                              size_t offset,
-                              size_t size,
-                              const void *host_ptr,
-                              const wait_list &events = wait_list())
+    event enqueue_write_buffer(const buffer &buffer,
+                               size_t offset,
+                               size_t size,
+                               const void *host_ptr,
+                               const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(size <= buffer.size());
         BOOST_ASSERT(buffer.get_context() == this->get_context());
         BOOST_ASSERT(host_ptr != 0);
+
+        event event_;
 
         cl_int ret = clEnqueueWriteBuffer(
             m_queue,
@@ -385,12 +395,14 @@ public:
             host_ptr,
             events.size(),
             events.get_event_ptr(),
-            0
+            &event_.get()
         );
 
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
+
+        return event_;
     }
 
     /// Enqueues a command to write data from host memory to \p buffer.
@@ -438,20 +450,22 @@ public:
     /// \see_opencl_ref{clEnqueueWriteBufferRect}
     ///
     /// \opencl_version_warning{1,1}
-    void enqueue_write_buffer_rect(const buffer &buffer,
-                                   const size_t buffer_origin[3],
-                                   const size_t host_origin[3],
-                                   const size_t region[3],
-                                   size_t buffer_row_pitch,
-                                   size_t buffer_slice_pitch,
-                                   size_t host_row_pitch,
-                                   size_t host_slice_pitch,
-                                   void *host_ptr,
-                                   const wait_list &events = wait_list())
+    event enqueue_write_buffer_rect(const buffer &buffer,
+                                    const size_t buffer_origin[3],
+                                    const size_t host_origin[3],
+                                    const size_t region[3],
+                                    size_t buffer_row_pitch,
+                                    size_t buffer_slice_pitch,
+                                    size_t host_row_pitch,
+                                    size_t host_slice_pitch,
+                                    void *host_ptr,
+                                    const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
         BOOST_ASSERT(buffer.get_context() == this->get_context());
         BOOST_ASSERT(host_ptr != 0);
+
+        event event_;
 
         cl_int ret = clEnqueueWriteBufferRect(
             m_queue,
@@ -467,12 +481,14 @@ public:
             host_ptr,
             events.size(),
             events.get_event_ptr(),
-            0
+            &event_.get()
         );
 
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
+
+        return event_;
     }
     #endif // CL_VERSION_1_1
 
@@ -1181,25 +1197,42 @@ public:
     void enqueue_barrier()
     {
         BOOST_ASSERT(m_queue != 0);
+        cl_int ret = CL_SUCCESS;
 
         #ifdef CL_VERSION_1_2
-        clEnqueueBarrierWithWaitList(m_queue, 0, 0, 0);
-        #else
-        clEnqueueBarrier(m_queue);
-        #endif
+        if(get_device().check_version(1, 2)){
+            ret = clEnqueueBarrierWithWaitList(m_queue, 0, 0, 0);
+        } else
+        #endif // CL_VERSION_1_2
+        {
+            ret = clEnqueueBarrier(m_queue);
+        }
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
     }
 
     #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a barrier in the queue after \p events.
     ///
     /// \opencl_version_warning{1,2}
-    void enqueue_barrier(const wait_list &events)
+    event enqueue_barrier(const wait_list &events)
     {
         BOOST_ASSERT(m_queue != 0);
 
-        clEnqueueBarrierWithWaitList(
-            m_queue, events.size(), events.get_event_ptr(), 0
+        event event_;
+        cl_int ret = CL_SUCCESS;
+
+        ret = clEnqueueBarrierWithWaitList(
+            m_queue, events.size(), events.get_event_ptr(), &event_.get()
         );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return event_;
     }
     #endif // CL_VERSION_1_2
 
@@ -1254,11 +1287,13 @@ public:
     /// \opencl_version_warning{2,0}
     ///
     /// \see_opencl2_ref{clEnqueueSVMMemcpy}
-    void enqueue_svm_memcpy(void *dst_ptr,
-                            const void *src_ptr,
-                            size_t size,
-                            const wait_list &events = wait_list())
+    event enqueue_svm_memcpy(void *dst_ptr,
+                             const void *src_ptr,
+                             size_t size,
+                             const wait_list &events = wait_list())
     {
+        event event_;
+
         cl_int ret = clEnqueueSVMMemcpy(
             m_queue,
             CL_TRUE,
@@ -1267,12 +1302,14 @@ public:
             size,
             events.size(),
             events.get_event_ptr(),
-            0
+            &event_.get()
         );
 
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
+
+        return event_;
     }
 
     /// Enqueues a command to copy \p size bytes of data from \p src_ptr to
@@ -1374,11 +1411,13 @@ public:
     /// \opencl_version_warning{2,0}
     ///
     /// \see_opencl2_ref{clEnqueueSVMMap}
-    void enqueue_svm_map(void *svm_ptr,
-                         size_t size,
-                         cl_map_flags flags,
-                         const wait_list &events = wait_list())
+    event enqueue_svm_map(void *svm_ptr,
+                          size_t size,
+                          cl_map_flags flags,
+                          const wait_list &events = wait_list())
     {
+        event event_;
+
         cl_int ret = clEnqueueSVMMap(
             m_queue,
             CL_TRUE,
@@ -1387,12 +1426,14 @@ public:
             size,
             events.size(),
             events.get_event_ptr(),
-            0
+            &event_.get()
         );
 
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
+
+        return event_;
     }
 
     /// Enqueues a command to unmap \p svm_ptr from the host memory space.
