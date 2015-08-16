@@ -944,6 +944,185 @@ public:
         );
     }
 
+    /// Enqueues a command to map \p image into the host address space.
+    ///
+    /// Event associated with map operation is returned through
+    /// \p map_image_event parameter.
+    ///
+    /// \see_opencl_ref{clEnqueueMapImage}
+    void* enqueue_map_image(const image_object &image,
+                            cl_map_flags flags,
+                            const size_t *origin,
+                            const size_t *region,
+                            size_t &output_row_pitch,
+                            size_t &output_slice_pitch,
+                            event &map_image_event,
+                            const wait_list &events = wait_list())
+    {
+        BOOST_ASSERT(m_queue != 0);
+        BOOST_ASSERT(image.get_context() == this->get_context());
+
+        cl_int ret = 0;
+        void *pointer = clEnqueueMapImage(
+            m_queue,
+            image.get(),
+            CL_TRUE,
+            flags,
+            origin,
+            region,
+            &output_row_pitch,
+            &output_slice_pitch,
+            events.size(),
+            events.get_event_ptr(),
+            &map_image_event.get(),
+            &ret
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return pointer;
+    }
+
+    /// \overload
+    void* enqueue_map_image(const image_object &image,
+                            cl_map_flags flags,
+                            const size_t *origin,
+                            const size_t *region,
+                            size_t &output_row_pitch,
+                            size_t &output_slice_pitch,
+                            const wait_list &events = wait_list())
+    {
+        event event_;
+        return enqueue_map_image(
+            image, flags, origin, region,
+            output_row_pitch, output_slice_pitch, event_, events
+        );
+    }
+
+    /// \overload
+    template<size_t N>
+    void* enqueue_map_image(image_object& image,
+                            cl_map_flags flags,
+                            const extents<N> origin,
+                            const extents<N> region,
+                            size_t &output_row_pitch,
+                            size_t &output_slice_pitch,
+                            event &map_image_event,
+                            const wait_list &events = wait_list())
+    {
+        BOOST_ASSERT(image.get_context() == this->get_context());
+
+        size_t origin3[3] = { 0, 0, 0 };
+        size_t region3[3] = { 1, 1, 1 };
+
+        std::copy(origin.data(), origin.data() + N, origin3);
+        std::copy(region.data(), region.data() + N, region3);
+
+        return enqueue_map_image(
+            image, flags, origin3, region3,
+            output_row_pitch, output_slice_pitch, map_image_event, events
+        );
+    }
+
+    /// \overload
+    template<size_t N>
+    void* enqueue_map_image(image_object& image,
+                            cl_map_flags flags,
+                            const extents<N> origin,
+                            const extents<N> region,
+                            size_t &output_row_pitch,
+                            size_t &output_slice_pitch,
+                            const wait_list &events = wait_list())
+    {
+        event event_;
+        return enqueue_map_image(
+            image, flags, origin, region,
+            output_row_pitch, output_slice_pitch, event_, events
+        );
+    }
+
+    /// Enqueues a command to map \p image into the host address space.
+    /// Map operation is performed asynchronously. The pointer to the mapped
+    /// region cannot be used until the map operation has completed.
+    ///
+    /// Event associated with map operation is returned through
+    /// \p map_image_event parameter.
+    ///
+    /// \see_opencl_ref{clEnqueueMapImage}
+    void* enqueue_map_image_async(const image_object &image,
+                                  cl_map_flags flags,
+                                  const size_t *origin,
+                                  const size_t *region,
+                                  size_t &output_row_pitch,
+                                  size_t &output_slice_pitch,
+                                  event &map_image_event,
+                                  const wait_list &events = wait_list())
+    {
+        BOOST_ASSERT(m_queue != 0);
+        BOOST_ASSERT(image.get_context() == this->get_context());
+
+        cl_int ret = 0;
+        void *pointer = clEnqueueMapImage(
+            m_queue,
+            image.get(),
+            CL_FALSE,
+            flags,
+            origin,
+            region,
+            &output_row_pitch,
+            &output_slice_pitch,
+            events.size(),
+            events.get_event_ptr(),
+            &map_image_event.get(),
+            &ret
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return pointer;
+    }
+
+    /// \overload
+    template<size_t N>
+    void* enqueue_map_image_async(image_object& image,
+                                  cl_map_flags flags,
+                                  const extents<N> origin,
+                                  const extents<N> region,
+                                  size_t &output_row_pitch,
+                                  size_t &output_slice_pitch,
+                                  event &map_image_event,
+                                  const wait_list &events = wait_list())
+    {
+        BOOST_ASSERT(image.get_context() == this->get_context());
+
+        size_t origin3[3] = { 0, 0, 0 };
+        size_t region3[3] = { 1, 1, 1 };
+
+        std::copy(origin.data(), origin.data() + N, origin3);
+        std::copy(region.data(), region.data() + N, region3);
+
+        return enqueue_map_image_async(
+            image, flags, origin3, region3,
+            output_row_pitch, output_slice_pitch, map_image_event, events
+        );
+    }
+
+    /// Enqueues a command to unmap \p image from the host memory space.
+    ///
+    /// \see_opencl_ref{clEnqueueUnmapMemObject}
+    event enqueue_unmap_image(const image_object &image,
+                              void *mapped_ptr,
+                              const wait_list &events = wait_list())
+    {
+        BOOST_ASSERT(image.get_context() == this->get_context());
+
+        return enqueue_unmap_mem_object(image.get(), mapped_ptr, events);
+    }
+
     /// Enqueues a command to copy data from \p src_image to \p dst_image.
     ///
     /// \see_opencl_ref{clEnqueueCopyImage}
