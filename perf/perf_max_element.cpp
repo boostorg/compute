@@ -47,26 +47,26 @@ int main(int argc, char *argv[])
         queue
     );
 
-    size_t max = 0;
+    boost::compute::vector<int>::iterator max = device_vector.begin();
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
         t.start();
-        max = *boost::compute::max_element(
+        max = boost::compute::max_element(
             device_vector.begin(), device_vector.end(), queue
         );
         queue.finish();
         t.stop();
     }
+
+    int device_max = max.read(queue);
     std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
-    std::cout << "max: " << max << std::endl;
+    std::cout << "max: " << device_max << std::endl;
 
     // verify max is correct
-    size_t host_max = *std::max_element(host_vector.begin(),
-                                   host_vector.end()
-                                   );
-    if(max != host_max){
+    int host_max = *std::max_element(host_vector.begin(), host_vector.end());
+    if(device_max != host_max){
         std::cout << "ERROR: "
-                  << "device_max (" << max << ") "
+                  << "device_max (" << device_max << ") "
                   << "!= "
                   << "host_max (" << host_max << ")"
                   << std::endl;
