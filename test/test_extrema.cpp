@@ -15,6 +15,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/iota.hpp>
+#include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/max_element.hpp>
 #include <boost/compute/algorithm/min_element.hpp>
 #include <boost/compute/algorithm/minmax_element.hpp>
@@ -25,18 +26,21 @@
 
 BOOST_AUTO_TEST_CASE(int_min_max)
 {
-    int data[] = { 9, 15, 1, 4 };
-    boost::compute::vector<int> vector(data, data + 4, queue);
+    boost::compute::vector<int> vector(size_t(4096), int(0), queue);
+    boost::compute::iota(vector.begin(), (vector.begin() + 512), 1, queue);
+    boost::compute::fill((vector.end() - 512), vector.end(), 513, queue);
 
     boost::compute::vector<int>::iterator min_iter =
         boost::compute::min_element(vector.begin(), vector.end(), queue);
-    BOOST_CHECK(min_iter == vector.begin() + 2);
-    BOOST_CHECK_EQUAL(*min_iter, 1);
+    BOOST_CHECK(min_iter == vector.begin() + 512);
+    BOOST_CHECK_EQUAL((vector.begin() + 512).read(queue), 0);
+    BOOST_CHECK_EQUAL(min_iter.read(queue), 0);
 
     boost::compute::vector<int>::iterator max_iter =
         boost::compute::max_element(vector.begin(), vector.end(), queue);
-    BOOST_CHECK(max_iter == vector.begin() + 1);
-    BOOST_CHECK_EQUAL(*max_iter, 15);
+    BOOST_CHECK(max_iter == vector.end() - 512);
+    BOOST_CHECK_EQUAL((vector.end() - 512).read(queue), 513);
+    BOOST_CHECK_EQUAL(max_iter.read(queue), 513);
 }
 
 BOOST_AUTO_TEST_CASE(int2_min_max_custom_comparision_function)

@@ -47,28 +47,44 @@ int main(int argc, char *argv[])
         queue
     );
 
-    boost::compute::vector<int>::iterator max = device_vector.begin();
+    boost::compute::vector<int>::iterator device_max_iter
+        = device_vector.begin();
+
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
         t.start();
-        max = boost::compute::max_element(
+        device_max_iter = boost::compute::max_element(
             device_vector.begin(), device_vector.end(), queue
         );
         queue.finish();
         t.stop();
     }
 
-    int device_max = max.read(queue);
+    int device_max = device_max_iter.read(queue);
     std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
     std::cout << "max: " << device_max << std::endl;
 
     // verify max is correct
-    int host_max = *std::max_element(host_vector.begin(), host_vector.end());
+    std::vector<int>::iterator host_max_iter
+        = std::max_element(host_vector.begin(), host_vector.end());
+
+    int host_max = *host_max_iter;
     if(device_max != host_max){
+         std::cout << "ERROR: "
+                   << "device_max (" << device_max << ") "
+                   << "!= "
+                   << "host_max (" << host_max << ")"
+                   << std::endl;
+         return -1;
+    }
+
+    size_t host_max_idx = std::distance(host_vector.begin(), host_max_iter);
+    size_t device_max_idx = std::distance(device_vector.begin(), device_max_iter);
+    if(device_max_idx != host_max_idx){
         std::cout << "ERROR: "
-                  << "device_max (" << device_max << ") "
+                  << "device_max index (" << device_max_idx << ") "
                   << "!= "
-                  << "host_max (" << host_max << ")"
+                  << "host_max index (" << host_max_idx << ")"
                   << std::endl;
         return -1;
     }
