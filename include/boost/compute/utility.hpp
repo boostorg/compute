@@ -13,6 +13,7 @@
 
 #include <boost/compute/utility/dim.hpp>
 #include <boost/compute/utility/extents.hpp>
+#include <boost/compute/utility/invoke.hpp>
 #include <boost/compute/utility/program_cache.hpp>
 #include <boost/compute/utility/source.hpp>
 #include <boost/compute/utility/wait_list.hpp>
