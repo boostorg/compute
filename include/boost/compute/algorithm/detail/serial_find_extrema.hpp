@@ -21,10 +21,11 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-template<class InputIterator>
+template<class InputIterator, class Compare>
 inline InputIterator serial_find_extrema(InputIterator first,
                                          InputIterator last,
-                                         char sign,
+                                         Compare compare,
+                                         const bool find_minimum,
                                          command_queue &queue)
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
@@ -40,7 +41,15 @@ inline InputIterator serial_find_extrema(InputIterator first,
         "for(uint i = 1; i < size; i++){\n" <<
         "  " << k.decl<value_type>("candidate") << "="
              << first[k.expr<uint_>("i")] << ";\n" <<
-        "  if(candidate" << sign << "value){\n" <<
+
+        "#ifndef BOOST_COMPUTE_FIND_MAXIMUM\n" <<
+        "  if(" << compare(k.var<value_type>("candidate"),
+                           k.var<value_type>("value")) << "){\n" <<
+        "#else\n" <<
+        "  if(" << compare(k.var<value_type>("value"),
+                           k.var<value_type>("candidate")) << "){\n" <<
+        "#endif\n" <<
+
         "    value = candidate;\n" <<
         "    value_index = i;\n" <<
         "  }\n" <<
@@ -50,7 +59,11 @@ inline InputIterator serial_find_extrema(InputIterator first,
     size_t index_arg_index = k.add_arg<uint_ *>(memory_object::global_memory, "index");
     size_t size_arg_index = k.add_arg<uint_>("size");
 
-    kernel kernel = k.compile(context);
+    std::string options;
+    if(!find_minimum){
+        options = "-DBOOST_COMPUTE_FIND_MAXIMUM";
+    }
+    kernel kernel = k.compile(context, options);
 
     // setup index buffer
     scalar<uint_> index(context);

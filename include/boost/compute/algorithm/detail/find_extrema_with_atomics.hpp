@@ -22,10 +22,11 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-template<class InputIterator>
+template<class InputIterator, class Compare>
 inline InputIterator find_extrema_with_atomics(InputIterator first,
                                                InputIterator last,
-                                               char sign,
+                                               Compare compare,
+                                               const bool find_minimum,
                                                command_queue &queue)
 {
     typedef typename std::iterator_traits<InputIterator>::difference_type difference_type;
@@ -38,9 +39,15 @@ inline InputIterator find_extrema_with_atomics(InputIterator first,
     k <<
         "const uint gid = get_global_id(0);\n" <<
         "uint old_index = *index;\n" <<
-        "while(" << first[k.var<uint_>("gid")]
-                 << sign
-                 << first[k.var<uint_>("old_index")] << "){\n" <<
+
+        "#ifndef BOOST_COMPUTE_FIND_MAXIMUM\n" <<
+        "while(" << compare(first[k.var<uint_>("gid")],
+                            first[k.var<uint_>("old_index")]) << "){\n" <<
+        "#else\n" <<
+        "while(" << compare(first[k.var<uint_>("old_index")],
+                            first[k.var<uint_>("gid")]) << "){\n" <<
+        "#endif\n" <<
+
         "  if(" << atomic_cmpxchg_uint(k.var<uint_ *>("index"),
                                        k.var<uint_>("old_index"),
                                        k.var<uint_>("gid")) << " == old_index)\n" <<
@@ -51,7 +58,11 @@ inline InputIterator find_extrema_with_atomics(InputIterator first,
 
     size_t index_arg_index = k.add_arg<uint_ *>(memory_object::global_memory, "index");
 
-    kernel kernel = k.compile(context);
+    std::string options;
+    if(!find_minimum){
+        options = "-DBOOST_COMPUTE_FIND_MAXIMUM";
+    }
+    kernel kernel = k.compile(context, options);
 
     // setup index buffer
     scalar<uint_> index(context);
