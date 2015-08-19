@@ -59,6 +59,7 @@ add_compute_test("core.type_traits" test_type_traits.cpp)
 add_compute_test("core.user_event" test_user_event.cpp)
 
 add_compute_test("utility.extents" test_extents.cpp)
+add_compute_test("utility.invoke" test_invoke.cpp)
 add_compute_test("utility.program_cache" test_program_cache.cpp)
 add_compute_test("utility.wait_list" test_wait_list.cpp)
 
