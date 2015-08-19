@@ -24,6 +24,7 @@
 #include <boost/compute/memory/local_buffer.hpp>
 #include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/utility/program_cache.hpp>
+#include <boost/compute/algorithm/detail/serial_find_extrema.hpp>
 
 namespace boost {
 namespace compute {
@@ -72,14 +73,15 @@ bool find_extrema_reduce_requirements_met(InputIterator first,
     return ((required_local_mem_size * 4) <= local_mem_size);
 }
 
-template<class InputIterator, class ResultIterator>
+template<class InputIterator, class ResultIterator, class Compare>
 inline size_t find_extrema_reduce(InputIterator first,
                                   size_t count,
                                   ResultIterator result,
                                   vector<uint_>::iterator result_idx,
                                   size_t work_groups_no,
                                   size_t work_group_size,
-                                  char sign,
+                                  Compare compare,
+                                  const bool find_minimum,
                                   command_queue &queue)
 {
     typedef typename std::iterator_traits<InputIterator>::value_type input_type;
@@ -115,7 +117,13 @@ inline size_t find_extrema_reduce(InputIterator first,
             // Next element
             k.decl<input_type>("next") << " = " << first[k.var<uint_>("idx")] << ";\n" <<
             // Comparison between currently best element (acc) and next element
-            "compare_result = acc " << sign << " next;\n" <<
+            "#ifndef BOOST_COMPUTE_FIND_MAXIMUM\n" <<
+            "compare_result = " << compare(k.var<input_type>("acc"),
+                                           k.var<input_type>("next")) << ";\n" <<
+            "#else\n" <<
+            "compare_result = " << compare(k.var<input_type>("next"),
+                                           k.var<input_type>("acc")) << ";\n" <<
+            "#endif\n" <<
             "acc = compare_result ? acc : next;\n" <<
             "acc_idx = compare_result ? acc_idx : idx;\n" <<
             "idx += get_global_size(0);\n" <<
@@ -136,7 +144,13 @@ inline size_t find_extrema_reduce(InputIterator first,
              "if((lid < offset) && ((lid + offset) < group_offset)) { \n" <<
                  k.decl<input_type>("mine") << " = block[lid];\n" <<
                  k.decl<input_type>("other") << " = block[lid+offset];\n" <<
-                 "compare_result = mine " << sign << " other;\n" <<
+                 "#ifndef BOOST_COMPUTE_FIND_MAXIMUM\n" <<
+                 "compare_result = " << compare(k.var<input_type>("mine"),
+                                                k.var<input_type>("other")) << ";\n" <<
+                 "#else\n" <<
+                 "compare_result = " << compare(k.var<input_type>("other"),
+                                                k.var<input_type>("mine")) << ";\n" <<
+                 "#endif\n" <<
                  "block[lid] = compare_result ? mine : other;\n" <<
                  "block_idx[lid] = compare_result ? " <<
                      "block_idx[lid] : block_idx[lid+offset];\n" <<
@@ -150,7 +164,12 @@ inline size_t find_extrema_reduce(InputIterator first,
         "    output_idx[get_group_id(0)] = block_idx[0];\n" <<
         "}";
 
-    kernel kernel = k.compile(context);
+    std::string options;
+    if(!find_minimum){
+        options = "-DBOOST_COMPUTE_FIND_MAXIMUM";
+    }
+    kernel kernel = k.compile(context, options);
+
     kernel.set_arg(count_arg, static_cast<uint_>(count));
     kernel.set_arg(output_arg, result.get_buffer());
     kernel.set_arg(output_idx_arg, result_idx.get_buffer());
@@ -165,10 +184,101 @@ inline size_t find_extrema_reduce(InputIterator first,
     return 0;
 }
 
+template<class InputIterator, class Compare>
+uint_ find_extrema_final(InputIterator candidates,
+                         vector<uint_>::iterator candidates_idx,
+                         const size_t count,
+                         Compare compare,
+                         const bool find_minimum,
+                         const size_t work_group_size,
+                         command_queue &queue)
+{
+    typedef typename std::iterator_traits<InputIterator>::value_type input_type;
+
+    const context &context = queue.get_context();
+
+    // device vectors for the result
+    vector<input_type> result(1, context);
+    vector<uint_> result_idx(1, context);
+
+    // get extremum from among the candidates
+    find_extrema_reduce(
+        candidates, count, result.begin(), result_idx.begin(),
+        1, work_group_size, compare, find_minimum, queue
+    );
+
+    // get candidate index
+    const uint_ idx = (result_idx.begin()).read(queue);
+    // get extremum index
+    typename vector<uint_>::iterator extremum_idx = candidates_idx + idx;
+
+    // return extremum index
+    return extremum_idx.read(queue);
+}
+
 template<class InputIterator>
+uint_ find_extrema_final(InputIterator candidates,
+                         vector<uint_>::iterator candidates_idx,
+                         const size_t count,
+                         ::boost::compute::less<
+                             typename std::iterator_traits<InputIterator>::value_type
+                         > compare,
+                         const bool find_minimum,
+                         const size_t work_group_size,
+                         command_queue &queue)
+{
+    (void) work_group_size;
+
+    typedef typename std::iterator_traits<InputIterator>::difference_type difference_type;
+    typedef typename std::iterator_traits<InputIterator>::value_type input_type;
+
+    // host vectors
+    std::vector<input_type> host_candidates(count);
+    std::vector<uint_> host_candidates_idx(count);
+
+    InputIterator candidates_last =
+        candidates + static_cast<difference_type>(count);
+    vector<uint_>::iterator candidates_idx_last =
+        candidates_idx + count;
+
+    // copying extremum candidates found by find_extrema_reduce(...) to host
+    ::boost::compute::copy(candidates_idx, candidates_idx_last,
+                           host_candidates_idx.begin(), queue);
+    ::boost::compute::copy(candidates, candidates_last,
+                           host_candidates.begin(), queue);
+
+    typename std::vector<input_type>::iterator i = host_candidates.begin();
+    std::vector<uint_>::iterator idx = host_candidates_idx.begin();
+    std::vector<uint_>::iterator extremum_idx = idx;
+    input_type extremum = *i;
+
+    // find extremum from among the candidates
+    if(!find_minimum) {
+        while(idx != host_candidates_idx.end()) {
+            bool compare_result =  *i > extremum;
+            extremum = compare_result ? *i : extremum;
+            extremum_idx = compare_result ? idx : extremum_idx;
+            idx++, i++;
+        }
+    }
+    else {
+        while(idx != host_candidates_idx.end()) {
+            bool compare_result =  *i < extremum;
+            extremum = compare_result ? *i : extremum;
+            extremum_idx = compare_result ? idx : extremum_idx;
+            idx++, i++;
+        }
+    }
+
+    // return extremum index
+    return (*extremum_idx);
+}
+
+template<class InputIterator, class Compare>
 InputIterator find_extrema_reduce(InputIterator first,
                                   InputIterator last,
-                                  char sign,
+                                  Compare compare,
+                                  const bool find_minimum,
                                   command_queue &queue)
 {
     typedef typename std::iterator_traits<InputIterator>::difference_type difference_type;
@@ -203,54 +313,22 @@ InputIterator find_extrema_reduce(InputIterator first,
             static_cast<size_t>(std::ceil(float(count) / work_group_size)));
 
     // device vectors for extremum candidates and their indices
-    vector<input_type> results(work_groups_no, context);
-    vector<uint_> results_idx(work_groups_no, context);
+    vector<input_type> candidates(work_groups_no, context);
+    vector<uint_> candidates_idx(work_groups_no, context);
 
     // find extremum candidates and their indices
-    find_extrema_reduce(first, count,
-                        results.begin(), results_idx.begin(),
-                        work_groups_no, work_group_size,
-                        sign,
-                        queue);
+    find_extrema_reduce(
+        first, count, candidates.begin(), candidates_idx.begin(),
+        work_groups_no, work_group_size, compare, find_minimum, queue
+     );
 
-    // host vectors
-    std::vector<input_type> host_results(work_groups_no);
-    std::vector<uint_> host_results_idx(work_groups_no);
+    // get extremum index
+    const uint_ extremum_idx = find_extrema_final(
+        candidates.begin(), candidates_idx.begin(), work_groups_no, compare,
+        find_minimum, work_group_size, queue
+    );
 
-    // copying extremum candidates found by
-    // find_extrema_reduce(...) to host
-    copy(results_idx.begin(),
-         results_idx.end(),
-         host_results_idx.begin(), queue);
-    copy(results.begin(),
-         results.end(),
-         host_results.begin(), queue);
-
-    typename std::vector<input_type>::iterator i = host_results.begin();
-    std::vector<uint_>::iterator idx = host_results_idx.begin();
-    std::vector<uint_>::iterator extreme_idx = idx;
-    input_type extreme = *i;
-
-    // find extremum from candidates found by find_extrema_reduce(...)
-    if(sign == '>') {
-        while(idx != host_results_idx.end()) {
-            bool compare_result =  *i > extreme;
-            extreme = compare_result ? *i : extreme;
-            extreme_idx = compare_result ? idx : extreme_idx;
-            idx++, i++;
-        }
-    }
-    else {
-        while(idx != host_results_idx.end()) {
-            bool compare_result =  *i < extreme;
-            extreme = compare_result ? *i : extreme;
-            extreme_idx = compare_result ? idx : extreme_idx;
-            idx++, i++;
-        }
-    }
-
-    // return iterator to extremum
-    return first + static_cast<difference_type>(*extreme_idx);
+    return first + static_cast<difference_type>(extremum_idx);
 }
 
 } // end detail namespace

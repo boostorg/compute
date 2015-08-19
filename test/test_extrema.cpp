@@ -39,6 +39,40 @@ BOOST_AUTO_TEST_CASE(int_min_max)
     BOOST_CHECK_EQUAL(*max_iter, 15);
 }
 
+BOOST_AUTO_TEST_CASE(int2_min_max_custom_comparision_function)
+{
+    using boost::compute::int2_;
+
+    boost::compute::vector<int2_> vector(context);
+    vector.push_back(int2_(1, 10), queue);
+    vector.push_back(int2_(2, -100), queue);
+    vector.push_back(int2_(3, 30), queue);
+    vector.push_back(int2_(4, 20), queue);
+    vector.push_back(int2_(5, 5), queue);
+    vector.push_back(int2_(6, -80), queue);
+    vector.push_back(int2_(7, 21), queue);
+    vector.push_back(int2_(8, -5), queue);
+
+    BOOST_COMPUTE_FUNCTION(bool, compare_second, (const int2_ a, const int2_ b),
+    {
+        return a.y < b.y;
+    });
+
+    boost::compute::vector<int2_>::iterator min_iter =
+        boost::compute::min_element(
+            vector.begin(), vector.end(), compare_second, queue
+         );
+    BOOST_CHECK(min_iter == vector.begin() + 1);
+    BOOST_CHECK_EQUAL(*min_iter, int2_(2, -100));
+
+    boost::compute::vector<int2_>::iterator max_iter =
+        boost::compute::max_element(
+            vector.begin(), vector.end(), compare_second, queue
+        );
+    BOOST_CHECK(max_iter == vector.begin() + 2);
+    BOOST_CHECK_EQUAL(*max_iter, int2_(3, 30));
+}
+
 BOOST_AUTO_TEST_CASE(iota_min_max)
 {
     boost::compute::vector<int> vector(5000, context);

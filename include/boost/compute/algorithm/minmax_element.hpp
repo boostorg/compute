@@ -25,8 +25,31 @@ namespace compute {
 /// element and the second pointing to the maximum element in the range
 /// [\p first, \p last).
 ///
+/// \param first first element in the input range
+/// \param last last element in the input range
+/// \param compare comparison function object which returns ​true if the first
+///        argument is less than (i.e. is ordered before) the second.
+/// \param queue command queue to perform the operation
+///
 /// \see max_element(), min_element()
-template<class InputIterator>
+template<class InputIterator, class Compare>
+inline std::pair<InputIterator, InputIterator>
+minmax_element(InputIterator first,
+               InputIterator last,
+               Compare compare,
+               command_queue &queue = system::default_queue())
+{
+    if(first == last){
+        // empty range
+        return std::make_pair(first, first);
+    }
+
+    return std::make_pair(min_element(first, last, compare, queue),
+                          max_element(first, last, compare, queue));
+}
+
+///\overload
+template<class InputIterator, class Compare>
 inline std::pair<InputIterator, InputIterator>
 minmax_element(InputIterator first,
                InputIterator last,
