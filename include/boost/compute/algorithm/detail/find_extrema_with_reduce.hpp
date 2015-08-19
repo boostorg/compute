@@ -8,8 +8,8 @@
 // See http://boostorg.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_FIND_EXTREMA_REDUCE_HPP
-#define BOOST_COMPUTE_ALGORITHM_DETAIL_FIND_EXTREMA_REDUCE_HPP
+#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_FIND_EXTREMA_WITH_REDUCE_HPP
+#define BOOST_COMPUTE_ALGORITHM_DETAIL_FIND_EXTREMA_WITH_REDUCE_HPP
 
 #include <algorithm>
 #include <vector>
@@ -31,9 +31,9 @@ namespace compute {
 namespace detail {
 
 template<class InputIterator>
-bool find_extrema_reduce_requirements_met(InputIterator first,
-                                          InputIterator last,
-                                          command_queue &queue)
+bool find_extrema_with_reduce_requirements_met(InputIterator first,
+                                               InputIterator last,
+                                               command_queue &queue)
 {
     typedef typename std::iterator_traits<InputIterator>::value_type input_type;
 
@@ -74,15 +74,15 @@ bool find_extrema_reduce_requirements_met(InputIterator first,
 }
 
 template<class InputIterator, class ResultIterator, class Compare>
-inline size_t find_extrema_reduce(InputIterator first,
-                                  size_t count,
-                                  ResultIterator result,
-                                  vector<uint_>::iterator result_idx,
-                                  size_t work_groups_no,
-                                  size_t work_group_size,
-                                  Compare compare,
-                                  const bool find_minimum,
-                                  command_queue &queue)
+inline size_t find_extrema_with_reduce(InputIterator first,
+                                       size_t count,
+                                       ResultIterator result,
+                                       vector<uint_>::iterator result_idx,
+                                       size_t work_groups_no,
+                                       size_t work_group_size,
+                                       Compare compare,
+                                       const bool find_minimum,
+                                       command_queue &queue)
 {
     typedef typename std::iterator_traits<InputIterator>::value_type input_type;
 
@@ -202,7 +202,7 @@ uint_ find_extrema_final(InputIterator candidates,
     vector<uint_> result_idx(1, context);
 
     // get extremum from among the candidates
-    find_extrema_reduce(
+    find_extrema_with_reduce(
         candidates, count, result.begin(), result_idx.begin(),
         1, work_group_size, compare, find_minimum, queue
     );
@@ -275,11 +275,11 @@ uint_ find_extrema_final(InputIterator candidates,
 }
 
 template<class InputIterator, class Compare>
-InputIterator find_extrema_reduce(InputIterator first,
-                                  InputIterator last,
-                                  Compare compare,
-                                  const bool find_minimum,
-                                  command_queue &queue)
+InputIterator find_extrema_with_reduce(InputIterator first,
+                                       InputIterator last,
+                                       Compare compare,
+                                       const bool find_minimum,
+                                       command_queue &queue)
 {
     typedef typename std::iterator_traits<InputIterator>::difference_type difference_type;
     typedef typename std::iterator_traits<InputIterator>::value_type input_type;
@@ -293,7 +293,7 @@ InputIterator find_extrema_reduce(InputIterator first,
 
     const size_t count = detail::iterator_range_size(first, last);
 
-    std::string cache_key = std::string("__boost_find_extrema_reduce_")
+    std::string cache_key = std::string("__boost_find_extrema_with_reduce_")
         + type_name<input_type>();
 
     // load parameters
@@ -317,7 +317,7 @@ InputIterator find_extrema_reduce(InputIterator first,
     vector<uint_> candidates_idx(work_groups_no, context);
 
     // find extremum candidates and their indices
-    find_extrema_reduce(
+    find_extrema_with_reduce(
         first, count, candidates.begin(), candidates_idx.begin(),
         work_groups_no, work_group_size, compare, find_minimum, queue
      );
@@ -335,4 +335,4 @@ InputIterator find_extrema_reduce(InputIterator first,
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_FIND_EXTREMA_REDUCE_HPP
+#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_FIND_EXTREMA_WITH_REDUCE_HPP
