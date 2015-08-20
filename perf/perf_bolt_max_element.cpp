@@ -42,15 +42,28 @@ int main(int argc, char *argv[])
     // transfer data to the device
     bolt::cl::copy(host_vec.begin(), host_vec.end(), device_vec.begin());
 
-    size_t max = 0;
+    bolt::cl::device_vector<int>::iterator max_iter = device_vec.begin();
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
         t.start();
-        max = *bolt::cl::max_element(device_vec.begin(), device_vec.end());
+        max_iter = bolt::cl::max_element(device_vec.begin(), device_vec.end());
         t.stop();
     }
+
+    int device_max = *max_iter;
     std::cout << "time: " << t.min_time() / 1e6 << " ms" << std::endl;
-    std::cout << "max: " << max << std::endl;
+    std::cout << "max: " << device_max << std::endl;
+
+    // verify max is correct
+    int host_max = *std::max_element(host_vec.begin(), host_vec.end());
+    if(device_max != host_max){
+        std::cout << "ERROR: "
+                  << "device_max (" << device_max << ") "
+                  << "!= "
+                  << "host_max (" << host_max << ")"
+                  << std::endl;
+        return -1;
+    }
 
     return 0;
 }
