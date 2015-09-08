@@ -163,7 +163,7 @@ BOOST_AUTO_TEST_CASE(write_buffer_rect)
     // skip this test on AMD GPUs due to a buggy implementation
     // of the clEnqueueWriteBufferRect() function
     if(device.vendor() == "Advanced Micro Devices, Inc." &&
-       device.type() == boost::compute::device::gpu){
+       device.type() & boost::compute::device::gpu){
         std::cerr << "skipping write_buffer_rect test on AMD GPU" << std::endl;
         return;
     }

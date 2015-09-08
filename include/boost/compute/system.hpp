@@ -226,11 +226,11 @@ private:
                     continue;
 
                 if (type && matches(std::string("GPU"), type))
-                    if (device.type() != device::gpu)
+                    if (!(device.type() & device::gpu))
                         continue;
 
                 if (type && matches(std::string("CPU"), type))
-                    if (device.type() != device::cpu)
+                    if (!(device.type() & device::cpu))
                         continue;
 
                 if (platform && !matches(device.platform().name(), platform))
@@ -247,7 +247,7 @@ private:
         for(size_t i = 0; i < devices_.size(); i++){
             const device& device = devices_[i];
 
-            if(device.type() == device::gpu){
+            if(device.type() & device::gpu){
                 return device;
             }
         }
@@ -256,7 +256,7 @@ private:
         for(size_t i = 0; i < devices_.size(); i++){
             const device& device = devices_[i];
 
-            if(device.type() == device::cpu){
+            if(device.type() & device::cpu){
                 return device;
             }
         }
