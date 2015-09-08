@@ -109,4 +109,4 @@ install(
 )
 
 # install header files
-install(DIRECTORY include/boost DESTINATION include/compute)
+install(DIRECTORY include/boost DESTINATION include)
