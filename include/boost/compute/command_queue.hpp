@@ -606,12 +606,15 @@ public:
     #endif // CL_VERSION_1_2
 
     /// Enqueues a command to map \p buffer into the host address space.
+    /// Event associated with map operation is returned through
+    /// \p map_buffer_event parameter.
     ///
     /// \see_opencl_ref{clEnqueueMapBuffer}
     void* enqueue_map_buffer(const buffer &buffer,
                              cl_map_flags flags,
                              size_t offset,
                              size_t size,
+                             event &map_buffer_event,
                              const wait_list &events = wait_list())
     {
         BOOST_ASSERT(m_queue != 0);
@@ -628,7 +631,7 @@ public:
             size,
             events.size(),
             events.get_event_ptr(),
-            0,
+            &map_buffer_event.get(),
             &ret
         );
 
@@ -637,6 +640,17 @@ public:
         }
 
         return pointer;
+    }
+
+    /// \overload
+    void* enqueue_map_buffer(const buffer &buffer,
+                             cl_map_flags flags,
+                             size_t offset,
+                             size_t size,
+                             const wait_list &events = wait_list())
+    {
+        event event_;
+        return enqueue_map_buffer(buffer, flags, offset, size, event_, events);
     }
 
     /// Enqueues a command to unmap \p buffer from the host memory space.
