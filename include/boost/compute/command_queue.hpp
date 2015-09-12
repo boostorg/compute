@@ -366,6 +366,53 @@ public:
 
         return event_;
     }
+
+    /// Enqueues a command to read a rectangular region from \p buffer to
+    /// host memory. The copy will be performed asynchronously.
+    ///
+    /// \see_opencl_ref{clEnqueueReadBufferRect}
+    ///
+    /// \opencl_version_warning{1,1}
+    event enqueue_read_buffer_rect_async(const buffer &buffer,
+                                         const size_t buffer_origin[3],
+                                         const size_t host_origin[3],
+                                         const size_t region[3],
+                                         size_t buffer_row_pitch,
+                                         size_t buffer_slice_pitch,
+                                         size_t host_row_pitch,
+                                         size_t host_slice_pitch,
+                                         void *host_ptr,
+                                         const wait_list &events = wait_list())
+    {
+        BOOST_ASSERT(m_queue != 0);
+        BOOST_ASSERT(buffer.get_context() == this->get_context());
+        BOOST_ASSERT(host_ptr != 0);
+
+        event event_;
+
+        cl_int ret = clEnqueueReadBufferRect(
+            m_queue,
+            buffer.get(),
+            CL_FALSE,
+            buffer_origin,
+            host_origin,
+            region,
+            buffer_row_pitch,
+            buffer_slice_pitch,
+            host_row_pitch,
+            host_slice_pitch,
+            host_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return event_;
+    }
     #endif // CL_VERSION_1_1
 
     /// Enqueues a command to write data from host memory to \p buffer.
@@ -471,6 +518,53 @@ public:
             m_queue,
             buffer.get(),
             CL_TRUE,
+            buffer_origin,
+            host_origin,
+            region,
+            buffer_row_pitch,
+            buffer_slice_pitch,
+            host_row_pitch,
+            host_slice_pitch,
+            host_ptr,
+            events.size(),
+            events.get_event_ptr(),
+            &event_.get()
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return event_;
+    }
+
+    /// Enqueues a command to write a rectangular region from host memory
+    /// to \p buffer. The copy is performed asynchronously.
+    ///
+    /// \see_opencl_ref{clEnqueueWriteBufferRect}
+    ///
+    /// \opencl_version_warning{1,1}
+    event enqueue_write_buffer_rect_async(const buffer &buffer,
+                                          const size_t buffer_origin[3],
+                                          const size_t host_origin[3],
+                                          const size_t region[3],
+                                          size_t buffer_row_pitch,
+                                          size_t buffer_slice_pitch,
+                                          size_t host_row_pitch,
+                                          size_t host_slice_pitch,
+                                          void *host_ptr,
+                                          const wait_list &events = wait_list())
+    {
+        BOOST_ASSERT(m_queue != 0);
+        BOOST_ASSERT(buffer.get_context() == this->get_context());
+        BOOST_ASSERT(host_ptr != 0);
+
+        event event_;
+
+        cl_int ret = clEnqueueWriteBufferRect(
+            m_queue,
+            buffer.get(),
+            CL_FALSE,
             buffer_origin,
             host_origin,
             region,
@@ -667,6 +761,46 @@ public:
     {
         event event_;
         return enqueue_map_buffer(buffer, flags, offset, size, event_, events);
+    }
+
+    /// Enqueues a command to map \p buffer into the host address space.
+    /// Map operation is performed asynchronously. The pointer to the mapped
+    /// region cannot be used until the map operation has completed.
+    ///
+    /// Event associated with map operation is returned through
+    /// \p map_buffer_event parameter.
+    ///
+    /// \see_opencl_ref{clEnqueueMapBuffer}
+    void* enqueue_map_buffer_async(const buffer &buffer,
+                                   cl_map_flags flags,
+                                   size_t offset,
+                                   size_t size,
+                                   event &map_buffer_event,
+                                   const wait_list &events = wait_list())
+    {
+        BOOST_ASSERT(m_queue != 0);
+        BOOST_ASSERT(offset + size <= buffer.size());
+        BOOST_ASSERT(buffer.get_context() == this->get_context());
+
+        cl_int ret = 0;
+        void *pointer = clEnqueueMapBuffer(
+            m_queue,
+            buffer.get(),
+            CL_FALSE,
+            flags,
+            offset,
+            size,
+            events.size(),
+            events.get_event_ptr(),
+            &map_buffer_event.get(),
+            &ret
+        );
+
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+
+        return pointer;
     }
 
     /// Enqueues a command to unmap \p buffer from the host memory space.
