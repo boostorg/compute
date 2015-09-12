@@ -26,7 +26,7 @@ namespace compute {
 ///
 /// Searches for the first match of the pattern [p_first, p_last)
 /// in text [t_first, t_last).
-/// \return Iterator pointing to beginning of first occurence
+/// \return Iterator pointing to beginning of first occurrence
 ///
 /// \param t_first Iterator pointing to start of text
 /// \param t_last Iterator pointing to end of text
@@ -41,9 +41,14 @@ inline TextIterator search(TextIterator t_first,
                            PatternIterator p_last,
                            command_queue &queue = system::default_queue())
 {
-    vector<uint_> matching_indices(detail::iterator_range_size(t_first, t_last),
-                                    queue.get_context());
+    // there is no need to check if pattern starts at last n - 1 indices
+    vector<uint_> matching_indices(
+        detail::iterator_range_size(t_first, t_last)
+            - detail::iterator_range_size(p_first, p_last) + 1,
+        queue.get_context()
+    );
 
+    // search_kernel puts value 1 at every index in vector where pattern starts at
     detail::search_kernel<PatternIterator,
                           TextIterator,
                           vector<uint_>::iterator> kernel;
@@ -54,6 +59,10 @@ inline TextIterator search(TextIterator t_first,
     vector<uint_>::iterator index = ::boost::compute::find(
         matching_indices.begin(), matching_indices.end(), uint_(1), queue
     );
+
+    // pattern was not found
+    if(index == matching_indices.end())
+        return t_last;
 
     return t_first + detail::iterator_range_size(matching_indices.begin(), index);
 }
