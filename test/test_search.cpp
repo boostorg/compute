@@ -24,8 +24,8 @@ namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(search_int)
 {
-    int data[] = {1, 4, 2, 6, 3, 2, 6, 3, 4, 6};
-    bc::vector<bc::int_> vectort(data, data + 10, queue);
+    int data[] = {1, 4, 2, 6, 3, 2, 6, 3, 4, 6, 6};
+    bc::vector<bc::int_> vectort(data, data + 11, queue);
 
     int datap[] = {2, 6};
     bc::vector<bc::int_> vectorp(datap, datap + 2, queue);
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(search_int)
         bc::search(vectort.begin(), vectort.end(),
                     vectorp.begin(), vectorp.end(), queue);
 
-    BOOST_VERIFY(iter == vectort.begin() + 2);
+    BOOST_CHECK(iter == vectort.begin() + 2);
 
     vectorp[1] = 9;
 
@@ -42,7 +42,16 @@ BOOST_AUTO_TEST_CASE(search_int)
         bc::search(vectort.begin(), vectort.end(),
                     vectorp.begin(), vectorp.end(), queue);
 
-    BOOST_VERIFY(iter == vectort.begin() + 10);
+    BOOST_CHECK(iter == vectort.begin() + 11);
+
+    vectorp[0] = 6;
+    vectorp[1] = 6;
+
+    iter =
+        bc::search(vectort.begin(), vectort.end(),
+                    vectorp.begin(), vectorp.end(), queue);
+
+    BOOST_CHECK(iter == vectort.begin() + 9);
 }
 
 BOOST_AUTO_TEST_CASE(search_string)
@@ -57,7 +66,7 @@ BOOST_AUTO_TEST_CASE(search_string)
         bc::search(vectort.begin(), vectort.end(),
                     vectorp.begin(), vectorp.end(), queue);
 
-    BOOST_VERIFY(iter == vectort.begin() + 2);
+    BOOST_CHECK(iter == vectort.begin() + 2);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

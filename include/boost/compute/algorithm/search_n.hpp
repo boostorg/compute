@@ -92,9 +92,9 @@ private:
 ///
 /// \brief Substring matching algorithm
 ///
-/// Searches for the first occurence of n consecutive occurences of
+/// Searches for the first occurrence of n consecutive occurrences of
 /// value in text [t_first, t_last).
-/// \return Iterator pointing to beginning of first occurence
+/// \return Iterator pointing to beginning of first occurrence
 ///
 /// \param t_first Iterator pointing to start of text
 /// \param t_last Iterator pointing to end of text
@@ -109,9 +109,14 @@ inline TextIterator search_n(TextIterator t_first,
                              ValueType value,
                              command_queue &queue = system::default_queue())
 {
-    vector<uint_> matching_indices(detail::iterator_range_size(t_first, t_last),
-                                    queue.get_context());
+    // there is no need to check if pattern starts at last n - 1 indices
+    vector<uint_> matching_indices(
+        detail::iterator_range_size(t_first, t_last) + 1 - n,
+        queue.get_context()
+    );
 
+    // search_n_kernel puts value 1 at every index in vector where pattern
+    // of n values starts at
     detail::search_n_kernel<TextIterator,
                             vector<uint_>::iterator> kernel;
 
@@ -121,6 +126,10 @@ inline TextIterator search_n(TextIterator t_first,
     vector<uint_>::iterator index = ::boost::compute::find(
         matching_indices.begin(), matching_indices.end(), uint_(1), queue
     );
+
+    // pattern was not found
+    if(index == matching_indices.end())
+        return t_last;
 
     return t_first + detail::iterator_range_size(matching_indices.begin(), index);
 }
