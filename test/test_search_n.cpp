@@ -23,18 +23,23 @@ namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(search_int)
 {
-    int data[] = {1, 2, 2, 2, 3, 2, 2, 2, 4, 6};
-    bc::vector<bc::int_> vectort(data, data + 10, queue);
+    int data[] = {1, 2, 2, 2, 3, 2, 2, 2, 4, 6, 6};
+    bc::vector<bc::int_> vectort(data, data + 11, queue);
 
     bc::vector<bc::int_>::iterator iter =
         bc::search_n(vectort.begin(), vectort.end(), 3, 2, queue);
 
-    BOOST_VERIFY(iter == vectort.begin() + 1);
+    BOOST_CHECK(iter == vectort.begin() + 1);
 
     iter =
         bc::search_n(vectort.begin(), vectort.end(), 5, 2, queue);
 
-    BOOST_VERIFY(iter == vectort.begin() + 10);
+    BOOST_CHECK(iter == vectort.begin() + 11);
+
+    iter =
+        bc::search_n(vectort.begin(), vectort.end(), 2, 6, queue);
+
+    BOOST_CHECK(iter == vectort.begin() + 9);
 }
 
 BOOST_AUTO_TEST_CASE(search_string)
@@ -45,7 +50,7 @@ BOOST_AUTO_TEST_CASE(search_string)
     bc::vector<bc::char_>::iterator iter =
         bc::search_n(vectort.begin(), vectort.end(), 2, 'a', queue);
 
-    BOOST_VERIFY(iter == vectort.begin() + 2);
+    BOOST_CHECK(iter == vectort.begin() + 2);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
