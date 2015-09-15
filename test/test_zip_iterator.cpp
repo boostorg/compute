@@ -20,6 +20,7 @@
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/iterator/constant_iterator.hpp>
 #include <boost/compute/iterator/zip_iterator.hpp>
 #include <boost/compute/types/tuple.hpp>
 
@@ -203,6 +204,29 @@ BOOST_AUTO_TEST_CASE(zip_iterator_get)
         queue
     );
     CHECK_RANGE_EQUAL(int, 5, output, (1, 3, 5, 7, 9));
+}
+
+BOOST_AUTO_TEST_CASE(zip_constant_iterator)
+{
+    compute::vector<int> result(4, context);
+
+    compute::transform(
+        compute::make_zip_iterator(
+            boost::make_tuple(
+                compute::make_constant_iterator(7)
+            )
+        ),
+        compute::make_zip_iterator(
+            boost::make_tuple(
+                compute::make_constant_iterator(7, result.size())
+            )
+        ),
+        result.begin(),
+        compute::get<0>(),
+        queue
+    );
+
+    CHECK_RANGE_EQUAL(int, 4, result, (7, 7, 7, 7));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
