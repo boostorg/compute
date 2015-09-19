@@ -52,6 +52,10 @@ int main(int argc, char *argv[])
         device_vector.begin(), device_vector.end(), _1 < 20, queue
     );
 
+    // just to be sure everything is finished before measuring execution time
+    // of binary_find algorithm
+    queue.finish();
+
     perf_timer t;
     for(size_t trial = 0; trial < PERF_TRIALS; trial++){
         t.start();
