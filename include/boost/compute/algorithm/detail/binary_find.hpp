@@ -95,29 +95,39 @@ inline InputIterator binary_find(InputIterator first,
     size_t threads = parameters->get(cache_key, "tpb", 128);
     size_t count = iterator_range_size(first, last);
 
+    InputIterator search_first = first;
+    InputIterator search_last = last;
+
     while(count > find_if_limit) {
 
         scalar<uint_> index(queue.get_context());
         index.write(static_cast<uint_>(count), queue);
 
         binary_find_kernel kernel(threads);
-        kernel.set_range(first, last, predicate);
+        kernel.set_range(search_first, search_last, predicate);
         kernel.exec(queue, index);
 
         size_t i = index.read(queue);
 
         if(i == count) {
-            first = last - count%threads;
+            search_first = search_last - ((count - 1)%(threads - 1));
             break;
         } else {
-            last = first + i;
-            first = last - count/threads;
+            search_last = search_first + i;
+            search_first = search_last - ((count - 1)/(threads - 1));
         }
 
-        count = iterator_range_size(first, last);
+        // Make sure that first and last stay within the input range
+        search_last = std::min(search_last, last);
+        search_last = std::max(search_last, first);
+
+        search_first = std::max(search_first, first);
+        search_first = std::min(search_first, last);
+
+        count = iterator_range_size(search_first, search_last);
     }
 
-    return find_if(first, last, predicate, queue);
+    return find_if(search_first, search_last, predicate, queue);
 }
 
 } // end detail namespace
