@@ -26,45 +26,32 @@ namespace detail{
 ///
 /// Subclass of meta_kernel to perform single step in binary find.
 ///
+template<class InputIterator, class UnaryPredicate>
 class binary_find_kernel : public meta_kernel
 {
 public:
-    binary_find_kernel(size_t threads) : meta_kernel("binary_find")
-    {
-        m_threads = threads;
-    }
-
-    template<class InputIterator, class UnaryPredicate>
-    void set_range(InputIterator first,
-                   InputIterator last,
-                   UnaryPredicate predicate)
+    binary_find_kernel(InputIterator first,
+                       InputIterator last,
+                       UnaryPredicate predicate)
+        : meta_kernel("binary_find")
     {
         typedef typename std::iterator_traits<InputIterator>::value_type value_type;
-        int block = (iterator_range_size(first, last)-1)/(m_threads-1);
 
         m_index_arg = add_arg<uint_ *>(memory_object::global_memory, "index");
+        m_block_arg = add_arg<uint_>("block");
 
         atomic_min<uint_> atomic_min_uint;
 
         *this <<
-            "uint i = get_global_id(0) * " << block << ";\n" <<
+            "uint i = get_global_id(0) * block;\n" <<
             decl<value_type>("value") << "=" << first[var<uint_>("i")] << ";\n" <<
             "if(" << predicate(var<value_type>("value")) << ") {\n" <<
                 atomic_min_uint(var<uint_ *>("index"), var<uint_>("i")) << ";\n" <<
             "}\n";
-
     }
 
-    event exec(command_queue &queue, scalar<uint_> index)
-    {
-        set_arg(m_index_arg, index.get_buffer());
-
-        return exec_1d(queue, 0, m_threads);
-    }
-
-private:
-    size_t m_threads;
     size_t m_index_arg;
+    size_t m_block_arg;
 };
 
 ///
@@ -95,29 +82,48 @@ inline InputIterator binary_find(InputIterator first,
     size_t threads = parameters->get(cache_key, "tpb", 128);
     size_t count = iterator_range_size(first, last);
 
-    while(count > find_if_limit) {
+    InputIterator search_first = first;
+    InputIterator search_last = last;
 
-        scalar<uint_> index(queue.get_context());
+    scalar<uint_> index(queue.get_context());
+
+    // construct and compile binary_find kernel
+    binary_find_kernel<InputIterator, UnaryPredicate>
+        binary_find_kernel(search_first, search_last, predicate);
+    ::boost::compute::kernel kernel = binary_find_kernel.compile(queue.get_context());
+
+    // set buffer for index
+    kernel.set_arg(binary_find_kernel.m_index_arg, index.get_buffer());
+
+    while(count > find_if_limit) {
         index.write(static_cast<uint_>(count), queue);
 
-        binary_find_kernel kernel(threads);
-        kernel.set_range(first, last, predicate);
-        kernel.exec(queue, index);
+        // set block and run binary_find kernel
+        uint_ block = (count - 1)/(threads - 1);
+        kernel.set_arg(binary_find_kernel.m_block_arg, block);
+        queue.enqueue_1d_range_kernel(kernel, 0, threads, 0);
 
         size_t i = index.read(queue);
 
         if(i == count) {
-            first = last - count%threads;
+            search_first = search_last - ((count - 1)%(threads - 1));
             break;
         } else {
-            last = first + i;
-            first = last - count/threads;
+            search_last = search_first + i;
+            search_first = search_last - ((count - 1)/(threads - 1));
         }
 
-        count = iterator_range_size(first, last);
+        // Make sure that first and last stay within the input range
+        search_last = std::min(search_last, last);
+        search_last = std::max(search_last, first);
+
+        search_first = std::max(search_first, first);
+        search_first = std::min(search_first, last);
+
+        count = iterator_range_size(search_first, search_last);
     }
 
-    return find_if(first, last, predicate, queue);
+    return find_if(search_first, search_last, predicate, queue);
 }
 
 } // end detail namespace
