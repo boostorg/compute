@@ -46,6 +46,13 @@ struct Atom
 // adapt the chemistry::Atom class
 BOOST_COMPUTE_ADAPT_STRUCT(chemistry::Atom, Atom, (x, y, z, number))
 
+struct StructWithArray {
+    int value;
+    int array[3];
+};
+
+BOOST_COMPUTE_ADAPT_STRUCT(StructWithArray, StructWithArray, (value, array))
+
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
@@ -122,6 +129,37 @@ BOOST_AUTO_TEST_CASE(custom_kernel)
     custom_kernel.set_arg(1, distances);
 
     queue.enqueue_1d_range_kernel(custom_kernel, 0, atoms.size(), 1);
+}
+
+// Creates a StructWithArray containing 'x', 'y', 'z'.
+StructWithArray make_struct_with_array(int x, int y, int z)
+{
+    StructWithArray s;
+    s.value = 0;
+    s.array[0] = x;
+    s.array[1] = y;
+    s.array[2] = z;
+    return s;
+}
+
+BOOST_AUTO_TEST_CASE(struct_with_array)
+{
+    compute::vector<StructWithArray> structs(context);
+
+    structs.push_back(make_struct_with_array(1, 2, 3), queue);
+    structs.push_back(make_struct_with_array(4, 5, 6), queue);
+    structs.push_back(make_struct_with_array(7, 8, 9), queue);
+
+    BOOST_COMPUTE_FUNCTION(int, sum_array, (StructWithArray x),
+    {
+        return x.array[0] + x.array[1] + x.array[2];
+    });
+
+    compute::vector<int> results(structs.size(), context);
+    compute::transform(
+        structs.begin(), structs.end(), results.begin(), sum_array, queue
+    );
+    CHECK_RANGE_EQUAL(int, 3, results, (6, 15, 24));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

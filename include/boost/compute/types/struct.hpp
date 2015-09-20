@@ -38,6 +38,15 @@ inline std::string adapt_struct_insert_member(T Struct::*, const char *name)
     return s.str();
 }
 
+
+template<class Struct, class T, int N>
+inline std::string adapt_struct_insert_member(T (Struct::*)[N], const char *name)
+{
+    std::stringstream s;
+    s << "    " << type_name<T>() << " " << name << "[" << N << "]" << ";\n";
+    return s.str();
+}
+
 } // end detail namespace
 } // end compute namespace
 } // end boost namespace
