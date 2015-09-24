@@ -136,7 +136,7 @@ public:
     /// Blocks until all of the events in the wait-list have completed.
     ///
     /// Does nothing if the wait-list is empty.
-    void wait()
+    void wait() const
     {
         if(!empty()){
             BOOST_COMPUTE_ASSERT_CL_SUCCESS(
