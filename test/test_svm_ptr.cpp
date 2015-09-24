@@ -28,12 +28,16 @@ BOOST_AUTO_TEST_CASE(empty)
 #ifdef CL_VERSION_2_0
 BOOST_AUTO_TEST_CASE(alloc)
 {
+    REQUIRES_OPENCL_VERSION(2, 0);
+
     compute::svm_ptr<int> ptr = compute::svm_alloc<int>(context, 8);
     compute::svm_free(context, ptr);
 }
 
 BOOST_AUTO_TEST_CASE(sum_svm_kernel)
 {
+    REQUIRES_OPENCL_VERSION(2, 0);
+
     const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
         __kernel void sum_svm_mem(__global const int *ptr, __global int *result)
         {

@@ -283,6 +283,8 @@ BOOST_AUTO_TEST_CASE(check_copy_type)
 #ifdef CL_VERSION_2_0
 BOOST_AUTO_TEST_CASE(copy_svm_ptr)
 {
+    REQUIRES_OPENCL_VERSION(2, 0);
+
     int data[] = { 1, 3, 2, 4 };
 
     compute::svm_ptr<int> ptr = compute::svm_alloc<int>(context, 4);

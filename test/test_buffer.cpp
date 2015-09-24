@@ -164,6 +164,8 @@ BOOST_AUTO_TEST_CASE(destructor_templated_callback)
 
 BOOST_AUTO_TEST_CASE(create_subbuffer)
 {
+    REQUIRES_OPENCL_VERSION(1, 1);
+
     size_t base_addr_align = device.get_info<CL_DEVICE_MEM_BASE_ADDR_ALIGN>() / 8;
     size_t multiplier = 16;
     size_t buffer_size = base_addr_align * multiplier;
