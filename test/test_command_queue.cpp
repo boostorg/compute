@@ -137,13 +137,17 @@ BOOST_AUTO_TEST_CASE(kernel_profiling)
 BOOST_AUTO_TEST_CASE(construct_from_cl_command_queue)
 {
     // create cl_command_queue
+    cl_command_queue cl_queue;
 #ifdef CL_VERSION_2_0
-    cl_command_queue cl_queue =
-      clCreateCommandQueueWithProperties(context, device.id(), 0, 0);
-#else
-    cl_command_queue cl_queue =
-      clCreateCommandQueue(context, device.id(), 0, 0);
-#endif
+    if (device.check_version(2, 0)){ // runtime check
+        cl_queue =
+            clCreateCommandQueueWithProperties(context, device.id(), 0, 0);
+    } else
+#endif // CL_VERSION_2_0
+    {
+        cl_queue =
+            clCreateCommandQueue(context, device.id(), 0, 0);
+    }
     BOOST_VERIFY(cl_queue);
 
     // create boost::compute::command_queue
@@ -160,6 +164,8 @@ BOOST_AUTO_TEST_CASE(construct_from_cl_command_queue)
 #ifdef CL_VERSION_1_1
 BOOST_AUTO_TEST_CASE(write_buffer_rect)
 {
+    REQUIRES_OPENCL_VERSION(1, 1);
+
     // skip this test on AMD GPUs due to a buggy implementation
     // of the clEnqueueWriteBufferRect() function
     if(device.vendor() == "Advanced Micro Devices, Inc." &&

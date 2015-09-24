@@ -20,6 +20,8 @@ BOOST_AUTO_TEST_CASE(empty){}
 #ifdef CL_VERSION_1_1
 BOOST_AUTO_TEST_CASE(user_event)
 {
+    REQUIRES_OPENCL_VERSION(1, 1);
+
     boost::compute::user_event event(context);
     BOOST_CHECK(event.get() != cl_event());
     BOOST_CHECK(event.status() != CL_COMPLETE);

@@ -30,6 +30,8 @@ BOOST_AUTO_TEST_CASE(image1d_get_supported_formats)
 #ifdef CL_VERSION_1_2
 BOOST_AUTO_TEST_CASE(fill_image1d)
 {
+    REQUIRES_OPENCL_VERSION(1, 2); // device OpenCL version check
+
     // single-channel unsigned char
     compute::image_format format(CL_R, CL_UNSIGNED_INT8);
 
