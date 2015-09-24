@@ -210,7 +210,7 @@ public:
 
     /// Blocks until the actions corresponding to the event have
     /// completed.
-    void wait()
+    void wait() const
     {
         cl_int ret = clWaitForEvents(1, &m_event);
         if(ret != CL_SUCCESS){

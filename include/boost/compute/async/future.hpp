@@ -73,7 +73,7 @@ public:
     /// Blocks until the computation is complete.
     void wait() const
     {
-        const_cast<event &>(m_event).wait();
+        m_event.wait();
     }
 
     /// Returns the underlying event object.
@@ -141,7 +141,7 @@ public:
 
     void wait() const
     {
-        const_cast<event &>(m_event).wait();
+        m_event.wait();
     }
 
     event get_event() const
