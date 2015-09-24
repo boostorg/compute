@@ -29,7 +29,7 @@ BOLT_FUNCTOR(saxpy_functor,
             return _a * x + y;
         };
     };
-);
+)
 
 int main(int argc, char *argv[])
 {
