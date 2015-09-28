@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------//
-// Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
+// Copyright (c) 2015 Jakub Pola <jakub.pola@gmail.com>
 //
 // Distributed under the Boost Software License, Version 1.0
 // See accompanying file LICENSE_1_0.txt or copy at
@@ -8,11 +8,10 @@
 // See http://boostorg.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#define BOOST_TEST_MODULE TestScatter
+#define BOOST_TEST_MODULE TestScatterIf
 #include <boost/test/unit_test.hpp>
 
 #include <boost/compute/system.hpp>
-#include <boost/compute/algorithm/scatter.hpp>
 #include <boost/compute/algorithm/scatter_if.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/constant_buffer_iterator.hpp>
