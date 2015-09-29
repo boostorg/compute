@@ -123,6 +123,8 @@ BOOST_AUTO_TEST_CASE(clone_image)
 #ifdef CL_VERSION_1_2
 BOOST_AUTO_TEST_CASE(fill_image)
 {
+    REQUIRES_OPENCL_VERSION(1, 2); // device OpenCL version check
+
     compute::image_format format(CL_RGBA, CL_UNSIGNED_INT8);
 
     if(!compute::image2d::is_supported_format(format, context)){

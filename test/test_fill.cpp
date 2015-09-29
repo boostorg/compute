@@ -290,6 +290,8 @@ BOOST_AUTO_TEST_CASE(fill_clone_buffer)
 #ifdef CL_VERSION_2_0
 BOOST_AUTO_TEST_CASE(fill_svm_buffer)
 {
+    REQUIRES_OPENCL_VERSION(2, 0);
+
     bc::svm_ptr<int> ptr = bc::svm_alloc<int>(context, 16);
     bc::fill_n(ptr, 16, 42, queue);
 
