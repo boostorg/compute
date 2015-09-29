@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE(scatter_if_int)
 
     bc::vector<uint> stencil(stencil_data, stencil_data + 10, queue);
 
-    bc::vector<int> output = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+    bc::vector<int> output(input.size(), -1, queue);
 
     bc::scatter_if(input.begin(), input.end(),
                    map.begin(), stencil.begin(),
@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE(scatter_if_constant_indices)
                               bc::buffer::read_only | bc::buffer::use_host_ptr,
                               stencil_data);
 
-    bc::vector<int> output = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+    bc::vector<int> output(input.size(), -1, queue);
 
     bc::scatter_if(input.begin(),
                    input.end(),
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE(scatter_if_function)
     int stencil_data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     bc::vector<uint> stencil(stencil_data, stencil_data + 10, queue);
 
-    bc::vector<int> output = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+    bc::vector<int> output(input.size(), -1, queue);
 
     BOOST_COMPUTE_FUNCTION(int, gt_than_5, (int x),
     {
@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE(scatter_if_counting_iterator)
     int map_data[] = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
     bc::vector<int> map(map_data, map_data + 10, queue);
 
-    bc::vector<int> output = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+    bc::vector<int> output(input.size(), -1, queue);
 
     BOOST_COMPUTE_FUNCTION(int, gt_than_5, (int x),
     {
