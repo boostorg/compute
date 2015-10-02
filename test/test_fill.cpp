@@ -33,6 +33,13 @@ typedef boost::mpl::list
 
 template<class T>
 inline void test_fill(T v1, T v2, T v3, bc::command_queue queue) {
+    if(boost::is_same<typename bc::scalar_type<T>::type, bc::double_>::value &&
+       !queue.get_device().supports_extension("cl_khr_fp64")) {
+        std::cerr << "Skipping test_fill<" << bc::type_name<T>() << ">() "
+                     "on device which doesn't support cl_khr_fp64" << std::endl;
+        return;
+    }
+
     bc::vector<T> vector(4, queue.get_context());
     bc::fill(vector.begin(), vector.end(), v1, queue);
     queue.finish();
@@ -126,6 +133,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( fill_vec16, S, scalar_types )
 
 template<class T>
 inline void test_fill_n(T v1, T v2, T v3, bc::command_queue queue) {
+    if(boost::is_same<typename bc::scalar_type<T>::type, bc::double_>::value &&
+       !queue.get_device().supports_extension("cl_khr_fp64")) {
+        std::cerr << "Skipping test_fill_n<" << bc::type_name<T>() << ">() "
+                     "on device which doesn't support cl_khr_fp64" << std::endl;
+        return;
+    }
+
     bc::vector<T> vector(4, queue.get_context());
     bc::fill_n(vector.begin(), 4, v1, queue);
     queue.finish();
