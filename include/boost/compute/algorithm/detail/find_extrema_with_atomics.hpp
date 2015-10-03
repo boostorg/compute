@@ -29,6 +29,7 @@ inline InputIterator find_extrema_with_atomics(InputIterator first,
                                                const bool find_minimum,
                                                command_queue &queue)
 {
+    typedef typename std::iterator_traits<InputIterator>::value_type value_type;
     typedef typename std::iterator_traits<InputIterator>::difference_type difference_type;
 
     const context &context = queue.get_context();
@@ -40,12 +41,32 @@ inline InputIterator find_extrema_with_atomics(InputIterator first,
         "const uint gid = get_global_id(0);\n" <<
         "uint old_index = *index;\n" <<
 
-        "#ifndef BOOST_COMPUTE_FIND_MAXIMUM\n" <<
-        "while(" << compare(first[k.var<uint_>("gid")],
-                            first[k.var<uint_>("old_index")]) << "){\n" <<
+        k.decl<value_type>("old") <<
+            " = " << first[k.var<uint_>("old_index")] << ";\n" <<
+        k.decl<value_type>("new") <<
+            " = " << first[k.var<uint_>("gid")] << ";\n" <<
+
+        k.decl<bool>("compare_result") << ";\n" <<
+        "#ifdef BOOST_COMPUTE_FIND_MAXIMUM\n" <<
+        "while(" <<
+            "(compare_result = " << compare(k.var<value_type>("old"),
+                                            k.var<value_type>("new")) << ")" <<
+            " || (!(compare_result" <<
+                      " || " << compare(k.var<value_type>("new"),
+                                        k.var<value_type>("old")) << ") "
+                  "&& gid < old_index)){\n" <<
         "#else\n" <<
-        "while(" << compare(first[k.var<uint_>("old_index")],
-                            first[k.var<uint_>("gid")]) << "){\n" <<
+        // while condition explained for minimum case with less (<)
+        // as comparison function:
+        // while(new_value < old_value
+        //       OR (new_value == old_value AND new_index < old_index))
+        "while(" <<
+            "(compare_result = " << compare(k.var<value_type>("new"),
+                                            k.var<value_type>("old"))  << ")" <<
+            " || (!(compare_result" <<
+                      " || " << compare(k.var<value_type>("old"),
+                                        k.var<value_type>("new")) << ") "
+                  "&& gid < old_index)){\n" <<
         "#endif\n" <<
 
         "  if(" << atomic_cmpxchg_uint(k.var<uint_ *>("index"),
@@ -54,6 +75,7 @@ inline InputIterator find_extrema_with_atomics(InputIterator first,
         "      break;\n" <<
         "  else\n" <<
         "    old_index = *index;\n" <<
+        "old = " << first[k.var<uint_>("old_index")] << ";\n" <<
         "}\n";
 
     size_t index_arg_index = k.add_arg<uint_ *>(memory_object::global_memory, "index");
