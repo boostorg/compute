@@ -347,4 +347,92 @@ BOOST_AUTO_TEST_CASE(resize_throw_exception)
     CHECK_RANGE_EQUAL(int, 8, vec, (1, 2, 3, 4, 5, 6, 7, 8));
 }
 
+BOOST_AUTO_TEST_CASE(copy_ctor_custom_alloc)
+{
+    int data[] = { 11, 12, 13, 14 };
+    bc::vector<int, bc::pinned_allocator<int> > a(data, data + 4, queue);
+    BOOST_CHECK_EQUAL(a.size(), size_t(4));
+    CHECK_RANGE_EQUAL(int, 4, a, (11, 12, 13, 14));
+
+    bc::vector<int, bc::pinned_allocator<int> > b(a, queue);
+    BOOST_CHECK_EQUAL(b.size(), size_t(4));
+    CHECK_RANGE_EQUAL(int, 4, b, (11, 12, 13, 14));
+}
+
+BOOST_AUTO_TEST_CASE(copy_ctor_different_alloc)
+{
+    int data[] = { 11, 12, 13, 14 };
+    bc::vector<int> a(data, data + 4, queue);
+    BOOST_CHECK_EQUAL(a.size(), size_t(4));
+    CHECK_RANGE_EQUAL(int, 4, a, (11, 12, 13, 14));
+
+    bc::vector<int, bc::pinned_allocator<int> > b(a, queue);
+    BOOST_CHECK_EQUAL(b.size(), size_t(4));
+    CHECK_RANGE_EQUAL(int, 4, b, (11, 12, 13, 14));
+
+    std::vector<int> host_vector;
+    host_vector.push_back(1);
+    host_vector.push_back(9);
+    host_vector.push_back(7);
+    host_vector.push_back(9);
+
+    bc::vector<int, bc::pinned_allocator<int> > c(host_vector, queue);
+    BOOST_CHECK_EQUAL(c.size(), size_t(4));
+    CHECK_RANGE_EQUAL(int, 4, c, (1, 9, 7, 9));
+}
+
+BOOST_AUTO_TEST_CASE(assignment_operator)
+{
+    int adata[] = { 11, 12, 13, 14 };
+    bc::vector<int> a(adata, adata + 4, queue);
+    BOOST_CHECK_EQUAL(a.size(), size_t(4));
+    CHECK_RANGE_EQUAL(int, 4, a, (11, 12, 13, 14));
+
+    bc::vector<int> b = a;
+    BOOST_CHECK_EQUAL(b.size(), size_t(4));
+    CHECK_RANGE_EQUAL(int, 4, b, (11, 12, 13, 14));
+
+    bc::vector<int, bc::pinned_allocator<int> > c = b;
+    BOOST_CHECK_EQUAL(c.size(), size_t(4));
+    CHECK_RANGE_EQUAL(int, 4, c, (11, 12, 13, 14));
+
+    int ddata[] = { 21, 22, 23 };
+    bc::vector<int, bc::pinned_allocator<int> > d(ddata, ddata + 3, queue);
+    BOOST_CHECK_EQUAL(d.size(), size_t(3));
+    CHECK_RANGE_EQUAL(int, 3, d, (21, 22, 23));
+
+    a = d;
+    BOOST_CHECK_EQUAL(a.size(), size_t(3));
+    CHECK_RANGE_EQUAL(int, 3, a, (21, 22, 23));
+
+    std::vector<int> host_vector;
+    host_vector.push_back(1);
+    host_vector.push_back(9);
+    host_vector.push_back(7);
+    host_vector.push_back(9);
+
+    d = host_vector;
+    BOOST_CHECK_EQUAL(d.size(), size_t(4));
+    CHECK_RANGE_EQUAL(int, 4, d, (1, 9, 7, 9));
+}
+
+BOOST_AUTO_TEST_CASE(swap_ctor_custom_alloc)
+{
+    int adata[] = { 11, 12, 13, 14 };
+    bc::vector<int, bc::pinned_allocator<int> > a(adata, adata + 4, queue);
+    BOOST_CHECK_EQUAL(a.size(), size_t(4));
+    CHECK_RANGE_EQUAL(int, 4, a, (11, 12, 13, 14));
+
+    int bdata[] = { 21, 22, 23 };
+    bc::vector<int, bc::pinned_allocator<int> > b(bdata, bdata + 3, queue);
+    BOOST_CHECK_EQUAL(b.size(), size_t(3));
+    CHECK_RANGE_EQUAL(int, 3, b, (21, 22, 23));
+
+    a.swap(b);
+    BOOST_CHECK_EQUAL(a.size(), size_t(3));
+    CHECK_RANGE_EQUAL(int, 3, a, (21, 22, 23));
+    BOOST_CHECK_EQUAL(b.size(), size_t(4));
+    CHECK_RANGE_EQUAL(int, 4, b, (11, 12, 13, 14));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
