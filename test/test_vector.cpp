@@ -19,6 +19,7 @@
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/find.hpp>
 #include <boost/compute/algorithm/remove.hpp>
+#include <boost/compute/allocator/pinned_allocator.hpp>
 #include <boost/compute/container/vector.hpp>
 
 #include "check_macros.hpp"
@@ -184,11 +185,27 @@ BOOST_AUTO_TEST_CASE(max_size)
 BOOST_AUTO_TEST_CASE(move_ctor)
 {
       int data[] = { 11, 12, 13, 14 };
-      bc::vector<int> a(data, data + 4);
+      bc::vector<int> a(data, data + 4, queue);
       BOOST_CHECK_EQUAL(a.size(), size_t(4));
       CHECK_RANGE_EQUAL(int, 4, a, (11, 12, 13, 14));
 
       bc::vector<int> b(std::move(a));
+      BOOST_CHECK(a.size() == 0);
+      BOOST_CHECK(a.get_buffer().get() == 0);
+      BOOST_CHECK_EQUAL(b.size(), size_t(4));
+      CHECK_RANGE_EQUAL(int, 4, b, (11, 12, 13, 14));
+}
+
+BOOST_AUTO_TEST_CASE(move_ctor_custom_alloc)
+{
+      int data[] = { 11, 12, 13, 14 };
+      bc::vector<int, bc::pinned_allocator<int> > a(data, data + 4, queue);
+      BOOST_CHECK_EQUAL(a.size(), size_t(4));
+      CHECK_RANGE_EQUAL(int, 4, a, (11, 12, 13, 14));
+
+      bc::vector<int, bc::pinned_allocator<int> > b(std::move(a));
+      BOOST_CHECK(a.size() == 0);
+      BOOST_CHECK(a.get_buffer().get() == 0);
       BOOST_CHECK_EQUAL(b.size(), size_t(4));
       CHECK_RANGE_EQUAL(int, 4, b, (11, 12, 13, 14));
 }
