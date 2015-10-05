@@ -188,14 +188,29 @@ public:
     }
 
     /// Creates a new vector and copies the values from \p other.
-    vector(const vector<T> &other)
+    vector(const vector &other,
+           command_queue &queue = system::default_queue())
         : m_size(other.m_size),
           m_allocator(other.m_allocator)
     {
         m_data = m_allocator.allocate((std::max)(m_size, _minimum_capacity()));
 
         if(!other.empty()){
-            command_queue queue = default_queue();
+            ::boost::compute::copy(other.begin(), other.end(), begin(), queue);
+            queue.finish();
+        }
+    }
+
+    /// Creates a new vector and copies the values from \p other.
+    template<class OtherAlloc>
+    vector(const vector<T, OtherAlloc> &other,
+           command_queue &queue = system::default_queue())
+        : m_size(other.size()),
+          m_allocator(queue.get_context())
+    {
+        m_data = m_allocator.allocate((std::max)(m_size, _minimum_capacity()));
+
+        if(!other.empty()){
             ::boost::compute::copy(other.begin(), other.end(), begin(), queue);
             queue.finish();
         }
@@ -225,7 +240,7 @@ public:
     }
     #endif // BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
 
-    vector<T>& operator=(const vector<T> &other)
+    vector& operator=(const vector &other)
     {
         if(this != &other){
             command_queue queue = default_queue();
@@ -238,7 +253,7 @@ public:
     }
 
     template<class OtherAlloc>
-    vector<T>& operator=(const std::vector<T, OtherAlloc> &vector)
+    vector& operator=(const std::vector<T, OtherAlloc> &vector)
     {
         command_queue queue = default_queue();
         resize(vector.size(), queue);
@@ -249,7 +264,7 @@ public:
 
     #ifndef BOOST_COMPUTE_NO_RVALUE_REFERENCES
     /// Move-constructs a new vector from \p other.
-    vector(vector<T>&& other)
+    vector(vector&& other)
         : m_data(std::move(other.m_data)),
           m_size(other.m_size),
           m_allocator(std::move(other.m_allocator))
@@ -258,7 +273,7 @@ public:
     }
 
     /// Move-assigns the data from \p other to \c *this.
-    vector<T>& operator=(vector<T>&& other)
+    vector& operator=(vector&& other)
     {
         if(m_size){
             m_allocator.deallocate(m_data, m_size);
@@ -549,7 +564,7 @@ public:
             ::boost::compute::copy_n(&value, 1, position, queue);
         }
         else {
-            ::boost::compute::vector<T> tmp(position, end(), queue);
+            ::boost::compute::vector<T, Alloc> tmp(position, end(), queue);
             resize(m_size + 1, queue);
             position = begin() + position.get_index();
             ::boost::compute::copy_n(&value, 1, position, queue);
@@ -572,7 +587,7 @@ public:
                 const T &value,
                 command_queue &queue)
     {
-        ::boost::compute::vector<T> tmp(position, end(), queue);
+        ::boost::compute::vector<T, Alloc> tmp(position, end(), queue);
         resize(size() + count, queue);
 
         position = begin() + position.get_index();
@@ -601,7 +616,7 @@ public:
                 InputIterator last,
                 command_queue &queue)
     {
-        ::boost::compute::vector<T> tmp(position, end(), queue);
+        ::boost::compute::vector<T, Alloc> tmp(position, end(), queue);
 
         size_type count = detail::iterator_range_size(first, last);
         resize(size() + count, queue);
@@ -642,7 +657,7 @@ public:
     iterator erase(iterator first, iterator last, command_queue &queue)
     {
         if(last != end()){
-            ::boost::compute::vector<T> tmp(last, end(), queue);
+            ::boost::compute::vector<T, Alloc> tmp(last, end(), queue);
             ::boost::compute::copy(tmp.begin(), tmp.end(), first, queue);
         }
 
@@ -661,7 +676,7 @@ public:
     }
 
     /// Swaps the contents of \c *this with \p other.
-    void swap(vector<T> &other)
+    void swap(vector &other)
     {
         std::swap(m_data, other.m_data);
         std::swap(m_size, other.m_size);
