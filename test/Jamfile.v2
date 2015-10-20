@@ -6,13 +6,12 @@ import testing ;
 
 lib boost_unit_test_framework ;
 
-project boost/compute/test
+project
     : source-location .
     : requirements
-        <include>.
-        <include>../include
-        <define>BOOST_TEST_DYN_LINK
-        <linkflags>"-lboost_unit_test_framework"
+        <define>BOOST_ALL_NO_LIB=1
+        <cxxflags>-Wno-deprecated-declarations
+        <library>/boost/test//boost_unit_test_framework
     ;
 
 rule test_all
@@ -25,6 +24,7 @@ rule test_all
         :
         :
         :
+            <link>shared:<define>BOOST_TEST_DYN_LINK=1
             <host-os>linux:<linkflags>"-lOpenCL"
             <host-os>darwin:<linkflags>"-framework OpenCL"
         ] ;
