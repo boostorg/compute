@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(alloc)
 {
     REQUIRES_OPENCL_VERSION(2, 0);
 
-    compute::svm_ptr<int> ptr = compute::svm_alloc<int>(context, 8);
+    compute::svm_ptr<cl_int> ptr = compute::svm_alloc<cl_int>(context, 8);
     compute::svm_free(context, ptr);
 }
 
@@ -50,21 +50,26 @@ BOOST_AUTO_TEST_CASE(sum_svm_kernel)
     );
 
     compute::program program =
-        compute::program::build_with_source(source, context);
+        compute::program::build_with_source(source, context, "-cl-std=CL2.0");
 
     compute::kernel sum_svm_mem_kernel = program.create_kernel("sum_svm_mem");
 
-    int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-    compute::svm_ptr<int> ptr = compute::svm_alloc<int>(context, 8);
-    queue.enqueue_svm_memcpy(ptr.get(), data, 8 * sizeof(int));
+    cl_int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    compute::svm_ptr<cl_int> ptr = compute::svm_alloc<cl_int>(context, 8);
+    queue.enqueue_svm_map(ptr.get(), 8 * sizeof(cl_int), CL_MAP_WRITE);
+    for(size_t i = 0; i < 8; i ++) {
+        static_cast<cl_int*>(ptr.get())[i] = data[i];
+    }
+    queue.enqueue_svm_unmap(ptr.get());
 
-    compute::vector<int> result(1, context);
+    compute::vector<cl_int> result(1, context);
 
     sum_svm_mem_kernel.set_arg(0, ptr);
     sum_svm_mem_kernel.set_arg(1, result);
     queue.enqueue_task(sum_svm_mem_kernel);
 
-    CHECK_RANGE_EQUAL(int, 1, result, (36));
+    queue.finish();
+    BOOST_CHECK_EQUAL(result[0], (36));
 
     compute::svm_free(context, ptr);
 }

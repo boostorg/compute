@@ -306,12 +306,16 @@ BOOST_AUTO_TEST_CASE(fill_svm_buffer)
 {
     REQUIRES_OPENCL_VERSION(2, 0);
 
-    bc::svm_ptr<int> ptr = bc::svm_alloc<int>(context, 16);
-    bc::fill_n(ptr, 16, 42, queue);
+    size_t size = 4;
+    bc::svm_ptr<cl_int> ptr =
+        bc::svm_alloc<cl_int>(context, size * sizeof(cl_int));
+    bc::fill_n(ptr, size * sizeof(cl_int), 42, queue);
 
-    int value = 0;
-    queue.enqueue_svm_memcpy(&value, ptr.get(), sizeof(int));
-    BOOST_CHECK_EQUAL(value, 42);
+    queue.enqueue_svm_map(ptr.get(), size * sizeof(cl_int), CL_MAP_READ);
+    for(size_t i = 0; i < size; i++) {
+        BOOST_CHECK_EQUAL(static_cast<cl_int*>(ptr.get())[i], 42);
+    }
+    queue.enqueue_svm_unmap(ptr.get());
 
     bc::svm_free(context, ptr);
 }
