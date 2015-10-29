@@ -29,6 +29,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/iterator/detail/swizzle_iterator.hpp>
 
+#include "quirks.hpp"
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
@@ -284,6 +285,11 @@ BOOST_AUTO_TEST_CASE(check_copy_type)
 BOOST_AUTO_TEST_CASE(copy_svm_ptr)
 {
     REQUIRES_OPENCL_VERSION(2, 0);
+
+    if(bug_in_svmmemcpy(device)){
+        std::cerr << "skipping copy_svm_ptr test case" << std::endl;
+        return;
+    }
 
     int data[] = { 1, 3, 2, 4 };
 
