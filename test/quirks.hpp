@@ -28,8 +28,17 @@ inline bool is_pocl_device(const boost::compute::device &device)
 // AMD platforms have a bug when using struct assignment. this affects
 // algorithms like fill() when used with pairs/tuples.
 //
-// see: http://devgurus.amd.com/thread/166622
+// see: https://community.amd.com/thread/166622
 inline bool bug_in_struct_assignment(const boost::compute::device &device)
+{
+    return boost::compute::detail::is_amd_device(device);
+}
+
+// clEnqueueSVMMemcpy() operation does not work on AMD devices. This affects
+// copy() algorithm.
+//
+// see: https://community.amd.com/thread/190585
+inline bool bug_in_svmmemcpy(const boost::compute::device &device)
 {
     return boost::compute::detail::is_amd_device(device);
 }
