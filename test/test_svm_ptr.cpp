@@ -16,6 +16,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/utility/source.hpp>
 
+#include "quirks.hpp"
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
@@ -32,6 +33,38 @@ BOOST_AUTO_TEST_CASE(alloc)
 
     compute::svm_ptr<cl_int> ptr = compute::svm_alloc<cl_int>(context, 8);
     compute::svm_free(context, ptr);
+}
+
+BOOST_AUTO_TEST_CASE(svmmemcpy)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    if(bug_in_svmmemcpy(device)){
+        std::cerr << "skipping svmmemcpy test case" << std::endl;
+        return;
+    }
+
+    cl_int input[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    cl_int output[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    compute::svm_ptr<cl_int> ptr = compute::svm_alloc<cl_int>(context, 8);
+    compute::svm_ptr<cl_int> ptr2 = compute::svm_alloc<cl_int>(context, 8);
+
+    // copying from and to host mem
+    queue.enqueue_svm_memcpy(ptr.get(), input, 8 * sizeof(cl_int));
+    queue.enqueue_svm_memcpy(output, ptr.get(), 8 * sizeof(cl_int));
+    queue.finish();
+
+    CHECK_HOST_RANGE_EQUAL(cl_int, 8, output, (1, 2, 3, 4, 5, 6, 7, 8));
+
+    // copying between svm mem
+    queue.enqueue_svm_memcpy(ptr2.get(), ptr.get(), 8 * sizeof(cl_int));
+    queue.enqueue_svm_memcpy(output, ptr2.get(), 8 * sizeof(cl_int));
+    queue.finish();
+
+    CHECK_HOST_RANGE_EQUAL(cl_int, 8, output, (1, 2, 3, 4, 5, 6, 7, 8));
+
+    compute::svm_free(context, ptr);
+    compute::svm_free(context, ptr2);
 }
 
 BOOST_AUTO_TEST_CASE(sum_svm_kernel)
