@@ -85,7 +85,7 @@ public:
     enum map_flags {
         map_read = CL_MAP_READ,
         map_write = CL_MAP_WRITE
-        #ifdef CL_VERSION_2_0
+        #ifdef CL_VERSION_1_2
         ,
         map_write_invalidate_region = CL_MAP_WRITE_INVALIDATE_REGION
         #endif
