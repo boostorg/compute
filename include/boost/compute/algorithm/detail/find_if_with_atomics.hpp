@@ -78,9 +78,9 @@ inline InputIterator find_if_with_atomics_multiple_vpt(InputIterator first,
     const device &device = queue.get_device();
 
     detail::meta_kernel k("find_if");
-    size_t index_arg = k.add_arg<uint *>(memory_object::global_memory, "index");
-    size_t count_arg = k.add_arg<const uint>("count");
-    size_t vpt_arg = k.add_arg<const uint>("vpt");
+    size_t index_arg = k.add_arg<uint_ *>(memory_object::global_memory, "index");
+    size_t count_arg = k.add_arg<const uint_>("count");
+    size_t vpt_arg = k.add_arg<const uint_>("vpt");
     atomic_min<uint_> atomic_min_uint;
 
     // for GPUs reads from global memory are coalesced
