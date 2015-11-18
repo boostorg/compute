@@ -394,6 +394,10 @@ public:
         // open file stream
         std::ifstream stream(file.c_str());
 
+        if(stream.fail()){
+          BOOST_THROW_EXCEPTION(std::ios_base::failure("failed to create stream."));
+        }
+
         // read source
         std::string source(
             (std::istreambuf_iterator<char>(stream)),
