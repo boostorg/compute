@@ -55,6 +55,16 @@ BOOST_AUTO_TEST_CASE(program_source)
     BOOST_CHECK_EQUAL(std::string(source), program.source());
 }
 
+BOOST_AUTO_TEST_CASE(program_source_no_file)
+{
+    // create program from a non-existant source file
+    // and verifies it throws.
+    BOOST_CHECK_THROW(boost::compute::program program =
+                      boost::compute::program::create_with_source
+                      (std::string(), context),
+                      std::ios_base::failure);
+}
+
 BOOST_AUTO_TEST_CASE(create_kernel)
 {
     boost::compute::program program =
