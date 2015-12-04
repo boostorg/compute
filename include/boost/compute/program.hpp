@@ -385,6 +385,30 @@ public:
         return program(program_, false);
     }
 
+    /// Creates a new program with \p sources in \p context.
+    ///
+    /// \see_opencl_ref{clCreateProgramWithSource}
+    static program create_with_source(const std::vector<std::string> &sources,
+                                      const context &context)
+    {
+        std::vector<const char*> source_strings(sources.size());
+        for(size_t i = 0; i < sources.size(); i++){
+            source_strings[i] = sources[i].c_str();
+        }
+
+        cl_int error = 0;
+        cl_program program_ = clCreateProgramWithSource(context,
+                                                        uint_(sources.size()),
+                                                        &source_strings[0],
+                                                        0,
+                                                        &error);
+        if(!program_){
+            BOOST_THROW_EXCEPTION(opencl_error(error));
+        }
+
+        return program(program_, false);
+    }
+
     /// Creates a new program with \p file in \p context.
     ///
     /// \see_opencl_ref{clCreateProgramWithSource}
