@@ -55,6 +55,21 @@ BOOST_AUTO_TEST_CASE(program_source)
     BOOST_CHECK_EQUAL(std::string(source), program.source());
 }
 
+BOOST_AUTO_TEST_CASE(program_multiple_sources)
+{
+    std::vector<std::string> sources;
+    sources.push_back("__kernel void foo(__global int* x) { }\n");
+    sources.push_back("__kernel void bar(__global float* y) { }\n");
+
+    // create program from sources
+    boost::compute::program program =
+        boost::compute::program::create_with_source(sources, context);
+    program.build();
+
+    boost::compute::kernel foo = program.create_kernel("foo");
+    boost::compute::kernel bar = program.create_kernel("bar");
+}
+
 BOOST_AUTO_TEST_CASE(program_source_no_file)
 {
     // create program from a non-existant source file
