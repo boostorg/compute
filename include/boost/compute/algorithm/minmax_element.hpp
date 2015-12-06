@@ -27,7 +27,7 @@ namespace compute {
 ///
 /// \param first first element in the input range
 /// \param last last element in the input range
-/// \param compare comparison function object which returns ​true if the first
+/// \param compare comparison function object which returns true if the first
 ///        argument is less than (i.e. is ordered before) the second.
 /// \param queue command queue to perform the operation
 ///
