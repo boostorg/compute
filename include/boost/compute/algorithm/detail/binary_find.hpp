@@ -114,11 +114,11 @@ inline InputIterator binary_find(InputIterator first,
         }
 
         // Make sure that first and last stay within the input range
-        search_last = std::min(search_last, last);
-        search_last = std::max(search_last, first);
+        search_last = (std::min)(search_last, last);
+        search_last = (std::max)(search_last, first);
 
-        search_first = std::max(search_first, first);
-        search_first = std::min(search_first, last);
+        search_first = (std::max)(search_first, first);
+        search_first = (std::min)(search_first, last);
 
         count = iterator_range_size(search_first, search_last);
     }
