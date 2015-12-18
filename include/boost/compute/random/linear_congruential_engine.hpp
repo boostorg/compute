@@ -102,7 +102,7 @@ public:
     /// \overload
     void seed(command_queue &queue)
     {
-        seed(default_seed);
+        seed(default_seed, queue);
     }
 
     /// Generates random numbers and stores them to the range [\p first, \p last).
