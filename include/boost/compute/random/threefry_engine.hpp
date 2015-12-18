@@ -11,6 +11,8 @@
 #ifndef BOOST_COMPUTE_RANDOM_THREEFRY_HPP
 #define BOOST_COMPUTE_RANDOM_THREEFRY_HPP
 
+#include <algorithm>
+
 #include <boost/compute/types.hpp>
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/kernel.hpp>
@@ -247,7 +249,7 @@ public:
             size_t count = 0;
             size_t size = size_ctr/2;
             if(size > threads){
-                count = threads;
+                count = (std::min)(static_cast<size_t>(threads), size - offset);
             }
             else {
                 count = size;
@@ -282,7 +284,7 @@ public:
             size_t count = 0;
             size_t size = size_ctr/2;
             if(size > threads){
-                count = threads;
+                count = (std::min)(static_cast<size_t>(threads), size - offset);
             }
             else {
                 count = size;
