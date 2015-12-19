@@ -11,6 +11,8 @@
 #ifndef BOOST_COMPUTE_RANDOM_LINEAR_CONGRUENTIAL_ENGINE_HPP
 #define BOOST_COMPUTE_RANDOM_LINEAR_CONGRUENTIAL_ENGINE_HPP
 
+#include <algorithm>
+
 #include <boost/compute/types.hpp>
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/kernel.hpp>
@@ -100,7 +102,7 @@ public:
     /// \overload
     void seed(command_queue &queue)
     {
-        seed(default_seed);
+        seed(default_seed, queue);
     }
 
     /// Generates random numbers and stores them to the range [\p first, \p last).
@@ -118,7 +120,7 @@ public:
         for(;;){
             size_t count = 0;
             if(size > threads){
-                count = threads;
+                count = (std::min)(static_cast<size_t>(threads), size - offset);
             }
             else {
                 count = size;
