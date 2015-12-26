@@ -55,6 +55,8 @@ public:
     /// Creates a new mersenne_twister_engine object as a copy of \p other.
     mersenne_twister_engine(const mersenne_twister_engine<T> &other)
         : m_context(other.m_context),
+          m_state_index(other.m_state_index),
+          m_program(other.m_program),
           m_state_buffer(other.m_state_buffer)
     {
     }
@@ -64,6 +66,9 @@ public:
     {
         if(this != &other){
             m_context = other.m_context;
+            m_state_index = other.m_state_index;
+            m_program = other.m_program;
+            m_state_buffer = other.m_state_buffer;
         }
 
         return *this;
