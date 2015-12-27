@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE(assign_op)
     boost::compute::vector<uint_> vector(10, context);
 
     rng_copy.discard(5, queue);
-	rng_copy = rng;
+    rng_copy = rng;
     rng_copy.generate(vector.begin(), vector.end(), queue);
 
     CHECK_RANGE_EQUAL(
