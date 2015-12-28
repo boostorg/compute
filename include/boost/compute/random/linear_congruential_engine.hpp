@@ -65,6 +65,7 @@ public:
     /// Creates a new linear_congruential_engine object as a copy of \p other.
     linear_congruential_engine(const linear_congruential_engine<T> &other)
         : m_context(other.m_context),
+          m_program(other.m_program),
           m_seed(other.m_seed),
           m_multiplicands(other.m_multiplicands)
     {
@@ -76,6 +77,9 @@ public:
     {
         if(this != &other){
             m_context = other.m_context;
+            m_program = other.m_program;
+            m_seed = other.m_seed;
+            m_multiplicands = other.m_multiplicands;
         }
 
         return *this;
