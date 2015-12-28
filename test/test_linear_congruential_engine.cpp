@@ -63,4 +63,58 @@ BOOST_AUTO_TEST_CASE(discard_uint)
     );
 }
 
+BOOST_AUTO_TEST_CASE(copy_ctor)
+{
+    using boost::compute::uint_;
+
+    boost::compute::linear_congruential_engine<uint_> rng(queue);
+    boost::compute::linear_congruential_engine<uint_> rng_copy(rng);
+
+    boost::compute::vector<uint_> vector(10, context);
+
+    rng_copy.generate(vector.begin(), vector.end(), queue);
+
+    CHECK_RANGE_EQUAL(
+        uint_, 10, vector,
+        (uint_(1099087573),
+         uint_(2291457337),
+         uint_(4026424941),
+         uint_(420705969),
+         uint_(2250972997),
+         uint_(153107049),
+         uint_(3581708125),
+         uint_(1733142113),
+         uint_(3008982197),
+         uint_(3237988505))
+    );
+}
+
+BOOST_AUTO_TEST_CASE(assign_op)
+{
+    using boost::compute::uint_;
+
+    boost::compute::linear_congruential_engine<uint_> rng(queue);
+    boost::compute::linear_congruential_engine<uint_> rng_copy(queue);
+
+    boost::compute::vector<uint_> vector(10, context);
+
+    rng_copy.discard(5, queue);
+    rng_copy = rng;
+    rng_copy.generate(vector.begin(), vector.end(), queue);
+
+    CHECK_RANGE_EQUAL(
+        uint_, 10, vector,
+        (uint_(1099087573),
+         uint_(2291457337),
+         uint_(4026424941),
+         uint_(420705969),
+         uint_(2250972997),
+         uint_(153107049),
+         uint_(3581708125),
+         uint_(1733142113),
+         uint_(3008982197),
+         uint_(3237988505))
+    );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
