@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestSvmPtr
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/core.hpp>
 #include <boost/compute/svm.hpp>
 #include <boost/compute/container/vector.hpp>
