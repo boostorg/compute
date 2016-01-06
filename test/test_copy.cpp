@@ -16,6 +16,7 @@
 #include <string>
 #include <sstream>
 #include <iterator>
+#include <iostream>
 
 #include <boost/compute/svm.hpp>
 #include <boost/compute/system.hpp>
