@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(scatter_if_int)
 
     int stencil_data[] = {0, 1, 0, 1, 0, 1, 0, 1, 0, 1};
 
-    bc::vector<uint> stencil(stencil_data, stencil_data + 10, queue);
+    bc::vector<bc::uint_> stencil(stencil_data, stencil_data + 10, queue);
 
     bc::vector<int> output(input.size(), -1, queue);
 
@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE(scatter_if_constant_indices)
 
     int stencil_data[] = {0, 1, 0, 1, 0, 1, 0, 1, 0, 1};
     bc::buffer stencil_buffer(context,
-                              10 * sizeof(int),
+                              10 * sizeof(bc::uint_),
                               bc::buffer::read_only | bc::buffer::use_host_ptr,
                               stencil_data);
 
@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_CASE(scatter_if_function)
     bc::vector<int> map(map_data, map_data + 10, queue);
 
     int stencil_data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    bc::vector<uint> stencil(stencil_data, stencil_data + 10, queue);
+    bc::vector<bc::uint_> stencil(stencil_data, stencil_data + 10, queue);
 
     bc::vector<int> output(input.size(), -1, queue);
 
