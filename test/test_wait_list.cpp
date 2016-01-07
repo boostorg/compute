@@ -29,7 +29,7 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(create_wait_list)
 {
     compute::wait_list events;
-    BOOST_CHECK_EQUAL(events.size(), 0);
+    BOOST_CHECK_EQUAL(events.size(), size_t(0));
     BOOST_CHECK_EQUAL(events.empty(), true);
     BOOST_CHECK(events.get_event_ptr() == 0);
 }
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(insert_future)
 
     // add future event to the wait list
     events.insert(future);
-    BOOST_CHECK_EQUAL(events.size(), 1);
+    BOOST_CHECK_EQUAL(events.size(), size_t(1));
     BOOST_CHECK(events.get_event_ptr() != 0);
 
     // wait for copy to complete
@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(insert_future)
 
     // clear the event list
     events.clear();
-    BOOST_CHECK_EQUAL(events.size(), 0);
+    BOOST_CHECK_EQUAL(events.size(), size_t(0));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

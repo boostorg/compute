@@ -42,8 +42,8 @@ boost::compute::image2d img(context, 640, 480, rgba8);
         // verify image has been created and format is correct
         BOOST_CHECK(img.get() != cl_mem());
         BOOST_CHECK(img.format() == rgba8);
-        BOOST_CHECK_EQUAL(img.width(), 640);
-        BOOST_CHECK_EQUAL(img.height(), 480);
+        BOOST_CHECK_EQUAL(img.width(), size_t(640));
+        BOOST_CHECK_EQUAL(img.height(), size_t(480));
     }
     catch(compute::opencl_error &e){
         if(e.error_code() == CL_IMAGE_FORMAT_NOT_SUPPORTED){

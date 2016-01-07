@@ -163,7 +163,7 @@ BOOST_AUTO_TEST_CASE(erase)
     int data[] = { 1, 2, 5, 7, 9 };
     bc::vector<int> vector(data, data + 5, queue);
     queue.finish();
-    BOOST_CHECK_EQUAL(vector.size(), 5);
+    BOOST_CHECK_EQUAL(vector.size(), size_t(5));
 
     vector.erase(vector.begin() + 1, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(4));
@@ -343,7 +343,7 @@ BOOST_AUTO_TEST_CASE(resize_throw_exception)
     );
 
     // ensure vector data is still the same
-    BOOST_CHECK_EQUAL(vec.size(), 8);
+    BOOST_CHECK_EQUAL(vec.size(), size_t(8));
     CHECK_RANGE_EQUAL(int, 8, vec, (1, 2, 3, 4, 5, 6, 7, 8));
 }
 
