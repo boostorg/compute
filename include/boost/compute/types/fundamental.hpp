@@ -58,7 +58,7 @@ public:
 
     explicit vector_type(const Scalar scalar)
     {
-        for(int i = 0; i < N; i++)
+        for(size_t i = 0; i < N; i++)
             m_value[i] = scalar;
     }
 

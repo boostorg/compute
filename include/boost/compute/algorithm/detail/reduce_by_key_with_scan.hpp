@@ -125,12 +125,16 @@ inline void carry_outs(vector<uint_>::iterator keys_first,
         k.decl<const uint_>("lid") << " = get_local_id(0);\n" <<
         k.decl<const uint_>("group_id") << " = get_group_id(0);\n" <<
 
-        "if(gid >= count){\n    return;\n}\n" <<
-
-        k.decl<uint_>("key") << " = " << keys_first[k.var<const uint_>("gid")] << ";\n" <<
-        k.decl<value_out_type>("value") << " = " << values_first[k.var<const uint_>("gid")] << ";\n" <<
-        "lkeys[lid] = key;\n" <<
-        "lvals[lid] = value;\n" <<
+        k.decl<uint_>("key") << ";\n" <<
+        k.decl<value_out_type>("value") << ";\n" <<
+        "if(gid < count){\n" <<
+            k.var<uint_>("key") << " = " <<
+                keys_first[k.var<const uint_>("gid")] << ";\n" <<
+            k.var<value_out_type>("value") << " = " <<
+                values_first[k.var<const uint_>("gid")] << ";\n" <<
+            "lkeys[lid] = key;\n" <<
+            "lvals[lid] = value;\n" <<
+        "}\n" <<
 
         // Calculate carry out for each work group by performing Hillis/Steele scan
         // where only last element (key-value pair) is saved
@@ -139,13 +143,15 @@ inline void carry_outs(vector<uint_>::iterator keys_first,
         k.decl<value_out_type>("other_value") << ";\n" <<
 
         "for(" << k.decl<uint_>("offset") << " = 1; " <<
-                  "offset < wg_size && lid >= offset; offset *= 2){\n"
+                  "offset < wg_size; offset *= 2){\n"
         "    barrier(CLK_LOCAL_MEM_FENCE);\n" <<
-        "    other_key = lkeys[lid - offset];\n" <<
-        "    if(other_key == key){\n" <<
-        "        other_value = lvals[lid - offset];\n" <<
-        "        result = " << function(k.var<value_out_type>("result"),
-                                        k.var<value_out_type>("other_value")) << ";\n" <<
+        "    if(lid >= offset){\n"
+        "        other_key = lkeys[lid - offset];\n" <<
+        "        if(other_key == key){\n" <<
+        "            other_value = lvals[lid - offset];\n" <<
+        "            result = " << function(k.var<value_out_type>("result"),
+                                            k.var<value_out_type>("other_value")) << ";\n" <<
+        "        }\n" <<
         "    }\n" <<
         "    barrier(CLK_LOCAL_MEM_FENCE);\n" <<
         "    lvals[lid] = result;\n" <<
@@ -197,19 +203,24 @@ inline void carry_ins(vector<uint_>::iterator carry_out_keys_first,
     size_t local_vals_arg = k.add_arg<value_out_type *>(memory_object::local_memory, "lvals");
 
     k <<
-        k.decl<const uint_>("id") << " = get_global_id(0) * values_per_work_item;\n" <<
+        k.decl<uint_>("id") << " = get_global_id(0) * values_per_work_item;\n" <<
         k.decl<uint_>("idx") << " = id;\n" <<
         k.decl<const uint_>("wg_size") << " = get_local_size(0);\n" <<
         k.decl<const uint_>("lid") << " = get_local_id(0);\n" <<
         k.decl<const uint_>("group_id") << " = get_group_id(0);\n" <<
 
-        "if(id >= carry_out_size){\n    return;\n}\n" <<
-
         k.decl<uint_>("key") << ";\n" <<
         k.decl<value_out_type>("value") << ";\n" <<
-        k.decl<uint_>("previous_key") << " = " << carry_out_keys_first[k.var<const uint_>("idx")] << ";\n" <<
-        k.decl<value_out_type>("result") << " = " << carry_out_values_first[k.var<const uint_>("idx")] << ";\n" <<
-        carry_in_values_first[k.var<const uint_>("idx")] << " = result;\n" <<
+        k.decl<uint_>("previous_key") << ";\n" <<
+        k.decl<value_out_type>("result") << ";\n" <<
+
+        "if(id < carry_out_size){\n" <<
+            k.var<uint_>("previous_key") << " = " <<
+                carry_out_keys_first[k.var<const uint_>("id")] << ";\n" <<
+            k.var<value_out_type>("result") << " = " <<
+                carry_out_values_first[k.var<const uint_>("id")] << ";\n" <<
+            carry_in_values_first[k.var<const uint_>("id")] << " = result;\n" <<
+        "}\n" <<
 
         k.decl<const uint_>("end") << " = (id + values_per_work_item) <= carry_out_size" <<
                                       " ? (values_per_work_item + id) :  carry_out_size;\n" <<
@@ -233,38 +244,40 @@ inline void carry_ins(vector<uint_>::iterator carry_out_keys_first,
 
         // Hillis/Steele scan
         "for(" << k.decl<uint_>("offset") << " = 1; " <<
-                  "offset < wg_size && lid >= offset; offset *= 2){\n"
+                  "offset < wg_size; offset *= 2){\n"
         "    barrier(CLK_LOCAL_MEM_FENCE);\n" <<
-        "    key = lkeys[lid - offset];\n" <<
-        "    if(previous_key == key){\n" <<
-        "        value = lvals[lid - offset];\n" <<
-        "        result = " << function(k.var<value_out_type>("result"),
-                                        k.var<value_out_type>("value")) << ";\n" <<
+        "    if(lid >= offset){\n"
+        "        key = lkeys[lid - offset];\n" <<
+        "        if(previous_key == key){\n" <<
+        "            value = lvals[lid - offset];\n" <<
+        "            result = " << function(k.var<value_out_type>("result"),
+                                            k.var<value_out_type>("value")) << ";\n" <<
+        "        }\n" <<
         "    }\n" <<
         "    barrier(CLK_LOCAL_MEM_FENCE);\n" <<
         "    lvals[lid] = result;\n" <<
         "}\n" <<
         "barrier(CLK_LOCAL_MEM_FENCE);\n" <<
 
-        // first in the group has nothing to do
-        "if(lid == 0){\n    return;\n}\n" <<
-
+        "if(lid > 0){\n" <<
         // load key-value reduced by previous work item
-        "previous_key = lkeys[lid - 1];\n" <<
-        "result       = lvals[lid - 1];\n" <<
-
-        // make sure all carry-ins are saved in global memory
-        "barrier( CLK_GLOBAL_MEM_FENCE );\n" <<
+        "    previous_key = lkeys[lid - 1];\n" <<
+        "    result       = lvals[lid - 1];\n" <<
+        "}\n" <<
 
         // add key-value reduced by previous work item
-        "for(idx = id; idx < end; idx += 1){\n" <<
-        "    key = " << carry_out_keys_first[k.var<const uint_>("idx")] << ";\n" <<
-        "    value = " << carry_in_values_first[k.var<const uint_>("idx")] << ";\n" <<
-        "    if(previous_key == key){\n" <<
-        "        value = " << function(k.var<value_out_type>("result"),
-                                       k.var<value_out_type>("value")) << ";\n" <<
+        "for(idx = id; idx < id + values_per_work_item; idx += 1){\n" <<
+        // make sure all carry-ins are saved in global memory
+        "    barrier( CLK_GLOBAL_MEM_FENCE );\n" <<
+        "    if(lid > 0 && idx < carry_out_size) {\n"
+        "        key = " << carry_out_keys_first[k.var<const uint_>("idx")] << ";\n" <<
+        "        value = " << carry_in_values_first[k.var<const uint_>("idx")] << ";\n" <<
+        "        if(previous_key == key){\n" <<
+        "            value = " << function(k.var<value_out_type>("result"),
+                                           k.var<value_out_type>("value")) << ";\n" <<
+        "        }\n" <<
+        "        " << carry_in_values_first[k.var<const uint_>("idx")] << " = value;\n" <<
         "    }\n" <<
-        "    " << carry_in_values_first[k.var<const uint_>("idx")] << " = value;\n" <<
         "}\n";
 
 
@@ -315,12 +328,17 @@ inline void final_reduction(InputKeyIterator keys_first,
         k.decl<const uint_>("lid") << " = get_local_id(0);\n" <<
         k.decl<const uint_>("group_id") << " = get_group_id(0);\n" <<
 
-        "if(gid >= count){\n    return;\n}\n" <<
+        k.decl<uint_>("key") << ";\n" <<
+        k.decl<value_out_type>("value") << ";\n"
 
-        k.decl<const uint_>("key") << " = " << new_keys_first[k.var<const uint_>("gid")] << ";\n" <<
-        k.decl<value_out_type>("value") << " = " << values_first[k.var<const uint_>("gid")] << ";\n" <<
-        "lkeys[lid] = key;\n" <<
-        "lvals[lid] = value;\n" <<
+        "if(gid < count){\n" <<
+            k.var<uint_>("key") << " = " <<
+                new_keys_first[k.var<const uint_>("gid")] << ";\n" <<
+            k.var<value_out_type>("value") << " = " <<
+                values_first[k.var<const uint_>("gid")] << ";\n" <<
+            "lkeys[lid] = key;\n" <<
+            "lvals[lid] = value;\n" <<
+        "}\n" <<
 
         // Hillis/Steele scan
         k.decl<value_out_type>("result") << " = value;\n" <<
@@ -328,17 +346,21 @@ inline void final_reduction(InputKeyIterator keys_first,
         k.decl<value_out_type>("other_value") << ";\n" <<
 
         "for(" << k.decl<uint_>("offset") << " = 1; " <<
-                 "offset < wg_size && lid >= offset; offset *= 2){\n"
+                 "offset < wg_size ; offset *= 2){\n"
         "    barrier(CLK_LOCAL_MEM_FENCE);\n" <<
-        "    other_key = lkeys[lid - offset];\n" <<
-        "    if(other_key == key){\n" <<
-        "        other_value = lvals[lid - offset];\n" <<
-        "        result = " << function(k.var<value_out_type>("result"),
-                                        k.var<value_out_type>("other_value")) << ";\n" <<
+        "    if(lid >= offset) {\n" <<
+        "        other_key = lkeys[lid - offset];\n" <<
+        "        if(other_key == key){\n" <<
+        "            other_value = lvals[lid - offset];\n" <<
+        "            result = " << function(k.var<value_out_type>("result"),
+                                            k.var<value_out_type>("other_value")) << ";\n" <<
+        "        }\n" <<
         "    }\n" <<
         "    barrier(CLK_LOCAL_MEM_FENCE);\n" <<
         "    lvals[lid] = result;\n" <<
         "}\n" <<
+
+        "if(gid >= count) {\n return;\n};\n" <<
 
         k.decl<const bool>("save") << " = (gid < (count - 1)) ?"
                                    << new_keys_first[k.var<const uint_>("gid + 1")] << " != key" <<

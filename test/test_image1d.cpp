@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(fill_image1d)
 
     compute::image1d img(context, 64, format);
 
-    BOOST_CHECK_EQUAL(img.width(), 64);
+    BOOST_CHECK_EQUAL(img.width(), size_t(64));
     BOOST_CHECK(img.size() == compute::dim(64));
     BOOST_CHECK(img.format() == format);
 
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(fill_image1d)
     // read value of first pixel
     compute::uchar_ first_pixel = 0;
     queue.enqueue_read_image(img, compute::dim(0), compute::dim(1), &first_pixel);
-    BOOST_CHECK_EQUAL(first_pixel, 128);
+    BOOST_CHECK_EQUAL(first_pixel, compute::uchar_(128));
 }
 #endif // CL_VERSION_1_2
 

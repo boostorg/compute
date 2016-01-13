@@ -137,7 +137,7 @@ BOOST_AUTO_TEST_CASE(get_arg_info)
 
     compute::kernel kernel = program.create_kernel("sum_kernel");
 
-    BOOST_CHECK_EQUAL(kernel.get_info<CL_KERNEL_NUM_ARGS>(), 3);
+    BOOST_CHECK_EQUAL(kernel.get_info<CL_KERNEL_NUM_ARGS>(), compute::uint_(3));
 
     BOOST_CHECK_EQUAL(kernel.get_arg_info<std::string>(0, CL_KERNEL_ARG_TYPE_NAME), "int*");
     BOOST_CHECK_EQUAL(kernel.get_arg_info<std::string>(0, CL_KERNEL_ARG_NAME), "input");

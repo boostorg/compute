@@ -46,9 +46,9 @@ BOOST_AUTO_TEST_CASE(subscript_operator)
     BOOST_CHECK_EQUAL(xyz[1], size_t(0));
     BOOST_CHECK_EQUAL(xyz[2], size_t(0));
 
-    xyz[0] = 10;
-    xyz[1] = 20;
-    xyz[2] = 30;
+    xyz[0] = size_t(10);
+    xyz[1] = size_t(20);
+    xyz[2] = size_t(30);
     BOOST_CHECK_EQUAL(xyz[0], size_t(10));
     BOOST_CHECK_EQUAL(xyz[1], size_t(20));
     BOOST_CHECK_EQUAL(xyz[2], size_t(30));
@@ -88,9 +88,9 @@ BOOST_AUTO_TEST_CASE(copy_to_vector)
 
     std::vector<size_t> vec(3);
     std::copy(exts.begin(), exts.end(), vec.begin());
-    BOOST_CHECK_EQUAL(vec[0], 4);
-    BOOST_CHECK_EQUAL(vec[1], 5);
-    BOOST_CHECK_EQUAL(vec[2], 6);
+    BOOST_CHECK_EQUAL(vec[0], size_t(4));
+    BOOST_CHECK_EQUAL(vec[1], size_t(5));
+    BOOST_CHECK_EQUAL(vec[2], size_t(6));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

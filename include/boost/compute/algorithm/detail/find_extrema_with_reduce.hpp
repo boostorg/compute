@@ -103,22 +103,24 @@ inline void find_extrema_with_reduce(InputIterator input,
     k <<
         // Work item global id
         k.decl<const uint_>("gid") << " = get_global_id(0);\n" <<
-        "if(gid >= count) {\n    return;\n}\n" <<
 
         // Index of element that will be read from input buffer
         k.decl<uint_>("idx") << " = gid;\n" <<
 
         k.decl<input_type>("acc") << ";\n" <<
-        // Real index of currently best element
-        "#ifdef BOOST_COMPUTE_USE_INPUT_IDX\n" <<
-        k.decl<input_type>("acc_idx") << " = " << input_idx[k.var<uint_>("idx")] << ";\n" <<
-        "#else\n" <<
-        k.decl<uint_>("acc_idx") << " = idx;\n" <<
-        "#endif\n" <<
+        k.decl<uint_>("acc_idx") << ";\n" <<
+        "if(gid < count) {\n" <<
+            // Real index of currently best element
+            "#ifdef BOOST_COMPUTE_USE_INPUT_IDX\n" <<
+            k.var<uint_>("acc_idx") << " = " << input_idx[k.var<uint_>("idx")] << ";\n" <<
+            "#else\n" <<
+            k.var<uint_>("acc_idx") << " = idx;\n" <<
+            "#endif\n" <<
 
-        // Init accumulator with first[get_global_id(0)]
-        "acc = " << input[k.var<uint_>("idx")] << ";\n" <<
-        "idx += get_global_size(0);\n" <<
+            // Init accumulator with first[get_global_id(0)]
+            "acc = " << input[k.var<uint_>("idx")] << ";\n" <<
+            "idx += get_global_size(0);\n" <<
+        "}\n" <<
 
         k.decl<bool>("compare_result") << ";\n" <<
         k.decl<bool>("equal") << ";\n\n" <<
