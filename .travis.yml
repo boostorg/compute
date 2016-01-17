@@ -13,7 +13,7 @@ before_install:
     - sudo apt-get install -qq fglrx opencl-headers libboost-chrono-dev libboost-date-time-dev libboost-test-dev libboost-system-dev libboost-filesystem-dev libboost-timer-dev libboost-program-options-dev libboost-thread-dev python-yaml lcov libopencv-dev g++-4.8
     - gem install coveralls-lcov
     - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
-    - sudo modprobe fglrx
+    - clinfo
     - fglrxinfo
 script:
     - mkdir -p build
