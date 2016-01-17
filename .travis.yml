@@ -10,13 +10,13 @@ before_install:
     - sudo dpkg --add-architecture i386
     - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
     - sudo apt-get update -qq -y
-    - sudo apt-get install -qq fglrx-updates=2:15.200-0ubuntu0.5 opencl-headers libboost-chrono-dev libboost-date-time-dev libboost-test-dev libboost-system-dev libboost-filesystem-dev libboost-timer-dev libboost-program-options-dev libboost-thread-dev python-yaml lcov libopencv-dev g++-4.8
+    - sudo apt-get install -qq fglrx opencl-headers libboost-chrono-dev libboost-date-time-dev libboost-test-dev libboost-system-dev libboost-filesystem-dev libboost-timer-dev libboost-program-options-dev libboost-thread-dev python-yaml lcov libopencv-dev g++-4.8
     - gem install coveralls-lcov
     - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
 script:
     - mkdir -p build
     - cd build
-    - cmake -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_ENABLE_COVERAGE=ON -DBOOST_COMPUTE_HAVE_OPENCV=ON -DBOOST_COMPUTE_THREAD_SAFE=ON -DCMAKE_CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -Wno-deprecated-declarations" -DOPENCL_LIBRARIES="/usr/lib32/fglrx/libOpenCL.so.1" ..
+    - cmake -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_ENABLE_COVERAGE=ON -DBOOST_COMPUTE_HAVE_OPENCV=ON -DBOOST_COMPUTE_THREAD_SAFE=ON -DCMAKE_CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -Wno-deprecated-declarations" -DOPENCL_LIBRARIES="/usr/lib32/libOpenCL.so.1" ..
     - make -j4
     - ./example/list_devices
     - ctest --output-on-failure
