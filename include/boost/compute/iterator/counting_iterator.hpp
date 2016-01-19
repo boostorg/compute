@@ -151,7 +151,7 @@ private:
 
     difference_type distance_to(const counting_iterator<T> &other) const
     {
-        return other.m_init - m_init;
+        return difference_type(other.m_init) - difference_type(m_init);
     }
 
 private:

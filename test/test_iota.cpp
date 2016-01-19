@@ -66,4 +66,25 @@ BOOST_AUTO_TEST_CASE(iota_permutation_iterator)
     CHECK_RANGE_EQUAL(int, 5, output, (2, 3, 1, 5, 4));
 }
 
+BOOST_AUTO_TEST_CASE(iota_uint)
+{
+    bc::vector<bc::uint_> vector(4, context);
+    bc::iota(vector.begin(), vector.end(), bc::uint_(0), queue);
+    CHECK_RANGE_EQUAL(bc::uint_, 4, vector, (0, 1, 2, 3));
+}
+
+BOOST_AUTO_TEST_CASE(iota_char)
+{
+    bc::vector<bc::char_> vector(4, context);
+    bc::iota(vector.begin(), vector.end(), bc::uint_(0), queue);
+    CHECK_RANGE_EQUAL(bc::char_, 4, vector, (0, 1, 2, 3));
+}
+
+BOOST_AUTO_TEST_CASE(iota_uchar)
+{
+    bc::vector<bc::uchar_> vector(4, context);
+    bc::iota(vector.begin(), vector.end(), bc::uint_(0), queue);
+    CHECK_RANGE_EQUAL(bc::uchar_, 4, vector, (0, 1, 2, 3));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
