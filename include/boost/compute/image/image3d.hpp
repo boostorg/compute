@@ -23,6 +23,9 @@
 namespace boost {
 namespace compute {
 
+// forward declarations
+class command_queue;
+
 /// \class image3d
 /// \brief An OpenCL 3D image object
 ///
