@@ -8,6 +8,8 @@
 // See http://boostorg.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
+#include <iostream>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/container/vector.hpp>
