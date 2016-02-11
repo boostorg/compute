@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <cstdlib>
+#include <iostream>
 
 #include <thrust/copy.h>
 #include <thrust/device_vector.h>
