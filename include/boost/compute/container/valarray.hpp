@@ -79,7 +79,8 @@ public:
     valarray<T>& operator=(const valarray<T> &other)
     {
         if(this != &other){
-            resize(other.size());
+            // change to other's OpenCL context
+            m_buffer = buffer(other.m_buffer.get_context(), other.size() * sizeof(T));
             copy(other.begin(), other.end(), begin());
         }
 
@@ -88,7 +89,7 @@ public:
 
     valarray<T>& operator=(const std::valarray<T> &valarray)
     {
-        resize(valarray.size());
+        m_buffer = buffer(m_buffer.get_context(), valarray.size() * sizeof(T));
         copy(&valarray[0], &valarray[valarray.size()], begin());
 
         return *this;
@@ -342,8 +343,11 @@ BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(%, modulus,
     { \
         assert \
         valarray<T> result(lhs.size()); \
-        transform(&lhs[0], &lhs[lhs.size()], &rhs[0], \
-            &result[0], op_name<T>()); \
+        transform(buffer_iterator<T>(lhs.get_buffer(), 0), \
+                  buffer_iterator<T>(lhs.get_buffer(), lhs.size()), \
+                  buffer_iterator<T>(rhs.get_buffer(), 0), \
+                  buffer_iterator<T>(result.get_buffer(), 0), \
+                  op_name<T>()); \
         return result; \
     } \
     \
@@ -352,8 +356,10 @@ BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(%, modulus,
     { \
         assert \
         valarray<T> result(rhs.size()); \
-        transform(&rhs[0], &rhs[rhs.size()], &result[0], \
-            ::boost::compute::bind(op_name<T>(), val, placeholders::_1)); \
+        transform(buffer_iterator<T>(rhs.get_buffer(), 0), \
+                  buffer_iterator<T>(rhs.get_buffer(), rhs.size()), \
+                  buffer_iterator<T>(result.get_buffer(), 0), \
+                  ::boost::compute::bind(op_name<T>(), val, placeholders::_1)); \
         return result; \
     } \
     \
@@ -362,8 +368,10 @@ BOOST_COMPUTE_DEFINE_VALARRAY_COMPOUND_ASSIGNMENT(%, modulus,
     { \
         assert \
         valarray<T> result(lhs.size()); \
-        transform(&lhs[0], &lhs[lhs.size()], &result[0], \
-            ::boost::compute::bind(op_name<T>(), placeholders::_1, val)); \
+        transform(buffer_iterator<T>(lhs.get_buffer(), 0), \
+                  buffer_iterator<T>(lhs.get_buffer(), lhs.size()), \
+                  buffer_iterator<T>(result.get_buffer(), 0), \
+                  ::boost::compute::bind(op_name<T>(), placeholders::_1, val)); \
         return result; \
     }
 
@@ -422,8 +430,11 @@ BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR_NO_FP(>>, shift_right)
             " and vector types" \
         ); \
         valarray<char> result(lhs.size()); \
-        transform(&lhs[0], &lhs[lhs.size()], &rhs[0], \
-            &result[0], op_name<T>()); \
+        transform(buffer_iterator<T>(lhs.get_buffer(), 0), \
+                  buffer_iterator<T>(lhs.get_buffer(), lhs.size()), \
+                  buffer_iterator<T>(rhs.get_buffer(), 0), \
+                  buffer_iterator<char>(result.get_buffer(), 0), \
+                  op_name<T>()); \
         return result; \
     } \
     \
@@ -436,8 +447,10 @@ BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR_NO_FP(>>, shift_right)
             " and vector types" \
         ); \
         valarray<char> result(rhs.size()); \
-        transform(&rhs[0], &rhs[rhs.size()], &result[0], \
-            ::boost::compute::bind(op_name<T>(), val, placeholders::_1)); \
+        transform(buffer_iterator<T>(rhs.get_buffer(), 0), \
+                  buffer_iterator<T>(rhs.get_buffer(), rhs.size()), \
+                  buffer_iterator<char>(result.get_buffer(), 0), \
+                  ::boost::compute::bind(op_name<T>(), val, placeholders::_1)); \
         return result; \
     } \
     \
@@ -450,8 +463,10 @@ BOOST_COMPUTE_DEFINE_VALARRAY_BINARY_OPERATOR_NO_FP(>>, shift_right)
             " and vector types" \
         ); \
         valarray<char> result(lhs.size()); \
-        transform(&lhs[0], &lhs[lhs.size()], &result[0], \
-            ::boost::compute::bind(op_name<T>(), placeholders::_1, val)); \
+        transform(buffer_iterator<T>(lhs.get_buffer(), 0), \
+                  buffer_iterator<T>(lhs.get_buffer(), lhs.size()), \
+                  buffer_iterator<char>(result.get_buffer(), 0), \
+                  ::boost::compute::bind(op_name<T>(), placeholders::_1, val)); \
         return result; \
     }
 

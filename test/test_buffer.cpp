@@ -20,6 +20,7 @@
 #include <future>
 #endif // BOOST_COMPUTE_USE_CPP11
 
+#include "quirks.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -122,6 +123,11 @@ destructor_callback_function(cl_mem memobj, void *user_data)
 BOOST_AUTO_TEST_CASE(destructor_callback)
 {
     REQUIRES_OPENCL_VERSION(1,2);
+
+    if(!supports_destructor_callback(device))
+    {
+        return;
+    }
 
     bool invoked = false;
     {

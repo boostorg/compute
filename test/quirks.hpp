@@ -58,4 +58,11 @@ inline bool supports_image_samplers(const boost::compute::device &device)
     return true;
 }
 
+// returns true if the device supports image samplers.
+inline bool supports_destructor_callback(const boost::compute::device &device)
+{
+    // clSetMemObjectDestructorCallback is unimplemented in POCL
+    return !is_pocl_device(device);
+}
+
 #endif // BOOST_COMPUTE_TEST_QUIRKS_HPP
