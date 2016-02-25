@@ -21,6 +21,7 @@
 #include <boost/compute/program.hpp>
 #include <boost/compute/utility/source.hpp>
 
+#include "quirks.hpp"
 #include "context_setup.hpp"
 
 namespace compute = boost::compute;
@@ -141,6 +142,10 @@ boost::compute::program foo_program =
 BOOST_AUTO_TEST_CASE(compile_and_link)
 {
     REQUIRES_OPENCL_VERSION(1,2);
+
+    if(!supports_compile_program(device) || !supports_link_program(device)) {
+        return;
+    }
 
     // create the library program
     const char library_source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
