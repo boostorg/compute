@@ -18,6 +18,8 @@ env:
     # Global build options and C++ flags
     - CMAKE_OPTIONS="-DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_ENABLE_COVERAGE=ON -DBOOST_COMPUTE_HAVE_OPENCV=ON -DBOOST_COMPUTE_THREAD_SAFE=ON"
     - CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -Wno-deprecated-declarations"
+    # Misc
+    - RUN_TESTS=true
 
 matrix:
   include:
@@ -109,13 +111,85 @@ matrix:
     # Khronos ICD builds (without running tests) (OpenCL 1.2, 2.0)
     ############################################################################
 
-    # Precise, OpenCL 1.2, Travis CI container-based infrastructure
+    # # Precise, OpenCL 1.2, Travis CI container-based infrastructure
+    # - os: linux
+    #   sudo: false
+    #   compiler: clang
+    #   addons:
+    #    apt:
+    #      packages: &precise_icd_packages
+    #        - g++-4.8
+    #        # Boost
+    #        - libboost-chrono1.55-dev
+    #        - libboost-date-time1.55-dev
+    #        - libboost-test1.55-dev
+    #        - libboost-system1.55-dev
+    #        - libboost-filesystem1.55-dev
+    #        - libboost-timer1.55-dev
+    #        - libboost-program-options1.55-dev
+    #        - libboost-thread1.55-dev
+    #        # Misc
+    #        - python-yaml
+    #        - lcov
+    #        - libopencv-dev
+    #      sources: &precise_icd_sources
+    #        - ubuntu-toolchain-r-test
+    #        - llvm-toolchain-precise-3.7
+    #        - boost-latest
+    #   env:
+    #     - RUN_TEST=false
+    #     - OPENCL_LIB=khronos-icd
+    #     - OPENCL_VERSION="12"
+    #     - ENV_CMAKE_OPTIONS="-DOPENCL_LIBRARIES=${OPENCL_ROOT}/lib/libOpenCL.so -DOPENCL_INCLUDE_DIRS=${OPENCL_ROOT}/include"
+    # - os: linux
+    #   sudo: false
+    #   compiler: gcc
+    #   addons:
+    #     apt:
+    #       packages: *precise_icd_packages
+    #       sources: *precise_icd_sources
+    #   env:
+    #     - RUN_TEST=false
+    #     - OPENCL_LIB=khronos-icd
+    #     - OPENCL_VERSION="12"
+    #     - ENV_CMAKE_OPTIONS="-DOPENCL_LIBRARIES=${OPENCL_ROOT}/lib/libOpenCL.so -DOPENCL_INCLUDE_DIRS=${OPENCL_ROOT}/include"
+    # # Precise, OpenCL 2.0, Travis CI container-based infrastructure
+    # - os: linux
+    #   sudo: false
+    #   compiler: clang
+    #   addons:
+    #     apt:
+    #       packages: *precise_icd_packages
+    #       sources: *precise_icd_sources
+    #   env:
+    #     - RUN_TEST=false
+    #     - OPENCL_LIB=khronos-icd
+    #     - OPENCL_VERSION="20"
+    #     - ENV_CMAKE_OPTIONS="-DOPENCL_LIBRARIES=${OPENCL_ROOT}/lib/libOpenCL.so -DOPENCL_INCLUDE_DIRS=${OPENCL_ROOT}/include"
+    # - os: linux
+    #   sudo: false
+    #   compiler: gcc
+    #   addons:
+    #     apt:
+    #       packages: *precise_icd_packages
+    #       sources: *precise_icd_sources
+    #   env:
+    #     - RUN_TEST=false
+    #     - OPENCL_LIB=khronos-icd
+    #     - OPENCL_VERSION="20"
+    #     - ENV_CMAKE_OPTIONS="-DOPENCL_LIBRARIES=${OPENCL_ROOT}/lib/libOpenCL.so -DOPENCL_INCLUDE_DIRS=${OPENCL_ROOT}/include"
+
+    ############################################################################
+    # AMD APP SDK builds (v2.9.1 -> OpenCL 1.2, v3.0 -> OpenCL 2.0)
+    ############################################################################
+
+    # Precise, AMD APP SDK v2.9.1, Travis CI container-based infrastructure
     - os: linux
       sudo: false
       compiler: clang
       addons:
        apt:
-         packages: &precise_icd_packages
+         packages: &precise_amdappsdk_packages
            - g++-4.8
            # Boost
            - libboost-chrono1.55-dev
@@ -130,48 +204,52 @@ matrix:
            - python-yaml
            - lcov
            - libopencv-dev
-         sources: &precise_icd_sources
+         sources: &precise_amdappsdk_sources
            - ubuntu-toolchain-r-test
            - llvm-toolchain-precise-3.7
            - boost-latest
       env:
-        - OPENCL_LIB=khronos-icd
+        - OPENCL_LIB=amdappsdk
         - OPENCL_VERSION="12"
-        - ENV_CMAKE_OPTIONS="-DOPENCL_LIBRARIES=${OPENCL_ROOT}/lib/libOpenCL.so -DOPENCL_INCLUDE_DIRS=${OPENCL_ROOT}/include"
+        - AMDAPPSDK_VERSION=291 # OpenCL 1.2
+        - ENV_CMAKE_OPTIONS="-DOPENCL_INCLUDE_DIRS=${OPENCL_ROOT}/include"
     - os: linux
       sudo: false
       compiler: gcc
       addons:
         apt:
-          packages: *precise_icd_packages
-          sources: *precise_icd_sources
+          packages: *precise_amdappsdk_packages
+          sources: *precise_amdappsdk_sources
       env:
-        - OPENCL_LIB=khronos-icd
+        - OPENCL_LIB=amdappsdk
         - OPENCL_VERSION="12"
-        - ENV_CMAKE_OPTIONS="-DOPENCL_LIBRARIES=${OPENCL_ROOT}/lib/libOpenCL.so -DOPENCL_INCLUDE_DIRS=${OPENCL_ROOT}/include"
-    # Precise, OpenCL 2.0, Travis CI container-based infrastructure
+        - AMDAPPSDK_VERSION=291 # OpenCL 1.2
+        - ENV_CMAKE_OPTIONS="-DOPENCL_INCLUDE_DIRS=${OPENCL_ROOT}/include"
+    # Precise, AMD APP SDK v3.0, OpenCL 2.0, Travis CI container-based infrastructure
     - os: linux
       sudo: false
       compiler: clang
       addons:
         apt:
-          packages: *precise_icd_packages
-          sources: *precise_icd_sources
+          packages: *precise_amdappsdk_packages
+          sources: *precise_amdappsdk_sources
       env:
-        - OPENCL_LIB=khronos-icd
+        - OPENCL_LIB=amdappsdk
         - OPENCL_VERSION="20"
-        - ENV_CMAKE_OPTIONS="-DOPENCL_LIBRARIES=${OPENCL_ROOT}/lib/libOpenCL.so -DOPENCL_INCLUDE_DIRS=${OPENCL_ROOT}/include"
+        - AMDAPPSDK_VERSION=300 # OpenCL 2.0
+        - ENV_CMAKE_OPTIONS="-DOPENCL_INCLUDE_DIRS=${OPENCL_ROOT}/include"
     - os: linux
       sudo: false
       compiler: gcc
       addons:
         apt:
-          packages: *precise_icd_packages
-          sources: *precise_icd_sources
+          packages: *precise_amdappsdk_packages
+          sources: *precise_amdappsdk_sources
       env:
-        - OPENCL_LIB=khronos-icd
+        - OPENCL_LIB=amdappsdk
         - OPENCL_VERSION="20"
-        - ENV_CMAKE_OPTIONS="-DOPENCL_LIBRARIES=${OPENCL_ROOT}/lib/libOpenCL.so -DOPENCL_INCLUDE_DIRS=${OPENCL_ROOT}/include"
+        - AMDAPPSDK_VERSION=300 # OpenCL 2.0
+        - ENV_CMAKE_OPTIONS="-DOPENCL_INCLUDE_DIRS=${OPENCL_ROOT}/include"
 
     ############################################################################
     # OSX
@@ -226,7 +304,7 @@ install:
         pushd ${OPENCL_ROOT}/include/CL
         travis_retry git clone --depth 1 https://github.com/KhronosGroup/OpenCL-Headers.git -b opencl${OPENCL_VERSION}
         mv ./OpenCL-Headers/* .
-        travis_retry wget -w 1 -np -nd -nv -A h,hpp --no-check-certificate https://www.khronos.org/registry/cl/api/2.1/cl.hpp
+        travis_retry wget -w 1 -np -nd -nv -A h,hpp --no-check-certificate ${OPENCL_REGISTRY}/api/2.1/cl.hpp;
         popd
       fi
 
@@ -275,6 +353,25 @@ install:
         popd
       fi
 
+    ############################################################################
+    # Install AMD APP SDK
+    # Thanks to JuliaGPU https://github.com/JuliaGPU/OpenCL.jl
+    ############################################################################
+    - |
+      if [[ ${TRAVIS_OS_NAME} == "linux" && ${OPENCL_LIB} == "amdappsdk" ]]; then
+        mkdir -p ${OPENCL_ROOT}
+        bash .travis/amd_sdk.sh ${AMDAPPSDK_VERSION}
+        tar -xjf AMD-SDK.tar.bz2
+        AMDAPPSDK=${OPENCL_ROOT}/AMDAPPSDK
+        export OPENCL_VENDOR_PATH=${AMDAPPSDK}/etc/OpenCL/vendors
+        mkdir -p ${OPENCL_VENDOR_PATH}
+        sh AMD-APP-SDK*.sh --tar -xf -C ${AMDAPPSDK}
+        echo libamdocl64.so > ${OPENCL_VENDOR_PATH}/amdocl64.icd
+        export LD_LIBRARY_PATH=${AMDAPPSDK}/lib/x86_64:${LD_LIBRARY_PATH}
+        chmod +x ${AMDAPPSDK}/bin/x86_64/clinfo
+        ${AMDAPPSDK}/bin/x86_64/clinfo
+      fi
+
 script:
     ############################################################################
     # Build Boost.Compute tests, benchmarks and examples
@@ -286,7 +383,7 @@ script:
     - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} ..
     - make -j4
     - |
-      if [[ ${TRAVIS_OS_NAME} == "osx" || ${OPENCL_LIB} == "pocl" ]]; then
+      if [[ ${RUN_TESTS} == "true" ]]; then
         # print OpenCL devices
         ./example/list_devices
         # run tests and examples
