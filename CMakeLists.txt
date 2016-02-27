@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
 #  Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
-# 
+#
 #  Distributed under the Boost Software License, Version 1.0
 #  See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt
@@ -12,10 +12,13 @@ cmake_minimum_required(VERSION 2.8)
 project(BoostCompute)
 
 set(CMAKE_MODULE_PATH ${BoostCompute_SOURCE_DIR}/cmake)
+if (CMAKE_VERSION VERSION_LESS "3.1.0")
+    list(APPEND CMAKE_MODULE_PATH "${BoostCompute_SOURCE_DIR}/cmake/opencl")
+endif()
 
 # find OpenCL
 find_package(OpenCL REQUIRED)
-include_directories(SYSTEM ${OPENCL_INCLUDE_DIRS})
+include_directories(SYSTEM ${OpenCL_INCLUDE_DIRS})
 
 # find Boost
 find_package(Boost 1.48 REQUIRED)

@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
 #  Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
-# 
+#
 #  Distributed under the Boost Software License, Version 1.0
 #  See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt
@@ -40,7 +40,7 @@ function(add_compute_test TEST_NAME TEST_SOURCE)
   get_filename_component(TEST_TARGET ${TEST_SOURCE} NAME_WE)
   add_executable(${TEST_TARGET} ${TEST_SOURCE})
   target_link_libraries(${TEST_TARGET}
-    ${OPENCL_LIBRARIES}
+    ${OpenCL_LIBRARIES}
     ${Boost_LIBRARIES}
   )
 

@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
 #  Copyright (c) 2013-2014 Kyle Lutz <kyle.r.lutz@gmail.com>
-# 
+#
 #  Distributed under the Boost Software License, Version 1.0
 #  See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt
@@ -49,7 +49,7 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 foreach(EXAMPLE ${EXAMPLES})
   add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
-  target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES})
+  target_link_libraries(${EXAMPLE} ${OpenCL_LIBRARIES} ${Boost_LIBRARIES})
 
   # add example program to list of tests (if testing is enabled)
   if(${BOOST_COMPUTE_BUILD_TESTS})
@@ -59,14 +59,14 @@ endforeach()
 
 # opencl test example
 add_executable(opencl_test opencl_test.cpp)
-target_link_libraries(opencl_test ${OPENCL_LIBRARIES})
+target_link_libraries(opencl_test ${OpenCL_LIBRARIES})
 
 # eigen examples
 if(${BOOST_COMPUTE_HAVE_EIGEN})
   find_package(Eigen REQUIRED)
   include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})
   add_executable(batched_determinant batched_determinant.cpp)
-  target_link_libraries(batched_determinant ${OPENCL_LIBRARIES} ${Boost_LIBRARIES})
+  target_link_libraries(batched_determinant ${OpenCL_LIBRARIES} ${Boost_LIBRARIES})
 endif()
 
 # opencv examples
@@ -78,7 +78,7 @@ if(${BOOST_COMPUTE_HAVE_OPENCV})
     k_means
     opencv_flip
     random_walk
-    opencv_optical_flow 
+    opencv_optical_flow
     opencv_convolution
     opencv_sobel_filter
     opencv_histogram
@@ -86,7 +86,7 @@ if(${BOOST_COMPUTE_HAVE_OPENCV})
 
   foreach(EXAMPLE ${OPENCV_EXAMPLES})
     add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
-    target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS})
+    target_link_libraries(${EXAMPLE} ${OpenCL_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS})
   endforeach()
 endif()
 
@@ -95,7 +95,7 @@ if(${BOOST_COMPUTE_HAVE_VTK})
   find_package(VTK REQUIRED)
   include(${VTK_USE_FILE})
   add_executable(opengl_sphere opengl_sphere.cpp)
-  target_link_libraries(opengl_sphere ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${VTK_LIBRARIES})
+  target_link_libraries(opengl_sphere ${OpenCL_LIBRARIES} ${Boost_LIBRARIES} ${VTK_LIBRARIES})
   if(APPLE)
     target_link_libraries(opengl_sphere "-framework OpenGL")
   elseif(UNIX)
@@ -118,7 +118,7 @@ if(${BOOST_COMPUTE_HAVE_QT})
 
     # look for Qt5
     find_package(Qt5Widgets QUIET)
-    
+
     if(${Qt5Widgets_FOUND})
       # build with Qt5
       find_package(Qt5Core REQUIRED)
@@ -139,7 +139,7 @@ if(${BOOST_COMPUTE_HAVE_QT})
 
   # add examples
   add_executable(qimage_blur qimage_blur.cpp)
-  target_link_libraries(qimage_blur ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES})
+  target_link_libraries(qimage_blur ${OpenCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES})
 
   set(QT_OPENGL_EXAMPLES
     mandelbrot
@@ -148,7 +148,7 @@ if(${BOOST_COMPUTE_HAVE_QT})
   )
   foreach(EXAMPLE ${QT_OPENGL_EXAMPLES})
     add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
-    target_link_libraries(${EXAMPLE} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES})
+    target_link_libraries(${EXAMPLE} ${OpenCL_LIBRARIES} ${Boost_LIBRARIES} ${QT_LIBRARIES})
     if(APPLE)
       target_link_libraries(${EXAMPLE} "-framework OpenGL")
     elseif(UNIX)

@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
 #  Copyright (c) 2013 Kyle Lutz <kyle.r.lutz@gmail.com>
-# 
+#
 #  Distributed under the Boost Software License, Version 1.0
 #  See accompanying file LICENSE_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt
@@ -18,11 +18,11 @@ endif()
 if(${BOOST_COMPUTE_THREAD_SAFE} AND NOT ${BOOST_COMPUTE_USE_CPP11})
   set(PERF_BOOST_COMPONENTS ${PERF_BOOST_COMPONENTS} thread)
 elseif(${BOOST_COMPUTE_HAVE_BOLT} AND ${BOOST_COMPUTE_USE_CPP11})
-  set(PERF_BOOST_COMPONENTS ${PERF_BOOST_COMPONENTS} thread)	
+  set(PERF_BOOST_COMPONENTS ${PERF_BOOST_COMPONENTS} thread)
 endif()
 
 if(${BOOST_COMPUTE_HAVE_BOLT} AND ${BOOST_COMPUTE_USE_CPP11})
-  set(PERF_BOOST_COMPONENTS ${PERF_BOOST_COMPONENTS} date_time) 
+  set(PERF_BOOST_COMPONENTS ${PERF_BOOST_COMPONENTS} date_time)
 endif()
 
 find_package(Boost 1.48 REQUIRED COMPONENTS ${PERF_BOOST_COMPONENTS})
@@ -80,7 +80,7 @@ set(BENCHMARKS
 foreach(BENCHMARK ${BENCHMARKS})
   set(PERF_TARGET perf_${BENCHMARK})
   add_executable(${PERF_TARGET} perf_${BENCHMARK}.cpp)
-  target_link_libraries(${PERF_TARGET} ${OPENCL_LIBRARIES} ${Boost_LIBRARIES})
+  target_link_libraries(${PERF_TARGET} ${OpenCL_LIBRARIES} ${Boost_LIBRARIES})
 endforeach()
 
 # stl benchmarks (for comparison)
@@ -199,7 +199,7 @@ if(${BOOST_COMPUTE_HAVE_BOLT} AND ${BOOST_COMPUTE_USE_CPP11})
   foreach(BENCHMARK ${BOLT_BENCHMARKS})
     set(PERF_TARGET perf_${BENCHMARK})
     add_executable(${PERF_TARGET} perf_${BENCHMARK}.cpp)
-    target_link_libraries(${PERF_TARGET} ${OPENCL_LIBRARIES} ${BOLT_LIBRARIES} ${Boost_LIBRARIES})
+    target_link_libraries(${PERF_TARGET} ${OpenCL_LIBRARIES} ${BOLT_LIBRARIES} ${Boost_LIBRARIES})
   endforeach()
 elseif(${BOOST_COMPUTE_HAVE_BOLT} AND NOT ${BOOST_COMPUTE_USE_CPP11})
   message(WARNING "BOOST_COMPUTE_USE_CPP11 must be ON for building Bolt C++ Template Library performance tests.")
