@@ -208,7 +208,7 @@ BOOST_AUTO_TEST_CASE(build_log)
         // should not get here
         BOOST_CHECK(false);
     }
-    catch(compute::opencl_error &e){
+    catch(compute::opencl_error&){
         std::string log = invalid_program.build_log();
         BOOST_CHECK(!log.empty());
     }

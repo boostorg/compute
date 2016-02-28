@@ -68,7 +68,7 @@ inline InputIterator find_if_with_atomics_multiple_vpt(InputIterator first,
                                                        InputIterator last,
                                                        UnaryPredicate predicate,
                                                        const size_t count,
-                                                       const uint_ vpt,
+                                                       const size_t vpt,
                                                        command_queue &queue)
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;

@@ -99,7 +99,7 @@ inline InputIterator binary_find(InputIterator first,
         index.write(static_cast<uint_>(count), queue);
 
         // set block and run binary_find kernel
-        uint_ block = (count - 1)/(threads - 1);
+        uint_ block = static_cast<uint_>((count - 1)/(threads - 1));
         kernel.set_arg(binary_find_kernel.m_block_arg, block);
         queue.enqueue_1d_range_kernel(kernel, 0, threads, 0);
 

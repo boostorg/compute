@@ -192,7 +192,7 @@ BOOST_AUTO_TEST_CASE(reduce_by_key_int2_long_vector)
                       keys_output.begin(), values_output.begin(), queue);
 
     CHECK_RANGE_EQUAL(int, 1, keys_output,   (0));
-    CHECK_RANGE_EQUAL(int2_, 1, values_output, (int2_(size, -size)));
+    CHECK_RANGE_EQUAL(int2_, 1, values_output, (int2_(int(size), -int(size))));
 
     keys_input[137] = 1;
     keys_input[677] = 1;

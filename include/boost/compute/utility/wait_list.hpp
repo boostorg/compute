@@ -97,7 +97,7 @@ public:
     /// Returns the number of events in the wait-list.
     uint_ size() const
     {
-        return m_events.size();
+        return static_cast<uint_>(m_events.size());
     }
 
     /// Removes all of the events from the wait-list.
