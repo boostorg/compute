@@ -58,10 +58,24 @@ inline bool supports_image_samplers(const boost::compute::device &device)
     return true;
 }
 
-// returns true if the device supports image samplers.
+// returns true if the device supports clSetMemObjectDestructorCallback
 inline bool supports_destructor_callback(const boost::compute::device &device)
 {
-    // clSetMemObjectDestructorCallback is unimplemented in POCL
+    // unimplemented in POCL
+    return !is_pocl_device(device);
+}
+
+// returns true if the device supports clCompileProgram
+inline bool supports_compile_program(const boost::compute::device &device)
+{
+    // unimplemented in POCL
+    return !is_pocl_device(device);
+}
+
+// returns true if the device supports clLinkProgram
+inline bool supports_link_program(const boost::compute::device &device)
+{
+    // unimplemented in POCL
     return !is_pocl_device(device);
 }
 
