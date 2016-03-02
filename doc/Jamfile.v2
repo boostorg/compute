@@ -106,6 +106,6 @@ boostbook standalone
     :
       compute
     :
-      <xsl:param>html.stylesheet=boostbook.css
       <dependency>autodoc
+      <format>html:<xsl:param>boost.root=../../../..
     ;
