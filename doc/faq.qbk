@@ -55,8 +55,11 @@ VexCL is an expression-template based linear-algebra library for
 OpenCL. The aims and scope are a bit different from the Boost Compute
 library. VexCL is closer in nature to the Eigen library while
 Boost.Compute is closer to the C++ standard library. I don't feel that
-Boost.Compute really fills the same role as VexCL and in fact VexCL
-could be built on top of Boost.Compute.
+Boost.Compute really fills the same role as VexCL. In fact, the recent versions
+of VexCL allow to use Boost.Compute as one of the backends, which makes
+the interaction between the two libraries a breeze.
+
+
 
 Also see this StackOverflow question:
 [@http://stackoverflow.com/questions/20154179/differences-between-vexcl-thrust-and-boost-compute]
