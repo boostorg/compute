@@ -10,9 +10,6 @@ project
     : source-location .
     : requirements
         <define>BOOST_ALL_NO_LIB=1
-        <toolset>gcc:<cxxflags>-Wno-deprecated-declarations # Deprecated declarations in OpenCL headers
-        <toolset>clang:<cxxflags>-Wno-deprecated-declarations # Deprecated declarations in OpenCL headers
-        <toolset>darwin:<cxxflags>-Wno-deprecated-declarations # Deprecated declarations in OpenCL headers
         <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
         <toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS
         <toolset>msvc:<define>NOMINMAX
@@ -21,7 +18,6 @@ project
         <toolset>msvc:<cxxflags>/wd4305 # Warning C4305: 'initializing': truncation from 'double' to 'float'
         <toolset>msvc:<cxxflags>/wd4800 # Warning C4800: 'uint32_t' : forcing value to bool 'true' or 'false' (performance warning)
         <toolset>msvc:<cxxflags>/wd4838 # Warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-        <toolset>msvc:<cxxflags>/wd4996 # Deprecated declarations in OpenCL headers
         <library>/boost/test//boost_unit_test_framework
     ;
 
