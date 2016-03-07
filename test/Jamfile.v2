@@ -34,6 +34,7 @@ rule test_all
             <link>shared:<define>BOOST_TEST_DYN_LINK=1
             <host-os>linux:<linkflags>"-lOpenCL"
             <host-os>darwin:<linkflags>"-framework OpenCL"
+            <host-os>freebsd:<linkflags>"-lOpenCL"
         ] ;
     }
 
