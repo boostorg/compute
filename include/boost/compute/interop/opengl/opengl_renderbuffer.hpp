@@ -14,6 +14,7 @@
 #include <boost/compute/image/image_object.hpp>
 #include <boost/compute/interop/opengl/gl.hpp>
 #include <boost/compute/interop/opengl/cl_gl.hpp>
+#include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/utility/extents.hpp>
 
 namespace boost {
@@ -122,5 +123,7 @@ struct set_kernel_arg<opengl_renderbuffer> : public set_kernel_arg<image_object>
 } // end detail namespace
 } // end compute namespace
 } // end boost namespace
+
+BOOST_COMPUTE_TYPE_NAME(boost::compute::opengl_renderbuffer, image2d_t)
 
 #endif // BOOST_COMPUTE_INTEROP_OPENGL_OPENGL_RENDERBUFFER_HPP

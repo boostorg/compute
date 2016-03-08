@@ -16,3 +16,13 @@
 BOOST_AUTO_TEST_CASE(opengl_buffer)
 {
 }
+
+BOOST_AUTO_TEST_CASE(type_name)
+{
+    BOOST_CHECK_EQUAL(
+        boost::compute::type_name<boost::compute::opengl_texture>(), "image2d_t"
+    );
+    BOOST_CHECK_EQUAL(
+        boost::compute::type_name<boost::compute::opengl_renderbuffer>(), "image2d_t"
+    );
+}
