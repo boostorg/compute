@@ -42,6 +42,47 @@ private:
     Predicate m_pred;
     Expr m_expr;
 };
+    
+template<class Predicate1,class Predicate2, class Expr>
+class invoked_unary_nor_function
+{
+public:
+    typedef int result_type;
+    
+    invoked_unary_nor_function(const Predicate1 &pred1,
+                               const Expr &expr1,
+                               const Predicate2 &pred2,
+                               const Expr &expr2)
+    : m_pred1(pred1),
+    m_expr1(expr1),
+    m_pred2(pred2),
+    m_expr2(expr2)
+    {
+    }
+    
+    Predicate1 pred1() const
+    {
+        return m_pred1;
+    }
+    
+    Expr expr1() const
+    {
+        return m_expr1;
+    }
+    Predicate2 pred2() const
+    {
+        return m_pred2;
+    }
+    
+    Expr expr2() const
+    {
+        return m_expr2;
+    }
+private:
+    Predicate1 m_pred1;
+    Predicate2 m_pred2;
+    Expr m_expr1,m_expr2;
+};
 
 template<class Predicate, class Expr1, class Expr2>
 class invoked_binary_negate_function
@@ -134,6 +175,34 @@ public:
 private:
     Predicate m_pred;
 };
+    
+/// The unary_nor function adaptor nor 2 unary function.
+///
+/// \see nor1()
+template<class Predicate1,class Predicate2>
+class unary_nor : public unary_function<void, int>
+{
+public:
+    explicit unary_nor(Predicate1 pred1,Predicate2 pred2)
+    : m_pred1(pred1),m_pred2(pred2)
+    {
+    }
+    
+    /// \internal_
+    template<class Arg>
+    detail::invoked_unary_nor_function<Predicate1,Predicate2, Arg>
+    operator()(const Arg &arg) const
+    {
+        return detail::invoked_unary_nor_function<
+        Predicate1,Predicate2,
+        Arg
+        >(m_pred1, arg,m_pred2,arg);
+    }
+    
+private:
+    Predicate1 m_pred1;
+    Predicate2 m_pred2;
+};
 
 /// The binnary_negate function adaptor negates a binary function.
 ///
@@ -172,6 +241,18 @@ template<class Predicate>
 inline unary_negate<Predicate> not1(const Predicate &predicate)
 {
     return unary_negate<Predicate>(predicate);
+}
+
+/// Returns a unary_nor adaptor around \p predicates.
+///
+/// \param predicate the unary function to wrap
+/// \param predicate the unary function to wrap
+///
+/// \return a unary_nor wrapper around \p predicates
+template<class Predicate1,class Predicate2>
+inline unary_nor<Predicate1,Predicate2> nor1(const Predicate1 &predicate1,const Predicate2 &predicate2)
+{
+    return unary_nor<Predicate1,Predicate2>(predicate1,predicate2);
 }
 
 /// Returns a binary_negate adaptor around \p predicate.
