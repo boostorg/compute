@@ -968,6 +968,14 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
     return kernel << "!(" << expr.pred()(expr.expr()) << ')';
 }
 
+template<class Predicate1,class Predicate2, class Arg>
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const invoked_unary_nor_function<Predicate1,Predicate2,
+                               Arg> &expr)
+{
+    return kernel << "!((" << expr.pred1()(expr.expr1()) <<")||("<<expr.pred2()(expr.expr2())<< "))";
+}
+
 template<class Predicate, class Arg1, class Arg2>
 inline meta_kernel& operator<<(meta_kernel &kernel,
                                const invoked_binary_negate_function<Predicate,
