@@ -90,6 +90,7 @@ Header: `<boost/compute/algorithm.hpp>`
 * [funcref boost::compute::prev_permutation prev_permutation()]
 * [funcref boost::compute::random_shuffle random_shuffle()]
 * [funcref boost::compute::reduce reduce()]
+* [funcref boost::compute::reduce_by_key reduce_by_key()]
 * [funcref boost::compute::remove remove()]
 * [funcref boost::compute::remove_if remove_if()]
 * [funcref boost::compute::replace replace()]
