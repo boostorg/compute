@@ -21,6 +21,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/utility/dim.hpp>
 #include <boost/compute/utility/source.hpp>
+#include <boost/compute/detail/diagnostic.hpp>
 
 #include "check_macros.hpp"
 #include "context_setup.hpp"
@@ -145,8 +146,11 @@ BOOST_AUTO_TEST_CASE(construct_from_cl_command_queue)
     } else
 #endif // CL_VERSION_2_0
     {
+        // Suppress deprecated declarations warning
+        BOOST_COMPUTE_DISABLE_DEPRECATED_DECLARATIONS();
         cl_queue =
             clCreateCommandQueue(context, device.id(), 0, 0);
+        BOOST_COMPUTE_ENABLE_DEPRECATED_DECLARATIONS();
     }
     BOOST_VERIFY(cl_queue);
 

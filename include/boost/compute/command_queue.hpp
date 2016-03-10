@@ -30,6 +30,7 @@
 #include <boost/compute/utility/wait_list.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
+#include <boost/compute/detail/diagnostic.hpp>
 #include <boost/compute/utility/extents.hpp>
 
 namespace boost {
@@ -135,9 +136,12 @@ public:
         } else
         #endif
         {
+            // Suppress deprecated declarations warning
+            BOOST_COMPUTE_DISABLE_DEPRECATED_DECLARATIONS();
             m_queue = clCreateCommandQueue(
                 context, device.id(), properties, &error
             );
+            BOOST_COMPUTE_ENABLE_DEPRECATED_DECLARATIONS();
         }
 
         if(!m_queue){
@@ -1532,7 +1536,10 @@ public:
         } else
         #endif // CL_VERSION_1_2
         {
+            // Suppress deprecated declarations warning
+            BOOST_COMPUTE_DISABLE_DEPRECATED_DECLARATIONS();
             ret = clEnqueueBarrier(m_queue);
+            BOOST_COMPUTE_ENABLE_DEPRECATED_DECLARATIONS();
         }
 
         if(ret != CL_SUCCESS){
@@ -1576,7 +1583,10 @@ public:
         } else
         #endif
         {
+            // Suppress deprecated declarations warning
+            BOOST_COMPUTE_DISABLE_DEPRECATED_DECLARATIONS();
             ret = clEnqueueMarker(m_queue, &event_.get());
+            BOOST_COMPUTE_ENABLE_DEPRECATED_DECLARATIONS();
         }
 
         if(ret != CL_SUCCESS){
