@@ -150,17 +150,17 @@ merge_with_merge_path(InputIterator1 first1,
    typedef typename
        std::iterator_traits<OutputIterator>::difference_type result_difference_type;
 
-    int tile_size = 1024;
+    size_t tile_size = 1024;
 
-    int count1 = iterator_range_size(first1, last1);
-    int count2 = iterator_range_size(first2, last2);
+    size_t count1 = iterator_range_size(first1, last1);
+    size_t count2 = iterator_range_size(first2, last2);
 
     vector<uint_> tile_a((count1+count2+tile_size-1)/tile_size+1, queue.get_context());
     vector<uint_> tile_b((count1+count2+tile_size-1)/tile_size+1, queue.get_context());
 
     // Tile the sets
     merge_path_kernel tiling_kernel;
-    tiling_kernel.tile_size = 1024;
+    tiling_kernel.tile_size = static_cast<unsigned int>(tile_size);
     tiling_kernel.set_range(first1, last1, first2, last2,
                             tile_a.begin()+1, tile_b.begin()+1, comp);
     fill_n(tile_a.begin(), 1, 0, queue);
@@ -172,7 +172,7 @@ merge_with_merge_path(InputIterator1 first1,
 
     // Merge
     serial_merge_kernel merge_kernel;
-    merge_kernel.tile_size = 1024;
+    merge_kernel.tile_size = static_cast<unsigned int>(tile_size);
     merge_kernel.set_range(first1, first2, tile_a.begin(), tile_a.end(),
                            tile_b.begin(), result, comp);
 

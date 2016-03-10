@@ -70,8 +70,8 @@ inline OutputIterator merge(InputIterator1 first1,
 
     // loading serial merge threshold parameter
     const size_t serial_merge_threshold =
-                   parameters->get(cache_key, "serial_merge_threshold",
-                                   default_serial_merge_threshold);
+        parameters->get(cache_key, "serial_merge_threshold",
+                        static_cast<uint_>(default_serial_merge_threshold));
 
     // choosing merge algorithm
     const size_t total_count =

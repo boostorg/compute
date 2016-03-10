@@ -131,7 +131,9 @@ BOOST_AUTO_TEST_CASE(custom_kernel)
 
     // set kernel arguments
     lookup_kernel.set_arg(0, map.begin().get_buffer()); // map buffer
-    lookup_kernel.set_arg<int>(1, map.size()); // map size
+    lookup_kernel.set_arg<boost::compute::int_>(
+        1, static_cast<boost::compute::int_>(map.size())
+    ); // map size
     lookup_kernel.set_arg<MapType::key_type>(2, 5); // key
     lookup_kernel.set_arg(3, result.get_buffer()); // result buffer
 

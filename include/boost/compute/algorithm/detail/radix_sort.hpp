@@ -302,11 +302,11 @@ inline void radix_sort_impl(const buffer_iterator<T> first,
     vector<uint_> counts(block_count * k2, context);
 
     const buffer *input_buffer = &first.get_buffer();
-    uint_ input_offset = first.get_index();
+    uint_ input_offset = static_cast<uint_>(first.get_index());
     const buffer *output_buffer = &output.get_buffer();
     uint_ output_offset = 0;
     const buffer *values_input_buffer = &values_first.get_buffer();
-    uint_ values_input_offset = values_first.get_index();
+    uint_ values_input_offset = static_cast<uint_>(values_first.get_index());
     const buffer *values_output_buffer = &values_output.get_buffer();
     uint_ values_output_offset = 0;
 

@@ -244,11 +244,11 @@ inline void reduce_on_gpu(InputIterator first,
     initial_reduce(first, last, ping, function, reduce_kernel, vpt, tpb, queue);
 
     // update count after initial reduce
-    count = std::ceil(float(count) / vpt / tpb);
+    count = static_cast<size_t>(std::ceil(float(count) / vpt / tpb));
 
     // middle pass(es), reduce between ping and pong
     const buffer *input_buffer = &ping;
-    buffer pong(context, count / vpt / tpb * sizeof(T));
+    buffer pong(context, static_cast<size_t>(count / vpt / tpb * sizeof(T)));
     const buffer *output_buffer = &pong;
     if(count > vpt * tpb){
         while(count > vpt * tpb){
@@ -258,14 +258,14 @@ inline void reduce_on_gpu(InputIterator first,
             reduce_kernel.set_arg(3, *output_buffer);
             reduce_kernel.set_arg(4, uint_(0));
 
-            size_t work_size = std::ceil(float(count) / vpt);
+            size_t work_size = static_cast<size_t>(std::ceil(float(count) / vpt));
             if(work_size % tpb != 0){
                 work_size += tpb - work_size % tpb;
             }
             queue.enqueue_1d_range_kernel(reduce_kernel, 0, work_size, tpb);
 
             std::swap(input_buffer, output_buffer);
-            count = std::ceil(float(count) / vpt / tpb);
+            count = static_cast<size_t>(std::ceil(float(count) / vpt / tpb));
         }
     }
 
