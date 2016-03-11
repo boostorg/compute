@@ -147,8 +147,8 @@ merge_with_merge_path(InputIterator1 first1,
                       Compare comp,
                       command_queue &queue = system::default_queue())
 {
-   typedef typename
-       std::iterator_traits<OutputIterator>::difference_type result_difference_type;
+    typedef typename
+        std::iterator_traits<OutputIterator>::difference_type result_difference_type;
 
     size_t tile_size = 1024;
 
@@ -163,12 +163,12 @@ merge_with_merge_path(InputIterator1 first1,
     tiling_kernel.tile_size = static_cast<unsigned int>(tile_size);
     tiling_kernel.set_range(first1, last1, first2, last2,
                             tile_a.begin()+1, tile_b.begin()+1, comp);
-    fill_n(tile_a.begin(), 1, 0, queue);
-    fill_n(tile_b.begin(), 1, 0, queue);
+    fill_n(tile_a.begin(), 1, uint_(0), queue);
+    fill_n(tile_b.begin(), 1, uint_(0), queue);
     tiling_kernel.exec(queue);
 
-    fill_n(tile_a.end()-1, 1, count1, queue);
-    fill_n(tile_b.end()-1, 1, count2, queue);
+    fill_n(tile_a.end()-1, 1, static_cast<uint_>(count1), queue);
+    fill_n(tile_b.end()-1, 1, static_cast<uint_>(count2), queue);
 
     // Merge
     serial_merge_kernel merge_kernel;
