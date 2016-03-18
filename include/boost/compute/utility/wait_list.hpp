@@ -120,6 +120,11 @@ public:
         return reinterpret_cast<const cl_event *>(&m_events[0]);
     }
 
+    /// Reserves a minimum length of storage for the wait list object.
+    void reserve(size_t new_capacity) {
+        m_events.reserve(new_capacity);
+    }
+
     /// Inserts \p event into the wait-list.
     void insert(const event &event)
     {
