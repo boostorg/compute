@@ -40,6 +40,9 @@ template<class T> class future;
 class wait_list
 {
 public:
+    typedef std::vector<event>::iterator iterator;
+    typedef std::vector<event>::const_iterator const_iterator;
+
     /// Creates an empty wait-list.
     wait_list()
     {
@@ -158,6 +161,36 @@ public:
     /// Returns a reference to the event at specified location \p pos.
     event& operator[](size_t pos) {
         return m_events[pos];
+    }
+
+    /// Returns an iterator to the first element of the wait-list.
+    iterator begin() {
+        return m_events.begin();
+    }
+
+    /// Returns an iterator to the first element of the wait-list.
+    const_iterator begin() const {
+        return m_events.begin();
+    }
+
+    /// Returns an iterator to the first element of the wait-list.
+    const_iterator cbegin() const {
+        return m_events.begin();
+    }
+
+    /// Returns an iterator to the element following the last element of the wait-list.
+    iterator end() {
+        return m_events.end();
+    }
+
+    /// Returns an iterator to the element following the last element of the wait-list.
+    const_iterator end() const {
+        return m_events.end();
+    }
+
+    /// Returns an iterator to the element following the last element of the wait-list.
+    const_iterator cend() const {
+        return m_events.end();
     }
 
 private:
