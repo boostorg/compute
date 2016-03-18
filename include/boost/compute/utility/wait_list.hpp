@@ -145,6 +145,16 @@ public:
         }
     }
 
+    /// Returns a reference to the event at specified location \p pos.
+    const event& operator[](size_t pos) const {
+        return m_events[pos];
+    }
+
+    /// Returns a reference to the event at specified location \p pos.
+    event& operator[](size_t pos) {
+        return m_events[pos];
+    }
+
 private:
     std::vector<event> m_events;
 };
