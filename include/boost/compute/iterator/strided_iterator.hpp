@@ -50,7 +50,7 @@ public:
 template<class IndexExpr, class Stride>
 struct stride_expr
 {
-    stride_expr(const IndexExpr &expr, Stride stride)
+    stride_expr(const IndexExpr &expr, const Stride &stride)
         : m_index_expr(expr),
           m_stride(stride)
     {
@@ -61,15 +61,19 @@ struct stride_expr
 };
 
 template<class IndexExpr, class Stride>
-inline stride_expr<IndexExpr, Stride> make_stride_expr(const IndexExpr &expr, Stride stride)
+inline stride_expr<IndexExpr, Stride> make_stride_expr(const IndexExpr &expr,
+                                                       const Stride &stride)
 {
     return stride_expr<IndexExpr, Stride>(expr, stride);
 }
 
 template<class IndexExpr, class Stride>
-inline meta_kernel& operator<<(meta_kernel &kernel, const stride_expr<IndexExpr, Stride> &expr)
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const stride_expr<IndexExpr, Stride> &expr)
 {
-    return kernel << "(" << expr.m_stride << " * (" << expr.m_index_expr << "))";
+    // (expr.m_stride * (expr.m_index_expr))
+    return kernel << "(" << static_cast<ulong_>(expr.m_stride)
+                  << " * (" << expr.m_index_expr << "))";
 }
 
 template<class Iterator, class Stride, class IndexExpr>
@@ -78,8 +82,8 @@ struct strided_iterator_index_expr
     typedef typename std::iterator_traits<Iterator>::value_type result_type;
 
     strided_iterator_index_expr(const Iterator &input_iter,
-                                  const Stride &stride,
-                                  const IndexExpr &index_expr)
+                                const Stride &stride,
+                                const IndexExpr &index_expr)
         : m_input_iter(input_iter),
           m_stride(stride),
           m_index_expr(index_expr)
@@ -94,8 +98,8 @@ struct strided_iterator_index_expr
 template<class Iterator, class Stride, class IndexExpr>
 inline meta_kernel& operator<<(meta_kernel &kernel,
                                const strided_iterator_index_expr<Iterator,
-                                                                   Stride,
-                                                                   IndexExpr> &expr)
+                                                                 Stride,
+                                                                 IndexExpr> &expr)
 {
     return kernel << expr.m_input_iter[make_stride_expr(expr.m_index_expr, expr.m_stride)];
 }
@@ -165,11 +169,12 @@ public:
     detail::strided_iterator_index_expr<Iterator, difference_type, IndexExpression>
     operator[](const IndexExpression &expr) const
     {
-        return detail::strided_iterator_index_expr<Iterator,
-                                                   difference_type,
-                                                   IndexExpression>(super_type::base(),
-                                                                    m_stride,
-                                                                    expr);
+        typedef
+            typename detail::strided_iterator_index_expr<Iterator,
+                                                         difference_type,
+                                                         IndexExpression>
+            StridedIndexExprType;
+        return StridedIndexExprType(super_type::base(),m_stride, expr);
     }
 
 private:
@@ -224,7 +229,8 @@ private:
 /// \endcode
 template<class Iterator>
 inline strided_iterator<Iterator>
-make_strided_iterator(Iterator iterator, typename std::iterator_traits<Iterator>::difference_type stride)
+make_strided_iterator(Iterator iterator,
+                      typename std::iterator_traits<Iterator>::difference_type stride)
 {
     return strided_iterator<Iterator>(iterator, stride);
 }
@@ -254,16 +260,16 @@ make_strided_iterator(Iterator iterator, typename std::iterator_traits<Iterator>
 /// // copy every 3rd element to result
 /// boost::compute::copy(
 ///         strided_iterator_begin,
-///         strided_iterator_end,ided_iterator referring to element that would follow
-///         the last element accessible through strided_iterator for \p first
-///         iterator with \p stride.
+///         strided_iterator_end,
 ///         result.begin(),
 ///         queue
 /// );
 /// \endcode
 template<class Iterator>
 strided_iterator<Iterator>
-make_strided_iterator_end(Iterator first, Iterator last, typename std::iterator_traits<Iterator>::difference_type stride)
+make_strided_iterator_end(Iterator first,
+                          Iterator last,
+                          typename std::iterator_traits<Iterator>::difference_type stride)
 {
     typedef typename std::iterator_traits<Iterator>::difference_type difference_type;
 

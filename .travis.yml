@@ -256,13 +256,24 @@ matrix:
     ############################################################################
     # OSX
     ############################################################################
+    # OSX build with running tests
     - os: osx
       compiler: clang
       env:
         - ENV_CXX_FLAGS="-Wno-c99-extensions"
+        - RUN_TESTS=true
+    # OSX build without running tests
+    - os: osx
+      compiler: clang
+      env:
+        - ENV_CXX_FLAGS="-Wno-c99-extensions"
+        - RUN_TESTS=false
 
   allow_failures:
-    - os: osx
+    - os: osx # OSX build with running tests is allowed to fail
+      env:
+        - ENV_CXX_FLAGS="-Wno-c99-extensions"
+        - RUN_TESTS=true
 
 before_install:
     # Install recent cmake
