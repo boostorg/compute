@@ -46,12 +46,12 @@ dispatch_gpu_sort_by_key(KeyIterator keys_first,
     if(count < 32){
         detail::serial_insertion_sort_by_key(
             keys_first, keys_last, values_first, compare, queue
-            );
+        );
     }
     else {
         detail::radix_sort_by_key(
             keys_first, keys_last, values_first, queue
-            );
+        );
     }
 }
 
@@ -73,13 +73,13 @@ dispatch_gpu_sort_by_key(KeyIterator keys_first,
     if(count < 32){
         detail::serial_insertion_sort_by_key(
             keys_first, keys_last, values_first, compare, queue
-            );
+        );
     }
     else {
         // radix sorts in ascending order
         detail::radix_sort_by_key(
             keys_first, keys_last, values_first, queue
-            );
+        );
 
         // Reverse keys, values for descending order
         ::boost::compute::reverse(keys_first, keys_last, queue);
@@ -115,7 +115,7 @@ inline void dispatch_sort_by_key(KeyIterator keys_first,
     );
 }
 
-}
+} // end detail namespace
 
 /// Performs a key-value sort using the keys in the range [\p keys_first,
 /// \p keys_last) on the values in the range [\p values_first,
@@ -124,7 +124,6 @@ inline void dispatch_sort_by_key(KeyIterator keys_first,
 /// If no compare function is specified, \c less is used.
 ///
 /// \see sort()
-
 template<class KeyIterator, class ValueIterator, class Compare>
 inline void sort_by_key(KeyIterator keys_first,
                         KeyIterator keys_last,
