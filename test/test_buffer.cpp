@@ -152,6 +152,13 @@ destructor_templated_callback_function(bool *flag)
 
 BOOST_AUTO_TEST_CASE(destructor_templated_callback)
 {
+    REQUIRES_OPENCL_VERSION(1,2);
+
+    if(!supports_destructor_callback(device))
+    {
+        return;
+    }
+
     bool invoked = false;
     {
         boost::compute::buffer buf(context, 128);
