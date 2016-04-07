@@ -45,6 +45,7 @@ public:
     svm_ptr& operator=(const svm_ptr<T> &other)
     {
         m_ptr = other.m_ptr;
+        return *this;
     }
 
     ~svm_ptr()
