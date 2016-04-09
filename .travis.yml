@@ -12,7 +12,8 @@ env:
     - OPENCL_REGISTRY=https://www.khronos.org/registry/cl
     - OPENCL_ROOT=${DEPS_DIR}/opencl
     # POCL
-    - POCL_VERSION=master
+    - POCL_BRANCH=release_0_13 # branch/tag
+    #- POCL_COMMIT= # commit id
     - POCL_LLVM_CONFIG="llvm-config-3.7"
     - POCL_COMPILER=clang++-3.7
     # AMD APP SDK
@@ -326,13 +327,10 @@ install:
     ############################################################################
     - |
       if [[ ${TRAVIS_OS_NAME} == "linux" && ${OPENCL_LIB} == "pocl" ]]; then
-        if [[ "${POCL_VERSION}" == "master" ]]; then
-          travis_retry git clone --depth 1 https://github.com/pocl/pocl.git
-          cd pocl
-        else
-          travis_retry wget --no-check-certificate http://pocl.sourceforge.net/downloads/${POCL_VERSION}.tar.gz
-          tar -xf ${POCL_VERSION}.tar.gz
-          cd ${POCL_VERSION}
+        travis_retry git clone --depth 1 https://github.com/pocl/pocl.git -b ${POCL_BRANCH}
+        cd pocl
+        if [[ -n "${POCL_COMMIT}" ]]; then
+            git checkout ${POCL_COMMIT}
         fi
         mkdir build
         cd build
