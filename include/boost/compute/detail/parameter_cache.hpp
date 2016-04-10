@@ -161,7 +161,7 @@ private:
         try {
             read_json(m_file_name, pt);
         }
-        catch(boost::property_tree::json_parser::json_parser_error &e){
+        catch(boost::property_tree::json_parser::json_parser_error&){
             // no saved cache file, ignore
             return;
         }
