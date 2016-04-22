@@ -90,11 +90,16 @@ public:
 
         BOOST_COMPUTE_FUNCTION(RealType2, box_muller, (const uint2_ x),
         {
+            const RealType one = 1;
+            const RealType two = 2;
+
             const RealType x1 = x.x / (RealType) (UINT_MAX - 1);
             const RealType x2 = x.y / (RealType) (UINT_MAX - 1);
 
-            const RealType z1 = sqrt(-2.f * log2(x1)) * cos(2.f * M_PI_F * x2);
-            const RealType z2 = sqrt(-2.f * log2(x1)) * sin(2.f * M_PI_F * x2);
+            const RealType rho = sqrt(-two * log(one-x1));
+
+            const RealType z1 = rho * cos(two * M_PI_F * x2);
+            const RealType z2 = rho * sin(two * M_PI_F * x2);
 
             return (RealType2)(MEAN, MEAN) + (RealType2)(z1, z2) * (RealType2)(STDDEV, STDDEV);
         });
