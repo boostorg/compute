@@ -93,8 +93,11 @@ public:
             const RealType one = 1;
             const RealType two = 2;
 
-            const RealType x1 = x.x / (RealType) (UINT_MAX - 1);
-            const RealType x2 = x.y / (RealType) (UINT_MAX - 1);
+            // Use nextafter to push values down into [0,1) range; without this, floating point rounding can
+            // lead to have x1 = 1, but that would lead to taking the log of 0, which would result in negative
+            // infinities; by pushing the values off 1 towards 0, we ensure this won't happen.
+            const RealType x1 = nextafter(x.x / (RealType) UINT_MAX, (RealType) 0);
+            const RealType x2 = x.y / (RealType) UINT_MAX;
 
             const RealType rho = sqrt(-two * log(one-x1));
 
