@@ -93,8 +93,8 @@ public:
             const RealType x1 = x.x / (RealType) (UINT_MAX - 1);
             const RealType x2 = x.y / (RealType) (UINT_MAX - 1);
 
-            const RealType z1 = sqrt(-2.f * log2(x1)) * cos(2.f * M_PI_F * x2);
-            const RealType z2 = sqrt(-2.f * log2(x1)) * sin(2.f * M_PI_F * x2);
+            const RealType z1 = sqrt(-2.f * log(x1)) * cos(2.f * M_PI_F * x2);
+            const RealType z2 = sqrt(-2.f * log(x1)) * sin(2.f * M_PI_F * x2);
 
             return (RealType2)(MEAN, MEAN) + (RealType2)(z1, z2) * (RealType2)(STDDEV, STDDEV);
         });
