@@ -21,6 +21,8 @@
 
 namespace compute = boost::compute;
 
+const bool descending = false;
+
 // radix_sort_by_key should be stable
 BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_int)
 {
@@ -43,6 +45,41 @@ BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_int)
         compute::int_, 10, values,
      // (-1, 2, 2, 2, 4, 6, 7, 9, 10, 10) keys
         ( 6, 3, 8, 9, 7, 5, 4, 2,  1, 10) // values
+    );
+}
+
+// radix_sort_by_key should be stable
+BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_int_desc)
+{
+    compute::int_ keys_data[] =   { 10, 9, 2, 7, 6, -1, 4, 2, 2, 10 };
+    compute::int_ values_data[] = { 1,  2, 3, 4, 5,  6, 7, 8, 9, 10 };
+
+    compute::vector<compute::int_> keys(keys_data, keys_data + 10, queue);
+    compute::vector<compute::int_> values(values_data, values_data + 10, queue);
+
+    BOOST_CHECK(
+        !compute::is_sorted(
+            keys.begin(), keys.end(), compute::greater<compute::int_>(), queue
+        )
+    );
+    compute::detail::radix_sort_by_key(
+        keys.begin(), keys.end(), values.begin(), descending, queue
+    );
+    BOOST_CHECK(
+        compute::is_sorted(
+            keys.begin(), keys.end(), compute::greater<compute::int_>(), queue
+        )
+    );
+
+    CHECK_RANGE_EQUAL(
+        compute::int_, 10, keys,
+        (10, 10, 9, 7, 6, 4, 2, 2, 2, -1) // keys
+     // ( 1, 10, 2, 4, 5, 7, 3, 8, 9,  6) values
+    );
+    CHECK_RANGE_EQUAL(
+        compute::int_, 10, values,
+    //  (10, 10, 9, 7, 6, 4, 2, 2, 2, -1) // keys
+        ( 1, 10, 2, 4, 5, 7, 3, 8, 9,  6) // values
     );
 }
 
@@ -72,6 +109,42 @@ BOOST_AUTO_TEST_CASE(stable_radix_sort_uint_by_uint)
 }
 
 // radix_sort_by_key should be stable
+BOOST_AUTO_TEST_CASE(stable_radix_sort_uint_by_uint_desc)
+{
+    compute::uint_ keys_data[] =   { 10, 9, 2, 7, 6, 1, 4, 2, 2, 10 };
+    compute::uint_ values_data[] = { 1,  2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+    compute::vector<compute::uint_> keys(keys_data, keys_data + 10, queue);
+    compute::vector<compute::uint_> values(values_data, values_data + 10, queue);
+
+    BOOST_CHECK(
+        !compute::is_sorted(
+            keys.begin(), keys.end(), compute::greater<compute::uint_>(), queue
+        )
+    );
+    compute::detail::radix_sort_by_key(
+        keys.begin(), keys.end(), values.begin(), descending, queue
+    );
+    BOOST_CHECK(
+        compute::is_sorted(
+            keys.begin(), keys.end(), compute::greater<compute::uint_>(), queue
+        )
+    );
+
+    CHECK_RANGE_EQUAL(
+        compute::uint_, 10, keys,
+        (10, 10, 9, 7, 6, 4, 2, 2, 2, 1) // keys
+     // ( 1, 10, 2, 4, 5, 7, 3, 8, 9, 6) values
+    );
+    CHECK_RANGE_EQUAL(
+        compute::uint_, 10, values,
+    //  (10, 10, 9, 7, 6, 4, 2, 2, 2, 1) // keys
+        ( 1, 10, 2, 4, 5, 7, 3, 8, 9, 6) // values
+    );
+}
+
+
+// radix_sort_by_key should be stable
 BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_float)
 {
     compute::float_ keys_data[]   = { 10., 5.5, 10., 7., 5.5};
@@ -95,6 +168,42 @@ BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_float)
         (200,   4,  2,   1, -10) // values
     );
 }
+
+// radix_sort_by_key should be stable
+BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_float_desc)
+{
+    compute::float_ keys_data[]   = { 10., 5.5, 10., 7., 5.5};
+    compute::int_   values_data[] = {   1, 200, -10,  2, 4 };
+
+    compute::vector<compute::float_> keys(keys_data, keys_data + 5, queue);
+    compute::vector<compute::uint_> values(values_data, values_data + 5, queue);
+
+    BOOST_CHECK(
+        !compute::is_sorted(
+            keys.begin(), keys.end(), compute::greater<compute::float_>(), queue
+        )
+    );
+    compute::detail::radix_sort_by_key(
+        keys.begin(), keys.end(), values.begin(), descending, queue
+    );
+    BOOST_CHECK(
+        compute::is_sorted(
+            keys.begin(), keys.end(), compute::greater<compute::float_>(), queue
+        )
+    );
+
+    CHECK_RANGE_EQUAL(
+        compute::float_, 5, keys,
+        (10.,  10., 7., 5.5, 5.5) // keys
+     // (  1, -10,   2, 200, 4) values
+    );
+    CHECK_RANGE_EQUAL(
+        compute::int_, 5, values,
+     // (10.,  10., 7., 5.5, 5.5) // keys
+        (  1, -10,   2, 200, 4) // values
+    );
+}
+
 
 // radix_sort_by_key should be stable
 BOOST_AUTO_TEST_CASE(stable_radix_sort_char_by_int)
