@@ -76,14 +76,10 @@ dispatch_gpu_sort_by_key(KeyIterator keys_first,
         );
     }
     else {
-        // radix sorts in ascending order
+        // radix sorts in descending order
         detail::radix_sort_by_key(
-            keys_first, keys_last, values_first, queue
+            keys_first, keys_last, values_first, false, queue
         );
-
-        // Reverse keys, values for descending order
-        ::boost::compute::reverse(keys_first, keys_last, queue);
-        ::boost::compute::reverse(values_first, values_first + count, queue);
     }
 }
 
