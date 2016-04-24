@@ -225,6 +225,7 @@ add_compute_test("experimental.tabulate" test_tabulate.cpp)
 add_compute_test("misc.amd_cpp_kernel_language" test_amd_cpp_kernel_language.cpp)
 add_compute_test("misc.lambda" test_lambda.cpp)
 add_compute_test("misc.user_defined_types" test_user_defined_types.cpp)
+add_compute_test("misc.literal_conversion" test_literal_conversion.cpp)
 
 # extra tests (interop tests, linkage tests, etc.)
 add_subdirectory(extra)
