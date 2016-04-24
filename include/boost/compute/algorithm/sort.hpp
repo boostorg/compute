@@ -74,11 +74,8 @@ inline void dispatch_gpu_sort(buffer_iterator<T> first,
         );
     }
     else {
-        // radix sort in ascending order
-        ::boost::compute::detail::radix_sort(first, last, queue);
-
-        // reverse range to descending order
-        ::boost::compute::reverse(first, last, queue);
+        // radix sorts in descending order
+        ::boost::compute::detail::radix_sort(first, last, false, queue);
     }
 }
 
