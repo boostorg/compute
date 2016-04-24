@@ -71,7 +71,9 @@ public:
     {
         BOOST_COMPUTE_FUNCTION(RealType, scale_random, (const uint_ x),
         {
-            return LO + (convert_RealType(x) / MAX_RANDOM) * (HI - LO);
+            // Use nextafter to shift the result slightly towards LO to avoid being able to get a
+            // value of exactly HI.
+            return nextafter(LO + (convert_RealType(x) / MAX_RANDOM) * (HI - LO), LO);
         });
 
         scale_random.define("LO", detail::make_literal(m_a));
