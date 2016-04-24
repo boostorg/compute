@@ -36,10 +36,12 @@ public:
 
     /// Creates a new uniform distribution producing numbers in the range
     /// [\p a, \p b).
+    /// Requires a < b
     uniform_real_distribution(RealType a = 0.f, RealType b = 1.f)
         : m_a(a),
           m_b(b)
     {
+        BOOST_ASSERT(a < b);
     }
 
     /// Destroys the uniform_real_distribution object.
@@ -69,7 +71,9 @@ public:
     {
         BOOST_COMPUTE_FUNCTION(RealType, scale_random, (const uint_ x),
         {
-            return LO + (convert_RealType(x) / MAX_RANDOM) * (HI - LO);
+            // Use nextafter to shift the result slightly towards LO to avoid being able to get a
+            // value of exactly HI.
+            return nextafter(LO + (convert_RealType(x) / MAX_RANDOM) * (HI - LO), LO);
         });
 
         scale_random.define("LO", detail::make_literal(m_a));
