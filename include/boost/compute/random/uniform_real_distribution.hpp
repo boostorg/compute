@@ -20,7 +20,7 @@ namespace boost {
 namespace compute {
 
 /// \class uniform_real_distribution
-/// \brief Produces uniformily distributed random floating-point numbers.
+/// \brief Produces uniformly distributed random floating-point numbers.
 ///
 /// The following example shows how to setup a uniform real distribution to
 /// produce random \c float values between \c 1 and \c 100.
@@ -59,7 +59,7 @@ public:
         return m_b;
     }
 
-    /// Generates uniformily distributed floating-point numbers and stores
+    /// Generates uniformly distributed floating-point numbers and stores
     /// them to the range [\p first, \p last).
     template<class OutputIterator, class Generator>
     void generate(OutputIterator first,
@@ -69,7 +69,7 @@ public:
     {
         BOOST_COMPUTE_FUNCTION(RealType, scale_random, (const uint_ x),
         {
-            return LO + (convert_RealType(x) / MAX_RANDOM) * (HI - LO);
+            return nextafter(LO + (convert_RealType(x) / MAX_RANDOM) * (HI - LO), (RealType) LO);
         });
 
         scale_random.define("LO", detail::make_literal(m_a));
@@ -78,6 +78,7 @@ public:
         scale_random.define(
             "convert_RealType", std::string("convert_") + type_name<RealType>()
         );
+        scale_random.define("RealType", type_name<RealType>());
 
         generator.generate(
             first, last, scale_random, queue
