@@ -11,6 +11,8 @@
 #ifndef BOOST_COMPUTE_RANDOM_UNIFORM_REAL_DISTRIBUTION_HPP
 #define BOOST_COMPUTE_RANDOM_UNIFORM_REAL_DISTRIBUTION_HPP
 
+#include <boost/assert.hpp>
+
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/function.hpp>
 #include <boost/compute/detail/literal.hpp>
@@ -36,10 +38,12 @@ public:
 
     /// Creates a new uniform distribution producing numbers in the range
     /// [\p a, \p b).
+    /// Requires a < b
     uniform_real_distribution(RealType a = 0.f, RealType b = 1.f)
         : m_a(a),
           m_b(b)
     {
+        BOOST_ASSERT(a < b);
     }
 
     /// Destroys the uniform_real_distribution object.
