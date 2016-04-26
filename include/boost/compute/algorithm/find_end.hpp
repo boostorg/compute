@@ -36,6 +36,7 @@ inline InputIterator find_end_helper(InputIterator first,
                                      command_queue &queue)
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
+    typedef typename std::iterator_traits<InputIterator>::difference_type difference_type;
 
     size_t count = detail::iterator_range_size(first, last);
     if(count == 0){
@@ -65,8 +66,13 @@ inline InputIterator find_end_helper(InputIterator first,
     queue.enqueue_1d_range_kernel(kernel, 0, count, 0);
 
     int result = static_cast<int>(index.read(queue));
-    if(result == -1) return last;
-    else return first + result;
+
+    if(result == -1){
+        return last;
+    }
+    else {
+        return first + static_cast<difference_type>(result);
+    }
 }
 
 } // end detail namespace
@@ -92,8 +98,13 @@ inline TextIterator find_end(TextIterator t_first,
                              command_queue &queue = system::default_queue())
 {
     const context &context = queue.get_context();
-    vector<uint_> matching_indices(detail::iterator_range_size(t_first, t_last),
-                                    context);
+
+    // there is no need to check if pattern starts at last n - 1 indices
+    vector<uint_> matching_indices(
+        detail::iterator_range_size(t_first, t_last)
+            + 1 - detail::iterator_range_size(p_first, p_last),
+        context
+    );
 
     detail::search_kernel<PatternIterator,
                           TextIterator,
@@ -105,10 +116,16 @@ inline TextIterator find_end(TextIterator t_first,
     using boost::compute::_1;
 
     vector<uint_>::iterator index =
-        detail::find_end_helper(matching_indices.begin(),
-                                matching_indices.end(),
-                                _1 == 1,
-                                queue);
+        detail::find_end_helper(
+            matching_indices.begin(),
+            matching_indices.end(),
+            _1 == 1,
+            queue
+        );
+
+    // pattern was not found
+    if(index == matching_indices.end())
+        return t_last;
 
     return t_first + detail::iterator_range_size(matching_indices.begin(), index);
 }
