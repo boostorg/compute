@@ -110,6 +110,7 @@ Header: `<boost/compute/algorithm.hpp>`
 * [funcref boost::compute::sort_by_key sort_by_key()]
 * [funcref boost::compute::stable_partition stable_partition()]
 * [funcref boost::compute::stable_sort stable_sort()]
+* [funcref boost::compute::stable_sort_by_key stable_sort_by_key()]
 * [funcref boost::compute::swap_ranges swap_ranges()]
 * [funcref boost::compute::transform transform()]
 * [funcref boost::compute::transform_reduce transform_reduce()]
