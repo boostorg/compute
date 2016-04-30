@@ -191,6 +191,11 @@ public:
     {
         return detail::get_object_info<T>(clGetKernelArgInfo, m_kernel, info, index);
     }
+
+    /// \overload
+    template<int Enum>
+    typename detail::get_object_info_type<kernel, Enum>::type
+    get_arg_info(size_t index) const;
     #endif // CL_VERSION_1_2
 
     /// Returns work-group information for the kernel with \p device.
@@ -362,6 +367,23 @@ BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(kernel,
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(kernel,
     ((std::string, CL_KERNEL_ATTRIBUTES))
 )
+#endif // CL_VERSION_1_2
+
+/// \internal_ define get_arg_info() specializations for kernel
+#ifdef CL_VERSION_1_2
+#define BOOST_COMPUTE_DETAIL_DEFINE_KERNEL_GET_ARG_INFO_SPECIALIZATION(result_type, value) \
+    namespace detail { \
+        template<> struct get_object_info_type<kernel, value> { typedef result_type type; }; \
+    } \
+    template<> inline result_type kernel::get_arg_info<value>(size_t index) const { \
+        return get_arg_info<result_type>(index, value); \
+    }
+
+BOOST_COMPUTE_DETAIL_DEFINE_KERNEL_GET_ARG_INFO_SPECIALIZATION(cl_kernel_arg_address_qualifier, CL_KERNEL_ARG_ADDRESS_QUALIFIER)
+BOOST_COMPUTE_DETAIL_DEFINE_KERNEL_GET_ARG_INFO_SPECIALIZATION(cl_kernel_arg_access_qualifier, CL_KERNEL_ARG_ACCESS_QUALIFIER)
+BOOST_COMPUTE_DETAIL_DEFINE_KERNEL_GET_ARG_INFO_SPECIALIZATION(std::string, CL_KERNEL_ARG_TYPE_NAME)
+BOOST_COMPUTE_DETAIL_DEFINE_KERNEL_GET_ARG_INFO_SPECIALIZATION(cl_kernel_arg_type_qualifier, CL_KERNEL_ARG_TYPE_QUALIFIER)
+BOOST_COMPUTE_DETAIL_DEFINE_KERNEL_GET_ARG_INFO_SPECIALIZATION(std::string, CL_KERNEL_ARG_NAME)
 #endif // CL_VERSION_1_2
 
 namespace detail {
