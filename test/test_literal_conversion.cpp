@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(literal_conversion_float)
     values.push_back(1.2345679f);
     values.push_back(1.2345680f);
     values.push_back(1.2345681f);
-    for (int i = 0; i < values.size(); i++) {
+    for (size_t i = 0; i < values.size(); i++) {
         std::istringstream iss(boost::compute::detail::make_literal(values[i]));
         float x;
         BOOST_CHECK(iss >> x);
@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(literal_conversion_double)
     values.push_back(1.2345678901234567);
     values.push_back(1.2345678901234569);
     values.push_back(1.2345678901234571);
-    for (int i = 0; i < values.size(); i++) {
+    for (size_t i = 0; i < values.size(); i++) {
         std::istringstream iss(boost::compute::detail::make_literal(values[i]));
         double x;
         BOOST_CHECK(iss >> x);
