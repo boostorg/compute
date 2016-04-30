@@ -16,6 +16,7 @@
 #include <boost/compute/algorithm/detail/radix_sort.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "quirks.hpp"
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
@@ -26,6 +27,14 @@ const bool descending = false;
 // radix_sort_by_key should be stable
 BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_int)
 {
+    if(is_apple_cpu_device(device)) {
+        std::cerr
+            << "skipping all radix_sort_by_key tests due to Apple platform"
+            << " behavior when local memory is used on a CPU device"
+            << std::endl;
+        return;
+    }
+
     compute::int_ keys_data[] =   { 10, 9, 2, 7, 6, -1, 4, 2, 2, 10 };
     compute::int_ values_data[] = { 1,  2, 3, 4, 5,  6, 7, 8, 9, 10 };
 
@@ -51,6 +60,10 @@ BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_int)
 // radix_sort_by_key should be stable
 BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_int_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     compute::int_ keys_data[] =   { 10, 9, 2, 7, 6, -1, 4, 2, 2, 10 };
     compute::int_ values_data[] = { 1,  2, 3, 4, 5,  6, 7, 8, 9, 10 };
 
@@ -86,6 +99,10 @@ BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_int_desc)
 // radix_sort_by_key should be stable
 BOOST_AUTO_TEST_CASE(stable_radix_sort_uint_by_uint)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     compute::uint_ keys_data[] =   { 10, 9, 2, 7, 6, 1, 4, 2, 2, 10 };
     compute::uint_ values_data[] = { 1,  2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
@@ -111,6 +128,10 @@ BOOST_AUTO_TEST_CASE(stable_radix_sort_uint_by_uint)
 // radix_sort_by_key should be stable
 BOOST_AUTO_TEST_CASE(stable_radix_sort_uint_by_uint_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     compute::uint_ keys_data[] =   { 10, 9, 2, 7, 6, 1, 4, 2, 2, 10 };
     compute::uint_ values_data[] = { 1,  2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
@@ -147,6 +168,10 @@ BOOST_AUTO_TEST_CASE(stable_radix_sort_uint_by_uint_desc)
 // radix_sort_by_key should be stable
 BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_float)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     compute::float_ keys_data[]   = { 10., 5.5, 10., 7., 5.5};
     compute::int_   values_data[] = {   1, 200, -10,  2, 4 };
 
@@ -172,6 +197,10 @@ BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_float)
 // radix_sort_by_key should be stable
 BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_float_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     compute::float_ keys_data[]   = { 10., 5.5, 10., 7., 5.5};
     compute::int_   values_data[] = {   1, 200, -10,  2, 4 };
 
@@ -208,6 +237,10 @@ BOOST_AUTO_TEST_CASE(stable_radix_sort_int_by_float_desc)
 // radix_sort_by_key should be stable
 BOOST_AUTO_TEST_CASE(stable_radix_sort_char_by_int)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     compute::int_ keys_data[] = { 6, 1, 1, 3, 4, 7, 5, 1 };
     compute::char_ values_data[] = { 'g', 'c', 'b', 'd', 'e', 'h', 'f', 'a' };
 
@@ -231,6 +264,10 @@ BOOST_AUTO_TEST_CASE(stable_radix_sort_char_by_int)
 // radix_sort_by_key should be stable
 BOOST_AUTO_TEST_CASE(stable_radix_sort_int2_by_int)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     compute::int_ keys_data[] = { 6, 1, 1, 3, 4, 7, 5, 1 };
     compute::int2_ values_data[] = {
         compute::int2_(1, 1), // 6

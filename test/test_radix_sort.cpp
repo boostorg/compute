@@ -16,6 +16,7 @@
 #include <boost/compute/algorithm/detail/radix_sort.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "quirks.hpp"
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
@@ -25,6 +26,14 @@ const bool descending = false;
 
 BOOST_AUTO_TEST_CASE(sort_char_vector)
 {
+    if(is_apple_cpu_device(device)) {
+        std::cerr
+            << "skipping all radix_sort tests due to Apple platform"
+            << " behavior when local memory is used on a CPU device"
+            << std::endl;
+        return;
+    }
+
     using boost::compute::char_;
 
     char_ data[] = { 'c', 'a', '0', '7', 'B', 'F', '\0', '$' };
@@ -39,6 +48,10 @@ BOOST_AUTO_TEST_CASE(sort_char_vector)
 
 BOOST_AUTO_TEST_CASE(sort_uchar_vector)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::uchar_;
 
     uchar_ data[] = { 0x12, 0x00, 0xFF, 0xB4, 0x80, 0x32, 0x64, 0xA2 };
@@ -53,6 +66,10 @@ BOOST_AUTO_TEST_CASE(sort_uchar_vector)
 
 BOOST_AUTO_TEST_CASE(sort_short_vector)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::short_;
 
     short_ data[] = { -4, 152, -94, 963, 31002, -456, 0, -2113 };
@@ -67,6 +84,10 @@ BOOST_AUTO_TEST_CASE(sort_short_vector)
 
 BOOST_AUTO_TEST_CASE(sort_ushort_vector)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::ushort_;
 
     ushort_ data[] = { 4, 152, 94, 963, 63202, 34560, 0, 2113 };
@@ -81,6 +102,10 @@ BOOST_AUTO_TEST_CASE(sort_ushort_vector)
 
 BOOST_AUTO_TEST_CASE(sort_int_vector)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     int data[] = { -4, 152, -5000, 963, 75321, -456, 0, 1112 };
     boost::compute::vector<int> vector(data, data + 8, queue);
     BOOST_CHECK_EQUAL(vector.size(), size_t(8));
@@ -93,6 +118,10 @@ BOOST_AUTO_TEST_CASE(sort_int_vector)
 
 BOOST_AUTO_TEST_CASE(sort_uint_vector)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::uint_;
 
     uint_ data[] = { 500, 1988, 123456, 562, 0, 4000000, 9852, 102030 };
@@ -107,6 +136,10 @@ BOOST_AUTO_TEST_CASE(sort_uint_vector)
 
 BOOST_AUTO_TEST_CASE(sort_long_vector)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::long_;
 
     long_ data[] = { 500, 1988, 123456, 562, 0, 4000000, 9852, 102030 };
@@ -121,6 +154,10 @@ BOOST_AUTO_TEST_CASE(sort_long_vector)
 
 BOOST_AUTO_TEST_CASE(sort_ulong_vector)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::ulong_;
 
     ulong_ data[] = { 500, 1988, 123456, 562, 0, 4000000, 9852, 102030 };
@@ -135,6 +172,10 @@ BOOST_AUTO_TEST_CASE(sort_ulong_vector)
 
 BOOST_AUTO_TEST_CASE(sort_float_vector)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     float data[] = { -6023.0f, 152.5f, -63.0f, 1234567.0f, 11.2f,
                      -5000.1f, 0.0f, 14.0f, -8.25f, -0.0f };
     boost::compute::vector<float> vector(data, data + 10, queue);
@@ -160,6 +201,10 @@ BOOST_AUTO_TEST_CASE(sort_float_vector)
 
 BOOST_AUTO_TEST_CASE(sort_double_vector)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     if(!device.supports_extension("cl_khr_fp64")){
         std::cout << "skipping test: device does not support double" << std::endl;
         return;
@@ -181,6 +226,10 @@ BOOST_AUTO_TEST_CASE(sort_double_vector)
 
 BOOST_AUTO_TEST_CASE(sort_char_vector_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::char_;
 
     char_ data[] = { 'c', 'a', '0', '7', 'B', 'F', '\0', '$' };
@@ -205,6 +254,10 @@ BOOST_AUTO_TEST_CASE(sort_char_vector_desc)
 
 BOOST_AUTO_TEST_CASE(sort_uchar_vector_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::uchar_;
 
     uchar_ data[] = { 0x12, 0x00, 0xFF, 0xB4, 0x80, 0x32, 0x64, 0xA2 };
@@ -229,6 +282,10 @@ BOOST_AUTO_TEST_CASE(sort_uchar_vector_desc)
 
 BOOST_AUTO_TEST_CASE(sort_short_vector_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::short_;
 
     short_ data[] = { -4, 152, -94, 963, 31002, -456, 0, -2113 };
@@ -253,6 +310,10 @@ BOOST_AUTO_TEST_CASE(sort_short_vector_desc)
 
 BOOST_AUTO_TEST_CASE(sort_ushort_vector_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::ushort_;
 
     ushort_ data[] = { 4, 152, 94, 963, 63202, 34560, 0, 2113 };
@@ -277,6 +338,10 @@ BOOST_AUTO_TEST_CASE(sort_ushort_vector_desc)
 
 BOOST_AUTO_TEST_CASE(sort_int_vector_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::int_;
 
     int_ data[] = { -4, 152, -5000, 963, 75321, -456, 0, 1112 };
@@ -301,6 +366,10 @@ BOOST_AUTO_TEST_CASE(sort_int_vector_desc)
 
 BOOST_AUTO_TEST_CASE(sort_uint_vector_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::uint_;
 
     uint_ data[] = { 500, 1988, 123456, 562, 0, 4000000, 9852, 102030 };
@@ -325,6 +394,10 @@ BOOST_AUTO_TEST_CASE(sort_uint_vector_desc)
 
 BOOST_AUTO_TEST_CASE(sort_long_vector_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::long_;
 
     long_ data[] = { -500, 1988, 123456, 562, 0, 4000000, 9852, 102030 };
@@ -349,6 +422,10 @@ BOOST_AUTO_TEST_CASE(sort_long_vector_desc)
 
 BOOST_AUTO_TEST_CASE(sort_ulong_vector_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     using boost::compute::ulong_;
 
     ulong_ data[] = { 500, 1988, 123456, 562, 0, 4000000, 9852, 102030 };
@@ -373,6 +450,10 @@ BOOST_AUTO_TEST_CASE(sort_ulong_vector_desc)
 
 BOOST_AUTO_TEST_CASE(sort_float_vector_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     float data[] = {
         -6023.0f, 152.5f, -63.0f, 1234567.0f, 11.2f,
         -5000.1f, 0.0f, 14.0f, -8.25f, -0.0f
@@ -412,6 +493,10 @@ BOOST_AUTO_TEST_CASE(sort_float_vector_desc)
 
 BOOST_AUTO_TEST_CASE(sort_double_vector_desc)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     if(!device.supports_extension("cl_khr_fp64")){
         std::cout << "skipping test: device does not support double" << std::endl;
         return;
@@ -442,6 +527,10 @@ BOOST_AUTO_TEST_CASE(sort_double_vector_desc)
 
 BOOST_AUTO_TEST_CASE(sort_partial_vector)
 {
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
     int data[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
     boost::compute::vector<int> vec(data, data + 10, queue);
 
