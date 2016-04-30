@@ -215,7 +215,7 @@ public:
     {
         BOOST_STATIC_ASSERT_MSG(
             arity == 3,
-            "Non-ternary function invoked with two arguments"
+            "Non-ternary function invoked with three arguments"
         );
 
         return detail::invoked_function<result_type, boost::tuple<Arg1, Arg2, Arg3> >(
