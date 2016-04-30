@@ -283,6 +283,29 @@ BOOST_AUTO_TEST_CASE(enqueue_kernel_with_extents)
     kernel.set_arg(0, output1);
     kernel.set_arg(1, output2);
 
+    queue.enqueue_nd_range_kernel(kernel, dim(0, 0), dim(4, 4), dim(1, 1));
+
+    CHECK_RANGE_EQUAL(int, 4, output1, (0, 0, 0, 0));
+    CHECK_RANGE_EQUAL(int, 4, output2, (0, 0, 0, 0));
+
+    // Maximum number of work-items that can be specified in each
+    // dimension of the work-group to clEnqueueNDRangeKernel.
+    std::vector<size_t> max_work_item_sizes =
+        device.get_info<CL_DEVICE_MAX_WORK_ITEM_SIZES>();
+
+    if(max_work_item_sizes[0] < size_t(2)) {
+        return;
+    }
+
+    queue.enqueue_nd_range_kernel(kernel, dim(0, 0), dim(4, 4), dim(2, 1));
+
+    CHECK_RANGE_EQUAL(int, 4, output1, (0, 1, 0, 1));
+    CHECK_RANGE_EQUAL(int, 4, output2, (0, 0, 0, 0));
+
+    if(max_work_item_sizes[1] < size_t(2)) {
+        return;
+    }
+
     queue.enqueue_nd_range_kernel(kernel, dim(0, 0), dim(4, 4), dim(2, 2));
 
     CHECK_RANGE_EQUAL(int, 4, output1, (0, 1, 0, 1));
