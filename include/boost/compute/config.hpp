@@ -16,8 +16,8 @@
 #include <boost/compute/cl.hpp>
 
 // check for minimum required boost version
-#if BOOST_VERSION < 104800
-#error Boost.Compute requires Boost version 1.48 or later
+#if BOOST_VERSION < 105400
+#error Boost.Compute requires Boost version 1.54 or later
 #endif
 
 // the BOOST_COMPUTE_NO_VARIADIC_TEMPLATES macro is defined
