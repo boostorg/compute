@@ -329,7 +329,7 @@ public:
     }
 
 private:
-    #ifndef BOOST_NO_VARIADIC_TEMPLATES
+    #ifndef BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
     /// \internal_
     template<size_t N>
     void _set_args()
@@ -343,7 +343,7 @@ private:
         set_arg(N, arg);
         _set_args<N+1>(rest...);
     }
-    #endif // BOOST_NO_VARIADIC_TEMPLATES
+    #endif // BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 
 private:
     cl_kernel m_kernel;
