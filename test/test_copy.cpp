@@ -28,6 +28,7 @@
 #include <boost/compute/algorithm/iota.hpp>
 #include <boost/compute/async/future.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/detail/device_ptr.hpp>
 #include <boost/compute/iterator/detail/swizzle_iterator.hpp>
 
 #include "quirks.hpp"
@@ -50,6 +51,33 @@ BOOST_AUTO_TEST_CASE(copy_on_device)
 
     bc::copy(a.begin(), a.end(), b.begin(), queue);
     CHECK_RANGE_EQUAL(float, 4, b, (6.1f, 10.2f, 19.3f, 25.4f));
+}
+
+BOOST_AUTO_TEST_CASE(copy_on_device_device_ptr)
+{
+    float data[] = { 6.1f, 10.2f, 19.3f, 25.4f };
+    bc::vector<float> a(4);
+    bc::copy(data, data + 4, a.begin(), queue);
+    CHECK_RANGE_EQUAL(float, 4, a, (6.1f, 10.2f, 19.3f, 25.4f));
+
+    bc::vector<float> b(4);
+    bc::detail::device_ptr<float> b_ptr(b.get_buffer(), size_t(0));
+
+    // buffer_iterator -> device_ptr
+    bc::copy(a.begin(), a.end(), b_ptr, queue);
+    CHECK_RANGE_EQUAL(float, 4, b, (6.1f, 10.2f, 19.3f, 25.4f));
+
+    bc::vector<float> c(4);
+    bc::fill(c.begin(), c.end(), 0.0f, queue);
+    bc::detail::device_ptr<float> c_ptr(c.get_buffer(), size_t(2));
+
+    // device_ptr -> device_ptr
+    bc::copy(b_ptr, b_ptr + 2, c_ptr, queue);
+    CHECK_RANGE_EQUAL(float, 4, c, (0.0f, 0.0f, 6.1f, 10.2f));
+
+    // device_ptr -> buffer_iterator
+    bc::copy(c_ptr, c_ptr + 2, a.begin() + 2, queue);
+    CHECK_RANGE_EQUAL(float, 4, a, (6.1f, 10.2f, 6.1f, 10.2f));
 }
 
 BOOST_AUTO_TEST_CASE(copy_on_host)
