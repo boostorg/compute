@@ -266,4 +266,14 @@ BOOST_AUTO_TEST_CASE(reduce_complex)
     BOOST_CHECK(result == std::complex<float>(-168, -576));
 }
 
+BOOST_AUTO_TEST_CASE(reduce_uchar_to_float)
+{
+    compute::vector<compute::uchar_> data;
+    data.push_back(250, queue);
+    data.push_back(250, queue);
+    float sum = 0;
+    compute::reduce(data.begin(), data.end(), &sum, compute::plus<float>(), queue);
+    BOOST_CHECK_EQUAL(sum, 500);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
