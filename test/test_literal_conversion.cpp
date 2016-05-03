@@ -29,13 +29,13 @@ BOOST_AUTO_TEST_CASE(literal_conversion_float)
         // 6 characters (5 digits) look good
         BOOST_CHECK_EQUAL(literal.substr(0, 6), "1.2345");
 
-        // Stuff the literal into a stream then extract it, and make sure we get a numerically
-        // identical result:
-        std::istringstream iss(literal);
+        // libc++ stream extraction fails on a value such as "1.2f" rather than extracting 1.2
+        // and leaving the f; so check the "f", then slice it off for the extraction below:
+        BOOST_CHECK_EQUAL(literal.substr(literal.length()-1), "f");
+
+        std::istringstream iss(literal.substr(0, literal.length()-1));
         float x;
-        std::string suffix;
-        iss >> x >> suffix;
-        BOOST_CHECK_EQUAL(suffix, "f");
+        iss >> x;
         roundtrip.push_back(x);
     }
     BOOST_CHECK_EQUAL(values[0], roundtrip[0]);
@@ -56,7 +56,9 @@ BOOST_AUTO_TEST_CASE(literal_conversion_double)
         BOOST_CHECK_EQUAL(literal.substr(0, 11), "1.234567890");
 
         // Stuff the literal into a stream then extract it, and make sure we get a numerically
-        // identical result:
+        // identical result.  (Since there is no suffix, we don't have to worry about removing the
+        // suffix like we have to above, for float--but we also check to make sure there is no
+        // (unextracted) suffix).
         std::istringstream iss(literal);
         double x;
         std::string suffix;
