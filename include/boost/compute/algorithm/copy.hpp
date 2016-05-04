@@ -18,6 +18,7 @@
 
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/not.hpp>
+#include <boost/mpl/or.hpp>
 
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/system.hpp>
@@ -26,6 +27,7 @@
 #include <boost/compute/algorithm/detail/copy_to_device.hpp>
 #include <boost/compute/algorithm/detail/copy_to_host.hpp>
 #include <boost/compute/async/future.hpp>
+#include <boost/compute/detail/device_ptr.hpp>
 #include <boost/compute/detail/is_contiguous_iterator.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
@@ -42,13 +44,25 @@ namespace mpl = boost::mpl;
 template<class InputIterator, class OutputIterator>
 struct can_copy_with_copy_buffer :
     mpl::and_<
-        boost::is_same<
-            InputIterator,
-            buffer_iterator<typename InputIterator::value_type>
+        mpl::or_<
+            boost::is_same<
+                InputIterator,
+                buffer_iterator<typename InputIterator::value_type>
+            >,
+            boost::is_same<
+                InputIterator,
+                detail::device_ptr<typename InputIterator::value_type>
+            >
         >,
-        boost::is_same<
-            OutputIterator,
-            buffer_iterator<typename OutputIterator::value_type>
+        mpl::or_<
+            boost::is_same<
+                OutputIterator,
+                buffer_iterator<typename OutputIterator::value_type>
+            >,
+            boost::is_same<
+                OutputIterator,
+                detail::device_ptr<typename OutputIterator::value_type>
+            >
         >,
         boost::is_same<
             typename InputIterator::value_type,
