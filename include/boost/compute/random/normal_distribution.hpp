@@ -13,6 +13,9 @@
 
 #include <limits>
 
+#include <boost/assert.hpp>
+#include <boost/type_traits.hpp>
+
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/function.hpp>
 #include <boost/compute/types/fundamental.hpp>
@@ -124,6 +127,11 @@ public:
 private:
     RealType m_mean;
     RealType m_stddev;
+
+    BOOST_STATIC_ASSERT_MSG(
+        boost::is_floating_point<RealType>::value,
+        "Template argument must be a floating point type"
+    );
 };
 
 } // end compute namespace

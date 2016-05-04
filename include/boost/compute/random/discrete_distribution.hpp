@@ -11,6 +11,9 @@
 #ifndef BOOST_COMPUTE_RANDOM_DISCRETE_DISTRIBUTION_HPP
 #define BOOST_COMPUTE_RANDOM_DISCRETE_DISTRIBUTION_HPP
 
+#include <boost/type_traits.hpp>
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/function.hpp>
 #include <boost/compute/algorithm/accumulate.hpp>
@@ -114,6 +117,11 @@ public:
 private:
     size_t m_n;
     ::std::vector<double> m_probabilities;
+
+    BOOST_STATIC_ASSERT_MSG(
+        boost::is_integral<IntType>::value,
+        "Template argument must be integral"
+    );
 };
 
 } // end compute namespace
