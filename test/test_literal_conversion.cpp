@@ -24,14 +24,18 @@ BOOST_AUTO_TEST_CASE(literal_conversion_float)
     values.push_back(1.2345680f);
     values.push_back(1.2345681f);
     for (size_t i = 0; i < values.size(); i++) {
-        std::istringstream iss(boost::compute::detail::make_literal(values[i]));
-        float x;
-        BOOST_CHECK(iss >> x);
-        BOOST_CHECK_EQUAL(char(iss.get()), 'f');
-        // Make sure we're at the end:
-        iss.peek();
-        BOOST_CHECK(iss.eof());
+        std::string literal = boost::compute::detail::make_literal(values[i]);
+        // Check that we got something in the literal, and that at least the first
+        // 6 characters (5 digits) look good
+        BOOST_CHECK_EQUAL(literal.substr(0, 6), "1.2345");
 
+        // libc++ stream extraction fails on a value such as "1.2f" rather than extracting 1.2
+        // and leaving the f; so check the "f", then slice it off for the extraction below:
+        BOOST_CHECK_EQUAL(literal.substr(literal.length()-1), "f");
+
+        std::istringstream iss(literal.substr(0, literal.length()-1));
+        float x;
+        iss >> x;
         roundtrip.push_back(x);
     }
     BOOST_CHECK_EQUAL(values[0], roundtrip[0]);
@@ -46,12 +50,20 @@ BOOST_AUTO_TEST_CASE(literal_conversion_double)
     values.push_back(1.2345678901234569);
     values.push_back(1.2345678901234571);
     for (size_t i = 0; i < values.size(); i++) {
-        std::istringstream iss(boost::compute::detail::make_literal(values[i]));
+        std::string literal = boost::compute::detail::make_literal(values[i]);
+        // Check that we got something in the literal, and that at least the first
+        // 11 characters (10 digits) look good
+        BOOST_CHECK_EQUAL(literal.substr(0, 11), "1.234567890");
+
+        // Stuff the literal into a stream then extract it, and make sure we get a numerically
+        // identical result.  (Since there is no suffix, we don't have to worry about removing the
+        // suffix like we have to above, for float--but we also check to make sure there is no
+        // (unextracted) suffix).
+        std::istringstream iss(literal);
         double x;
-        BOOST_CHECK(iss >> x);
-        // Make sure we're at the end:
-        iss.peek();
-        BOOST_CHECK(iss.eof());
+        std::string suffix;
+        iss >> x >> suffix;
+        BOOST_CHECK_EQUAL(suffix, "");
         roundtrip.push_back(x);
     }
     BOOST_CHECK_EQUAL(values[0], roundtrip[0]);
