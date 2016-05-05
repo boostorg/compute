@@ -22,6 +22,7 @@
 #include <boost/compute/allocator/pinned_allocator.hpp>
 #include <boost/compute/container/vector.hpp>
 
+#include "quirks.hpp"
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
@@ -332,6 +333,13 @@ BOOST_AUTO_TEST_CASE(assign_constant_value)
 
 BOOST_AUTO_TEST_CASE(resize_throw_exception)
 {
+    if(bug_in_clcreatebuffer(device)) {
+        std::cerr
+            << "skipping resize_throw_exception test on Apple platform"
+            << std::endl;
+        return;
+    }
+
     // create vector with eight items
     int data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
     compute::vector<int> vec(data, data + 8, queue);

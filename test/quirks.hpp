@@ -60,6 +60,14 @@ inline bool is_apple_cpu_device(const boost::compute::device &device)
     return is_apple_device(device) && (device.type() & ::boost::compute::device::cpu);
 }
 
+// On Apple devices clCreateBuffer does not return NULL and does no set error
+// to CL_INVALID_BUFFER_SIZE when size of the buffer memory object is greater
+// than CL_DEVICE_MAX_MEM_ALLOC_SIZE.
+inline bool bug_in_clcreatebuffer(const boost::compute::device &device)
+{
+    return is_apple_device(device);
+}
+
 // returns true if the device supports image samplers.
 inline bool supports_image_samplers(const boost::compute::device &device)
 {
