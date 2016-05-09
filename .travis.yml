@@ -217,18 +217,19 @@ matrix:
         - OPENCL_VERSION="12"
         - AMDAPPSDK_VERSION=291 # OpenCL 1.2
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    - os: linux
-      sudo: false
-      compiler: gcc
-      addons:
-        apt:
-          packages: *precise_amdappsdk_packages
-          sources: *precise_amdappsdk_sources
-      env:
-        - OPENCL_LIB=amdappsdk
-        - OPENCL_VERSION="12"
-        - AMDAPPSDK_VERSION=291 # OpenCL 1.2
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+    # Build is disabled as it's reduntant with the Coveralls build (see below)
+    # - os: linux
+    #   sudo: false
+    #   compiler: gcc
+    #   addons:
+    #     apt:
+    #       packages: *precise_amdappsdk_packages
+    #       sources: *precise_amdappsdk_sources
+    #   env:
+    #     - OPENCL_LIB=amdappsdk
+    #     - OPENCL_VERSION="12"
+    #     - AMDAPPSDK_VERSION=291 # OpenCL 1.2
+    #     - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # Precise, AMD APP SDK v3.0, OpenCL 2.0, Travis CI container-based infrastructure
     - os: linux
       sudo: false
