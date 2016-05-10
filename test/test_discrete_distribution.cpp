@@ -191,10 +191,12 @@ BOOST_AUTO_TEST_CASE(discrete_distribution_empty_weights)
 BOOST_AUTO_TEST_CASE(discrete_distribution_uchar)
 {
     using boost::compute::uchar_;
+    using boost::compute::uint_;
     using boost::compute::lambda::_1;
 
     size_t size = 100;
-    boost::compute::vector<uchar_> vec(size, context);
+    boost::compute::vector<uchar_> uchar_vec(size, context);
+    boost::compute::vector<uint_> uint_vec(size, context);
 
     // initialize the default random engine
     boost::compute::default_random_engine engine(queue);
@@ -211,12 +213,22 @@ BOOST_AUTO_TEST_CASE(discrete_distribution_uchar)
     BOOST_CHECK_EQUAL((distribution.min)(), uchar_(0));
     BOOST_CHECK_EQUAL((distribution.max)(), uchar_(255));
 
-    // generate the random values and store them to 'vec'
-    distribution.generate(vec.begin(), vec.end(), engine, queue);
+    // generate the random uchar_ values to the uchar_ vector
+    distribution.generate(uchar_vec.begin(), uchar_vec.end(), engine, queue);
 
     BOOST_CHECK_EQUAL(
         boost::compute::count_if(
-            vec.begin(), vec.end(), _1 == uchar_(1), queue
+            uchar_vec.begin(), uchar_vec.end(), _1 == uchar_(1), queue
+        ),
+        size
+    );
+
+    // generate the random uchar_ values to the uint_ vector
+    distribution.generate(uint_vec.begin(), uint_vec.end(), engine, queue);
+
+    BOOST_CHECK_EQUAL(
+        boost::compute::count_if(
+            uint_vec.begin(), uint_vec.end(), _1 == uint_(1), queue
         ),
         size
     );

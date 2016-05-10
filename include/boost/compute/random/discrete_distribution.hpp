@@ -120,7 +120,7 @@ public:
                   Generator &generator,
                   command_queue &queue)
     {
-        std::string source = "inline uint scale_random(uint x)\n";
+        std::string source = "inline IntType scale_random(uint x)\n";
 
         source = source +
             "{\n" +
@@ -139,6 +139,7 @@ public:
         BOOST_COMPUTE_FUNCTION(IntType, scale_random, (const uint_ x), {});
 
         scale_random.set_source(source);
+        scale_random.define("IntType", type_name<IntType>());
 
         generator.generate(first, last, scale_random, queue);
     }
