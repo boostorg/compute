@@ -94,6 +94,24 @@ public:
         return m_probabilities;
     }
 
+    /// Returns the minimum potentially generated value.
+    result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const
+    {
+        return result_type(0);
+    }
+
+    /// Returns the maximum potentially generated value.
+    result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const
+    {
+        size_t type_max = static_cast<size_t>(
+            (std::numeric_limits<result_type>::max)()
+        );
+        if(m_probabilities.size() - 1 > type_max) {
+            return (std::numeric_limits<result_type>::max)();
+        }
+        return static_cast<result_type>(m_probabilities.size() - 1);
+    }
+
     /// Generates uniformly distributed integers and stores
     /// them to the range [\p first, \p last).
     template<class OutputIterator, class Generator>
