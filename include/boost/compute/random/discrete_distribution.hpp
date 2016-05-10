@@ -44,6 +44,15 @@ class discrete_distribution
 public:
     typedef IntType result_type;
 
+    /// Creates a new discrete distribution with a single weight p = { 1 }.
+    /// This distribution produces only zeroes.
+    discrete_distribution()
+        : m_probabilities(1, double(1)),
+          m_scanned_probabilities(1, double(1))
+    {
+
+    }
+
     /// Creates a new discrete distribution with weights given by
     /// the range [\p first, \p last).
     template<class InputIterator>
