@@ -12,6 +12,7 @@
 #define BOOST_COMPUTE_RANDOM_UNIFORM_REAL_DISTRIBUTION_HPP
 
 #include <boost/assert.hpp>
+#include <boost/type_traits.hpp>
 
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/function.hpp>
@@ -102,6 +103,11 @@ public:
 private:
     RealType m_a;
     RealType m_b;
+
+    BOOST_STATIC_ASSERT_MSG(
+        boost::is_floating_point<RealType>::value,
+        "Template argument must be a floating point type"
+    );
 };
 
 } // end compute namespace

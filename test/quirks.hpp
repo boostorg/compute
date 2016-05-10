@@ -25,6 +25,12 @@ inline bool is_pocl_device(const boost::compute::device &device)
     return device.platform().name() == "Portable Computing Language";
 }
 
+// returns true if the device is from Apple OpenCL platform
+inline bool is_apple_device(const boost::compute::device &device)
+{
+    return device.platform().name() == "Apple";
+}
+
 // AMD platforms have a bug when using struct assignment. this affects
 // algorithms like fill() when used with pairs/tuples.
 //
@@ -41,6 +47,25 @@ inline bool bug_in_struct_assignment(const boost::compute::device &device)
 inline bool bug_in_svmmemcpy(const boost::compute::device &device)
 {
     return boost::compute::detail::is_amd_device(device);
+}
+
+// For CPU devices on Apple platform local memory can not be used when work
+// group size is not [1;1;1]. If work group size is greater "Invalid Work Group
+// Size" error is thrown. (Apple OpenCL implementation can sometimes reduce
+// max work group size for other reasons.)
+// When local memory is not used max work group size for CPU devices on Apple
+// platform should be [1024;1;1].
+inline bool is_apple_cpu_device(const boost::compute::device &device)
+{
+    return is_apple_device(device) && (device.type() & ::boost::compute::device::cpu);
+}
+
+// On Apple devices clCreateBuffer does not return NULL and does no set error
+// to CL_INVALID_BUFFER_SIZE when size of the buffer memory object is greater
+// than CL_DEVICE_MAX_MEM_ALLOC_SIZE.
+inline bool bug_in_clcreatebuffer(const boost::compute::device &device)
+{
+    return is_apple_device(device);
 }
 
 // returns true if the device supports image samplers.

@@ -11,6 +11,9 @@
 #ifndef BOOST_COMPUTE_RANDOM_DISCRETE_DISTRIBUTION_HPP
 #define BOOST_COMPUTE_RANDOM_DISCRETE_DISTRIBUTION_HPP
 
+#include <boost/type_traits.hpp>
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/function.hpp>
 #include <boost/compute/algorithm/accumulate.hpp>
@@ -42,8 +45,8 @@ public:
     /// the range [\p first, \p last)
     template<class InputIterator>
     discrete_distribution(InputIterator first, InputIterator last)
-        : m_n(std::distance(first, last)),
-          m_probabilities(std::distance(first, last))
+        : m_n((std::max)(size_t(1), static_cast<size_t>(std::distance(first, last)))),
+          m_probabilities((std::max)(size_t(1), static_cast<size_t>(std::distance(first, last))))
     {
         double sum = 0;
 
@@ -52,9 +55,14 @@ public:
             sum += *iter;
         }
 
-        for(size_t i=0; i<m_n; i++)
+        InputIterator iter = first;
+        m_probabilities[0] = (*iter)/sum;
+        iter++;
+
+        for(size_t i = 1; i < m_n; i++)
         {
-            m_probabilities[i] = m_probabilities[i-1] + first[i]/sum;
+            m_probabilities[i] = m_probabilities[i-1] + (*iter)/sum;
+            iter++;
         }
     }
 
@@ -109,6 +117,11 @@ public:
 private:
     size_t m_n;
     ::std::vector<double> m_probabilities;
+
+    BOOST_STATIC_ASSERT_MSG(
+        boost::is_integral<IntType>::value,
+        "Template argument must be integral"
+    );
 };
 
 } // end compute namespace

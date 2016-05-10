@@ -307,7 +307,7 @@ BOOST_AUTO_TEST_CASE(lambda_get_tuple)
     vector.push_back(boost::make_tuple(5, 'c', 5.6f), queue);
     vector.push_back(boost::make_tuple(7, 'd', 7.8f), queue);
 
-    // extract first compoenent of each tuple
+    // extract first component of each tuple
     compute::vector<int> first_component(4, context);
     compute::transform(
         vector.begin(),
@@ -318,7 +318,7 @@ BOOST_AUTO_TEST_CASE(lambda_get_tuple)
     );
     CHECK_RANGE_EQUAL(int, 4, first_component, (1, 3, 5, 7));
 
-    // extract second compoenent of each tuple
+    // extract second component of each tuple
     compute::vector<char> second_component(4, context);
     compute::transform(
         vector.begin(),
@@ -329,7 +329,7 @@ BOOST_AUTO_TEST_CASE(lambda_get_tuple)
     );
     CHECK_RANGE_EQUAL(char, 4, second_component, ('a', 'b', 'c', 'd'));
 
-    // extract third compoenent of each tuple
+    // extract third component of each tuple
     compute::vector<float> third_component(4, context);
     compute::transform(
         vector.begin(),
