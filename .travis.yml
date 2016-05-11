@@ -19,10 +19,11 @@ env:
     # AMD APP SDK
     - AMDAPPSDKROOT=${OPENCL_ROOT}/AMDAPPSDK
     # Global build options and C++ flags
-    - CMAKE_OPTIONS="-DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_ENABLE_COVERAGE=ON -DBOOST_COMPUTE_HAVE_OPENCV=ON -DBOOST_COMPUTE_THREAD_SAFE=ON"
+    - CMAKE_OPTIONS="-DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_HAVE_OPENCV=ON -DBOOST_COMPUTE_THREAD_SAFE=ON"
     - CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow"
     # Misc
     - RUN_TESTS=true
+    - COVERAGE=false
 
 matrix:
   include:
@@ -216,18 +217,19 @@ matrix:
         - OPENCL_VERSION="12"
         - AMDAPPSDK_VERSION=291 # OpenCL 1.2
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    - os: linux
-      sudo: false
-      compiler: gcc
-      addons:
-        apt:
-          packages: *precise_amdappsdk_packages
-          sources: *precise_amdappsdk_sources
-      env:
-        - OPENCL_LIB=amdappsdk
-        - OPENCL_VERSION="12"
-        - AMDAPPSDK_VERSION=291 # OpenCL 1.2
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+    # Build is disabled as it's reduntant with the Coveralls build (see below)
+    # - os: linux
+    #   sudo: false
+    #   compiler: gcc
+    #   addons:
+    #     apt:
+    #       packages: *precise_amdappsdk_packages
+    #       sources: *precise_amdappsdk_sources
+    #   env:
+    #     - OPENCL_LIB=amdappsdk
+    #     - OPENCL_VERSION="12"
+    #     - AMDAPPSDK_VERSION=291 # OpenCL 1.2
+    #     - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # Precise, AMD APP SDK v3.0, OpenCL 2.0, Travis CI container-based infrastructure
     - os: linux
       sudo: false
@@ -253,6 +255,39 @@ matrix:
         - OPENCL_VERSION="20"
         - AMDAPPSDK_VERSION=300 # OpenCL 2.0
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+
+    # Coveralls build (-DBOOST_COMPUTE_ENABLE_COVERAGE=ON)
+    # Trusty, AMD APP SDK v2.9.1, OpenCL 1.2
+    - os: linux
+      dist: trusty
+      sudo: required
+      compiler: gcc
+      addons:
+        apt:
+          packages: &trusty_amdappsdk_packages
+            - g++-4.8
+            # Boost
+            - libboost-chrono1.55-dev
+            - libboost-date-time1.55-dev
+            - libboost-test1.55-dev
+            - libboost-system1.55-dev
+            - libboost-filesystem1.55-dev
+            - libboost-timer1.55-dev
+            - libboost-program-options1.55-dev
+            - libboost-thread1.55-dev
+            # Misc
+            - python-yaml
+            - lcov
+            - libopencv-dev
+          sources: &trusty_amdappsdk_sources
+            - ubuntu-toolchain-r-test
+      env:
+        - LINUX_DIST=trusty
+        - OPENCL_LIB=amdappsdk
+        - OPENCL_VERSION="12"
+        - AMDAPPSDK_VERSION=291 # OpenCL 1.2
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON"
+        - COVERAGE=true
 
     ############################################################################
     # OSX
@@ -398,6 +433,9 @@ script:
       fi
 
 after_success:
-    - lcov --directory test --base-directory ../include/boost/compute/ --capture --output-file coverage.info
-    - lcov --remove coverage.info '/usr*' -o coverage.info
-    - cd .. && coveralls-lcov build/coverage.info
+    - |
+      if [[ ${COVERAGE} == "true" ]]; then
+        lcov --directory test --base-directory ../include/boost/compute/ --capture --output-file coverage.info
+        lcov --remove coverage.info '/usr*' '*/test/*' -o coverage.info
+        cd .. && coveralls-lcov build/coverage.info
+      fi
