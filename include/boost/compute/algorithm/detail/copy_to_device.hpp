@@ -53,6 +53,49 @@ inline DeviceIterator copy_to_device(HostIterator first,
 }
 
 template<class HostIterator, class DeviceIterator>
+inline DeviceIterator copy_to_device_map(HostIterator first,
+                                         HostIterator last,
+                                         DeviceIterator result,
+                                         command_queue &queue)
+{
+    typedef typename
+        std::iterator_traits<DeviceIterator>::value_type
+        value_type;
+    typedef typename
+        std::iterator_traits<DeviceIterator>::difference_type
+        difference_type;
+
+    size_t count = iterator_range_size(first, last);
+    if(count == 0){
+        return result;
+    }
+
+    size_t offset = result.get_index();
+
+    // map result buffer to host
+    value_type *pointer = static_cast<value_type*>(
+        queue.enqueue_map_buffer(
+            result.get_buffer(),
+            CL_MAP_WRITE,
+            offset * sizeof(value_type),
+            count * sizeof(value_type)
+        )
+    );
+
+    // copy [first; last) to result buffer
+    std::copy(first, last, pointer);
+
+    // unmap result buffer
+    boost::compute::event unmapEvent = queue.enqueue_unmap_buffer(
+        result.get_buffer(),
+        static_cast<void*>(pointer)
+    );
+    unmapEvent.wait();
+
+    return result + static_cast<difference_type>(count);
+}
+
+template<class HostIterator, class DeviceIterator>
 inline future<DeviceIterator> copy_to_device_async(HostIterator first,
                                                    HostIterator last,
                                                    DeviceIterator result,

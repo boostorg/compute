@@ -27,10 +27,13 @@
 #include <boost/compute/algorithm/detail/copy_to_device.hpp>
 #include <boost/compute/algorithm/detail/copy_to_host.hpp>
 #include <boost/compute/async/future.hpp>
+#include <boost/compute/container/mapped_view.hpp>
 #include <boost/compute/detail/device_ptr.hpp>
 #include <boost/compute/detail/is_contiguous_iterator.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/detail/parameter_cache.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
+#include <boost/compute/type_traits/type_name.hpp>
 #include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
@@ -70,6 +73,19 @@ struct can_copy_with_copy_buffer :
         >
     >::type {};
 
+// meta-function returning true if value_types of InputIterator and
+// OutputIterator are same
+template<class InputIterator, class OutputIterator>
+struct is_same_value_type :
+    boost::is_same<
+        typename boost::remove_cv<
+            typename std::iterator_traits<InputIterator>::value_type
+        >::type,
+        typename boost::remove_cv<
+            typename OutputIterator::value_type
+        >::type
+    >::type {};
+
 // host -> device
 template<class InputIterator, class OutputIterator>
 inline OutputIterator
@@ -77,9 +93,14 @@ dispatch_copy(InputIterator first,
               InputIterator last,
               OutputIterator result,
               command_queue &queue,
-              typename boost::enable_if_c<
-                  !is_device_iterator<InputIterator>::value &&
-                  is_device_iterator<OutputIterator>::value
+              typename boost::enable_if<
+                  mpl::and_<
+                      mpl::not_<
+                          is_device_iterator<InputIterator>
+                      >,
+                      is_device_iterator<OutputIterator>,
+                      is_same_value_type<InputIterator, OutputIterator>
+                  >
               >::type* = 0)
 {
     if(is_contiguous_iterator<InputIterator>::value){
@@ -92,6 +113,93 @@ dispatch_copy(InputIterator first,
         std::vector<T> vector(first, last);
         return copy_to_device(vector.begin(), vector.end(), result, queue);
     }
+}
+
+// host -> device
+// Type mismatch between InputIterator and OutputIterator value_types
+template<class InputIterator, class OutputIterator>
+inline OutputIterator
+dispatch_copy(InputIterator first,
+              InputIterator last,
+              OutputIterator result,
+              command_queue &queue,
+              typename boost::enable_if<
+                  mpl::and_<
+                      mpl::not_<
+                          is_device_iterator<InputIterator>
+                      >,
+                      is_device_iterator<OutputIterator>,
+                      mpl::not_<
+                          is_same_value_type<InputIterator, OutputIterator>
+                      >
+                  >
+              >::type* = 0)
+{
+    typedef typename OutputIterator::value_type output_type;
+    typedef typename std::iterator_traits<InputIterator>::value_type input_type;
+
+    const context &context = queue.get_context();
+    const device &device = queue.get_device();
+
+    // loading parameters
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_device_")
+            + type_name<input_type>() + "_" + type_name<output_type>();
+    boost::shared_ptr<parameter_cache> parameters =
+        detail::parameter_cache::get_global_cache(device);
+
+    size_t map_copy_threshold;
+    size_t direct_copy_threshold;
+
+    // calculate default values of thresholds
+    if (device.type() & device::gpu) {
+        // GPUs
+        map_copy_threshold = 524288;  // 0.5 MB
+        direct_copy_threshold = 52428800; // 50 MB
+    }
+    else {
+        // CPUs and other devices
+        map_copy_threshold = 134217728; // 128 MB
+        direct_copy_threshold = 0; // it's never efficient for CPUs
+    }
+
+    // load thresholds
+    map_copy_threshold =
+        parameters->get(
+            cache_key, "map_copy_threshold", map_copy_threshold
+        );
+    direct_copy_threshold =
+        parameters->get(
+            cache_key, "direct_copy_threshold", direct_copy_threshold
+        );
+
+    // select copy method based on thresholds & input_size_bytes
+    size_t input_size = iterator_range_size(first, last);
+    size_t input_size_bytes = input_size * sizeof(input_type);
+
+    // [0; map_copy_threshold) -> copy_to_device_map()
+    if(input_size_bytes < map_copy_threshold) {
+        return copy_to_device_map(first, last, result, queue);
+    }
+    // [map_copy_threshold; direct_copy_threshold) -> convert [first; last)
+    //     on host and then perform copy_to_device()
+    else if(input_size_bytes < direct_copy_threshold) {
+        std::vector<output_type> vector(first, last);
+        return copy_to_device(vector.begin(), vector.end(), result, queue);
+    }
+
+    // [direct_copy_threshold; inf) -> map [first; last) to device and
+    //     run copy kernel on device for copying & casting
+    ::boost::compute::mapped_view<input_type> mapped_host(
+        // make sure it's a pointer to constant data
+        // to force read only mapping
+        const_cast<const input_type*>(
+            ::boost::addressof(*first)
+        ),
+        input_size,
+        context
+    );
+    return copy_on_device(mapped_host.begin(), mapped_host.end(), result, queue);
 }
 
 // host -> device (async)
@@ -130,7 +238,7 @@ dispatch_copy(InputIterator first,
         return copy_to_host(first, last, result, queue);
     }
     else {
-        // for non-contiguous input we first copy the values to
+        // for non-contiguous output we first copy the values to
         // a temporary std::vector and then copy from there
         typedef typename std::iterator_traits<InputIterator>::value_type T;
         std::vector<T> vector(iterator_range_size(first, last));
