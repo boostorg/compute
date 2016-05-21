@@ -238,4 +238,30 @@ BOOST_AUTO_TEST_CASE(copy_host_float_to_device_int_with_transform)
     parameters->set(cache_key, "direct_copy_threshold", direct_copy_threshold);
 }
 
+BOOST_AUTO_TEST_CASE(copy_async_host_float_to_device_int)
+{
+    using compute::int_;
+    using compute::float_;
+
+    float_ host[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<int_> device_vector(4, context);
+
+    // copy host float data to int device vector
+    compute::future<void> future =
+        bc::copy_async(host, host + 4, device_vector.begin(), queue);
+    future.wait();
+
+    CHECK_RANGE_EQUAL(
+        int_,
+        4,
+        device_vector,
+        (
+            static_cast<int_>(6.1f),
+            static_cast<int_>(-10.2f),
+            static_cast<int_>(19.3f),
+            static_cast<int_>(25.4f)
+        )
+    );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
