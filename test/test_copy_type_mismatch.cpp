@@ -264,4 +264,66 @@ BOOST_AUTO_TEST_CASE(copy_async_host_float_to_device_int)
     );
 }
 
+BOOST_AUTO_TEST_CASE(copy_device_float_to_device_int)
+{
+    using compute::int_;
+    using compute::float_;
+
+    float_ data[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<float_> device_fvector(data, data + 4, queue);
+    bc::vector<int_> device_ivector(4, context);
+
+    // copy device float vector to device int vector
+    bc::copy(
+        device_fvector.begin(),
+        device_fvector.end(),
+        device_ivector.begin(),
+        queue
+    );
+
+    CHECK_RANGE_EQUAL(
+        int_,
+        4,
+        device_ivector,
+        (
+            static_cast<int_>(6.1f),
+            static_cast<int_>(-10.2f),
+            static_cast<int_>(19.3f),
+            static_cast<int_>(25.4f)
+        )
+    );
+}
+
+BOOST_AUTO_TEST_CASE(copy_async_device_float_to_device_int)
+{
+    using compute::int_;
+    using compute::float_;
+
+    float_ data[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<float_> device_fvector(data, data + 4, queue);
+    bc::vector<int_> device_ivector(4, context);
+
+    // copy device float vector to device int vector
+    compute::future<void> future =
+        bc::copy_async(
+            device_fvector.begin(),
+            device_fvector.end(),
+            device_ivector.begin(),
+            queue
+        );
+    future.wait();
+
+    CHECK_RANGE_EQUAL(
+        int_,
+        4,
+        device_ivector,
+        (
+            static_cast<int_>(6.1f),
+            static_cast<int_>(-10.2f),
+            static_cast<int_>(19.3f),
+            static_cast<int_>(25.4f)
+        )
+    );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
