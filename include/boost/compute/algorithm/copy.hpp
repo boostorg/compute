@@ -87,6 +87,7 @@ struct is_same_value_type :
     >::type {};
 
 // host -> device
+// InputIterator is a contiguous iterator
 template<class InputIterator, class OutputIterator>
 inline OutputIterator
 dispatch_copy(InputIterator first,
@@ -99,24 +100,17 @@ dispatch_copy(InputIterator first,
                           is_device_iterator<InputIterator>
                       >,
                       is_device_iterator<OutputIterator>,
-                      is_same_value_type<InputIterator, OutputIterator>
+                      is_same_value_type<InputIterator, OutputIterator>,
+                      is_contiguous_iterator<InputIterator>
                   >
               >::type* = 0)
 {
-    if(is_contiguous_iterator<InputIterator>::value){
-        return copy_to_device(first, last, result, queue);
-    }
-    else {
-        // for non-contiguous input we first copy the values to
-        // a temporary std::vector and then copy from there
-        typedef typename std::iterator_traits<InputIterator>::value_type T;
-        std::vector<T> vector(first, last);
-        return copy_to_device(vector.begin(), vector.end(), result, queue);
-    }
+    return copy_to_device(first, last, result, queue);
 }
 
 // host -> device
 // Type mismatch between InputIterator and OutputIterator value_types
+// InputIterator is a contiguous iterator
 template<class InputIterator, class OutputIterator>
 inline OutputIterator
 dispatch_copy(InputIterator first,
@@ -131,7 +125,8 @@ dispatch_copy(InputIterator first,
                       is_device_iterator<OutputIterator>,
                       mpl::not_<
                           is_same_value_type<InputIterator, OutputIterator>
-                      >
+                      >,
+                      is_contiguous_iterator<InputIterator>
                   >
               >::type* = 0)
 {
@@ -200,6 +195,81 @@ dispatch_copy(InputIterator first,
         context
     );
     return copy_on_device(mapped_host.begin(), mapped_host.end(), result, queue);
+}
+
+// host -> device
+// InputIterator is NOT a contiguous iterator
+template<class InputIterator, class OutputIterator>
+inline OutputIterator
+dispatch_copy(InputIterator first,
+              InputIterator last,
+              OutputIterator result,
+              command_queue &queue,
+              typename boost::enable_if<
+                  mpl::and_<
+                      mpl::not_<
+                          is_device_iterator<InputIterator>
+                      >,
+                      is_device_iterator<OutputIterator>,
+                      mpl::not_<
+                          is_contiguous_iterator<InputIterator>
+                      >
+                  >
+              >::type* = 0)
+{
+    typedef typename OutputIterator::value_type output_type;
+    typedef typename std::iterator_traits<InputIterator>::value_type input_type;
+
+    const device &device = queue.get_device();
+
+    // loading parameters
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_device_")
+            + type_name<input_type>() + "_" + type_name<output_type>();
+    boost::shared_ptr<parameter_cache> parameters =
+        detail::parameter_cache::get_global_cache(device);
+
+    size_t map_copy_threshold;
+    size_t direct_copy_threshold;
+
+    // calculate default values of thresholds
+    if (device.type() & device::gpu) {
+        // GPUs
+        map_copy_threshold = 524288;  // 0.5 MB
+        direct_copy_threshold = 52428800; // 50 MB
+    }
+    else {
+        // CPUs and other devices
+        map_copy_threshold = 134217728; // 128 MB
+        direct_copy_threshold = 0; // it's never efficient for CPUs
+    }
+
+    // load thresholds
+    map_copy_threshold =
+        parameters->get(
+            cache_key, "map_copy_threshold", map_copy_threshold
+        );
+    direct_copy_threshold =
+        parameters->get(
+            cache_key, "direct_copy_threshold", direct_copy_threshold
+        );
+
+    // select copy method based on thresholds & input_size_bytes
+    size_t input_size = iterator_range_size(first, last);
+    size_t input_size_bytes = input_size * sizeof(input_type);
+
+    // [0; map_copy_threshold) -> copy_to_device_map()
+    //
+    // if direct_copy_threshold is less than map_copy_threshold
+    // copy_to_device_map() is used for every input
+    if(input_size_bytes < map_copy_threshold
+        || direct_copy_threshold <= map_copy_threshold) {
+        return copy_to_device_map(first, last, result, queue);
+    }
+    // [map_copy_threshold; inf) -> convert [first; last)
+    //     on host and then perform copy_to_device()
+    std::vector<output_type> vector(first, last);
+    return copy_to_device(vector.begin(), vector.end(), result, queue);
 }
 
 // host -> device (async)
