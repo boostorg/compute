@@ -337,10 +337,15 @@ BOOST_AUTO_TEST_CASE(copy_to_vector_bool)
 {
     using compute::uchar_;
 
-    compute::vector<uchar_> vec(context);
-    vec.push_back(true, queue);
-    vec.push_back(false, queue);
+    compute::vector<uchar_> vec(2, context);
 
+    // copy to device
+    bool data[] = {true, false};
+    compute::copy(data, data + 2, vec.begin(), queue);
+    BOOST_CHECK(static_cast<bool>(vec[0]) == true);
+    BOOST_CHECK(static_cast<bool>(vec[1]) == false);
+
+    // copy to host
     std::vector<bool> host_vec(vec.size());
     compute::copy(vec.begin(), vec.end(), host_vec.begin(), queue);
     BOOST_CHECK(host_vec[0] == true);

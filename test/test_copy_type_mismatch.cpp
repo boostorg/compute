@@ -327,7 +327,7 @@ BOOST_AUTO_TEST_CASE(copy_async_device_float_to_device_int)
 }
 
 // Test copying from a std::list to a bc::vector. This differs from
-// the test copying from std::vector because std::list has non-contigous
+// the test copying from std::vector because std::list has non-contiguous
 // storage for its data values.
 BOOST_AUTO_TEST_CASE(copy_from_host_float_list_to_int_device_map)
 {
@@ -370,7 +370,7 @@ BOOST_AUTO_TEST_CASE(copy_from_host_float_list_to_int_device_map)
 }
 
 // Test copying from a std::list to a bc::vector. This differs from
-// the test copying from std::vector because std::list has non-contigous
+// the test copying from std::vector because std::list has non-contiguous
 // storage for its data values.
 BOOST_AUTO_TEST_CASE(copy_from_host_float_list_to_int_device_convert_on_host)
 {
@@ -386,9 +386,13 @@ BOOST_AUTO_TEST_CASE(copy_from_host_float_list_to_int_device_convert_on_host)
     // save
     uint_ map_copy_threshold =
         parameters->get(cache_key, "map_copy_threshold", 0);
+    uint_ direct_copy_threshold =
+        parameters->get(cache_key, "direct_copy_threshold", 0);
 
-    // force copy_to_device_map (mapping device vector to the host)
+    // force copying by casting input data on host and performing
+    // normal copy host->device (since types match now)
     parameters->set(cache_key, "map_copy_threshold", 0);
+    parameters->set(cache_key, "direct_copy_threshold", 1024);
 
     float_ data[] = { 6.1f, -10.2f, 19.3f, 25.4f };
     std::list<float_> host(data, data + 4);
@@ -410,6 +414,257 @@ BOOST_AUTO_TEST_CASE(copy_from_host_float_list_to_int_device_convert_on_host)
 
     // restore
     parameters->set(cache_key, "map_copy_threshold", map_copy_threshold);
+    parameters->set(cache_key, "direct_copy_threshold", direct_copy_threshold);
 }
+
+
+// DEVICE -> HOST
+
+BOOST_AUTO_TEST_CASE(copy_device_float_to_host_int)
+{
+    using compute::int_;
+    using compute::float_;
+
+    float_ data[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<float_> device_vector(data, data + 4, queue);
+
+    std::vector<int_> host_vector(4);
+    // copy device float vector to int host vector
+    bc::copy(device_vector.begin(), device_vector.end(), host_vector.begin(), queue);
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        host_vector.begin(),
+        (
+            static_cast<int_>(6.1f),
+            static_cast<int_>(-10.2f),
+            static_cast<int_>(19.3f),
+            static_cast<int_>(25.4f)
+        )
+    );
+}
+
+BOOST_AUTO_TEST_CASE(copy_to_host_float_to_int_map)
+{
+    using compute::int_;
+    using compute::uint_;
+    using compute::float_;
+
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_host_float_int");
+    boost::shared_ptr<bc::detail::parameter_cache> parameters =
+        bc::detail::parameter_cache::get_global_cache(device);
+
+    // save
+    uint_ map_copy_threshold =
+        parameters->get(cache_key, "map_copy_threshold", 0);
+
+    // force copy_to_host_map (mapping device vector to the host)
+    parameters->set(cache_key, "map_copy_threshold", 1024);
+
+    float_ data[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<float_> device_vector(data, data + 4, queue);
+
+    std::vector<int_> host_vector(4);
+    // copy device float vector to int host vector
+    bc::copy(device_vector.begin(), device_vector.end(), host_vector.begin(), queue);
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        host_vector.begin(),
+        (
+            static_cast<int_>(6.1f),
+            static_cast<int_>(-10.2f),
+            static_cast<int_>(19.3f),
+            static_cast<int_>(25.4f)
+        )
+    );
+
+    // restore
+    parameters->set(cache_key, "map_copy_threshold", map_copy_threshold);
+}
+
+BOOST_AUTO_TEST_CASE(copy_to_host_float_to_int_convert_on_host)
+{
+    using compute::int_;
+    using compute::uint_;
+    using compute::float_;
+
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_host_float_int");
+    boost::shared_ptr<bc::detail::parameter_cache> parameters =
+        bc::detail::parameter_cache::get_global_cache(device);
+
+    // save
+    uint_ map_copy_threshold =
+        parameters->get(cache_key, "map_copy_threshold", 0);
+    uint_ direct_copy_threshold =
+        parameters->get(cache_key, "direct_copy_threshold", 0);
+
+    // force copying by copying input device vector to temporary
+    // host vector of the same type and then copying from that temporary
+    // vector to result using std::copy()
+    parameters->set(cache_key, "map_copy_threshold", 0);
+    parameters->set(cache_key, "direct_copy_threshold", 1024);
+
+    float_ data[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<float_> device_vector(data, data + 4, queue);
+
+    std::vector<int_> host_vector(4);
+    // copy device float vector to int host vector
+    bc::copy(device_vector.begin(), device_vector.end(), host_vector.begin(), queue);
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        host_vector.begin(),
+        (
+            static_cast<int_>(6.1f),
+            static_cast<int_>(-10.2f),
+            static_cast<int_>(19.3f),
+            static_cast<int_>(25.4f)
+        )
+    );
+
+    // restore
+    parameters->set(cache_key, "map_copy_threshold", map_copy_threshold);
+    parameters->set(cache_key, "direct_copy_threshold", direct_copy_threshold);
+}
+
+BOOST_AUTO_TEST_CASE(copy_to_host_float_to_int_convert_on_device)
+{
+    using compute::int_;
+    using compute::uint_;
+    using compute::float_;
+
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_host_float_int");
+    boost::shared_ptr<bc::detail::parameter_cache> parameters =
+        bc::detail::parameter_cache::get_global_cache(device);
+
+    // save
+    uint_ map_copy_threshold =
+        parameters->get(cache_key, "map_copy_threshold", 0);
+    uint_ direct_copy_threshold =
+        parameters->get(cache_key, "direct_copy_threshold", 0);
+
+    // force copying by mapping output data to the device memory
+    // and using transform operation for casting & copying
+    parameters->set(cache_key, "map_copy_threshold", 0);
+    parameters->set(cache_key, "direct_copy_threshold", 0);
+
+    float_ data[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<float_> device_vector(data, data + 4, queue);
+
+    std::vector<int_> host_vector(4);
+    // copy device float vector to int host vector
+    bc::copy(device_vector.begin(), device_vector.end(), host_vector.begin(), queue);
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        host_vector.begin(),
+        (
+            static_cast<int_>(6.1f),
+            static_cast<int_>(-10.2f),
+            static_cast<int_>(19.3f),
+            static_cast<int_>(25.4f)
+        )
+    );
+
+    // restore
+    parameters->set(cache_key, "map_copy_threshold", map_copy_threshold);
+    parameters->set(cache_key, "direct_copy_threshold", direct_copy_threshold);
+}
+
+// Test copying from a bc::vector to a std::list . This differs from
+// the test copying to std::vector because std::list has non-contiguous
+// storage for its data values.
+BOOST_AUTO_TEST_CASE(copy_to_host_list_float_to_int_map)
+{
+    using compute::int_;
+    using compute::uint_;
+    using compute::float_;
+
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_host_float_int");
+    boost::shared_ptr<bc::detail::parameter_cache> parameters =
+        bc::detail::parameter_cache::get_global_cache(device);
+
+    // save
+    uint_ map_copy_threshold =
+        parameters->get(cache_key, "map_copy_threshold", 0);
+
+    // force copy_to_host_map (mapping device vector to the host)
+    parameters->set(cache_key, "map_copy_threshold", 1024);
+
+    float_ data[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<float_> device_vector(data, data + 4, queue);
+
+    std::list<int_> host_list(4);
+    // copy device float vector to int host vector
+    bc::copy(device_vector.begin(), device_vector.end(), host_list.begin(), queue);
+
+    int_ expected[4] = {
+        static_cast<int_>(6.1f),
+        static_cast<int_>(-10.2f),
+        static_cast<int_>(19.3f),
+        static_cast<int_>(25.4f)
+    };
+    BOOST_CHECK_EQUAL_COLLECTIONS(
+        host_list.begin(), host_list.end(),
+        expected, expected + 4
+    );
+
+    // restore
+    parameters->set(cache_key, "map_copy_threshold", map_copy_threshold);
+}
+
+// Test copying from a bc::vector to a std::list . This differs from
+// the test copying to std::vector because std::list has non-contiguous
+// storage for its data values.
+BOOST_AUTO_TEST_CASE(copy_to_host_list_float_to_int_covert_on_host)
+{
+    using compute::int_;
+    using compute::uint_;
+    using compute::float_;
+
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_host_float_int");
+    boost::shared_ptr<bc::detail::parameter_cache> parameters =
+        bc::detail::parameter_cache::get_global_cache(device);
+
+    // save
+    uint_ map_copy_threshold =
+        parameters->get(cache_key, "map_copy_threshold", 0);
+    uint_ direct_copy_threshold =
+        parameters->get(cache_key, "direct_copy_threshold", 0);
+
+    // force copying by copying input device vector to temporary
+    // host vector of the same type and then copying from that temporary
+    // vector to result using std::copy()
+    parameters->set(cache_key, "map_copy_threshold", 0);
+    parameters->set(cache_key, "direct_copy_threshold", 1024);
+
+    float_ data[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<float_> device_vector(data, data + 4, queue);
+
+    std::list<int_> host_list(4);
+    // copy device float vector to int host vector
+    bc::copy(device_vector.begin(), device_vector.end(), host_list.begin(), queue);
+    int_ expected[4] = {
+        static_cast<int_>(6.1f),
+        static_cast<int_>(-10.2f),
+        static_cast<int_>(19.3f),
+        static_cast<int_>(25.4f)
+    };
+    BOOST_CHECK_EQUAL_COLLECTIONS(
+        host_list.begin(), host_list.end(),
+        expected, expected + 4
+    );
+
+    // restore
+    parameters->set(cache_key, "map_copy_threshold", map_copy_threshold);
+    parameters->set(cache_key, "direct_copy_threshold", direct_copy_threshold);
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
