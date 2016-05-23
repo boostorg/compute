@@ -172,7 +172,7 @@ inline future<svm_ptr<T> > copy_on_device_async(svm_ptr<T> first,
 {
     size_t count = iterator_range_size(first, last);
     if(count == 0){
-        return result;
+        return future<svm_ptr<T> >();
     }
 
     event event_ = queue.enqueue_svm_memcpy_async(
