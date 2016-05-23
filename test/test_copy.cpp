@@ -315,19 +315,48 @@ BOOST_AUTO_TEST_CASE(copy_svm_ptr)
 {
     REQUIRES_OPENCL_VERSION(2, 0);
 
+    using boost::compute::int_;
+
     if(bug_in_svmmemcpy(device)){
         std::cerr << "skipping copy_svm_ptr test case" << std::endl;
         return;
     }
 
-    int data[] = { 1, 3, 2, 4 };
+    int_ data[] = { 1, 3, 2, 4 };
 
-    compute::svm_ptr<int> ptr = compute::svm_alloc<int>(context, 4);
+    compute::svm_ptr<int_> ptr = compute::svm_alloc<int_>(context, 4);
     compute::copy(data, data + 4, ptr, queue);
 
-    int output[] = { 0, 0, 0, 0 };
+    int_ output[] = { 0, 0, 0, 0 };
     compute::copy(ptr, ptr + 4, output, queue);
-    CHECK_HOST_RANGE_EQUAL(int, 4, output, (1, 3, 2, 4));
+    CHECK_HOST_RANGE_EQUAL(int_, 4, output, (1, 3, 2, 4));
+
+    compute::svm_free(context, ptr);
+}
+
+BOOST_AUTO_TEST_CASE(copy_async_svm_ptr)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    using boost::compute::int_;
+
+    if(bug_in_svmmemcpy(device)){
+        std::cerr << "skipping copy_svm_ptr test case" << std::endl;
+        return;
+    }
+
+    int_ data[] = { 1, 3, 2, 4 };
+
+    compute::svm_ptr<int_> ptr = compute::svm_alloc<int_>(context, 4);
+    boost::compute::future<void> future =
+        compute::copy_async(data, data + 4, ptr, queue);
+    future.wait();
+
+    int_ output[] = { 0, 0, 0, 0 };
+    future =
+        compute::copy_async(ptr, ptr + 4, output, queue);
+    future.wait();
+    CHECK_HOST_RANGE_EQUAL(int_, 4, output, (1, 3, 2, 4));
 
     compute::svm_free(context, ptr);
 }
