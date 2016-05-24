@@ -666,5 +666,37 @@ BOOST_AUTO_TEST_CASE(copy_to_host_list_float_to_int_covert_on_host)
     parameters->set(cache_key, "direct_copy_threshold", direct_copy_threshold);
 }
 
+BOOST_AUTO_TEST_CASE(copy_async_to_host_float_to_int)
+{
+    using compute::int_;
+    using compute::float_;
+
+    float_ data[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<float_> device_vector(data, data + 4, queue);
+    std::vector<int_> host_vector(device_vector.size());
+
+    // copy device float vector to host int vector
+    compute::future<void> future =
+        bc::copy_async(
+            device_vector.begin(),
+            device_vector.end(),
+            host_vector.begin(),
+            queue
+        );
+    future.wait();
+
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        host_vector.begin(),
+        (
+            static_cast<int_>(6.1f),
+            static_cast<int_>(-10.2f),
+            static_cast<int_>(19.3f),
+            static_cast<int_>(25.4f)
+        )
+    );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
