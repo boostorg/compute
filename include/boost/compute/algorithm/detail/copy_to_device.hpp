@@ -161,6 +161,29 @@ inline future<svm_ptr<T> > copy_to_device_async(HostIterator first,
 
     return make_future(result + count, event_);
 }
+
+template<class HostIterator, class T>
+inline svm_ptr<T> copy_to_device_map(HostIterator first,
+                                              HostIterator last,
+                                              svm_ptr<T> result,
+                                              command_queue &queue)
+{
+    size_t count = iterator_range_size(first, last);
+    if(count == 0){
+        return result;
+    }
+
+    // map
+    queue.enqueue_svm_map(result.get(), count * sizeof(T), CL_MAP_WRITE);
+
+    // copy [first; last) to result buffer
+    std::copy(first, last, static_cast<T*>(result.get()));
+
+    // unmap result
+    queue.enqueue_svm_unmap(result.get()).wait();
+
+    return result + count;
+}
 #endif // CL_VERSION_2_0
 
 } // end detail namespace

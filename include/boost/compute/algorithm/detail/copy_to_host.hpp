@@ -162,6 +162,33 @@ inline future<HostIterator> copy_to_host_async(svm_ptr<T> first,
 
     return make_future(iterator_plus_distance(result, count), event_);
 }
+
+template<class T, class HostIterator>
+inline HostIterator copy_to_host_map(svm_ptr<T> first,
+                                     svm_ptr<T> last,
+                                     HostIterator result,
+                                     command_queue &queue)
+{
+    size_t count = iterator_range_size(first, last);
+    if(count == 0){
+        return result;
+    }
+
+    // map
+    queue.enqueue_svm_map(first.get(), count * sizeof(T), CL_MAP_READ);
+
+    // copy [first; last) to result
+    std::copy(
+        static_cast<T*>(first.get()),
+        static_cast<T*>(last.get()),
+        result
+    );
+
+    // unmap [first; last)
+    queue.enqueue_svm_unmap(first.get()).wait();
+
+    return iterator_plus_distance(result, count);
+}
 #endif // CL_VERSION_2_0
 
 } // end detail namespace
