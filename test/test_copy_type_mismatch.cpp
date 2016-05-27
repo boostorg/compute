@@ -33,6 +33,7 @@
 #include <boost/compute/async/future.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/detail/device_ptr.hpp>
+#include <boost/compute/memory/svm_ptr.hpp>
 #include <boost/compute/detail/parameter_cache.hpp>
 
 #include "quirks.hpp"
@@ -357,6 +358,194 @@ BOOST_AUTO_TEST_CASE(copy_to_device_float_to_int_list_convert_on_host)
     parameters->set(cache_key, "direct_copy_threshold", direct_copy_threshold);
 }
 
+// SVM requires OpenCL 2.0
+#if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+BOOST_AUTO_TEST_CASE(copy_to_device_svm_float_to_int_map)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    using compute::int_;
+    using compute::uint_;
+    using compute::float_;
+
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_device_float_int");
+    boost::shared_ptr<bc::detail::parameter_cache> parameters =
+        bc::detail::parameter_cache::get_global_cache(device);
+
+    // save
+    uint_ map_copy_threshold =
+        parameters->get(cache_key, "map_copy_threshold", 0);
+
+    // force copy_to_device_map (mapping device vector to the host)
+    parameters->set(cache_key, "map_copy_threshold", 1024);
+
+    float_ host[] = { 5.1f, -10.3f, 19.4f, 26.7f };
+    compute::svm_ptr<int_> ptr = compute::svm_alloc<int_>(context, 4);
+
+    // copy host float data to int device vector
+    bc::copy(host, host + 4, ptr, queue);
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_READ);
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        static_cast<int_*>(ptr.get()),
+        (
+            static_cast<int_>(5.1f),
+            static_cast<int_>(-10.3f),
+            static_cast<int_>(19.4f),
+            static_cast<int_>(26.7f)
+        )
+    );
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    compute::svm_free(context, ptr);
+
+    // restore
+    parameters->set(cache_key, "map_copy_threshold", map_copy_threshold);
+}
+
+BOOST_AUTO_TEST_CASE(copy_to_device_svm_float_to_int_convert_on_host)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    if(bug_in_svmmemcpy(device)){
+        std::cerr << "skipping svmmemcpy test case" << std::endl;
+        return;
+    }
+
+    using compute::int_;
+    using compute::uint_;
+    using compute::float_;
+
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_device_float_int");
+    boost::shared_ptr<bc::detail::parameter_cache> parameters =
+        bc::detail::parameter_cache::get_global_cache(device);
+
+    // save
+    uint_ map_copy_threshold =
+        parameters->get(cache_key, "map_copy_threshold", 0);
+    uint_ direct_copy_threshold =
+        parameters->get(cache_key, "direct_copy_threshold", 0);
+
+    // force copying by casting input data on host and performing
+    // normal copy host->device (since types match now)
+    parameters->set(cache_key, "map_copy_threshold", 0);
+    parameters->set(cache_key, "direct_copy_threshold", 1024);
+
+    float_ host[] = { 0.1f, 10.3f, 9.4f, -26.7f };
+    compute::svm_ptr<int_> ptr = compute::svm_alloc<int_>(context, 4);
+
+    // copy host float data to int device vector
+    bc::copy(host, host + 4, ptr, queue);
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_READ);
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        static_cast<int_*>(ptr.get()),
+        (
+            static_cast<int_>(0.1f),
+            static_cast<int_>(10.3f),
+            static_cast<int_>(9.4f),
+            static_cast<int_>(-26.7f)
+        )
+    );
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    compute::svm_free(context, ptr);
+
+    // restore
+    parameters->set(cache_key, "map_copy_threshold", map_copy_threshold);
+    parameters->set(cache_key, "direct_copy_threshold", direct_copy_threshold);
+}
+
+BOOST_AUTO_TEST_CASE(copy_to_device_svm_float_to_int_with_transform)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    using compute::int_;
+    using compute::uint_;
+    using compute::float_;
+
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_device_float_int");
+    boost::shared_ptr<bc::detail::parameter_cache> parameters =
+        bc::detail::parameter_cache::get_global_cache(device);
+
+    // save
+    uint_ map_copy_threshold =
+        parameters->get(cache_key, "map_copy_threshold", 0);
+    uint_ direct_copy_threshold =
+        parameters->get(cache_key, "direct_copy_threshold", 0);
+
+    // force copying by mapping input data to the device memory
+    // and using transform operation (copy kernel) for casting & copying
+    parameters->set(cache_key, "map_copy_threshold", 0);
+    parameters->set(cache_key, "direct_copy_threshold", 0);
+
+    float_ host[] = { 4.1f, -11.3f, 219.4f, -26.7f };
+    compute::svm_ptr<int_> ptr = compute::svm_alloc<int_>(context, 4);
+
+    // copy host float data to int device vector
+    bc::copy(host, host + 4, ptr, queue);
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_READ);
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        static_cast<int_*>(ptr.get()),
+        (
+            static_cast<int_>(4.1f),
+            static_cast<int_>(-11.3f),
+            static_cast<int_>(219.4f),
+            static_cast<int_>(-26.7f)
+        )
+    );
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    compute::svm_free(context, ptr);
+
+    // restore
+    parameters->set(cache_key, "map_copy_threshold", map_copy_threshold);
+    parameters->set(cache_key, "direct_copy_threshold", direct_copy_threshold);
+}
+
+BOOST_AUTO_TEST_CASE(copy_async_to_device_svm_float_to_int)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    using compute::int_;
+    using compute::uint_;
+    using compute::float_;
+
+    float_ host[] = { 44.1f, -14.3f, 319.4f, -26.7f };
+    compute::svm_ptr<int_> ptr = compute::svm_alloc<int_>(context, 4);
+
+    // copy host float data to int device vector
+    compute::future<void> future =
+        bc::copy_async(host, host + 4, ptr, queue);
+    future.wait();
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_READ);
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        static_cast<int_*>(ptr.get()),
+        (
+            static_cast<int_>(44.1f),
+            static_cast<int_>(-14.3f),
+            static_cast<int_>(319.4f),
+            static_cast<int_>(-26.7f)
+        )
+    );
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    compute::svm_free(context, ptr);
+}
+#endif
 
 // DEVICE -> DEVICE
 
@@ -421,6 +610,223 @@ BOOST_AUTO_TEST_CASE(copy_async_on_device_float_to_int)
         )
     );
 }
+
+// SVM requires OpenCL 2.0
+#if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+BOOST_AUTO_TEST_CASE(copy_on_device_buffer_to_svm_float_to_int)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    using compute::int_;
+    using compute::float_;
+
+    float_ data[] = { 65.1f, -110.2f, -19.3f, 26.7f };
+    bc::vector<float_> device_vector(data, data + 4, queue);
+    compute::svm_ptr<int_> ptr = compute::svm_alloc<int_>(context, 4);
+
+    // copy host float data to int svm memory
+    bc::copy(device_vector.begin(), device_vector.end(), ptr, queue);
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_READ);
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        static_cast<int_*>(ptr.get()),
+        (
+            static_cast<int_>(65.1f),
+            static_cast<int_>(-110.2f),
+            static_cast<int_>(-19.3f),
+            static_cast<int_>(26.7f)
+        )
+    );
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    compute::svm_free(context, ptr);
+}
+
+BOOST_AUTO_TEST_CASE(copy_on_device_svm_to_buffer_float_to_int)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    using compute::int_;
+    using compute::float_;
+
+    float_ data[] = { 6.1f, 11.2f, 19.3f, 6.7f };
+    bc::vector<int_> device_vector(4, context);
+    compute::svm_ptr<float_> ptr = compute::svm_alloc<float_>(context, 4);
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_WRITE);
+    for(size_t i = 0; i < 4; i++) {
+        static_cast<float_*>(ptr.get())[i] = data[i];
+    }
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    // copy host float svm data to int device vector
+    bc::copy(ptr, ptr + 4, device_vector.begin(), queue);
+
+    CHECK_RANGE_EQUAL(
+        int_,
+        4,
+        device_vector,
+        (
+            static_cast<int_>(6.1f),
+            static_cast<int_>(11.2f),
+            static_cast<int_>(19.3f),
+            static_cast<int_>(6.7f)
+        )
+    );
+
+    compute::svm_free(context, ptr);
+}
+
+BOOST_AUTO_TEST_CASE(copy_on_device_svm_to_svm_float_to_int)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    using compute::int_;
+    using compute::float_;
+
+    float_ data[] = { 0.1f, -10.2f, -1.3f, 2.7f };
+    compute::svm_ptr<float_> ptr = compute::svm_alloc<float_>(context, 4);
+    compute::svm_ptr<int_> ptr2 = compute::svm_alloc<int_>(context, 4);
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_WRITE);
+    for(size_t i = 0; i < 4; i++) {
+        static_cast<float_*>(ptr.get())[i] = data[i];
+    }
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    // copy host float svm to int svm
+    bc::copy(ptr, ptr + 4, ptr2, queue);
+
+    queue.enqueue_svm_map(ptr2.get(), 4 * sizeof(cl_int), CL_MAP_READ);
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        static_cast<int_*>(ptr2.get()),
+        (
+            static_cast<int_>(0.1f),
+            static_cast<int_>(-10.2f),
+            static_cast<int_>(-1.3f),
+            static_cast<int_>(2.7f)
+        )
+    );
+    queue.enqueue_svm_unmap(ptr2.get()).wait();
+
+    compute::svm_free(context, ptr);
+    compute::svm_free(context, ptr2);
+}
+
+BOOST_AUTO_TEST_CASE(copy_async_on_device_buffer_to_svm_float_to_int)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    using compute::int_;
+    using compute::float_;
+
+    float_ data[] = { 65.1f, -110.2f, -19.3f, 26.7f };
+    bc::vector<float_> device_vector(data, data + 4, queue);
+    compute::svm_ptr<int_> ptr = compute::svm_alloc<int_>(context, 4);
+
+    // copy host float data to int svm memory
+    compute::future<bc::svm_ptr<int_> > future =
+        bc::copy_async(device_vector.begin(), device_vector.end(), ptr, queue);
+    future.wait();
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_READ);
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        static_cast<int_*>(ptr.get()),
+        (
+            static_cast<int_>(65.1f),
+            static_cast<int_>(-110.2f),
+            static_cast<int_>(-19.3f),
+            static_cast<int_>(26.7f)
+        )
+    );
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    compute::svm_free(context, ptr);
+}
+
+BOOST_AUTO_TEST_CASE(copy_async_on_device_svm_to_buffer_float_to_int)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    using compute::int_;
+    using compute::float_;
+
+    float_ data[] = { 65.1f, -110.2f, -19.3f, 26.7f };
+    bc::vector<int_> device_vector(4, context);
+    compute::svm_ptr<float_> ptr = compute::svm_alloc<float_>(context, 4);
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_WRITE);
+    for(size_t i = 0; i < 4; i++) {
+        static_cast<float_*>(ptr.get())[i] = data[i];
+    }
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    // copy host float svm data to int device vector
+    compute::future<bc::vector<int_>::iterator > future =
+        bc::copy_async(ptr, ptr + 4, device_vector.begin(), queue);
+    future.wait();
+
+    CHECK_RANGE_EQUAL(
+        int_,
+        4,
+        device_vector,
+        (
+            static_cast<int_>(65.1f),
+            static_cast<int_>(-110.2f),
+            static_cast<int_>(-19.3f),
+            static_cast<int_>(26.7f)
+        )
+    );
+
+    compute::svm_free(context, ptr);
+}
+
+BOOST_AUTO_TEST_CASE(copy_async_on_device_svm_to_svm_float_to_int)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    using compute::int_;
+    using compute::float_;
+
+    float_ data[] = { 0.1f, -10.2f, -1.3f, 2.7f };
+    compute::svm_ptr<float_> ptr = compute::svm_alloc<float_>(context, 4);
+    compute::svm_ptr<int_> ptr2 = compute::svm_alloc<int_>(context, 4);
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_WRITE);
+    for(size_t i = 0; i < 4; i++) {
+        static_cast<float_*>(ptr.get())[i] = data[i];
+    }
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    // copy host float svm to int svm
+    compute::future<bc::svm_ptr<int_> > future =
+        bc::copy_async(ptr, ptr + 4, ptr2, queue);
+    future.wait();
+
+    queue.enqueue_svm_map(ptr2.get(), 4 * sizeof(cl_int), CL_MAP_READ);
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        static_cast<int_*>(ptr2.get()),
+        (
+            static_cast<int_>(0.1f),
+            static_cast<int_>(-10.2f),
+            static_cast<int_>(-1.3f),
+            static_cast<int_>(2.7f)
+        )
+    );
+    queue.enqueue_svm_unmap(ptr2.get()).wait();
+
+    compute::svm_free(context, ptr);
+    compute::svm_free(context, ptr2);
+}
+#endif
 
 // DEVICE -> HOST
 
@@ -702,5 +1108,177 @@ BOOST_AUTO_TEST_CASE(copy_async_to_host_float_to_int)
     );
 }
 
+// SVM requires OpenCL 2.0
+#if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+BOOST_AUTO_TEST_CASE(copy_to_host_svm_float_to_int_map)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    using compute::int_;
+    using compute::uint_;
+    using compute::float_;
+
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_host_float_int");
+    boost::shared_ptr<bc::detail::parameter_cache> parameters =
+        bc::detail::parameter_cache::get_global_cache(device);
+
+    // save
+    uint_ map_copy_threshold =
+        parameters->get(cache_key, "map_copy_threshold", 0);
+
+    // force copy_to_host_map (mapping device vector to the host)
+    parameters->set(cache_key, "map_copy_threshold", 1024);
+
+    float_ data[] = { 6.1f, 1.2f, 1.3f, -66.7f };
+    std::vector<int_> host_vector(4, 0);
+    compute::svm_ptr<float_> ptr = compute::svm_alloc<float_>(context, 4);
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_WRITE);
+    for(size_t i = 0; i < 4; i++) {
+        static_cast<float_*>(ptr.get())[i] = data[i];
+    }
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    // copy host float svm data to int host vector
+    bc::copy(ptr, ptr + 4, host_vector.begin(), queue);
+
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        host_vector.begin(),
+        (
+            static_cast<int_>(6.1f),
+            static_cast<int_>(1.2f),
+            static_cast<int_>(1.3f),
+            static_cast<int_>(-66.7f)
+        )
+    );
+
+    compute::svm_free(context, ptr);
+
+    // restore
+    parameters->set(cache_key, "map_copy_threshold", map_copy_threshold);
+}
+
+BOOST_AUTO_TEST_CASE(copy_to_host_svm_float_to_int_convert_on_host)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    if(bug_in_svmmemcpy(device)){
+        std::cerr << "skipping svmmemcpy test case" << std::endl;
+        return;
+    }
+
+    using compute::int_;
+    using compute::uint_;
+    using compute::float_;
+
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_host_float_int");
+    boost::shared_ptr<bc::detail::parameter_cache> parameters =
+        bc::detail::parameter_cache::get_global_cache(device);
+
+    // save
+    uint_ map_copy_threshold =
+        parameters->get(cache_key, "map_copy_threshold", 0);
+    uint_ direct_copy_threshold =
+        parameters->get(cache_key, "direct_copy_threshold", 0);
+
+    // force copying by copying input device vector to temporary
+    // host vector of the same type and then copying from that temporary
+    // vector to result using std::copy()
+    parameters->set(cache_key, "map_copy_threshold", 0);
+    parameters->set(cache_key, "direct_copy_threshold", 1024);
+
+    float_ data[] = { 6.1f, 1.2f, 1.3f, 766.7f };
+    std::vector<int_> host_vector(4, 0);
+    compute::svm_ptr<float_> ptr = compute::svm_alloc<float_>(context, 4);
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_WRITE);
+    for(size_t i = 0; i < 4; i++) {
+        static_cast<float_*>(ptr.get())[i] = data[i];
+    }
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    // copy host float svm data to int host vector
+    bc::copy(ptr, ptr + 4, host_vector.begin(), queue);
+
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        host_vector.begin(),
+        (
+            static_cast<int_>(6.1f),
+            static_cast<int_>(1.2f),
+            static_cast<int_>(1.3f),
+            static_cast<int_>(766.7f)
+        )
+    );
+
+    compute::svm_free(context, ptr);
+
+    // restore
+    parameters->set(cache_key, "map_copy_threshold", map_copy_threshold);
+    parameters->set(cache_key, "direct_copy_threshold", direct_copy_threshold);
+}
+
+BOOST_AUTO_TEST_CASE(copy_to_host_svm_float_to_int_transform)
+{
+    REQUIRES_OPENCL_VERSION(2, 0);
+
+    using compute::int_;
+    using compute::uint_;
+    using compute::float_;
+
+    std::string cache_key =
+        std::string("__boost_compute_copy_to_host_float_int");
+    boost::shared_ptr<bc::detail::parameter_cache> parameters =
+        bc::detail::parameter_cache::get_global_cache(device);
+
+    // save
+    uint_ map_copy_threshold =
+        parameters->get(cache_key, "map_copy_threshold", 0);
+    uint_ direct_copy_threshold =
+        parameters->get(cache_key, "direct_copy_threshold", 0);
+
+    // force copying by copying input device vector to temporary
+    // host vector of the same type and then copying from that temporary
+    // vector to result using std::copy()
+    parameters->set(cache_key, "map_copy_threshold", 0);
+    parameters->set(cache_key, "direct_copy_threshold", 0);
+
+    float_ data[] = { 0.1f, 11.2f, 1.3f, -66.7f };
+    std::vector<int_> host_vector(4, 0);
+    compute::svm_ptr<float_> ptr = compute::svm_alloc<float_>(context, 4);
+
+    queue.enqueue_svm_map(ptr.get(), 4 * sizeof(cl_int), CL_MAP_WRITE);
+    for(size_t i = 0; i < 4; i++) {
+        static_cast<float_*>(ptr.get())[i] = data[i];
+    }
+    queue.enqueue_svm_unmap(ptr.get()).wait();
+
+    // copy host float svm data to int host vector
+    bc::copy(ptr, ptr + 4, host_vector.begin(), queue);
+
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        host_vector.begin(),
+        (
+            static_cast<int_>(0.1f),
+            static_cast<int_>(11.2f),
+            static_cast<int_>(1.3f),
+            static_cast<int_>(-66.7f)
+        )
+    );
+
+    compute::svm_free(context, ptr);
+
+    // restore
+    parameters->set(cache_key, "map_copy_threshold", map_copy_threshold);
+    parameters->set(cache_key, "direct_copy_threshold", direct_copy_threshold);
+}
+#endif
 
 BOOST_AUTO_TEST_SUITE_END()
