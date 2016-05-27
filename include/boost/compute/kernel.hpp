@@ -22,7 +22,6 @@
 #include <boost/compute/type_traits/is_fundamental.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
-#include <boost/compute/memory/svm_ptr.hpp>
 
 namespace boost {
 namespace compute {
@@ -263,11 +262,10 @@ public:
     }
 
     /// \internal_
-    template<class T>
-    void set_arg(size_t index, const svm_ptr<T> ptr)
+    void set_arg_svm_ptr(size_t index, void* ptr)
     {
         #ifdef CL_VERSION_2_0
-        cl_int ret = clSetKernelArgSVMPointer(m_kernel, index, ptr.get());
+        cl_int ret = clSetKernelArgSVMPointer(m_kernel, index, ptr);
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
