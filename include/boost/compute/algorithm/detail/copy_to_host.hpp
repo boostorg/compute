@@ -89,11 +89,11 @@ inline HostIterator copy_to_host_map(DeviceIterator first,
     );
 
     // unmap [first; last)
-    boost::compute::event unmapEvent = queue.enqueue_unmap_buffer(
+    boost::compute::event unmap_event = queue.enqueue_unmap_buffer(
         first.get_buffer(),
         static_cast<void*>(pointer)
     );
-    unmapEvent.wait();
+    unmap_event.wait();
 
     return iterator_plus_distance(result, count);
 }

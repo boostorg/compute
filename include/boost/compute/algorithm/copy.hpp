@@ -556,7 +556,7 @@ dispatch_copy(InputIterator first,
         make_buffer_iterator<output_type>(mapped_host),
         queue
     );
-    // update host memory asynchronously by maping and unmaping memory
+    // synchronously update host memory by mapping and unmapping memory
     event map_event;
     void* ptr = queue.enqueue_map_buffer_async(
         mapped_host,

@@ -86,11 +86,11 @@ inline DeviceIterator copy_to_device_map(HostIterator first,
     std::copy(first, last, pointer);
 
     // unmap result buffer
-    boost::compute::event unmapEvent = queue.enqueue_unmap_buffer(
+    boost::compute::event unmap_event = queue.enqueue_unmap_buffer(
         result.get_buffer(),
         static_cast<void*>(pointer)
     );
-    unmapEvent.wait();
+    unmap_event.wait();
 
     return result + static_cast<difference_type>(count);
 }
