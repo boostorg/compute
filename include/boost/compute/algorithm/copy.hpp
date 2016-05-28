@@ -96,6 +96,81 @@ struct is_bool_value_type :
         bool
     >::type {};
 
+// host -> device (async)
+template<class InputIterator, class OutputIterator>
+inline future<OutputIterator>
+dispatch_copy_async(InputIterator first,
+                    InputIterator last,
+                    OutputIterator result,
+                    command_queue &queue,
+                    typename boost::enable_if<
+                        mpl::and_<
+                            mpl::not_<
+                                is_device_iterator<InputIterator>
+                            >,
+                            is_device_iterator<OutputIterator>,
+                            is_same_value_type<InputIterator, OutputIterator>
+                        >
+                    >::type* = 0)
+{
+    BOOST_STATIC_ASSERT_MSG(
+        is_contiguous_iterator<InputIterator>::value,
+        "copy_async() is only supported for contiguous host iterators"
+    );
+
+    return copy_to_device_async(first, last, result, queue);
+}
+
+// host -> device (async)
+// Type mismatch between InputIterator and OutputIterator value_types
+template<class InputIterator, class OutputIterator>
+inline future<OutputIterator>
+dispatch_copy_async(InputIterator first,
+                    InputIterator last,
+                    OutputIterator result,
+                    command_queue &queue,
+                    typename boost::enable_if<
+                        mpl::and_<
+                            mpl::not_<
+                                is_device_iterator<InputIterator>
+                            >,
+                            is_device_iterator<OutputIterator>,
+                            mpl::not_<
+                                is_same_value_type<InputIterator, OutputIterator>
+                            >
+                        >
+                    >::type* = 0)
+{
+    BOOST_STATIC_ASSERT_MSG(
+        is_contiguous_iterator<InputIterator>::value,
+        "copy_async() is only supported for contiguous host iterators"
+    );
+
+    typedef typename std::iterator_traits<InputIterator>::value_type input_type;
+
+    const context &context = queue.get_context();
+    size_t count = iterator_range_size(first, last);
+
+    if(count < size_t(1)) {
+        return future<OutputIterator>();
+    }
+
+    // map [first; last) to device and run copy kernel
+    // on device for copying & casting
+    ::boost::compute::mapped_view<input_type> mapped_host(
+        // make sure it's a pointer to constant data
+        // to force read only mapping
+        const_cast<const input_type*>(
+            ::boost::addressof(*first)
+        ),
+        count,
+        context
+    );
+    return copy_on_device_async(
+        mapped_host.begin(), mapped_host.end(), result, queue
+    );
+}
+
 // host -> device
 // InputIterator is a contiguous iterator
 template<class InputIterator, class OutputIterator>
@@ -143,7 +218,6 @@ dispatch_copy(InputIterator first,
     typedef typename OutputIterator::value_type output_type;
     typedef typename std::iterator_traits<InputIterator>::value_type input_type;
 
-    const context &context = queue.get_context();
     const device &device = queue.get_device();
 
     // loading parameters
@@ -196,16 +270,12 @@ dispatch_copy(InputIterator first,
     // [direct_copy_threshold; inf) -> map [first; last) to device and
     //     run copy kernel on device for copying & casting
     // At this point we are sure that count > 1 (first != last).
-    ::boost::compute::mapped_view<input_type> mapped_host(
-        // make sure it's a pointer to constant data
-        // to force read only mapping
-        const_cast<const input_type*>(
-            ::boost::addressof(*first)
-        ),
-        count,
-        context
-    );
-    return copy_on_device(mapped_host.begin(), mapped_host.end(), result, queue);
+
+    // Perform async copy to device, wait for it to be finished and
+    // return the result.
+    // At this point we are sure that count > 1 (first != last), so event
+    // returned by dispatch_copy_async() must be valid.
+    return dispatch_copy_async(first, last, result, queue).get();
 }
 
 // host -> device
@@ -283,7 +353,7 @@ dispatch_copy(InputIterator first,
     return copy_to_device(vector.begin(), vector.end(), result, queue);
 }
 
-// host -> device (async)
+// device -> host (async)
 template<class InputIterator, class OutputIterator>
 inline future<OutputIterator>
 dispatch_copy_async(InputIterator first,
@@ -292,23 +362,23 @@ dispatch_copy_async(InputIterator first,
                     command_queue &queue,
                     typename boost::enable_if<
                         mpl::and_<
+                            is_device_iterator<InputIterator>,
                             mpl::not_<
-                                is_device_iterator<InputIterator>
+                                is_device_iterator<OutputIterator>
                             >,
-                            is_device_iterator<OutputIterator>,
-                            is_same_value_type<InputIterator, OutputIterator>
+                            is_same_value_type<OutputIterator, InputIterator>
                         >
                     >::type* = 0)
 {
     BOOST_STATIC_ASSERT_MSG(
-        is_contiguous_iterator<InputIterator>::value,
+        is_contiguous_iterator<OutputIterator>::value,
         "copy_async() is only supported for contiguous host iterators"
     );
 
-    return copy_to_device_async(first, last, result, queue);
+    return copy_to_host_async(first, last, result, queue);
 }
 
-// host -> device (async)
+// device -> host (async)
 // Type mismatch between InputIterator and OutputIterator value_types
 template<class InputIterator, class OutputIterator>
 inline future<OutputIterator>
@@ -318,23 +388,22 @@ dispatch_copy_async(InputIterator first,
                     command_queue &queue,
                     typename boost::enable_if<
                         mpl::and_<
+                            is_device_iterator<InputIterator>,
                             mpl::not_<
-                                is_device_iterator<InputIterator>
+                                is_device_iterator<OutputIterator>
                             >,
-                            is_device_iterator<OutputIterator>,
                             mpl::not_<
-                                is_same_value_type<InputIterator, OutputIterator>
+                                is_same_value_type<OutputIterator, InputIterator>
                             >
                         >
                     >::type* = 0)
 {
     BOOST_STATIC_ASSERT_MSG(
-        is_contiguous_iterator<InputIterator>::value,
+        is_contiguous_iterator<OutputIterator>::value,
         "copy_async() is only supported for contiguous host iterators"
     );
 
-    typedef typename std::iterator_traits<InputIterator>::value_type input_type;
-
+    typedef typename std::iterator_traits<OutputIterator>::value_type output_type;
     const context &context = queue.get_context();
     size_t count = iterator_range_size(first, last);
 
@@ -342,20 +411,36 @@ dispatch_copy_async(InputIterator first,
         return future<OutputIterator>();
     }
 
-    // map [first; last) to device and run copy kernel
-    // on device for copying & casting
-    ::boost::compute::mapped_view<input_type> mapped_host(
-        // make sure it's a pointer to constant data
-        // to force read only mapping
-        const_cast<const input_type*>(
-            ::boost::addressof(*first)
-        ),
-        count,
-        context
+    // map host memory to device
+    buffer mapped_host(
+        context,
+        count * sizeof(output_type),
+        buffer::write_only | buffer::use_host_ptr,
+        static_cast<void*>(
+            ::boost::addressof(*result)
+        )
     );
-    return copy_on_device_async(
-        mapped_host.begin(), mapped_host.end(), result, queue
+    // copy async on device
+    ::boost::compute::future<buffer_iterator<output_type> > future =
+        copy_on_device_async(
+            first,
+            last,
+            make_buffer_iterator<output_type>(mapped_host),
+            queue
+        );
+    // update host memory asynchronously by maping and unmaping memory
+    event map_event;
+    void* ptr = queue.enqueue_map_buffer_async(
+        mapped_host,
+        CL_MAP_READ,
+        0,
+        count * sizeof(output_type),
+        map_event,
+        future.get_event()
     );
+    event unmap_event =
+        queue.enqueue_unmap_buffer(mapped_host, ptr, map_event);
+    return make_future(result + count, unmap_event);
 }
 
 // device -> host
@@ -493,7 +578,6 @@ dispatch_copy(InputIterator first,
     typedef typename std::iterator_traits<OutputIterator>::value_type output_type;
     typedef typename InputIterator::value_type input_type;
 
-    const context &context = queue.get_context();
     const device &device = queue.get_device();
 
     // loading parameters
@@ -547,122 +631,12 @@ dispatch_copy(InputIterator first,
     // [direct_copy_threshold; inf) -> map [result; result + input_size) to
     //     device and run copy kernel on device for copying & casting
     // map host memory to device.
-    // At this point we are sure that count > 1 (first != last).
-    buffer mapped_host(
-        context,
-        count * sizeof(output_type),
-        buffer::write_only | buffer::use_host_ptr,
-        static_cast<void*>(
-            ::boost::addressof(*result)
-        )
-    );
-    copy_on_device(
-        first,
-        last,
-        make_buffer_iterator<output_type>(mapped_host),
-        queue
-    );
-    // synchronously update host memory by mapping and unmapping memory
-    event map_event;
-    void* ptr = queue.enqueue_map_buffer_async(
-        mapped_host,
-        CL_MAP_READ,
-        0,
-        count * sizeof(output_type),
-        map_event
-    );
-    queue.enqueue_unmap_buffer(mapped_host, ptr, map_event).wait();
-    return iterator_plus_distance(result, count);
-}
 
-// device -> host (async)
-template<class InputIterator, class OutputIterator>
-inline future<OutputIterator>
-dispatch_copy_async(InputIterator first,
-                    InputIterator last,
-                    OutputIterator result,
-                    command_queue &queue,
-                    typename boost::enable_if<
-                        mpl::and_<
-                            is_device_iterator<InputIterator>,
-                            mpl::not_<
-                                is_device_iterator<OutputIterator>
-                            >,
-                            is_same_value_type<OutputIterator, InputIterator>
-                        >
-                    >::type* = 0)
-{
-    BOOST_STATIC_ASSERT_MSG(
-        is_contiguous_iterator<OutputIterator>::value,
-        "copy_async() is only supported for contiguous host iterators"
-    );
-
-    return copy_to_host_async(first, last, result, queue);
-}
-
-// device -> host (async)
-// Type mismatch between InputIterator and OutputIterator value_types
-template<class InputIterator, class OutputIterator>
-inline future<OutputIterator>
-dispatch_copy_async(InputIterator first,
-                    InputIterator last,
-                    OutputIterator result,
-                    command_queue &queue,
-                    typename boost::enable_if<
-                        mpl::and_<
-                            is_device_iterator<InputIterator>,
-                            mpl::not_<
-                                is_device_iterator<OutputIterator>
-                            >,
-                            mpl::not_<
-                                is_same_value_type<OutputIterator, InputIterator>
-                            >
-                        >
-                    >::type* = 0)
-{
-    BOOST_STATIC_ASSERT_MSG(
-        is_contiguous_iterator<OutputIterator>::value,
-        "copy_async() is only supported for contiguous host iterators"
-    );
-
-    typedef typename std::iterator_traits<OutputIterator>::value_type output_type;
-    const context &context = queue.get_context();
-    size_t count = iterator_range_size(first, last);
-
-    if(count < size_t(1)) {
-        return future<OutputIterator>();
-    }
-
-    // map host memory to device
-    buffer mapped_host(
-        context,
-        count * sizeof(output_type),
-        buffer::write_only | buffer::use_host_ptr,
-        static_cast<void*>(
-            ::boost::addressof(*result)
-        )
-    );
-    // copy async on device
-    ::boost::compute::future<buffer_iterator<output_type> > future =
-        copy_on_device_async(
-            first,
-            last,
-            make_buffer_iterator<output_type>(mapped_host),
-            queue
-        );
-    // update host memory asynchronously by maping and unmaping memory
-    event map_event;
-    void* ptr = queue.enqueue_map_buffer_async(
-        mapped_host,
-        CL_MAP_READ,
-        0,
-        count * sizeof(output_type),
-        map_event,
-        future.get_event()
-    );
-    event unmap_event =
-        queue.enqueue_unmap_buffer(mapped_host, ptr, map_event);
-    return make_future(result + count, unmap_event);
+    // Perform async copy to host, wait for it to be finished and
+    // return the result.
+    // At this point we are sure that count > 1 (first != last), so event
+    // returned by dispatch_copy_async() must be valid.
+    return dispatch_copy_async(first, last, result, queue).get();
 }
 
 // device -> device
