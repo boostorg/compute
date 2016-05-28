@@ -41,33 +41,37 @@ namespace compute = boost::compute;
 BOOST_AUTO_TEST_CASE(copy_on_device)
 {
     float data[] = { 6.1f, 10.2f, 19.3f, 25.4f };
-    bc::vector<float> a(4);
+    bc::vector<float> a(4, context);
     bc::copy(data, data + 4, a.begin(), queue);
     CHECK_RANGE_EQUAL(float, 4, a, (6.1f, 10.2f, 19.3f, 25.4f));
 
-    bc::vector<float> b(4);
+    bc::vector<float> b(4, context);
     bc::fill(b.begin(), b.end(), 0, queue);
     CHECK_RANGE_EQUAL(float, 4, b, (0.0f, 0.0f, 0.0f, 0.0f));
 
     bc::copy(a.begin(), a.end(), b.begin(), queue);
+    CHECK_RANGE_EQUAL(float, 4, b, (6.1f, 10.2f, 19.3f, 25.4f));
+
+    bc::vector<float> c(context);
+    bc::copy(c.begin(), c.end(), b.begin(), queue);
     CHECK_RANGE_EQUAL(float, 4, b, (6.1f, 10.2f, 19.3f, 25.4f));
 }
 
 BOOST_AUTO_TEST_CASE(copy_on_device_device_ptr)
 {
     float data[] = { 6.1f, 10.2f, 19.3f, 25.4f };
-    bc::vector<float> a(4);
+    bc::vector<float> a(4, context);
     bc::copy(data, data + 4, a.begin(), queue);
     CHECK_RANGE_EQUAL(float, 4, a, (6.1f, 10.2f, 19.3f, 25.4f));
 
-    bc::vector<float> b(4);
+    bc::vector<float> b(4, context);
     bc::detail::device_ptr<float> b_ptr(b.get_buffer(), size_t(0));
 
     // buffer_iterator -> device_ptr
     bc::copy(a.begin(), a.end(), b_ptr, queue);
     CHECK_RANGE_EQUAL(float, 4, b, (6.1f, 10.2f, 19.3f, 25.4f));
 
-    bc::vector<float> c(4);
+    bc::vector<float> c(4, context);
     bc::fill(c.begin(), c.end(), 0.0f, queue);
     bc::detail::device_ptr<float> c_ptr(c.get_buffer(), size_t(2));
 
@@ -101,6 +105,29 @@ BOOST_AUTO_TEST_CASE(copy)
     BOOST_CHECK_EQUAL(host_vector[1], 2);
     BOOST_CHECK_EQUAL(host_vector[2], 5);
     BOOST_CHECK_EQUAL(host_vector[3], 6);
+}
+
+BOOST_AUTO_TEST_CASE(empty_copy)
+{
+    int data[] = { 1, 2, 5, 6 };
+    bc::vector<int> a(4, context);
+    bc::vector<int> b(context);
+    std::vector<int> c;
+
+    bc::copy(data, data + 4, a.begin(), queue);
+    CHECK_RANGE_EQUAL(int, 4, a, (1, 2, 5, 6));
+
+    bc::copy(b.begin(), b.end(), a.begin(), queue);
+    CHECK_RANGE_EQUAL(int, 4, a, (1, 2, 5, 6));
+
+    bc::copy(c.begin(), c.end(), a.begin(), queue);
+    CHECK_RANGE_EQUAL(int, 4, a, (1, 2, 5, 6));
+
+    bc::future<bc::vector<int>::iterator> future =
+        bc::copy_async(c.begin(), c.end(), a.begin(), queue);
+    if(future.valid())
+        future.wait();
+    CHECK_RANGE_EQUAL(int, 4, a, (1, 2, 5, 6));
 }
 
 // Test copying from a std::list to a bc::vector. This differs from
