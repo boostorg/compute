@@ -267,6 +267,34 @@ BOOST_AUTO_TEST_CASE(copy_async_to_device_float_to_int)
     );
 }
 
+BOOST_AUTO_TEST_CASE(copy_async_to_device_float_to_int_empty)
+{
+    using compute::int_;
+    using compute::float_;
+
+    float_ host[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<int_> device_vector(size_t(4), int_(1), queue);
+
+    // copy nothing to int device vector
+    compute::future<bc::vector<int_>::iterator > future =
+        bc::copy_async(host, host, device_vector.begin(), queue);
+    if(future.valid()) {
+        future.wait();
+    }
+
+    CHECK_RANGE_EQUAL(
+        int_,
+        4,
+        device_vector,
+        (
+            int_(1),
+            int_(1),
+            int_(1),
+            int_(1)
+        )
+    );
+}
+
 // Test copying from a std::list to a bc::vector. This differs from
 // the test copying from std::vector because std::list has non-contiguous
 // storage for its data values.
@@ -607,6 +635,40 @@ BOOST_AUTO_TEST_CASE(copy_async_on_device_float_to_int)
             static_cast<int_>(-10.2f),
             static_cast<int_>(19.3f),
             static_cast<int_>(25.4f)
+        )
+    );
+}
+
+BOOST_AUTO_TEST_CASE(copy_async_on_device_float_to_int_empty)
+{
+    using compute::int_;
+    using compute::float_;
+
+    float_ data[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<float_> device_fvector(data, data + 4, queue);
+    bc::vector<int_> device_ivector(size_t(4), int_(1), queue);
+
+    // copy device float vector to device int vector
+    compute::future<void> future =
+        bc::copy_async(
+            device_fvector.begin(),
+            device_fvector.begin(),
+            device_ivector.begin(),
+            queue
+        );
+    if(future.valid()) {
+        future.wait();
+    }
+
+    CHECK_RANGE_EQUAL(
+        int_,
+        4,
+        device_ivector,
+        (
+            int_(1),
+            int_(1),
+            int_(1),
+            int_(1)
         )
     );
 }
@@ -1104,6 +1166,40 @@ BOOST_AUTO_TEST_CASE(copy_async_to_host_float_to_int)
             static_cast<int_>(-10.2f),
             static_cast<int_>(19.3f),
             static_cast<int_>(25.4f)
+        )
+    );
+}
+
+BOOST_AUTO_TEST_CASE(copy_async_to_host_float_to_int_empty)
+{
+    using compute::int_;
+    using compute::float_;
+
+    float_ data[] = { 6.1f, -10.2f, 19.3f, 25.4f };
+    bc::vector<float_> device_vector(data, data + 4, queue);
+    std::vector<int_> host_vector(device_vector.size(), int_(1));
+
+    // copy device float vector to host int vector
+    compute::future<void> future =
+        bc::copy_async(
+            device_vector.begin(),
+            device_vector.begin(),
+            host_vector.begin(),
+            queue
+        );
+    if(future.valid()) {
+        future.wait();
+    }
+
+    CHECK_HOST_RANGE_EQUAL(
+        int_,
+        4,
+        host_vector.begin(),
+        (
+            int_(1),
+            int_(1),
+            int_(1),
+            int_(1)
         )
     );
 }

@@ -179,8 +179,8 @@ dispatch_copy(InputIterator first,
         );
 
     // select copy method based on thresholds & input_size_bytes
-    size_t input_size = iterator_range_size(first, last);
-    size_t input_size_bytes = input_size * sizeof(input_type);
+    size_t count = iterator_range_size(first, last);
+    size_t input_size_bytes = count * sizeof(input_type);
 
     // [0; map_copy_threshold) -> copy_to_device_map()
     if(input_size_bytes < map_copy_threshold) {
@@ -195,13 +195,14 @@ dispatch_copy(InputIterator first,
 
     // [direct_copy_threshold; inf) -> map [first; last) to device and
     //     run copy kernel on device for copying & casting
+    // At this point we are sure that count > 1 (first != last).
     ::boost::compute::mapped_view<input_type> mapped_host(
         // make sure it's a pointer to constant data
         // to force read only mapping
         const_cast<const input_type*>(
             ::boost::addressof(*first)
         ),
-        input_size,
+        count,
         context
     );
     return copy_on_device(mapped_host.begin(), mapped_host.end(), result, queue);
@@ -335,7 +336,11 @@ dispatch_copy_async(InputIterator first,
     typedef typename std::iterator_traits<InputIterator>::value_type input_type;
 
     const context &context = queue.get_context();
-    size_t input_size = iterator_range_size(first, last);
+    size_t count = iterator_range_size(first, last);
+
+    if(count < size_t(1)) {
+        return future<OutputIterator>();
+    }
 
     // map [first; last) to device and run copy kernel
     // on device for copying & casting
@@ -345,7 +350,7 @@ dispatch_copy_async(InputIterator first,
         const_cast<const input_type*>(
             ::boost::addressof(*first)
         ),
-        input_size,
+        count,
         context
     );
     return copy_on_device_async(
@@ -541,7 +546,8 @@ dispatch_copy(InputIterator first,
 
     // [direct_copy_threshold; inf) -> map [result; result + input_size) to
     //     device and run copy kernel on device for copying & casting
-    // map host memory to device
+    // map host memory to device.
+    // At this point we are sure that count > 1 (first != last).
     buffer mapped_host(
         context,
         count * sizeof(output_type),
@@ -622,6 +628,10 @@ dispatch_copy_async(InputIterator first,
     typedef typename std::iterator_traits<OutputIterator>::value_type output_type;
     const context &context = queue.get_context();
     size_t count = iterator_range_size(first, last);
+
+    if(count < size_t(1)) {
+        return future<OutputIterator>();
+    }
 
     // map host memory to device
     buffer mapped_host(
