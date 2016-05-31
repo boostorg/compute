@@ -296,6 +296,10 @@ matrix:
     - os: linux
       sudo: false
       compiler: clang
+      cache:
+        ccache: true
+        directories:
+          - ${DEPS_DIR}/boost
       addons:
        apt:
          packages: &precise_latest_boost_packages
@@ -316,6 +320,10 @@ matrix:
     - os: linux
       sudo: false
       compiler: gcc
+      cache:
+        ccache: true
+        directories:
+          - ${DEPS_DIR}/boost
       addons:
         apt:
           packages: *precise_latest_boost_packages
@@ -365,7 +373,7 @@ before_install:
 install:
     # Download and install recent cmake
     - |
-      if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      if [[ ${TRAVIS_OS_NAME} == "linux" ]]; then
         CMAKE_URL="http://www.cmake.org/files/v3.4/cmake-3.4.3-Linux-x86_64.tar.gz"
         mkdir -p ${DEPS_DIR}/cmake
         travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C ${DEPS_DIR}/cmake
@@ -374,18 +382,24 @@ install:
 
     # Download and install Boost
     - |
-      if [[ "${TRAVIS_OS_NAME}" == "linux" && "${BOOST_VERSION}" != "default" ]]; then
-        # create dirs for source and install
-        mkdir -p ${DEPS_DIR}/boost${BOOST_VERSION}
-        mkdir -p ${DEPS_DIR}/boost
-        # download
-        travis_retry wget --no-check-certificate --quiet -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${DEPS_DIR}/boost${BOOST_VERSION}
-        pushd ${DEPS_DIR}/boost${BOOST_VERSION}
-        # configure and install
-        echo "using gcc : 4.8 : g++-4.8 ;" > $HOME/user-config.jam
-        ./bootstrap.sh --prefix=${DEPS_DIR}/boost/ --with-libraries=program_options,filesystem,system,thread,test,timer,chrono
-        ./b2 -d0 install
-        popd
+      if [[ ${TRAVIS_OS_NAME} == "linux" && ${BOOST_VERSION} != "default" ]]; then
+        if [ ! -f "${DEPS_DIR}/boost/${BOOST_VERSION}_cached" ]; then
+          # create dirs for source and install
+          mkdir -p ${DEPS_DIR}/boost${BOOST_VERSION}
+          mkdir -p ${DEPS_DIR}/boost
+          rm -rf ${DEPS_DIR}/boost/*
+          # download
+          travis_retry wget --no-check-certificate --quiet -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${DEPS_DIR}/boost${BOOST_VERSION}
+          pushd ${DEPS_DIR}/boost${BOOST_VERSION}
+          # configure and install
+          echo "using gcc : 4.8 : g++-4.8 ;" > $HOME/user-config.jam
+          ./bootstrap.sh --prefix=${DEPS_DIR}/boost/ --with-libraries=program_options,filesystem,system,thread,test,timer,chrono
+          ./b2 -d0 install
+          popd
+          touch ${DEPS_DIR}/boost/${BOOST_VERSION}_cached
+        else
+          echo 'Using cached Boost ${BOOST_VERSION} libraries.'
+        fi
         export CMAKE_OPTIONS=${CMAKE_OPTIONS}" -DBOOST_ROOT=${DEPS_DIR}/boost"
       fi
 
