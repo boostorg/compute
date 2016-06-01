@@ -212,7 +212,6 @@ matrix:
            - libopencv-dev
          sources: &precise_amdappsdk_sources
            - ubuntu-toolchain-r-test
-           - llvm-toolchain-precise-3.7
            - boost-latest
       env:
         - OPENCL_LIB=amdappsdk
