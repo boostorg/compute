@@ -102,4 +102,34 @@ BOOST_AUTO_TEST_CASE(sort_int_and_float)
     BOOST_CHECK(compute::is_sorted(values.begin(), values.end(), queue) == true);
 }
 
+BOOST_AUTO_TEST_CASE(sort_int_and_float_custom_comparison_func)
+{
+    using boost::compute::int_;
+    using boost::compute::float_;
+
+    int n = 1024;
+    std::vector<int_> host_keys(n);
+    std::vector<float_> host_values(n);
+    for(int i = 0; i < n; i++){
+        host_keys[i] = n - i;
+        host_values[i] = (n - i) / 2.f;
+    }
+
+    BOOST_COMPUTE_FUNCTION(bool, sort_int, (int_ a, int_ b),
+    {
+        return a < b;
+    });
+
+    compute::vector<int_> keys(host_keys.begin(), host_keys.end(), queue);
+    compute::vector<float_> values(host_values.begin(), host_values.end(), queue);
+
+    BOOST_CHECK(compute::is_sorted(keys.begin(), keys.end(), sort_int, queue) == false);
+    BOOST_CHECK(compute::is_sorted(values.begin(), values.end(), queue) == false);
+
+    compute::sort_by_key(keys.begin(), keys.end(), values.begin(), sort_int, queue);
+
+    BOOST_CHECK(compute::is_sorted(keys.begin(), keys.end(), sort_int, queue) == true);
+    BOOST_CHECK(compute::is_sorted(values.begin(), values.end(), queue) == true);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
