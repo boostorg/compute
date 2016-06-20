@@ -36,6 +36,7 @@ set(BENCHMARKS
   bernoulli_distribution
   binary_find
   cart_to_polar
+  comparison_sort
   copy_if
   copy_to_device
   count
