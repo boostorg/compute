@@ -84,7 +84,6 @@ BOOST_AUTO_TEST_CASE(sort_mid_vector_int)
     boost::compute::detail::merge_sort_on_gpu(
         vector.begin(), vector.end(), less, queue
     );
-
     BOOST_CHECK(
         boost::compute::is_sorted(vector.begin(), vector.end(), less, queue)
     );
@@ -122,7 +121,6 @@ BOOST_AUTO_TEST_CASE(sort_mid_vector_ulong)
     boost::compute::detail::merge_sort_on_gpu(
         vector.begin(), vector.end(), less, queue
     );
-
     BOOST_CHECK(
         boost::compute::is_sorted(vector.begin(), vector.end(), less, queue)
     );
@@ -308,7 +306,7 @@ BOOST_AUTO_TEST_CASE(sort_mid_vector_long8)
         data[i] = i%2 ? long8_(i) : long8_(i * i);
     }
 
-    BOOST_COMPUTE_FUNCTION(bool, long8_sort, (long8_ a, long8_ b),
+    BOOST_COMPUTE_FUNCTION(bool, comp, (long8_ a, long8_ b),
     {
         return a.s0 < b.s3;
     });
@@ -316,14 +314,58 @@ BOOST_AUTO_TEST_CASE(sort_mid_vector_long8)
     boost::compute::vector<long8_> vector(data.begin(), data.end(), queue);
     BOOST_CHECK_EQUAL(vector.size(), size);
     BOOST_CHECK(
-        !boost::compute::is_sorted(vector.begin(), vector.end(), long8_sort, queue)
+        !boost::compute::is_sorted(vector.begin(), vector.end(), comp, queue)
     );
 
     boost::compute::detail::merge_sort_on_gpu(
-        vector.begin(), vector.end(), long8_sort, queue
+        vector.begin(), vector.end(), comp, queue
     );
     BOOST_CHECK(
-        boost::compute::is_sorted(vector.begin(), vector.end(), long8_sort, queue)
+        boost::compute::is_sorted(vector.begin(), vector.end(), comp, queue)
+    );
+}
+
+BOOST_AUTO_TEST_CASE(stable_sort_vector_int2)
+{
+    if(is_apple_cpu_device(device)) {
+        return;
+    }
+
+    using boost::compute::int2_;
+
+    int2_ data[] = {
+        int2_(8, 3), int2_(5, 1),
+        int2_(2, 1), int2_(6, 1),
+        int2_(8, 1), int2_(7, 1),
+        int2_(4, 1), int2_(8, 2)
+    };
+
+    BOOST_COMPUTE_FUNCTION(bool, comp, (int2_ a, int2_ b),
+    {
+        return a.x < b.x;
+    });
+
+    boost::compute::vector<int2_> vector(data, data + 8, queue);
+    BOOST_CHECK_EQUAL(vector.size(), 8);
+    BOOST_CHECK(
+        !boost::compute::is_sorted(vector.begin(), vector.end(), comp, queue)
+    );
+
+    //
+    boost::compute::detail::merge_sort_on_gpu(
+        vector.begin(), vector.end(), comp, true /*stable*/, queue
+    );
+    BOOST_CHECK(
+        boost::compute::is_sorted(vector.begin(), vector.end(), comp, queue)
+    );
+    CHECK_RANGE_EQUAL(
+        int2_, 8, vector,
+        (
+            int2_(2, 1), int2_(4, 1),
+            int2_(5, 1), int2_(6, 1),
+            int2_(7, 1), int2_(8, 3),
+            int2_(8, 1), int2_(8, 2)
+        )
     );
 }
 
