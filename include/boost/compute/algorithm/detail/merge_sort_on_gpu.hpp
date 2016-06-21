@@ -296,7 +296,7 @@ inline size_t block_sort(KeyIterator keys_first,
 {
     if(stable) {
         // TODO: Implement stable block sort (stable odd-even merge sort)
-        return size_t(0);
+        return size_t(1);
     }
     return bitonic_block_sort(
         keys_first, values_first,
@@ -457,6 +457,7 @@ inline void merge_sort_by_key_on_gpu(KeyIterator keys_first,
                                      KeyIterator keys_last,
                                      ValueIterator values_first,
                                      Compare compare,
+                                     bool stable,
                                      command_queue &queue)
 {
     typedef typename std::iterator_traits<KeyIterator>::value_type key_type;
@@ -471,7 +472,7 @@ inline void merge_sort_by_key_on_gpu(KeyIterator keys_first,
         block_sort(
             keys_first, values_first,
             compare, count,
-            true /* sort_by_key */, false /* stable */,
+            true /* sort_by_key */, stable /* stable */,
             queue
         );
 
@@ -507,11 +508,11 @@ inline void merge_sort_by_key_on_gpu(KeyIterator keys_first,
     }
 }
 
-// This sort is not stable.
 template<class Iterator, class Compare>
 inline void merge_sort_on_gpu(Iterator first,
                               Iterator last,
                               Compare compare,
+                              bool stable,
                               command_queue &queue)
 {
     typedef typename std::iterator_traits<Iterator>::value_type key_type;
@@ -526,7 +527,7 @@ inline void merge_sort_on_gpu(Iterator first,
         block_sort(
             first, dummy,
             compare, count,
-            false /* sort_by_key */, false /* stable */,
+            false /* sort_by_key */, stable /* stable */,
             queue
         );
 
@@ -556,6 +557,30 @@ inline void merge_sort_on_gpu(Iterator first,
     if(result_in_temporary_buffer) {
         copy_async(temp_keys.begin(), temp_keys.end(), first, queue);
     }
+}
+
+template<class KeyIterator, class ValueIterator, class Compare>
+inline void merge_sort_by_key_on_gpu(KeyIterator keys_first,
+                                     KeyIterator keys_last,
+                                     ValueIterator values_first,
+                                     Compare compare,
+                                     command_queue &queue)
+{
+    merge_sort_by_key_on_gpu(
+        keys_first, keys_last, values_first,
+        compare, false /* not stable */, queue
+    );
+}
+
+template<class Iterator, class Compare>
+inline void merge_sort_on_gpu(Iterator first,
+                              Iterator last,
+                              Compare compare,
+                              command_queue &queue)
+{
+    merge_sort_on_gpu(
+        first, last, compare, false /* not stable */, queue
+    );
 }
 
 } // end detail namespace
