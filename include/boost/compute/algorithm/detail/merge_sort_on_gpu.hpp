@@ -91,7 +91,6 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
                                  command_queue &queue)
 {
     typedef typename std::iterator_traits<KeyIterator>::value_type key_type;
-    typedef typename std::iterator_traits<ValueIterator>::value_type value_type;
 
     meta_kernel k("bitonic_block_sort");
     size_t count_arg = k.add_arg<const uint_>("count");
@@ -99,7 +98,7 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
     size_t local_keys_arg = k.add_arg<key_type *>(memory_object::local_memory, "lkeys");
     size_t local_vals_arg;
     if(sort_by_key) {
-        local_vals_arg = k.add_arg<value_type *>(memory_object::local_memory, "lvals");
+        local_vals_arg = k.add_arg<uchar_ *>(memory_object::local_memory, "lidx");
     }
 
     k <<
@@ -110,37 +109,29 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
     // declare my_key and my_value
     k <<
         k.decl<key_type>("my_key") << ";\n";
-    // TODO: Instead of copying values (my_value) in local memory with keys
-    // we can save local index (uchar) and copy my_value at the end at
-    // final index. This may save some memory.
+    // Instead of copying values (my_value) in local memory with keys
+    // we save local index (uchar) and copy my_value at the end at
+    // final index. This saves local memory.
     if(sort_by_key)
     {
         k <<
-            k.decl<value_type>("my_value") << ";\n";
+            k.decl<uchar_>("my_index") << " = (uchar)(lid);\n";
     }
 
-    // load key and value
+    // load key
     k <<
         "if(gid < count) {\n" <<
             k.var<key_type>("my_key") <<  " = " <<
-                keys_first[k.var<const uint_>("gid")] << ";\n";
-    if(sort_by_key)
-    {
-        k <<
-            k.var<value_type>("my_value") << " = " <<
-                values_first[k.var<const uint_>("gid")] << ";\n";
-    }
-    k <<
-        // end if
+                keys_first[k.var<const uint_>("gid")] << ";\n" <<
         "}\n";
 
-    // load key and value to local memory
+    // load key and index to local memory
     k <<
         "lkeys[lid] = my_key;\n";
     if(sort_by_key)
     {
         k <<
-            "lvals[lid] = my_value;\n";
+            "lidx[lid] = my_index;\n";
     }
     k <<
         k.decl<const uint_>("offset") << " = get_group_id(0) * get_local_size(0);\n" <<
@@ -184,7 +175,7 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
     if(sort_by_key)
     {
         k <<
-            "my_value = swap ? lvals[sibling_idx] : my_value;\n";
+            "my_index = swap ? lidx[sibling_idx] : my_index;\n";
     }
     k <<
             "barrier(CLK_LOCAL_MEM_FENCE);\n" <<
@@ -192,7 +183,7 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
     if(sort_by_key)
     {
         k <<
-            "lvals[lid] = my_value;\n";
+            "lidx[lid] = my_index;\n";
     }
     k <<
             "barrier(CLK_LOCAL_MEM_FENCE);\n" <<
@@ -234,7 +225,7 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
     if(sort_by_key)
     {
         k <<
-            "my_value = swap ? lvals[sibling_idx] : my_value;\n";
+            "my_index = swap ? lidx[sibling_idx] : my_index;\n";
     }
     k <<
             "barrier(CLK_LOCAL_MEM_FENCE);\n" <<
@@ -242,7 +233,7 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
     if(sort_by_key)
     {
         k <<
-            "lvals[lid] = my_value;\n";
+            "lidx[lid] = my_index;\n";
     }
     k <<
             "barrier(CLK_LOCAL_MEM_FENCE);\n"
@@ -258,9 +249,8 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
             k.var<key_type>("my_key") << ";\n";
     if(sort_by_key)
     {
-        k <<
-            values_first[k.var<const uint_>("gid")] << " = " <<
-                k.var<value_type>("my_value") << ";\n";
+        k << values_first[k.var<const uint_>("gid")] << " = " <<
+                values_first[k.var<const uint_>("offset + my_index")] << ";\n";
     }
     k <<
         // end if
@@ -271,7 +261,7 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
     ::boost::compute::kernel kernel = k.compile(context);
 
     const size_t work_group_size =
-        pick_bitonic_block_sort_block_size<key_type, value_type>(
+        pick_bitonic_block_sort_block_size<key_type, uchar_>(
             kernel.get_work_group_info<size_t>(
                 device, CL_KERNEL_WORK_GROUP_SIZE
             ),
@@ -287,7 +277,7 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
     kernel.set_arg(count_arg, static_cast<uint_>(count));
     kernel.set_arg(local_keys_arg, local_buffer<key_type>(work_group_size));
     if(sort_by_key) {
-        kernel.set_arg(local_vals_arg, local_buffer<value_type>(work_group_size));
+        kernel.set_arg(local_vals_arg, local_buffer<uchar_>(work_group_size));
     }
 
     queue.enqueue_1d_range_kernel(kernel, 0, global_size, work_group_size);
