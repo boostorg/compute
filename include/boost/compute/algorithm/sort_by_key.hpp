@@ -18,6 +18,7 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/detail/merge_sort_on_cpu.hpp>
+#include <boost/compute/algorithm/detail/merge_sort_on_gpu.hpp>
 #include <boost/compute/algorithm/detail/insertion_sort.hpp>
 #include <boost/compute/algorithm/detail/radix_sort.hpp>
 #include <boost/compute/algorithm/reverse.hpp>
@@ -90,9 +91,17 @@ inline void dispatch_gpu_sort_by_key(KeyIterator keys_first,
                                      Compare compare,
                                      command_queue &queue)
 {
-    detail::serial_insertion_sort_by_key(
-        keys_first, keys_last, values_first, compare, queue
-    );
+    size_t count = detail::iterator_range_size(keys_first, keys_last);
+
+    if(count < 32){
+        detail::serial_insertion_sort_by_key(
+            keys_first, keys_last, values_first, compare, queue
+        );
+    } else {
+        detail::merge_sort_by_key_on_gpu(
+            keys_first, keys_last, values_first, compare, queue
+        );
+    }
 }
 
 template<class KeyIterator, class ValueIterator, class Compare>

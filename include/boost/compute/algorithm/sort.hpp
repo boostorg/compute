@@ -18,6 +18,7 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/detail/merge_sort_on_cpu.hpp>
+#include <boost/compute/algorithm/detail/merge_sort_on_gpu.hpp>
 #include <boost/compute/algorithm/detail/radix_sort.hpp>
 #include <boost/compute/algorithm/detail/insertion_sort.hpp>
 #include <boost/compute/algorithm/reverse.hpp>
@@ -85,9 +86,22 @@ inline void dispatch_gpu_sort(Iterator first,
                               Compare compare,
                               command_queue &queue)
 {
-    ::boost::compute::detail::serial_insertion_sort(
-        first, last, compare, queue
-    );
+    size_t count = detail::iterator_range_size(first, last);
+
+    if(count < 2){
+        // nothing to do
+        return;
+    }
+    else if(count <= 32){
+        ::boost::compute::detail::serial_insertion_sort(
+            first, last, compare, queue
+        );
+    }
+    else {
+        ::boost::compute::detail::merge_sort_on_gpu(
+            first, last, compare, queue
+        );
+    }
 }
 
 // sort() for device iterators
