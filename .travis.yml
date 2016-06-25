@@ -14,8 +14,10 @@ env:
     # POCL
     - POCL_BRANCH=release_0_13 # branch/tag
     #- POCL_COMMIT= # commit id
-    - POCL_LLVM_CONFIG="llvm-config-3.7"
-    - POCL_COMPILER=clang++-3.7
+    - POCL_LLVM_VERSION=3.8.0
+    - POCL_LLVM_CONFIG=${DEPS_DIR}/llvm-${POCL_LLVM_VERSION}/bin/llvm-config
+    - POCL_CXX_COMPILER=${DEPS_DIR}/llvm-${POCL_LLVM_VERSION}/bin/clang++
+    - POCL_C_COMPILER=${DEPS_DIR}/llvm-${POCL_LLVM_VERSION}/bin/clang
     # AMD APP SDK
     - AMDAPPSDKROOT=${OPENCL_ROOT}/AMDAPPSDK
     # Global build options and C++ flags
@@ -351,10 +353,16 @@ before_install:
       # POCL dependencies for Trusty
       # llvm-toolchain-trusty-3.7 is not whitelisted yet https://github.com/travis-ci/apt-source-whitelist/issues/199
       if [[ ${LINUX_DIST} == "trusty" && ${OPENCL_LIB} == "pocl" ]]; then
-        sudo add-apt-repository -y "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.7 main"
-        travis_retry wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | travis_retry sudo apt-key add -
-        sudo apt-get update -qq -
-        sudo apt-get install -qq -y clang-3.7 libclang-common-3.7-dev libclang-3.7-dev libclang1-3.7 libllvm3.7 lldb-3.7 llvm-3.7 llvm-3.7-dev llvm-3.7-runtime clang-modernize-3.7 clang-format-3.7 lldb-3.7-dev
+        # see https://github.com/travis-ci/travis-ci/issues/6120
+        POCL_LLVM_URL=http://llvm.org/releases/${POCL_LLVM_VERSION}/clang+llvm-${POCL_LLVM_VERSION}-x86_64-linux-gnu-ubuntu-14.04.tar.xz
+        mkdir -p ${DEPS_DIR}/llvm-${POCL_LLVM_VERSION}
+        travis_retry wget --no-check-certificate --quiet -O llvm-${POCL_LLVM_VERSION}.tar.xz ${POCL_LLVM_URL}
+        tar xf llvm-${POCL_LLVM_VERSION}.tar.xz -C ${DEPS_DIR}/llvm-${POCL_LLVM_VERSION} --strip-components 1
+
+        #sudo add-apt-repository -y "deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.7 main"
+        #travis_retry wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | travis_retry sudo apt-key add -
+        #sudo apt-get update -qq -
+        #sudo apt-get install -qq -y clang-3.7 libclang-common-3.7-dev libclang-3.7-dev libclang1-3.7 libllvm3.7 lldb-3.7 llvm-3.7 llvm-3.7-dev llvm-3.7-runtime clang-modernize-3.7 clang-format-3.7 lldb-3.7-dev
       # OSX
       elif [[ ${TRAVIS_OS_NAME} == "osx" ]]; then
         brew update
@@ -427,7 +435,7 @@ install:
         fi
         mkdir build
         cd build
-        cmake -DDIRECT_LINKAGE=ON -DENABLE_ICD=OFF -DCMAKE_CXX_COMPILER=/usr/bin/${POCL_COMPILER} -DWITH_LLVM_CONFIG=/usr/bin/${POCL_LLVM_CONFIG} -DCMAKE_INSTALL_PREFIX=${OPENCL_ROOT}/pocl/ ..
+        cmake -DDIRECT_LINKAGE=ON -DENABLE_ICD=OFF -DCMAKE_C_COMPILER=${POCL_C_COMPILER} -DCMAKE_CXX_COMPILER=${POCL_CXX_COMPILER} -DWITH_LLVM_CONFIG=${POCL_LLVM_CONFIG} -DCMAKE_INSTALL_PREFIX=${OPENCL_ROOT}/pocl/ ..
         make install
         cd ../..
       fi
