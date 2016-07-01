@@ -23,26 +23,15 @@
 namespace boost {
 namespace compute {
 
-/// Stores the difference of each pair of consecutive values in the range
-/// [\p first, \p last) to the range beginning at \p result. If \p op is not
-/// provided, \c minus<T> is used.
-///
-/// \param first first element in the input range
-/// \param last last element in the input range
-/// \param result first element in the output range
-/// \param op binary difference function
-/// \param queue command queue to perform the operation
-///
-/// \return \c OutputIterator to the end of the result range
-///
-/// \see adjacent_find()
+namespace detail {
+
 template<class InputIterator, class OutputIterator, class BinaryFunction>
 inline OutputIterator
-adjacent_difference(InputIterator first,
-                    InputIterator last,
-                    OutputIterator result,
-                    BinaryFunction op,
-                    command_queue &queue = system::default_queue())
+dispatch_adjacent_difference(InputIterator first,
+                             InputIterator last,
+                             OutputIterator result,
+                             BinaryFunction op,
+                             command_queue &queue = system::default_queue())
 {
     if(first == last){
         return result;
@@ -66,6 +55,51 @@ adjacent_difference(InputIterator first,
     return result + count;
 }
 
+} // end detail namespace
+
+/// Stores the difference of each pair of consecutive values in the range
+/// [\p first, \p last) to the range beginning at \p result. If \p op is not
+/// provided, \c minus<T> is used.
+///
+/// \param first first element in the input range
+/// \param last last element in the input range
+/// \param result first element in the output range
+/// \param op binary difference function
+/// \param queue command queue to perform the operation
+///
+/// \return \c OutputIterator to the end of the result range
+///
+/// \see adjacent_find()
+template<class InputIterator, class OutputIterator, class BinaryFunction>
+inline OutputIterator
+adjacent_difference(InputIterator first,
+                    InputIterator last,
+                    OutputIterator result,
+                    BinaryFunction op,
+                    command_queue &queue = system::default_queue())
+{
+    typedef typename std::iterator_traits<InputIterator>::value_type value_type;
+
+    if(first == last) {
+        return result;
+    }
+
+    if (first == result) {
+        vector<value_type> temp(detail::iterator_range_size(first, last),
+                                queue.get_context());
+        copy(first, last, temp.begin(), queue);
+
+        return ::boost::compute::detail::dispatch_adjacent_difference(
+            temp.begin(), temp.end(), result, op, queue
+        );
+    }
+    else {
+        return ::boost::compute::detail::dispatch_adjacent_difference(
+            first, last, result, op, queue
+        );
+    }
+}
+
 /// \overload
 template<class InputIterator, class OutputIterator>
 inline OutputIterator
@@ -76,20 +110,9 @@ adjacent_difference(InputIterator first,
 {
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
-    if (first == result) {
-        vector<value_type> temp(detail::iterator_range_size(first, last),
-                                queue.get_context());
-        copy(first, last, temp.begin(), queue);
-
-        return ::boost::compute::adjacent_difference(
-            temp.begin(), temp.end(), result, ::boost::compute::minus<value_type>(), queue
-        );
-    }
-    else {
-        return ::boost::compute::adjacent_difference(
-            first, last, result, ::boost::compute::minus<value_type>(), queue
-        );
-    }
+    return ::boost::compute::adjacent_difference(
+        first, last, result, ::boost::compute::minus<value_type>(), queue
+    );
 }
 
 } // end compute namespace
