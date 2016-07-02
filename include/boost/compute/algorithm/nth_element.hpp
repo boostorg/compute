@@ -23,6 +23,8 @@ namespace compute {
 
 /// Rearranges the elements in the range [\p first, \p last) such that
 /// the \p nth element would be in that position in a sorted sequence.
+///
+/// Space complexity: \Omega(3n)
 template<class Iterator, class Compare>
 inline void nth_element(Iterator first,
                         Iterator nth,

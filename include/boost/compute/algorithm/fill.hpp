@@ -271,6 +271,8 @@ inline future<void> dispatch_fill_async(BufferIterator first,
 /// boost::compute::fill(vec.begin(), vec.end(), 7, queue);
 /// \endcode
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see boost::compute::fill_n()
 template<class BufferIterator, class T>
 inline void fill(BufferIterator first,

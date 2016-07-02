@@ -24,6 +24,8 @@ namespace compute {
 /// and all of the elements for which \p predicate returns \c false to
 /// the range beginning at \p first_false.
 ///
+/// Space complexity: \Omega(2n)
+///
 /// \see partition()
 template<class InputIterator,
          class OutputIterator1,

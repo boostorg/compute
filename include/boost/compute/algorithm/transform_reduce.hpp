@@ -30,6 +30,9 @@ namespace compute {
 ///
 /// \snippet test/test_transform_reduce.cpp sum_abs_int
 ///
+/// Space complexity on GPUs: \Omega(n)<br>
+/// Space complexity on CPUs: \Omega(1)
+///
 /// \see reduce(), inner_product()
 template<class InputIterator,
          class OutputIterator,

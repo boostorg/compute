@@ -25,6 +25,9 @@ namespace compute {
 
 /// Returns the number of elements in the range [\p first, \p last)
 /// for which \p predicate returns \c true.
+///
+/// Space complexity on CPUs: \Omega(1)<br>
+/// Space complexity on GPUs: \Omega(n)
 template<class InputIterator, class Predicate>
 inline size_t count_if(InputIterator first,
                        InputIterator last,

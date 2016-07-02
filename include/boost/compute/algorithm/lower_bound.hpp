@@ -22,6 +22,8 @@ namespace compute {
 /// Returns an iterator pointing to the first element in the sorted
 /// range [\p first, \p last) that is not less than \p value.
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see upper_bound()
 template<class InputIterator, class T>
 inline InputIterator

@@ -22,6 +22,8 @@ namespace compute {
 /// Partitions the elements in the range [\p first, \p last) according to
 /// \p predicate. Order of the elements need not be preserved.
 ///
+/// Space complexity: \Omega(3n)
+///
 /// \see is_partitioned() and stable_partition()
 ///
 template<class Iterator, class UnaryPredicate>

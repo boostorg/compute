@@ -31,6 +31,8 @@ namespace compute {
 ///
 /// \return \c InputIterator to the new logical end of the range
 ///
+/// Space complexity: \Omega(4n)
+///
 /// \see unique_copy()
 template<class InputIterator, class BinaryPredicate>
 inline InputIterator unique(InputIterator first,

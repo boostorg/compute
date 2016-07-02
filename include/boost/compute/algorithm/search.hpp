@@ -34,6 +34,7 @@ namespace compute {
 /// \param p_last Iterator pointing to end of pattern
 /// \param queue Queue on which to execute
 ///
+/// Space complexity: \Omega(distance(\p t_first, \p t_last))
 template<class TextIterator, class PatternIterator>
 inline TextIterator search(TextIterator t_first,
                            TextIterator t_last,
