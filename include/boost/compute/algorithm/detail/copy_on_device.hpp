@@ -27,18 +27,6 @@ namespace boost {
 namespace compute {
 namespace detail {
 
-inline size_t pick_copy_work_group_size(size_t n, const device &device)
-{
-    (void) device;
-
-    if(n % 32 == 0) return 32;
-    else if(n % 16 == 0) return 16;
-    else if(n % 8 == 0) return 8;
-    else if(n % 4 == 0) return 4;
-    else if(n % 2 == 0) return 2;
-    else return 1;
-}
-
 template<class InputIterator, class OutputIterator>
 class copy_kernel : public meta_kernel
 {
