@@ -22,6 +22,7 @@
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/parameter_cache.hpp>
 #include <boost/compute/detail/work_size.hpp>
+#include <boost/compute/detail/vendor.hpp>
 
 namespace boost {
 namespace compute {
@@ -102,7 +103,11 @@ inline event dispatch_copy_on_device(InputIterator first,
     }
 
     const device& device = queue.get_device();
-    if(device.type() & device::cpu) {
+    // copy_on_device_cpu() does not work for CPU on Apple platform
+    // due to bug in its compiler.
+    // See https://github.com/boostorg/compute/pull/626
+    if((device.type() & device::cpu) && !is_apple_platform_device(device))
+    {
         return copy_on_device_cpu(first, result, count, queue);
     }
     return copy_on_device_gpu(first, result, count, queue);
