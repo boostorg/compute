@@ -8,15 +8,17 @@
 // See http://boostorg.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_REDUCE_HPP
-#define BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_REDUCE_HPP
+#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_REDUCE_ON_CPU_HPP
+#define BOOST_COMPUTE_ALGORITHM_DETAIL_REDUCE_ON_CPU_HPP
 
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/detail/parameter_cache.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
 #include <boost/compute/type_traits/result_of.hpp>
+#include <boost/compute/algorithm/detail/serial_reduce.hpp>
 
 namespace boost {
 namespace compute {
@@ -34,10 +36,25 @@ inline void reduce_on_cpu(InputIterator first,
     typedef typename
         ::boost::compute::result_of<BinaryFunction(T, T)>::type result_type;
 
+    const device &device = queue.get_device();
+    boost::shared_ptr<parameter_cache> parameters =
+        detail::parameter_cache::get_global_cache(device);
+
+    std::string cache_key =
+        "__boost_reduce_cpu_" + boost::lexical_cast<std::string>(sizeof(T));
+
+    // for inputs smaller than serial_reduce_threshold
+    // serial_reduce algorithm is used
+    uint_ serial_reduce_threshold =
+        parameters->get(cache_key, "serial_reduce_threshold", 16384 * sizeof(T));
+
     const context &context = queue.get_context();
     size_t count = detail::iterator_range_size(first, last);
     if(count == 0){
         return;
+    }
+    else if(count < serial_reduce_threshold) {
+        return serial_reduce(first, last, result, function, queue);
     }
 
     meta_kernel k("reduce_on_cpu");
@@ -64,20 +81,14 @@ inline void reduce_on_cpu(InputIterator first,
         "output[get_global_id(0)] = result;\n";
 
     size_t global_work_size = compute_units;
-    if(count <= 1024) global_work_size = 1;
     kernel kernel = k.compile(context);
 
-    if(global_work_size == 1) {
-        kernel.set_arg(count_arg, static_cast<uint_>(count));
-        kernel.set_arg(output_arg, result.get_buffer());
-        queue.enqueue_1d_range_kernel(kernel, 0, global_work_size, 0);
-        return;
-    }
-
+    // reduction to global_work_size elements
     kernel.set_arg(count_arg, static_cast<uint_>(count));
     kernel.set_arg(output_arg, output);
     queue.enqueue_1d_range_kernel(kernel, 0, global_work_size, 0);
 
+    // final reduction
     reduce_on_cpu(
         make_buffer_iterator<result_type>(output),
         make_buffer_iterator<result_type>(output, global_work_size),
@@ -91,4 +102,4 @@ inline void reduce_on_cpu(InputIterator first,
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_REDUCE_HPP
+#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_REDUCE_ON_CPU_HPP
