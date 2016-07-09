@@ -96,7 +96,7 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
     size_t count_arg = k.add_arg<const uint_>("count");
 
     size_t local_keys_arg = k.add_arg<key_type *>(memory_object::local_memory, "lkeys");
-    size_t local_vals_arg;
+    size_t local_vals_arg = 0;
     if(sort_by_key) {
         local_vals_arg = k.add_arg<uchar_ *>(memory_object::local_memory, "lidx");
     }
