@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestInplaceReduce
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/algorithm/iota.hpp>

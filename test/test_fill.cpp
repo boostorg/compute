@@ -13,6 +13,8 @@
 #include <boost/test/test_case_template.hpp>
 #include <boost/mpl/list.hpp>
 
+#include <iostream>
+
 #include <boost/compute/algorithm/equal.hpp>
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/algorithm/fill_n.hpp>
