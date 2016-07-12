@@ -199,9 +199,9 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
 
     k <<
         k.decl<bool>("lid_is_even") << " = (lid%2) == 0;\n" <<
-        k.decl<uint>("oddsibling_idx") << " = " <<
+        k.decl<uint_>("oddsibling_idx") << " = " <<
             "(lid_is_even) ? max(lid,(uint)(1)) - 1 : min(lid+1,n-1);\n" <<
-        k.decl<uint>("evensibling_idx") << " = " <<
+        k.decl<uint_>("evensibling_idx") << " = " <<
             "(lid_is_even) ? min(lid+1,n-1) : max(lid,(uint)(1)) - 1;\n" <<
 
         // wait for keys and vals to be stored in local memory
@@ -213,7 +213,7 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
             "i < n; " <<
             "i++" <<
         ") {\n" <<
-            k.decl<uint>("sibling_idx") <<
+            k.decl<uint_>("sibling_idx") <<
                 " = i%2 == 0 ? evensibling_idx : oddsibling_idx;\n" <<
             k.decl<key_type>("sibling_key") << " = lkeys[sibling_idx];\n" <<
             k.decl<bool>("compare") << " = " <<
