@@ -11,6 +11,8 @@
 #define BOOST_TEST_MODULE TestMergeSortOnGPU
 #include <boost/test/unit_test.hpp>
 
+#include <iostream>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/is_sorted.hpp>
 #include <boost/compute/algorithm/detail/merge_sort_on_gpu.hpp>
