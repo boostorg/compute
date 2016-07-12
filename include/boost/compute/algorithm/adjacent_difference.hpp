@@ -33,12 +33,7 @@ dispatch_adjacent_difference(InputIterator first,
                              BinaryFunction op,
                              command_queue &queue = system::default_queue())
 {
-    if(first == last){
-        return result;
-    }
-
     size_t count = detail::iterator_range_size(first, last);
-
     detail::meta_kernel k("adjacent_difference");
 
     k << "const uint i = get_global_id(0);\n"
