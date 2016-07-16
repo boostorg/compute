@@ -402,11 +402,12 @@ BOOST_AUTO_TEST_CASE(assignment_operator)
     BOOST_CHECK_EQUAL(a.size(), size_t(4));
     CHECK_RANGE_EQUAL(int, 4, a, (11, 12, 13, 14));
 
-    bc::vector<int> b(context); b = a;
+    bc::vector<int> b = a;
     BOOST_CHECK_EQUAL(b.size(), size_t(4));
     CHECK_RANGE_EQUAL(int, 4, b, (11, 12, 13, 14));
 
-    bc::vector<int, bc::pinned_allocator<int> > c(context); c = b;
+    bc::vector<int, bc::pinned_allocator<int> > c(context);
+    c = b;
     BOOST_CHECK_EQUAL(c.size(), size_t(4));
     CHECK_RANGE_EQUAL(int, 4, c, (11, 12, 13, 14));
 

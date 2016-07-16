@@ -196,8 +196,15 @@ public:
         m_data = m_allocator.allocate((std::max)(m_size, _minimum_capacity()));
 
         if(!other.empty()){
-            ::boost::compute::copy(other.begin(), other.end(), begin(), queue);
-            queue.finish();
+            if(other.get_buffer().get_context() != queue.get_context()){
+                command_queue other_queue = other.default_queue();
+                ::boost::compute::copy(other.begin(), other.end(), begin(), other_queue);
+                other_queue.finish();
+            }
+            else {
+                ::boost::compute::copy(other.begin(), other.end(), begin(), queue);
+                queue.finish();
+            }
         }
     }
 
