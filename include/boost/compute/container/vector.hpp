@@ -253,6 +253,17 @@ public:
     }
 
     template<class OtherAlloc>
+    vector& operator=(const vector<T, OtherAlloc> &other)
+    {
+        command_queue queue = default_queue();
+        resize(other.size(), queue);
+        ::boost::compute::copy(other.begin(), other.end(), begin(), queue);
+        queue.finish();
+
+        return *this;
+    }
+
+    template<class OtherAlloc>
     vector& operator=(const std::vector<T, OtherAlloc> &vector)
     {
         command_queue queue = default_queue();
