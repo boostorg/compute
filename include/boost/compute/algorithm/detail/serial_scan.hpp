@@ -8,8 +8,8 @@
 // See http://boostorg.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_SCAN_ON_CPU_HPP
-#define BOOST_COMPUTE_ALGORITHM_DETAIL_SCAN_ON_CPU_HPP
+#ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_SCAN_HPP
+#define BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_SCAN_HPP
 
 #include <iterator>
 
@@ -24,7 +24,7 @@ namespace compute {
 namespace detail {
 
 template<class InputIterator, class OutputIterator, class T, class BinaryOperator>
-inline OutputIterator scan_on_cpu(InputIterator first,
+inline OutputIterator serial_scan(InputIterator first,
                                   InputIterator last,
                                   OutputIterator result,
                                   bool exclusive,
@@ -44,7 +44,7 @@ inline OutputIterator scan_on_cpu(InputIterator first,
     const context &context = queue.get_context();
 
     // create scan kernel
-    meta_kernel k("scan_on_cpu");
+    meta_kernel k("serial_scan");
 
     // Arguments
     size_t n_arg = k.add_arg<ulong_>("n");
@@ -100,4 +100,4 @@ inline OutputIterator scan_on_cpu(InputIterator first,
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_SCAN_ON_CPU_HPP
+#endif // BOOST_COMPUTE_ALGORITHM_DETAIL_SERIAL_SCAN_HPP
