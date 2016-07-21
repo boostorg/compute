@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------//
-// Copyright (c) 2015 Jakub Szuppe <j.szuppe@gmail.com>
+// Copyright (c) 2016 Jakub Szuppe <j.szuppe@gmail.com>
 //
 // Distributed under the Boost Software License, Version 1.0
 // See accompanying file LICENSE_1_0.txt or copy at
@@ -10,6 +10,8 @@
 
 #ifndef BOOST_COMPUTE_ALGORITHM_DETAIL_REDUCE_ON_CPU_HPP
 #define BOOST_COMPUTE_ALGORITHM_DETAIL_REDUCE_ON_CPU_HPP
+
+#include <algorithm>
 
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/command_queue.hpp>
@@ -37,6 +39,8 @@ inline void reduce_on_cpu(InputIterator first,
         ::boost::compute::result_of<BinaryFunction(T, T)>::type result_type;
 
     const device &device = queue.get_device();
+    const uint_ compute_units = queue.get_device().compute_units();
+
     boost::shared_ptr<parameter_cache> parameters =
         detail::parameter_cache::get_global_cache(device);
 
@@ -47,6 +51,8 @@ inline void reduce_on_cpu(InputIterator first,
     // serial_reduce algorithm is used
     uint_ serial_reduce_threshold =
         parameters->get(cache_key, "serial_reduce_threshold", 16384 * sizeof(T));
+    serial_reduce_threshold =
+        (std::max)(serial_reduce_threshold, uint_(compute_units));
 
     const context &context = queue.get_context();
     size_t count = detail::iterator_range_size(first, last);
@@ -58,7 +64,6 @@ inline void reduce_on_cpu(InputIterator first,
     }
 
     meta_kernel k("reduce_on_cpu");
-    const size_t compute_units = queue.get_device().compute_units();
     buffer output(context, sizeof(result_type) * compute_units);
 
     size_t count_arg = k.add_arg<uint_>("count");
