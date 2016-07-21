@@ -64,11 +64,11 @@ BOOST_AUTO_TEST_CASE(resize)
 
 BOOST_AUTO_TEST_CASE(array_operator)
 {
-    bc::vector<int> vector(10);
-    bc::fill(vector.begin(), vector.end(), 0);
+    bc::vector<int> vector(10, context);
+    bc::fill(vector.begin(), vector.end(), 0, queue);
     CHECK_RANGE_EQUAL(int, 10, vector, (0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 
-    bc::fill(vector.begin(), vector.end(), 42);
+    bc::fill(vector.begin(), vector.end(), 42, queue);
     CHECK_RANGE_EQUAL(int, 10, vector, (42, 42, 42, 42, 42, 42, 42, 42, 42, 42));
 
     vector[0] = 9;
@@ -216,9 +216,14 @@ BOOST_AUTO_TEST_CASE(move_ctor_custom_alloc)
 #ifdef BOOST_COMPUTE_USE_CPP11
 BOOST_AUTO_TEST_CASE(initializer_list_ctor)
 {
-    bc::vector<int> vector = { 2, 4, 6, 8 };
+    // ctor with std::initializer_list<T> always uses
+    // default_queue in this case
+    bc::vector<int> vector = { 2, -4, 6, 8 };
     BOOST_CHECK_EQUAL(vector.size(), size_t(4));
-    CHECK_RANGE_EQUAL(int, 4, vector, (2, 4, 6, 8));
+    BOOST_CHECK_EQUAL(vector[0], 2);
+    BOOST_CHECK_EQUAL(vector[1], -4);
+    BOOST_CHECK_EQUAL(vector[2], 6);
+    BOOST_CHECK_EQUAL(vector[3], 8);
 }
 #endif // BOOST_COMPUTE_USE_CPP11
 
@@ -401,7 +406,8 @@ BOOST_AUTO_TEST_CASE(assignment_operator)
     BOOST_CHECK_EQUAL(b.size(), size_t(4));
     CHECK_RANGE_EQUAL(int, 4, b, (11, 12, 13, 14));
 
-    bc::vector<int, bc::pinned_allocator<int> > c = b;
+    bc::vector<int, bc::pinned_allocator<int> > c(context);
+    c = b;
     BOOST_CHECK_EQUAL(c.size(), size_t(4));
     CHECK_RANGE_EQUAL(int, 4, c, (11, 12, 13, 14));
 

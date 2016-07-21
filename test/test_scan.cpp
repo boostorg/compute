@@ -119,7 +119,7 @@ BOOST_AUTO_TEST_CASE(inclusive_scan_transform_iterator)
 
     // normal inclusive scan of the input
     bc::inclusive_scan(input.begin(), input.end(), output.begin(), queue);
-    bc::system::finish();
+    queue.finish();
     BOOST_CHECK_CLOSE(float(output[0]), 1.0f, 1e-4f);
     BOOST_CHECK_CLOSE(float(output[1]), 3.0f, 1e-4f);
     BOOST_CHECK_CLOSE(float(output[2]), 6.0f, 1e-4f);
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(inclusive_scan_transform_iterator)
     bc::inclusive_scan(bc::make_transform_iterator(input.begin(), pown(_1, 2)),
                        bc::make_transform_iterator(input.end(), pown(_1, 2)),
                        output.begin(), queue);
-    bc::system::finish();
+    queue.finish();
     BOOST_CHECK_CLOSE(float(output[0]), 1.0f, 1e-4f);
     BOOST_CHECK_CLOSE(float(output[1]), 5.0f, 1e-4f);
     BOOST_CHECK_CLOSE(float(output[2]), 14.0f, 1e-4f);

@@ -268,7 +268,7 @@ BOOST_AUTO_TEST_CASE(reduce_complex)
 
 BOOST_AUTO_TEST_CASE(reduce_uchar_to_float)
 {
-    compute::vector<compute::uchar_> data;
+    compute::vector<compute::uchar_> data(context);
     data.push_back(250, queue);
     data.push_back(250, queue);
     float sum = 0;
