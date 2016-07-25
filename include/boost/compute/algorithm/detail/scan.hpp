@@ -12,8 +12,8 @@
 #define BOOST_COMPUTE_ALGORITHM_DETAIL_SCAN_HPP
 
 #include <boost/compute/device.hpp>
+#include <boost/compute/algorithm/detail/scan_on_cpu.hpp>
 #include <boost/compute/algorithm/detail/scan_on_gpu.hpp>
-#include <boost/compute/algorithm/detail/serial_scan.hpp>
 
 namespace boost {
 namespace compute {
@@ -31,7 +31,7 @@ inline OutputIterator scan(InputIterator first,
     const device &device = queue.get_device();
 
     if(device.type() & device::cpu){
-        return serial_scan(first, last, result, exclusive, init, op, queue);
+        return scan_on_cpu(first, last, result, exclusive, init, op, queue);
     }
     else {
         return scan_on_gpu(first, last, result, exclusive, init, op, queue);
