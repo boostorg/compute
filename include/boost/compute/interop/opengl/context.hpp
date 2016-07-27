@@ -78,7 +78,7 @@ inline context opengl_create_shared_context()
         // load clGetGLContextInfoKHR() extension function
         GetGLContextInfoKHRFunction GetGLContextInfoKHR =
             reinterpret_cast<GetGLContextInfoKHRFunction>(
-                reinterpret_cast<unsigned long>(
+                reinterpret_cast<size_t>(
                     platform.get_extension_function_address("clGetGLContextInfoKHR")
                 )
             );
