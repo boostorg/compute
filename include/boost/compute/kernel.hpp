@@ -270,6 +270,8 @@ public:
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
         #else
+        (void) index;
+        (void) ptr;
         BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_ARG_VALUE));
         #endif
     }
