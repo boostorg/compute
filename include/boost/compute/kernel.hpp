@@ -188,7 +188,9 @@ public:
     template<class T>
     T get_arg_info(size_t index, cl_kernel_arg_info info) const
     {
-        return detail::get_object_info<T>(clGetKernelArgInfo, m_kernel, info, index);
+        return detail::get_object_info<T>(
+            clGetKernelArgInfo, m_kernel, info, static_cast<cl_uint>(index)
+        );
     }
 
     /// \overload
@@ -270,6 +272,8 @@ public:
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
         #else
+        (void) index;
+        (void) ptr;
         BOOST_THROW_EXCEPTION(opencl_error(CL_INVALID_ARG_VALUE));
         #endif
     }
