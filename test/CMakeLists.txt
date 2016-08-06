@@ -81,6 +81,8 @@ add_compute_test("core.system" test_system.cpp)
 add_compute_test("core.type_traits" test_type_traits.cpp)
 add_compute_test("core.user_event" test_user_event.cpp)
 
+add_compute_test("distributed.context" test_distributed_context.cpp)
+
 add_compute_test("utility.extents" test_extents.cpp)
 add_compute_test("utility.invoke" test_invoke.cpp)
 add_compute_test("utility.program_cache" test_program_cache.cpp)
