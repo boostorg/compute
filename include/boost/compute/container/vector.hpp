@@ -389,7 +389,7 @@ public:
     /// Resizes the vector to \p size.
     void resize(size_type size, command_queue &queue)
     {
-        if(size < capacity()){
+        if(size <= capacity()){
             m_size = size;
         }
         else {
