@@ -184,14 +184,16 @@ public:
         cl_uint count = 0;
         clGetPlatformIDs(0, 0, &count);
 
-        std::vector<cl_platform_id> platform_ids(count);
-        clGetPlatformIDs(count, &platform_ids[0], 0);
-
         std::vector<platform> platforms;
-        for(size_t i = 0; i < platform_ids.size(); i++){
-            platforms.push_back(platform(platform_ids[i]));
-        }
+        if(count > 0)
+        {
+            std::vector<cl_platform_id> platform_ids(count);
+            clGetPlatformIDs(count, &platform_ids[0], 0);
 
+            for(size_t i = 0; i < platform_ids.size(); i++){
+                platforms.push_back(platform(platform_ids[i]));
+            }
+        }
         return platforms;
     }
 
