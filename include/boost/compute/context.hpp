@@ -204,7 +204,7 @@ public:
     typename detail::get_object_info_type<context, Enum>::type
     get_info() const;
 
-    /// Returns \c true if the context is the same at \p other.
+    /// Returns \c true if the context is the same as \p other.
     bool operator==(const context &other) const
     {
         return m_context == other.m_context;
