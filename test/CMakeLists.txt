@@ -84,6 +84,7 @@ add_compute_test("core.user_event" test_user_event.cpp)
 add_compute_test("distributed.context" test_distributed_context.cpp)
 add_compute_test("distributed.command_queue" test_distributed_command_queue.cpp)
 add_compute_test("distributed.vector" test_distributed_vector.cpp)
+add_compute_test("distributed.copy" test_distributed_copy.cpp)
 
 add_compute_test("utility.extents" test_extents.cpp)
 add_compute_test("utility.invoke" test_invoke.cpp)
