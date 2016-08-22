@@ -79,9 +79,6 @@ BOOST_AUTO_TEST_CASE(command_queue_ctor)
     bc::distributed::vector<bc::uint_> distributed_vector(
         size_t(35), value, distributed_queue
     );
-    bc::distributed::vector<bc::uint_> distributed_vector_blocking(
-        size_t(35), value, distributed_queue, true
-    );
 
     BOOST_CHECK(!distributed_vector.empty());
     BOOST_CHECK(distributed_vector.size() == 35);
@@ -110,14 +107,6 @@ BOOST_AUTO_TEST_CASE(command_queue_ctor)
                 distributed_queue.get(i)
             )
         );
-        BOOST_CHECK(
-            bc::equal(
-                distributed_vector_blocking.begin(i),
-                distributed_vector_blocking.begin(i),
-                bc::make_constant_iterator(value),
-                distributed_queue.get(i)
-            )
-        );
     }
 }
 
@@ -133,9 +122,6 @@ BOOST_AUTO_TEST_CASE(host_iterator_ctor)
 
     bc::distributed::vector<bc::int_> distributed_vector(
         host_vector.begin(), host_vector.end(), distributed_queue
-    );
-    bc::distributed::vector<bc::int_> distributed_vector_blocking(
-        host_vector.begin(), host_vector.end(), distributed_queue, true
     );
 
     BOOST_CHECK(!distributed_vector.empty());
@@ -155,14 +141,6 @@ BOOST_AUTO_TEST_CASE(host_iterator_ctor)
             bc::equal(
                 distributed_vector.begin(i),
                 distributed_vector.end(i),
-                bc::make_constant_iterator(value),
-                distributed_queue.get(i)
-            )
-        );
-        BOOST_CHECK(
-            bc::equal(
-                distributed_vector_blocking.begin(i),
-                distributed_vector_blocking.begin(i),
                 bc::make_constant_iterator(value),
                 distributed_queue.get(i)
             )
@@ -192,19 +170,19 @@ BOOST_AUTO_TEST_CASE(copy_ctor)
     size_t size = 64;
 
     bc::distributed::vector<bc::int_> distributed_vector(
-        size, value, distributed_queue1, true
+        size, value, distributed_queue1
     );
     bc::distributed::vector<bc::int_> distributed_vector_copy1(
-        distributed_vector, true
+        distributed_vector
     );
     bc::distributed::vector<bc::int_> distributed_vector_copy2(
-        distributed_vector, distributed_queue2, true
+        distributed_vector, distributed_queue2
     );
     bc::distributed::vector<
         bc::int_,
         bc::distributed::default_weight_func, bc::pinned_allocator<bc::int_>
     > distributed_vector_copy3(
-        distributed_vector, distributed_queue2, true
+        distributed_vector, distributed_queue2
     );
 
     for(size_t i = 0; i < distributed_vector.parts(); i++)

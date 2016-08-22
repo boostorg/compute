@@ -29,8 +29,6 @@
 #include <boost/compute/device.hpp>
 #include <boost/compute/context.hpp>
 #include <boost/compute/command_queue.hpp>
-#include <boost/compute/algorithm/copy.hpp> // ?
-#include <boost/compute/algorithm/copy_n.hpp> // ?
 #include <boost/compute/algorithm/fill.hpp>
 #include <boost/compute/allocator/buffer_allocator.hpp>
 #include <boost/compute/iterator/buffer_iterator.hpp>
@@ -40,61 +38,12 @@
 
 #include <boost/compute/distributed/context.hpp>
 #include <boost/compute/distributed/command_queue.hpp>
+#include <boost/compute/distributed/copy.hpp>
+#include <boost/compute/distributed/detail/weight_func.hpp>
 
 namespace boost {
 namespace compute {
 namespace distributed {
-
-typedef std::vector<double> (*weight_func)(const command_queue&);
-
-namespace detail {
-
-/// \internal_
-/// Rounds up \p n to the nearest multiple of \p m.
-/// Note: \p m must be a multiple of 2.
-size_t round_up(size_t n, size_t m)
-{
-    assert(m && ((m & (m -1)) == 0));
-    return (n + m - 1) & ~(m - 1);
-}
-
-/// \internal_
-///
-std::vector<size_t> partition(const command_queue& queue,
-                              weight_func weight_func,
-                              const size_t size,
-                              const size_t align)
-{
-    std::vector<double> weights = weight_func(queue);
-    std::vector<size_t> partition;
-    partition.reserve(queue.size() + 1);
-    partition.push_back(0);
-
-    if(queue.size() > 1)
-    {
-        double acc = 0;
-        for(size_t i = 0; i < queue.size(); i++)
-        {
-            acc += weights[i];
-            partition.push_back(
-                std::min(
-                    size,
-                    round_up(size * acc, align)
-                )
-            );
-        }
-        return partition;
-    }
-    partition.push_back(size);
-    return partition;
-}
-
-} // end distributed detail
-
-std::vector<double> default_weight_func(const command_queue& queue)
-{
-    return std::vector<double>(queue.size(), 1.0/queue.size());
-}
 
 /// \class vector
 /// \brief A resizable array of values allocated across multiple devices.
@@ -127,7 +76,6 @@ public:
         : m_queue(queue),
           m_size(0)
     {
-        // TODO lazy allocation?
         for(size_t i = 0; i < m_queue.size(); i++)
         {
             m_allocators.push_back(Alloc(m_queue.get_context(i)));
@@ -159,32 +107,34 @@ public:
     /// \endcode
     vector(size_type count,
            const T &value,
-           command_queue &queue,
-           bool blocking = false)
+           command_queue &queue)
         : m_queue(queue),
           m_size(count)
     {
         allocate_memory(m_size);
-        wait_list events;
+        std::vector<event> events;
         events.reserve(m_data.size());
         for(size_t i = 0; i < m_data.size(); i++)
         {
-            events.safe_insert(
+            event e =
                 ::boost::compute::fill_async(
                     begin(i),
                     end(i),
                     value,
                     queue.get(i)
-                )
-            );
+                ).get_event();
+            if(e.get()) {
+                events.push_back(e);
+            }
         }
-        if(blocking) {
-            events.wait();
+        for(size_t i = 0; i < events.size(); i++) {
+            events[i].wait();
         }
     }
 
     /// Creates a vector with space for the values in the range [\p first,
-    /// \p last) and copies them into the vector with \p queue.
+    /// \p last) allocated on the host and copies them into the vector
+    /// with \p queue.
     ///
     /// For example:
     /// \code
@@ -194,83 +144,116 @@ public:
     /// // create a vector of size four and copy the values from data
     /// boost::compute::distributed::vector<int> vec(data, data + 4, queue);
     /// \endcode
-    template<class InputIterator>
-    vector(InputIterator first,
-           InputIterator last,
+    template<class HostIterator>
+    vector(HostIterator first,
+           HostIterator last,
            command_queue &queue,
-           bool blocking = false)
+           typename boost::enable_if_c<
+               !is_device_iterator<HostIterator>::value
+           >::type* = 0)
         : m_queue(queue),
           m_size(::boost::compute::detail::iterator_range_size(first, last))
     {
         allocate_memory(m_size);
-        copy(first, last, m_queue, blocking);
+        ::boost::compute::distributed::copy(first, last, *this, m_queue);
+    }
+
+    /// Creates a vector with space for the values in the range [\p first,
+    /// \p last) allocated on an OpenCL device and copies them into the vector
+    /// with \p queue.
+    template<class DeviceIterator>
+    vector(DeviceIterator first,
+           DeviceIterator last,
+           ::boost::compute::command_queue &device_queue,
+           command_queue &distributed_queue,
+           typename boost::enable_if_c<
+               is_device_iterator<DeviceIterator>::value
+           >::type* = 0)
+        : m_queue(distributed_queue),
+          m_size(::boost::compute::detail::iterator_range_size(first, last))
+    {
+        allocate_memory(m_size);
+        ::boost::compute::distributed::copy(
+            first, last, *this, device_queue, m_queue
+        );
     }
 
     /// Creates a new vector and copies the values from \p other.
-    explicit vector(const vector &other, bool blocking = false)
+    explicit vector(const vector &other)
         : m_queue(other.m_queue),
           m_size(other.m_size)
     {
         allocate_memory(m_size);
-        copy(other, m_queue, blocking);
+        ::boost::compute::distributed::copy(
+            other, *this, m_queue
+        );
     }
 
     /// Creates a new vector and copies the values from \p other
     /// with \p queue.
-    vector(const vector &other, command_queue &queue, bool blocking = false)
+    vector(const vector &other, command_queue &queue)
         : m_queue(queue),
           m_size(other.m_size)
     {
         allocate_memory(m_size);
         if(m_queue == other.m_queue) {
-            copy(other, m_queue, blocking);
+            ::boost::compute::distributed::copy(
+                other, *this, m_queue
+            );
         }
         else {
             command_queue other_queue = other.get_queue();
-            copy(other, other_queue, m_queue);
+            ::boost::compute::distributed::copy(
+                other, *this, other_queue, m_queue
+            );
         }
     }
 
     /// Creates a new vector and copies the values from \p other
     /// with \p queue.
     template<class OtherAlloc>
-    vector(const vector<T, weight, OtherAlloc> &other,
-           bool blocking = false)
+    vector(const vector<T, weight, OtherAlloc> &other)
         : m_queue(other.m_queue),
           m_size(other.m_size)
     {
         allocate_memory(m_size);
-        copy(other, m_queue, blocking);
+        ::boost::compute::distributed::copy(
+            other, *this, m_queue
+        );
     }
 
     /// Creates a new vector and copies the values from \p other.
     template<class OtherAlloc>
     vector(const vector<T, weight, OtherAlloc> &other,
-           command_queue &queue,
-           bool blocking = false)
+           command_queue &queue)
         : m_queue(queue),
           m_size(other.size())
     {
         allocate_memory(m_size);
         if(m_queue == other.get_queue()) {
-            copy(other, m_queue, blocking);
+            ::boost::compute::distributed::copy(
+                other, *this, m_queue
+            );
         }
         else {
             command_queue other_queue = other.get_queue();
-            copy(other, other_queue, m_queue);
+            ::boost::compute::distributed::copy(
+                other, *this, other_queue, m_queue
+            );
         }
     }
 
     /// Creates a new vector and copies the values from \p vector.
     template<class OtherAlloc>
     vector(const std::vector<T, OtherAlloc> &vector,
-           command_queue &queue,
-           bool blocking = false)
+           command_queue &queue)
         : m_queue(queue),
           m_size(vector.size())
     {
         allocate_memory(m_size);
-        copy(vector.begin(), vector.end(), m_queue, blocking);
+        ::boost::compute::distributed::copy(
+            vector.begin(), vector.end(), *this, m_queue
+        );
     }
 
     /// Copy assignment. This operation is always non-blocking.
@@ -280,7 +263,7 @@ public:
             m_queue = other.m_queue;
             m_size = other.m_size;
             allocate_memory(m_size);
-            copy(other, m_queue, false);
+            ::boost::compute::distributed::copy(other, *this, m_queue);
         }
         return *this;
     }
@@ -292,7 +275,7 @@ public:
         m_queue = other.get_queue();
         m_size = other.size();
         allocate_memory(m_size);
-        copy(other, m_queue, false);
+        ::boost::compute::distributed::copy(other, *this, m_queue);
         return *this;
     }
 
@@ -302,7 +285,9 @@ public:
     {
         m_size = vector.size();
         allocate_memory(m_size);
-        copy(vector.begin(), vector.end(), m_queue, false);
+        ::boost::compute::distributed::copy(
+            vector.begin(), vector.end(), *this, m_queue
+        );
         return *this;
     }
 
@@ -526,7 +511,6 @@ public:
     /// Removes all elements from the vector.
     void clear()
     {
-        //TODO: ???
         m_size = 0;
     }
 
@@ -593,121 +577,6 @@ private:
             m_data_sizes.push_back(data_size);
             m_data_indices.push_back(partition[i]);
         }
-    }
-
-    // host -> device
-    template <class Iterator>
-    inline wait_list
-    copy_async(Iterator first,
-               Iterator last,
-               command_queue &queue,
-               typename boost::enable_if_c<
-                   !is_device_iterator<Iterator>::value
-               >::type* = 0)
-    {
-        typedef typename Iterator::difference_type diff_type;
-        wait_list events;
-        events.reserve(m_data.size());
-
-        Iterator part_first = first;
-        Iterator part_end = first;
-        for(size_t i = 0; i < m_data.size(); i++)
-        {
-            part_end = (std::min)(
-                part_end + static_cast<diff_type>(m_data_sizes[i]),
-                last
-            );
-            events.safe_insert(
-                ::boost::compute::copy_async(
-                    part_first,
-                    part_end,
-                    begin(i),
-                    queue.get(i)
-                )
-            );
-            part_first = part_end;
-        }
-        return events;
-    }
-
-    // host -> device
-    template <class Iterator>
-    inline void
-    copy(Iterator first,
-         Iterator last,
-         command_queue &queue,
-         bool blocking,
-         typename boost::enable_if_c<
-             !is_device_iterator<Iterator>::value
-         >::type* = 0)
-    {
-        if(blocking) {
-            copy_async(first, last, queue).wait();
-        } else {
-            copy_async(first, last, queue);
-        }
-    }
-
-    // device -> device (copying distributed vector)
-    // both vectors must have the same command_queue
-    template<class OtherAlloc>
-    inline wait_list
-    copy_async(const vector<T, weight, OtherAlloc> &other, command_queue &queue)
-    {
-        wait_list events;
-        events.reserve(m_data.size());
-        for(size_t i = 0; i < m_data.size(); i++)
-        {
-            events.safe_insert(
-                ::boost::compute::copy_async(
-                    other.begin(i),
-                    other.end(i),
-                    begin(i),
-                    queue.get(i)
-                )
-            );
-        }
-        return events;
-    }
-
-    // device -> device (copying distributed vector)
-    // both vectors must have the same command_queue
-    template<class OtherAlloc>
-    inline void
-    copy(const vector<T, weight, OtherAlloc> &other, command_queue &queue, bool blocking)
-    {
-        if(blocking) {
-            copy_async(other, queue).wait();
-        } else {
-            copy_async(other, queue);
-        }
-    }
-
-    // device -> device (copying distributed vector)
-    template<class OtherAlloc>
-    inline void
-    copy(const vector<T, weight, OtherAlloc> &other,
-         command_queue &other_queue,
-         command_queue &queue)
-    {
-        wait_list events;
-        events.reserve(m_data.size());
-        std::vector<T> host(other.size());
-        typename std::vector<T>::iterator host_iter = host.begin();
-        for(size_t i = 0; i < other.parts(); i++)
-        {
-            events.safe_insert(
-                ::boost::compute::copy_async(
-                    other.begin(i),
-                    other.end(i),
-                    host_iter,
-                    other_queue.get(i)
-                )
-            );
-            host_iter += other.part_size(i);
-        }
-        events.wait();
-        copy_async(host.begin(), host.end(), queue).wait();
     }
 
 private:

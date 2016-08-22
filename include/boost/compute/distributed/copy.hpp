@@ -27,11 +27,19 @@
 
 #include <boost/compute/distributed/context.hpp>
 #include <boost/compute/distributed/command_queue.hpp>
-#include <boost/compute/distributed/vector.hpp>
+#include <boost/compute/distributed/detail/weight_func.hpp>
 
 namespace boost {
 namespace compute {
 namespace distributed {
+
+// forward declaration for distributed::vector
+template<
+    class T,
+    weight_func weight,
+    class Alloc
+>
+class vector;
 
 namespace detail {
 
