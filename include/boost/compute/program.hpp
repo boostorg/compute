@@ -272,8 +272,8 @@ public:
         }
     }
 
-    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
-    /// Compiles the program with \p options and \p headers.
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Compiles the program with \p options.
     ///
     /// \opencl_version_warning{1,2}
     ///
@@ -358,7 +358,7 @@ public:
 
         return program(program_, false);
     }
-    #endif // CL_VERSION_1_2
+    #endif // BOOST_COMPUTE_CL_VERSION_1_2
 
     /// Returns the build log.
     std::string build_log() const
@@ -545,7 +545,7 @@ public:
         return create_with_binary(&binary[0], binary.size(), context);
     }
 
-    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Creates a new program with the built-in kernels listed in
     /// \p kernel_names for \p devices in \p context.
     ///
@@ -572,7 +572,7 @@ public:
 
         return program(program_, false);
     }
-    #endif // CL_VERSION_1_2
+    #endif // BOOST_COMPUTE_CL_VERSION_1_2
 
     /// Create a new program with \p source in \p context and builds it with \p options.
     /**
@@ -694,12 +694,12 @@ BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(program,
     ((std::vector<unsigned char *>, CL_PROGRAM_BINARIES))
 )
 
-#ifdef CL_VERSION_1_2
+#ifdef BOOST_COMPUTE_CL_VERSION_1_2
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(program,
     ((size_t, CL_PROGRAM_NUM_KERNELS))
     ((std::string, CL_PROGRAM_KERNEL_NAMES))
 )
-#endif // CL_VERSION_1_2
+#endif // BOOST_COMPUTE_CL_VERSION_1_2
 
 } // end compute namespace
 } // end boost namespace
