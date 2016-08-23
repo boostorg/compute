@@ -65,24 +65,40 @@ public:
         }
     }
 
-    /// Creates a distributed command queue containing command queue for each
+    /// Creates a distributed command queue containing command queues for each
     /// corresponding device and context from \p devices and \p contexts.
     command_queue(const std::vector< ::boost::compute::context> &contexts,
-                  const std::vector<device> &devices,
+                  const std::vector< std::vector<device> > &devices,
                   cl_command_queue_properties properties = 0)
     {
         m_context = context(contexts);
-        size_t n = m_context.size();
-        for(size_t i = 0; i < n; i++) {
+        for(size_t i = 0; i < m_context.size(); i++) {
+            for(size_t j = 0; j < devices[i].size(); j++) {
+                m_queues.push_back(
+                    ::boost::compute::command_queue(
+                        m_context.get(i), devices[i][j], properties
+                    )
+                );
+            }
+        }
+    }
+
+    /// Creates a distributed command queue for all devices in \p context.
+    command_queue(const ::boost::compute::context &context,
+                  cl_command_queue_properties properties = 0)
+    {
+        m_context = ::boost::compute::distributed::context(context);
+        std::vector<device> devices = context.get_devices();
+        for(size_t i = 0; i < devices.size(); i++) {
             m_queues.push_back(
                 ::boost::compute::command_queue(
-                    m_context.get(i), devices[i], properties
+                    context, devices[i], properties
                 )
             );
         }
     }
 
-    /// Creates a distributed command queue.
+    /// Creates a distributed command queue containing \p queues.
     explicit
     command_queue(const std::vector< ::boost::compute::command_queue> queues)
         : m_queues(queues)

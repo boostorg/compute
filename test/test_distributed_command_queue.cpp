@@ -52,10 +52,11 @@ BOOST_AUTO_TEST_CASE(construct_from_distributed_context)
 BOOST_AUTO_TEST_CASE(construct_from_contexts)
 {
     std::vector<bc::context> contexts;
-    std::vector<bc::device> devices;
+    std::vector<std::vector<bc::device> > devices;
 
     contexts.push_back(context);
-    devices.push_back(device);
+    devices.push_back(std::vector<bc::device>());
+    devices[0].push_back(device);
 
     bc::distributed::command_queue distributed_queue1(contexts, devices);
     BOOST_CHECK_EQUAL(
@@ -63,8 +64,7 @@ BOOST_AUTO_TEST_CASE(construct_from_contexts)
         1
     );
 
-    contexts.push_back(context);
-    devices.push_back(device);
+    devices[0].push_back(device);
 
     bc::distributed::command_queue distributed_queue2(
         contexts, devices, bc::distributed::command_queue::enable_profiling
@@ -78,6 +78,21 @@ BOOST_AUTO_TEST_CASE(construct_from_contexts)
             .get_info<cl_command_queue_properties>(0, CL_QUEUE_PROPERTIES),
         bc::distributed::command_queue::enable_profiling
     );
+}
+
+BOOST_AUTO_TEST_CASE(construct_from_context)
+{
+    bc::distributed::command_queue distributed_queue(context);
+    BOOST_CHECK_EQUAL(
+        distributed_queue.size(),
+        context.get_devices().size()
+    );
+    for(size_t i = 0; i < distributed_queue.size(); i++) {
+        BOOST_CHECK_EQUAL(
+            distributed_queue.get_context(i),
+            context
+        );
+    }
 }
 
 BOOST_AUTO_TEST_CASE(construct_from_command_queues)
