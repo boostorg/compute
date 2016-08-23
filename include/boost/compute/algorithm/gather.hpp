@@ -36,7 +36,6 @@ public:
                    OutputIterator result)
     {
         m_count = iterator_range_size(first, last);
-        m_offset = first.get_index();
 
         *this <<
             "const uint i = get_global_id(0);\n" <<
@@ -50,12 +49,11 @@ public:
             return event();
         }
 
-        return exec_1d(queue, m_offset, m_count);
+        return exec_1d(queue, 0, m_count);
     }
 
 private:
     size_t m_count;
-    size_t m_offset;
 };
 
 } // end detail namespace

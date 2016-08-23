@@ -33,7 +33,7 @@ template<class T> class future;
 /// specify dependencies for OpenCL operations or to wait on the host until
 /// all of the events have completed.
 ///
-/// This class also provides convenience fnuctions for interacting with
+/// This class also provides convenience functions for interacting with
 /// OpenCL APIs which typically accept event dependencies as a \c cl_event*
 /// pointer and a \c cl_uint size. For example:
 /// \code

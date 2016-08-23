@@ -267,7 +267,7 @@ public:
     void set_arg_svm_ptr(size_t index, void* ptr)
     {
         #ifdef CL_VERSION_2_0
-        cl_int ret = clSetKernelArgSVMPointer(m_kernel, index, ptr);
+        cl_int ret = clSetKernelArgSVMPointer(m_kernel, static_cast<cl_uint>(index), ptr);
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
