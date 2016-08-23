@@ -29,13 +29,29 @@ public:
     {
     }
 
-    /// Creates a new distributed context for \p devices.
-    explicit context(const std::vector< ::boost::compute::device> &devices)
+    /// Creates a new distributed context for \p devices, containing
+    /// boost::compute::context objects, each constructed using corresponding
+    /// vector of OpenCL devices and \p properties.
+    context(const std::vector< std::vector< ::boost::compute::device> > &devices,
+            const std::vector<cl_context_properties*> &properties)
     {
         m_contexts = std::vector< ::boost::compute::context>();
         for(size_t i = 0; i < devices.size(); i++) {
             m_contexts.push_back(
-                ::boost::compute::context(devices[i], 0)
+                ::boost::compute::context(devices[i], properties[i])
+            );
+        }
+    }
+
+    /// Creates a new distributed context for \p devices, containing
+    /// boost::compute::context objects, each constructed using corresponding
+    /// vector of OpenCL devices and default properties.
+    explicit context(const std::vector< std::vector< ::boost::compute::device> > &devices)
+    {
+        m_contexts = std::vector< ::boost::compute::context>();
+        for(size_t i = 0; i < devices.size(); i++) {
+            m_contexts.push_back(
+                ::boost::compute::context(devices[i])
             );
         }
     }
@@ -52,9 +68,36 @@ public:
         }
     }
 
+    /// Creates a new distributed context for \p devices
+    explicit context(const std::vector< ::boost::compute::device> &devices)
+    {
+        m_contexts = std::vector< ::boost::compute::context>();
+        for(size_t i = 0; i < devices.size(); i++) {
+            m_contexts.push_back(
+                ::boost::compute::context(devices[i])
+            );
+        }
+    }
+
     /// Creates a new distributed context using \p contexts.
     explicit context(const std::vector< ::boost::compute::context>& contexts)
         : m_contexts(contexts)
+    {
+
+    }
+
+    /// Creates a new distributed context using contexts from range
+    /// [\p first, \p last).
+    template <class Iterator>
+    explicit context(Iterator first, Iterator last)
+        : m_contexts(first, last)
+    {
+
+    }
+
+    /// Creates a new distributed context from one \p context.
+    explicit context(const ::boost::compute::context& context)
+        : m_contexts(1, context)
     {
 
     }
@@ -144,6 +187,27 @@ public:
 private:
     std::vector< ::boost::compute::context> m_contexts;
 };
+
+
+inline bool operator==(const ::boost::compute::context &lhs, const context& rhs)
+{
+    return (rhs.size() == 1) && (rhs.get(0) == lhs);
+}
+
+inline bool operator==(const context& lhs, const ::boost::compute::context &rhs)
+{
+    return (lhs.size() == 1) && (lhs.get(0) == rhs);
+}
+
+inline bool operator!=(const ::boost::compute::context &lhs, const context& rhs)
+{
+    return !(lhs == rhs);
+}
+
+inline bool operator!=(const context& lhs, const ::boost::compute::context &rhs)
+{
+    return !(lhs == rhs);
+}
 
 } // end distributed namespace
 } // end compute namespace

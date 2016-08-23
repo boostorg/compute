@@ -24,20 +24,24 @@ namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(construct_from_devices)
 {
-    std::vector<bc::device> all_devices;
+    std::vector<std::vector<bc::device> > all_devices;
 
     const std::vector<bc::platform> &platforms = bc::system::platforms();
     for(size_t i = 0; i < platforms.size(); i++){
         const bc::platform &platform = platforms[i];
+
         std::vector<bc::device> platform_devices = platform.devices();
+        std::vector<cl_context_properties*> properties(platform_devices.size(), 0);
 
         // create a distributed context for devices in current platform
-        bc::distributed::context ctx(platform_devices);
+        bc::distributed::context ctx1(platform_devices);
+        bc::distributed::context ctx2(platform_devices, properties);
 
         // check context count
-        BOOST_CHECK_EQUAL(ctx.size(), platform.device_count());
+        BOOST_CHECK_EQUAL(ctx1.size(), platform_devices.size());
+        BOOST_CHECK_EQUAL(ctx2.size(), platform_devices.size());
 
-        all_devices.insert(all_devices.end(), platform_devices.begin(), platform_devices.end());
+        all_devices.push_back(platform_devices);
     }
 
     // create a distributed context for devices in current platform
@@ -58,12 +62,23 @@ BOOST_AUTO_TEST_CASE(construct_from_contexts)
         bc::context ctx(platform.devices());
         contexts.push_back(ctx);
     }
-    bc::distributed::context ctx(contexts);
 
-    BOOST_CHECK_EQUAL(ctx.size(), contexts.size());
+    bc::distributed::context ctx1(contexts);
+    bc::distributed::context ctx2(contexts.begin(), contexts.end());
+
+    BOOST_CHECK_EQUAL(ctx1.size(), contexts.size());
+    BOOST_CHECK_EQUAL(ctx2.size(), contexts.size());
     for(size_t i = 0; i < contexts.size(); i++) {
-        BOOST_CHECK_EQUAL(ctx.get(i), contexts[i]);
+        BOOST_CHECK_EQUAL(ctx1.get(i), contexts[i]);
+        BOOST_CHECK_EQUAL(ctx2.get(i), contexts[i]);
     }
+}
+
+BOOST_AUTO_TEST_CASE(construct_from_context)
+{
+    bc::distributed::context ctx(context);
+    BOOST_CHECK_EQUAL(ctx.size(), 1);
+    BOOST_CHECK_EQUAL(ctx.get(0), context);
 }
 
 BOOST_AUTO_TEST_CASE(copy_ctor)
@@ -136,34 +151,5 @@ BOOST_AUTO_TEST_CASE(get_context)
         BOOST_CHECK_EQUAL(distributed_context.get(i), contexts[i]);
     }
 }
-
-//BOOST_AUTO_TEST_CASE(test)
-//{
-//    bc::platform platform = Context::queue.get_context().get_device().platform();
-//    // create a context for containing all devices in the platform
-//    bc::context ctx(platform.devices());
-//
-//    for(size_t i = 0; i < platform.devices().size(); i++)
-//    {
-//        std::cout << platform.devices()[i].name() << std::endl;
-//    }
-//
-//    bc::vector<bc::int_> vec(64, ctx);
-//
-//    bc::command_queue q0(ctx, platform.devices()[0]);
-//    bc::command_queue q1(ctx, platform.devices()[1]);
-//
-//    bc::fill(vec.begin(), vec.begin() + 32, bc::int_(4), q0);
-//    q0.finish();
-//    bc::fill(vec.begin() + 32, vec.end(), bc::int_(3), q1);
-//    q1.finish();
-//
-//    bc::fill(vec.begin(), vec.end(), bc::int_(5), q1);
-//    q0.finish();
-//
-////    for(size_t i = 0; i < vec.size(); i++) {
-////        std::cout << vec[i] << std::endl;
-////    }
-//}
 
 BOOST_AUTO_TEST_SUITE_END()
