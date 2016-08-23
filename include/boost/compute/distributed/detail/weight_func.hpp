@@ -22,6 +22,11 @@ namespace distributed {
 
 typedef std::vector<double> (*weight_func)(const command_queue&);
 
+std::vector<double> default_weight_func(const command_queue& queue)
+{
+    return std::vector<double>(queue.size(), 1.0/queue.size());
+}
+
 namespace detail {
 
 /// \internal_
@@ -33,8 +38,6 @@ size_t round_up(size_t n, size_t m)
     return (n + m - 1) & ~(m - 1);
 }
 
-/// \internal_
-///
 std::vector<size_t> partition(const command_queue& queue,
                               weight_func weight_func,
                               const size_t size,
@@ -65,11 +68,6 @@ std::vector<size_t> partition(const command_queue& queue,
 }
 
 } // end distributed detail
-
-std::vector<double> default_weight_func(const command_queue& queue)
-{
-    return std::vector<double>(queue.size(), 1.0/queue.size());
-}
 
 } // end distributed namespace
 } // end compute namespace

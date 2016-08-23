@@ -20,39 +20,25 @@
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/or.hpp>
 
-#include <boost/type_traits/integral_constant.hpp>
-
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/wait_list.hpp>
 
 #include <boost/compute/distributed/context.hpp>
 #include <boost/compute/distributed/command_queue.hpp>
 #include <boost/compute/distributed/detail/weight_func.hpp>
+#include <boost/compute/distributed/detail/is_distributed_vector.hpp>
 
 namespace boost {
 namespace compute {
 namespace distributed {
 
-// forward declaration for distributed::vector
+// forward declaration for distributed::vector<T, weight_func, Alloc>
 template<
     class T,
     weight_func weight,
     class Alloc
 >
 class vector;
-
-namespace detail {
-
-template<class T>
-struct is_distributed_vector : boost::false_type {};
-
-template<class T>
-struct is_distributed_vector<const T> : is_distributed_vector<T> {};
-
-template< class T, weight_func w, class Alloc>
-struct is_distributed_vector< vector<T, w, Alloc> > : boost::true_type {};
-
-} // end detail namespace
 
 // host -> distributed::vector
 /// Copies the values in the range [\p first, \p last) allocated on host to

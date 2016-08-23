@@ -40,6 +40,7 @@
 #include <boost/compute/distributed/command_queue.hpp>
 #include <boost/compute/distributed/copy.hpp>
 #include <boost/compute/distributed/detail/weight_func.hpp>
+#include <boost/compute/distributed/detail/is_distributed_vector.hpp>
 
 namespace boost {
 namespace compute {
@@ -588,6 +589,14 @@ private:
     std::vector<pointer> m_data;
     std::vector<allocator_type> m_allocators;
 };
+
+
+namespace detail {
+
+template<class T, weight_func w, class Alloc>
+struct is_distributed_vector< vector<T, w, Alloc> > : boost::true_type {};
+
+} // end detail namespace
 
 } // end distributed namespace
 } // end compute namespace
