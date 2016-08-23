@@ -64,7 +64,7 @@ inline future<void> fill_async_with_copy(BufferIterator first,
            );
 }
 
-#if defined(CL_VERSION_1_2)
+#if defined(BOOST_COMPUTE_CL_VERSION_1_2)
 
 // meta-function returing true if Iterator points to a range of values
 // that can be filled using clEnqueueFillBuffer(). to meet this criteria
@@ -172,7 +172,7 @@ dispatch_fill_async(BufferIterator first,
     return future<void>(event_);
 }
 
-#ifdef CL_VERSION_2_0
+#ifdef BOOST_COMPUTE_CL_VERSION_2_0
 // specializations for svm_ptr<T>
 template<class T>
 inline void dispatch_fill(svm_ptr<T> first,
@@ -205,7 +205,7 @@ inline future<void> dispatch_fill_async(svm_ptr<T> first,
 
     return future<void>(event_);
 }
-#endif // CL_VERSION_2_0
+#endif // BOOST_COMPUTE_CL_VERSION_2_0
 
 // default implementations
 template<class BufferIterator, class T>
@@ -251,7 +251,7 @@ inline future<void> dispatch_fill_async(BufferIterator first,
 {
     return fill_async_with_copy(first, count, value, queue);
 }
-#endif // !defined(CL_VERSION_1_2)
+#endif // !defined(BOOST_COMPUTE_CL_VERSION_1_2)
 
 } // end detail namespace
 

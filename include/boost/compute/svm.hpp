@@ -16,7 +16,7 @@
 #include <boost/compute/memory/svm_ptr.hpp>
 
 // svm functions require OpenCL 2.0
-#if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+#if defined(BOOST_COMPUTE_CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
 
 namespace boost {
 namespace compute {
@@ -67,6 +67,6 @@ inline void svm_free(const context &context, svm_ptr<T> ptr)
 } // end compute namespace
 } // end boost namespace
 
-#endif // CL_VERSION_2_0
+#endif // BOOST_COMPUTE_CL_VERSION_2_0
 
 #endif // BOOST_COMPUTE_PIPE_HPP

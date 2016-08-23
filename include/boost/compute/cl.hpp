@@ -17,4 +17,34 @@
 #include <CL/cl.h>
 #endif
 
+// select what OpenCL core API versions to use
+#if defined(CL_VERSION_1_0)
+#  define BOOST_COMPUTE_CL_VERSION_1_0
+#endif
+#if defined(CL_VERSION_1_1)
+#  if !defined(BOOST_COMPUTE_MAX_CL_VERSION) || BOOST_COMPUTE_MAX_CL_VERSION >= 101
+#    define BOOST_COMPUTE_CL_VERSION_1_1
+#  endif
+#endif
+#if defined(CL_VERSION_1_2)
+#  if !defined(BOOST_COMPUTE_MAX_CL_VERSION) || BOOST_COMPUTE_MAX_CL_VERSION >= 102
+#    define BOOST_COMPUTE_CL_VERSION_1_2
+#  endif
+#endif
+#if defined(CL_VERSION_2_0)
+#  if !defined(BOOST_COMPUTE_MAX_CL_VERSION) || BOOST_COMPUTE_MAX_CL_VERSION >= 200
+#    define BOOST_COMPUTE_CL_VERSION_2_0
+#  endif
+#endif
+#if defined(CL_VERSION_2_1)
+#  if !defined(BOOST_COMPUTE_MAX_CL_VERSION) || BOOST_COMPUTE_MAX_CL_VERSION >= 201
+#    define BOOST_COMPUTE_CL_VERSION_2_1
+#  endif
+#endif
+#if defined(CL_VERSION_2_2)
+#  if !defined(BOOST_COMPUTE_MAX_CL_VERSION) || BOOST_COMPUTE_MAX_CL_VERSION >= 202
+#    define BOOST_COMPUTE_CL_VERSION_2_2
+#  endif
+#endif
+
 #endif // BOOST_COMPUTE_CL_HPP

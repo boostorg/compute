@@ -1036,7 +1036,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 }
 
 // SVM requires OpenCL 2.0
-#if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+#if defined(BOOST_COMPUTE_CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
 template<class T, class IndexExpr>
 inline meta_kernel& operator<<(meta_kernel &kernel,
                                const svm_ptr_index_expr<T, IndexExpr> &expr)
