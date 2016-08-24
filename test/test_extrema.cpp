@@ -72,7 +72,21 @@ BOOST_AUTO_TEST_CASE(int_min_max)
     BOOST_CHECK_EQUAL(max_iter.read(queue), 513);
 
     // compare function
-    boost::compute::less<int_> lestint;
+    boost::compute::less<int_> lessint;
+
+    // test minmax_element
+    std::pair<
+        boost::compute::vector<int_>::iterator,
+        boost::compute::vector<int_>::iterator
+    > minmax_iter =
+        boost::compute::minmax_element(vector.begin(), vector.end(), queue);
+    BOOST_CHECK_EQUAL((minmax_iter.first).read(queue), 0);
+    BOOST_CHECK_EQUAL((minmax_iter.second).read(queue), 513);
+
+    minmax_iter =
+        boost::compute::minmax_element(vector.begin(), vector.end(), lessint, queue);
+    BOOST_CHECK_EQUAL((minmax_iter.first).read(queue), 0);
+    BOOST_CHECK_EQUAL((minmax_iter.second).read(queue), 513);
 
     // find_extrama_on_cpu
 
@@ -89,14 +103,14 @@ BOOST_AUTO_TEST_CASE(int_min_max)
     parameters->set(cache_key, "serial_find_extrema_threshold", 16);
 
     min_iter = boost::compute::detail::find_extrema_on_cpu(
-        vector.begin(), vector.end(), lestint, true /* find minimum */, queue
+        vector.begin(), vector.end(), lessint, true /* find minimum */, queue
     );
     BOOST_CHECK(min_iter == vector.begin() + 512);
     BOOST_CHECK_EQUAL((vector.begin() + 512).read(queue), 0);
     BOOST_CHECK_EQUAL(min_iter.read(queue), 0);
 
     max_iter = boost::compute::detail::find_extrema_on_cpu(
-        vector.begin(), vector.end(), lestint, false /* find minimum */, queue
+        vector.begin(), vector.end(), lessint, false /* find minimum */, queue
     );
     BOOST_CHECK(max_iter == vector.end() - 512);
     BOOST_CHECK_EQUAL((vector.end() - 512).read(queue), 513);
@@ -115,14 +129,14 @@ BOOST_AUTO_TEST_CASE(int_min_max)
 
     // find_extrama_with_reduce
     min_iter = boost::compute::detail::find_extrema_with_reduce(
-        vector.begin(), vector.end(), lestint, true /* find minimum */, queue
+        vector.begin(), vector.end(), lessint, true /* find minimum */, queue
     );
     BOOST_CHECK(min_iter == vector.begin() + 512);
     BOOST_CHECK_EQUAL((vector.begin() + 512).read(queue), 0);
     BOOST_CHECK_EQUAL(min_iter.read(queue), 0);
 
     max_iter = boost::compute::detail::find_extrema_with_reduce(
-        vector.begin(), vector.end(), lestint, false /* find minimum */, queue
+        vector.begin(), vector.end(), lessint, false /* find minimum */, queue
     );
     BOOST_CHECK(max_iter == vector.end() - 512);
     BOOST_CHECK_EQUAL((vector.end() - 512).read(queue), 513);
@@ -130,14 +144,14 @@ BOOST_AUTO_TEST_CASE(int_min_max)
 
     // find_extram_with_atomics
     min_iter = boost::compute::detail::find_extrema_with_atomics(
-        vector.begin(), vector.end(), lestint, true /* find minimum */, queue
+        vector.begin(), vector.end(), lessint, true /* find minimum */, queue
     );
     BOOST_CHECK(min_iter == vector.begin() + 512);
     BOOST_CHECK_EQUAL((vector.begin() + 512).read(queue), 0);
     BOOST_CHECK_EQUAL(min_iter.read(queue), 0);
 
     max_iter = boost::compute::detail::find_extrema_with_atomics(
-        vector.begin(), vector.end(), lestint, false /* find minimum */, queue
+        vector.begin(), vector.end(), lessint, false /* find minimum */, queue
     );
     BOOST_CHECK(max_iter == vector.end() - 512);
     BOOST_CHECK_EQUAL((vector.end() - 512).read(queue), 513);

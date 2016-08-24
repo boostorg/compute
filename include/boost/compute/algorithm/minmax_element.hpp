@@ -49,7 +49,7 @@ minmax_element(InputIterator first,
 }
 
 ///\overload
-template<class InputIterator, class Compare>
+template<class InputIterator>
 inline std::pair<InputIterator, InputIterator>
 minmax_element(InputIterator first,
                InputIterator last,
