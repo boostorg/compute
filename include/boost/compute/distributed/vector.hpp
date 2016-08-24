@@ -510,12 +510,6 @@ public:
         std::swap(m_queue, other.m_queue);
     }
 
-    /// Removes all elements from the vector.
-    void clear()
-    {
-        m_size = 0;
-    }
-
     /// Returns the underlying buffer.
     std::vector<buffer> get_buffers() const
     {
