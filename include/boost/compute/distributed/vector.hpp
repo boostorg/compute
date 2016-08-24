@@ -84,9 +84,9 @@ public:
                 m_allocators.back()
                     .allocate(_minimum_capacity())
             );
-            m_data_sizes.push_back(0);
             m_data_indices.push_back(0);
         }
+        m_data_indices.push_back(0);
     }
 
     /// Creates a distributed vector with space for \p count elements
@@ -298,7 +298,6 @@ public:
         : m_queue(std::move(m_queue)),
           m_size(other.m_size),
           m_data(std::move(other.m_data)),
-          m_data_sizes(std::move(other.m_data_sizes)),
           m_data_indices(std::move(other.m_data_indices)),
           m_allocators(std::move(other.m_allocators))
     {
@@ -310,14 +309,13 @@ public:
     {
         if(m_size) {
             for(size_t i = 0; i < m_allocators.size(); i++) {
-                m_allocators[i].deallocate(m_data[i], m_data_sizes[i]);
+                m_allocators[i].deallocate(m_data[i], part_size(i));
             }
         }
 
         m_queue = std::move(other.m_queue);
         m_size = other.m_size;
         m_data = std::move(other.m_data);
-        m_data_sizes = std::move(other.m_data_sizes);
         m_data_indices = std::move(other.m_data_indices);
         m_allocators = std::move(other.m_allocators);
 
@@ -332,7 +330,7 @@ public:
     {
         if(m_size) {
             for(size_t i = 0; i < m_allocators.size(); i++) {
-                m_allocators[i].deallocate(m_data[i], m_data_sizes[i]);
+                m_allocators[i].deallocate(m_data[i], part_size(i));
             }
         }
     }
@@ -350,12 +348,16 @@ public:
 
     std::vector<size_type> parts_sizes() const
     {
-        return m_data_sizes;
+        std::vector<size_type> part_sizes(parts());
+        for(size_t i = 0; i < parts(); i++) {
+            part_sizes[i] = part_size(i);
+        }
+        return part_sizes;
     }
 
     size_type part_size(size_t n) const
     {
-        return m_data_sizes[n];
+        return m_data_indices[n+1] - m_data_indices[n];
     }
 
     std::vector<size_t> parts_starts() const
@@ -396,14 +398,14 @@ public:
     iterator end(size_t n)
     {
         return ::boost::compute::make_buffer_iterator<T>(
-            m_data[n].get_buffer(), m_data_sizes[n]
+            m_data[n].get_buffer(), m_data_indices[n+1] - m_data_indices[n]
         );
     }
 
     const_iterator end(size_t n) const
     {
         return ::boost::compute::make_buffer_iterator<T>(
-            m_data[n].get_buffer(), m_data_sizes[n]
+            m_data[n].get_buffer(), m_data_indices[n+1] - m_data_indices[n]
         );
     }
 
@@ -502,7 +504,6 @@ public:
     void swap(vector &other)
     {
         std::swap(m_data, other.m_data);
-        std::swap(m_data_sizes, other.m_data_sizes);
         std::swap(m_data_indices, other.m_data_indices);
         std::swap(m_size, other.m_size);
         std::swap(m_allocators, other.m_allocators);
@@ -557,13 +558,11 @@ private:
     {
         m_allocators.clear();
         m_data.clear();
-        m_data_sizes.clear();
         m_data_indices.clear();
 
         m_allocators.reserve(m_queue.size());
         m_data.reserve(m_queue.size());
-        m_data_sizes.reserve(m_queue.size());
-        m_data_indices.reserve(m_queue.size());
+        m_data_indices.reserve(m_queue.size() + 1);
 
         std::vector<size_t> partition =
             detail::partition(m_queue, weight, count, _align());
@@ -575,16 +574,15 @@ private:
                 m_allocators.back()
                     .allocate((std::max)(data_size, _minimum_capacity()))
                 );
-            m_data_sizes.push_back(data_size);
             m_data_indices.push_back(partition[i]);
         }
+        m_data_indices.push_back(partition[m_queue.size()]);
     }
 
 private:
     command_queue m_queue;
     size_type m_size;
 
-    std::vector<size_type> m_data_sizes;
     std::vector<size_t> m_data_indices;
     std::vector<pointer> m_data;
     std::vector<allocator_type> m_allocators;
