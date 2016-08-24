@@ -109,6 +109,7 @@ public:
 
     vector_type()
     {
+        BOOST_STATIC_ASSERT(sizeof(Scalar) * N == sizeof(vector_type<Scalar, N>));
     }
 
     explicit vector_type(const Scalar scalar)
