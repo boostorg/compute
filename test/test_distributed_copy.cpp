@@ -26,37 +26,9 @@
 #include "context_setup.hpp"
 
 #include "distributed_check_functions.hpp"
+#include "distributed_queue_setup.hpp"
 
 namespace bc = boost::compute;
-
-inline boost::compute::distributed::command_queue
-get_distributed_queue(boost::compute::command_queue& queue,
-                      size_t n = 1,
-                      bool same_context = false)
-{
-    std::vector<bc::command_queue> queues;
-    queues.push_back(queue);
-    for(size_t i = 0; i < n; i++) {
-        if(same_context) {
-            queues.push_back(
-                boost::compute::command_queue(
-                    queue.get_context(),
-                    queue.get_device()
-                )
-            );
-        }
-        else {
-            queues.push_back(
-                boost::compute::command_queue(
-                    boost::compute::context(queue.get_device()),
-                    queue.get_device()
-                )
-            );
-        }
-    }
-
-    return bc::distributed::command_queue(queues);
-}
 
 BOOST_AUTO_TEST_CASE(copy_from_host)
 {

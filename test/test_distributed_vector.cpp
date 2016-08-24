@@ -23,14 +23,17 @@
 #include "check_macros.hpp"
 #include "context_setup.hpp"
 
+#include "distributed_check_functions.hpp"
+#include "distributed_queue_setup.hpp"
+
 namespace bc = boost::compute;
 
 BOOST_AUTO_TEST_CASE(empty_vector)
 {
-    std::vector<bc::command_queue> queues;
-    queues.push_back(queue);
-    queues.push_back(queue);
-    bc::distributed::command_queue distributed_queue(queues);
+    // construct distributed::command_queue
+    bc::distributed::command_queue distributed_queue =
+        get_distributed_queue(queue);
+
     bc::distributed::vector<bc::uint_> distributed_vector(distributed_queue);
 
     BOOST_CHECK(distributed_vector.empty());
@@ -47,10 +50,9 @@ BOOST_AUTO_TEST_CASE(empty_vector)
 
 BOOST_AUTO_TEST_CASE(count_ctor)
 {
-    std::vector<bc::command_queue> queues;
-    queues.push_back(queue);
-    queues.push_back(queue);
-    bc::distributed::command_queue distributed_queue(queues);
+    // construct distributed::command_queue
+    bc::distributed::command_queue distributed_queue =
+        get_distributed_queue(queue);
 
     bc::distributed::vector<bc::uint_> distributed_vector(
         64, distributed_queue
@@ -70,10 +72,9 @@ BOOST_AUTO_TEST_CASE(count_ctor)
 
 BOOST_AUTO_TEST_CASE(command_queue_ctor)
 {
-    std::vector<bc::command_queue> queues;
-    queues.push_back(queue);
-    queues.push_back(queue);
-    bc::distributed::command_queue distributed_queue(queues);
+    // construct distributed::command_queue
+    bc::distributed::command_queue distributed_queue =
+        get_distributed_queue(queue);
 
     bc::uint_ value = 991;
     bc::distributed::vector<bc::uint_> distributed_vector(
@@ -97,25 +98,14 @@ BOOST_AUTO_TEST_CASE(command_queue_ctor)
     BOOST_CHECK_EQUAL(distributed_vector.back(), value);
     BOOST_CHECK_EQUAL(distributed_vector.front(), value);
 
-    for(size_t i = 0; i < distributed_vector.parts(); i++)
-    {
-        BOOST_CHECK(
-            bc::equal(
-                distributed_vector.begin(i),
-                distributed_vector.end(i),
-                bc::make_constant_iterator(value),
-                distributed_queue.get(i)
-            )
-        );
-    }
+    BOOST_CHECK(distributed_equal(distributed_vector, value, distributed_queue));
 }
 
 BOOST_AUTO_TEST_CASE(host_iterator_ctor)
 {
-    std::vector<bc::command_queue> queues;
-    queues.push_back(queue);
-    queues.push_back(queue);
-    bc::distributed::command_queue distributed_queue(queues);
+    // construct distributed::command_queue
+    bc::distributed::command_queue distributed_queue =
+        get_distributed_queue(queue);
 
     bc::int_ value = -1;
     std::vector<bc::int_> host_vector(50, value);
@@ -135,17 +125,7 @@ BOOST_AUTO_TEST_CASE(host_iterator_ctor)
     }
     BOOST_CHECK_EQUAL(distributed_vector.size(), size_sum);
 
-    for(size_t i = 0; i < distributed_vector.parts(); i++)
-    {
-        BOOST_CHECK(
-            bc::equal(
-                distributed_vector.begin(i),
-                distributed_vector.end(i),
-                bc::make_constant_iterator(value),
-                distributed_queue.get(i)
-            )
-        );
-    }
+    BOOST_CHECK(distributed_equal(distributed_vector, value, distributed_queue));
 
     // need to finish since back() and front()
     // use different (self-made) queues
@@ -159,12 +139,12 @@ BOOST_AUTO_TEST_CASE(host_iterator_ctor)
 
 BOOST_AUTO_TEST_CASE(copy_ctor)
 {
-    std::vector<bc::command_queue> queues;
-    queues.push_back(queue);
-    queues.push_back(queue);
-    bc::distributed::command_queue distributed_queue1(queues);
-    queues.push_back(queue);
-    bc::distributed::command_queue distributed_queue2(queues);
+    // construct distributed::command_queue
+    bc::distributed::command_queue distributed_queue1 =
+        get_distributed_queue(queue);
+    // construct distributed::command_queue
+    bc::distributed::command_queue distributed_queue2 =
+        get_distributed_queue(queue, 2);
 
     bc::int_ value = -1;
     size_t size = 64;
@@ -185,52 +165,25 @@ BOOST_AUTO_TEST_CASE(copy_ctor)
         distributed_vector, distributed_queue2
     );
 
-    for(size_t i = 0; i < distributed_vector.parts(); i++)
-    {
-        BOOST_CHECK(
-            bc::equal(
-                distributed_vector.begin(i),
-                distributed_vector.end(i),
-                bc::make_constant_iterator(value),
-                distributed_queue1.get(i)
-            )
-        );
-        BOOST_CHECK(
-            bc::equal(
-                distributed_vector_copy1.begin(i),
-                distributed_vector_copy1.end(i),
-                bc::make_constant_iterator(value),
-                distributed_queue1.get(i)
-            )
-        );
-    }
-    for(size_t i = 0; i < distributed_vector_copy2.parts(); i++)
-    {
-        BOOST_CHECK(
-            bc::equal(
-                distributed_vector_copy2.begin(i),
-                distributed_vector_copy2.end(i),
-                bc::make_constant_iterator(value),
-                distributed_queue2.get(i)
-            )
-        );
-        BOOST_CHECK(
-            bc::equal(
-                distributed_vector_copy3.begin(i),
-                distributed_vector_copy3.end(i),
-                bc::make_constant_iterator(value),
-                distributed_queue2.get(i)
-            )
-        );
-    }
+    BOOST_CHECK(
+        distributed_equal(distributed_vector, value, distributed_queue1)
+    );
+    BOOST_CHECK(
+        distributed_equal(distributed_vector_copy1, value, distributed_queue1)
+    );
+    BOOST_CHECK(
+        distributed_equal(distributed_vector_copy2, value, distributed_queue2)
+    );
+    BOOST_CHECK(
+        distributed_equal(distributed_vector_copy3, value, distributed_queue2)
+    );
 }
 
 BOOST_AUTO_TEST_CASE(at)
 {
-    std::vector<bc::command_queue> queues;
-    queues.push_back(queue);
-    queues.push_back(queue);
-    bc::distributed::command_queue distributed_queue(queues);
+    // construct distributed::command_queue
+    bc::distributed::command_queue distributed_queue =
+        get_distributed_queue(queue);
 
     bc::distributed::vector<bc::uint_> distributed_vector(
         size_t(64), bc::uint_(64), distributed_queue
@@ -263,10 +216,9 @@ BOOST_AUTO_TEST_CASE(at)
 
 BOOST_AUTO_TEST_CASE(subscript_operator)
 {
-    std::vector<bc::command_queue> queues;
-    queues.push_back(queue);
-    queues.push_back(queue);
-    bc::distributed::command_queue distributed_queue(queues);
+    // construct distributed::command_queue
+    bc::distributed::command_queue distributed_queue =
+        get_distributed_queue(queue);
 
     bc::distributed::vector<bc::uint_> distributed_vector(
         size_t(64), bc::uint_(64), distributed_queue
