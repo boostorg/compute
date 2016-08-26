@@ -22,7 +22,7 @@ namespace boost {
 namespace compute {
 
 /// Transforms the elements in the range [\p first, \p last) using
-/// \p transform and stores the results in the range beginning at
+/// operator \p op and stores the results in the range beginning at
 /// \p result.
 ///
 /// For example, to calculate the absolute value for each element in a vector:
