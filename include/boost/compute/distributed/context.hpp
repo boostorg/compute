@@ -147,6 +147,16 @@ public:
         return m_contexts[n];
     }
 
+    /// Returns true if all contexts are in fact the same OpenCL context.
+    bool one_context() const
+    {
+        bool one_context = m_contexts[0].get() != 0;
+        for(size_t i = 1; i < m_contexts.size(); i++) {
+            one_context = (one_context && (m_contexts[0] == m_contexts[i]));
+        }
+        return one_context;
+    }
+
     /// Returns information about nth context.
     template<class T>
     T get_info(size_t n, cl_context_info info) const

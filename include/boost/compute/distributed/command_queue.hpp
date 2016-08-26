@@ -181,6 +181,13 @@ public:
         return m_queues[n].get_context();
     }
 
+    /// Returns true if all device command queues are in the same OpenCL
+    /// context.
+    bool one_context() const
+    {
+        return m_context.one_context();
+    }
+
     /// Returns nth context from command queue's distributed context.
     ::boost::compute::device get_device(size_t n) const
     {
