@@ -56,7 +56,9 @@ copy_async(InputIterator first,
                !is_device_iterator<InputIterator>::value
            >::type* = 0)
 {
-    typedef typename InputIterator::difference_type diff_type;
+    typedef typename
+        std::iterator_traits<InputIterator>::difference_type diff_type;
+
     std::vector<event> events;
     events.reserve(result.parts());
 
@@ -128,7 +130,9 @@ copy_async(const vector<T, weight, Alloc> &input,
                >
            >::type* = 0)
 {
-    typedef typename OutputIterator::difference_type diff_type;
+    typedef typename
+        std::iterator_traits<OutputIterator>::difference_type diff_type;
+
     std::vector<event> events;
     events.reserve(input.parts());
 
@@ -197,7 +201,9 @@ copy_async(InputIterator first,
                is_device_iterator<InputIterator>::value
            >::type* = 0)
 {
-    typedef typename InputIterator::difference_type diff_type;
+    typedef typename
+        std::iterator_traits<InputIterator>::difference_type diff_type;
+
     std::vector<event> events;
     events.reserve(result.parts());
 
@@ -246,7 +252,9 @@ copy(InputIterator first,
          is_device_iterator<InputIterator>::value
      >::type* = 0)
 {
-    typedef typename InputIterator::difference_type diff_type;
+    typedef typename
+        std::iterator_traits<InputIterator>::difference_type diff_type;
+
     std::vector<event> events;
     events.reserve(result.parts());
 
@@ -314,7 +322,9 @@ copy_async(const vector<T, weight, Alloc> &input,
                >
            >::type* = 0)
 {
-    typedef typename OutputIterator::difference_type diff_type;
+    typedef typename
+        std::iterator_traits<OutputIterator>::difference_type diff_type;
+
     std::vector<event> events;
     events.reserve(input.parts());
 
@@ -362,7 +372,9 @@ copy(const vector<T, weight, Alloc> &input,
          >
      >::type* = 0)
 {
-    typedef typename OutputIterator::difference_type diff_type;
+    typedef typename
+        std::iterator_traits<OutputIterator>::difference_type diff_type;
+
     std::vector<event> events;
     events.reserve(input.parts());
 

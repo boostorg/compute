@@ -8,7 +8,7 @@
 // See http://boostorg.github.com/compute for more information.
 //---------------------------------------------------------------------------//
 
-#define BOOST_TEST_MODULE TestDistributedVector
+#define BOOST_TEST_MODULE TestDistributedCopy
 #include <boost/test/unit_test.hpp>
 
 #include <boost/compute/algorithm.hpp>
