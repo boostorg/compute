@@ -161,6 +161,7 @@ Header: `<boost/compute/iterators.hpp>`
 * [classref boost::compute::discard_iterator discard_iterator]
 * [classref boost::compute::function_input_iterator function_input_iterator<Function>]
 * [classref boost::compute::permutation_iterator permutation_iterator<ElementIterator, IndexIterator>]
+* [classref boost::compute::strided_iterator strided_iterator<Iterator>]
 * [classref boost::compute::transform_iterator transform_iterator<InputIterator, UnaryFunction>]
 * [classref boost::compute::zip_iterator zip_iterator<IteratorTuple>]
 
