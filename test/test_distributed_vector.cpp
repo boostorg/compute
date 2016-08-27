@@ -68,6 +68,13 @@ BOOST_AUTO_TEST_CASE(count_ctor)
         size_sum += distributed_vector.part_size(i);
     }
     BOOST_CHECK_EQUAL(distributed_vector.size(), size_sum);
+
+    std::vector<bc::buffer> buffers = distributed_vector.get_buffers();
+    for(size_t i = 0; i < distributed_vector.parts(); i++)
+    {
+        BOOST_CHECK(buffers[i].get() != 0);
+        BOOST_CHECK(buffers[i] == distributed_vector.get_buffer(i));
+    }
 }
 
 BOOST_AUTO_TEST_CASE(command_queue_ctor)
@@ -91,6 +98,32 @@ BOOST_AUTO_TEST_CASE(command_queue_ctor)
         size_sum += distributed_vector.part_size(i);
     }
     BOOST_CHECK_EQUAL(distributed_vector.size(), size_sum);
+
+    // need to finish since back() and front()
+    // use different (self-made) queues
+    distributed_queue.finish();
+    BOOST_CHECK_EQUAL(distributed_vector.back(), value);
+    BOOST_CHECK_EQUAL(distributed_vector.front(), value);
+
+    BOOST_CHECK(distributed_equal(distributed_vector, value, distributed_queue));
+}
+
+BOOST_AUTO_TEST_CASE(command_queue_ctor_one_queue)
+{
+    // construct distributed::command_queue
+    // with only 1 device command queue
+    bc::distributed::command_queue distributed_queue =
+        get_distributed_queue(queue, 0);
+
+    bc::uint_ value = 1;
+    bc::distributed::vector<bc::uint_> distributed_vector(
+        size_t(5), value, distributed_queue
+    );
+
+    BOOST_CHECK(!distributed_vector.empty());
+    BOOST_CHECK(distributed_vector.size() == 5);
+    BOOST_CHECK(distributed_vector.parts() == 1);
+    BOOST_CHECK_EQUAL(distributed_vector.size(), distributed_vector.part_size(0));
 
     // need to finish since back() and front()
     // use different (self-made) queues
@@ -164,6 +197,15 @@ BOOST_AUTO_TEST_CASE(copy_ctor)
     > distributed_vector_copy3(
         distributed_vector, distributed_queue2
     );
+    bc::distributed::vector<bc::int_> distributed_vector_copy4(
+        distributed_vector, distributed_queue1
+    );
+    bc::distributed::vector<
+        bc::int_,
+        bc::distributed::default_weight_func, bc::pinned_allocator<bc::int_>
+    > distributed_vector_copy5(
+        distributed_vector, distributed_queue1
+    );
 
     BOOST_CHECK(
         distributed_equal(distributed_vector, value, distributed_queue1)
@@ -176,6 +218,12 @@ BOOST_AUTO_TEST_CASE(copy_ctor)
     );
     BOOST_CHECK(
         distributed_equal(distributed_vector_copy3, value, distributed_queue2)
+    );
+    BOOST_CHECK(
+        distributed_equal(distributed_vector_copy4, value, distributed_queue1)
+    );
+    BOOST_CHECK(
+        distributed_equal(distributed_vector_copy5, value, distributed_queue1)
     );
 }
 
@@ -244,6 +292,50 @@ BOOST_AUTO_TEST_CASE(subscript_operator)
     BOOST_CHECK_EQUAL(
         *distributed_vector.begin(1),
         bc::uint_(55)
+    );
+}
+
+BOOST_AUTO_TEST_CASE(swap)
+{
+    // construct distributed::command_queue
+    bc::distributed::command_queue distributed_queue1 =
+        get_distributed_queue(queue);
+    // construct 2nd distributed::command_queue
+    bc::distributed::command_queue distributed_queue2 =
+        get_distributed_queue(queue, 2);
+
+    bc::int_ value1 = -88;
+    bc::int_ value2 = 99;
+    size_t size1 = 64;
+    size_t size2 = 48;
+
+    bc::distributed::vector<bc::int_> distributed_vector1(
+        size1, value1, distributed_queue1
+    );
+    bc::distributed::vector<bc::int_> distributed_vector2(
+        size2, value2, distributed_queue2
+    );
+
+    BOOST_CHECK_EQUAL(distributed_vector1.size(), size1);
+    BOOST_CHECK(
+        distributed_equal(distributed_vector1, value1, distributed_queue1)
+    );
+    BOOST_CHECK_EQUAL(distributed_vector2.size(), size2);
+    BOOST_CHECK(
+        distributed_equal(distributed_vector2, value2, distributed_queue2)
+    );
+    distributed_queue1.finish();
+    distributed_queue2.finish();
+
+    distributed_vector1.swap(distributed_vector2);
+
+    BOOST_CHECK_EQUAL(distributed_vector1.size(), size2);
+    BOOST_CHECK(
+        distributed_equal(distributed_vector1, value2, distributed_queue2)
+    );
+    BOOST_CHECK_EQUAL(distributed_vector2.size(), size1);
+    BOOST_CHECK(
+        distributed_equal(distributed_vector2, value1, distributed_queue1)
     );
 }
 
