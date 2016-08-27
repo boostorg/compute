@@ -231,6 +231,18 @@ public:
         }
     }
 
+    /// \internal_
+    /// Return true if every device supports at least OpenCL major.minor
+    bool check_devices_version(int major, int minor) const
+    {
+        bool check = true;
+        for(size_t i = 0; i < m_queues.size(); i++)
+        {
+            check = check && m_queues[i].get_device().check_version(major, minor);
+        }
+        return check;
+    }
+
 private:
     ::boost::compute::distributed::context m_context;
     std::vector< ::boost::compute::command_queue> m_queues;
