@@ -273,12 +273,14 @@ public:
     }
 
     #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
-    /// Compiles the program with \p options.
+    /// Compiles the program with \p options and \p headers.
     ///
     /// \opencl_version_warning{1,2}
     ///
     /// \see_opencl_ref{clCompileProgram}
-    void compile(const std::string &options = std::string())
+    void compile(const std::string &options = std::string(),
+                 const std::vector<std::pair<std::string, program> > &headers =
+                    std::vector<std::pair<std::string, program> >())
     {
         const char *options_string = 0;
 
@@ -286,9 +288,36 @@ public:
             options_string = options.c_str();
         }
 
-        cl_int ret = clCompileProgram(
-            m_program, 0, 0, options_string, 0, 0, 0, 0, 0
-        );
+        cl_int ret;
+        if (headers.empty())
+        {
+            ret = clCompileProgram(
+                m_program, 0, 0, options_string, 0, 0, 0, 0, 0
+            );
+        }
+        else
+        {
+            std::vector<const char*> header_names(headers.size());
+            std::vector<cl_program> header_programs(headers.size());
+            for (size_t i = 0; i < headers.size(); ++i)
+            {
+                header_names[i] = headers[i].first.c_str();
+                header_programs[i] = headers[i].second.m_program;
+            }
+
+            ret = clCompileProgram(
+                m_program,
+                0,
+                0,
+                options_string,
+                headers.size(),
+                header_programs.data(),
+                header_names.data(),
+                0,
+                0
+            );
+        }
+
 
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
