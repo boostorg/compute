@@ -127,15 +127,18 @@ BOOST_AUTO_TEST_CASE(result_of)
 
     namespace proto = ::boost::proto;
 
-    check_lambda_result<int>(proto::lit(1));
-    check_lambda_result<int>(proto::lit(1) + 2);
+    using boost::compute::int_;
+
+    check_lambda_result<int_>(proto::lit(1));
+    check_lambda_result<int_>(proto::lit(1) + 2);
     check_lambda_result<float>(proto::lit(1.2f));
     check_lambda_result<float>(proto::lit(1) + 1.2f);
     check_lambda_result<float>(proto::lit(1) / 2 + 1.2f);
 
     using boost::compute::float4_;
+    using boost::compute::int4_;
 
-    check_lambda_result<int>(_1, int(1));
+    check_lambda_result<int_>(_1, int_(1));
     check_lambda_result<float>(_1, float(1.2f));
     check_lambda_result<float4_>(_1, float4_(1, 2, 3, 4));
     check_lambda_result<float4_>(2.0f * _1, float4_(1, 2, 3, 4));
@@ -146,8 +149,30 @@ BOOST_AUTO_TEST_CASE(result_of)
     check_lambda_result<float>(distance(_1, _2), float4_(0, 1, 2, 3), float4_(3, 2, 1, 0));
     check_lambda_result<float>(distance(_1, float4_(3, 2, 1, 0)), float4_(0, 1, 2, 3));
 
+    check_lambda_result<float>(length(_1), float4_(3, 2, 1, 0));
+
     check_lambda_result<float4_>(cross(_1, _2), float4_(0, 1, 2, 3), float4_(3, 2, 1, 0));
     check_lambda_result<float4_>(cross(_1, float4_(3, 2, 1, 0)), float4_(0, 1, 2, 3));
+
+    check_lambda_result<float4_>(max(_1, _2), float4_(3, 2, 1, 0), float4_(0, 1, 2, 3));
+    check_lambda_result<float4_>(max(_1, float(1.0f)), float4_(0, 1, 2, 3));
+    check_lambda_result<int4_>(max(_1, int4_(3, 2, 1, 0)), int4_(0, 1, 2, 3));
+    check_lambda_result<int4_>(max(_1, int_(1)), int4_(0, 1, 2, 3));
+    check_lambda_result<float4_>(min(_1, float4_(3, 2, 1, 0)), float4_(0, 1, 2, 3));
+
+    check_lambda_result<float4_>(step(_1, _2), float4_(3, 2, 1, 0), float4_(0, 1, 2, 3));
+    check_lambda_result<int4_>(step(_1, _2), float(3.0f), int4_(0, 1, 2, 3));
+
+    check_lambda_result<float4_>(
+        smoothstep(_1, _2, _3),
+        float4_(3, 2, 1, 0), float4_(3, 2, 1, 0), float4_(0, 1, 2, 3)
+    );
+    check_lambda_result<int4_>(
+        smoothstep(_1, _2, _3),
+        float(2.0f), float(3.0f), int4_(0, 1, 2, 3)
+    );
+
+    check_lambda_result<int4_>(isinf(_1), float4_(0, 1, 2, 3));
 
     check_lambda_result<int>(_1 + 2, int(2));
     check_lambda_result<float>(_1 + 2, float(2.2f));
