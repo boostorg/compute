@@ -247,6 +247,57 @@ BOOST_AUTO_TEST_CASE(make_function_from_binary_lamdba)
     CHECK_RANGE_EQUAL(int, 5, result, (8, 4, 0, 4, 8));
 }
 
+BOOST_AUTO_TEST_CASE(lambda_binary_function_with_pointer_modf)
+{
+    using boost::compute::lambda::_1;
+    using boost::compute::lambda::_2;
+    using boost::compute::lambda::abs;
+
+    bc::float_ data1[] = { 2.2f, 4.2f, 6.3f, 8.3f, 10.2f };
+    compute::vector<bc::float_> vec1(data1, data1 + 5, queue);
+    compute::vector<bc::float_> vec2(size_t(5), context);
+    compute::vector<bc::float_> result(5, context);
+
+    compute::transform(
+        bc::make_transform_iterator(vec1.begin(), _1 + 0.01f),
+        bc::make_transform_iterator(vec1.end(), _1 + 0.01f),
+        vec2.begin(),
+        result.begin(),
+        bc::lambda::modf(_1, _2),
+        queue
+    );
+    CHECK_RANGE_CLOSE(bc::float_, 5, result, (0.21f, 0.21f, 0.31f, 0.31f, 0.21f), 0.01f);
+    CHECK_RANGE_CLOSE(bc::float_, 5, vec2, (2, 4, 6, 8, 10), 0.01f);
+}
+
+BOOST_AUTO_TEST_CASE(lambda_tenary_function_with_pointer_remquo)
+{
+    using boost::compute::lambda::_1;
+    using boost::compute::lambda::_2;
+    using boost::compute::lambda::get;
+
+    bc::float_ data1[] = { 2.2f, 4.2f, 6.3f, 8.3f, 10.2f };
+    bc::float_ data2[] = { 4.4f, 4.2f, 6.3f, 16.6f, 10.2f };
+    compute::vector<bc::float_> vec1(data1, data1 + 5, queue);
+    compute::vector<bc::float_> vec2(data2, data2 + 5, queue);
+    compute::vector<bc::int_> vec3(size_t(5), context);
+    compute::vector<bc::float_> result(5, context);
+
+    compute::transform(
+        compute::make_zip_iterator(
+            boost::make_tuple(vec1.begin(), vec2.begin(), vec3.begin())
+        ),
+        compute::make_zip_iterator(
+            boost::make_tuple(vec1.end(), vec2.end(), vec3.end())
+        ),
+        result.begin(),
+        bc::lambda::remquo(get<0>(_1), get<1>(_1), get<2>(_1)),
+        queue
+    );
+    CHECK_RANGE_CLOSE(bc::float_, 5, result, (2.2f, 0.0f, 0.0f, 8.3f, 0.0f), 0.01f);
+    CHECK_RANGE_EQUAL(bc::int_, 5, vec3, (0, 1, 1, 0, 1));
+}
+
 BOOST_AUTO_TEST_CASE(lambda_get_vector)
 {
     using boost::compute::_1;
