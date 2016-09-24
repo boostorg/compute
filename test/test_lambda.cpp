@@ -26,6 +26,7 @@
 #include <boost/compute/types/tuple.hpp>
 
 #include "check_macros.hpp"
+#include "quirks.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -272,6 +273,11 @@ BOOST_AUTO_TEST_CASE(lambda_binary_function_with_pointer_modf)
 
 BOOST_AUTO_TEST_CASE(lambda_tenary_function_with_pointer_remquo)
 {
+    if(!has_remquo_func(device))
+    {
+        return;
+    }
+
     using boost::compute::lambda::_1;
     using boost::compute::lambda::_2;
     using boost::compute::lambda::get;
