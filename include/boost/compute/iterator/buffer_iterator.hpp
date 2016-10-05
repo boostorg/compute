@@ -81,9 +81,9 @@ struct buffer_iterator_index_expr
     }
 
     const buffer m_buffer;
-    size_t m_index;
-    memory_object::address_space m_address_space;
-    IndexExpr m_expr;
+    const size_t m_index;
+    const memory_object::address_space m_address_space;
+    const IndexExpr m_expr;
 };
 
 template<class T, class IndexExpr>
