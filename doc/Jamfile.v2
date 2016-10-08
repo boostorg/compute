@@ -109,3 +109,9 @@ boostbook standalone
       <dependency>autodoc
       <format>html:<xsl:param>boost.root=../../../..
     ;
+
+###############################################################################
+alias boostdoc ;
+explicit boostdoc ;
+alias boostrelease : standalone ;
+explicit boostrelease ;
