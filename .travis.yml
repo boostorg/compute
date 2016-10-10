@@ -366,6 +366,7 @@ before_install:
       # OSX
       elif [[ ${TRAVIS_OS_NAME} == "osx" ]]; then
         brew update
+        /usr/bin/yes | pip uninstall numpy
         brew outdated boost || brew upgrade boost
         brew outdated cmake || brew upgrade cmake
         brew install lcov homebrew/science/opencv
