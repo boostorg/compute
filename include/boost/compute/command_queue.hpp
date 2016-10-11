@@ -81,6 +81,11 @@ public:
     enum properties {
         enable_profiling = CL_QUEUE_PROFILING_ENABLE,
         enable_out_of_order_execution = CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE
+        #ifdef CL_VERSION_2_0
+        ,
+        on_device = CL_QUEUE_ON_DEVICE,
+        on_device_default = CL_QUEUE_ON_DEVICE_DEFAULT
+        #endif
     };
 
     enum map_flags {
