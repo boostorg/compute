@@ -307,7 +307,7 @@ inline void radix_sort_impl(const buffer_iterator<T> first,
 
     // load radix sort program
     program radix_sort_program = cache->get_or_build(
-        cache_key, options.str(), radix_sort_source, context
+       cache_key, options.str(), boost::compute::type_definition<T2>() +"\n"+radix_sort_source, context
     );
 
     kernel count_kernel(radix_sort_program, "count");

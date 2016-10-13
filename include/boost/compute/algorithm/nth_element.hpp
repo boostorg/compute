@@ -43,8 +43,7 @@ inline void nth_element(Iterator first,
             first, last, ::boost::compute::bind(compare, _1, value), queue
         );
 
-        Iterator old_nth = find(new_nth, last, value, queue);
-
+        Iterator old_nth = find_if(new_nth,last,nor1(boost::compute::bind(compare, _1, value),boost::compute::bind(compare, value, _1)),queue);
         value_type new_value = new_nth.read(queue);
 
         fill_n(new_nth, 1, value, queue);
