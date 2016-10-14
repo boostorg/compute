@@ -199,7 +199,30 @@ public:
     {
 
     }
-
+ 
+    valarray<T> operator+(const valarray<T> &rhs) const
++    {
++        const context &context = m_buffer.get_context();
+    command_queue queue(context, context.get_device());
+    valarray<T> result(size(), context);
+    transform(begin(), end(), rhs.begin(), result.begin(), plus<T>(), queue);
+    queue.finish();
+    return result;
+    
+    }
+    
+     valarray<T> operator-(const valarray<T> &rhs) const
++    {
++   const context &context = m_buffer.get_context();
+    command_queue queue(context, context.get_device());
+    valarray<T> result(size(), context);
+    transform(begin(), end(), rhs.begin(),result.begin(), minus<T>(), queue);
+    queue.finish();
+    return result;
+    
+    }
+    
++
     size_t size() const
     {
         return m_buffer.size() / sizeof(T);
