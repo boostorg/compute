@@ -72,6 +72,8 @@ dispatch_gpu_stable_sort(buffer_iterator<T> first,
 /// Sorts the values in the range [\p first, \p last) according to
 /// \p compare. The relative order of identical values is preserved.
 ///
+/// Space complexity: \Omega(n)
+///
 /// \see sort(), is_sorted()
 template<class Iterator, class Compare>
 inline void stable_sort(Iterator first,

@@ -26,6 +26,7 @@ namespace boost {
 namespace compute {
 namespace detail {
 
+// Space complexity: O(2n)
 template<class InputIterator, class OutputIterator, class UnaryFunction, class Predicate>
 inline OutputIterator transform_if_impl(InputIterator first,
                                         InputIterator last,
@@ -98,6 +99,8 @@ inline discard_iterator transform_if_impl(InputIterator first,
 
 /// Copies each element in the range [\p first, \p last) for which
 /// \p predicate returns \c true to the range beginning at \p result.
+///
+/// Space complexity: O(2n)
 template<class InputIterator, class OutputIterator, class UnaryFunction, class Predicate>
 inline OutputIterator transform_if(InputIterator first,
                                    InputIterator last,

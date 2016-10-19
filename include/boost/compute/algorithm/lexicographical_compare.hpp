@@ -42,10 +42,10 @@ const char lexicographical_compare_source[] =
 
 template<class InputIterator1, class InputIterator2>
 inline bool dispatch_lexicographical_compare(InputIterator1 first1,
-                                     InputIterator1 last1,
-                                     InputIterator2 first2,
-                                     InputIterator2 last2,
-                                     command_queue &queue)
+                                             InputIterator1 last1,
+                                             InputIterator2 first2,
+                                             InputIterator2 last2,
+                                             command_queue &queue)
 {
     const boost::compute::context &context = queue.get_context();
 
@@ -103,6 +103,9 @@ inline bool dispatch_lexicographical_compare(InputIterator1 first1,
 
 /// Checks if the first range [first1, last1) is lexicographically
 /// less than the second range [first2, last2).
+///
+/// Space complexity:
+/// \Omega(max(distance(\p first1, \p last1), distance(\p first2, \p last2)))
 template<class InputIterator1, class InputIterator2>
 inline bool lexicographical_compare(InputIterator1 first1,
                                     InputIterator1 last1,

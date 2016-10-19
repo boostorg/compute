@@ -83,7 +83,7 @@ private:
 /// at \p map if stencil is resolved to true. By default the predicate is
 /// an identity
 ///
-///
+/// Space complexity: \Omega(1)
 template<class InputIterator, class MapIterator, class StencilIterator, class OutputIterator,
          class Predicate>
 inline void scatter_if(InputIterator first,

@@ -64,6 +64,9 @@ dispatch_adjacent_difference(InputIterator first,
 ///
 /// \return \c OutputIterator to the end of the result range
 ///
+/// Space complexity: \Omega(1)<br>
+/// Space complexity when \p result == \p first: \Omega(n)
+///
 /// \see adjacent_find()
 template<class InputIterator, class OutputIterator, class BinaryFunction>
 inline OutputIterator

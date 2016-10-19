@@ -29,6 +29,8 @@ namespace compute {
 ///
 /// \snippet test/test_transform.cpp transform_abs
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see copy()
 template<class InputIterator, class OutputIterator, class UnaryOperator>
 inline OutputIterator transform(InputIterator first,

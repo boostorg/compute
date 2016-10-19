@@ -42,6 +42,10 @@ namespace compute {
 ///
 /// \snippet test/test_scan.cpp inclusive_scan_int_multiplies
 ///
+/// Space complexity on GPUs: \Omega(n)<br>
+/// Space complexity on GPUs when \p first == \p result: \Omega(2n)<br>
+/// Space complexity on CPUs: \Omega(1)
+///
 /// \see exclusive_scan()
 template<class InputIterator, class OutputIterator, class BinaryOperator>
 inline OutputIterator

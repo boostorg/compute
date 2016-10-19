@@ -29,6 +29,8 @@ namespace compute {
 /// \param predicate Unary predicate to be applied on each element
 /// \param queue Queue on which to execute
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see partition() and stable_partition()
 ///
 template<class InputIterator, class UnaryPredicate>

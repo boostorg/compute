@@ -28,6 +28,8 @@ namespace compute {
 /// Returns a pair of iterators pointing to the first position where the
 /// range [\p first1, \p last1) and the range starting at \p first2
 /// differ.
+///
+/// Space complexity: \Omega(1)
 template<class InputIterator1, class InputIterator2>
 inline std::pair<InputIterator1, InputIterator2>
 mismatch(InputIterator1 first1,

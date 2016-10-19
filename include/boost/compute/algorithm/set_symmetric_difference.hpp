@@ -133,13 +133,16 @@ private:
 /// difference will be stored
 /// \param queue Queue on which to execute
 ///
+/// Space complexity:
+/// \Omega(2(distance(\p first1, \p last1) + distance(\p first2, \p last2)))
 template<class InputIterator1, class InputIterator2, class OutputIterator>
-inline OutputIterator set_symmetric_difference(InputIterator1 first1,
-                                     InputIterator1 last1,
-                                     InputIterator2 first2,
-                                     InputIterator2 last2,
-                                     OutputIterator result,
-                                     command_queue &queue = system::default_queue())
+inline OutputIterator
+set_symmetric_difference(InputIterator1 first1,
+                         InputIterator1 last1,
+                         InputIterator2 first2,
+                         InputIterator2 last2,
+                         OutputIterator result,
+                         command_queue &queue = system::default_queue())
 {
     typedef typename std::iterator_traits<InputIterator1>::value_type value_type;
 

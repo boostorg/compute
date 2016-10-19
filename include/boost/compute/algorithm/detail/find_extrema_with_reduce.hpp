@@ -246,6 +246,7 @@ inline void find_extrema_with_reduce(InputIterator input,
     );
 }
 
+// Space complexity: \Omega(2 * work-group-size * work-groups-per-compute-unit)
 template<class InputIterator, class Compare>
 InputIterator find_extrema_with_reduce(InputIterator first,
                                        InputIterator last,

@@ -62,6 +62,8 @@ private:
 /// to the range beginning at \p result using the input values from the range
 /// beginning at \p input.
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see scatter()
 template<class InputIterator, class MapIterator, class OutputIterator>
 inline void gather(MapIterator first,
