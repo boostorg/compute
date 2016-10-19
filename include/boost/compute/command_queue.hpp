@@ -1511,7 +1511,10 @@ public:
     {
         BOOST_ASSERT(m_queue != 0);
 
-        clFlush(m_queue);
+        cl_int ret = clFlush(m_queue);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
     }
 
     /// Blocks until all outstanding commands in the queue have finished.
@@ -1521,7 +1524,10 @@ public:
     {
         BOOST_ASSERT(m_queue != 0);
 
-        clFinish(m_queue);
+        cl_int ret = clFinish(m_queue);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
     }
 
     /// Enqueues a barrier in the queue.
