@@ -83,6 +83,16 @@ inline bool supports_image_samplers(const boost::compute::device &device)
     return true;
 }
 
+// returns true if the device has remquo() built-in OpenCL function implementation
+inline bool has_remquo_func(const boost::compute::device &device)
+{
+    // POCL does not have it
+    if(is_pocl_device(device)){
+        return false;
+    }
+    return true;
+}
+
 // returns true if the device supports clSetMemObjectDestructorCallback
 inline bool supports_destructor_callback(const boost::compute::device &device)
 {

@@ -26,6 +26,7 @@
 #include <boost/compute/types/tuple.hpp>
 
 #include "check_macros.hpp"
+#include "quirks.hpp"
 #include "context_setup.hpp"
 
 namespace bc = boost::compute;
@@ -127,15 +128,18 @@ BOOST_AUTO_TEST_CASE(result_of)
 
     namespace proto = ::boost::proto;
 
-    check_lambda_result<int>(proto::lit(1));
-    check_lambda_result<int>(proto::lit(1) + 2);
+    using boost::compute::int_;
+
+    check_lambda_result<int_>(proto::lit(1));
+    check_lambda_result<int_>(proto::lit(1) + 2);
     check_lambda_result<float>(proto::lit(1.2f));
     check_lambda_result<float>(proto::lit(1) + 1.2f);
     check_lambda_result<float>(proto::lit(1) / 2 + 1.2f);
 
     using boost::compute::float4_;
+    using boost::compute::int4_;
 
-    check_lambda_result<int>(_1, int(1));
+    check_lambda_result<int_>(_1, int_(1));
     check_lambda_result<float>(_1, float(1.2f));
     check_lambda_result<float4_>(_1, float4_(1, 2, 3, 4));
     check_lambda_result<float4_>(2.0f * _1, float4_(1, 2, 3, 4));
@@ -146,8 +150,30 @@ BOOST_AUTO_TEST_CASE(result_of)
     check_lambda_result<float>(distance(_1, _2), float4_(0, 1, 2, 3), float4_(3, 2, 1, 0));
     check_lambda_result<float>(distance(_1, float4_(3, 2, 1, 0)), float4_(0, 1, 2, 3));
 
+    check_lambda_result<float>(length(_1), float4_(3, 2, 1, 0));
+
     check_lambda_result<float4_>(cross(_1, _2), float4_(0, 1, 2, 3), float4_(3, 2, 1, 0));
     check_lambda_result<float4_>(cross(_1, float4_(3, 2, 1, 0)), float4_(0, 1, 2, 3));
+
+    check_lambda_result<float4_>(max(_1, _2), float4_(3, 2, 1, 0), float4_(0, 1, 2, 3));
+    check_lambda_result<float4_>(max(_1, float(1.0f)), float4_(0, 1, 2, 3));
+    check_lambda_result<int4_>(max(_1, int4_(3, 2, 1, 0)), int4_(0, 1, 2, 3));
+    check_lambda_result<int4_>(max(_1, int_(1)), int4_(0, 1, 2, 3));
+    check_lambda_result<float4_>(min(_1, float4_(3, 2, 1, 0)), float4_(0, 1, 2, 3));
+
+    check_lambda_result<float4_>(step(_1, _2), float4_(3, 2, 1, 0), float4_(0, 1, 2, 3));
+    check_lambda_result<int4_>(step(_1, _2), float(3.0f), int4_(0, 1, 2, 3));
+
+    check_lambda_result<float4_>(
+        smoothstep(_1, _2, _3),
+        float4_(3, 2, 1, 0), float4_(3, 2, 1, 0), float4_(0, 1, 2, 3)
+    );
+    check_lambda_result<int4_>(
+        smoothstep(_1, _2, _3),
+        float(2.0f), float(3.0f), int4_(0, 1, 2, 3)
+    );
+
+    check_lambda_result<int4_>(isinf(_1), float4_(0, 1, 2, 3));
 
     check_lambda_result<int>(_1 + 2, int(2));
     check_lambda_result<float>(_1 + 2, float(2.2f));
@@ -220,6 +246,62 @@ BOOST_AUTO_TEST_CASE(make_function_from_binary_lamdba)
         vec1.begin(), vec1.end(), vec2.begin(), result.begin(), f, queue
     );
     CHECK_RANGE_EQUAL(int, 5, result, (8, 4, 0, 4, 8));
+}
+
+BOOST_AUTO_TEST_CASE(lambda_binary_function_with_pointer_modf)
+{
+    using boost::compute::lambda::_1;
+    using boost::compute::lambda::_2;
+    using boost::compute::lambda::abs;
+
+    bc::float_ data1[] = { 2.2f, 4.2f, 6.3f, 8.3f, 10.2f };
+    compute::vector<bc::float_> vec1(data1, data1 + 5, queue);
+    compute::vector<bc::float_> vec2(size_t(5), context);
+    compute::vector<bc::float_> result(5, context);
+
+    compute::transform(
+        bc::make_transform_iterator(vec1.begin(), _1 + 0.01f),
+        bc::make_transform_iterator(vec1.end(), _1 + 0.01f),
+        vec2.begin(),
+        result.begin(),
+        bc::lambda::modf(_1, _2),
+        queue
+    );
+    CHECK_RANGE_CLOSE(bc::float_, 5, result, (0.21f, 0.21f, 0.31f, 0.31f, 0.21f), 0.01f);
+    CHECK_RANGE_CLOSE(bc::float_, 5, vec2, (2, 4, 6, 8, 10), 0.01f);
+}
+
+BOOST_AUTO_TEST_CASE(lambda_tenary_function_with_pointer_remquo)
+{
+    if(!has_remquo_func(device))
+    {
+        return;
+    }
+
+    using boost::compute::lambda::_1;
+    using boost::compute::lambda::_2;
+    using boost::compute::lambda::get;
+
+    bc::float_ data1[] = { 2.2f, 4.2f, 6.3f, 8.3f, 10.2f };
+    bc::float_ data2[] = { 4.4f, 4.2f, 6.3f, 16.6f, 10.2f };
+    compute::vector<bc::float_> vec1(data1, data1 + 5, queue);
+    compute::vector<bc::float_> vec2(data2, data2 + 5, queue);
+    compute::vector<bc::int_> vec3(size_t(5), context);
+    compute::vector<bc::float_> result(5, context);
+
+    compute::transform(
+        compute::make_zip_iterator(
+            boost::make_tuple(vec1.begin(), vec2.begin(), vec3.begin())
+        ),
+        compute::make_zip_iterator(
+            boost::make_tuple(vec1.end(), vec2.end(), vec3.end())
+        ),
+        result.begin(),
+        bc::lambda::remquo(get<0>(_1), get<1>(_1), get<2>(_1)),
+        queue
+    );
+    CHECK_RANGE_CLOSE(bc::float_, 5, result, (2.2f, 0.0f, 0.0f, 8.3f, 0.0f), 0.01f);
+    CHECK_RANGE_EQUAL(bc::int_, 5, vec3, (0, 1, 1, 0, 1));
 }
 
 BOOST_AUTO_TEST_CASE(lambda_get_vector)
