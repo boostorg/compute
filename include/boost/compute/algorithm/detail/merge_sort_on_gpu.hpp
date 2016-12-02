@@ -418,7 +418,7 @@ inline void merge_blocks_on_gpu(KeyIterator keys_first,
                     ");\n" <<
                 "left_idx = equal ? mid_idx + 1 : left_idx + 1;\n" <<
                 "right_idx = equal ? right_idx : mid_idx;\n" <<
-                "upper_key = equal ? upper_key : " <<
+                "upper_key = " <<
                     keys_first[k.var<const uint_>("left_idx")] << ";\n" <<
             "}\n" <<
         "}\n" <<
