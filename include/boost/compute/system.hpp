@@ -79,6 +79,22 @@ public:
         return default_device;
     }
 
+    /// Returns the default gpu compute device for the system.
+    static device default_gpu_device()
+    {
+        static device default_gpu_device = find_default_gpu_device();
+
+        return default_gpu_device;
+    }
+
+    /// Returns the default cpu compute device for the system.
+    static device default_cpu_device()
+    {
+        static device default_cpu_device = find_default_cpu_device();
+
+        return default_cpu_device;
+    }
+
     /// Returns the device with \p name.
     ///
     /// \throws no_device_found if no device with \p name is found.
@@ -265,6 +281,82 @@ private:
 
         // return the first device found
         return devices_[0];
+    }
+
+    static device find_default_gpu_device()
+    {
+        // get a list of all devices on the system
+        const std::vector<device> devices_ = devices();
+        if(devices_.empty()){
+            return device();
+        }
+
+        // check for device from environment variable
+        const char *name     = detail::getenv("BOOST_COMPUTE_DEFAULT_DEVICE");
+        const char *platform = detail::getenv("BOOST_COMPUTE_DEFAULT_PLATFORM");
+        const char *vendor   = detail::getenv("BOOST_COMPUTE_DEFAULT_VENDOR");
+
+        if(name || platform || vendor){
+            BOOST_FOREACH(const device &device, devices_){
+                if (name && !matches(device.name(), name))
+                    continue;
+
+                if (platform && !matches(device_platform(device).name(), platform))
+                    continue;
+
+                if (vendor && !matches(device.vendor(), vendor))
+                    continue;
+
+                return device;
+            }
+        }
+
+        // find the first gpu device
+        BOOST_FOREACH(const device &device, devices_){
+            if(device.type() == device::gpu){
+                return device;
+            }
+        }
+
+        return device();
+    }
+
+    static device find_default_cpu_device()
+    {
+        // get a list of all devices on the system
+        const std::vector<device> devices_ = devices();
+        if(devices_.empty()){
+            return device();
+        }
+
+        // check for device from environment variable
+        const char *name     = detail::getenv("BOOST_COMPUTE_DEFAULT_DEVICE");
+        const char *platform = detail::getenv("BOOST_COMPUTE_DEFAULT_PLATFORM");
+        const char *vendor   = detail::getenv("BOOST_COMPUTE_DEFAULT_VENDOR");
+
+        if(name || platform || vendor){
+            BOOST_FOREACH(const device &device, devices_){
+                if (name && !matches(device.name(), name))
+                    continue;
+
+                if (platform && !matches(device_platform(device).name(), platform))
+                    continue;
+
+                if (vendor && !matches(device.vendor(), vendor))
+                    continue;
+
+                return device;
+            }
+        }
+
+        // find the first cpu device
+        BOOST_FOREACH(const device &device, devices_){
+            if(device.type() == device::cpu){
+                return device;
+            }
+        }
+
+        return device();
     }
 
     /// \internal_
