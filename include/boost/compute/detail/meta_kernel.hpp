@@ -1072,7 +1072,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
     BOOST_STATIC_ASSERT(N < 16);
 
     if(N < 10){
-        return kernel << expr.m_arg << ".s" << uint_(N);
+        return kernel << expr.m_arg << ".s" << int_(N);
     }
     else if(N < 16){
 #ifdef _MSC_VER

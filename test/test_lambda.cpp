@@ -546,4 +546,72 @@ BOOST_AUTO_TEST_CASE(bind_lambda_function)
     CHECK_RANGE_EQUAL(int, 4, vector, (2, 4, 6, 8));
 }
 
+BOOST_AUTO_TEST_CASE(lambda_function_with_uint_args)
+{
+  compute::uint_ host_data[] = { 1, 3, 5, 7, 9 };
+  compute::vector<compute::uint_> device_vector(host_data, host_data + 5, queue);
+
+  using boost::compute::lambda::clamp;
+  using compute::lambda::_1;
+
+  compute::transform(
+    device_vector.begin(), device_vector.end(),
+    device_vector.begin(),
+    clamp(_1, compute::uint_(4), compute::uint_(6)),
+    queue
+  );
+  CHECK_RANGE_EQUAL(compute::uint_, 5, device_vector, (4, 4, 5, 6, 6));
+}
+
+BOOST_AUTO_TEST_CASE(lambda_function_with_short_args)
+{
+  compute::short_ host_data[] = { 1, 3, 5, 7, 9 };
+  compute::vector<compute::short_> device_vector(host_data, host_data + 5, queue);
+
+  using boost::compute::lambda::clamp;
+  using compute::lambda::_1;
+
+  compute::transform(
+    device_vector.begin(), device_vector.end(),
+    device_vector.begin(),
+    clamp(_1, compute::short_(4), compute::short_(6)),
+    queue
+  );
+  CHECK_RANGE_EQUAL(compute::short_, 5, device_vector, (4, 4, 5, 6, 6));
+}
+
+BOOST_AUTO_TEST_CASE(lambda_function_with_uchar_args)
+{
+  compute::uchar_ host_data[] = { 1, 3, 5, 7, 9 };
+  compute::vector<compute::uchar_> device_vector(host_data, host_data + 5, queue);
+
+  using boost::compute::lambda::clamp;
+  using compute::lambda::_1;
+
+  compute::transform(
+    device_vector.begin(), device_vector.end(),
+    device_vector.begin(),
+    clamp(_1, compute::uchar_(4), compute::uchar_(6)),
+    queue
+  );
+  CHECK_RANGE_EQUAL(compute::uchar_, 5, device_vector, (4, 4, 5, 6, 6));
+}
+
+BOOST_AUTO_TEST_CASE(lambda_function_with_char_args)
+{
+  compute::char_ host_data[] = { 1, 3, 5, 7, 9 };
+  compute::vector<compute::char_> device_vector(host_data, host_data + 5, queue);
+
+  using boost::compute::lambda::clamp;
+  using compute::lambda::_1;
+
+  compute::transform(
+    device_vector.begin(), device_vector.end(),
+    device_vector.begin(),
+    clamp(_1, compute::char_(4), compute::char_(6)),
+    queue
+  );
+  CHECK_RANGE_EQUAL(compute::char_, 5, device_vector, (4, 4, 5, 6, 6));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
