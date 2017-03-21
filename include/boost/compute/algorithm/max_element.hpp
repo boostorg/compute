@@ -43,6 +43,9 @@ namespace compute {
 ///     boost::compute::max_element(data.begin(), data.end(), compare_first, queue);
 /// \endcode
 ///
+/// Space complexity on CPUs: \Omega(1)<br>
+/// Space complexity on GPUs: \Omega(N)
+///
 /// \see min_element()
 template<class InputIterator, class Compare>
 inline InputIterator

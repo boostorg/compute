@@ -37,6 +37,8 @@ namespace compute {
 ///
 /// \return \c OutputIterator to the end of the result range
 ///
+/// Space complexity: \Omega(distance(\p first1, \p last1) + distance(\p first2, \p last2))
+///
 /// \see inplace_merge()
 template<class InputIterator1,
          class InputIterator2,

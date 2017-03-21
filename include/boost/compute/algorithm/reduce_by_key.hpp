@@ -51,6 +51,9 @@ namespace compute {
 ///
 /// \snippet test/test_reduce_by_key.cpp reduce_by_key_int
 ///
+/// Space complexity on GPUs: \Omega(2n)<br>
+/// Space complexity on CPUs: \Omega(1)
+///
 /// \see reduce()
 template<class InputKeyIterator, class InputValueIterator,
          class OutputKeyIterator, class OutputValueIterator,

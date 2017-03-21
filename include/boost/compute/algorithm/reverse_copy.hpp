@@ -51,6 +51,8 @@ struct reverse_copy_kernel : public meta_kernel
 /// Copies the elements in the range [\p first, \p last) in reversed
 /// order to the range beginning at \p result.
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see reverse()
 template<class InputIterator, class OutputIterator>
 inline OutputIterator

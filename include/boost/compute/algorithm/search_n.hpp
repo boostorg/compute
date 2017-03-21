@@ -102,6 +102,7 @@ private:
 /// \param value Value which repeats
 /// \param queue Queue on which to execute
 ///
+/// Space complexity: \Omega(distance(\p t_first, \p t_last))
 template<class TextIterator, class ValueType>
 inline TextIterator search_n(TextIterator t_first,
                              TextIterator t_last,

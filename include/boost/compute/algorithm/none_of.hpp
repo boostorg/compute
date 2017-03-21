@@ -20,6 +20,8 @@ namespace compute {
 /// Returns \c true if \p predicate returns \c true for none of the elements in
 /// the range [\p first, \p last).
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see all_of(), any_of()
 template<class InputIterator, class UnaryPredicate>
 inline bool none_of(InputIterator first,

@@ -28,6 +28,8 @@ namespace compute {
 
 /// Randomly shuffles the elements in the range [\p first, \p last).
 ///
+/// Space complexity: \Omega(2n)
+///
 /// \see scatter()
 template<class Iterator>
 inline void random_shuffle(Iterator first,

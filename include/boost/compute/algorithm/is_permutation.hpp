@@ -36,6 +36,7 @@ namespace compute {
 /// \param last2 Iterator pointing to end of second range
 /// \param queue Queue on which to execute
 ///
+/// Space complexity: \Omega(distance(\p first1, \p last1) + distance(\p first2, \p last2))
 template<class InputIterator1, class InputIterator2>
 inline bool is_permutation(InputIterator1 first1,
                            InputIterator1 last1,

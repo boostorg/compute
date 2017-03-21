@@ -79,6 +79,8 @@ private:
 /// beginning at \p result using the output indices from the range beginning
 /// at \p map.
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see gather()
 template<class InputIterator, class MapIterator, class OutputIterator>
 inline void scatter(InputIterator first,

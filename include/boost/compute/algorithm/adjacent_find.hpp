@@ -114,6 +114,8 @@ adjacent_find_with_atomics(InputIterator first,
 /// \return \c InputIteratorm to the first element which compares equal
 ///         to the following element. If none are equal, returns \c last.
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see find(), adjacent_difference()
 template<class InputIterator, class Compare>
 inline InputIterator

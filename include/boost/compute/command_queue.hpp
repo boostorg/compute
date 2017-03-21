@@ -81,6 +81,11 @@ public:
     enum properties {
         enable_profiling = CL_QUEUE_PROFILING_ENABLE,
         enable_out_of_order_execution = CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE
+        #ifdef CL_VERSION_2_0
+        ,
+        on_device = CL_QUEUE_ON_DEVICE,
+        on_device_default = CL_QUEUE_ON_DEVICE_DEFAULT
+        #endif
     };
 
     enum map_flags {
@@ -1511,7 +1516,10 @@ public:
     {
         BOOST_ASSERT(m_queue != 0);
 
-        clFlush(m_queue);
+        cl_int ret = clFlush(m_queue);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
     }
 
     /// Blocks until all outstanding commands in the queue have finished.
@@ -1521,7 +1529,10 @@ public:
     {
         BOOST_ASSERT(m_queue != 0);
 
-        clFinish(m_queue);
+        cl_int ret = clFinish(m_queue);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
     }
 
     /// Enqueues a barrier in the queue.

@@ -38,6 +38,8 @@ inline OutputIterator copy_index_if(InputIterator first,
 
 /// Copies each element in the range [\p first, \p last) for which
 /// \p predicate returns \c true to the range beginning at \p result.
+///
+/// Space complexity: \Omega(2n)
 template<class InputIterator, class OutputIterator, class Predicate>
 inline OutputIterator copy_if(InputIterator first,
                               InputIterator last,

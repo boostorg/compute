@@ -110,6 +110,8 @@ private:
 /// will be stored
 /// \param queue Queue on which to execute
 ///
+/// Space complexity:
+/// \Omega(2(distance(\p first1, \p last1) + distance(\p first2, \p last2)))
 template<class InputIterator1, class InputIterator2, class OutputIterator>
 inline OutputIterator set_intersection(InputIterator1 first1,
                                        InputIterator1 last1,

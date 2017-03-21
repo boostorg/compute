@@ -23,6 +23,9 @@ namespace compute {
 /// Returns the number of occurrences of \p value in the range
 /// [\p first, \p last).
 ///
+/// Space complexity on CPUs: \Omega(1)<br>
+/// Space complexity on GPUs: \Omega(n)
+///
 /// \see count_if()
 template<class InputIterator, class T>
 inline size_t count(InputIterator first,

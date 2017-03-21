@@ -20,6 +20,8 @@ namespace compute {
 
 /// Fills the range [\p first, \p first + count) with \p value.
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see fill()
 template<class BufferIterator, class Size, class T>
 inline void fill_n(BufferIterator first,

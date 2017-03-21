@@ -23,6 +23,8 @@ namespace compute {
 
 /// Merges the sorted values in the range [\p first, \p middle) with
 /// the sorted values in the range [\p middle, \p last) in-place.
+///
+/// Space complexity: \Omega(n)
 template<class Iterator>
 inline void inplace_merge(Iterator first,
                           Iterator middle,
