@@ -173,7 +173,7 @@ BOOST_AUTO_TEST_CASE(result_of)
         float(2.0f), float(3.0f), int4_(0, 1, 2, 3)
     );
 
-    check_lambda_result<int4_>(isinf(_1), float4_(0, 1, 2, 3));
+    check_lambda_result<int4_>(bc::lambda::isinf(_1), float4_(0, 1, 2, 3));
 
     check_lambda_result<int>(_1 + 2, int(2));
     check_lambda_result<float>(_1 + 2, float(2.2f));
