@@ -543,10 +543,11 @@ public:
             .process( options     )
             .process( source      )
             ;
+        std::string hash_string = hash;
 
         // Try to get cached program binaries:
         try {
-            boost::optional<program> prog = load_program_binary(hash, context);
+            boost::optional<program> prog = load_program_binary(hash_string, context);
 
             if (prog) {
                 prog->build(options);
@@ -575,7 +576,7 @@ public:
 
 #ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
         // Save program binaries for future reuse.
-        save_program_binary(hash, prog);
+        save_program_binary(hash_string, prog);
 #endif
 
         return prog;
