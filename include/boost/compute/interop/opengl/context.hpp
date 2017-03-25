@@ -75,6 +75,10 @@ inline context opengl_create_shared_context()
     for(size_t i = 0; i < platforms.size(); i++){
         const platform &platform = platforms[i];
 
+        // check whether this platform supports OpenCL/OpenGL sharing
+        if (!platform.supports_extension(cl_gl_sharing_extension))
+          continue;
+
         // load clGetGLContextInfoKHR() extension function
         GetGLContextInfoKHRFunction GetGLContextInfoKHR =
             reinterpret_cast<GetGLContextInfoKHRFunction>(
