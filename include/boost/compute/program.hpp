@@ -432,6 +432,33 @@ public:
         return create_with_source(source, context);
     }
 
+    /// Creates a new program with \p files in \p context.
+    ///
+    /// \see_opencl_ref{clCreateProgramWithSource}
+    static program create_with_source_file(const std::vector<std::string> &files,
+                                           const context &context)
+    {
+        std::vector<std::string> sources(files.size());
+
+        for(size_t i = 0; i < files.size(); ++i) {
+            // open file stream
+            std::ifstream stream(files[i].c_str());
+
+            if(stream.fail()){
+                BOOST_THROW_EXCEPTION(std::ios_base::failure("failed to create stream."));
+            }
+
+            // read source
+            sources[i] = std::string(
+                    (std::istreambuf_iterator<char>(stream)),
+                    std::istreambuf_iterator<char>()
+            );
+        }
+
+        // create program
+        return create_with_source(sources, context);
+    }
+
     /// Creates a new program with \p binary of \p binary_size in
     /// \p context.
     ///
