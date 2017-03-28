@@ -168,7 +168,7 @@ public:
     typename detail::get_object_info_type<kernel, Enum>::type
     get_info() const;
 
-    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Returns information about the argument at \p index.
     ///
     /// For example, to get the name of the first argument:
@@ -197,7 +197,7 @@ public:
     template<int Enum>
     typename detail::get_object_info_type<kernel, Enum>::type
     get_arg_info(size_t index) const;
-    #endif // CL_VERSION_1_2
+    #endif // BOOST_COMPUTE_CL_VERSION_1_2
 
     /// Returns work-group information for the kernel with \p device.
     ///
@@ -266,7 +266,7 @@ public:
     /// \internal_
     void set_arg_svm_ptr(size_t index, void* ptr)
     {
-        #ifdef CL_VERSION_2_0
+        #ifdef BOOST_COMPUTE_CL_VERSION_2_0
         cl_int ret = clSetKernelArgSVMPointer(m_kernel, static_cast<cl_uint>(index), ptr);
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
@@ -289,7 +289,7 @@ public:
     }
     #endif // BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 
-    #if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Sets additional execution information for the kernel.
     ///
     /// \opencl_version_warning{2,0}
@@ -302,7 +302,7 @@ public:
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
     }
-    #endif // CL_VERSION_2_0
+    #endif // BOOST_COMPUTE_CL_VERSION_2_0
 
     /// Returns \c true if the kernel is the same at \p other.
     bool operator==(const kernel &other) const
@@ -365,14 +365,14 @@ BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(kernel,
     ((cl_program, CL_KERNEL_PROGRAM))
 )
 
-#ifdef CL_VERSION_1_2
+#ifdef BOOST_COMPUTE_CL_VERSION_1_2
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(kernel,
     ((std::string, CL_KERNEL_ATTRIBUTES))
 )
-#endif // CL_VERSION_1_2
+#endif // BOOST_COMPUTE_CL_VERSION_1_2
 
 /// \internal_ define get_arg_info() specializations for kernel
-#ifdef CL_VERSION_1_2
+#ifdef BOOST_COMPUTE_CL_VERSION_1_2
 #define BOOST_COMPUTE_DETAIL_DEFINE_KERNEL_GET_ARG_INFO_SPECIALIZATION(result_type, value) \
     namespace detail { \
         template<> struct get_object_info_type<kernel, value> { typedef result_type type; }; \
@@ -386,7 +386,7 @@ BOOST_COMPUTE_DETAIL_DEFINE_KERNEL_GET_ARG_INFO_SPECIALIZATION(cl_kernel_arg_acc
 BOOST_COMPUTE_DETAIL_DEFINE_KERNEL_GET_ARG_INFO_SPECIALIZATION(std::string, CL_KERNEL_ARG_TYPE_NAME)
 BOOST_COMPUTE_DETAIL_DEFINE_KERNEL_GET_ARG_INFO_SPECIALIZATION(cl_kernel_arg_type_qualifier, CL_KERNEL_ARG_TYPE_QUALIFIER)
 BOOST_COMPUTE_DETAIL_DEFINE_KERNEL_GET_ARG_INFO_SPECIALIZATION(std::string, CL_KERNEL_ARG_NAME)
-#endif // CL_VERSION_1_2
+#endif // BOOST_COMPUTE_CL_VERSION_1_2
 
 namespace detail {
 

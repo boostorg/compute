@@ -124,7 +124,7 @@ inline future<DeviceIterator> copy_to_device_async(HostIterator first,
     return make_future(result + static_cast<difference_type>(count), event_);
 }
 
-#ifdef CL_VERSION_2_0
+#ifdef BOOST_COMPUTE_CL_VERSION_2_0
 // copy_to_device() specialization for svm_ptr
 template<class HostIterator, class T>
 inline svm_ptr<T> copy_to_device(HostIterator first,
@@ -184,7 +184,7 @@ inline svm_ptr<T> copy_to_device_map(HostIterator first,
 
     return result + count;
 }
-#endif // CL_VERSION_2_0
+#endif // BOOST_COMPUTE_CL_VERSION_2_0
 
 } // end detail namespace
 } // end compute namespace

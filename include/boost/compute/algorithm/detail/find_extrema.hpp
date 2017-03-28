@@ -56,7 +56,7 @@ inline InputIterator find_extrema(InputIterator first,
 
     // use serial method for OpenCL version 1.0 due to
     // problems with atomic_cmpxchg()
-    #ifndef CL_VERSION_1_1
+    #ifndef BOOST_COMPUTE_CL_VERSION_1_1
         return serial_find_extrema(first, last, compare, find_minimum, queue);
     #endif
 
