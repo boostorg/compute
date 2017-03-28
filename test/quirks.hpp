@@ -41,12 +41,16 @@ inline bool bug_in_struct_assignment(const boost::compute::device &device)
 }
 
 // clEnqueueSVMMemcpy() operation does not work on AMD devices. This affects
-// copy() algorithm.
+// copy() algorithm. This bug was fixed in AMD drivers for Windows.
 //
 // see: https://community.amd.com/thread/190585
 inline bool bug_in_svmmemcpy(const boost::compute::device &device)
 {
+    #ifdef _WIN32
+    return false;
+    #else
     return boost::compute::detail::is_amd_device(device);
+    #endif
 }
 
 // For CPU devices on Apple platform local memory can not be used when work
