@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(empty)
 {
 }
 
-#ifdef CL_VERSION_2_0
+#ifdef BOOST_COMPUTE_CL_VERSION_2_0
 BOOST_AUTO_TEST_CASE(alloc)
 {
     REQUIRES_OPENCL_VERSION(2, 0);
@@ -108,6 +108,6 @@ BOOST_AUTO_TEST_CASE(sum_svm_kernel)
 
     compute::svm_free(context, ptr);
 }
-#endif // CL_VERSION_2_0
+#endif // BOOST_COMPUTE_CL_VERSION_2_0
 
 BOOST_AUTO_TEST_SUITE_END()

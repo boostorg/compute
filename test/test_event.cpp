@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(null_event)
     BOOST_CHECK(null.get() == cl_event());
 }
 
-#if defined(CL_VERSION_1_1) && defined(BOOST_COMPUTE_USE_CPP11)
+#if defined(BOOST_COMPUTE_CL_VERSION_1_1) && defined(BOOST_COMPUTE_USE_CPP11)
 std::mutex callback_mutex;
 std::condition_variable callback_condition_variable;
 static bool callback_invoked = false;
@@ -115,6 +115,6 @@ BOOST_AUTO_TEST_CASE(event_to_std_future)
     // wait for future to become ready
     future.wait();
 }
-#endif // CL_VERSION_1_1
+#endif // BOOST_COMPUTE_CL_VERSION_1_1
 
 BOOST_AUTO_TEST_SUITE_END()

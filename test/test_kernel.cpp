@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(kernel_set_args)
 }
 #endif // BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 
-#ifdef CL_VERSION_1_2
+#ifdef BOOST_COMPUTE_CL_VERSION_1_2
 BOOST_AUTO_TEST_CASE(get_arg_info)
 {
     REQUIRES_OPENCL_VERSION(1, 2);
@@ -153,6 +153,6 @@ BOOST_AUTO_TEST_CASE(get_arg_info)
     BOOST_CHECK_EQUAL(kernel.get_arg_info<CL_KERNEL_ARG_TYPE_NAME>(2), "int*");
     BOOST_CHECK_EQUAL(kernel.get_arg_info<CL_KERNEL_ARG_NAME>(2), "result");
 }
-#endif // CL_VERSION_1_2
+#endif // BOOST_COMPUTE_CL_VERSION_1_2
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -337,7 +337,7 @@ BOOST_AUTO_TEST_CASE(check_copy_type)
     CHECK_HOST_RANGE_EQUAL(int, 8, data, (1, 2, 3, 4, 5, 6, 7, 8));
 }
 
-#ifdef CL_VERSION_2_0
+#ifdef BOOST_COMPUTE_CL_VERSION_2_0
 BOOST_AUTO_TEST_CASE(copy_svm_ptr)
 {
     REQUIRES_OPENCL_VERSION(2, 0);
@@ -387,7 +387,7 @@ BOOST_AUTO_TEST_CASE(copy_async_svm_ptr)
 
     compute::svm_free(context, ptr);
 }
-#endif // CL_VERSION_2_0
+#endif // BOOST_COMPUTE_CL_VERSION_2_0
 
 BOOST_AUTO_TEST_CASE(copy_to_vector_bool)
 {
