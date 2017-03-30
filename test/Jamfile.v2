@@ -6,7 +6,7 @@ import testing ;
 
 lib boost_unit_test_framework ;
 
-compile check/has_opencl.cpp : : has_opencl ;
+obj has_opencl : check/has_opencl.cpp ;
 explicit has_opencl ;
 
 project
