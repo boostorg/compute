@@ -91,6 +91,7 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
                                  command_queue &queue)
 {
     typedef typename std::iterator_traits<KeyIterator>::value_type key_type;
+    typedef typename std::iterator_traits<ValueIterator>::value_type value_type;
 
     meta_kernel k("bitonic_block_sort");
     size_t count_arg = k.add_arg<const uint_>("count");
@@ -249,8 +250,11 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
             k.var<key_type>("my_key") << ";\n";
     if(sort_by_key)
     {
-        k << values_first[k.var<const uint_>("gid")] << " = " <<
-                values_first[k.var<const uint_>("offset + my_index")] << ";\n";
+        k <<
+            k.decl<value_type>("my_value") << " = " <<
+                values_first[k.var<const uint_>("offset + my_index")] << ";\n" <<
+            "barrier(CLK_GLOBAL_MEM_FENCE);\n" <<
+            values_first[k.var<const uint_>("gid")] << " = my_value;\n";
     }
     k <<
         // end if
