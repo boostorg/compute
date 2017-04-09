@@ -261,6 +261,7 @@ BOOST_AUTO_TEST_CASE(copy_with_wait_list)
     CHECK_HOST_RANGE_EQUAL(int, 4, data2, (1, 3, 5, 7));
 }
 
+#ifndef BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
 BOOST_AUTO_TEST_CASE(enqueue_kernel_with_extents)
 {
     using boost::compute::dim;
@@ -311,5 +312,6 @@ BOOST_AUTO_TEST_CASE(enqueue_kernel_with_extents)
     CHECK_RANGE_EQUAL(int, 4, output1, (0, 1, 0, 1));
     CHECK_RANGE_EQUAL(int, 4, output2, (0, 1, 0, 1));
 }
+#endif // BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
 
 BOOST_AUTO_TEST_SUITE_END()

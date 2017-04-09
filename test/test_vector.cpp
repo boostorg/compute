@@ -214,6 +214,7 @@ BOOST_AUTO_TEST_CASE(move_ctor_custom_alloc)
 #endif // BOOST_COMPUTE_NO_RVALUE_REFERENCES
 
 #ifdef BOOST_COMPUTE_USE_CPP11
+#ifndef BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
 BOOST_AUTO_TEST_CASE(initializer_list_ctor)
 {
     // ctor with std::initializer_list<T> always uses
@@ -225,6 +226,7 @@ BOOST_AUTO_TEST_CASE(initializer_list_ctor)
     BOOST_CHECK_EQUAL(vector[2], 6);
     BOOST_CHECK_EQUAL(vector[3], 8);
 }
+#endif // BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
 #endif // BOOST_COMPUTE_USE_CPP11
 
 BOOST_AUTO_TEST_CASE(vector_double)
