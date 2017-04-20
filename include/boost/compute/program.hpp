@@ -310,7 +310,7 @@ public:
                 0,
                 0,
                 options_string,
-                headers.size(),
+                static_cast<cl_uint>(headers.size()),
                 header_programs.data(),
                 header_names.data(),
                 0,
