@@ -55,6 +55,10 @@ public:
     ///        name of the platform (e.g. "NVIDIA CUDA")
     /// \li \c BOOST_COMPUTE_DEFAULT_VENDOR -
     ///        name of the device vendor (e.g. "NVIDIA")
+    /// \li \c BOOST_COMPUTE_DEFAULT_ENFORCE -
+    ///        If this is set to "1", then throw a no_device_found() exception
+    ///        if any of the above environment variables is set, but a matching
+    ///        device was not found.
     ///
     /// The default device is determined once on the first time this function
     /// is called. Calling this function multiple times will always result in
@@ -220,6 +224,7 @@ private:
         const char *type     = detail::getenv("BOOST_COMPUTE_DEFAULT_DEVICE_TYPE");
         const char *platform = detail::getenv("BOOST_COMPUTE_DEFAULT_PLATFORM");
         const char *vendor   = detail::getenv("BOOST_COMPUTE_DEFAULT_VENDOR");
+        const char *enforce  = detail::getenv("BOOST_COMPUTE_DEFAULT_ENFORCE");
 
         if(name || type || platform || vendor){
             for(size_t i = 0; i < devices_.size(); i++){
@@ -243,6 +248,9 @@ private:
 
                 return device;
             }
+
+            if(enforce && enforce[0] == '1')
+                BOOST_THROW_EXCEPTION(no_device_found());
         }
 
         // find the first gpu device
