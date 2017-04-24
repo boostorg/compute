@@ -138,7 +138,7 @@ boost::compute::program foo_program =
     foo_program.build();
 }
 
-#ifdef CL_VERSION_1_2
+#ifdef BOOST_COMPUTE_CL_VERSION_1_2
 BOOST_AUTO_TEST_CASE(compile_and_link)
 {
     REQUIRES_OPENCL_VERSION(1,2);
@@ -244,7 +244,7 @@ BOOST_AUTO_TEST_CASE(compile_and_link_with_headers)
         linked_program.create_kernel("squareby2_kernel");
     BOOST_CHECK_EQUAL(square_kernel.name(), "squareby2_kernel");
 }
-#endif // CL_VERSION_1_2
+#endif // BOOST_COMPUTE_CL_VERSION_1_2
 
 BOOST_AUTO_TEST_CASE(build_log)
 {

@@ -62,7 +62,7 @@ public:
     explicit device(cl_device_id id, bool retain = true)
         : m_id(id)
     {
-        #ifdef CL_VERSION_1_2
+        #ifdef BOOST_COMPUTE_CL_VERSION_1_2
         if(m_id && retain && is_subdevice()){
             clRetainDevice(m_id);
         }
@@ -75,7 +75,7 @@ public:
     device(const device &other)
         : m_id(other.m_id)
     {
-        #ifdef CL_VERSION_1_2
+        #ifdef BOOST_COMPUTE_CL_VERSION_1_2
         if(m_id && is_subdevice()){
             clRetainDevice(m_id);
         }
@@ -86,7 +86,7 @@ public:
     device& operator=(const device &other)
     {
         if(this != &other){
-            #ifdef CL_VERSION_1_2
+            #ifdef BOOST_COMPUTE_CL_VERSION_1_2
             if(m_id && is_subdevice()){
                 clReleaseDevice(m_id);
             }
@@ -94,7 +94,7 @@ public:
 
             m_id = other.m_id;
 
-            #ifdef CL_VERSION_1_2
+            #ifdef BOOST_COMPUTE_CL_VERSION_1_2
             if(m_id && is_subdevice()){
                 clRetainDevice(m_id);
             }
@@ -115,7 +115,7 @@ public:
     /// Move-assigns the device from \p other to \c *this.
     device& operator=(device&& other) BOOST_NOEXCEPT
     {
-        #ifdef CL_VERSION_1_2
+        #ifdef BOOST_COMPUTE_CL_VERSION_1_2
         if(m_id && is_subdevice()){
             clReleaseDevice(m_id);
         }
@@ -131,7 +131,7 @@ public:
     /// Destroys the device object.
     ~device()
     {
-        #ifdef CL_VERSION_1_2
+        #ifdef BOOST_COMPUTE_CL_VERSION_1_2
         if(m_id && is_subdevice()){
             BOOST_COMPUTE_ASSERT_CL_SUCCESS(
                 clReleaseDevice(m_id)
@@ -282,7 +282,7 @@ public:
     /// Returns \c true if the device is a sub-device.
     bool is_subdevice() const
     {
-    #if defined(CL_VERSION_1_2)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_2)
         try {
             return get_info<cl_device_id>(CL_DEVICE_PARENT_DEVICE) != 0;
         }
@@ -321,7 +321,7 @@ public:
     typename detail::get_object_info_type<device, Enum>::type
     get_info() const;
 
-    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Partitions the device into multiple sub-devices according to
     /// \p properties.
     ///
@@ -393,7 +393,7 @@ public:
 
         return partition(properties);
     }
-    #endif // CL_VERSION_1_2
+    #endif // BOOST_COMPUTE_CL_VERSION_1_2
 
     /// Returns \c true if the device is the same at \p other.
     bool operator==(const device &other) const
@@ -528,7 +528,7 @@ BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
 )
 #endif
 
-#ifdef CL_VERSION_1_1
+#ifdef BOOST_COMPUTE_CL_VERSION_1_1
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
     ((bool, CL_DEVICE_HOST_UNIFIED_MEMORY))
     ((cl_uint, CL_DEVICE_NATIVE_VECTOR_WIDTH_CHAR))
@@ -539,9 +539,9 @@ BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
     ((cl_uint, CL_DEVICE_NATIVE_VECTOR_WIDTH_DOUBLE))
     ((std::string, CL_DEVICE_OPENCL_C_VERSION))
 )
-#endif // CL_VERSION_1_1
+#endif // BOOST_COMPUTE_CL_VERSION_1_1
 
-#ifdef CL_VERSION_1_2
+#ifdef BOOST_COMPUTE_CL_VERSION_1_2
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
     ((std::string, CL_DEVICE_BUILT_IN_KERNELS))
     ((bool, CL_DEVICE_LINKER_AVAILABLE))
@@ -554,9 +554,9 @@ BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
     ((bool, CL_DEVICE_PREFERRED_INTEROP_USER_SYNC))
     ((cl_uint, CL_DEVICE_REFERENCE_COUNT))
 )
-#endif // CL_VERSION_1_2
+#endif // BOOST_COMPUTE_CL_VERSION_1_2
 
-#ifdef CL_VERSION_2_0
+#ifdef BOOST_COMPUTE_CL_VERSION_2_0
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
     ((size_t, CL_DEVICE_GLOBAL_VARIABLE_PREFERRED_TOTAL_SIZE))
     ((size_t, CL_DEVICE_MAX_GLOBAL_VARIABLE_SIZE))
@@ -576,7 +576,7 @@ BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(device,
     ((cl_uint, CL_DEVICE_IMAGE_BASE_ADDRESS_ALIGNMENT))
     ((cl_uint, CL_DEVICE_IMAGE_PITCH_ALIGNMENT))
 )
-#endif // CL_VERSION_2_0
+#endif // BOOST_COMPUTE_CL_VERSION_2_0
 
 } // end compute namespace
 } // end boost namespace

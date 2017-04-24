@@ -110,7 +110,7 @@ BOOST_AUTO_TEST_CASE(clone_buffer)
 }
 
 #ifdef BOOST_COMPUTE_USE_CPP11
-#ifdef CL_VERSION_1_1
+#ifdef BOOST_COMPUTE_CL_VERSION_1_1
 std::mutex callback_mutex;
 std::condition_variable callback_condition_variable;
 
@@ -199,7 +199,7 @@ BOOST_AUTO_TEST_CASE(create_subbuffer)
     }
 }
 
-#endif // CL_VERSION_1_1
+#endif // BOOST_COMPUTE_CL_VERSION_1_1
 
 BOOST_AUTO_TEST_CASE(create_buffer_doctest)
 {

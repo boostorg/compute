@@ -125,7 +125,7 @@ inline future<HostIterator> copy_to_host_async(DeviceIterator first,
     return make_future(iterator_plus_distance(result, count), event_);
 }
 
-#ifdef CL_VERSION_2_0
+#ifdef BOOST_COMPUTE_CL_VERSION_2_0
 // copy_to_host() specialization for svm_ptr
 template<class T, class HostIterator>
 inline HostIterator copy_to_host(svm_ptr<T> first,
@@ -189,7 +189,7 @@ inline HostIterator copy_to_host_map(svm_ptr<T> first,
 
     return iterator_plus_distance(result, count);
 }
-#endif // CL_VERSION_2_0
+#endif // BOOST_COMPUTE_CL_VERSION_2_0
 
 } // end detail namespace
 } // end compute namespace

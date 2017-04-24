@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(get_max_work_item_sizes)
     BOOST_CHECK_GE(max_work_item_sizes[2], size_t(1));
 }
 
-#ifdef CL_VERSION_1_2
+#ifdef BOOST_COMPUTE_CL_VERSION_1_2
 
 // returns true if the device supports the partitioning type
 bool supports_partition_type(const boost::compute::device &device,
@@ -216,7 +216,7 @@ BOOST_AUTO_TEST_CASE(partition_by_affinity_domain)
     BOOST_CHECK(sub_devices.size() > 0);
     BOOST_CHECK(sub_devices[0].is_subdevice() == true);
 }
-#endif // CL_VERSION_1_2
+#endif // BOOST_COMPUTE_CL_VERSION_1_2
 
 BOOST_AUTO_TEST_CASE(nvidia_compute_capability)
 {

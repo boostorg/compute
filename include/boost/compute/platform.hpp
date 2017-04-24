@@ -181,7 +181,7 @@ public:
     /// function. Returns \c 0 if \p function_name is invalid.
     void* get_extension_function_address(const char *function_name) const
     {
-        #ifdef CL_VERSION_1_2
+        #ifdef BOOST_COMPUTE_CL_VERSION_1_2
         return clGetExtensionFunctionAddressForPlatform(m_platform,
                                                         function_name);
         #else
@@ -192,7 +192,7 @@ public:
     /// Requests that the platform unload any compiler resources.
     void unload_compiler()
     {
-        #ifdef CL_VERSION_1_2
+        #ifdef BOOST_COMPUTE_CL_VERSION_1_2
         clUnloadPlatformCompiler(m_platform);
         #else
         clUnloadCompiler();
