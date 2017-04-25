@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/boostorg/compute.svg?branch=master)](https://travis-ci.org/boostorg/compute)
 [![Coverage Status](https://coveralls.io/repos/boostorg/compute/badge.svg?branch=master)](https://coveralls.io/r/boostorg/compute)
+[![Gitter](https://badges.gitter.im/boostorg/compute.svg)](https://gitter.im/boostorg/compute?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Boost.Compute is a GPU/parallel-computing library for C++ based on OpenCL.
 
