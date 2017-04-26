@@ -131,6 +131,16 @@ public:
         return m_context;
     }
 
+    bool operator==(const svm_ptr<T>& other) const
+    {
+        return (other.m_context == m_context) && (m_ptr == other.m_ptr);
+    }
+
+    bool operator!=(const svm_ptr<T>& other) const
+    {
+        return (other.m_context != m_context) || (m_ptr != other.m_ptr);
+    }
+
     // svm functions require OpenCL 2.0
     #if defined(BOOST_COMPUTE_CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// \internal_
