@@ -1,0 +1,56 @@
+# clone directory
+clone_folder: C:\boost.compute
+
+# do not build on tags
+skip_tags: true
+
+# clone only the top level commit
+shallow_clone: true
+
+# branches to build
+branches:
+  # blacklist
+  except:
+    - gh-pages
+
+# environment variables
+environment:
+  global:
+    INTELOCLSDKROOT: C:\Program Files (x86)\Intel\OpenCL SDK\
+    BOOST_COMPUTE_DEFAULT_PLATFORM: Intel(R) OpenCL
+  matrix:
+     - VS_VER: 2015
+       BOOST_ROOT: C:\Libraries\boost_1_59_0
+       BOOST_LIBRARYDIR: C:\Libraries\boost_1_59_0\lib64-msvc-14.0
+     - VS_VER: 2013
+       BOOST_ROOT: C:\Libraries\boost_1_58_0
+       BOOST_LIBRARYDIR: C:\Libraries\boost_1_58_0\lib64-msvc-12.0
+
+image: Visual Studio 2015
+
+# build platforms
+platform:
+  - x64
+
+configuration:
+  - Debug
+
+before_build:
+  - appveyor DownloadFile "http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/8539/intel_sdk_for_opencl_setup_6.0.0.1049.exe"
+  - start /wait .\intel_sdk_for_opencl_setup_6.0.0.1049.exe install --output=output.log --eula=accept
+  #- type output.log
+  - appveyor DownloadFile "http://registrationcenter-download.intel.com/akdlm/irc_nas/9022/opencl_runtime_16.1.1_x64_setup.msi"
+  - start /wait msiexec /i opencl_runtime_16.1.1_x64_setup.msi /qn  /l*v msiexec2.log
+  #- type msiexec2.log
+
+build_script:
+  - mkdir build && cd build
+  - if "%VS_VER%" == "2015" cmake -G"Visual Studio 14 2015 Win64" -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON ..
+  - if "%VS_VER%" == "2013" cmake -G"Visual Studio 12 2013 Win64" -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON ..
+  - cmake --build . --config Debug
+
+test_script:
+  - .\example\Debug\list_devices.exe
+  - .\example\Debug\hello_world.exe
+  - ctest --output-on-failure
+  - ctest --output-on-failure

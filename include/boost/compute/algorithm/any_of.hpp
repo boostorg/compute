@@ -24,6 +24,8 @@ namespace compute {
 ///
 /// \snippet test/test_any_all_none_of.cpp any_of
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see all_of(), none_of()
 template<class InputIterator, class UnaryPredicate>
 inline bool any_of(InputIterator first,

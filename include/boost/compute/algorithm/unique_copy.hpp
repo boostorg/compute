@@ -127,6 +127,8 @@ inline OutputIterator unique_copy(InputIterator first,
 ///
 /// \return \c OutputIterator to the end of the result range
 ///
+/// Space complexity: \Omega(4n)
+///
 /// \see unique()
 template<class InputIterator, class OutputIterator, class BinaryPredicate>
 inline OutputIterator unique_copy(InputIterator first,

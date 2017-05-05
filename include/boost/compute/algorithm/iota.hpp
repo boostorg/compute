@@ -26,6 +26,8 @@ namespace compute {
 /// \snippet test/test_iota.cpp iota
 ///
 /// Will fill \c vec with the values (\c 0, \c 1, \c 2, \c ...).
+///
+/// Space complexity: \Omega(1)
 template<class BufferIterator, class T>
 inline void iota(BufferIterator first,
                  BufferIterator last,

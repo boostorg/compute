@@ -7,7 +7,7 @@ env:
     - DEPS_DIR=${TRAVIS_BUILD_DIR}/deps
     # OpenCL
     - OPENCL_LIB=default
-    - OPENCL_VERSION="10"
+    - OPENCL_HEADERS_VER="21"
     # Khronos OpenCL ICD
     - OPENCL_REGISTRY=https://www.khronos.org/registry/cl
     - OPENCL_ROOT=${DEPS_DIR}/opencl
@@ -22,7 +22,7 @@ env:
     - AMDAPPSDKROOT=${OPENCL_ROOT}/AMDAPPSDK
     # Global build options and C++ flags
     - CMAKE_OPTIONS="-DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_HAVE_OPENCV=ON -DBOOST_COMPUTE_THREAD_SAFE=ON"
-    - CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow"
+    - CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -DCI_BUILD"
     # Boost
     - BOOST_VERSION=default
     # Misc
@@ -72,7 +72,8 @@ matrix:
       env:
        - LINUX_DIST=trusty
        - OPENCL_LIB=pocl
-       - OPENCL_VERSION="10"
+       - OPENCL_HEADERS_VER="21"
+       - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=100"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/pocl/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     - os: linux
       dist: trusty
@@ -85,7 +86,8 @@ matrix:
       env:
        - LINUX_DIST=trusty
        - OPENCL_LIB=pocl
-       - OPENCL_VERSION="10"
+       - OPENCL_HEADERS_VER="21"
+       - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=100"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/pocl/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # Trusty, OpenCL 1.1
     - os: linux
@@ -99,7 +101,8 @@ matrix:
       env:
        - LINUX_DIST=trusty
        - OPENCL_LIB=pocl
-       - OPENCL_VERSION="11"
+       - OPENCL_HEADERS_VER="21"
+       - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=101"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/pocl/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     - os: linux
       dist: trusty
@@ -112,7 +115,8 @@ matrix:
       env:
        - LINUX_DIST=trusty
        - OPENCL_LIB=pocl
-       - OPENCL_VERSION="11"
+       - OPENCL_HEADERS_VER="21"
+       - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=101"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/pocl/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
 
     ############################################################################
@@ -147,7 +151,7 @@ matrix:
     #   env:
     #     - RUN_TEST=false
     #     - OPENCL_LIB=khronos-icd
-    #     - OPENCL_VERSION="12"
+    #     - OPENCL_HEADERS_VER="12"
     #     - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # - os: linux
     #   sudo: false
@@ -159,7 +163,7 @@ matrix:
     #   env:
     #     - RUN_TEST=false
     #     - OPENCL_LIB=khronos-icd
-    #     - OPENCL_VERSION="12"
+    #     - OPENCL_HEADERS_VER="12"
     #     - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # # Precise, OpenCL 2.0, Travis CI container-based infrastructure
     # - os: linux
@@ -172,7 +176,7 @@ matrix:
     #   env:
     #     - RUN_TEST=false
     #     - OPENCL_LIB=khronos-icd
-    #     - OPENCL_VERSION="20"
+    #     - OPENCL_HEADERS_VER="20"
     #     - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # - os: linux
     #   sudo: false
@@ -184,7 +188,7 @@ matrix:
     #   env:
     #     - RUN_TEST=false
     #     - OPENCL_LIB=khronos-icd
-    #     - OPENCL_VERSION="20"
+    #     - OPENCL_HEADERS_VER="20"
     #     - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
 
     ############################################################################
@@ -217,8 +221,9 @@ matrix:
            - boost-latest
       env:
         - OPENCL_LIB=amdappsdk
-        - OPENCL_VERSION="12"
+        - OPENCL_HEADERS_VER="21"
         - AMDAPPSDK_VERSION=291 # OpenCL 1.2
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=102"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # Build is disabled as it's reduntant with the Coveralls build (see below)
     # - os: linux
@@ -230,7 +235,7 @@ matrix:
     #       sources: *precise_amdappsdk_sources
     #   env:
     #     - OPENCL_LIB=amdappsdk
-    #     - OPENCL_VERSION="12"
+    #     - OPENCL_HEADERS_VER="12"
     #     - AMDAPPSDK_VERSION=291 # OpenCL 1.2
     #     - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # Precise, AMD APP SDK v3.0, OpenCL 2.0, Travis CI container-based infrastructure
@@ -243,8 +248,9 @@ matrix:
           sources: *precise_amdappsdk_sources
       env:
         - OPENCL_LIB=amdappsdk
-        - OPENCL_VERSION="20"
+        - OPENCL_HEADERS_VER="21"
         - AMDAPPSDK_VERSION=300 # OpenCL 2.0
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=200"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     - os: linux
       sudo: false
@@ -255,8 +261,9 @@ matrix:
           sources: *precise_amdappsdk_sources
       env:
         - OPENCL_LIB=amdappsdk
-        - OPENCL_VERSION="20"
+        - OPENCL_HEADERS_VER="21"
         - AMDAPPSDK_VERSION=300 # OpenCL 2.0
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=200"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
 
     # Coveralls build (-DBOOST_COMPUTE_ENABLE_COVERAGE=ON)
@@ -287,12 +294,13 @@ matrix:
       env:
         - LINUX_DIST=trusty
         - OPENCL_LIB=amdappsdk
-        - OPENCL_VERSION="12"
+        - OPENCL_HEADERS_VER="21"
         - AMDAPPSDK_VERSION=291 # OpenCL 1.2
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON"
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=102"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON -DBOOST_COMPUTE_USE_CPP11=ON"
         - COVERAGE=true
 
-    # Latest Boost library builds (currently 1.61)
+    # Latest Boost library builds (currently 1.64)
     # Precise, AMD APP SDK v2.9.1, Travis CI container-based infrastructure
     - os: linux
       sudo: false
@@ -313,11 +321,12 @@ matrix:
            - ubuntu-toolchain-r-test
       env:
         - OPENCL_LIB=amdappsdk
-        - OPENCL_VERSION="12"
+        - OPENCL_HEADERS_VER="21"
         - AMDAPPSDK_VERSION=291 # OpenCL 1.2
-        - BOOST_VERSION="1_61_0" # Boost 1.61
-        - BOOST_URL="http://sourceforge.net/projects/boost/files/boost/1.61.0/boost_1_61_0.tar.gz"
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+        - BOOST_VERSION="1_64_0" # Boost 1.64
+        - BOOST_URL="http://sourceforge.net/projects/boost/files/boost/1.64.0/boost_1_64_0.tar.gz"
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=102"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
     - os: linux
       sudo: false
       compiler: gcc
@@ -331,11 +340,12 @@ matrix:
           sources: *precise_latest_boost_sources
       env:
         - OPENCL_LIB=amdappsdk
-        - OPENCL_VERSION="12"
+        - OPENCL_HEADERS_VER="21"
         - AMDAPPSDK_VERSION=291 # OpenCL 1.2
-        - BOOST_VERSION="1_61_0" # Boost 1.61
-        - BOOST_URL="http://sourceforge.net/projects/boost/files/boost/1.61.0/boost_1_61_0.tar.gz"
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+        - BOOST_VERSION="1_64_0" # Boost 1.64
+        - BOOST_URL="http://sourceforge.net/projects/boost/files/boost/1.64.0/boost_1_64_0.tar.gz"
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=102"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
 
     ############################################################################
     # OSX
@@ -366,6 +376,7 @@ before_install:
       # OSX
       elif [[ ${TRAVIS_OS_NAME} == "osx" ]]; then
         brew update
+        /usr/bin/yes | pip uninstall numpy
         brew outdated boost || brew upgrade boost
         brew outdated cmake || brew upgrade cmake
         brew install lcov homebrew/science/opencv
@@ -417,7 +428,7 @@ install:
       if [[ ${TRAVIS_OS_NAME} == "linux" ]]; then
         mkdir -p ${OPENCL_ROOT}/include/CL
         pushd ${OPENCL_ROOT}/include/CL
-        travis_retry git clone --depth 1 https://github.com/KhronosGroup/OpenCL-Headers.git -b opencl${OPENCL_VERSION}
+        travis_retry git clone --depth 1 https://github.com/KhronosGroup/OpenCL-Headers.git -b opencl${OPENCL_HEADERS_VER}
         mv ./OpenCL-Headers/* .
         travis_retry wget -w 1 -np -nd -nv -A h,hpp --no-check-certificate ${OPENCL_REGISTRY}/api/2.1/cl.hpp;
         popd
@@ -499,7 +510,7 @@ script:
     - cd build
     - echo ${CMAKE_OPTIONS}
     - echo ${CXX_FLAGS}
-    - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} ..
+    - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS="${CXX_FLAGS}" ..
     - make -j4
     - |
       if [[ ${RUN_TESTS} == "true" ]]; then

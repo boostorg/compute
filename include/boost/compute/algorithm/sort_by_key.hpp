@@ -128,6 +128,8 @@ inline void dispatch_sort_by_key(KeyIterator keys_first,
 ///
 /// If no compare function is specified, \c less is used.
 ///
+/// Space complexity: \Omega(2n)
+///
 /// \see sort()
 template<class KeyIterator, class ValueIterator, class Compare>
 inline void sort_by_key(KeyIterator keys_first,

@@ -21,6 +21,10 @@ namespace compute {
 /// Calculates the cumulative sum of the elements in the range [\p first,
 /// \p last) and writes the resulting values to the range beginning at
 /// \p result.
+///
+/// Space complexity on GPUs: \Omega(n)<br>
+/// Space complexity on GPUs when \p first == \p result: \Omega(2n)<br>
+/// Space complexity on CPUs: \Omega(1)
 template<class InputIterator, class OutputIterator>
 inline OutputIterator
 partial_sum(InputIterator first,

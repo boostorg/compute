@@ -81,12 +81,17 @@ public:
     enum properties {
         enable_profiling = CL_QUEUE_PROFILING_ENABLE,
         enable_out_of_order_execution = CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE
+        #ifdef BOOST_COMPUTE_CL_VERSION_2_0
+        ,
+        on_device = CL_QUEUE_ON_DEVICE,
+        on_device_default = CL_QUEUE_ON_DEVICE_DEFAULT
+        #endif
     };
 
     enum map_flags {
         map_read = CL_MAP_READ,
         map_write = CL_MAP_WRITE
-        #ifdef CL_VERSION_1_2
+        #ifdef BOOST_COMPUTE_CL_VERSION_1_2
         ,
         map_write_invalidate_region = CL_MAP_WRITE_INVALIDATE_REGION
         #endif
@@ -118,7 +123,7 @@ public:
 
         cl_int error = 0;
 
-        #ifdef CL_VERSION_2_0
+        #ifdef BOOST_COMPUTE_CL_VERSION_2_0
         if (device.check_version(2, 0)){
             std::vector<cl_queue_properties> queue_properties;
             if(properties){
@@ -323,7 +328,7 @@ public:
         return event_;
     }
 
-    #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to read a rectangular region from \p buffer to
     /// host memory.
     ///
@@ -417,7 +422,7 @@ public:
 
         return event_;
     }
-    #endif // CL_VERSION_1_1
+    #endif // BOOST_COMPUTE_CL_VERSION_1_1
 
     /// Enqueues a command to write data from host memory to \p buffer.
     ///
@@ -494,7 +499,7 @@ public:
         return event_;
     }
 
-    #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to write a rectangular region from host memory
     /// to \p buffer.
     ///
@@ -588,7 +593,7 @@ public:
 
         return event_;
     }
-    #endif // CL_VERSION_1_1
+    #endif // BOOST_COMPUTE_CL_VERSION_1_1
 
     /// Enqueues a command to copy data from \p src_buffer to
     /// \p dst_buffer.
@@ -630,7 +635,7 @@ public:
         return event_;
     }
 
-    #if defined(CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to copy a rectangular region from
     /// \p src_buffer to \p dst_buffer.
     ///
@@ -676,9 +681,9 @@ public:
 
         return event_;
     }
-    #endif // CL_VERSION_1_1
+    #endif // BOOST_COMPUTE_CL_VERSION_1_1
 
-    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to fill \p buffer with \p pattern.
     ///
     /// \see_opencl_ref{clEnqueueFillBuffer}
@@ -717,7 +722,7 @@ public:
 
         return event_;
     }
-    #endif // CL_VERSION_1_2
+    #endif // BOOST_COMPUTE_CL_VERSION_1_2
 
     /// Enqueues a command to map \p buffer into the host address space.
     /// Event associated with map operation is returned through
@@ -1269,7 +1274,7 @@ public:
         return event_;
     }
 
-    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to fill \p image with \p fill_color.
     ///
     /// \see_opencl_ref{clEnqueueFillImage}
@@ -1354,7 +1359,7 @@ public:
 
         return event_;
     }
-    #endif // CL_VERSION_1_2
+    #endif // BOOST_COMPUTE_CL_VERSION_1_2
 
     /// Enqueues a kernel for execution.
     ///
@@ -1438,7 +1443,7 @@ public:
 
         // clEnqueueTask() was deprecated in OpenCL 2.0. In that case we
         // just forward to the equivalent clEnqueueNDRangeKernel() call.
-        #ifdef CL_VERSION_2_0
+        #ifdef BOOST_COMPUTE_CL_VERSION_2_0
         size_t one = 1;
         cl_int ret = clEnqueueNDRangeKernel(
             m_queue, kernel, 1, 0, &one, &one,
@@ -1511,7 +1516,10 @@ public:
     {
         BOOST_ASSERT(m_queue != 0);
 
-        clFlush(m_queue);
+        cl_int ret = clFlush(m_queue);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
     }
 
     /// Blocks until all outstanding commands in the queue have finished.
@@ -1521,7 +1529,10 @@ public:
     {
         BOOST_ASSERT(m_queue != 0);
 
-        clFinish(m_queue);
+        cl_int ret = clFinish(m_queue);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
     }
 
     /// Enqueues a barrier in the queue.
@@ -1530,11 +1541,11 @@ public:
         BOOST_ASSERT(m_queue != 0);
         cl_int ret = CL_SUCCESS;
 
-        #ifdef CL_VERSION_1_2
+        #ifdef BOOST_COMPUTE_CL_VERSION_1_2
         if(get_device().check_version(1, 2)){
             ret = clEnqueueBarrierWithWaitList(m_queue, 0, 0, 0);
         } else
-        #endif // CL_VERSION_1_2
+        #endif // BOOST_COMPUTE_CL_VERSION_1_2
         {
             // Suppress deprecated declarations warning
             BOOST_COMPUTE_DISABLE_DEPRECATED_DECLARATIONS();
@@ -1547,7 +1558,7 @@ public:
         }
     }
 
-    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a barrier in the queue after \p events.
     ///
     /// \opencl_version_warning{1,2}
@@ -1568,7 +1579,7 @@ public:
 
         return event_;
     }
-    #endif // CL_VERSION_1_2
+    #endif // BOOST_COMPUTE_CL_VERSION_1_2
 
     /// Enqueues a marker in the queue and returns an event that can be
     /// used to track its progress.
@@ -1577,7 +1588,7 @@ public:
         event event_;
         cl_int ret = CL_SUCCESS;
 
-        #ifdef CL_VERSION_1_2
+        #ifdef BOOST_COMPUTE_CL_VERSION_1_2
         if(get_device().check_version(1, 2)){
             ret = clEnqueueMarkerWithWaitList(m_queue, 0, 0, &event_.get());
         } else
@@ -1596,7 +1607,7 @@ public:
         return event_;
     }
 
-    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a marker after \p events in the queue and returns an
     /// event that can be used to track its progress.
     ///
@@ -1615,9 +1626,9 @@ public:
 
         return event_;
     }
-    #endif // CL_VERSION_1_2
+    #endif // BOOST_COMPUTE_CL_VERSION_1_2
 
-    #if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Enqueues a command to copy \p size bytes of data from \p src_ptr to
     /// \p dst_ptr.
     ///
@@ -1797,7 +1808,7 @@ public:
 
         return event_;
     }
-    #endif // CL_VERSION_2_0
+    #endif // BOOST_COMPUTE_CL_VERSION_2_0
 
     /// Returns \c true if the command queue is the same at \p other.
     bool operator==(const command_queue &other) const

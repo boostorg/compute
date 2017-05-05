@@ -26,6 +26,7 @@ namespace boost {
 namespace compute {
 namespace detail {
 
+// Space complexity O(1)
 template<class InputIterator, class T, class BinaryFunction>
 inline T generic_accumulate(InputIterator first,
                             InputIterator last,
@@ -154,6 +155,9 @@ inline T dispatch_accumulate(InputIterator first,
 /// accumulate(vec.begin(), vec.end(), 0, plus<float>());   // slow
 /// reduce(vec.begin(), vec.end(), &result, plus<float>()); // fast
 /// \endcode
+///
+/// Space complexity: \Omega(1)<br>
+/// Space complexity when optimized to \c reduce(): \Omega(n)
 ///
 /// \see reduce()
 template<class InputIterator, class T, class BinaryFunction>

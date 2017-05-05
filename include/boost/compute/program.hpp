@@ -272,13 +272,15 @@ public:
         }
     }
 
-    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Compiles the program with \p options.
     ///
     /// \opencl_version_warning{1,2}
     ///
     /// \see_opencl_ref{clCompileProgram}
-    void compile(const std::string &options = std::string())
+    void compile(const std::string &options = std::string(),
+                 const std::vector<std::pair<std::string, program> > &headers =
+                    std::vector<std::pair<std::string, program> >())
     {
         const char *options_string = 0;
 
@@ -286,9 +288,36 @@ public:
             options_string = options.c_str();
         }
 
-        cl_int ret = clCompileProgram(
-            m_program, 0, 0, options_string, 0, 0, 0, 0, 0
-        );
+        cl_int ret;
+        if (headers.empty())
+        {
+            ret = clCompileProgram(
+                m_program, 0, 0, options_string, 0, 0, 0, 0, 0
+            );
+        }
+        else
+        {
+            std::vector<const char*> header_names(headers.size());
+            std::vector<cl_program> header_programs(headers.size());
+            for (size_t i = 0; i < headers.size(); ++i)
+            {
+                header_names[i] = headers[i].first.c_str();
+                header_programs[i] = headers[i].second.m_program;
+            }
+
+            ret = clCompileProgram(
+                m_program,
+                0,
+                0,
+                options_string,
+                static_cast<cl_uint>(headers.size()),
+                header_programs.data(),
+                header_names.data(),
+                0,
+                0
+            );
+        }
+
 
         if(ret != CL_SUCCESS){
             BOOST_THROW_EXCEPTION(opencl_error(ret));
@@ -329,7 +358,7 @@ public:
 
         return program(program_, false);
     }
-    #endif // CL_VERSION_1_2
+    #endif // BOOST_COMPUTE_CL_VERSION_1_2
 
     /// Returns the build log.
     std::string build_log() const
@@ -432,6 +461,33 @@ public:
         return create_with_source(source, context);
     }
 
+    /// Creates a new program with \p files in \p context.
+    ///
+    /// \see_opencl_ref{clCreateProgramWithSource}
+    static program create_with_source_file(const std::vector<std::string> &files,
+                                           const context &context)
+    {
+        std::vector<std::string> sources(files.size());
+
+        for(size_t i = 0; i < files.size(); ++i) {
+            // open file stream
+            std::ifstream stream(files[i].c_str());
+
+            if(stream.fail()){
+                BOOST_THROW_EXCEPTION(std::ios_base::failure("failed to create stream."));
+            }
+
+            // read source
+            sources[i] = std::string(
+                    (std::istreambuf_iterator<char>(stream)),
+                    std::istreambuf_iterator<char>()
+            );
+        }
+
+        // create program
+        return create_with_source(sources, context);
+    }
+
     /// Creates a new program with \p binary of \p binary_size in
     /// \p context.
     ///
@@ -489,7 +545,7 @@ public:
         return create_with_binary(&binary[0], binary.size(), context);
     }
 
-    #if defined(CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    #if defined(BOOST_COMPUTE_CL_VERSION_1_2) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
     /// Creates a new program with the built-in kernels listed in
     /// \p kernel_names for \p devices in \p context.
     ///
@@ -516,7 +572,7 @@ public:
 
         return program(program_, false);
     }
-    #endif // CL_VERSION_1_2
+    #endif // BOOST_COMPUTE_CL_VERSION_1_2
 
     /// Create a new program with \p source in \p context and builds it with \p options.
     /**
@@ -543,10 +599,11 @@ public:
             .process( options     )
             .process( source      )
             ;
+        std::string hash_string = hash;
 
         // Try to get cached program binaries:
         try {
-            boost::optional<program> prog = load_program_binary(hash, context);
+            boost::optional<program> prog = load_program_binary(hash_string, context);
 
             if (prog) {
                 prog->build(options);
@@ -575,7 +632,7 @@ public:
 
 #ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
         // Save program binaries for future reuse.
-        save_program_binary(hash, prog);
+        save_program_binary(hash_string, prog);
 #endif
 
         return prog;
@@ -637,12 +694,12 @@ BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(program,
     ((std::vector<unsigned char *>, CL_PROGRAM_BINARIES))
 )
 
-#ifdef CL_VERSION_1_2
+#ifdef BOOST_COMPUTE_CL_VERSION_1_2
 BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(program,
     ((size_t, CL_PROGRAM_NUM_KERNELS))
     ((std::string, CL_PROGRAM_KERNEL_NAMES))
 )
-#endif // CL_VERSION_1_2
+#endif // BOOST_COMPUTE_CL_VERSION_1_2
 
 } // end compute namespace
 } // end boost namespace

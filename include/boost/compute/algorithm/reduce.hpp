@@ -153,6 +153,7 @@ block_reduce(InputIterator first,
     return result_vector;
 }
 
+// Space complexity: O( ceil(n / 2 / 256) )
 template<class InputIterator, class OutputIterator, class BinaryFunction>
 inline void generic_reduce(InputIterator first,
                            InputIterator last,
@@ -263,6 +264,9 @@ inline void dispatch_reduce(InputIterator first,
 /// the \c accumulate() algorithm, its implementation is substantially more
 /// efficient on parallel hardware. For more information, see the documentation
 /// on the \c accumulate() algorithm.
+///
+/// Space complexity on GPUs: \Omega(n)<br>
+/// Space complexity on CPUs: \Omega(1)
 ///
 /// \see accumulate()
 template<class InputIterator, class OutputIterator, class BinaryFunction>

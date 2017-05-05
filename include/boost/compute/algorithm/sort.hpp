@@ -176,6 +176,8 @@ inline void dispatch_sort(Iterator first,
 /// boost::compute::sort(data.begin(), data.end(), queue);
 /// \endcode
 ///
+/// Space complexity: \Omega(n)
+///
 /// \see is_sorted()
 template<class Iterator, class Compare>
 inline void sort(Iterator first,

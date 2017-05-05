@@ -144,7 +144,7 @@ inline future<OutputIterator> copy_on_device_async(InputIterator first,
     return make_future(result + std::distance(first, last), event_);
 }
 
-#ifdef CL_VERSION_2_0
+#ifdef BOOST_COMPUTE_CL_VERSION_2_0
 // copy_on_device() specialization for svm_ptr
 template<class T>
 inline svm_ptr<T> copy_on_device(svm_ptr<T> first,
@@ -181,7 +181,7 @@ inline future<svm_ptr<T> > copy_on_device_async(svm_ptr<T> first,
 
     return make_future(result + count, event_);
 }
-#endif // CL_VERSION_2_0
+#endif // BOOST_COMPUTE_CL_VERSION_2_0
 
 } // end detail namespace
 } // end compute namespace

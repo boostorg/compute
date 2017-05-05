@@ -41,12 +41,16 @@ inline bool bug_in_struct_assignment(const boost::compute::device &device)
 }
 
 // clEnqueueSVMMemcpy() operation does not work on AMD devices. This affects
-// copy() algorithm.
+// copy() algorithm. This bug was fixed in AMD drivers for Windows.
 //
 // see: https://community.amd.com/thread/190585
 inline bool bug_in_svmmemcpy(const boost::compute::device &device)
 {
+    #ifdef _WIN32
+    return false;
+    #else
     return boost::compute::detail::is_amd_device(device);
+    #endif
 }
 
 // For CPU devices on Apple platform local memory can not be used when work
@@ -80,6 +84,16 @@ inline bool supports_image_samplers(const boost::compute::device &device)
         return false;
     }
 
+    return true;
+}
+
+// returns true if the device has remquo() built-in OpenCL function implementation
+inline bool has_remquo_func(const boost::compute::device &device)
+{
+    // POCL does not have it
+    if(is_pocl_device(device)){
+        return false;
+    }
     return true;
 }
 

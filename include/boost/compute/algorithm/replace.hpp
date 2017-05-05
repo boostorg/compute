@@ -68,6 +68,8 @@ private:
 
 /// Replaces each instance of \p old_value in the range [\p first,
 /// \p last) with \p new_value.
+///
+/// Space complexity: \Omega(1)
 template<class Iterator, class T>
 inline void replace(Iterator first,
                     Iterator last,

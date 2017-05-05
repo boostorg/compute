@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(get_max_work_item_sizes)
     BOOST_CHECK_GE(max_work_item_sizes[2], size_t(1));
 }
 
-#ifdef CL_VERSION_1_2
+#ifdef BOOST_COMPUTE_CL_VERSION_1_2
 
 // returns true if the device supports the partitioning type
 bool supports_partition_type(const boost::compute::device &device,
@@ -111,10 +111,10 @@ BOOST_AUTO_TEST_CASE(partition_device_equally)
     // ensure device is not a sub-device
     BOOST_CHECK(device.is_subdevice() == false);
 
-    // partition default device into sub-devices with two compute units each
+    // partition default device into sub-devices with one compute unit each
     std::vector<boost::compute::device>
-        sub_devices = device.partition_equally(2);
-    BOOST_CHECK_EQUAL(sub_devices.size(), size_t(device.compute_units() / 2));
+        sub_devices = device.partition_equally(1);
+    BOOST_CHECK_EQUAL(sub_devices.size(), size_t(device.compute_units()));
 
     // verify each of the sub-devices
     for(size_t i = 0; i < sub_devices.size(); i++){
@@ -129,7 +129,7 @@ BOOST_AUTO_TEST_CASE(partition_device_equally)
         BOOST_CHECK(sub_device.is_subdevice() == true);
 
         // check number of compute units
-        BOOST_CHECK_EQUAL(sub_device.compute_units(), size_t(2));
+        BOOST_CHECK_EQUAL(sub_device.compute_units(), size_t(1));
     }
 }
 
@@ -216,7 +216,7 @@ BOOST_AUTO_TEST_CASE(partition_by_affinity_domain)
     BOOST_CHECK(sub_devices.size() > 0);
     BOOST_CHECK(sub_devices[0].is_subdevice() == true);
 }
-#endif // CL_VERSION_1_2
+#endif // BOOST_COMPUTE_CL_VERSION_1_2
 
 BOOST_AUTO_TEST_CASE(nvidia_compute_capability)
 {

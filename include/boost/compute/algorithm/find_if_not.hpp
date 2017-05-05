@@ -22,6 +22,8 @@ namespace compute {
 /// Returns an iterator pointing to the first element in the range
 /// [\p first, \p last) for which \p predicate returns \c false.
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see find_if()
 template<class InputIterator, class UnaryPredicate>
 inline InputIterator find_if_not(InputIterator first,

@@ -139,12 +139,12 @@ BOOST_AUTO_TEST_CASE(construct_from_cl_command_queue)
 {
     // create cl_command_queue
     cl_command_queue cl_queue;
-#ifdef CL_VERSION_2_0
+#ifdef BOOST_COMPUTE_CL_VERSION_2_0
     if (device.check_version(2, 0)){ // runtime check
         cl_queue =
             clCreateCommandQueueWithProperties(context, device.id(), 0, 0);
     } else
-#endif // CL_VERSION_2_0
+#endif // BOOST_COMPUTE_CL_VERSION_2_0
     {
         // Suppress deprecated declarations warning
         BOOST_COMPUTE_DISABLE_DEPRECATED_DECLARATIONS();
@@ -165,7 +165,7 @@ BOOST_AUTO_TEST_CASE(construct_from_cl_command_queue)
     clReleaseCommandQueue(cl_queue);
 }
 
-#ifdef CL_VERSION_1_1
+#ifdef BOOST_COMPUTE_CL_VERSION_1_1
 BOOST_AUTO_TEST_CASE(write_buffer_rect)
 {
     REQUIRES_OPENCL_VERSION(1, 1);
@@ -206,7 +206,7 @@ BOOST_AUTO_TEST_CASE(write_buffer_rect)
     BOOST_CHECK_EQUAL(output[2], 5);
     BOOST_CHECK_EQUAL(output[3], 7);
 }
-#endif // CL_VERSION_1_1
+#endif // BOOST_COMPUTE_CL_VERSION_1_1
 
 static bool nullary_kernel_executed = false;
 
@@ -261,6 +261,7 @@ BOOST_AUTO_TEST_CASE(copy_with_wait_list)
     CHECK_HOST_RANGE_EQUAL(int, 4, data2, (1, 3, 5, 7));
 }
 
+#ifndef BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
 BOOST_AUTO_TEST_CASE(enqueue_kernel_with_extents)
 {
     using boost::compute::dim;
@@ -311,5 +312,6 @@ BOOST_AUTO_TEST_CASE(enqueue_kernel_with_extents)
     CHECK_RANGE_EQUAL(int, 4, output1, (0, 1, 0, 1));
     CHECK_RANGE_EQUAL(int, 4, output2, (0, 1, 0, 1));
 }
+#endif // BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
 
 BOOST_AUTO_TEST_SUITE_END()

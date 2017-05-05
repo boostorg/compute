@@ -26,8 +26,8 @@ namespace detail {
 ///
 /// \brief Helper function for find_end
 ///
-/// Basically a copy of find_if which returns last occurence
-/// instead of first occurence
+/// Basically a copy of find_if which returns last occurrence
+/// instead of first occurrence
 ///
 template<class InputIterator, class UnaryPredicate>
 inline InputIterator find_end_helper(InputIterator first,
@@ -89,6 +89,8 @@ inline InputIterator find_end_helper(InputIterator first,
 /// \param p_first Iterator pointing to start of pattern
 /// \param p_last Iterator pointing to end of pattern
 /// \param queue Queue on which to execute
+///
+/// Space complexity: \Omega(n)
 ///
 template<class TextIterator, class PatternIterator>
 inline TextIterator find_end(TextIterator t_first,

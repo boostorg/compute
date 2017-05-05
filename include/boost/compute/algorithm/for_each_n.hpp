@@ -19,6 +19,8 @@ namespace compute {
 /// Calls \p function on each element in the range [\p first, \p first
 /// \c + \p count).
 ///
+/// Space complexity: \Omega(1)
+///
 /// \see for_each()
 template<class InputIterator, class Size, class UnaryFunction>
 inline UnaryFunction for_each_n(InputIterator first,

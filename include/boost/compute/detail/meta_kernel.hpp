@@ -1036,7 +1036,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
 }
 
 // SVM requires OpenCL 2.0
-#if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+#if defined(BOOST_COMPUTE_CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
 template<class T, class IndexExpr>
 inline meta_kernel& operator<<(meta_kernel &kernel,
                                const svm_ptr_index_expr<T, IndexExpr> &expr)
@@ -1072,7 +1072,7 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
     BOOST_STATIC_ASSERT(N < 16);
 
     if(N < 10){
-        return kernel << expr.m_arg << ".s" << uint_(N);
+        return kernel << expr.m_arg << ".s" << int_(N);
     }
     else if(N < 16){
 #ifdef _MSC_VER

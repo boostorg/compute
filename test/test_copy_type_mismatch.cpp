@@ -387,7 +387,7 @@ BOOST_AUTO_TEST_CASE(copy_to_device_float_to_int_list_convert_on_host)
 }
 
 // SVM requires OpenCL 2.0
-#if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+#if defined(BOOST_COMPUTE_CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
 BOOST_AUTO_TEST_CASE(copy_to_device_svm_float_to_int_map)
 {
     REQUIRES_OPENCL_VERSION(2, 0);
@@ -674,7 +674,7 @@ BOOST_AUTO_TEST_CASE(copy_async_on_device_float_to_int_empty)
 }
 
 // SVM requires OpenCL 2.0
-#if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+#if defined(BOOST_COMPUTE_CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
 BOOST_AUTO_TEST_CASE(copy_on_device_buffer_to_svm_float_to_int)
 {
     REQUIRES_OPENCL_VERSION(2, 0);
@@ -1205,7 +1205,7 @@ BOOST_AUTO_TEST_CASE(copy_async_to_host_float_to_int_empty)
 }
 
 // SVM requires OpenCL 2.0
-#if defined(CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+#if defined(BOOST_COMPUTE_CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
 BOOST_AUTO_TEST_CASE(copy_to_host_svm_float_to_int_map)
 {
     REQUIRES_OPENCL_VERSION(2, 0);

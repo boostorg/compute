@@ -138,7 +138,7 @@ boost::compute::program foo_program =
     foo_program.build();
 }
 
-#ifdef CL_VERSION_1_2
+#ifdef BOOST_COMPUTE_CL_VERSION_1_2
 BOOST_AUTO_TEST_CASE(compile_and_link)
 {
     REQUIRES_OPENCL_VERSION(1,2);
@@ -192,7 +192,59 @@ BOOST_AUTO_TEST_CASE(compile_and_link)
         linked_program.create_kernel("square_kernel");
     BOOST_CHECK_EQUAL(square_kernel.name(), "square_kernel");
 }
-#endif // CL_VERSION_1_2
+
+BOOST_AUTO_TEST_CASE(compile_and_link_with_headers)
+{
+    REQUIRES_OPENCL_VERSION(1,2);
+
+    if(!supports_compile_program(device) || !supports_link_program(device)) {
+        return;
+    }
+
+    // create the header programs
+    const char square_header_source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
+        T square(T x) { return x * x; }
+    );
+    const char div2_header_source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
+        T div2(T x) { return x / 2; }
+    );
+
+    compute::program square_header_program =
+        compute::program::create_with_source(square_header_source, context);
+    compute::program div2_header_program =
+        compute::program::create_with_source(div2_header_source, context);
+
+    // create the kernel program
+    const char kernel_source[] =
+        "#include \"square.h\"\n"
+        "#include \"div2.h\"\n"
+        "__kernel void squareby2_kernel(__global int *x)"
+        "{"
+        "    x[0] = div2(square(x[0]));"
+        "}";
+
+    compute::program square_program =
+        compute::program::create_with_source(kernel_source, context);
+
+    std::vector<std::pair<std::string, compute::program> > header_programs;
+    header_programs.push_back(std::make_pair("square.h", square_header_program));
+    header_programs.push_back(std::make_pair("div2.h", div2_header_program));
+
+    square_program.compile("-DT=int", header_programs);
+
+    // link program
+    std::vector<compute::program> programs;
+    programs.push_back(square_program);
+
+    compute::program linked_program =
+        compute::program::link(programs, context);
+
+    // create the square kernel
+    compute::kernel square_kernel =
+        linked_program.create_kernel("squareby2_kernel");
+    BOOST_CHECK_EQUAL(square_kernel.name(), "squareby2_kernel");
+}
+#endif // BOOST_COMPUTE_CL_VERSION_1_2
 
 BOOST_AUTO_TEST_CASE(build_log)
 {

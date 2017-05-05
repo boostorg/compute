@@ -26,6 +26,7 @@ namespace boost {
 namespace compute {
 namespace detail {
 
+// Space complexity: O(2n)
 template<class InputIterator, class OutputIterator, class UnaryFunction, class Predicate>
 inline OutputIterator transform_if_impl(InputIterator first,
                                         InputIterator last,
@@ -53,14 +54,12 @@ inline OutputIterator transform_if_impl(InputIterator first,
            << predicate(first[k1.get_global_id(0)]) << " ? 1 : 0;\n";
     k1.exec_1d(queue, 0, count);
 
-    // count number of elements to be copied
-    size_t copied_element_count =
-        ::boost::compute::count(indices.begin(), indices.end(), 1, queue);
-
     // scan indices
+    size_t copied_element_count = (indices.cend() - 1).read(queue);
     ::boost::compute::exclusive_scan(
         indices.begin(), indices.end(), indices.begin(), queue
     );
+    copied_element_count += (indices.cend() - 1).read(queue); // last scan element plus last mask element
 
     // copy values
     ::boost::compute::detail::meta_kernel k2("transform_if_do_copy");
@@ -98,6 +97,8 @@ inline discard_iterator transform_if_impl(InputIterator first,
 
 /// Copies each element in the range [\p first, \p last) for which
 /// \p predicate returns \c true to the range beginning at \p result.
+///
+/// Space complexity: O(2n)
 template<class InputIterator, class OutputIterator, class UnaryFunction, class Predicate>
 inline OutputIterator transform_if(InputIterator first,
                                    InputIterator last,
