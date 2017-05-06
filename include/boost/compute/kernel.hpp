@@ -15,10 +15,14 @@
 
 #include <boost/assert.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/optional.hpp>
+
+#include <boost/compute/cl_ext.hpp> // cl_khr_subgroups
 
 #include <boost/compute/config.hpp>
-#include <boost/compute/program.hpp>
 #include <boost/compute/exception.hpp>
+#include <boost/compute/program.hpp>
+#include <boost/compute/platform.hpp>
 #include <boost/compute/type_traits/is_fundamental.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
@@ -207,6 +211,101 @@ public:
     {
         return detail::get_object_info<T>(clGetKernelWorkGroupInfo, m_kernel, info, device.id());
     }
+
+    #if defined(BOOST_COMPUTE_CL_VERSION_2_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Returns sub-group information for the kernel with \p device. Returns a null
+    /// optional if \p device is not 2.1 device, or is not 2.0 device with support
+    /// for cl_khr_subgroups extension.
+    ///
+    /// \opencl_version_warning{2,1}
+    /// \see_opencl_ref{clGetKernelSubGroupInfo}
+    template<class T>
+    boost::optional<T> get_sub_group_info(const device &device, cl_kernel_sub_group_info info,
+                                          const size_t input_size, const void * input) const
+    {
+        if(device.check_version(2, 1))
+        {
+            return detail::get_object_info<T>(
+                clGetKernelSubGroupInfo, m_kernel, info, device.id(), input_size, input
+            );
+        }
+        else if(!device.check_version(2, 0) || !device.supports_extension("cl_khr_subgroups"))
+        {
+            return boost::optional<T>();
+        }
+        // Only CL_KERNEL_MAX_SUB_GROUP_SIZE_FOR_NDRANGE and CL_KERNEL_SUB_GROUP_COUNT_FOR_NDRANGE
+        // are supported in cl_khr_subgroups extension for 2.0 devices.
+        else if(info != CL_KERNEL_MAX_SUB_GROUP_SIZE_FOR_NDRANGE && info != CL_KERNEL_SUB_GROUP_COUNT_FOR_NDRANGE)
+        {
+            return boost::optional<T>();
+        }
+
+        clGetKernelSubGroupInfoKHR_fn clGetKernelSubGroupInfoKHR_fptr =
+            reinterpret_cast<clGetKernelSubGroupInfoKHR_fn>(
+                reinterpret_cast<size_t>(
+                    device.platform().get_extension_function_address("clGetKernelSubGroupInfoKHR")
+                )
+            );
+
+        return detail::get_object_info<T>(
+            clGetKernelSubGroupInfoKHR_fptr, m_kernel, info, device.id(), input_size, input
+        );
+    }
+
+    /// \overload
+    template<class T>
+    boost::optional<T> get_sub_group_info(const device &device, cl_kernel_sub_group_info info) const
+    {
+        return get_sub_group_info<T>(device, info, 0, 0);
+    }
+
+    /// \overload
+    template<class T>
+    boost::optional<T> get_sub_group_info(const device &device, cl_kernel_sub_group_info info,
+                                          const size_t input) const
+    {
+        return get_sub_group_info<T>(device, info, sizeof(size_t), &input);
+    }
+    #endif // BOOST_COMPUTE_CL_VERSION_2_1
+
+    #if defined(BOOST_COMPUTE_CL_VERSION_2_0) && !defined(BOOST_COMPUTE_CL_VERSION_2_1)
+    /// Returns sub-group information for the kernel with \p device. Returns a null
+    /// optional if cl_khr_subgroups extension is not supported by \p device.
+    ///
+    /// \opencl_version_warning{2,0}
+    /// \see_opencl_ref{clGetKernelSubGroupInfoKHR}
+    template<class T>
+    boost::optional<T> get_sub_group_info(const device &device, cl_kernel_sub_group_info info,
+                                          const size_t input_size, const void * input) const
+    {
+        if(!device.check_version(2, 0) || !device.supports_extension("cl_khr_subgroups"))
+        {
+            return boost::optional<T>();
+        }
+
+        clGetKernelSubGroupInfoKHR_fn clGetKernelSubGroupInfoKHR_fptr =
+            reinterpret_cast<clGetKernelSubGroupInfoKHR_fn>(
+                reinterpret_cast<size_t>(
+                    device.platform().get_extension_function_address("clGetKernelSubGroupInfoKHR")
+                )
+            );
+
+        return detail::get_object_info<T>(
+            clGetKernelSubGroupInfoKHR_fptr, m_kernel, info, device.id(), input_size, input
+        );
+    }
+    #endif // defined(BOOST_COMPUTE_CL_VERSION_2_0) && !defined(BOOST_COMPUTE_CL_VERSION_2_1)
+
+    #if defined(BOOST_COMPUTE_CL_VERSION_2_0) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// \overload
+    template<class T>
+    boost::optional<T> get_sub_group_info(const device &device, cl_kernel_sub_group_info info,
+                                          const std::vector<size_t> input) const
+    {
+        BOOST_ASSERT(input.size() > 0);
+        return get_sub_group_info<T>(device, info, input.size() * sizeof(size_t), &input[0]);
+    }
+    #endif // BOOST_COMPUTE_CL_VERSION_2_0
 
     /// Sets the argument at \p index to \p value with \p size.
     ///
