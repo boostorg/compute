@@ -141,6 +141,7 @@ BOOST_AUTO_TEST_CASE(push_back)
     for(int i = 0; i < 100; i++){
         vector.push_back(i, queue);
     }
+    queue.finish();
     BOOST_CHECK_EQUAL(vector.size(), size_t(103));
     BOOST_CHECK_EQUAL(vector[0], 12);
     BOOST_CHECK_EQUAL(vector[1], 24);
@@ -154,6 +155,7 @@ BOOST_AUTO_TEST_CASE(at)
     vector.push_back(1, queue);
     vector.push_back(2, queue);
     vector.push_back(3, queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(vector.at(0), 1);
     BOOST_CHECK_EQUAL(vector.at(1), 2);
     BOOST_CHECK_EQUAL(vector.at(2), 3);
@@ -256,6 +258,7 @@ BOOST_AUTO_TEST_CASE(vector_iterator)
     vector.push_back(4, queue);
     vector.push_back(6, queue);
     vector.push_back(8, queue);
+    queue.finish();
     BOOST_CHECK_EQUAL(vector.size(), size_t(4));
     BOOST_CHECK_EQUAL(vector[0], 2);
     BOOST_CHECK_EQUAL(*vector.begin(), 2);
