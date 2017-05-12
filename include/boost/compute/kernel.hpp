@@ -128,6 +128,21 @@ public:
         }
     }
 
+    #if defined(BOOST_COMPUTE_CL_VERSION_2_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Creates a new kernel object based on a shallow copy of
+    /// the undelying OpenCL kernel object.
+    ///
+    /// \opencl_version_warning{2,1}
+    ///
+    /// \see_opencl_ref{clCloneKernel}
+    kernel clone()
+    {
+        cl_int ret = 0;
+        cl_kernel k = clCloneKernel(m_kernel, &ret);
+        return kernel(k, false);
+    }
+    #endif // BOOST_COMPUTE_CL_VERSION_2_1
+
     /// Returns a reference to the underlying OpenCL kernel object.
     cl_kernel& get() const
     {
