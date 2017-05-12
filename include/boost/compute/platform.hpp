@@ -211,6 +211,23 @@ public:
         return m_platform != other.m_platform;
     }
 
+    /// Returns \c true if the platform OpenCL version is major.minor
+    /// or newer; otherwise returns \c false.
+    bool check_version(int major, int minor) const
+    {
+        std::stringstream stream;
+        stream << version();
+
+        int actual_major, actual_minor;
+        stream.ignore(7); // 'OpenCL '
+        stream >> actual_major;
+        stream.ignore(1); // '.'
+        stream >> actual_minor;
+
+        return actual_major > major ||
+               (actual_major == major && actual_minor >= minor);
+    }
+
 private:
     cl_platform_id m_platform;
 };
