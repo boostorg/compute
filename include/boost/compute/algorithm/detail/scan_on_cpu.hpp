@@ -79,7 +79,8 @@ inline OutputIterator scan_on_cpu(InputIterator first,
         "uint block = " <<
             "(uint)ceil(((float)count)/(get_global_size(0) + 1));\n" <<
         "uint index = get_global_id(0) * block;\n" <<
-        "uint end = min(count, index + block);\n";
+        "uint end = min(count, index + block);\n" <<
+        "if(index >= end) return;\n";
 
     if(!exclusive){
         k <<
