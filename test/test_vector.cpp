@@ -62,6 +62,23 @@ BOOST_AUTO_TEST_CASE(resize)
     BOOST_CHECK_EQUAL(int_vector.size(), size_t(5));
 }
 
+BOOST_AUTO_TEST_CASE(reserve)
+{
+    const float growth_factor = 1.5f;
+
+    bc::vector<int> int_vector(10, context);
+    BOOST_CHECK_EQUAL(int_vector.size(), size_t(10));
+    BOOST_CHECK_EQUAL(int_vector.capacity(), size_t(10));
+
+    int_vector.reserve(20, queue);
+    BOOST_CHECK_EQUAL(int_vector.size(), size_t(10));
+    BOOST_CHECK_EQUAL(int_vector.capacity(), size_t(20 * growth_factor));
+
+    int_vector.reserve(5, queue);
+    BOOST_CHECK_EQUAL(int_vector.size(), size_t(10));
+    BOOST_CHECK_EQUAL(int_vector.capacity(), size_t(20 * growth_factor));
+}
+
 BOOST_AUTO_TEST_CASE(array_operator)
 {
     bc::vector<int> vector(10, context);
