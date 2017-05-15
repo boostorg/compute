@@ -435,8 +435,27 @@ public:
 
     void reserve(size_type size, command_queue &queue)
     {
-        (void) size;
-        (void) queue;
+        if(size > max_size()){
+            throw std::length_error("vector::reserve");
+        }
+        if(capacity() < size){
+            // allocate new buffer
+            pointer new_data =
+                m_allocator.allocate(
+                    static_cast<size_type>(
+                        static_cast<float>(size) * _growth_factor()
+                    )
+                );
+
+            // copy old values to the new buffer
+            ::boost::compute::copy(m_data, m_data + m_size, new_data, queue);
+
+            // free old memory
+            m_allocator.deallocate(m_data, m_size);
+
+            // set new data
+            m_data = new_data;
+        }
     }
 
     void reserve(size_type size)
