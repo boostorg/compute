@@ -407,7 +407,8 @@ public:
         return m_id != other.m_id;
     }
 
-    /// \internal_
+    /// Returns \c true if the device OpenCL version is major.minor
+    /// or newer; otherwise returns \c false.
     bool check_version(int major, int minor) const
     {
         std::stringstream stream;

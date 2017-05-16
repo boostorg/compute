@@ -17,6 +17,7 @@
 #include <boost/compute/utility/source.hpp>
 
 #include "context_setup.hpp"
+#include "check_macros.hpp"
 
 namespace compute = boost::compute;
 
@@ -285,6 +286,27 @@ BOOST_AUTO_TEST_CASE(get_sub_group_info_core)
         // supported by cl_khr_subgroups (2.0 ext)
         BOOST_CHECK(max == boost::none);
     }
+}
+#endif // BOOST_COMPUTE_CL_VERSION_2_1
+
+#ifdef BOOST_COMPUTE_CL_VERSION_2_1
+BOOST_AUTO_TEST_CASE(clone_kernel)
+{
+    REQUIRES_OPENCL_PLATFORM_VERSION(2, 1);
+
+    compute::kernel k1 = compute::kernel::create_with_source(
+        "__kernel void test(__global int * x) { x[get_global_id(0)] = get_global_id(0); }",
+        "test", context
+    );
+
+    compute::buffer x(context, 5 * sizeof(compute::int_));
+    k1.set_arg(0, x);
+
+    // Clone k1 kernel
+    compute::kernel k2 = k1.clone();
+    // After clone k2 0th argument (__global float * x) should be set,
+    // so we should be able to enqueue k2 kernel without problems
+    queue.enqueue_1d_range_kernel(k2, 0, x.size() / sizeof(compute::int_), 0).wait();
 }
 #endif // BOOST_COMPUTE_CL_VERSION_2_1
 
