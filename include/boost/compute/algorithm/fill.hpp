@@ -138,7 +138,7 @@ dispatch_fill(BufferIterator first,
             sizeof(value_type),
             offset * sizeof(value_type),
             count * sizeof(value_type)
-        );
+        ).wait();
     }
 }
 
