@@ -126,6 +126,82 @@ BOOST_AUTO_TEST_CASE(create_with_binary)
     BOOST_CHECK_EQUAL(binary_bar_kernel.name(), std::string("bar"));
 }
 
+#ifdef BOOST_COMPUTE_CL_VERSION_2_1
+BOOST_AUTO_TEST_CASE(create_with_il)
+{
+    size_t device_address_space_size = device.address_bits();
+    std::string file_path(BOOST_COMPUTE_TEST_DATA_PATH);
+    if(device_address_space_size == 64)
+    {
+        file_path += "/program.spirv64";
+    }
+    else
+    {
+        file_path += "/program.spirv32";
+    }
+
+    // create program from il
+    boost::compute::program il_program;
+    BOOST_CHECK_NO_THROW(
+        il_program = boost::compute::program::create_with_il_file(
+            file_path, context
+        )
+    );
+    BOOST_CHECK_NO_THROW(il_program.build());
+
+    // create kernel (to check if program was loaded correctly)
+    BOOST_CHECK_NO_THROW(il_program.create_kernel("foobar"));
+}
+
+BOOST_AUTO_TEST_CASE(get_program_il_binary)
+{
+    size_t device_address_space_size = device.address_bits();
+    std::string file_path(BOOST_COMPUTE_TEST_DATA_PATH);
+    if(device_address_space_size == 64)
+    {
+        file_path += "/program.spirv64";
+    }
+    else
+    {
+        file_path += "/program.spirv32";
+    }
+
+    // create program from il
+    boost::compute::program il_program;
+    BOOST_CHECK_NO_THROW(
+        il_program = boost::compute::program::create_with_il_file(
+            file_path, context
+        )
+    );
+    BOOST_CHECK_NO_THROW(il_program.build());
+
+    std::vector<unsigned char> il_binary;
+    BOOST_CHECK_NO_THROW(il_binary = il_program.il_binary());
+
+    // create program from loaded il binary
+    BOOST_CHECK_NO_THROW(
+        il_program = boost::compute::program::create_with_il(il_binary, context)
+    );
+    BOOST_CHECK_NO_THROW(il_program.build());
+
+    // create kernel (to check if program was loaded correctly)
+    BOOST_CHECK_NO_THROW(il_program.create_kernel("foobar"));
+}
+
+BOOST_AUTO_TEST_CASE(get_program_il_binary_empty)
+{
+    boost::compute::program program;
+    BOOST_CHECK_NO_THROW(
+        program = boost::compute::program::create_with_source(source, context)
+    );
+    BOOST_CHECK_NO_THROW(program.build());
+
+    std::vector<unsigned char> il_binary;
+    il_binary = program.il_binary();
+    BOOST_CHECK(il_binary.empty());
+}
+#endif // BOOST_COMPUTE_CL_VERSION_2_1
+
 BOOST_AUTO_TEST_CASE(create_with_source_doctest)
 {
 //! [create_with_source]
