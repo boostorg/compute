@@ -183,6 +183,8 @@ struct get_object_info_impl<std::vector<T> >
             BOOST_THROW_EXCEPTION(opencl_error(ret));
         }
 
+        if(size == 0) return std::vector<T>();
+
         std::vector<T> vector(size / sizeof(T));
         ret = function(info, size, &vector[0], 0);
         if(ret != CL_SUCCESS){

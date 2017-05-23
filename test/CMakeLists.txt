@@ -50,6 +50,9 @@ if(${BOOST_COMPUTE_ENABLE_COVERAGE} AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU
   add_definitions(-fprofile-arcs -ftest-coverage)
 endif()
 
+# add path to test data dir
+add_definitions(-DBOOST_COMPUTE_TEST_DATA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/data")
+
 function(add_compute_test TEST_NAME TEST_SOURCE)
   get_filename_component(TEST_TARGET ${TEST_SOURCE} NAME_WE)
   add_executable(${TEST_TARGET} ${TEST_SOURCE})
