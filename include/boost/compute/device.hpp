@@ -403,7 +403,7 @@ public:
     /// \see_opencl_ref{clGetHostTimer}
     ///
     /// \opencl_version_warning{2,1}
-    ulong_ get_host_timer()
+    ulong_ get_host_timer() const
     {
         ulong_ host_timestamp = 0;
         cl_int ret = clGetHostTimer(m_id, &host_timestamp);
@@ -420,7 +420,7 @@ public:
     /// \see_opencl_ref{clGetDeviceAndHostTimer}
     ///
     /// \opencl_version_warning{2,1}
-    std::pair<ulong_, ulong_> get_device_and_host_timer()
+    std::pair<ulong_, ulong_> get_device_and_host_timer() const
     {
         ulong_ host_timestamp;
         ulong_ device_timestamp;
@@ -449,7 +449,7 @@ public:
     ///
     /// \opencl_version_warning{2,1}
     template<class Duration>
-    Duration get_host_timer()
+    Duration get_host_timer() const
     {
         const ulong_ nanoseconds = this->get_host_timer();
         return detail::make_duration_from_nanoseconds(Duration(), nanoseconds);
@@ -464,7 +464,7 @@ public:
     ///
     /// \opencl_version_warning{2,1}
     template<class Duration>
-    std::pair<Duration, Duration> get_device_and_host_timer()
+    std::pair<Duration, Duration> get_device_and_host_timer() const
     {
         const std::pair<ulong_, ulong_> timestamps = this->get_device_and_host_timer();
         return std::make_pair(
