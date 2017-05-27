@@ -232,3 +232,54 @@ BOOST_AUTO_TEST_CASE(get_info_specializations)
 
     std::cout << device.get_info<CL_DEVICE_NAME>() << std::endl;
 }
+
+#ifdef BOOST_COMPUTE_CL_VERSION_2_1
+BOOST_AUTO_TEST_CASE(get_host_timer)
+{
+    boost::compute::device device = boost::compute::system::default_device();
+    BOOST_CHECK(device.get_host_timer() != 0);
+
+    #ifndef BOOST_COMPUTE_NO_HDR_CHRONO
+    typedef std::chrono::milliseconds stdms;
+    BOOST_CHECK(device.get_host_timer<stdms>().count() != 0);
+    #endif
+
+    #ifndef BOOST_COMPUTE_NO_BOOST_CHRONO
+    typedef boost::chrono::milliseconds bms;
+    BOOST_CHECK(device.get_host_timer<bms>().count() != 0);
+    #endif
+}
+
+BOOST_AUTO_TEST_CASE(get_device_and_host_timer)
+{
+    boost::compute::device device = boost::compute::system::default_device();
+    typedef std::pair<boost::compute::ulong_, boost::compute::ulong_> dah_timer;
+    dah_timer timer;
+    BOOST_CHECK_NO_THROW(timer = device.get_device_and_host_timer());
+    BOOST_CHECK(timer.first != 0);
+    BOOST_CHECK(timer.second != 0);
+
+    #ifndef BOOST_COMPUTE_NO_HDR_CHRONO
+    typedef std::chrono::milliseconds stdms;
+    BOOST_CHECK(device.get_device_and_host_timer<stdms>().first.count() != 0);
+    BOOST_CHECK(device.get_device_and_host_timer<stdms>().second.count() != 0);
+    #endif
+
+    #ifndef BOOST_COMPUTE_NO_BOOST_CHRONO
+    typedef boost::chrono::milliseconds bms;
+    BOOST_CHECK(device.get_device_and_host_timer<bms>().first.count() != 0);
+    BOOST_CHECK(device.get_device_and_host_timer<bms>().second.count() != 0);
+    #endif
+}
+
+BOOST_AUTO_TEST_CASE(get_info_opencl21_queries)
+{
+    boost::compute::device device = boost::compute::system::default_device();
+
+    BOOST_CHECK(!device.get_info<CL_DEVICE_IL_VERSION>().empty());
+    BOOST_CHECK(device.get_info<CL_DEVICE_MAX_NUM_SUB_GROUPS>() > 0);
+    BOOST_CHECK_NO_THROW(
+        device.get_info<CL_DEVICE_SUB_GROUP_INDEPENDENT_FORWARD_PROGRESS>()
+    );
+}
+#endif // BOOST_COMPUTE_CL_VERSION_2_1

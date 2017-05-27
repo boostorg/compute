@@ -241,6 +241,12 @@ BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(platform,
     ((std::string, CL_PLATFORM_EXTENSIONS))
 )
 
+#ifdef BOOST_COMPUTE_CL_VERSION_2_1
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(platform,
+    ((cl_ulong, CL_PLATFORM_HOST_TIMER_RESOLUTION))
+)
+#endif // BOOST_COMPUTE_CL_VERSION_2_1
+
 inline boost::compute::platform device::platform() const
 {
     return boost::compute::platform(get_info<CL_DEVICE_PLATFORM>());
