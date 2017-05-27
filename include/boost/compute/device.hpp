@@ -21,6 +21,7 @@
 #include <boost/compute/config.hpp>
 #include <boost/compute/exception.hpp>
 #include <boost/compute/types/fundamental.hpp>
+#include <boost/compute/detail/duration.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
 
@@ -394,6 +395,85 @@ public:
         return partition(properties);
     }
     #endif // BOOST_COMPUTE_CL_VERSION_1_2
+
+    #if defined(BOOST_COMPUTE_CL_VERSION_2_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Returns the current value of the host clock as seen by device
+    /// in nanoseconds.
+    ///
+    /// \see_opencl_ref{clGetHostTimer}
+    ///
+    /// \opencl_version_warning{2,1}
+    ulong_ get_host_timer()
+    {
+        ulong_ host_timestamp = 0;
+        cl_int ret = clGetHostTimer(m_id, &host_timestamp);
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+        return host_timestamp;
+    }
+
+    /// Returns a reasonably synchronized pair of timestamps from the device timer
+    /// and the host timer as seen by device in nanoseconds. The first of returned
+    /// std::pair is a device timer timestamp, the second is a host timer timestamp.
+    ///
+    /// \see_opencl_ref{clGetDeviceAndHostTimer}
+    ///
+    /// \opencl_version_warning{2,1}
+    std::pair<ulong_, ulong_> get_device_and_host_timer()
+    {
+        ulong_ host_timestamp;
+        ulong_ device_timestamp;
+        cl_int ret = clGetDeviceAndHostTimer(
+            m_id, &device_timestamp, &host_timestamp
+        );
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+        return std::make_pair(
+            device_timestamp, host_timestamp
+        );
+    }
+
+    #if !defined(BOOST_COMPUTE_NO_HDR_CHRONO) || !defined(BOOST_COMPUTE_NO_BOOST_CHRONO)
+    /// Returns the current value of the host clock as seen by device
+    /// as duration.
+    ///
+    /// For example, to print the current value of the host clock as seen by device
+    /// in milliseconds:
+    /// \code
+    /// std::cout << device.get_host_timer<std::chrono::milliseconds>().count() << " ms";
+    /// \endcode
+    ///
+    /// \see_opencl_ref{clGetHostTimer}
+    ///
+    /// \opencl_version_warning{2,1}
+    template<class Duration>
+    Duration get_host_timer()
+    {
+        const ulong_ nanoseconds = this->get_host_timer();
+        return detail::make_duration_from_nanoseconds(Duration(), nanoseconds);
+    }
+
+    /// Returns a reasonably synchronized pair of timestamps from the device timer
+    /// and the host timer as seen by device as a std::pair<Duration, Duration> value.
+    /// The first of returned std::pair is a device timer timestamp, the second is
+    /// a host timer timestamp.
+    ///
+    /// \see_opencl_ref{clGetDeviceAndHostTimer}
+    ///
+    /// \opencl_version_warning{2,1}
+    template<class Duration>
+    std::pair<Duration, Duration> get_device_and_host_timer()
+    {
+        const std::pair<ulong_, ulong_> timestamps = this->get_device_and_host_timer();
+        return std::make_pair(
+            detail::make_duration_from_nanoseconds(Duration(), timestamps.first),
+            detail::make_duration_from_nanoseconds(Duration(), timestamps.second)
+        );
+    }
+    #endif // !defined(BOOST_COMPUTE_NO_HDR_CHRONO) || !defined(BOOST_COMPUTE_NO_BOOST_CHRONO)
+    #endif // BOOST_COMPUTE_CL_VERSION_2_1
 
     /// Returns \c true if the device is the same at \p other.
     bool operator==(const device &other) const
