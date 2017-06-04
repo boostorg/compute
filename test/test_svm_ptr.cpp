@@ -110,4 +110,47 @@ BOOST_AUTO_TEST_CASE(sum_svm_kernel)
 }
 #endif // BOOST_COMPUTE_CL_VERSION_2_0
 
+#ifdef BOOST_COMPUTE_CL_VERSION_2_1
+BOOST_AUTO_TEST_CASE(migrate)
+{
+    REQUIRES_OPENCL_VERSION(2, 1);
+
+    compute::svm_ptr<cl_int> ptr =
+        compute::svm_alloc<cl_int>(context, 8);
+
+    // Migrate to device
+    std::vector<const void*> ptrs(1, ptr.get());
+    std::vector<size_t> sizes(1, 8 * sizeof(cl_int));
+    queue.enqueue_svm_migrate_memory(ptrs, sizes).wait();
+
+    // Set on device
+    const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void foo(__global int *ptr)
+        {
+            for(int i = 0; i < 8; i++){
+                ptr[i] = i;
+            }
+        }
+    );
+    compute::program program =
+        compute::program::build_with_source(source, context, "-cl-std=CL2.0");
+    compute::kernel foo_kernel = program.create_kernel("foo");
+    foo_kernel.set_arg(0, ptr);
+    queue.enqueue_task(foo_kernel).wait();
+
+    // Migrate to host
+    queue.enqueue_svm_migrate_memory(
+        ptr.get(), 0, boost::compute::command_queue::migrate_to_host
+    ).wait();
+
+    // Check
+    CHECK_HOST_RANGE_EQUAL(
+        cl_int, 8,
+        static_cast<cl_int*>(ptr.get()),
+        (0, 1, 2, 3, 4, 5, 6, 7)
+    );
+    compute::svm_free(context, ptr);
+}
+#endif // BOOST_COMPUTE_CL_VERSION_2_1
+
 BOOST_AUTO_TEST_SUITE_END()
