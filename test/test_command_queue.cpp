@@ -314,4 +314,39 @@ BOOST_AUTO_TEST_CASE(enqueue_kernel_with_extents)
 }
 #endif // BOOST_COMPUTE_NO_HDR_INITIALIZER_LIST
 
+#ifdef BOOST_COMPUTE_CL_VERSION_2_1
+BOOST_AUTO_TEST_CASE(get_default_device_queue)
+{
+    REQUIRES_OPENCL_VERSION(2, 1);
+
+    boost::compute::command_queue default_device_queue(
+        context, device,
+        boost::compute::command_queue::on_device |
+        boost::compute::command_queue::on_device_default |
+        boost::compute::command_queue::enable_out_of_order_execution
+    );
+    BOOST_CHECK_NO_THROW(queue.get_info<CL_QUEUE_DEVICE_DEFAULT>());
+    BOOST_CHECK_EQUAL(
+        queue.get_default_device_queue(),
+        default_device_queue
+    );
+}
+
+BOOST_AUTO_TEST_CASE(set_as_default_device_queue)
+{
+    REQUIRES_OPENCL_VERSION(2, 1);
+
+    boost::compute::command_queue new_default_device_queue(
+        context, device,
+        boost::compute::command_queue::on_device |
+        boost::compute::command_queue::enable_out_of_order_execution
+    );
+    new_default_device_queue.set_as_default_device_queue();
+    BOOST_CHECK_EQUAL(
+         queue.get_default_device_queue(),
+         new_default_device_queue
+    );
+}
+#endif
+
 BOOST_AUTO_TEST_SUITE_END()
