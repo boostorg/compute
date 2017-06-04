@@ -134,7 +134,7 @@ public:
     ///
     /// \opencl_version_warning{2,1}
     ///
-    /// \see_opencl_ref{clCloneKernel}
+    /// \see_opencl21_ref{clCloneKernel}
     kernel clone()
     {
         cl_int ret = 0;
@@ -233,7 +233,8 @@ public:
     /// for cl_khr_subgroups extension.
     ///
     /// \opencl_version_warning{2,1}
-    /// \see_opencl_ref{clGetKernelSubGroupInfo}
+    /// \see_opencl21_ref{clGetKernelSubGroupInfo}
+    /// \see_opencl2_ref{clGetKernelSubGroupInfoKHR}
     template<class T>
     boost::optional<T> get_sub_group_info(const device &device, cl_kernel_sub_group_info info,
                                           const size_t input_size, const void * input) const
@@ -288,7 +289,7 @@ public:
     /// optional if cl_khr_subgroups extension is not supported by \p device.
     ///
     /// \opencl_version_warning{2,0}
-    /// \see_opencl_ref{clGetKernelSubGroupInfoKHR}
+    /// \see_opencl2_ref{clGetKernelSubGroupInfoKHR}
     template<class T>
     boost::optional<T> get_sub_group_info(const device &device, cl_kernel_sub_group_info info,
                                           const size_t input_size, const void * input) const
