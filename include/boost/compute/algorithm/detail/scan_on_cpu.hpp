@@ -76,8 +76,7 @@ inline OutputIterator scan_on_cpu(InputIterator first,
         k.add_arg<output_type *>(memory_object::global_memory, "block_partial_sums");
 
     k <<
-        "uint block = " <<
-            "(uint)ceil(((float)count)/(get_global_size(0) + 1));\n" <<
+        "uint block = (count + get_global_size(0))/(get_global_size(0) + 1);\n" <<
         "uint index = get_global_id(0) * block;\n" <<
         "uint end = min(count, index + block);\n" <<
         "if(index >= end) return;\n";
@@ -155,11 +154,9 @@ inline OutputIterator scan_on_cpu(InputIterator first,
         l.add_arg<output_type *>(memory_object::global_memory, "block_partial_sums");
 
     l <<
-        "uint block = " <<
-            "(uint)ceil(((float)count)/(get_global_size(0) + 1));\n" <<
+        "uint block = (count + get_global_size(0))/(get_global_size(0) + 1);\n" <<
         "uint index = block + get_global_id(0) * block;\n" <<
         "uint end = min(count, index + block);\n" <<
-
         k.decl<output_type>("sum") << " = block_partial_sums[0];\n" <<
         "for(uint i = 0; i < get_global_id(0); i++) {\n" <<
             "sum = " << op(k.var<output_type>("sum"),
