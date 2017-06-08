@@ -9,6 +9,8 @@
 
 include_directories(../include)
 
+set(Boost_USE_MULTITHREADED ON)
+
 set(EXAMPLES
   amd_cpp_kernel
   black_scholes
@@ -32,6 +34,8 @@ set(EXAMPLES
   vector_addition
   simple_moving_average
   matrix_transpose
+  visualize_kernel
+  matrix_multiplication
 )
 
 # boost library link dependencies
@@ -56,6 +60,7 @@ find_package(Boost 1.54 REQUIRED COMPONENTS ${EXAMPLE_BOOST_COMPONENTS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 foreach(EXAMPLE ${EXAMPLES})
+  find_package(Boost 1.46 REQUIRED COMPONENTS system filesystem thread program_options)
   add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
   target_link_libraries(${EXAMPLE} ${OpenCL_LIBRARIES} ${Boost_LIBRARIES})
 
