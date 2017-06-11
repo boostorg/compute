@@ -400,7 +400,7 @@ public:
     /// Returns the current value of the host clock as seen by device
     /// in nanoseconds.
     ///
-    /// \see_opencl_ref{clGetHostTimer}
+    /// \see_opencl21_ref{clGetHostTimer}
     ///
     /// \opencl_version_warning{2,1}
     ulong_ get_host_timer() const
@@ -417,7 +417,7 @@ public:
     /// and the host timer as seen by device in nanoseconds. The first of returned
     /// std::pair is a device timer timestamp, the second is a host timer timestamp.
     ///
-    /// \see_opencl_ref{clGetDeviceAndHostTimer}
+    /// \see_opencl21_ref{clGetDeviceAndHostTimer}
     ///
     /// \opencl_version_warning{2,1}
     std::pair<ulong_, ulong_> get_device_and_host_timer() const
@@ -445,7 +445,7 @@ public:
     /// std::cout << device.get_host_timer<std::chrono::milliseconds>().count() << " ms";
     /// \endcode
     ///
-    /// \see_opencl_ref{clGetHostTimer}
+    /// \see_opencl21_ref{clGetHostTimer}
     ///
     /// \opencl_version_warning{2,1}
     template<class Duration>
@@ -460,7 +460,7 @@ public:
     /// The first of returned std::pair is a device timer timestamp, the second is
     /// a host timer timestamp.
     ///
-    /// \see_opencl_ref{clGetDeviceAndHostTimer}
+    /// \see_opencl21_ref{clGetDeviceAndHostTimer}
     ///
     /// \opencl_version_warning{2,1}
     template<class Duration>

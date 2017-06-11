@@ -253,6 +253,35 @@ public:
         return get_info<cl_command_queue_properties>(CL_QUEUE_PROPERTIES);
     }
 
+    #if defined(BOOST_COMPUTE_CL_VERSION_2_1) || defined(BOOST_COMPUTE_DOXYGEN_INVOKED)
+    /// Returns the current default device command queue for the underlying device.
+    ///
+    /// \opencl_version_warning{2,1}
+    command_queue get_default_device_queue() const
+    {
+        return command_queue(get_info<cl_command_queue>(CL_QUEUE_DEVICE_DEFAULT));
+    }
+
+    /// Replaces the default device command queue for the underlying device
+    /// with this command queue. Command queue must have been created
+    /// with CL_QUEUE_ON_DEVICE flag.
+    ///
+    /// \see_opencl21_ref{clSetDefaultDeviceCommandQueue}
+    ///
+    /// \opencl_version_warning{2,1}
+    void set_as_default_device_queue() const
+    {
+        cl_int ret = clSetDefaultDeviceCommandQueue(
+            this->get_context().get(),
+            this->get_device().get(),
+            m_queue
+        );
+        if(ret != CL_SUCCESS){
+            BOOST_THROW_EXCEPTION(opencl_error(ret));
+        }
+    }
+    #endif // BOOST_COMPUTE_CL_VERSION_2_1
+
     /// Enqueues a command to read data from \p buffer to host memory.
     ///
     /// \see_opencl_ref{clEnqueueReadBuffer}
@@ -1885,6 +1914,12 @@ BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(command_queue,
     ((uint_, CL_QUEUE_REFERENCE_COUNT))
     ((cl_command_queue_properties, CL_QUEUE_PROPERTIES))
 )
+
+#ifdef BOOST_COMPUTE_CL_VERSION_2_1
+BOOST_COMPUTE_DETAIL_DEFINE_GET_INFO_SPECIALIZATIONS(command_queue,
+    ((cl_command_queue, CL_QUEUE_DEVICE_DEFAULT))
+)
+#endif // BOOST_COMPUTE_CL_VERSION_2_1
 
 } // end compute namespace
 } // end boost namespace

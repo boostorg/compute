@@ -587,7 +587,7 @@ public:
     ///
     /// \opencl_version_warning{2,1}
     ///
-    /// \see_opencl_ref{clCreateProgramWithIL}
+    /// \see_opencl21_ref{clCreateProgramWithIL}
     static program create_with_il(const void * il_binary,
                                   const size_t il_size,
                                   const context &context)
