@@ -477,7 +477,22 @@ public:
 
     void shrink_to_fit(command_queue &queue)
     {
-        (void) queue;
+        pointer old_data = m_data;
+        m_data = pointer(); // null pointer
+        if(m_size > 0)
+        {
+            // allocate new buffer
+            m_data = m_allocator.allocate(m_size);
+
+            // copy old values to the new buffer
+            ::boost::compute::copy(old_data, old_data + m_size, m_data, queue);
+        }
+
+        if(capacity() > 0)
+        {
+            // free old memory
+            m_allocator.deallocate(old_data, capacity());
+        }
     }
 
     void shrink_to_fit()

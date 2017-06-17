@@ -472,4 +472,31 @@ BOOST_AUTO_TEST_CASE(swap_ctor_custom_alloc)
     CHECK_RANGE_EQUAL(int, 4, b, (11, 12, 13, 14));
 }
 
+BOOST_AUTO_TEST_CASE(shrink_to_fit)
+{
+    bc::vector<bc::int_> int_vector(5, context);
+    BOOST_CHECK_EQUAL(int_vector.size(), 5);
+    BOOST_CHECK(int_vector.capacity() >= 5);
+
+    int_vector.reserve(15);
+    BOOST_CHECK_EQUAL(int_vector.size(), 5);
+    BOOST_CHECK(int_vector.capacity() >= 15);
+
+    int_vector.shrink_to_fit();
+    BOOST_CHECK_EQUAL(int_vector.size(), 5);
+    BOOST_CHECK_EQUAL(int_vector.capacity(), 5);
+
+    int_vector.clear();
+    BOOST_CHECK_EQUAL(int_vector.size(), 0);
+    BOOST_CHECK_EQUAL(int_vector.capacity(), 5);
+
+    int_vector.shrink_to_fit();
+    BOOST_CHECK_EQUAL(int_vector.size(), 0);
+    BOOST_CHECK_EQUAL(int_vector.capacity(), 0);
+
+    int_vector.reserve(15);
+    BOOST_CHECK_EQUAL(int_vector.size(), 0);
+    BOOST_CHECK(int_vector.capacity() >= 15);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
