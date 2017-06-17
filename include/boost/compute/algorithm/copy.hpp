@@ -227,8 +227,8 @@ dispatch_copy(InputIterator first,
     boost::shared_ptr<parameter_cache> parameters =
         detail::parameter_cache::get_global_cache(device);
 
-    size_t map_copy_threshold;
-    size_t direct_copy_threshold;
+    uint_ map_copy_threshold;
+    uint_ direct_copy_threshold;
 
     // calculate default values of thresholds
     if (device.type() & device::gpu) {
@@ -310,8 +310,8 @@ dispatch_copy(InputIterator first,
     boost::shared_ptr<parameter_cache> parameters =
         detail::parameter_cache::get_global_cache(device);
 
-    size_t map_copy_threshold;
-    size_t direct_copy_threshold;
+    uint_ map_copy_threshold;
+    uint_ direct_copy_threshold;
 
     // calculate default values of thresholds
     if (device.type() & device::gpu) {
@@ -505,8 +505,8 @@ dispatch_copy(InputIterator first,
     boost::shared_ptr<parameter_cache> parameters =
         detail::parameter_cache::get_global_cache(device);
 
-    size_t map_copy_threshold;
-    size_t direct_copy_threshold;
+    uint_ map_copy_threshold;
+    uint_ direct_copy_threshold;
 
     // calculate default values of thresholds
     if (device.type() & device::gpu) {
@@ -587,8 +587,8 @@ dispatch_copy(InputIterator first,
     boost::shared_ptr<parameter_cache> parameters =
         detail::parameter_cache::get_global_cache(device);
 
-    size_t map_copy_threshold;
-    size_t direct_copy_threshold;
+    uint_ map_copy_threshold;
+    uint_ direct_copy_threshold;
 
     // calculate default values of thresholds
     if (device.type() & device::gpu) {
