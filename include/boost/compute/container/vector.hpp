@@ -293,8 +293,8 @@ public:
     /// Move-assigns the data from \p other to \c *this.
     vector& operator=(vector&& other)
     {
-        if(m_size){
-            m_allocator.deallocate(m_data, m_size);
+        if(capacity() > 0){
+            m_allocator.deallocate(m_data, capacity());
         }
 
         m_data = std::move(other.m_data);
@@ -310,8 +310,8 @@ public:
     /// Destroys the vector object.
     ~vector()
     {
-        if(m_size){
-            m_allocator.deallocate(m_data, m_size);
+        if(capacity() > 0){
+            m_allocator.deallocate(m_data, capacity());
         }
     }
 
@@ -401,11 +401,14 @@ public:
                     )
                 );
 
-            // copy old values to the new buffer
-            ::boost::compute::copy(m_data, m_data + m_size, new_data, queue);
+            if(capacity() > 0)
+            {
+                // copy old values to the new buffer
+                ::boost::compute::copy(m_data, m_data + m_size, new_data, queue);
 
-            // free old memory
-            m_allocator.deallocate(m_data, m_size);
+                // free old memory
+                m_allocator.deallocate(m_data, capacity());
+            }
 
             // set new data and size
             m_data = new_data;
@@ -430,6 +433,10 @@ public:
     /// Returns the capacity of the vector.
     size_type capacity() const
     {
+        if(m_data == pointer()) // null pointer check
+        {
+            return 0;
+        }
         return m_data.get_buffer().size() / sizeof(T);
     }
 
@@ -447,11 +454,14 @@ public:
                     )
                 );
 
-            // copy old values to the new buffer
-            ::boost::compute::copy(m_data, m_data + m_size, new_data, queue);
+            if(capacity() > 0)
+            {
+                // copy old values to the new buffer
+                ::boost::compute::copy(m_data, m_data + m_size, new_data, queue);
 
-            // free old memory
-            m_allocator.deallocate(m_data, m_size);
+                // free old memory
+                m_allocator.deallocate(m_data, capacity());
+            }
 
             // set new data
             m_data = new_data;
@@ -467,7 +477,22 @@ public:
 
     void shrink_to_fit(command_queue &queue)
     {
-        (void) queue;
+        pointer old_data = m_data;
+        m_data = pointer(); // null pointer
+        if(m_size > 0)
+        {
+            // allocate new buffer
+            m_data = m_allocator.allocate(m_size);
+
+            // copy old values to the new buffer
+            ::boost::compute::copy(old_data, old_data + m_size, m_data, queue);
+        }
+
+        if(capacity() > 0)
+        {
+            // free old memory
+            m_allocator.deallocate(old_data, capacity());
+        }
     }
 
     void shrink_to_fit()
