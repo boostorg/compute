@@ -451,21 +451,8 @@ public:
     static program create_with_source_file(const std::string &file,
                                            const context &context)
     {
-        // open file stream
-        std::ifstream stream(file.c_str());
-
-        if(stream.fail()){
-          BOOST_THROW_EXCEPTION(std::ios_base::failure("failed to create stream."));
-        }
-
-        // read source
-        std::string source(
-            (std::istreambuf_iterator<char>(stream)),
-            std::istreambuf_iterator<char>()
-        );
-
         // create program
-        return create_with_source(source, context);
+        return create_with_source(read_source_file(file), context);
     }
 
     /// Creates a new program with \p files in \p context.
@@ -704,6 +691,22 @@ public:
         return prog;
     }
 
+    /// Create a new program with \p file in \p context and builds it with \p options.
+    /**
+     * In case BOOST_COMPUTE_USE_OFFLINE_CACHE macro is defined,
+     * the compiled binary is stored for reuse in the offline cache located in
+     * $HOME/.boost_compute on UNIX-like systems and in %APPDATA%/boost_compute
+     * on Windows.
+     */
+    static program build_with_source_file(
+            const std::string &file,
+            const context     &context,
+            const std::string &options = std::string()
+            )
+    {
+        return build_with_source(read_source_file(file), context, options);
+    }
+
 private:
 #ifdef BOOST_COMPUTE_USE_OFFLINE_CACHE
     // Saves program binaries for future reuse.
@@ -744,6 +747,22 @@ private:
                 );
     }
 #endif // BOOST_COMPUTE_USE_OFFLINE_CACHE
+
+    static std::string read_source_file(const std::string &file)
+    {
+        // open file stream
+        std::ifstream stream(file.c_str());
+
+        if(stream.fail()){
+          BOOST_THROW_EXCEPTION(std::ios_base::failure("failed to create stream."));
+        }
+
+        // read source
+        return std::string(
+            (std::istreambuf_iterator<char>(stream)),
+            std::istreambuf_iterator<char>()
+        );
+    }
 
 private:
     cl_program m_program;
