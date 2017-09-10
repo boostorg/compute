@@ -73,7 +73,7 @@ matrix:
        - LINUX_DIST=trusty
        - OPENCL_LIB=pocl
        - OPENCL_HEADERS_VER="21"
-       - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=100"
+       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=100"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/pocl/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     - os: linux
       dist: trusty
@@ -87,7 +87,7 @@ matrix:
        - LINUX_DIST=trusty
        - OPENCL_LIB=pocl
        - OPENCL_HEADERS_VER="21"
-       - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=100"
+       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=100"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/pocl/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # Trusty, OpenCL 1.1
     - os: linux
@@ -102,7 +102,7 @@ matrix:
        - LINUX_DIST=trusty
        - OPENCL_LIB=pocl
        - OPENCL_HEADERS_VER="21"
-       - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=101"
+       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=101"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/pocl/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     - os: linux
       dist: trusty
