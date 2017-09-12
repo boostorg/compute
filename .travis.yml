@@ -73,7 +73,7 @@ matrix:
        - LINUX_DIST=trusty
        - OPENCL_LIB=pocl
        - OPENCL_HEADERS_VER="21"
-       - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=100"
+       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=100"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/pocl/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     - os: linux
       dist: trusty
@@ -87,7 +87,7 @@ matrix:
        - LINUX_DIST=trusty
        - OPENCL_LIB=pocl
        - OPENCL_HEADERS_VER="21"
-       - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=100"
+       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=100"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/pocl/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # Trusty, OpenCL 1.1
     - os: linux
@@ -102,7 +102,7 @@ matrix:
        - LINUX_DIST=trusty
        - OPENCL_LIB=pocl
        - OPENCL_HEADERS_VER="21"
-       - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=101"
+       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=101"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ROOT}/pocl/lib/libOpenCL.so -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     - os: linux
       dist: trusty
@@ -300,7 +300,7 @@ matrix:
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON -DBOOST_COMPUTE_USE_CPP11=ON"
         - COVERAGE=true
 
-    # Latest Boost library builds (currently 1.64)
+    # Latest Boost library builds (currently 1.65.1)
     # Precise, AMD APP SDK v2.9.1, Travis CI container-based infrastructure
     - os: linux
       sudo: false
@@ -323,8 +323,8 @@ matrix:
         - OPENCL_LIB=amdappsdk
         - OPENCL_HEADERS_VER="21"
         - AMDAPPSDK_VERSION=291 # OpenCL 1.2
-        - BOOST_VERSION="1_64_0" # Boost 1.64
-        - BOOST_URL="http://sourceforge.net/projects/boost/files/boost/1.64.0/boost_1_64_0.tar.gz"
+        - BOOST_VERSION="1_65_1" # Boost 1.65.1
+        - BOOST_URL="http://sourceforge.net/projects/boost/files/boost/1.65.1/boost_1_65_1.tar.gz"
         - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=102"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
     - os: linux
@@ -342,8 +342,8 @@ matrix:
         - OPENCL_LIB=amdappsdk
         - OPENCL_HEADERS_VER="21"
         - AMDAPPSDK_VERSION=291 # OpenCL 1.2
-        - BOOST_VERSION="1_64_0" # Boost 1.64
-        - BOOST_URL="http://sourceforge.net/projects/boost/files/boost/1.64.0/boost_1_64_0.tar.gz"
+        - BOOST_VERSION="1_65_1" # Boost 1.65.1
+        - BOOST_URL="http://sourceforge.net/projects/boost/files/boost/1.65.1/boost_1_65_1.tar.gz"
         - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=102"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
 
