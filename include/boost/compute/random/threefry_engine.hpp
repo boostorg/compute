@@ -40,12 +40,10 @@ public:
     /// Creates a new threefry_engine and seeds it with \p value.
     explicit threefry_engine(command_queue &queue,
                              ulong_ value = default_seed)
-        : m_counter(0),
+        : m_key(value),
+          m_counter(0),
           m_context(queue.get_context())
     {
-        // Set seed
-        m_key[0] = static_cast<uint_>(value);
-        m_key[1] = static_cast<uint_>(value >> 32);
         // Load program
         load_program();
     }
@@ -86,11 +84,9 @@ public:
     void seed(ulong_ value, command_queue &queue)
     {
         (void) queue;
-        m_key[0] = static_cast<uint_>(value);
-        m_key[1] = static_cast<uint_>(value >> 32);
+        m_key = value;
         // Reset counter
-        m_counter[0] = 0;
-        m_counter[1] = 0;
+        m_counter = 0;
     }
 
     /// \overload
@@ -121,12 +117,7 @@ public:
     {
         (void) queue;
         ulong_ offset = std::distance(first, last);
-
-        uint_ lo = static_cast<uint_>(offset);
-        uint_ hi = static_cast<uint_>(offset >> 32);
-
-        m_counter[0] += lo;
-        m_counter[1] += hi + (m_counter[0] < lo ? 1 : 0);
+        m_counter += offset;
     }
 
     /// Generates random numbers, transforms them with \p op, and then stores
@@ -296,9 +287,7 @@ private:
             "    c.v[0] = counter.x + gid;\n"
             "    c.v[1] = counter.y + (c.v[0] < counter.x ? 1 : 0);\n"
             "\n"
-            "    threefry2x32_key_t k;\n"
-            "    k.v[0] = key.x;\n"
-            "    k.v[1] = key.y;\n"
+            "    threefry2x32_key_t k = { {key.x, key.y} };\n"
             "\n"
             "    threefry2x32_ctr_t result;\n"
             "    result = threefry2x32_R(THREEFRY2x32_DEFAULT_ROUNDS, c, k);\n"
@@ -316,8 +305,8 @@ private:
     }
 
     // Engine state
-    uint2_ m_key;
-    uint2_ m_counter;
+    ulong_ m_key; // 2 x 32bit
+    ulong_ m_counter;
     // OpenCL
     context m_context;
     program m_program;
