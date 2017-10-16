@@ -113,6 +113,21 @@ BOOST_AUTO_TEST_CASE(kernel_set_args)
 }
 #endif // BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 
+// Originally failed to compile on macOS (several types are resolved differently)
+BOOST_AUTO_TEST_CASE(kernel_set_args_mac)
+{
+    compute::kernel k = compute::kernel::create_with_source(
+        "__kernel void test(unsigned int a, unsigned long b) { }", "test", context
+    );
+
+    unsigned int a;
+    unsigned long b;
+
+    k.set_arg(0, a);
+    k.set_arg(1, b);
+}
+
+
 #ifdef BOOST_COMPUTE_CL_VERSION_1_2
 BOOST_AUTO_TEST_CASE(get_arg_info)
 {
