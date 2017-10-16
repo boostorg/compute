@@ -23,6 +23,7 @@
 #include <boost/compute/exception.hpp>
 #include <boost/compute/program.hpp>
 #include <boost/compute/platform.hpp>
+#include <boost/compute/types.hpp>
 #include <boost/compute/type_traits/is_fundamental.hpp>
 #include <boost/compute/detail/diagnostic.hpp>
 #include <boost/compute/detail/get_object_info.hpp>
