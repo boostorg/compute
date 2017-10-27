@@ -13,6 +13,7 @@
 
 #include <boost/compute/buffer.hpp>
 #include <boost/compute/kernel.hpp>
+#include <boost/compute/types.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/utility/source.hpp>
 
