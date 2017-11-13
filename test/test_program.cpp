@@ -16,6 +16,7 @@
 // thrown when invalid kernel code is passed to program::build().
 #undef BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION
 
+#include <boost/compute/exception/program_build_failure.hpp>
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/program.hpp>
@@ -341,6 +342,33 @@ BOOST_AUTO_TEST_CASE(build_log)
     catch(compute::opencl_error&){
         std::string log = invalid_program.build_log();
         BOOST_CHECK(!log.empty());
+    }
+}
+
+BOOST_AUTO_TEST_CASE(program_build_exception)
+{
+    const char invalid_source[] =
+        "__kernel void foo(__global int *input) { !@#$%^&*() }";
+
+    compute::program invalid_program =
+        compute::program::create_with_source(invalid_source, context);
+
+    BOOST_CHECK_THROW(invalid_program.build(),
+                      compute::program_build_failure);
+
+    try {
+        invalid_program.build();
+
+        // should not get here
+        BOOST_CHECK(false);
+    }
+    catch(compute::program_build_failure& e){
+        BOOST_CHECK(e.build_log() == invalid_program.build_log());
+    }
+    catch(...)
+    {
+        // should not get here
+        BOOST_CHECK(false);
     }
 }
 
