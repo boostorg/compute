@@ -372,4 +372,20 @@ BOOST_AUTO_TEST_CASE(program_build_exception)
     }
 }
 
+BOOST_AUTO_TEST_CASE(build_with_source_exception)
+{
+    const char invalid_source[] =
+        "__kernel void foo(__global int *input) { !@#$%^&*() }";
+
+    BOOST_CHECK_THROW(compute::program::build_with_source(invalid_source, context),
+        compute::program_build_failure);
+}
+
+BOOST_AUTO_TEST_CASE(build_with_source_file_exception)
+{
+    std::string file_path(BOOST_COMPUTE_TEST_DATA_PATH "/invalid_program.cl");
+    BOOST_CHECK_THROW(compute::program::build_with_source_file(file_path, context),
+        compute::program_build_failure);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

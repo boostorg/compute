@@ -1,0 +1,1 @@
+__kernel void foo(__global int *input) { !@#$%^&*() }
