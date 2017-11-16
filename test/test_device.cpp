@@ -236,6 +236,8 @@ BOOST_AUTO_TEST_CASE(get_info_specializations)
 #ifdef BOOST_COMPUTE_CL_VERSION_2_1
 BOOST_AUTO_TEST_CASE(get_host_timer)
 {
+    REQUIRES_OPENCL_VERSION(2, 1);
+
     boost::compute::device device = boost::compute::system::default_device();
     BOOST_CHECK(device.get_host_timer() != 0);
 
@@ -252,6 +254,8 @@ BOOST_AUTO_TEST_CASE(get_host_timer)
 
 BOOST_AUTO_TEST_CASE(get_device_and_host_timer)
 {
+    REQUIRES_OPENCL_VERSION(2, 1);
+
     boost::compute::device device = boost::compute::system::default_device();
     typedef std::pair<boost::compute::ulong_, boost::compute::ulong_> dah_timer;
     dah_timer timer;
@@ -274,6 +278,8 @@ BOOST_AUTO_TEST_CASE(get_device_and_host_timer)
 
 BOOST_AUTO_TEST_CASE(get_info_opencl21_queries)
 {
+    REQUIRES_OPENCL_VERSION(2, 1);
+
     boost::compute::device device = boost::compute::system::default_device();
 
     BOOST_CHECK(!device.get_info<CL_DEVICE_IL_VERSION>().empty());
