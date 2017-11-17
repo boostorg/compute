@@ -129,6 +129,8 @@ BOOST_AUTO_TEST_CASE(create_with_binary)
 #ifdef BOOST_COMPUTE_CL_VERSION_2_1
 BOOST_AUTO_TEST_CASE(create_with_il)
 {
+    REQUIRES_OPENCL_VERSION(2, 1);
+
     size_t device_address_space_size = device.address_bits();
     std::string file_path(BOOST_COMPUTE_TEST_DATA_PATH);
     if(device_address_space_size == 64)
