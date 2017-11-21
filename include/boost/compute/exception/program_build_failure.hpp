@@ -37,6 +37,11 @@ public:
     {
     }
 
+    /// Destroys the program_build_failure object.
+    ~program_build_failure() throw()
+    {
+    }
+
     /// Retrieve the log of a failed program build.
     std::string build_log() const throw()
     {
