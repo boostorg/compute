@@ -118,4 +118,11 @@ inline bool supports_link_program(const boost::compute::device &device)
     return !is_pocl_device(device);
 }
 
+// See https://github.com/pocl/pocl/issues/577, POCL fails when a program
+// with incorrect code is built for the 2nd time
+inline bool pocl_bug_issue_577(const boost::compute::device &device)
+{
+    return is_pocl_device(device);
+}
+
 #endif // BOOST_COMPUTE_TEST_QUIRKS_HPP
