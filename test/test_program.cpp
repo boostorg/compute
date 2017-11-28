@@ -158,6 +158,8 @@ BOOST_AUTO_TEST_CASE(create_with_il)
 
 BOOST_AUTO_TEST_CASE(get_program_il_binary)
 {
+    REQUIRES_OPENCL_VERSION(2, 1);
+
     size_t device_address_space_size = device.address_bits();
     std::string file_path(BOOST_COMPUTE_TEST_DATA_PATH);
     if(device_address_space_size == 64)
@@ -193,6 +195,8 @@ BOOST_AUTO_TEST_CASE(get_program_il_binary)
 
 BOOST_AUTO_TEST_CASE(get_program_il_binary_empty)
 {
+    REQUIRES_OPENCL_VERSION(2, 1);
+
     boost::compute::program program;
     BOOST_CHECK_NO_THROW(
         program = boost::compute::program::create_with_source(source, context)
