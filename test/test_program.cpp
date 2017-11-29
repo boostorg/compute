@@ -16,6 +16,7 @@
 // thrown when invalid kernel code is passed to program::build().
 #undef BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION
 
+#include <boost/compute/exception/program_build_failure.hpp>
 #include <boost/compute/kernel.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/program.hpp>
@@ -157,6 +158,8 @@ BOOST_AUTO_TEST_CASE(create_with_il)
 
 BOOST_AUTO_TEST_CASE(get_program_il_binary)
 {
+    REQUIRES_OPENCL_VERSION(2, 1);
+
     size_t device_address_space_size = device.address_bits();
     std::string file_path(BOOST_COMPUTE_TEST_DATA_PATH);
     if(device_address_space_size == 64)
@@ -192,6 +195,8 @@ BOOST_AUTO_TEST_CASE(get_program_il_binary)
 
 BOOST_AUTO_TEST_CASE(get_program_il_binary_empty)
 {
+    REQUIRES_OPENCL_VERSION(2, 1);
+
     boost::compute::program program;
     BOOST_CHECK_NO_THROW(
         program = boost::compute::program::create_with_source(source, context)
@@ -342,6 +347,55 @@ BOOST_AUTO_TEST_CASE(build_log)
         std::string log = invalid_program.build_log();
         BOOST_CHECK(!log.empty());
     }
+}
+
+BOOST_AUTO_TEST_CASE(program_build_exception)
+{
+    const char invalid_source[] =
+        "__kernel void foo(__global int *input) { !@#$%^&*() }";
+
+    compute::program invalid_program =
+        compute::program::create_with_source(invalid_source, context);
+
+    BOOST_CHECK_THROW(invalid_program.build(),
+                      compute::program_build_failure);
+
+    try {
+        // POCL bug: https://github.com/pocl/pocl/issues/577
+        if(pocl_bug_issue_577(device))
+        {
+            invalid_program =
+                compute::program::create_with_source(invalid_source, context);
+        }
+        invalid_program.build();
+
+        // should not get here
+        BOOST_CHECK(false);
+    }
+    catch(compute::program_build_failure& e){
+        BOOST_CHECK(e.build_log() == invalid_program.build_log());
+    }
+    catch(...)
+    {
+        // should not get here
+        BOOST_CHECK(false);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(build_with_source_exception)
+{
+    const char invalid_source[] =
+        "__kernel void foo(__global int *input) { !@#$%^&*() }";
+
+    BOOST_CHECK_THROW(compute::program::build_with_source(invalid_source, context),
+        compute::program_build_failure);
+}
+
+BOOST_AUTO_TEST_CASE(build_with_source_file_exception)
+{
+    std::string file_path(BOOST_COMPUTE_TEST_DATA_PATH "/invalid_program.cl");
+    BOOST_CHECK_THROW(compute::program::build_with_source_file(file_path, context),
+        compute::program_build_failure);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
