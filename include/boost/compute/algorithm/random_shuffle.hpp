@@ -52,7 +52,7 @@ inline void random_shuffle(Iterator first,
     boost::iota(random_indices, 0);
 #ifdef BOOST_COMPUTE_USE_CPP11
     std::random_device nondeterministic_randomness;
-    std::default_random_engine random_engine(nondeterministic_randomness);
+    std::default_random_engine random_engine(nondeterministic_randomness());
     std::shuffle(random_indices.begin(), random_indices.end(), random_engine);
 #else
     std::random_shuffle(random_indices.begin(), random_indices.end());
