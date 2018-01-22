@@ -14,6 +14,10 @@
 #include <vector>
 #include <algorithm>
 
+#ifdef BOOST_COMPUTE_USE_CPP11
+#include <random>
+#endif
+
 #include <boost/range/algorithm_ext/iota.hpp>
 
 #include <boost/compute/system.hpp>
@@ -46,7 +50,12 @@ inline void random_shuffle(Iterator first,
     // generate shuffled indices on the host
     std::vector<cl_uint> random_indices(count);
     boost::iota(random_indices, 0);
+#ifdef BOOST_COMPUTE_USE_CPP11
+    std::default_random_engine random_engine;
+    std::shuffle(random_indices.begin(), random_indices.end(), random_engine);
+#else
     std::random_shuffle(random_indices.begin(), random_indices.end());
+#endif
 
     // copy random indices to the device
     const context &context = queue.get_context();
