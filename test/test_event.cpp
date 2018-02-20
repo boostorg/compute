@@ -18,6 +18,7 @@
 #include <future>
 #endif // BOOST_COMPUTE_USE_CPP11
 
+#include <boost/compute/async/future.hpp>
 #include <boost/compute/event.hpp>
 
 #include "context_setup.hpp"
@@ -83,6 +84,28 @@ BOOST_AUTO_TEST_CASE(lambda_callback)
         lock, std::chrono::seconds(1), [&](){ return lambda_invoked; }
     );
     BOOST_CHECK_EQUAL(lambda_invoked, true);
+}
+
+BOOST_AUTO_TEST_CASE(future_then_callback)
+{
+    REQUIRES_OPENCL_VERSION(1,2);
+
+    bool callback_invoked = false;
+
+    boost::compute::future<void> future(queue.enqueue_marker());
+    future.then([&](){
+        std::lock_guard<std::mutex> lock(callback_mutex);
+        callback_invoked = true;
+        callback_condition_variable.notify_one();
+    });
+    future.wait();
+
+    // wait up to one second for the callback to be executed
+    std::unique_lock<std::mutex> lock(callback_mutex);
+    callback_condition_variable.wait_for(
+        lock, std::chrono::seconds(1), [&](){ return callback_invoked; }
+    );
+    BOOST_CHECK_EQUAL(callback_invoked, true);
 }
 
 void BOOST_COMPUTE_CL_CALLBACK
