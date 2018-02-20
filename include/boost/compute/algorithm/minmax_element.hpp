@@ -13,10 +13,13 @@
 
 #include <utility>
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/max_element.hpp>
 #include <boost/compute/algorithm/min_element.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -42,6 +45,7 @@ minmax_element(InputIterator first,
                Compare compare,
                command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
     if(first == last){
         // empty range
         return std::make_pair(first, first);
@@ -58,6 +62,7 @@ minmax_element(InputIterator first,
                InputIterator last,
                command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
     if(first == last){
         // empty range
         return std::make_pair(first, first);

@@ -11,9 +11,12 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_EQUAL_HPP
 #define BOOST_COMPUTE_ALGORITHM_EQUAL_HPP
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/mismatch.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -28,6 +31,8 @@ inline bool equal(InputIterator1 first1,
                   InputIterator2 first2,
                   command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator1>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator2>::value);
     return ::boost::compute::mismatch(first1,
                                       last1,
                                       first2,
@@ -42,6 +47,8 @@ inline bool equal(InputIterator1 first1,
                   InputIterator2 last2,
                   command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator1>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator2>::value);
     if(std::distance(first1, last1) != std::distance(first2, last2)){
         return false;
     }

@@ -11,8 +11,11 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_ALL_OF_HPP
 #define BOOST_COMPUTE_ALGORITHM_ALL_OF_HPP
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/find_if_not.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -29,6 +32,7 @@ inline bool all_of(InputIterator first,
                    UnaryPredicate predicate,
                    command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
     return ::boost::compute::find_if_not(first, last, predicate, queue) == last;
 }
 

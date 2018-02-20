@@ -11,12 +11,15 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_TRANSFORM_HPP
 #define BOOST_COMPUTE_ALGORITHM_TRANSFORM_HPP
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/iterator/transform_iterator.hpp>
 #include <boost/compute/iterator/zip_iterator.hpp>
 #include <boost/compute/functional/detail/unpack.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -39,6 +42,8 @@ inline OutputIterator transform(InputIterator first,
                                 UnaryOperator op,
                                 command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<OutputIterator>::value);
     return copy(
                ::boost::compute::make_transform_iterator(first, op),
                ::boost::compute::make_transform_iterator(last, op),
@@ -59,6 +64,10 @@ inline OutputIterator transform(InputIterator1 first1,
                                 BinaryOperator op,
                                 command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator1>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator2>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<OutputIterator>::value);
+
     typedef typename std::iterator_traits<InputIterator1>::difference_type difference_type;
 
     difference_type n = std::distance(first1, last1);

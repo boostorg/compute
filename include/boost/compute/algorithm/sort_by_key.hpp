@@ -13,6 +13,7 @@
 
 #include <iterator>
 
+#include <boost/static_assert.hpp>
 #include <boost/utility/enable_if.hpp>
 
 #include <boost/compute/system.hpp>
@@ -23,10 +24,10 @@
 #include <boost/compute/algorithm/detail/radix_sort.hpp>
 #include <boost/compute/algorithm/reverse.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
-
 namespace detail {
 
 template<class KeyIterator, class ValueIterator>
@@ -138,6 +139,8 @@ inline void sort_by_key(KeyIterator keys_first,
                         Compare compare,
                         command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<KeyIterator>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<ValueIterator>::value);
     ::boost::compute::detail::dispatch_sort_by_key(
         keys_first, keys_last, values_first, compare, queue
     );
@@ -150,6 +153,8 @@ inline void sort_by_key(KeyIterator keys_first,
                         ValueIterator values_first,
                         command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<KeyIterator>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<ValueIterator>::value);
     typedef typename std::iterator_traits<KeyIterator>::value_type key_type;
 
     ::boost::compute::sort_by_key(

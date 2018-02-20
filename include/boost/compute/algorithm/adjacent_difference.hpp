@@ -13,12 +13,15 @@
 
 #include <iterator>
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/functional/operator.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -76,6 +79,8 @@ adjacent_difference(InputIterator first,
                     BinaryFunction op,
                     command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<OutputIterator>::value);
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
     if(first == last) {
@@ -106,6 +111,8 @@ adjacent_difference(InputIterator first,
                     OutputIterator result,
                     command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<OutputIterator>::value);
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
     return ::boost::compute::adjacent_difference(

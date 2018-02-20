@@ -11,10 +11,13 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_SWAP_RANGES_HPP
 #define BOOST_COMPUTE_ALGORITHM_SWAP_RANGES_HPP
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -29,6 +32,9 @@ inline Iterator2 swap_ranges(Iterator1 first1,
                              Iterator2 first2,
                              command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<Iterator1>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<Iterator2>::value);
+
     typedef typename std::iterator_traits<Iterator1>::value_type value_type;
 
     Iterator2 last2 = first2 + std::distance(first1, last1);

@@ -13,10 +13,13 @@
 
 #include <iterator>
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/sort_by_key.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -136,6 +139,8 @@ inline void stable_sort_by_key(KeyIterator keys_first,
                                Compare compare,
                                command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<KeyIterator>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<ValueIterator>::value);
     ::boost::compute::detail::dispatch_ssort_by_key(
         keys_first, keys_last, values_first, compare, queue
     );
@@ -148,6 +153,8 @@ inline void stable_sort_by_key(KeyIterator keys_first,
                                ValueIterator values_first,
                                command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<KeyIterator>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<ValueIterator>::value);
     typedef typename std::iterator_traits<KeyIterator>::value_type key_type;
 
     ::boost::compute::stable_sort_by_key(

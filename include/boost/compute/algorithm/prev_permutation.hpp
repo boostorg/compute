@@ -13,10 +13,13 @@
 
 #include <iterator>
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/container/detail/scalar.hpp>
 #include <boost/compute/algorithm/reverse.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -137,6 +140,7 @@ inline bool prev_permutation(InputIterator first,
                              InputIterator last,
                              command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
     if(first == last) return false;

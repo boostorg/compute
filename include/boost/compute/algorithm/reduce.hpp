@@ -13,6 +13,8 @@
 
 #include <iterator>
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/detail/meta_kernel.hpp>
@@ -26,6 +28,7 @@
 #include <boost/compute/detail/iterator_range_size.hpp>
 #include <boost/compute/memory/local_buffer.hpp>
 #include <boost/compute/type_traits/result_of.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -276,6 +279,8 @@ inline void reduce(InputIterator first,
                    BinaryFunction function,
                    command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<OutputIterator>::value);
     if(first == last){
         return;
     }
@@ -290,6 +295,8 @@ inline void reduce(InputIterator first,
                    OutputIterator result,
                    command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<OutputIterator>::value);
     typedef typename std::iterator_traits<InputIterator>::value_type T;
 
     if(first == last){

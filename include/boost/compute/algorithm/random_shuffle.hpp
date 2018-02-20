@@ -18,6 +18,7 @@
 #include <random>
 #endif
 
+#include <boost/static_assert.hpp>
 #include <boost/range/algorithm_ext/iota.hpp>
 
 #include <boost/compute/system.hpp>
@@ -26,6 +27,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/algorithm/scatter.hpp>
 #include <boost/compute/detail/iterator_range_size.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -40,6 +42,7 @@ inline void random_shuffle(Iterator first,
                            Iterator last,
                            command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<Iterator>::value);
     typedef typename std::iterator_traits<Iterator>::value_type value_type;
 
     size_t count = detail::iterator_range_size(first, last);

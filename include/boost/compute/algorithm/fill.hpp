@@ -13,6 +13,7 @@
 
 #include <iterator>
 
+#include <boost/static_assert.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/contains.hpp>
@@ -280,6 +281,7 @@ inline void fill(BufferIterator first,
                  const T &value,
                  command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(detail::is_buffer_iterator<BufferIterator>::value);
     size_t count = detail::iterator_range_size(first, last);
     if(count == 0){
         return;
@@ -294,6 +296,7 @@ inline future<void> fill_async(BufferIterator first,
                                const T &value,
                                command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(detail::is_buffer_iterator<BufferIterator>::value);
     size_t count = detail::iterator_range_size(first, last);
     if(count == 0){
         return future<void>();

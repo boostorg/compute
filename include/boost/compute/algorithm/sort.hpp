@@ -13,6 +13,7 @@
 
 #include <iterator>
 
+#include <boost/static_assert.hpp>
 #include <boost/utility/enable_if.hpp>
 
 #include <boost/compute/system.hpp>
@@ -185,6 +186,7 @@ inline void sort(Iterator first,
                  Compare compare,
                  command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<Iterator>::value);
     ::boost::compute::detail::dispatch_sort(first, last, compare, queue);
 }
 
@@ -194,6 +196,7 @@ inline void sort(Iterator first,
                  Iterator last,
                  command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<Iterator>::value);
     typedef typename std::iterator_traits<Iterator>::value_type value_type;
 
     ::boost::compute::sort(

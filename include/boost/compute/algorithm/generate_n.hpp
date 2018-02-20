@@ -11,9 +11,12 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_GENERATE_N_HPP
 #define BOOST_COMPUTE_ALGORITHM_GENERATE_N_HPP
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/generate.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -28,6 +31,7 @@ inline void generate_n(OutputIterator first,
                        Generator generator,
                        command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
     ::boost::compute::generate(first, first + count, generator, queue);
 }
 
