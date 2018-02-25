@@ -12,70 +12,72 @@ import boostbook ;
 import doxygen ;
 import modules ;
 
+path-constant here : . ;
+
 doxygen autodoc
   :
-    ../include/boost/compute.hpp
-    ../include/boost/compute/buffer.hpp
-    ../include/boost/compute/cl.hpp
-    ../include/boost/compute/closure.hpp
-    ../include/boost/compute/command_queue.hpp
-    ../include/boost/compute/config.hpp
-    ../include/boost/compute/context.hpp
-    ../include/boost/compute/core.hpp
-    ../include/boost/compute/device.hpp
-    ../include/boost/compute/event.hpp
-    ../include/boost/compute/function.hpp
-    ../include/boost/compute/kernel.hpp
-    ../include/boost/compute/memory_object.hpp
-    ../include/boost/compute/pipe.hpp
-    ../include/boost/compute/platform.hpp
-    ../include/boost/compute/program.hpp
-    ../include/boost/compute/svm.hpp
-    ../include/boost/compute/system.hpp
-    ../include/boost/compute/user_event.hpp
-    ../include/boost/compute/version.hpp
+    $(here)/../include/boost/compute.hpp
+    $(here)/../include/boost/compute/buffer.hpp
+    $(here)/../include/boost/compute/cl.hpp
+    $(here)/../include/boost/compute/closure.hpp
+    $(here)/../include/boost/compute/command_queue.hpp
+    $(here)/../include/boost/compute/config.hpp
+    $(here)/../include/boost/compute/context.hpp
+    $(here)/../include/boost/compute/core.hpp
+    $(here)/../include/boost/compute/device.hpp
+    $(here)/../include/boost/compute/event.hpp
+    $(here)/../include/boost/compute/function.hpp
+    $(here)/../include/boost/compute/kernel.hpp
+    $(here)/../include/boost/compute/memory_object.hpp
+    $(here)/../include/boost/compute/pipe.hpp
+    $(here)/../include/boost/compute/platform.hpp
+    $(here)/../include/boost/compute/program.hpp
+    $(here)/../include/boost/compute/svm.hpp
+    $(here)/../include/boost/compute/system.hpp
+    $(here)/../include/boost/compute/user_event.hpp
+    $(here)/../include/boost/compute/version.hpp
 
-    ../include/boost/compute/algorithm.hpp
-    [ glob ../include/boost/compute/algorithm/*.hpp ]
+    $(here)/../include/boost/compute/algorithm.hpp
+    [ glob $(here)/../include/boost/compute/algorithm/*.hpp ]
 
-    ../include/boost/compute/allocator.hpp
-    [ glob ../include/boost/compute/allocator/*.hpp ]
+    $(here)/../include/boost/compute/allocator.hpp
+    [ glob $(here)/../include/boost/compute/allocator/*.hpp ]
 
-    ../include/boost/compute/async.hpp
-    [ glob ../include/boost/compute/async/*.hpp ]
+    $(here)/../include/boost/compute/async.hpp
+    [ glob $(here)/../include/boost/compute/async/*.hpp ]
 
-    ../include/boost/compute/container.hpp
-    [ glob ../include/boost/compute/container/*.hpp ]
+    $(here)/../include/boost/compute/container.hpp
+    [ glob $(here)/../include/boost/compute/container/*.hpp ]
 
-    ../include/boost/compute/exception.hpp
-    [ glob ../include/boost/compute/exception/*.hpp ]
+    $(here)/../include/boost/compute/exception.hpp
+    [ glob $(here)/../include/boost/compute/exception/*.hpp ]
 
-    ../include/boost/compute/functional.hpp
-    [ glob ../include/boost/compute/functional/*.hpp ]
+    $(here)/../include/boost/compute/functional.hpp
+    [ glob $(here)/../include/boost/compute/functional/*.hpp ]
 
-    ../include/boost/compute/interop/opengl.hpp
-    [ glob ../include/boost/compute/interop/opengl/*.hpp ]
+    $(here)/../include/boost/compute/interop/opengl.hpp
+    [ glob $(here)/../include/boost/compute/interop/opengl/*.hpp ]
 
-    ../include/boost/compute/image.hpp
-    [ glob ../include/boost/compute/image/*.hpp ]
+    $(here)/../include/boost/compute/image.hpp
+    [ glob $(here)/../include/boost/compute/image/*.hpp ]
 
-    ../include/boost/compute/iterator.hpp
-    [ glob ../include/boost/compute/iterator/*.hpp ]
+    $(here)/../include/boost/compute/iterator.hpp
+    [ glob $(here)/../include/boost/compute/iterator/*.hpp ]
 
-    ../include/boost/compute/memory.hpp
-    [ glob ../include/boost/compute/memory/*.hpp ]
+    $(here)/../include/boost/compute/memory.hpp
+    [ glob $(here)/../include/boost/compute/memory/*.hpp ]
 
-    ../include/boost/compute/random.hpp
-    [ glob ../include/boost/compute/random/*.hpp ]
+    $(here)/../include/boost/compute/random.hpp
+    [ glob $(here)/../include/boost/compute/random/*.hpp ]
 
-    ../include/boost/compute/types.hpp
-    ../include/boost/compute/types/struct.hpp
+    $(here)/../include/boost/compute/types.hpp
+    $(here)/../include/boost/compute/types/struct.hpp
 
-    ../include/boost/compute/type_traits.hpp
-    [ glob ../include/boost/compute/type_traits/*.hpp ]
+    $(here)/../include/boost/compute/type_traits.hpp
+    [ glob $(here)/../include/boost/compute/type_traits/*.hpp ]
 
-    ../include/boost/compute/utility.hpp
-    [ glob ../include/boost/compute/utility/*.hpp ]
+    $(here)/../include/boost/compute/utility.hpp
+    [ glob $(here)/../include/boost/compute/utility/*.hpp ]
   :
     <doxygen:param>QUIET=YES
     <doxygen:param>WARNINGS=YES
@@ -87,7 +89,7 @@ doxygen autodoc
     <doxygen:param>EXPAND_ONLY_PREDEF=YES
     <doxygen:param>SORT_MEMBER_DOCS=NO
     <doxygen:param>TAB_SIZE=4
-    <doxygen:param>EXAMPLE_PATH=../
+    <doxygen:param>EXAMPLE_PATH=$(here)/../
     <doxygen:param>PREDEFINED=BOOST_COMPUTE_DOXYGEN_INVOKED
     <doxygen:param>"ALIASES= \\
       internal_=\"INTERNAL ONLY\" \\
