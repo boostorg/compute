@@ -109,8 +109,8 @@ BOOST_AUTO_TEST_CASE(clone_buffer)
     BOOST_CHECK(buffer1.get_memory_flags() == buffer2.get_memory_flags());
 }
 
-#ifdef BOOST_COMPUTE_USE_CPP11
 #ifdef BOOST_COMPUTE_CL_VERSION_1_1
+#ifdef BOOST_COMPUTE_USE_CPP11
 std::mutex callback_mutex;
 std::condition_variable callback_condition_variable;
 
