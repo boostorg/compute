@@ -433,6 +433,6 @@ after_success:
     - |
       if [[ ${COVERAGE} == "true" ]]; then
         lcov --directory test --base-directory ../include/boost/compute/ --capture --output-file coverage.info
-        lcov --remove coverage.info '/usr*' '*/test/*' -o coverage.info
+        lcov --remove coverage.info '/usr*' '*/test/*' '*/deps/*' -o coverage.info
         cd .. && coveralls-lcov build/coverage.info
       fi
