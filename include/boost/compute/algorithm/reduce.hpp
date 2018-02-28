@@ -280,7 +280,6 @@ inline void reduce(InputIterator first,
                    command_queue &queue = system::default_queue())
 {
     BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
-    BOOST_STATIC_ASSERT(is_device_iterator<OutputIterator>::value);
     if(first == last){
         return;
     }
@@ -296,7 +295,6 @@ inline void reduce(InputIterator first,
                    command_queue &queue = system::default_queue())
 {
     BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
-    BOOST_STATIC_ASSERT(is_device_iterator<OutputIterator>::value);
     typedef typename std::iterator_traits<InputIterator>::value_type T;
 
     if(first == last){

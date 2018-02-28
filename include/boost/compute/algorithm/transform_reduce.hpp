@@ -49,7 +49,6 @@ inline void transform_reduce(InputIterator first,
                              command_queue &queue = system::default_queue())
 {
     BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
-    BOOST_STATIC_ASSERT(is_device_iterator<OutputIterator>::value);
     ::boost::compute::reduce(
         ::boost::compute::make_transform_iterator(first, transform_function),
         ::boost::compute::make_transform_iterator(last, transform_function),
