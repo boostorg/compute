@@ -13,6 +13,8 @@
 
 #include <iterator>
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/algorithm/detail/balanced_path.hpp>
 #include <boost/compute/algorithm/fill_n.hpp>
 #include <boost/compute/algorithm/find.hpp>
@@ -21,6 +23,7 @@
 #include <boost/compute/detail/meta_kernel.hpp>
 #include <boost/compute/detail/read_write_single_value.hpp>
 #include <boost/compute/system.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -118,6 +121,9 @@ inline bool includes(InputIterator1 first1,
                     InputIterator2 last2,
                     command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator1>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator2>::value);
+
     size_t tile_size = 1024;
 
     size_t count1 = detail::iterator_range_size(first1, last1);

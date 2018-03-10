@@ -11,11 +11,14 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_UNIQUE_HPP
 #define BOOST_COMPUTE_ALGORITHM_UNIQUE_HPP
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/unique_copy.hpp>
 #include <boost/compute/container/vector.hpp>
 #include <boost/compute/functional/operator.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -40,6 +43,7 @@ inline InputIterator unique(InputIterator first,
                             BinaryPredicate op,
                             command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
     vector<value_type> temp(first, last, queue);
@@ -55,6 +59,7 @@ inline InputIterator unique(InputIterator first,
                             InputIterator last,
                             command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
     return ::boost::compute::unique(

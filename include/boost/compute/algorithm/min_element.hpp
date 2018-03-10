@@ -11,10 +11,13 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_MIN_ELEMENT_HPP
 #define BOOST_COMPUTE_ALGORITHM_MIN_ELEMENT_HPP
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/functional.hpp>
 #include <boost/compute/algorithm/detail/find_extrema.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -54,6 +57,7 @@ min_element(InputIterator first,
             Compare compare,
             command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
     return detail::find_extrema(first, last, compare, true, queue);
 }
 
@@ -64,6 +68,7 @@ min_element(InputIterator first,
             InputIterator last,
             command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
     typedef typename std::iterator_traits<InputIterator>::value_type value_type;
 
     return ::boost::compute::min_element(

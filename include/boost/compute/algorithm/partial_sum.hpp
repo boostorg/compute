@@ -11,9 +11,12 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_PARTIAL_SUM_HPP
 #define BOOST_COMPUTE_ALGORITHM_PARTIAL_SUM_HPP
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/inclusive_scan.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -32,6 +35,8 @@ partial_sum(InputIterator first,
             OutputIterator result,
             command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<OutputIterator>::value);
     return ::boost::compute::inclusive_scan(first, last, result, queue);
 }
 

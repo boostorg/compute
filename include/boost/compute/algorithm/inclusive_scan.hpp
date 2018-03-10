@@ -11,10 +11,13 @@
 #ifndef BOOST_COMPUTE_ALGORITHM_INCLUSIVE_SCAN_HPP
 #define BOOST_COMPUTE_ALGORITHM_INCLUSIVE_SCAN_HPP
 
+#include <boost/static_assert.hpp>
+
 #include <boost/compute/functional.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/algorithm/detail/scan.hpp>
+#include <boost/compute/type_traits/is_device_iterator.hpp>
 
 namespace boost {
 namespace compute {
@@ -55,6 +58,8 @@ inclusive_scan(InputIterator first,
                BinaryOperator binary_op,
                command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<OutputIterator>::value);
     typedef typename
         std::iterator_traits<OutputIterator>::value_type output_type;
 
@@ -71,6 +76,8 @@ inclusive_scan(InputIterator first,
                OutputIterator result,
                command_queue &queue = system::default_queue())
 {
+    BOOST_STATIC_ASSERT(is_device_iterator<InputIterator>::value);
+    BOOST_STATIC_ASSERT(is_device_iterator<OutputIterator>::value);
     typedef typename
         std::iterator_traits<OutputIterator>::value_type output_type;
 
