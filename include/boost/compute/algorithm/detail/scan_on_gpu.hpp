@@ -108,7 +108,7 @@ public:
         // store sum for the block
         if(exclusive){
             *this <<
-                "if(lid == block_size - 1){\n" <<
+                "if(lid == block_size - 1 && gid < count) {\n" <<
                 "    block_sums[get_group_id(0)] = " <<
                        op(first[expr<cl_uint>("gid")], var<T>("scratch[lid]")) <<
                        ";\n" <<
