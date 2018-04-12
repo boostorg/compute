@@ -76,7 +76,7 @@ inline context opengl_create_shared_context()
         const platform &platform = platforms[i];
 
         // check whether this platform supports OpenCL/OpenGL sharing
-        if (!platform.supports_extension("cl_gl_sharing_extension"))
+        if (!platform.supports_extension(cl_gl_sharing_extension))
           continue;
 
         // load clGetGLContextInfoKHR() extension function
@@ -118,7 +118,7 @@ inline context opengl_create_shared_context()
 
         // create device object for the GPU and ensure it supports CL-GL sharing
         device gpu(gpu_id, false);
-        if(!gpu.supports_extension("cl_gl_sharing_extension")){
+        if(!gpu.supports_extension(cl_gl_sharing_extension)){
             continue;
         }
 
@@ -129,7 +129,7 @@ inline context opengl_create_shared_context()
 
     // no CL-GL sharing capable devices found
     BOOST_THROW_EXCEPTION(
-        unsupported_extension_error("cl_gl_sharing_extension")
+        unsupported_extension_error(cl_gl_sharing_extension)
     );
 }
 
