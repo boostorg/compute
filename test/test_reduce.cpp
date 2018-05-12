@@ -276,4 +276,23 @@ BOOST_AUTO_TEST_CASE(reduce_uchar_to_float)
     BOOST_CHECK_EQUAL(sum, 500);
 }
 
+// Test case for https://github.com/boostorg/compute/issues/746
+BOOST_AUTO_TEST_CASE(buffer_reference_count_test)
+{
+    using compute::uint_;
+
+    compute::vector<uint_> vector(8, context);
+    const compute::buffer& b = vector.get_buffer();
+    uint_ rc1 = b.get_info<CL_MEM_REFERENCE_COUNT>();
+    {
+        compute::fill(vector.begin(), vector.end(), uint_(2), queue);
+
+        uint_ product;
+        compute::reduce(vector.begin(), vector.end(), &product, compute::multiplies<uint_>(), queue);
+        BOOST_CHECK_EQUAL(product, uint_(256));
+    }
+    uint_ rc2 = b.get_info<CL_MEM_REFERENCE_COUNT>();
+    BOOST_CHECK_EQUAL(rc1, rc2);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
