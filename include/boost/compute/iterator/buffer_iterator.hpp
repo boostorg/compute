@@ -65,6 +65,14 @@ struct buffer_iterator_index_expr
     {
     }
 
+    buffer_iterator_index_expr(const buffer_iterator_index_expr& other)
+        : m_buffer(other.m_buffer.get(), false),
+          m_index(other.m_index),
+          m_address_space(other.m_address_space),
+          m_expr(other.m_expr)
+    {
+    }
+
     ~buffer_iterator_index_expr()
     {
         // set buffer to null so that its reference count will
