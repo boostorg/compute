@@ -126,7 +126,7 @@ public:
         return m_ptr - other.m_ptr;
     }
 
-    context& get_context() const
+    const context& get_context() const
     {
         return m_context;
     }
