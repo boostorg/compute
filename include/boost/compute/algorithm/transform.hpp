@@ -73,8 +73,8 @@ inline OutputIterator transform(InputIterator1 first1,
     difference_type n = std::distance(first1, last1);
 
     return transform(
-               make_zip_iterator(boost::make_tuple(first1, first2)),
-               make_zip_iterator(boost::make_tuple(last1, first2 + n)),
+               ::boost::compute::make_zip_iterator(boost::make_tuple(first1, first2)),
+               ::boost::compute::make_zip_iterator(boost::make_tuple(last1, first2 + n)),
                result,
                detail::unpack(op),
                queue
