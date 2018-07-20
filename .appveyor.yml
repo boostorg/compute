@@ -50,7 +50,7 @@ before_build:
   - appveyor DownloadFile "http://registrationcenter-download.intel.com/akdlm/irc_nas/9022/opencl_runtime_16.1.1_x64_setup.msi"
   - start /wait msiexec /i opencl_runtime_16.1.1_x64_setup.msi /qn  /l*v msiexec2.log
   #- type msiexec2.log
-  - git clone --depth 1 https://github.com/KhronosGroup/OpenCL-Headers.git -b opencl%OPENCL_HEADERS_VER% %OPENCL_INCLUDE_DIR%\CL
+  - git clone --depth 1 https://github.com/KhronosGroup/OpenCL-Headers.git %OPENCL_INCLUDE_DIR%\CL
 
 build_script:
   - mkdir build && cd build
