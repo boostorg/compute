@@ -113,6 +113,34 @@ inline meta_kernel& operator<<(meta_kernel &kernel,
     return kernel;
 }
 
+template<class Arg1, class Arg2, class T>
+struct invoked_complex_plus
+{
+    typedef typename std::complex<T> result_type;
+
+    invoked_complex_plus(const Arg1 &arg1, const Arg2 &arg2)
+        : m_arg1(arg1),
+          m_arg2(arg2)
+    {
+    }
+
+    Arg1 m_arg1;
+    Arg2 m_arg2;
+};
+
+template<class Arg1, class Arg2, class T>
+inline meta_kernel& operator<<(meta_kernel &kernel,
+                               const invoked_complex_plus<Arg1, Arg2, T> &expr)
+{
+    typedef typename std::complex<T> value_type;
+
+    kernel << "(" << type_name<value_type>() << ")"
+           << "(" << expr.m_arg1 << ".x+" << expr.m_arg2 << ".x,"
+                  << expr.m_arg1 << ".y+" << expr.m_arg2 << ".y" << ")";
+
+    return kernel;
+};
+
 template<class Arg, class T>
 struct invoked_complex_conj
 {
@@ -158,6 +186,27 @@ public:
     operator()(const Arg1 &x, const Arg2 &y) const
     {
         return detail::invoked_complex_multiplies<Arg1, Arg2, T>(x, y);
+    }
+};
+
+// specialization for plus<T>
+template<class T>
+class plus<std::complex<T> > :
+    public function<std::complex<T> (std::complex<T>, std::complex<T>)>
+{
+public:
+    plus() :
+        function<
+            std::complex<T> (std::complex<T>, std::complex<T>)
+        >("complex_plus")
+    {
+    }
+
+    template<class Arg1, class Arg2>
+    detail::invoked_complex_plus<Arg1, Arg2, T>
+    operator()(const Arg1 &x, const Arg2 &y) const
+    {
+        return detail::invoked_complex_plus<Arg1, Arg2, T>(x, y);
     }
 };
 

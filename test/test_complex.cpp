@@ -170,4 +170,31 @@ BOOST_AUTO_TEST_CASE(transform_multiply)
     BOOST_CHECK_EQUAL(std::complex<float>(z[1]), std::complex<float>(1.0f, 12.0f));
 }
 
+BOOST_AUTO_TEST_CASE(transform_plus)
+{
+    boost::compute::vector<std::complex<float> > x(context);
+    x.push_back(std::complex<float>(-2.0f, 5.0f), queue);
+    x.push_back(std::complex<float>(1.0f, 2.0f), queue);
+
+    boost::compute::vector<std::complex<float> > y(context);
+    y.push_back(std::complex<float>(2.0f, -1.0f), queue);
+    y.push_back(std::complex<float>(-3.0f, 4.0f), queue);
+
+    boost::compute::vector<std::complex<float> > z(2, context);
+
+    // z = x + y
+    boost::compute::transform(
+        x.begin(),
+        x.end(),
+        y.begin(),
+        z.begin(),
+        boost::compute::plus<std::complex<float> >(),
+        queue
+    );
+    queue.finish();
+
+    BOOST_CHECK_EQUAL(std::complex<float>(z[0]), std::complex<float>(0.0f, 4.0f));
+    BOOST_CHECK_EQUAL(std::complex<float>(z[1]), std::complex<float>(-2.0f, 6.0f));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
