@@ -175,7 +175,7 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
                         k.var<key_type>("sibling_key")) << ");\n" <<
             k.decl<bool>("swap") <<
                 " = compare ^ (sibling_idx < lid) ^ direction;\n" <<
-            "swap |= equal;\n" <<
+            "swap = equal ? false : swap;\n" <<
             "my_key = swap ? sibling_key : my_key;\n";
     if(sort_by_key)
     {
@@ -229,7 +229,7 @@ inline size_t bitonic_block_sort(KeyIterator keys_first,
                         k.var<key_type>("sibling_key")) << ");\n" <<
             k.decl<bool>("swap") <<
                 " = compare ^ (sibling_idx < lid);\n" <<
-            "swap |= equal;\n" <<
+            "swap = equal ? false : swap;\n" <<
             "my_key = swap ? sibling_key : my_key;\n";
     if(sort_by_key)
     {
