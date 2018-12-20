@@ -340,6 +340,7 @@ BOOST_AUTO_TEST_CASE(sort_int2)
     host[size/4] = int2_(20.f, 0.f);
     host[(size*3)/4] = int2_(9.f, 0.f);
     host[size-3] = int2_(-10.0f, 0.f);
+    host[size/2+1] = int2_(-10.0f, -1.f);
 
     boost::compute::vector<int2_> vector(size, context);
     boost::compute::copy(host.begin(), host.end(), vector.begin(), queue);
@@ -356,9 +357,11 @@ BOOST_AUTO_TEST_CASE(sort_int2)
     );
     boost::compute::copy(vector.begin(), vector.end(), host.begin(), queue);
     BOOST_CHECK_CLOSE(host[0][0], -10.f, 0.1);
+    BOOST_CHECK_CLOSE(host[1][0], -10.f, 0.1);
     BOOST_CHECK_CLOSE(host[(size - 3)][0], 9.f, 0.1);
     BOOST_CHECK_CLOSE(host[(size - 2)][0], 20.f, 0.1);
     BOOST_CHECK_CLOSE(host[(size - 1)][0], 100.f, 0.1);
+    BOOST_CHECK_NE(host[0], host[1]);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
