@@ -104,47 +104,144 @@ matrix:
        - OPENCL_LIB=pocl
        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=101"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # Xenial, OpenCL 1.2, New Boost Libs, C++11, Coverage
+    # Xenial, OpenCL 1.2
     # CLANG
     - os: linux
       dist: xenial
       compiler: clang
       addons:
         apt:
-          packages: &xenial_pocl_packages_latest_boost
-            - g++-5
-            # POCL
-            - libltdl-dev
-            - libhwloc-dev
-            - pkg-config
-            - libedit-dev
-            # Misc
-            - python-yaml
-            - lcov
-            - libopencv-dev
-          sources: &xenial_pocl_sources_latest_boost
-            - ubuntu-toolchain-r-test
+          packages: *xenial_pocl_packages
+          sources: *xenial_pocl_sources
       env:
        - OPENCL_LIB=pocl
-       - BOOST_VERSION="1_67_0"
-       - BOOST_URL="https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.gz"
        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
-       - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
+       - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # GCC
     - os: linux
       dist: xenial
       compiler: gcc
       addons:
         apt:
-          packages: *xenial_pocl_packages_latest_boost
-          sources: *xenial_pocl_sources_latest_boost
+          packages: *xenial_pocl_packages
+          sources: *xenial_pocl_sources
       env:
        - OPENCL_LIB=pocl
-       - COVERAGE=true
-       - BOOST_VERSION="1_67_0"
-       - BOOST_URL="https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.gz"
        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
-       - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON -DBOOST_COMPUTE_USE_CPP11=ON"
+       - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON"
+
+    ############################################################################
+    # Intel OpenCL Runtime builds (1.2, 2.0, 2.1)
+    ############################################################################
+
+    # Linux, Intel OpenCL 1.2
+    # CLANG
+    - os: linux
+      dist: xenial
+      compiler: clang
+      addons:
+        apt:
+          packages: &xenial_intel_packages
+            - g++-5
+            # Boost
+            - libboost-chrono1.58-dev
+            - libboost-date-time1.58-dev
+            - libboost-test1.58-dev
+            - libboost-system1.58-dev
+            - libboost-filesystem1.58-dev
+            - libboost-timer1.58-dev
+            - libboost-program-options1.58-dev
+            - libboost-thread1.58-dev
+            # Misc
+            - python-yaml
+            - lcov
+            - libopencv-dev
+          sources: &xenial_intel_packages
+            - ubuntu-toolchain-r-test
+      env:
+        - OPENCL_LIB=intel
+        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+    # GCC
+    - os: linux
+      dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          packages: *xenial_intel_packages
+          sources: *xenial_intel_packages
+      env:
+        - OPENCL_LIB=intel
+        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+    # Linux, Intel OpenCL 2.0
+    # CLANG
+    - os: linux
+      dist: xenial
+      compiler: clang
+      addons:
+        apt:
+          packages: *xenial_intel_packages
+          sources: *xenial_intel_packages
+      env:
+        - OPENCL_LIB=intel
+        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+    # GCC
+    - os: linux
+      dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          packages: *xenial_intel_packages
+          sources: *xenial_intel_packages
+      env:
+        - OPENCL_LIB=intel
+        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+    # Linux, Intel OpenCL 2.1, New Boost Libs, C++11, Coverage
+    # CLANG
+    - os: linux
+      dist: xenial
+      compiler: clang
+      cache:
+        ccache: true
+        directories:
+          - ${DEPS_DIR}/boost
+      addons:
+       apt:
+         packages: &xenial_intel_latest_boost_packages
+            - g++-5
+            # Misc
+            - python-yaml
+            - lcov
+            - libopencv-dev
+         sources: &xenial_intel_latest_boost_sources
+           - ubuntu-toolchain-r-test
+      env:
+        - OPENCL_LIB=intel
+        - BOOST_VERSION="1_67_0"
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
+    # GCC
+    - os: linux
+      dist: xenial
+      compiler: gcc
+      cache:
+        ccache: true
+        directories:
+          - ${DEPS_DIR}/boost
+      addons:
+        apt:
+          packages: *xenial_intel_latest_boost_packages
+          sources: *xenial_intel_latest_boost_sources
+      env:
+        - OPENCL_LIB=intel
+        - BOOST_VERSION="1_67_0"
+        - COVERAGE=true
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON -DBOOST_COMPUTE_USE_CPP11=ON"
+        - COVERAGE=true
 
     ############################################################################
     # OSX
@@ -215,6 +312,8 @@ install:
           mkdir -p ${DEPS_DIR}/boost
           rm -rf ${DEPS_DIR}/boost/*
           # Download
+          BOOST_BASENAME=$(echo ${BOOST_VERSION} | awk -F '_' '{print $1 "." $2 "." $3 }')
+          BOOST_URL="https://dl.bintray.com/boostorg/release/${BOOST_BASENAME}/source/boost_${BOOST_VERSION}.tar.gz"
           travis_retry wget --no-check-certificate --quiet -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${DEPS_DIR}/boost${BOOST_VERSION}
           pushd ${DEPS_DIR}/boost${BOOST_VERSION}
           # Configure and install
@@ -259,6 +358,21 @@ install:
         else
           echo 'Using cached POCL lib.'
         fi
+      fi
+
+    ############################################################################
+    # Install Intel OpenCL Runtime
+    ############################################################################
+    - |
+      if [[ ${TRAVIS_OS_NAME} == "linux" && ${OPENCL_LIB} == "intel" ]]; then
+        # https://software.intel.com/en-us/articles/opencl-drivers#cpu-section
+        PACKAGE_URL=http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/13793/l_opencl_p_18.1.0.013.tgz
+        PACKAGE_NAME=l_opencl_p_18.1.0.013
+
+        wget -q ${PACKAGE_URL} -O /tmp/opencl_runtime.tgz
+        tar -xzf /tmp/opencl_runtime.tgz -C /tmp
+        sed 's/decline/accept/g' -i /tmp/${PACKAGE_NAME}/silent.cfg
+        sudo /tmp/${PACKAGE_NAME}/install.sh -s /tmp/${PACKAGE_NAME}/silent.cfg
       fi
 
 script:
