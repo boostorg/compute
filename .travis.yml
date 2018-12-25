@@ -200,11 +200,12 @@ matrix:
     # OSX
     # CLANG
     - os: osx
+      osx_image: xcode10
       compiler: clang
       env:
         - ENV_CXX_FLAGS="-Wno-c99-extensions"
         - ENV_CMAKE_OPTIONS="-DBOOST_COMPUTE_HAVE_OPENCV=OFF"
-        - MATRIX_EVAL="CC=clang-7 && CXX=clang++ && export PATH=\"/usr/local/opt/llvm/bin:$PATH\" && export LDFLAGS=\"-L/usr/local/opt/llvm/lib\" && export CPPFLAGS=\"-I/usr/local/opt/llvm/include\""
+        - MATRIX_EVAL="CC=clang && CXX=clang++ && export PATH=\"/usr/local/opt/llvm/bin:$PATH\" && export LDFLAGS=\"-L/usr/local/opt/llvm/lib\" && export CPPFLAGS=\"-I/usr/local/opt/llvm/include\""
       addons:
        homebrew:
          packages: &osx_packages
@@ -212,9 +213,10 @@ matrix:
           - cmake
           - lcov
           - gcc@7
-          - llvm@7
+          - llvm
     # GCC
     - os: osx
+      osx_image: xcode10
       compiler: gcc
       env:
         - ENV_CXX_FLAGS="-Wno-c99-extensions"
