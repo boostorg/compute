@@ -13,14 +13,12 @@ env:
     - OPENCL_ROOT=${DEPS_DIR}/opencl
     # POCL
     - POCL_BRANCH=release_1_2 # branch/tag
-    - POCL_LLVM_VERSION=6.0.1
+    - POCL_LLVM_VERSION=7.0.0
     - POCL_ROOT=${OPENCL_ROOT}/pocl-${POCL_BRANCH}/
     - POCL_LLVM_CONFIG=${DEPS_DIR}/llvm-${POCL_LLVM_VERSION}/bin/llvm-config
     - POCL_CXX_COMPILER=${DEPS_DIR}/llvm-${POCL_LLVM_VERSION}/bin/clang++
     - POCL_C_COMPILER=${DEPS_DIR}/llvm-${POCL_LLVM_VERSION}/bin/clang
     - POCL_OPENCL_LIB=${POCL_ROOT}/lib/libOpenCL.so
-    # AMD APP SDK
-    - AMDAPPSDKROOT=${OPENCL_ROOT}/AMDAPPSDK
     # Global build options and C++ flags
     - CMAKE_OPTIONS="-DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_HAVE_OPENCV=ON -DBOOST_COMPUTE_THREAD_SAFE=ON"
     - CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -DCI_BUILD"
@@ -43,7 +41,7 @@ matrix:
       addons:
         apt:
           packages: &xenial_packages
-            - g++-6
+            - g++-7
             # POCL
             - libltdl-dev
             - libhwloc-dev
@@ -62,6 +60,7 @@ matrix:
             - python-yaml
             - lcov
             - libopencv-dev
+            - clinfo
           sources: &xenial_sources
             - ubuntu-toolchain-r-test
       env:
@@ -127,10 +126,10 @@ matrix:
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
 
     ############################################################################
-    # AMD APP SDK builds (v2.9.1 -> OpenCL 1.2, v3.0 -> OpenCL 2.0)
+    # Intel OpenCL Runtime builds
     ############################################################################
 
-    # Linux, AMD APP SDK v2.9.1, OpenCL 1.2
+    # Linux, Intel OpenCL 1.2
     # CLANG
     - os: linux
       compiler: clang
@@ -139,8 +138,7 @@ matrix:
           packages: *xenial_packages
           sources: *xenial_sources
       env:
-        - OPENCL_LIB=amdappsdk
-        - AMDAPPSDK_VERSION=291 # OpenCL 1.2
+        - OPENCL_LIB=intel
         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # GCC
@@ -151,11 +149,10 @@ matrix:
           packages: *xenial_packages
           sources: *xenial_sources
       env:
-        - OPENCL_LIB=amdappsdk
-        - AMDAPPSDK_VERSION=291 # OpenCL 1.2
+        - OPENCL_LIB=intel
         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # Linux, AMD APP SDK v3.0.0, OpenCL 2.0
+    # Linux, Intel OpenCL 2.1
     # CLANG
     - os: linux
       compiler: clang
@@ -165,19 +162,18 @@ matrix:
           - ${DEPS_DIR}/boost
       addons:
        apt:
-         packages: &xenial_amdappsdk_latest_boost_packages
-           - g++-6
+         packages: &xenial_intel_latest_boost_packages
+           - g++-7
            # Misc
            - python-yaml
            - lcov
            - libopencv-dev
-         sources: &xenial_amdappsdk_latest_boost_sources
+         sources: &xenial_intel_latest_boost_sources
            - ubuntu-toolchain-r-test
       env:
-        - OPENCL_LIB=amdappsdk
-        - AMDAPPSDK_VERSION=300 # OpenCL 2.0
-        - BOOST_VERSION="1_67_0" # Boost 1.67.0
-        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=200"
+        - OPENCL_LIB=intel
+        - BOOST_VERSION="1_69_0" # Boost 1.69.0
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
     # GCC
     - os: linux
@@ -188,13 +184,12 @@ matrix:
           - ${DEPS_DIR}/boost
       addons:
         apt:
-          packages: *xenial_amdappsdk_latest_boost_packages
-          sources: *xenial_amdappsdk_latest_boost_sources
+          packages: *xenial_intel_latest_boost_packages
+          sources: *xenial_intel_latest_boost_sources
       env:
-        - OPENCL_LIB=amdappsdk
-        - AMDAPPSDK_VERSION=300  # OpenCL 2.0
-        - BOOST_VERSION="1_67_0" # Boost 1.67.0
-        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=200"
+        - OPENCL_LIB=intel
+        - BOOST_VERSION="1_69_0" # Boost 1.69.0
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON -DBOOST_COMPUTE_USE_CPP11=ON"
         - COVERAGE=true
 
@@ -209,22 +204,22 @@ matrix:
       env:
         - ENV_CXX_FLAGS="-Wno-c99-extensions"
         - ENV_CMAKE_OPTIONS="-DBOOST_COMPUTE_HAVE_OPENCV=OFF"
-        - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++ && export PATH=\"/usr/local/opt/llvm/bin:$PATH\" && export LDFLAGS=\"-L/usr/local/opt/llvm/lib\" && export CPPFLAGS=\"-I/usr/local/opt/llvm/include\""
+        - MATRIX_EVAL="CC=clang-7 && CXX=clang++ && export PATH=\"/usr/local/opt/llvm/bin:$PATH\" && export LDFLAGS=\"-L/usr/local/opt/llvm/lib\" && export CPPFLAGS=\"-I/usr/local/opt/llvm/include\""
       addons:
        homebrew:
          packages: &osx_packages
           - boost
           - cmake
           - lcov
-          - gcc@6
-          - llvm@6
+          - gcc@7
+          - llvm@7
     # GCC
     - os: osx
       compiler: gcc
       env:
         - ENV_CXX_FLAGS="-Wno-c99-extensions"
         - ENV_CMAKE_OPTIONS="-DBOOST_COMPUTE_HAVE_OPENCV=OFF"
-        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
       addons:
        homebrew:
          packages: *osx_packages
@@ -323,37 +318,18 @@ install:
       fi
 
     ############################################################################
-    # Install AMD APP SDK
-    # Thanks to JuliaGPU https://github.com/JuliaGPU/OpenCL.jl
+    # Install Intel OpenCL Runtime
     ############################################################################
     - |
-      if [[ ${TRAVIS_OS_NAME} == "linux" && ${OPENCL_LIB} == "amdappsdk" ]]; then
-        mkdir -p ${OPENCL_ROOT}
-        export OPENCL_VENDOR_PATH=${AMDAPPSDKROOT}/etc/OpenCL/vendors
-        mkdir -p ${OPENCL_VENDOR_PATH}
-        
-        #AMD APP SDK v3.0:
-        if [[ ${AMDAPPSDK_VERSION} == "300" ]]; then
-          URL="https://github.com/Microsoft/LightGBM/releases/download/v2.0.12/AMD-APP-SDKInstaller-v3.0.130.136-GA-linux64.tar.bz2"
-          wget $URL -O AMD-SDK.tar.bz2
-          tar -xjf AMD-SDK.tar.bz2
-          sh AMD-APP-SDK*.sh --tar -xf -C ${AMDAPPSDKROOT}
-        else  #AMD APP SDK v2.9.1:
-          URL="https://github.com/ghostlander/AMD-APP-SDK/releases/download/v2.9.1/AMD-APP-SDK-v2.9.1-lnx64.tar.xz"
-          wget $URL -O AMD-SDK.tar.xz
-          tar -xJf AMD-SDK.tar.xz -C ${AMDAPPSDKROOT} --strip 1
-        fi
-        echo libamdocl64.so > ${OPENCL_VENDOR_PATH}/amdocl64.icd
-        if [[ ${AMDAPPSDK_VERSION} == "300" ]]; then
-          export LD_LIBRARY_PATH=${AMDAPPSDKROOT}/lib/x86_64/sdk:${LD_LIBRARY_PATH}
-          export CMAKE_LIBRARY_PATH=${AMDAPPSDKROOT}/lib/x86_64/sdk
-          cp ${AMDAPPSDKROOT}/lib/x86_64/libamdocl12cl64.so ${AMDAPPSDKROOT}/lib/x86_64/sdk/libamdocl12cl64.so
-        else  # 291
-          export LD_LIBRARY_PATH=${AMDAPPSDKROOT}/lib/x86_64:${LD_LIBRARY_PATH}
-          export CMAKE_LIBRARY_PATH=${AMDAPPSDKROOT}/lib/x86_64
-        fi
-        chmod +x ${AMDAPPSDKROOT}/bin/x86_64/clinfo
-        ${AMDAPPSDKROOT}/bin/x86_64/clinfo
+      if [[ ${TRAVIS_OS_NAME} == "linux" && ${OPENCL_LIB} == "intel" ]]; then
+        # https://software.intel.com/en-us/articles/opencl-drivers#cpu-section
+        PACKAGE_URL=http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/13793/l_opencl_p_18.1.0.013.tgz
+        PACKAGE_NAME=l_opencl_p_18.1.0.013
+
+        wget -q ${PACKAGE_URL} -O /tmp/opencl_runtime.tgz
+        tar -xzf /tmp/opencl_runtime.tgz -C /tmp
+        sed 's/decline/accept/g' -i /tmp/${PACKAGE_NAME}/silent.cfg
+        sudo /tmp/${PACKAGE_NAME}/install.sh -s /tmp/${PACKAGE_NAME}/silent.cfg
       fi
 
 script:
