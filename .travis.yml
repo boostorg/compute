@@ -173,7 +173,7 @@ matrix:
       env:
         - OPENCL_LIB=intel
         - BOOST_VERSION="1_69_0" # Boost 1.69.0
-        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=200"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
     # GCC
     - os: linux
@@ -189,7 +189,7 @@ matrix:
       env:
         - OPENCL_LIB=intel
         - BOOST_VERSION="1_69_0" # Boost 1.69.0
-        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=200"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON -DBOOST_COMPUTE_USE_CPP11=ON"
         - COVERAGE=true
 
@@ -219,7 +219,7 @@ matrix:
       osx_image: xcode10
       compiler: gcc
       env:
-        - ENV_CXX_FLAGS="-Wno-c99-extensions"
+        - ENV_CXX_FLAGS="-Wno-c99-extensions -Wno-ignored-attributes"
         - ENV_CMAKE_OPTIONS="-DBOOST_COMPUTE_HAVE_OPENCV=OFF"
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
       addons:
@@ -327,8 +327,7 @@ install:
         # https://software.intel.com/en-us/articles/opencl-drivers#cpu-section
         PACKAGE_URL=http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/13793/l_opencl_p_18.1.0.013.tgz
         PACKAGE_NAME=l_opencl_p_18.1.0.013
-
-        wget -q ${PACKAGE_URL} -O /tmp/opencl_runtime.tgz
+        travis_retry wget -q ${PACKAGE_URL} -O /tmp/opencl_runtime.tgz
         tar -xzf /tmp/opencl_runtime.tgz -C /tmp
         sed 's/decline/accept/g' -i /tmp/${PACKAGE_NAME}/silent.cfg
         sudo /tmp/${PACKAGE_NAME}/install.sh -s /tmp/${PACKAGE_NAME}/silent.cfg
