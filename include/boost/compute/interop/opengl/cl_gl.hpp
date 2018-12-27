@@ -11,6 +11,8 @@
 #ifndef BOOST_COMPUTE_INTEROP_OPENGL_CL_GL_HPP
 #define BOOST_COMPUTE_INTEROP_OPENGL_CL_GL_HPP
 
+#include <boost/compute/detail/cl_versions.hpp>
+
 #if defined(__APPLE__)
 #include <OpenCL/cl_gl.h>
 #else
