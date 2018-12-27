@@ -244,6 +244,42 @@ matrix:
         - COVERAGE=true
 
     ############################################################################
+    # OpenCL 2.2 Only Build
+    ############################################################################
+
+    # Linux, OpenCL 2.2, Tests not run, C++11
+    # CLANG
+    - os: linux
+      dist: xenial
+      compiler: clang
+      addons:
+       apt:
+         packages: &xenial_packages
+            - g++-5
+            # Misc
+            - libopencv-dev
+         sources: &xenial_packages
+           - ubuntu-toolchain-r-test
+      env:
+        - OPENCL_LIB=khronos-icd
+        - RUN_TESTS=false
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=202"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
+    # GCC
+    - os: linux
+      dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          packages: *xenial_packages
+          sources: *xenial_packages
+      env:
+        - OPENCL_LIB=khronos-icd
+        - RUN_TESTS=false
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
+
+    ############################################################################
     # OSX
     ############################################################################
 
@@ -341,6 +377,28 @@ install:
         travis_retry wget -w 1 -np -nd -nv -A h,hpp --no-check-certificate ${OPENCL_REGISTRY}/api/2.1/cl.hpp;
         popd
       fi
+
+    ############################################################################	
+    # Only ICD
+    ############################################################################	
+    - |	
+      if [[ ${TRAVIS_OS_NAME} == "linux" && ${OPENCL_LIB} == "khronos-icd" ]]; then	
+        mkdir -p ${OPENCL_ROOT}	
+        pushd ${OPENCL_ROOT}	
+        travis_retry git clone --depth 1 https://github.com/KhronosGroup/OpenCL-ICD-Loader.git	
+        mv ./OpenCL-ICD-Loader/* .	
+        mkdir -p inc/CL	
+        pushd inc/CL	
+        cp ${OPENCL_ROOT}/include/CL/* .	
+        popd	
+        mkdir -p lib	
+        pushd lib	
+        cmake -G "Unix Makefiles" ..	
+        make	
+        cp ./bin/libOpenCL.so .	
+        popd	
+        popd	
+      fi   
 
     ############################################################################
     # Build and install POCL https://github.com/pocl/pocl
