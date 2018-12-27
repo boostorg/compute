@@ -104,10 +104,12 @@ public:
 template<class Scalar, size_t N>
 class vector_type : public detail::vector_type_desc<Scalar, N>
 {
+    typedef detail::vector_type_desc<Scalar, N> base_type;
 public:
     typedef Scalar scalar_type;
 
     vector_type()
+        : base_type()
     {
         BOOST_STATIC_ASSERT(sizeof(Scalar) * N == sizeof(vector_type<Scalar, N>));
     }
