@@ -41,7 +41,6 @@ matrix:
       addons:
         apt:
           packages: &xenial_packages
-            - g++-7
             # POCL
             - libltdl-dev
             - libhwloc-dev
@@ -61,8 +60,6 @@ matrix:
             - lcov
             - libopencv-dev
             - clinfo
-          sources: &xenial_sources
-            - ubuntu-toolchain-r-test
       env:
        - OPENCL_LIB=pocl
        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=100"
@@ -73,7 +70,6 @@ matrix:
       addons:
         apt:
           packages: *xenial_packages
-          sources: *xenial_sources
       env:
        - OPENCL_LIB=pocl
        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=100"
@@ -85,7 +81,6 @@ matrix:
       addons:
         apt:
           packages: *xenial_packages
-          sources: *xenial_sources
       env:
        - OPENCL_LIB=pocl
        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=101"
@@ -96,7 +91,6 @@ matrix:
       addons:
         apt:
           packages: *xenial_packages
-          sources: *xenial_sources
       env:
        - OPENCL_LIB=pocl
        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=101"
@@ -108,7 +102,6 @@ matrix:
       addons:
         apt:
           packages: *xenial_packages
-          sources: *xenial_sources
       env:
        - OPENCL_LIB=pocl
        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
@@ -119,33 +112,9 @@ matrix:
       addons:
         apt:
           packages: *xenial_packages
-          sources: *xenial_sources
       env:
        - OPENCL_LIB=pocl
        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
-       - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # Linux, OpenCL 2.0
-    # CLANG
-    - os: linux
-      compiler: clang
-      addons:
-        apt:
-          packages: *xenial_packages
-          sources: *xenial_sources
-      env:
-       - OPENCL_LIB=pocl
-       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
-       - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # GCC
-    - os: linux
-      compiler: gcc
-      addons:
-        apt:
-          packages: *xenial_packages
-          sources: *xenial_sources
-      env:
-       - OPENCL_LIB=pocl
-       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
 
     ############################################################################
@@ -159,7 +128,6 @@ matrix:
       addons:
         apt:
           packages: *xenial_packages
-          sources: *xenial_sources
       env:
         - OPENCL_LIB=intel
         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
@@ -170,10 +138,30 @@ matrix:
       addons:
         apt:
           packages: *xenial_packages
-          sources: *xenial_sources
       env:
         - OPENCL_LIB=intel
         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+    # Linux, Intel OpenCL 2.0
+    # CLANG
+    - os: linux
+      compiler: clang
+      addons:
+        apt:
+          packages: *xenial_packages
+      env:
+        - OPENCL_LIB=intel
+        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+    # GCC
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          packages: *xenial_packages
+      env:
+        - OPENCL_LIB=intel
+        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
     # Linux, Intel OpenCL 2.1
     # CLANG
@@ -186,13 +174,11 @@ matrix:
       addons:
        apt:
          packages: &xenial_intel_latest_boost_packages
-           - g++-7
            # Misc
            - python-yaml
            - lcov
            - libopencv-dev
-         sources: &xenial_intel_latest_boost_sources
-           - ubuntu-toolchain-r-test
+           - clinfo
       env:
         - OPENCL_LIB=intel
         - BOOST_VERSION="1_69_0" # Boost 1.69.0
@@ -208,7 +194,6 @@ matrix:
       addons:
         apt:
           packages: *xenial_intel_latest_boost_packages
-          sources: *xenial_intel_latest_boost_sources
       env:
         - OPENCL_LIB=intel
         - BOOST_VERSION="1_69_0" # Boost 1.69.0
@@ -227,7 +212,6 @@ matrix:
       compiler: clang
       env:
         - ENV_CXX_FLAGS="-Wno-c99-extensions"
-        - ENV_CMAKE_OPTIONS="-DBOOST_COMPUTE_HAVE_OPENCV=OFF"
         - MATRIX_EVAL="CC=clang && CXX=clang++ && export PATH=\"/usr/local/opt/llvm/bin:$PATH\" && export LDFLAGS=\"-L/usr/local/opt/llvm/lib\" && export CPPFLAGS=\"-I/usr/local/opt/llvm/include\""
       addons:
        homebrew:
@@ -237,17 +221,36 @@ matrix:
           - lcov
           - gcc@5
           - llvm
+          - opencv
     # GCC
     - os: osx
       osx_image: xcode10
       compiler: gcc
       env:
         - ENV_CXX_FLAGS="-Wno-c99-extensions"
-        - ENV_CMAKE_OPTIONS="-DBOOST_COMPUTE_HAVE_OPENCV=OFF"
         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
       addons:
        homebrew:
          packages: *osx_packages
+
+    ############################################################################
+    # Windows
+    ############################################################################
+    - os: windows
+      env:
+        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=200"
+        - NUGETDIR="C:/NUGET"
+        - OCL_ROOT="$NUGETDIR/opencl-nug.0.777.77/build/native"
+      install:
+        # Install OpenCL headers and libraries
+        - choco install nuget.commandline
+        - nuget install opencl-nug -Version 0.777.77 -OutputDirectory $NUGETDIR
+        - ls -l $NUGETDIR/opencl-nug.0.777.77/build/native/
+        # Install OpenCL Runtime
+        - choco install opencl-intel-cpu-runtime
+        # Check if it's working
+        - curl -L 'https://ci.appveyor.com/api/projects/oblomov/clinfo/artifacts/clinfo.exe?job=platform:+x64' -o clinfo.exe
+        - ./clinfo.exe
 
 cache:
   directories:
@@ -365,7 +368,7 @@ script:
     - echo ${CMAKE_OPTIONS}
     - echo ${CXX_FLAGS}
     - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS="${CXX_FLAGS}" ..
-    - make -j4
+    - cmake --build . --config Debug -j 4
     - |
       if [[ ${RUN_TESTS} == "true" ]]; then
         # print OpenCL devices
