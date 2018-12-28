@@ -249,13 +249,13 @@ matrix:
       install:
         # Install OpenCV
         - choco install opencv
-        - export OPENCV_DIR=C:/tools/opencv/build/x64/vc15/
+        - export OPENCV_DIR=C:/tools/opencv/build/x64/vc15/lib
         # Install Boost
         - wget https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.7z
         - 7z x boost_1_67_0.7z -o/C/local
         - pushd "/C/local/boost_1_67_0"
         - ./bootstrap.bat
-        - ./b2.exe --with-libraries=program_options,filesystem,system,thread,test,timer,chrono
+        - ./b2.exe --with-chrono --with-date_time --with-filesystem --with-program_options --with-system --with-thread --with-timer --with-test
         - popd
         # Install OpenCL headers and libraries
         - choco install nuget.commandline
@@ -386,7 +386,7 @@ script:
     - echo ${CMAKE_OPTIONS}
     - echo ${CXX_FLAGS}
     - if [[ ${TRAVIS_OS_NAME} != "windows" ]]; then cmake -G"${GENERATOR}" ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS="${CXX_FLAGS}" .. ; fi
-    - if [[ ${TRAVIS_OS_NAME} == "windows" ]]; then cmake -G"${GENERATOR}" -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DCMAKE_CXX_FLAGS="${CXX_FLAGS}".. ; fi
+    - if [[ ${TRAVIS_OS_NAME} == "windows" ]]; then cmake -G"${GENERATOR}" ${CMAKE_OPTIONS} .. ; fi
     # https://stackoverflow.com/questions/39865367/warning-section-textcoal-nt-is-deprecate-since-updating-to-mac-osx-sierra
     - if [[ ${TRAVIS_OS_NAME} == "osx" ]]; then cmake --build . -j 4 --config Debug 2>&1 | grep -v -e '^/var/folders/*' -e '^[[:space:]]*\.section' -e '^[[:space:]]*\^[[:space:]]*~*' ; fi
     - if [[ ${TRAVIS_OS_NAME} != "osx" ]]; then cmake --build . -j 4 --config Debug ; fi
