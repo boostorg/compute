@@ -60,7 +60,7 @@ bool check_results(const std::vector<float>& values, const std::vector<float>& s
 
     int semiWidth = wSize/2;
 
-    bool res = true;
+    bool ret = true;
     for(int idx = 0 ; idx < size ; ++idx)
     {
         int start = (std::max)(idx - semiWidth,0);
@@ -76,11 +76,11 @@ bool check_results(const std::vector<float>& values, const std::vector<float>& s
         if(std::abs(res-smoothValues[idx]) > 1e-3)
         {
             std::cout << "idx = " << idx << " -- expected = " << res << " -- result = " << smoothValues[idx] << std::endl;
-            res = false;
+            ret = false;
         }
     }
 
-    return res;
+    return ret;
 }
 
 // generate a uniform law over [0,10]

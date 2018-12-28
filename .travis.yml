@@ -9,7 +9,7 @@ env:
     # OpenCL
     - OPENCL_LIB=default
     # Khronos OpenCL ICD
-    - OPENCL_REGISTRY=https://www.khronos.org/registry/cl
+    - OPENCL_REGISTRY=https://www.khronos.org/registry/OpenCL/
     - OPENCL_ROOT=${DEPS_DIR}/opencl
     # POCL
     - POCL_BRANCH=release_1_2 # branch/tag
@@ -35,7 +35,7 @@ matrix:
     # POCL builds (OpenCL 1.0, 1.1, 1.2)
     ############################################################################
 
-    # Linux, OpenCL 1.0
+    # Xenial, OpenCL 1.0
     # CLANG
     - os: linux
       compiler: clang
@@ -75,7 +75,7 @@ matrix:
        - OPENCL_LIB=pocl
        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=100"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # Linux, OpenCL 1.1
+    # Xenial, OpenCL 1.1
     # CLANG
     - os: linux
       compiler: clang
@@ -294,7 +294,9 @@ before_install:
     - eval "${MATRIX_EVAL}"
 
 install:
-    # Download and install recent cmake
+    ############################################################################
+    # Download and install recent CMake    
+    ############################################################################
     - |
       if [[ ${TRAVIS_OS_NAME} == "linux" ]]; then
         CMAKE_URL=${CMAKE_URL}
@@ -303,20 +305,22 @@ install:
         export PATH=${DEPS_DIR}/cmake/bin:${PATH}
       fi
 
-    # Download and install Boost
+    ############################################################################
+    # Download and install Boost    
+    ############################################################################
     - |
       if [[ ${TRAVIS_OS_NAME} == "linux" && ${BOOST_VERSION} != "default" ]]; then
         if [ ! -f "${DEPS_DIR}/boost/${BOOST_VERSION}_cached" ]; then
-          # create dirs for source and install
+          # Create dirs for source and install
           mkdir -p ${DEPS_DIR}/boost${BOOST_VERSION}
           mkdir -p ${DEPS_DIR}/boost
           rm -rf ${DEPS_DIR}/boost/*
-          # download
+          # Download
           BOOST_BASENAME=$(echo ${BOOST_VERSION} | awk -F '_' '{print $1 "." $2 "." $3 }')
           BOOST_URL="https://dl.bintray.com/boostorg/release/${BOOST_BASENAME}/source/boost_${BOOST_VERSION}.tar.gz"
           travis_retry wget --no-check-certificate --quiet -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${DEPS_DIR}/boost${BOOST_VERSION}
           pushd ${DEPS_DIR}/boost${BOOST_VERSION}
-          # configure and install
+          # Configure and install
           ./bootstrap.sh --prefix=${DEPS_DIR}/boost/ --with-libraries=program_options,filesystem,system,thread,test,timer,chrono
           ./b2 -d0 install
           popd
@@ -382,15 +386,15 @@ script:
     - echo ${CMAKE_OPTIONS}
     - echo ${CXX_FLAGS}
     - if [[ ${TRAVIS_OS_NAME} != "windows" ]]; then cmake -G"${GENERATOR}" ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS="${CXX_FLAGS}" .. ; fi
-    - if [[ ${TRAVIS_OS_NAME} == "windows" ]]; then cmake -G"${GENERATOR} -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DCMAKE_CXX_FLAGS="${CXX_FLAGS}".. ; fi
+    - if [[ ${TRAVIS_OS_NAME} == "windows" ]]; then cmake -G"${GENERATOR}" -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DCMAKE_CXX_FLAGS="${CXX_FLAGS}".. ; fi
     # https://stackoverflow.com/questions/39865367/warning-section-textcoal-nt-is-deprecate-since-updating-to-mac-osx-sierra
     - if [[ ${TRAVIS_OS_NAME} == "osx" ]]; then cmake --build . -j 4 --config Debug 2>&1 | grep -v -e '^/var/folders/*' -e '^[[:space:]]*\.section' -e '^[[:space:]]*\^[[:space:]]*~*' ; fi
     - if [[ ${TRAVIS_OS_NAME} != "osx" ]]; then cmake --build . -j 4 --config Debug ; fi
     - |
       if [[ ${RUN_TESTS} == "true" ]]; then
-        # print OpenCL devices
+        # Print OpenCL devices
         ./example/list_devices
-        # run tests and examples
+        # Run tests and examples
         ctest --output-on-failure --repeat-until-fail 2
       fi
 

@@ -40,6 +40,7 @@ To explicitly enable variadic support for Boost.Preprocessor add
 * POCL (CPUs only)
 * Beignet (Intel GPUs only)
 * Apple (CPUs and GPUs)
+* Xilinx (FPGA)
 
 [endsect]
 
