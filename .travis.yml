@@ -10,6 +10,7 @@ env:
     # Khronos OpenCL ICD
     - OPENCL_REGISTRY=https://www.khronos.org/registry/OpenCL/
     - OPENCL_ROOT=${DEPS_DIR}/opencl
+    - OPENCL_ICD_LIB=${OPENCL_ROOT}/icd/build/lib/libOpenCL.so
     # POCL
     - POCL_BRANCH=release_1_2 # branch/tag
     - POCL_LLVM_VERSION=7.0.0
@@ -19,7 +20,7 @@ env:
     - POCL_C_COMPILER=${DEPS_DIR}/llvm-${POCL_LLVM_VERSION}/bin/clang
     - POCL_OPENCL_LIB=${POCL_ROOT}/lib/libOpenCL.so
     # Global build options and C++ flags
-    - GCC_VERSION=5 
+    - GCC_VERSION=5
     - CMAKE_OPTIONS="-DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_HAVE_OPENCV=ON -DBOOST_COMPUTE_THREAD_SAFE=ON"
     - CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow -DCI_BUILD"
     # Boost
@@ -156,7 +157,7 @@ matrix:
             - python-yaml
             - lcov
             - libopencv-dev
-          sources: &xenial_intel_packages
+          sources: &xenial_intel_sources
             - ubuntu-toolchain-r-test
       env:
         - OPENCL_LIB=intel
@@ -169,7 +170,7 @@ matrix:
       addons:
         apt:
           packages: *xenial_intel_packages
-          sources: *xenial_intel_packages
+          sources: *xenial_intel_sources
       env:
         - OPENCL_LIB=intel
         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
@@ -182,7 +183,7 @@ matrix:
       addons:
         apt:
           packages: *xenial_intel_packages
-          sources: *xenial_intel_packages
+          sources: *xenial_intel_sources
       env:
         - OPENCL_LIB=intel
         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
@@ -194,7 +195,7 @@ matrix:
       addons:
         apt:
           packages: *xenial_intel_packages
-          sources: *xenial_intel_packages
+          sources: *xenial_intel_sources
       env:
         - OPENCL_LIB=intel
         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
@@ -221,7 +222,7 @@ matrix:
       env:
         - OPENCL_LIB=intel
         - BOOST_VERSION="1_67_0"
-        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
+        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=201"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
     # GCC
     - os: linux
@@ -239,7 +240,7 @@ matrix:
         - OPENCL_LIB=intel
         - BOOST_VERSION="1_67_0"
         - COVERAGE=true
-        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
+        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=201"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON -DBOOST_COMPUTE_USE_CPP11=ON"
         - COVERAGE=true
 
@@ -256,15 +257,24 @@ matrix:
        apt:
          packages: &xenial_packages
             - g++-5
+            # Boost
+            - libboost-chrono1.58-dev
+            - libboost-date-time1.58-dev
+            - libboost-test1.58-dev
+            - libboost-system1.58-dev
+            - libboost-filesystem1.58-dev
+            - libboost-timer1.58-dev
+            - libboost-program-options1.58-dev
+            - libboost-thread1.58-dev
             # Misc
             - libopencv-dev
-         sources: &xenial_packages
+         sources: &xenial_sources
            - ubuntu-toolchain-r-test
       env:
         - OPENCL_LIB=khronos-icd
         - RUN_TESTS=false
-        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=202"
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
+        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=202"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ICD_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
     # GCC
     - os: linux
       dist: xenial
@@ -272,12 +282,12 @@ matrix:
       addons:
         apt:
           packages: *xenial_packages
-          sources: *xenial_packages
+          sources: *xenial_sources
       env:
         - OPENCL_LIB=khronos-icd
         - RUN_TESTS=false
-        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
+        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=202"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ICD_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
 
     ############################################################################
     # OSX
@@ -327,7 +337,7 @@ before_install:
 
 install:
     ############################################################################
-    # Download and install recent CMake    
+    # Download and install recent CMake
     ############################################################################
     - |
       if [[ ${TRAVIS_OS_NAME} == "linux" ]]; then
@@ -338,7 +348,7 @@ install:
       fi
 
     ############################################################################
-    # Download and install Boost    
+    # Download and install Boost
     ############################################################################
     - |
       if [[ ${TRAVIS_OS_NAME} == "linux" && ${BOOST_VERSION} != "default" ]]; then
@@ -378,27 +388,21 @@ install:
         popd
       fi
 
-    ############################################################################	
+    ############################################################################
     # Only ICD
-    ############################################################################	
-    - |	
-      if [[ ${TRAVIS_OS_NAME} == "linux" && ${OPENCL_LIB} == "khronos-icd" ]]; then	
-        mkdir -p ${OPENCL_ROOT}	
-        pushd ${OPENCL_ROOT}	
-        travis_retry git clone --depth 1 https://github.com/KhronosGroup/OpenCL-ICD-Loader.git	
-        mv ./OpenCL-ICD-Loader/* .	
-        mkdir -p inc/CL	
-        pushd inc/CL	
-        cp ${OPENCL_ROOT}/include/CL/* .	
-        popd	
-        mkdir -p lib	
-        pushd lib	
-        cmake -G "Unix Makefiles" ..	
-        make	
-        cp ./bin/libOpenCL.so .	
-        popd	
-        popd	
-      fi   
+    ############################################################################
+    - |
+      if [[ ${TRAVIS_OS_NAME} == "linux" && ${OPENCL_LIB} == "khronos-icd" ]]; then
+        mkdir -p ${OPENCL_ROOT}
+        pushd ${OPENCL_ROOT}
+        travis_retry git clone --depth 1 https://github.com/KhronosGroup/OpenCL-ICD-Loader.git icd
+        pushd icd
+        mkdir -p inc/CL
+        cp ${OPENCL_ROOT}/include/CL/* ./inc/CL/
+        make -j2
+        popd
+        popd
+      fi
 
     ############################################################################
     # Build and install POCL https://github.com/pocl/pocl
@@ -411,7 +415,7 @@ install:
           mkdir build
           cd build
           cmake -DDIRECT_LINKAGE=ON -DENABLE_ICD=OFF -DCMAKE_C_COMPILER=${POCL_C_COMPILER} -DCMAKE_CXX_COMPILER=${POCL_CXX_COMPILER} -DWITH_LLVM_CONFIG=${POCL_LLVM_CONFIG} -DCMAKE_INSTALL_PREFIX=${POCL_ROOT}/ ..
-          make install
+          make -j2 install
           cd ../..
         else
           echo 'Using cached POCL lib.'
@@ -426,7 +430,6 @@ install:
         # https://software.intel.com/en-us/articles/opencl-drivers#cpu-section
         PACKAGE_URL=http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/13793/l_opencl_p_18.1.0.013.tgz
         PACKAGE_NAME=l_opencl_p_18.1.0.013
-
         wget -q ${PACKAGE_URL} -O /tmp/opencl_runtime.tgz
         tar -xzf /tmp/opencl_runtime.tgz -C /tmp
         sed 's/decline/accept/g' -i /tmp/${PACKAGE_NAME}/silent.cfg
