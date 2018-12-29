@@ -177,11 +177,14 @@ BOOST_AUTO_TEST_CASE(get_sub_group_info_ext)
         local_work_size
     );
 
+    #ifdef BOOST_COMPUTE_CL_VERSION_2_1
     if(device.check_version(2, 1))
     {
         BOOST_CHECK(count);
     }
-    else if(device.check_version(2, 0) && device.supports_extension("cl_khr_subgroups"))
+    else
+    #endif // BOOST_COMPUTE_CL_VERSION_2_1
+    if(device.check_version(2, 0) && device.supports_extension("cl_khr_subgroups"))
     {
         // for device with cl_khr_subgroups it should return some value
         BOOST_CHECK(count);
@@ -200,11 +203,14 @@ BOOST_AUTO_TEST_CASE(get_sub_group_info_ext)
         &local_work_size[0]
     );
 
+    #ifdef BOOST_COMPUTE_CL_VERSION_2_1
     if(device.check_version(2, 1))
     {
         BOOST_CHECK(count);
     }
-    else if(device.check_version(2, 0) && device.supports_extension("cl_khr_subgroups"))
+    else
+    #endif // BOOST_COMPUTE_CL_VERSION_2_1
+    if(device.check_version(2, 0) && device.supports_extension("cl_khr_subgroups"))
     {
         // for device with cl_khr_subgroups it should return some value
         BOOST_CHECK(count);

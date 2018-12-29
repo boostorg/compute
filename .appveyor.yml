@@ -2,8 +2,7 @@
 environment:
   global:
     BOOST_COMPUTE_DEFAULT_PLATFORM: Intel(R) OpenCL
-    CMAKE_OPTIONS: -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_HAVE_OPENCV=ON 
--DBOOST_COMPUTE_THREAD_SAFE=ON
+    CMAKE_OPTIONS: -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_HAVE_OPENCV=ON -DBOOST_COMPUTE_THREAD_SAFE=ON
     CXXFLAGS: -DBOOST_COMPUTE_MAX_CL_VERSION=201
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
@@ -30,8 +29,7 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
       CMAKE_GENERATOR: Visual Studio 12 2013 Win64
       BOOST_ROOT: C:\Libraries\boost_1_58_0
-      CMAKE_OPTIONS: -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_HAVE_OPENCV=OFF 
--DBOOST_COMPUTE_THREAD_SAFE=ON
+      CMAKE_OPTIONS: -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_HAVE_OPENCV=OFF -DBOOST_COMPUTE_THREAD_SAFE=ON
 
 install:
   # Install OpenCV
@@ -50,26 +48,26 @@ install:
 build_script:
   - sh: clinfo
   - sh: echo ${CMAKE_OPTIONS}
-  - sh: echo ${CXX_FLAGS}
+  - sh: echo ${CXXFLAGS}
   - sh: echo ${CMAKE_GENERATOR}
   - sh: echo ${CC}
   - sh: echo ${CXX}
   - cmd: .\clinfo.exe
   - cmd: echo %CMAKE_OPTIONS%
-  - cmd: echo %CXX_FLAGS%
+  - cmd: echo %CXXFLAGS%
   - cmd: echo %CMAKE_GENERATOR%
   - cmd: echo %CC%
   - cmd: echo %CXX%
   - mkdir build && cd build
   - cmd: cmake -G"%CMAKE_GENERATOR%" %CMAKE_OPTIONS% ..
   - sh: cmake -G"${CMAKE_GENERATOR}" ${CMAKE_OPTIONS} ..
-  - cmake --build . --config Debug -j 4
+  - cmake --build . --config Debug -j 2
 
 test_script:
   - cmd: .\example\Debug\list_devices.exe
   - cmd: .\example\Debug\hello_world.exe
-  - sh: ./example/Debug/list_devices
-  - sh: ./example/Debug/hello_world
+  - sh: ./example/list_devices
+  - sh: ./example/hello_world
   - ctest --output-on-failure --repeat-until-fail 2
 
 for:

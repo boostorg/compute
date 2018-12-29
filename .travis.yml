@@ -11,6 +11,7 @@ env:
     # Khronos OpenCL ICD
     - OPENCL_REGISTRY=https://www.khronos.org/registry/OpenCL/
     - OPENCL_ROOT=${DEPS_DIR}/opencl
+    - OPENCL_ICD_LIB=${OPENCL_ROOT}/icd/build/lib/libOpenCL.so
     # POCL
     - POCL_BRANCH=release_1_2 # branch/tag
     - POCL_LLVM_VERSION=7.0.0
@@ -96,7 +97,7 @@ matrix:
        - OPENCL_LIB=pocl
        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=101"
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # Linux, OpenCL 1.2
+    # Xenial, OpenCL 1.2
     # CLANG
     - os: linux
       compiler: clang
@@ -119,10 +120,10 @@ matrix:
        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
 
     ############################################################################
-    # Intel OpenCL Runtime builds
+    # Intel OpenCL Runtime builds (1.2, 2.0, 2.1)
     ############################################################################
 
-    # Linux, Intel OpenCL 1.2
+    # Xenial, Intel OpenCL 1.2
     # CLANG
     - os: linux
       compiler: clang
@@ -143,7 +144,7 @@ matrix:
         - OPENCL_LIB=intel
         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # Linux, Intel OpenCL 2.0
+    # Xenial, Intel OpenCL 2.0
     # CLANG
     - os: linux
       compiler: clang
@@ -164,7 +165,7 @@ matrix:
         - OPENCL_LIB=intel
         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # Linux, Intel OpenCL 2.1
+    # Xenial, Intel OpenCL 2.1, New Boost Libs, C++11, Coverage
     # CLANG
     - os: linux
       compiler: clang
@@ -201,6 +202,36 @@ matrix:
         - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON -DBOOST_COMPUTE_USE_CPP11=ON"
         - COVERAGE=true
+
+    ############################################################################
+    # OpenCL 2.2 Only Build
+    ############################################################################
+
+    # Linux, OpenCL 2.2, Tests not run, C++11
+    # CLANG
+    - os: linux
+      dist: xenial
+      compiler: clang
+      addons:
+       apt:
+         packages: *xenial_packages
+      env:
+        - OPENCL_LIB=khronos-icd
+        - RUN_TESTS=false
+        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=202"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ICD_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
+    # GCC
+    - os: linux
+      dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          packages: *xenial_packages
+      env:
+        - OPENCL_LIB=khronos-icd
+        - RUN_TESTS=false
+        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=202"
+        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ICD_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
 
     ############################################################################
     # OSX
@@ -267,7 +298,7 @@ matrix:
         # Download clinfo executable and add it to PATH
         - mkdir bin
         - curl -L 'https://ci.appveyor.com/api/projects/oblomov/clinfo/artifacts/clinfo.exe?job=platform:+x64' -o ./bin/clinfo.exe
-        - export PATH=./bin/:PATH
+        - export PATH=./bin/:$PATH
 
 cache:
   directories:
@@ -289,16 +320,12 @@ before_install:
         fi
       fi
     - gem install coveralls-lcov
-
-    # Combine global build options with OS/compiler-dependent options
-    - export CMAKE_OPTIONS=${CMAKE_OPTIONS}" "${ENV_CMAKE_OPTIONS}
-    - export CXXFLAGS=${CXX_FLAGS}" "${ENV_CXX_FLAGS}
     # Pick correct compiler on OSX
     - eval "${MATRIX_EVAL}"
 
 install:
     ############################################################################
-    # Download and install recent CMake    
+    # Download and install recent CMake
     ############################################################################
     - |
       if [[ ${TRAVIS_OS_NAME} == "linux" ]]; then
@@ -309,7 +336,7 @@ install:
       fi
 
     ############################################################################
-    # Download and install Boost    
+    # Download and install Boost
     ############################################################################
     - |
       if [[ ${TRAVIS_OS_NAME} == "linux" && ${BOOST_VERSION} != "default" ]]; then
@@ -349,6 +376,22 @@ install:
       fi
 
     ############################################################################
+    # Only ICD
+    ############################################################################
+    - |
+      if [[ ${TRAVIS_OS_NAME} == "linux" && ${OPENCL_LIB} == "khronos-icd" ]]; then
+        mkdir -p ${OPENCL_ROOT}
+        pushd ${OPENCL_ROOT}
+        travis_retry git clone --depth 1 https://github.com/KhronosGroup/OpenCL-ICD-Loader.git icd
+        pushd icd
+        mkdir -p inc/CL
+        cp ${OPENCL_ROOT}/include/CL/* ./inc/CL/
+        make -j2
+        popd
+        popd
+      fi
+
+    ############################################################################
     # Build and install POCL https://github.com/pocl/pocl
     ############################################################################
     - |
@@ -359,7 +402,7 @@ install:
           mkdir build
           cd build
           cmake -DDIRECT_LINKAGE=ON -DENABLE_ICD=OFF -DCMAKE_C_COMPILER=${POCL_C_COMPILER} -DCMAKE_CXX_COMPILER=${POCL_CXX_COMPILER} -DWITH_LLVM_CONFIG=${POCL_LLVM_CONFIG} -DCMAKE_INSTALL_PREFIX=${POCL_ROOT}/ ..
-          make install
+          make -j2 install
           cd ../..
         else
           echo 'Using cached POCL lib.'
@@ -385,8 +428,10 @@ script:
     # Build Boost.Compute tests, benchmarks and examples
     ############################################################################
     - clinfo
-    - mkdir -p build
-    - cd build
+    - mkdir build && cd build
+    # Combine global build options with OS/compiler-dependent options
+    - export CMAKE_OPTIONS=${CMAKE_OPTIONS}" "${ENV_CMAKE_OPTIONS}
+    - export CXXFLAGS=${CXX_FLAGS}" "${ENV_CXX_FLAGS}
     - echo ${CXXFLAGS}
     - echo ${CXX}
     - echo ${CCFLAGS}
@@ -397,7 +442,7 @@ script:
     # https://stackoverflow.com/questions/39865367/warning-section-textcoal-nt-is-deprecate-since-updating-to-mac-osx-sierra
     # Build must be run sequentially or else the grep command will not catch warnings correctly
     - if [[ ${TRAVIS_OS_NAME} == "osx" && ${CC} == "gcc-5" ]]; then cmake --build . --config Debug 2>&1 | grep -v -e '^/var/folders/*' -e '^[[:space:]]*\.section' -e '^[[:space:]]*\^[[:space:]]*~*' ; fi
-    - if [[ ${TRAVIS_OS_NAME} != "osx" || ${CC} != "gcc-5" ]]; then cmake --build . -j 4 --config Debug ; fi
+    - if [[ ${TRAVIS_OS_NAME} != "osx" || ${CC} != "gcc-5" ]]; then cmake --build . -j 2 --config Debug ; fi
     - |
       if [[ ${RUN_TESTS} == "true" ]]; then
         # Print OpenCL devices
