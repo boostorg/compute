@@ -206,7 +206,6 @@ matrix:
     # OSX
     ############################################################################
 
-    # OSX
     # CLANG
     - os: osx
       osx_image: xcode10
@@ -222,6 +221,7 @@ matrix:
           - gcc@5
           - llvm
           - opencv
+          - clinfo
     # GCC
     - os: osx
       osx_image: xcode10
@@ -248,8 +248,9 @@ matrix:
         - OCL_ROOT="$NUGETDIR/opencl-nug.0.777.77/build/native"
       install:
         # Install OpenCV
-        - choco install opencv
+        - choco install opencv --version 3.4.4
         - export OPENCV_DIR=C:/tools/opencv/build/x64/vc15/lib
+        - export PATH=C:/tools/opencv/build/x64/vc15/bin:$PATH
         # Install Boost
         - wget https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.7z
         - 7z x boost_1_67_0.7z -o/C/local
@@ -260,11 +261,13 @@ matrix:
         # Install OpenCL headers and libraries
         - choco install nuget.commandline
         - nuget install opencl-nug -Version 0.777.77 -OutputDirectory $NUGETDIR
+        - ls -l $OCL_ROOT
         # Install OpenCL Runtime
         - choco install opencl-intel-cpu-runtime
-        # Check if it's working
-        - curl -L 'https://ci.appveyor.com/api/projects/oblomov/clinfo/artifacts/clinfo.exe?job=platform:+x64' -o clinfo.exe
-        - ./clinfo.exe
+        # Download clinfo executable and add it to PATH
+        - mkdir bin
+        - curl -L 'https://ci.appveyor.com/api/projects/oblomov/clinfo/artifacts/clinfo.exe?job=platform:+x64' -o ./bin/clinfo.exe
+        - export PATH=./bin/:PATH
 
 cache:
   directories:
@@ -289,7 +292,7 @@ before_install:
 
     # Combine global build options with OS/compiler-dependent options
     - export CMAKE_OPTIONS=${CMAKE_OPTIONS}" "${ENV_CMAKE_OPTIONS}
-    - export CXX_FLAGS=${CXX_FLAGS}" "${ENV_CXX_FLAGS}
+    - export CXXFLAGS=${CXX_FLAGS}" "${ENV_CXX_FLAGS}
     # Pick correct compiler on OSX
     - eval "${MATRIX_EVAL}"
 
@@ -381,15 +384,20 @@ script:
     ############################################################################
     # Build Boost.Compute tests, benchmarks and examples
     ############################################################################
+    - clinfo
     - mkdir -p build
     - cd build
+    - echo ${CXXFLAGS}
+    - echo ${CXX}
+    - echo ${CCFLAGS}
+    - echo ${CC}
+    - echo ${GENERATOR}
     - echo ${CMAKE_OPTIONS}
-    - echo ${CXX_FLAGS}
-    - if [[ ${TRAVIS_OS_NAME} != "windows" ]]; then cmake -G"${GENERATOR}" ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS="${CXX_FLAGS}" .. ; fi
-    - if [[ ${TRAVIS_OS_NAME} == "windows" ]]; then cmake -G"${GENERATOR}" ${CMAKE_OPTIONS} .. ; fi
+    - cmake -G"${GENERATOR}" ${CMAKE_OPTIONS} ..
     # https://stackoverflow.com/questions/39865367/warning-section-textcoal-nt-is-deprecate-since-updating-to-mac-osx-sierra
-    - if [[ ${TRAVIS_OS_NAME} == "osx" ]]; then cmake --build . -j 4 --config Debug 2>&1 | grep -v -e '^/var/folders/*' -e '^[[:space:]]*\.section' -e '^[[:space:]]*\^[[:space:]]*~*' ; fi
-    - if [[ ${TRAVIS_OS_NAME} != "osx" ]]; then cmake --build . -j 4 --config Debug ; fi
+    # Build must be run sequentially or else the grep command will not catch warnings correctly
+    - if [[ ${TRAVIS_OS_NAME} == "osx" && ${CC} == "gcc-5" ]]; then cmake --build . --config Debug 2>&1 | grep -v -e '^/var/folders/*' -e '^[[:space:]]*\.section' -e '^[[:space:]]*\^[[:space:]]*~*' ; fi
+    - if [[ ${TRAVIS_OS_NAME} != "osx" || ${CC} != "gcc-5" ]]; then cmake --build . -j 4 --config Debug ; fi
     - |
       if [[ ${RUN_TESTS} == "true" ]]; then
         # Print OpenCL devices
@@ -397,7 +405,6 @@ script:
         # Run tests and examples
         ctest --output-on-failure --repeat-until-fail 2
       fi
-
 after_success:
     - |
       if [[ ${COVERAGE} == "true" ]]; then
