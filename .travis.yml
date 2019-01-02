@@ -31,207 +31,207 @@ env:
     - COVERAGE=false
 
 matrix:
-  include:
-    ############################################################################
-    # POCL builds (OpenCL 1.0, 1.1, 1.2)
-    ############################################################################
+   include:
+#     ############################################################################
+#     # POCL builds (OpenCL 1.0, 1.1, 1.2)
+#     ############################################################################
 
-    # Xenial, OpenCL 1.0
-    # CLANG
-    - os: linux
-      compiler: clang
-      addons:
-        apt:
-          packages: &xenial_packages
-            # POCL
-            - libltdl-dev
-            - libhwloc-dev
-            - pkg-config
-            - libedit-dev
-            # Boost
-            - libboost-chrono1.58-dev
-            - libboost-date-time1.58-dev
-            - libboost-test1.58-dev
-            - libboost-system1.58-dev
-            - libboost-filesystem1.58-dev
-            - libboost-timer1.58-dev
-            - libboost-program-options1.58-dev
-            - libboost-thread1.58-dev
-            # Misc
-            - python-yaml
-            - lcov
-            - libopencv-dev
-            - clinfo
-      env:
-       - OPENCL_LIB=pocl
-       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=100"
-       - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # GCC
-    - os: linux
-      compiler: gcc
-      addons:
-        apt:
-          packages: *xenial_packages
-      env:
-       - OPENCL_LIB=pocl
-       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=100"
-       - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # Xenial, OpenCL 1.1
-    # CLANG
-    - os: linux
-      compiler: clang
-      addons:
-        apt:
-          packages: *xenial_packages
-      env:
-       - OPENCL_LIB=pocl
-       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=101"
-       - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # GCC
-    - os: linux
-      compiler: gcc
-      addons:
-        apt:
-          packages: *xenial_packages
-      env:
-       - OPENCL_LIB=pocl
-       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=101"
-       - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # Xenial, OpenCL 1.2
-    # CLANG
-    - os: linux
-      compiler: clang
-      addons:
-        apt:
-          packages: *xenial_packages
-      env:
-       - OPENCL_LIB=pocl
-       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
-       - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # GCC
-    - os: linux
-      compiler: gcc
-      addons:
-        apt:
-          packages: *xenial_packages
-      env:
-       - OPENCL_LIB=pocl
-       - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
-       - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON"
+#     # Xenial, OpenCL 1.0
+#     # CLANG
+#     - os: linux
+#       compiler: clang
+#       addons:
+#         apt:
+#           packages: &xenial_packages
+#             # POCL
+#             - libltdl-dev
+#             - libhwloc-dev
+#             - pkg-config
+#             - libedit-dev
+#             # Boost
+#             - libboost-chrono1.58-dev
+#             - libboost-date-time1.58-dev
+#             - libboost-test1.58-dev
+#             - libboost-system1.58-dev
+#             - libboost-filesystem1.58-dev
+#             - libboost-timer1.58-dev
+#             - libboost-program-options1.58-dev
+#             - libboost-thread1.58-dev
+#             # Misc
+#             - python-yaml
+#             - lcov
+#             - libopencv-dev
+#             - clinfo
+#       env:
+#        - OPENCL_LIB=pocl
+#        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=100"
+#        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+#     # GCC
+#     - os: linux
+#       compiler: gcc
+#       addons:
+#         apt:
+#           packages: *xenial_packages
+#       env:
+#        - OPENCL_LIB=pocl
+#        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=100"
+#        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+#     # Xenial, OpenCL 1.1
+#     # CLANG
+#     - os: linux
+#       compiler: clang
+#       addons:
+#         apt:
+#           packages: *xenial_packages
+#       env:
+#        - OPENCL_LIB=pocl
+#        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=101"
+#        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+#     # GCC
+#     - os: linux
+#       compiler: gcc
+#       addons:
+#         apt:
+#           packages: *xenial_packages
+#       env:
+#        - OPENCL_LIB=pocl
+#        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=101"
+#        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+#     # Xenial, OpenCL 1.2
+#     # CLANG
+#     - os: linux
+#       compiler: clang
+#       addons:
+#         apt:
+#           packages: *xenial_packages
+#       env:
+#        - OPENCL_LIB=pocl
+#        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
+#        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+#     # GCC
+#     - os: linux
+#       compiler: gcc
+#       addons:
+#         apt:
+#           packages: *xenial_packages
+#       env:
+#        - OPENCL_LIB=pocl
+#        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
+#        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${POCL_OPENCL_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_ENABLE_COVERAGE=ON"
 
-    ############################################################################
-    # Intel OpenCL Runtime builds (1.2, 2.0, 2.1)
-    ############################################################################
+#     ############################################################################
+#     # Intel OpenCL Runtime builds (1.2, 2.0, 2.1)
+#     ############################################################################
 
-    # Xenial, Intel OpenCL 1.2
-    # CLANG
-    - os: linux
-      compiler: clang
-      addons:
-        apt:
-          packages: *xenial_packages
-      env:
-        - OPENCL_LIB=intel
-        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # GCC
-    - os: linux
-      compiler: gcc
-      addons:
-        apt:
-          packages: *xenial_packages
-      env:
-        - OPENCL_LIB=intel
-        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # Xenial, Intel OpenCL 2.0
-    # CLANG
-    - os: linux
-      compiler: clang
-      addons:
-        apt:
-          packages: *xenial_packages
-      env:
-        - OPENCL_LIB=intel
-        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # GCC
-    - os: linux
-      compiler: gcc
-      addons:
-        apt:
-          packages: *xenial_packages
-      env:
-        - OPENCL_LIB=intel
-        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
-    # Xenial, Intel OpenCL 2.1, New Boost Libs, C++11, Coverage
-    # CLANG
-    - os: linux
-      compiler: clang
-      cache:
-        ccache: true
-        directories:
-          - ${DEPS_DIR}/boost
-      addons:
-       apt:
-         packages: &xenial_intel_latest_boost_packages
-           # Misc
-           - python-yaml
-           - lcov
-           - libopencv-dev
-           - clinfo
-      env:
-        - OPENCL_LIB=intel
-        - BOOST_VERSION="1_67_0"
-        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
-    # GCC
-    - os: linux
-      compiler: gcc
-      cache:
-        ccache: true
-        directories:
-          - ${DEPS_DIR}/boost
-      addons:
-        apt:
-          packages: *xenial_intel_latest_boost_packages
-      env:
-        - OPENCL_LIB=intel
-        - BOOST_VERSION="1_67_0"
-        - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
-        - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON -DBOOST_COMPUTE_ENABLE_COVERAGE=ON" 
-        - COVERAGE=true
+#     # Xenial, Intel OpenCL 1.2
+#     # CLANG
+#     - os: linux
+#       compiler: clang
+#       addons:
+#         apt:
+#           packages: *xenial_packages
+#       env:
+#         - OPENCL_LIB=intel
+#         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
+#         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+#     # GCC
+#     - os: linux
+#       compiler: gcc
+#       addons:
+#         apt:
+#           packages: *xenial_packages
+#       env:
+#         - OPENCL_LIB=intel
+#         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=102"
+#         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+#     # Xenial, Intel OpenCL 2.0
+#     # CLANG
+#     - os: linux
+#       compiler: clang
+#       addons:
+#         apt:
+#           packages: *xenial_packages
+#       env:
+#         - OPENCL_LIB=intel
+#         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
+#         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+#     # GCC
+#     - os: linux
+#       compiler: gcc
+#       addons:
+#         apt:
+#           packages: *xenial_packages
+#       env:
+#         - OPENCL_LIB=intel
+#         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=200"
+#         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include"
+#     # Xenial, Intel OpenCL 2.1, New Boost Libs, C++11, Coverage
+#     # CLANG
+#     - os: linux
+#       compiler: clang
+#       cache:
+#         ccache: true
+#         directories:
+#           - ${DEPS_DIR}/boost
+#       addons:
+#        apt:
+#          packages: &xenial_intel_latest_boost_packages
+#            # Misc
+#            - python-yaml
+#            - lcov
+#            - libopencv-dev
+#            - clinfo
+#       env:
+#         - OPENCL_LIB=intel
+#         - BOOST_VERSION="1_67_0"
+#         - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
+#         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
+#     # GCC
+#     - os: linux
+#       compiler: gcc
+#       cache:
+#         ccache: true
+#         directories:
+#           - ${DEPS_DIR}/boost
+#       addons:
+#         apt:
+#           packages: *xenial_intel_latest_boost_packages
+#       env:
+#         - OPENCL_LIB=intel
+#         - BOOST_VERSION="1_67_0"
+#         - ENV_CXX_FLAGS="-DBOOST_COMPUTE_MAX_CL_VERSION=201"
+#         - ENV_CMAKE_OPTIONS="-DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON -DBOOST_COMPUTE_ENABLE_COVERAGE=ON" 
+#         - COVERAGE=true
 
-    ############################################################################
-    # OpenCL 2.2 Only Build
-    ############################################################################
+#     ############################################################################
+#     # OpenCL 2.2 Only Build
+#     ############################################################################
 
-    # Linux, OpenCL 2.2, Tests not run, C++11
-    # CLANG
-    - os: linux
-      dist: xenial
-      compiler: clang
-      addons:
-       apt:
-         packages: *xenial_packages
-      env:
-        - OPENCL_LIB=khronos-icd
-        - RUN_TESTS=false
-        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=202"
-        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ICD_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
-    # GCC
-    - os: linux
-      dist: xenial
-      compiler: gcc
-      addons:
-        apt:
-          packages: *xenial_packages
-      env:
-        - OPENCL_LIB=khronos-icd
-        - RUN_TESTS=false
-        - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=202"
-        - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ICD_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
+#     # Linux, OpenCL 2.2, Tests not run, C++11
+#     # CLANG
+#     - os: linux
+#       dist: xenial
+#       compiler: clang
+#       addons:
+#        apt:
+#          packages: *xenial_packages
+#       env:
+#         - OPENCL_LIB=khronos-icd
+#         - RUN_TESTS=false
+#         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=202"
+#         - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ICD_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
+#     # GCC
+#     - os: linux
+#       dist: xenial
+#       compiler: gcc
+#       addons:
+#         apt:
+#           packages: *xenial_packages
+#       env:
+#         - OPENCL_LIB=khronos-icd
+#         - RUN_TESTS=false
+#         - ENV_CXX_FLAGS="-Wno-unused-local-typedef -DBOOST_COMPUTE_MAX_CL_VERSION=202"
+#         - ENV_CMAKE_OPTIONS="-DOpenCL_LIBRARY=${OPENCL_ICD_LIB} -DOpenCL_INCLUDE_DIR=${OPENCL_ROOT}/include -DBOOST_COMPUTE_USE_CPP11=ON"
 
     ############################################################################
     # OSX
@@ -257,15 +257,16 @@ matrix:
     - os: osx
       osx_image: xcode10
       compiler: gcc
+      cache:
+        ccache: true
+        directories:
+          - /usr/local/Cellar/boost@1.57
       env:
         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+        - BOOST_VERSION="1.57"
       addons:
        homebrew:
          packages: *osx_packages
-      install:
-        - brew uninstall boost --ignore-dependencies
-        - travis_wait 50 brew install boost@1.57 --cc=gcc-5
-        - brew link boost@1.57 --force
 
     ############################################################################
     # Windows
@@ -360,6 +361,15 @@ install:
           echo 'Using cached Boost ${BOOST_VERSION} libraries.'
         fi
         export CMAKE_OPTIONS=${CMAKE_OPTIONS}" -DBOOST_ROOT=${DEPS_DIR}/boost"
+      elif [[ ${TRAVIS_OS_NAME} == "osx" && ${BOOST_VERSION} != "default" ]]; then
+        if [ ! -f "/usr/local/Cellar/boost@{BOOST_VERSION}/cached" ]; then
+          brew uninstall boost --ignore-dependencies
+          travis_wait 50 brew install boost@{BOOST_VERSION} --cc=gcc-5
+          touch /usr/local/Cellar/boost@{BOOST_VERSION}/cached
+        else
+          echo 'Using cached Boost ${BOOST_VERSION} libraries.'
+        fi
+        brew link boost@1.57 --force
       fi
 
     ############################################################################
@@ -427,6 +437,7 @@ script:
     ############################################################################
     # Build Boost.Compute tests, benchmarks and examples
     ############################################################################
+    - lscpu
     - clinfo
     - mkdir build && cd build
     # Combine global build options with OS/compiler-dependent options
