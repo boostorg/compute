@@ -362,10 +362,10 @@ install:
         fi
         export CMAKE_OPTIONS=${CMAKE_OPTIONS}" -DBOOST_ROOT=${DEPS_DIR}/boost"
       elif [[ ${TRAVIS_OS_NAME} == "osx" && ${BOOST_VERSION} != "default" ]]; then
-        if [ ! -f "/usr/local/Cellar/boost@{BOOST_VERSION}/cached" ]; then
+        if [ ! -f "/usr/local/Cellar/boost@${BOOST_VERSION}/cached" ]; then
           brew uninstall boost --ignore-dependencies
-          travis_wait 50 brew install boost@{BOOST_VERSION} --cc=gcc-5
-          touch /usr/local/Cellar/boost@{BOOST_VERSION}/cached
+          travis_wait 50 brew install boost@${BOOST_VERSION} --cc=gcc-5
+          touch /usr/local/Cellar/boost@${BOOST_VERSION}/cached
         else
           echo 'Using cached Boost ${BOOST_VERSION} libraries.'
         fi
@@ -437,7 +437,7 @@ script:
     ############################################################################
     # Build Boost.Compute tests, benchmarks and examples
     ############################################################################
-    - lscpu
+    - wmic cpu list config
     - clinfo
     - mkdir build && cd build
     # Combine global build options with OS/compiler-dependent options
