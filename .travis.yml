@@ -362,8 +362,8 @@ install:
         fi
         export CMAKE_OPTIONS=${CMAKE_OPTIONS}" -DBOOST_ROOT=${DEPS_DIR}/boost"
       elif [[ ${TRAVIS_OS_NAME} == "osx" && ${BOOST_VERSION} != "default" ]]; then
-        if [ ! -f "/usr/local/Cellar/boost@${BOOST_VERSION}/cached" ]; then
           brew uninstall boost --ignore-dependencies
+        if [ ! -f "/usr/local/Cellar/boost@${BOOST_VERSION}/cached" ]; then
           travis_wait 50 brew install boost@${BOOST_VERSION} --cc=gcc-5
           touch /usr/local/Cellar/boost@${BOOST_VERSION}/cached
         else
@@ -437,7 +437,7 @@ script:
     ############################################################################
     # Build Boost.Compute tests, benchmarks and examples
     ############################################################################
-    - if [[ ${TRAVIS_OS_NAME} == "windows" ]]; then wmic cpu list config > something.txt && cat something.txt; fi
+    - if [[ ${TRAVIS_OS_NAME} == "windows" ]]; then wmic cpu list full; fi
     - clinfo
     - mkdir build && cd build
     # Combine global build options with OS/compiler-dependent options
