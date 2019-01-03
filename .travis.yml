@@ -437,7 +437,7 @@ script:
     ############################################################################
     # Build Boost.Compute tests, benchmarks and examples
     ############################################################################
-    - wmic cpu list config
+    - if [[ ${TRAVIS_OS_NAME} == "windows" ]]; then wmic cpu list config > something.txt && cat something.txt; fi
     - clinfo
     - mkdir build && cd build
     # Combine global build options with OS/compiler-dependent options
