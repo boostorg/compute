@@ -176,8 +176,10 @@ const char radix_sort_source[] =
 "    uint sum = 0;\n"
 "    for(uint i = 0; i < K2_BITS; i++){\n"
 "        uint x = global_offsets[i] + last_block_offsets[i];\n"
+"        mem_fence(CLK_GLOBAL_MEM_FENCE);\n" // work around the RX 500/Vega bug, see #811
 "        global_offsets[i] = sum;\n"
 "        sum += x;\n"
+"        mem_fence(CLK_GLOBAL_MEM_FENCE);\n" // work around the RX Vega bug, see #811
 "    }\n"
 "}\n"
 
