@@ -216,7 +216,7 @@ struct closure_signature_argument_inserter
         BOOST_ASSERT(capture_string[0] == '(' &&
                      capture_string[capture_string_length-1] == ')');
         std::string capture_string_(capture_string + 1, capture_string_length - 2);
-        boost::split(m_capture_names, capture_string_ , boost::is_any_of(","));
+        boost::split(m_capture_names, capture_string_ , boost::is_any_of(", "), boost::algorithm::token_compress_on);
     }
 
     template<class T>
@@ -226,9 +226,6 @@ struct closure_signature_argument_inserter
 
         // get captured variable name
         std::string variable_name = m_capture_names[n];
-
-        // remove leading and trailing whitespace from variable name
-        boost::trim(variable_name);
 
         s << capture_traits<T>::type_name() << " " << variable_name;
         if(n+1 < m_last){
