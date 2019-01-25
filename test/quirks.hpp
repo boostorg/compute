@@ -42,14 +42,18 @@ inline bool bug_in_struct_assignment(const boost::compute::device &device)
 
 // clEnqueueSVMMemcpy() operation does not work on AMD devices. This affects
 // copy() algorithm. This bug was fixed in AMD drivers for Windows.
+// Also it doesn't work on Intel GPUs
+// (returns INVALID_VALUE for valid parameters).
 //
 // see: https://community.amd.com/thread/190585
+// also: https://github.com/boostorg/compute/issues/818
 inline bool bug_in_svmmemcpy(const boost::compute::device &device)
 {
     #ifdef _WIN32
-    return false;
+    return boost::compute::detail::is_intel_gpu(device);
     #else
-    return boost::compute::detail::is_amd_device(device);
+    return boost::compute::detail::is_amd_device(device) ||
+        boost::compute::detail::is_intel_gpu(device);
     #endif
 }
 
