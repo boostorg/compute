@@ -56,7 +56,7 @@ class kernel;
 ///     boost::compute::program::create_with_source_file("/path/to/bar.cl", context);
 /// \endcode
 ///
-/// Once a program object has been succesfully created, it can be compiled
+/// Once a program object has been successfully created, it can be compiled
 /// using the \c build() method:
 /// \code
 /// // build the program
