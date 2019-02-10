@@ -29,7 +29,8 @@ template<class DeviceIterator, class HostIterator>
 inline HostIterator copy_to_host(DeviceIterator first,
                                  DeviceIterator last,
                                  HostIterator result,
-                                 command_queue &queue)
+                                 command_queue &queue,
+                                 const wait_list &events)
 {
     typedef typename
         std::iterator_traits<DeviceIterator>::value_type
@@ -46,7 +47,8 @@ inline HostIterator copy_to_host(DeviceIterator first,
     queue.enqueue_read_buffer(buffer,
                               offset * sizeof(value_type),
                               count * sizeof(value_type),
-                              ::boost::addressof(*result));
+                              ::boost::addressof(*result),
+                              events);
 
     return iterator_plus_distance(result, count);
 }
@@ -55,7 +57,8 @@ template<class DeviceIterator, class HostIterator>
 inline HostIterator copy_to_host_map(DeviceIterator first,
                                      DeviceIterator last,
                                      HostIterator result,
-                                     command_queue &queue)
+                                     command_queue &queue,
+                                     const wait_list &events)
 {
     typedef typename
         std::iterator_traits<DeviceIterator>::value_type
@@ -77,7 +80,8 @@ inline HostIterator copy_to_host_map(DeviceIterator first,
             first.get_buffer(),
             CL_MAP_READ,
             offset * sizeof(value_type),
-            count * sizeof(value_type)
+            count * sizeof(value_type),
+            events
         )
     );
 
@@ -102,7 +106,8 @@ template<class DeviceIterator, class HostIterator>
 inline future<HostIterator> copy_to_host_async(DeviceIterator first,
                                                DeviceIterator last,
                                                HostIterator result,
-                                               command_queue &queue)
+                                               command_queue &queue,
+                                               const wait_list &events)
 {
     typedef typename
         std::iterator_traits<DeviceIterator>::value_type
@@ -120,7 +125,8 @@ inline future<HostIterator> copy_to_host_async(DeviceIterator first,
         queue.enqueue_read_buffer_async(buffer,
                                         offset * sizeof(value_type),
                                         count * sizeof(value_type),
-                                        ::boost::addressof(*result));
+                                        ::boost::addressof(*result),
+                                        events);
 
     return make_future(iterator_plus_distance(result, count), event_);
 }
@@ -131,7 +137,8 @@ template<class T, class HostIterator>
 inline HostIterator copy_to_host(svm_ptr<T> first,
                                  svm_ptr<T> last,
                                  HostIterator result,
-                                 command_queue &queue)
+                                 command_queue &queue,
+                                 const wait_list &events)
 {
     size_t count = iterator_range_size(first, last);
     if(count == 0){
@@ -139,7 +146,7 @@ inline HostIterator copy_to_host(svm_ptr<T> first,
     }
 
     queue.enqueue_svm_memcpy(
-        ::boost::addressof(*result), first.get(), count * sizeof(T)
+        ::boost::addressof(*result), first.get(), count * sizeof(T), events
     );
 
     return result + count;
@@ -149,7 +156,8 @@ template<class T, class HostIterator>
 inline future<HostIterator> copy_to_host_async(svm_ptr<T> first,
                                                svm_ptr<T> last,
                                                HostIterator result,
-                                               command_queue &queue)
+                                               command_queue &queue,
+                                               const wait_list &events)
 {
     size_t count = iterator_range_size(first, last);
     if(count == 0){
@@ -157,7 +165,7 @@ inline future<HostIterator> copy_to_host_async(svm_ptr<T> first,
     }
 
     event event_ = queue.enqueue_svm_memcpy_async(
-        ::boost::addressof(*result), first.get(), count * sizeof(T)
+        ::boost::addressof(*result), first.get(), count * sizeof(T), events
     );
 
     return make_future(iterator_plus_distance(result, count), event_);
@@ -167,7 +175,8 @@ template<class T, class HostIterator>
 inline HostIterator copy_to_host_map(svm_ptr<T> first,
                                      svm_ptr<T> last,
                                      HostIterator result,
-                                     command_queue &queue)
+                                     command_queue &queue,
+                                     const wait_list &events)
 {
     size_t count = iterator_range_size(first, last);
     if(count == 0){
@@ -175,7 +184,7 @@ inline HostIterator copy_to_host_map(svm_ptr<T> first,
     }
 
     // map
-    queue.enqueue_svm_map(first.get(), count * sizeof(T), CL_MAP_READ);
+    queue.enqueue_svm_map(first.get(), count * sizeof(T), CL_MAP_READ, events);
 
     // copy [first; last) to result
     std::copy(
