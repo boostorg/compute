@@ -44,33 +44,91 @@ typedef cl_double double_;
 #define BOOST_COMPUTE_MAKE_VECTOR_TYPE(scalar, size) \
     BOOST_PP_CAT(BOOST_PP_CAT(::boost::compute::scalar, size), _)
 
+namespace detail {
+
+// specialized vector_type base classes that provide the
+// (x,y), (x,y,z,w), (s0..s7), (s0..sf) accessors
+template<class Scalar, size_t N> class vector_type_desc;
+
+template<class Scalar>
+class vector_type_desc<Scalar, 2>
+{
+public:
+    Scalar x, y;
+
+    Scalar& operator[](size_t i)
+    {
+        return (&x)[i];
+    }
+
+    const Scalar operator[](size_t i) const
+    {
+        return (&x)[i];
+    }
+};
+
+template<class Scalar>
+class vector_type_desc<Scalar, 4> : public vector_type_desc<Scalar, 2>
+{
+public:
+    Scalar z, w;
+};
+
+template<class Scalar>
+class vector_type_desc<Scalar, 8>
+{
+public:
+    Scalar s0, s1, s2, s3, s4, s5, s6, s7;
+
+    Scalar& operator[](size_t i)
+    {
+        return (&s0)[i];
+    }
+
+    const Scalar operator[](size_t i) const
+    {
+        return (&s0)[i];
+    }
+};
+
+template<class Scalar>
+class vector_type_desc<Scalar, 16> : public vector_type_desc<Scalar, 8>
+{
+public:
+    Scalar s8, s9, sa, sb, sc, sd, se, sf;
+};
+
+} // end detail namespace
+
 // vector data types
 template<class Scalar, size_t N>
-class vector_type
+class vector_type : public detail::vector_type_desc<Scalar, N>
 {
+    typedef detail::vector_type_desc<Scalar, N> base_type;
 public:
     typedef Scalar scalar_type;
 
     vector_type()
-        : m_value()
+        : base_type()
     {
+        BOOST_STATIC_ASSERT(sizeof(Scalar) * N == sizeof(vector_type<Scalar, N>));
     }
 
     explicit vector_type(const Scalar scalar)
     {
         for(size_t i = 0; i < N; i++)
-            m_value[i] = scalar;
+            (*this)[i] = scalar;
     }
 
     vector_type(const vector_type<Scalar, N> &other)
     {
-        std::memcpy(m_value, other.m_value, sizeof(m_value));
+        std::memcpy(this, &other, sizeof(Scalar) * N);
     }
 
     vector_type<Scalar, N>&
     operator=(const vector_type<Scalar, N> &other)
     {
-        std::memcpy(m_value, other.m_value, sizeof(m_value));
+        std::memcpy(this, &other, sizeof(Scalar) * N);
         return *this;
     }
 
@@ -79,28 +137,15 @@ public:
         return N;
     }
 
-    Scalar& operator[](size_t i)
-    {
-        return m_value[i];
-    }
-
-    Scalar operator[](size_t i) const
-    {
-        return m_value[i];
-    }
-
     bool operator==(const vector_type<Scalar, N> &other) const
     {
-        return std::memcmp(m_value, other.m_value, sizeof(m_value)) == 0;
+        return std::memcmp(this, &other, sizeof(Scalar) * N) == 0;
     }
 
     bool operator!=(const vector_type<Scalar, N> &other) const
     {
         return !(*this == other);
     }
-
-protected:
-    scalar_type m_value[N];
 };
 
 #define BOOST_COMPUTE_VECTOR_TYPE_CTOR_ARG_FUNCTION(z, i, _) \
@@ -108,9 +153,9 @@ protected:
 #define BOOST_COMPUTE_VECTOR_TYPE_DECLARE_CTOR_ARGS(scalar, size) \
     BOOST_PP_REPEAT(size, BOOST_COMPUTE_VECTOR_TYPE_CTOR_ARG_FUNCTION, _)
 #define BOOST_COMPUTE_VECTOR_TYPE_ASSIGN_CTOR_ARG(z, i, _) \
-    m_value[i] = BOOST_PP_CAT(arg, i);
+    (*this)[i] = BOOST_PP_CAT(arg, i);
 #define BOOST_COMPUTE_VECTOR_TYPE_ASSIGN_CTOR_SINGLE_ARG(z, i, _) \
-    m_value[i] = arg;
+    (*this)[i] = arg;
 
 #define BOOST_COMPUTE_DECLARE_VECTOR_TYPE_CLASS(cl_scalar, size, class_name) \
     class class_name : public vector_type<cl_scalar, size> \
