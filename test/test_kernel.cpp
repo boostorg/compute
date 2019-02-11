@@ -121,8 +121,8 @@ BOOST_AUTO_TEST_CASE(kernel_set_args_mac)
         "__kernel void test(unsigned int a, unsigned long b) { }", "test", context
     );
 
-    unsigned int a;
-    unsigned long b;
+    compute::uint_  a;
+    compute::ulong_ b;
 
     k.set_arg(0, a);
     k.set_arg(1, b);
