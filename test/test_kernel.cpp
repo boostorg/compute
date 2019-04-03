@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE(arity)
 BOOST_AUTO_TEST_CASE(set_buffer_arg)
 {
     const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
-        __kernel void foo(__global int *x, __global int *y)
+        __kernel void foo(__global int *x, __global int *y, __global int *z)
         {
             x[get_global_id(0)] = -y[get_global_id(0)];
         }
@@ -70,6 +70,11 @@ BOOST_AUTO_TEST_CASE(set_buffer_arg)
 
     foo.set_arg(0, x);
     foo.set_arg(1, y.get());
+#ifdef BOOST_COMPUTE_USE_CPP11
+    foo.set_arg(2, nullptr);
+#else
+    foo.set_arg(2, sizeof(cl_mem), 0);
+#endif
 }
 
 BOOST_AUTO_TEST_CASE(get_work_group_info)
@@ -107,10 +112,10 @@ BOOST_AUTO_TEST_CASE(get_work_group_info)
 BOOST_AUTO_TEST_CASE(kernel_set_args)
 {
     compute::kernel k = compute::kernel::create_with_source(
-        "__kernel void test(int x, float y, char z) { }", "test", context
+        "__kernel void test(int x, float y, char z, __global int* w) { }", "test", context
     );
 
-    k.set_args(4, 2.4f, 'a');
+    k.set_args(4, 2.4f, 'a', nullptr);
 }
 #endif // BOOST_COMPUTE_NO_VARIADIC_TEMPLATES
 

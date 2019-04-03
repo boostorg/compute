@@ -363,6 +363,11 @@ public:
     /// // set argument to a local buffer with storage for 32 float's
     /// kernel.set_arg(0, local_buffer<float>(32));
     /// \endcode
+    ///
+    /// For setting NULL to global and constant memory arguments (C++11):
+    /// \code
+    /// kernel.set_arg(0, nullptr);
+    /// \endcode
     template<class T>
     void set_arg(size_t index, const T &value)
     {
@@ -370,6 +375,14 @@ public:
         // attempted to set a kernel argument from an invalid type.
         detail::set_kernel_arg<T>()(*this, index, value);
     }
+
+    #ifdef BOOST_COMPUTE_USE_CPP11
+    /// \overload
+    void set_arg(size_t index, std::nullptr_t nul)
+    {
+        set_arg(index, sizeof(cl_mem), NULL);
+    }
+    #endif
 
     /// \internal_
     void set_arg(size_t index, const cl_mem mem)
