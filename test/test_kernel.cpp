@@ -70,11 +70,11 @@ BOOST_AUTO_TEST_CASE(set_buffer_arg)
 
     foo.set_arg(0, x);
     foo.set_arg(1, y.get());
-#ifdef BOOST_COMPUTE_USE_CPP11
+#ifndef BOOST_NO_CXX11_NULLPTR
     foo.set_arg(2, nullptr);
 #else
     foo.set_arg(2, sizeof(cl_mem), 0);
-#endif
+#endif // BOOST_NO_CXX11_NULLPTR
 }
 
 BOOST_AUTO_TEST_CASE(get_work_group_info)

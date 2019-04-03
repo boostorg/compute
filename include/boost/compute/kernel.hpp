@@ -376,13 +376,13 @@ public:
         detail::set_kernel_arg<T>()(*this, index, value);
     }
 
-    #ifdef BOOST_COMPUTE_USE_CPP11
+    #ifndef BOOST_NO_CXX11_NULLPTR
     /// \overload
     void set_arg(size_t index, std::nullptr_t nul)
     {
         set_arg(index, sizeof(cl_mem), NULL);
     }
-    #endif
+    #endif // BOOST_NO_CXX11_NULLPTR
 
     /// \internal_
     void set_arg(size_t index, const cl_mem mem)
