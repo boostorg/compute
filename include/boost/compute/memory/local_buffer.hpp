@@ -88,4 +88,4 @@ struct set_kernel_arg<local_buffer<T> >
 } // end compute namespace
 } // end boost namespace
 
-#endif // BOOST_COMPUTE_MEMORY_SVM_PTR_HPP
+#endif // BOOST_COMPUTE_MEMORY_LOCAL_BUFFER_HPP
