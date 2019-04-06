@@ -17,6 +17,18 @@
 
 #include <boost/throw_exception.hpp>
 
+#if defined(BOOST_COMPUTE_THREAD_SAFE) 
+#  if defined(BOOST_COMPUTE_USE_CPP11)
+#    include <mutex>
+#    include <thread>
+#    include <atomic>
+#  else
+#    include <boost/thread/mutex.hpp>
+#    include <boost/thread/lock_guard.hpp>
+#    include <boost/atomic.hpp>
+#  endif
+#endif 
+
 #include <boost/compute/cl.hpp>
 #include <boost/compute/device.hpp>
 #include <boost/compute/context.hpp>
@@ -24,6 +36,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/getenv.hpp>
 #include <boost/compute/exception/no_device_found.hpp>
+#include <boost/compute/exception/context_error.hpp>
 
 namespace boost {
 namespace compute {
@@ -76,11 +89,13 @@ public:
     /// // print the name of the device
     /// std::cout << "default device: " << device.name() << std::endl;
     /// \endcode
-    static device default_device()
+    static device default_device(device* set_device = 0)
     {
-        static device default_device = find_default_device();
-
-        return default_device;
+#ifdef BOOST_COMPUTE_THREAD_SAFE
+        return default_device_thread_safe_impl(set_device);
+#else
+        return default_device_impl(set_device);
+#endif
     }
 
     /// Returns the device with \p name.
@@ -141,17 +156,20 @@ public:
 
     /// Returns the default context for the system.
     ///
-    /// The default context is created for the default device on the system
-    /// (as returned by default_device()).
+    /// The default context is either created for the default device on the 
+    /// system (as returned by default_device()), or initialized from user-
+    /// provided context.
     ///
     /// The default context is created once on the first time this function is
     /// called. Calling this function multiple times will always result in the
     /// same context object being returned.
-    static context default_context()
+    static context default_context(context* user_context = 0)
     {
-        static context default_context(default_device());
-
-        return default_context;
+#ifdef BOOST_COMPUTE_THREAD_SAFE
+        return default_context_impl_thread_safe(user_context);
+#else // BOOST_COMPUTE_THREAD_SAFE
+        return default_context_impl(user_context);
+#endif // BOOST_COMPUTE_THREAD_SAFE
     }
 
     /// Returns the default command queue for the system.
@@ -280,6 +298,115 @@ private:
     {
         return str.find(pattern) != std::string::npos;
     }
+
+    /// \internal_
+    static inline void check_init(context* user_context)
+    {
+        if (user_context)
+        {
+            device user_device = user_context->get_device();
+            default_device(&user_device);
+
+            if (user_device != default_device())
+            {
+                // Try invoking default_context() before anything else
+                BOOST_THROW_EXCEPTION(context_error(user_context, 
+                    "Error: User CL context mismatches default device",
+                    0, 0));  
+            }
+        }
+    }
+
+    /// \internal_
+    static device default_device_impl(device* set_device = 0)
+    {
+        static device* default_device;
+        
+        if (!default_device)
+        {
+            default_device = new device(
+                set_device ? *set_device : find_default_device()
+            );
+        }
+
+        return *default_device;
+    }
+
+    /// \internal_
+    static context default_context_impl(context* user_context)
+    {
+        static context* default_context;
+
+        if (!default_context)
+        {
+            check_init(user_context);
+            default_context = new context(
+                user_context ? *user_context : context(default_device())
+            );
+        }
+
+        return *default_context;
+    }
+
+#ifdef BOOST_COMPUTE_THREAD_SAFE
+    /// \internal_
+    static device default_device_thread_safe_impl(device* set_device = 0)
+    {
+#ifdef BOOST_COMPUTE_USE_CPP11
+        using namespace std;
+#else // BOOST_COMPUTE_USE_CPP11
+        using namespace boost;
+#endif // BOOST_COMPUTE_USE_CPP11
+        static atomic<device*> default_device;
+        static mutex init_mutex;
+        
+        device* tmp = default_device.load(memory_order_consume);
+        if (!tmp)
+        {
+            lock_guard<mutex> lock(init_mutex);
+            tmp = default_device.load(memory_order_consume);
+            if (!tmp)
+            {
+                tmp = new device(
+                    set_device ? *set_device : find_default_device()
+                );
+                default_device.store(tmp, memory_order_release);
+            }
+        }
+
+        return *tmp;
+    }
+
+    /// \internal_
+    static context default_context_impl_thread_safe(context* user_context = 0)
+    {
+#ifdef BOOST_COMPUTE_USE_CPP11
+        using namespace std;
+#else // BOOST_COMPUTE_USE_CPP11
+        using namespace boost;
+#endif // BOOST_COMPUTE_USE_CPP11
+        static atomic<context*> default_context;
+        static mutex init_mutex;
+
+        context* tmp = default_context.load(memory_order_consume);
+        if (!tmp)
+        {
+            lock_guard<mutex> lock(init_mutex);
+            tmp = default_context.load(memory_order_consume);
+            if (!tmp)
+            {
+                check_init(user_context);
+
+                tmp = new context(user_context ?
+                    *user_context :
+                    context(default_device())
+                );
+                default_context.store(tmp, memory_order_release);
+            }
+        }
+        return *tmp;
+    }
+#endif // BOOST_COMPUTE_THREAD_SAFE
 };
 
 } // end compute namespace

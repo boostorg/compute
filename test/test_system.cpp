@@ -11,6 +11,7 @@
 #define BOOST_TEST_MODULE TestSystem
 #include <boost/test/unit_test.hpp>
 
+#include <boost/compute/context.hpp>
 #include <boost/compute/device.hpp>
 #include <boost/compute/system.hpp>
 
@@ -28,6 +29,25 @@ BOOST_AUTO_TEST_CASE(default_device)
 {
     boost::compute::device device = boost::compute::system::default_device();
     BOOST_CHECK(device.id() != cl_device_id());
+}
+
+BOOST_AUTO_TEST_CASE(user_default_context)
+{
+    boost::compute::device device = boost::compute::system::default_device();
+
+    boost::compute::context context1(device);
+    {
+        boost::compute::system::default_context(&context1);
+        boost::compute::context default_context = boost::compute::system::default_context();
+        BOOST_ASSERT(context1 == default_context);
+    }
+    boost::compute::context context2(device);
+    {
+        boost::compute::system::default_context(&context2); // no longer settable
+        boost::compute::context default_context = boost::compute::system::default_context();
+        BOOST_ASSERT(context2 != default_context);
+        BOOST_ASSERT(context1 == default_context);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(find_device)

@@ -83,6 +83,8 @@ add_compute_test("core.program" test_program.cpp)
 add_compute_test("core.system" test_system.cpp)
 add_compute_test("core.type_traits" test_type_traits.cpp)
 add_compute_test("core.user_event" test_user_event.cpp)
+add_compute_test("core.user_default_context" test_user_context_set_default.cpp)
+add_compute_test("core.user_default_context_thread_safety" test_user_context_thread_safety.cpp)
 
 add_compute_test("utility.extents" test_extents.cpp)
 add_compute_test("utility.invoke" test_invoke.cpp)
