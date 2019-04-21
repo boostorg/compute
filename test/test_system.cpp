@@ -14,25 +14,46 @@
 #include <boost/compute/device.hpp>
 #include <boost/compute/system.hpp>
 
+namespace compute = boost::compute;
+
 BOOST_AUTO_TEST_CASE(platform_count)
 {
-    BOOST_CHECK(boost::compute::system::platform_count() >= 1);
+    BOOST_CHECK(compute::system::platform_count() >= 1);
 }
 
 BOOST_AUTO_TEST_CASE(device_count)
 {
-    BOOST_CHECK(boost::compute::system::device_count() >= 1);
+    BOOST_CHECK(compute::system::device_count() >= 1);
 }
 
 BOOST_AUTO_TEST_CASE(default_device)
 {
-    boost::compute::device device = boost::compute::system::default_device();
+    compute::device device = compute::system::default_device();
     BOOST_CHECK(device.id() != cl_device_id());
 }
 
+BOOST_AUTO_TEST_CASE(user_default_queue)
+{
+    compute::device device = compute::system::default_device();
+    compute::context context = compute::context(device);
+
+    compute::command_queue queue1(context, device);
+    {
+        compute::system::default_queue(&queue1);
+        compute::command_queue default_queue = compute::system::default_queue();
+        BOOST_ASSERT(queue1 == default_queue);
+    }
+    compute::command_queue queue2(context, device);
+    {
+        compute::system::default_queue(&queue2); // no longer settable after first initialization
+        compute::command_queue default_queue = compute::system::default_queue();
+        BOOST_ASSERT(queue2 != default_queue);
+        BOOST_ASSERT(queue1 == default_queue);
+    }
+}
 BOOST_AUTO_TEST_CASE(find_device)
 {
-    boost::compute::device device = boost::compute::system::default_device();
+    compute::device device = compute::system::default_device();
     const std::string &name = device.name();
-    BOOST_CHECK(boost::compute::system::find_device(name).name() == device.name());
+    BOOST_CHECK(compute::system::find_device(name).name() == device.name());
 }
