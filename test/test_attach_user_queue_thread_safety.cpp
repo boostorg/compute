@@ -38,7 +38,7 @@ void attach_user_queue_worker_threads(
 
 BOOST_AUTO_TEST_CASE(user_default_context_thread_safety)
 {
-#ifdef BOOST_COMPUTE_THREAD_SAFE
+#if defined(BOOST_COMPUTE_THREAD_SAFE) && defined(NDEBUG)
     const int num_threads = 16;
 
     compute::command_queue queues[num_threads];
@@ -70,5 +70,5 @@ BOOST_AUTO_TEST_CASE(user_default_context_thread_safety)
     {
         BOOST_CHECK_EQUAL(queues[0].get(), queues[i].get());
     }
-#endif
+#endif // defined(BOOST_COMPUTE_THREAD_SAFE) && defined(NDEBUG)
 }

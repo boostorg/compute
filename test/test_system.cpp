@@ -43,6 +43,7 @@ BOOST_AUTO_TEST_CASE(user_default_queue)
         compute::command_queue default_queue = compute::system::default_queue();
         BOOST_ASSERT(queue1 == default_queue);
     }
+#ifdef NDEBUG
     compute::command_queue queue2(context, device);
     {
         compute::system::default_queue(&queue2); // no longer settable after first initialization
@@ -50,6 +51,7 @@ BOOST_AUTO_TEST_CASE(user_default_queue)
         BOOST_ASSERT(queue2 != default_queue);
         BOOST_ASSERT(queue1 == default_queue);
     }
+#endif
 }
 BOOST_AUTO_TEST_CASE(find_device)
 {
