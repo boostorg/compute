@@ -18,6 +18,7 @@
 #include <boost/compute/config.hpp>
 #include <boost/compute/device.hpp>
 #include <boost/compute/exception/opencl_error.hpp>
+#include <boost/compute/exception/set_default_queue_error.hpp>
 #include <boost/compute/detail/assert_cl_success.hpp>
 
 namespace boost {

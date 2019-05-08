@@ -169,10 +169,16 @@ public:
     /// and default device will be set up appropriately so that the default queue
     /// matches the default context and device.
     ///
+    /// If the OpenCL context and device associated with user-provided command queue 
+    /// does not match the default context and device that have already been set,
+    /// a set_default_queue_error exception is thrown. For example:
+    ///
+    /// \snippet test/test_attach_user_queue_error.cpp queue_mismatch
+    ///
     /// The default queue is created once on the first time this function is
     /// called. Calling this function multiple times will always result in the
     /// same command queue object being returned.
-    static command_queue& default_queue(command_queue* user_queue = 0)
+    static command_queue& default_queue(const command_queue &user_queue = command_queue())
     {
         return init_default_queue(user_queue);
     }
@@ -297,9 +303,10 @@ private:
     }
 
     /// \internal_
-    static device init_default_device(device* user_device = 0)
+    static device init_default_device(const device &user_device = device())
     {
         static device default_device;
+
 #ifdef BOOST_COMPUTE_THREAD_SAFE
     #ifdef BOOST_COMPUTE_USE_CPP11
         using namespace std;
@@ -316,24 +323,24 @@ private:
             is_init_value = is_init.load(memory_order_consume);
             if (!is_init_value)
             {
-                default_device = user_device ? 
-                    *user_device : find_default_device();
+                default_device = user_device.get() ? 
+                    user_device : find_default_device();
 
                 is_init.store(true, memory_order_release);
             }
         }
-#else
+#else // BOOST_COMPUTE_THREAD_SAFE
         if (!default_device.get())
         {
-            default_device = user_device ? 
-                *user_device : find_default_device();
+            default_device = user_device.get() ? 
+                user_device : find_default_device();
         }
-#endif       
+#endif // BOOST_COMPUTE_THREAD_SAFE   
         return default_device;
     }
 
     /// \internal_
-    static context init_default_context(context* user_context = 0)
+    static context init_default_context(const context &user_context = context())
     {
         static context default_context;
 
@@ -353,8 +360,8 @@ private:
             is_init_value = is_init.load(memory_order_consume);
             if (!is_init_value)
             {
-                default_context = user_context ? 
-                    *user_context : context(default_device());
+                default_context = user_context.get() ? 
+                    user_context : context(default_device());
 
                 is_init.store(true, memory_order_release);
             }
@@ -362,31 +369,29 @@ private:
 #else // BOOST_COMPUTE_THREAD_SAFE
         if (!default_context.get())
         {
-            default_context = user_context ?
-                *user_context : context(default_device());
+            default_context = user_context.get() ?
+                user_context : context(default_device());
         }
 #endif // BOOST_COMPUTE_THREAD_SAFE
         return default_context;
     }
 
     /// \internal_
-    static void init_default_device_and_context(command_queue* user_queue)
+    static void init_default_device_and_context(const command_queue &user_queue)
     {
-        device user_device = user_queue->get_device();
-        context user_context = user_queue->get_context();
+        device user_device = user_queue.get_device();
+        context user_context = user_queue.get_context();
 
-        if ( (user_device != init_default_device(&user_device)) ||
-             (user_context != init_default_context(&user_context)) )
+        if ( (user_device != init_default_device(user_device)) ||
+             (user_context != init_default_context(user_context)) )
         {
             // Try invoking default_queue() before anything else
-            BOOST_THROW_EXCEPTION(context_error(&user_context, 
-                "Error: User command queue mismatches default device and/or context",
-                0, 0));  
+            BOOST_THROW_EXCEPTION(set_default_queue_error());  
         }
     }
     
     /// \internal_
-    static command_queue& init_default_queue(command_queue* user_queue = 0)
+    static command_queue& init_default_queue(const command_queue &user_queue = command_queue())
     {
         static command_queue default_queue;
 
@@ -406,11 +411,11 @@ private:
             is_init_value = is_init.load(memory_order_consume);
             if (!is_init_value)
             {
-                if (user_queue)
+                if (user_queue.get())
                     init_default_device_and_context(user_queue);
 
-                default_queue = user_queue ? 
-                    *user_queue : 
+                default_queue = user_queue.get() ? 
+                    user_queue : 
                     command_queue(default_context(), default_device());
 
                 is_init.store(true, memory_order_release);
@@ -419,17 +424,17 @@ private:
 #else // BOOST_COMPUTE_THREAD_SAFE
         if (!default_queue.get())
         {
-            if (user_queue)
+            if (user_queue.get())
                 init_default_device_and_context(user_queue);
 
-            default_queue = user_queue ? 
-                *user_queue :
+            default_queue = user_queue.get() ? 
+                user_queue :
                 command_queue(default_context(), default_device());
         }
 #endif // BOOST_COMPUTE_THREAD_SAFE
         else
         {
-            BOOST_ASSERT_MSG(user_queue == 0, 
+            BOOST_ASSERT_MSG(user_queue.get() == 0, 
                 "Default command queue has already been set.");
         }
         return default_queue;

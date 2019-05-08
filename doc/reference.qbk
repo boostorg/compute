@@ -149,6 +149,8 @@ Header: `<boost/compute/exception.hpp>`
 * [classref boost::compute::no_device_found no_device_found]
 * [classref boost::compute::opencl_error opencl_error]
 * [classref boost::compute::unsupported_extension_error unsupported_extension_error]
+* [classref boost::compute::program_build_failure program_build_failure]
+* [classref boost::compute::set_default_queue_error set_default_queue_error]
 
 [h3 Iterators]
 

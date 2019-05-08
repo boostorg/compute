@@ -20,24 +20,17 @@ namespace compute = boost::compute;
 // For correct usage of setting up global default queue, see test_system.cpp
 BOOST_AUTO_TEST_CASE(user_context_device_mismatch)
 {
+//! [queue_mismatch]
     compute::device user_device = compute::system::devices().front();
     compute::context user_context(user_device);
     compute::command_queue user_queue(user_context, user_device);
 
     // Don't call default_device() or default_context() before calling 
-    // default_queue(command_queue* = 0) if you wish to attach your command queue
-    compute::system::default_device(); 
+    // default_queue() if you wish to attach your command queue
+    compute::system::default_context();
 
-    try 
-    {
-        compute::system::default_queue(&user_queue); 
-    }
-    catch (boost::compute::context_error& e) 
-    {
-        BOOST_CHECK_EQUAL(
-            std::string(e.what()), 
-            std::string("Error: User command queue mismatches default device and/or context")
-        );
-        return;
-    }
+    BOOST_CHECK_THROW(
+        compute::system::default_queue(user_queue),
+        compute::set_default_queue_error);
+//! [queue_mismatch]
 }

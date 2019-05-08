@@ -33,7 +33,7 @@ void attach_user_queue_worker_threads(
     compute::command_queue* queues)
 {
     compute::command_queue user_queue(user_context, user_device);
-    queues[id] = compute::system::default_queue(&user_queue);
+    queues[id] = compute::system::default_queue(user_queue);
 }
 
 BOOST_AUTO_TEST_CASE(user_default_context_thread_safety)
