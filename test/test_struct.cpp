@@ -23,6 +23,8 @@
 #include <boost/compute/type_traits/type_definition.hpp>
 #include <boost/compute/utility/source.hpp>
 
+#include "check_macros.hpp"
+
 namespace compute = boost::compute;
 
 // example code defining an atom class
@@ -129,6 +131,37 @@ BOOST_AUTO_TEST_CASE(custom_kernel)
     custom_kernel.set_arg(1, distances);
 
     queue.enqueue_1d_range_kernel(custom_kernel, 0, atoms.size(), 1);
+}
+
+BOOST_AUTO_TEST_CASE(custom_kernel_set_struct_by_value)
+{
+    std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
+        __kernel void custom_kernel(Atom atom,
+                                    __global float *position,
+                                    __global int *number)
+        {
+            position[0] = atom.x;
+            position[1] = atom.y;
+            position[2] = atom.z;
+            number[0] = atom.number;
+        }
+    );
+    source = compute::type_definition<chemistry::Atom>() + "\n" + source;
+    compute::program program =
+        compute::program::build_with_source(source, context);
+    compute::kernel custom_kernel = program.create_kernel("custom_kernel");
+
+    chemistry::Atom atom(1.0f, 2.0f, 3.0f, 4);
+    compute::vector<float> position(3);
+    compute::vector<int> number(1);
+
+    custom_kernel.set_arg(0, atom);
+    custom_kernel.set_arg(1, position);
+    custom_kernel.set_arg(2, number);
+    queue.enqueue_task(custom_kernel);
+
+    CHECK_RANGE_EQUAL(float, 3, position, (1.0f, 2.0f, 3.0f));
+    CHECK_RANGE_EQUAL(int, 1, number, (4));
 }
 
 // Creates a StructWithArray containing 'x', 'y', 'z'.
