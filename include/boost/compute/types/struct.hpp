@@ -168,6 +168,14 @@ inline std::string adapt_struct_insert_member(T (Struct::*)[N], const char *name
                ) \
                << "}"; \
     } \
+    template<> \
+    struct set_kernel_arg<type> \
+    { \
+        void operator()(kernel &kernel_, size_t index, const type &c) \
+        { \
+            kernel_.set_arg(index, sizeof(type), &c); \
+        } \
+    }; \
     }}}
 
 #endif // BOOST_COMPUTE_TYPES_STRUCT_HPP
