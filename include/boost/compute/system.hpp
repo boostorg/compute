@@ -17,6 +17,18 @@
 
 #include <boost/throw_exception.hpp>
 
+#if defined(BOOST_COMPUTE_THREAD_SAFE) 
+#  if defined(BOOST_COMPUTE_USE_CPP11)
+#    include <mutex>
+#    include <thread>
+#    include <atomic>
+#  else
+#    include <boost/thread/mutex.hpp>
+#    include <boost/thread/lock_guard.hpp>
+#    include <boost/atomic.hpp>
+#  endif
+#endif 
+
 #include <boost/compute/cl.hpp>
 #include <boost/compute/device.hpp>
 #include <boost/compute/context.hpp>
@@ -24,6 +36,7 @@
 #include <boost/compute/command_queue.hpp>
 #include <boost/compute/detail/getenv.hpp>
 #include <boost/compute/exception/no_device_found.hpp>
+#include <boost/compute/exception/context_error.hpp>
 
 namespace boost {
 namespace compute {
@@ -78,9 +91,7 @@ public:
     /// \endcode
     static device default_device()
     {
-        static device default_device = find_default_device();
-
-        return default_device;
+        return init_default_device();
     }
 
     /// Returns the device with \p name.
@@ -149,17 +160,27 @@ public:
     /// same context object being returned.
     static context default_context()
     {
-        static context default_context(default_device());
-
-        return default_context;
+        return init_default_context();
     }
 
     /// Returns the default command queue for the system.
-    static command_queue& default_queue()
+    ///
+    /// If user-provided command queue is given, the system-wide default context
+    /// and default device will be set up appropriately so that the default queue
+    /// matches the default context and device.
+    ///
+    /// If the OpenCL context and device associated with user-provided command queue 
+    /// does not match the default context and device that have already been set,
+    /// a set_default_queue_error exception is thrown. For example:
+    ///
+    /// \snippet test/test_attach_user_queue_error.cpp queue_mismatch
+    ///
+    /// The default queue is created once on the first time this function is
+    /// called. Calling this function multiple times will always result in the
+    /// same command queue object being returned.
+    static command_queue& default_queue(const command_queue &user_queue = command_queue())
     {
-        static command_queue queue(default_context(), default_device());
-
-        return queue;
+        return init_default_queue(user_queue);
     }
 
     /// Blocks until all outstanding computations on the default
@@ -279,6 +300,144 @@ private:
     static bool matches(const std::string &str, const std::string &pattern)
     {
         return str.find(pattern) != std::string::npos;
+    }
+
+    /// \internal_
+    static device init_default_device(const device &user_device = device())
+    {
+        static device default_device;
+
+#ifdef BOOST_COMPUTE_THREAD_SAFE
+    #ifdef BOOST_COMPUTE_USE_CPP11
+        using namespace std;
+    #else 
+        using namespace boost;
+    #endif 
+        static atomic<bool> is_init;
+        static mutex init_mutex;
+
+        bool is_init_value = is_init.load(memory_order_consume);
+        if (!is_init_value)
+        {
+            lock_guard<mutex> lock(init_mutex);
+            is_init_value = is_init.load(memory_order_consume);
+            if (!is_init_value)
+            {
+                default_device = user_device.get() ? 
+                    user_device : find_default_device();
+
+                is_init.store(true, memory_order_release);
+            }
+        }
+#else // BOOST_COMPUTE_THREAD_SAFE
+        if (!default_device.get())
+        {
+            default_device = user_device.get() ? 
+                user_device : find_default_device();
+        }
+#endif // BOOST_COMPUTE_THREAD_SAFE   
+        return default_device;
+    }
+
+    /// \internal_
+    static context init_default_context(const context &user_context = context())
+    {
+        static context default_context;
+
+#ifdef BOOST_COMPUTE_THREAD_SAFE
+    #ifdef BOOST_COMPUTE_USE_CPP11
+        using namespace std;
+    #else 
+        using namespace boost;
+    #endif 
+        static atomic<bool> is_init;
+        static mutex init_mutex;
+
+        bool is_init_value = is_init.load(memory_order_consume);
+        if (!is_init_value)
+        {
+            lock_guard<mutex> lock(init_mutex);
+            is_init_value = is_init.load(memory_order_consume);
+            if (!is_init_value)
+            {
+                default_context = user_context.get() ? 
+                    user_context : context(default_device());
+
+                is_init.store(true, memory_order_release);
+            }
+        }
+#else // BOOST_COMPUTE_THREAD_SAFE
+        if (!default_context.get())
+        {
+            default_context = user_context.get() ?
+                user_context : context(default_device());
+        }
+#endif // BOOST_COMPUTE_THREAD_SAFE
+        return default_context;
+    }
+
+    /// \internal_
+    static void init_default_device_and_context(const command_queue &user_queue)
+    {
+        device user_device = user_queue.get_device();
+        context user_context = user_queue.get_context();
+
+        if ( (user_device != init_default_device(user_device)) ||
+             (user_context != init_default_context(user_context)) )
+        {
+            // Try invoking default_queue() before anything else
+            BOOST_THROW_EXCEPTION(set_default_queue_error());  
+        }
+    }
+    
+    /// \internal_
+    static command_queue& init_default_queue(const command_queue &user_queue = command_queue())
+    {
+        static command_queue default_queue;
+
+#ifdef BOOST_COMPUTE_THREAD_SAFE
+    #ifdef BOOST_COMPUTE_USE_CPP11
+        using namespace std;
+    #else 
+        using namespace boost;
+    #endif 
+        static atomic<bool> is_init;
+        static mutex init_mutex;
+
+        bool is_init_value = is_init.load(memory_order_consume);
+        if (!is_init_value)
+        {
+            lock_guard<mutex> lock(init_mutex);
+            is_init_value = is_init.load(memory_order_consume);
+            if (!is_init_value)
+            {
+                if (user_queue.get())
+                    init_default_device_and_context(user_queue);
+
+                default_queue = user_queue.get() ? 
+                    user_queue : 
+                    command_queue(default_context(), default_device());
+
+                is_init.store(true, memory_order_release);
+            }
+        }
+#else // BOOST_COMPUTE_THREAD_SAFE
+        if (!default_queue.get())
+        {
+            if (user_queue.get())
+                init_default_device_and_context(user_queue);
+
+            default_queue = user_queue.get() ? 
+                user_queue :
+                command_queue(default_context(), default_device());
+        }
+#endif // BOOST_COMPUTE_THREAD_SAFE
+        else
+        {
+            BOOST_ASSERT_MSG(user_queue.get() == 0, 
+                "Default command queue has already been set.");
+        }
+        return default_queue;
     }
 };
 
