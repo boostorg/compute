@@ -1,54 +1,107 @@
-# clone directory
-clone_folder: C:\boost.compute
-
-# do not build on tags
-skip_tags: true
-
-# clone only the top level commit
-shallow_clone: true
-
-# branches to build
-branches:
-  # blacklist
-  except:
-    - gh-pages
-
 # environment variables
 environment:
   global:
     BOOST_COMPUTE_DEFAULT_PLATFORM: Intel(R) OpenCL
-    # OpenCL version used in tests (2.0)
-    OPENCL_VERSION: 200
-    CXXFLAGS: -DBOOST_COMPUTE_MAX_CL_VERSION=%OPENCL_VERSION%
+    CMAKE_OPTIONS: -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_HAVE_OPENCV=ON -DBOOST_COMPUTE_THREAD_SAFE=ON
+    CXXFLAGS: -DBOOST_COMPUTE_MAX_CL_VERSION=201
   matrix:
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
+      CMAKE_GENERATOR: Unix Makefiles
+      OPENCL_LIB: POCL
+      CXXFLAGS: -DBOOST_COMPUTE_MAX_CL_VERSION=102 -Wno-deprecated-declarations
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
+      CMAKE_GENERATOR: Unix Makefiles
+      OPENCL_LIB: INTEL
+      CXXFLAGS: -DBOOST_COMPUTE_MAX_CL_VERSION=201 -Wno-deprecated-declarations
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1604
+      CMAKE_GENERATOR: Unix Makefiles
+      OPENCL_LIB: INTEL
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       CMAKE_GENERATOR: Visual Studio 15 2017 Win64
       BOOST_ROOT: C:\Libraries\boost_1_67_0
+      OPENCV_DIR: C:\tools\opencv\build\x64\vc15\lib\
+      OPENCV_BINDIR: C:\tools\opencv\build\x64\vc15\bin\
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       CMAKE_GENERATOR: Visual Studio 14 2015 Win64
       BOOST_ROOT: C:\Libraries\boost_1_63_0
+      OPENCV_DIR: C:\tools\opencv\build\x64\vc14\lib\
+      OPENCV_BINDIR: C:\tools\opencv\build\x64\vc14\bin\
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
       CMAKE_GENERATOR: Visual Studio 12 2013 Win64
       BOOST_ROOT: C:\Libraries\boost_1_58_0
+      CMAKE_OPTIONS: -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON -DBOOST_COMPUTE_BUILD_BENCHMARKS=ON -DBOOST_COMPUTE_USE_OFFLINE_CACHE=ON -DBOOST_COMPUTE_HAVE_OPENCV=OFF -DBOOST_COMPUTE_THREAD_SAFE=ON
 
-before_build:
+install:
+  # Install OpenCV
+  - choco install opencv --version 3.4.4
+  - set PATH=%OPENCV_BINDIR%;%PATH%
   # Install OpenCL headers and libraries
   - set NUGETDIR=C:\NUGET
   - nuget install opencl-nug -Version 0.777.77 -OutputDirectory %NUGETDIR%
-  - dir %NUGETDIR%\opencl-nug.0.777.77\build\native\
-  - set OCL_ROOT=%NUGETDIR%\opencl-nug.0.777.77\build\native
+  - set OCL_ROOT=%NUGETDIR%\opencl-nug.0.777.77\build\native\
+  - dir %OCL_ROOT%
   # Install OpenCL Runtime
   - choco install opencl-intel-cpu-runtime
-  # Check if it's working
+  # Download clinfo executable
   - ps: appveyor DownloadFile "https://ci.appveyor.com/api/projects/oblomov/clinfo/artifacts/clinfo.exe?job=platform:+x64" -FileName clinfo.exe
-  - .\clinfo.exe
 
 build_script:
+  - sh: clinfo
+  - sh: echo ${CMAKE_OPTIONS}
+  - sh: echo ${CXXFLAGS}
+  - sh: echo ${CMAKE_GENERATOR}
+  - sh: echo ${CC}
+  - sh: echo ${CXX}
+  - cmd: .\clinfo.exe
+  - cmd: echo %CMAKE_OPTIONS%
+  - cmd: echo %CXXFLAGS%
+  - cmd: echo %CMAKE_GENERATOR%
+  - cmd: echo %CC%
+  - cmd: echo %CXX%
   - mkdir build && cd build
-  - cmake -G"%CMAKE_GENERATOR%" -DBOOST_COMPUTE_BUILD_TESTS=ON -DBOOST_COMPUTE_BUILD_EXAMPLES=ON ..
-  - cmake --build . --config Debug
+  - cmd: cmake -G"%CMAKE_GENERATOR%" %CMAKE_OPTIONS% ..
+  - sh: cmake -G"${CMAKE_GENERATOR}" ${CMAKE_OPTIONS} ..
+  - cmake --build . --config Debug -j 2
 
 test_script:
-  - .\example\Debug\list_devices.exe
-  - .\example\Debug\hello_world.exe
+  - cmd: .\example\Debug\list_devices.exe
+  - cmd: .\example\Debug\hello_world.exe
+  - sh: ./example/list_devices
+  - sh: ./example/hello_world
   - ctest --output-on-failure --repeat-until-fail 2
+
+for:
+-
+  matrix:
+    only:
+    - CMAKE_GENERATOR: Unix Makefiles
+      OPENCL_LIB: INTEL
+
+  install: &install_linux
+    - sudo apt-get update
+    - sudo apt-get install libboost-all-dev libopencv-dev -y
+    - sudo apt-get install ocl-icd-opencl-dev opencl-headers clinfo -y
+    - sudo apt-get install g++-5 -y
+    - export CC=gcc-5
+    - export CXX=g++-5
+
+  before_build:
+    # https://software.intel.com/en-us/articles/opencl-drivers#cpu-section
+    - PACKAGE_URL=http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/13793/l_opencl_p_18.1.0.013.tgz
+    - PACKAGE_NAME=l_opencl_p_18.1.0.013
+    - wget -q ${PACKAGE_URL} -O /tmp/opencl_runtime.tgz
+    - tar -xzf /tmp/opencl_runtime.tgz -C /tmp
+    - sed 's/decline/accept/g' -i /tmp/${PACKAGE_NAME}/silent.cfg
+    - sudo /tmp/${PACKAGE_NAME}/install.sh -s /tmp/${PACKAGE_NAME}/silent.cfg
+
+-
+  matrix:
+    only:
+    - CMAKE_GENERATOR: Unix Makefiles
+      OPENCL_LIB: POCL
+
+  install: *install_linux
+
+  before_build:
+    - sudo apt-get install libpocl-dev -y
+    - poclcc -l
