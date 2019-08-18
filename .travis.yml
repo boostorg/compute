@@ -251,7 +251,7 @@ matrix:
           - lcov
           - gcc@5
           - llvm
-          - opencv
+          - opencv@3
           - clinfo
     # GCC
     - os: osx
