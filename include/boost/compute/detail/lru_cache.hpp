@@ -100,7 +100,7 @@ public:
             i->second.second = m_list.begin();
 
             // return the value
-            return value;
+            return i->second.first;
         }
         else {
             // the item is already at the front of the most recently
