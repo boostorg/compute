@@ -13,7 +13,7 @@
 
 #include <iterator>
 
-#include <boost/utility/enable_if.hpp>
+#include <boost/core/enable_if.hpp>
 
 #include <boost/compute/system.hpp>
 #include <boost/compute/command_queue.hpp>

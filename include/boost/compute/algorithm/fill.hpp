@@ -13,11 +13,11 @@
 
 #include <iterator>
 
+#include <boost/core/enable_if.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/contains.hpp>
-#include <boost/utility/enable_if.hpp>
 
 #include <boost/compute/cl.hpp>
 #include <boost/compute/system.hpp>

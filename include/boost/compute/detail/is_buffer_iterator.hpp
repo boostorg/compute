@@ -12,8 +12,8 @@
 #define BOOST_COMPUTE_DETAIL_IS_BUFFER_ITERATOR_HPP
 
 #include <boost/config.hpp>
+#include <boost/core/enable_if.hpp>
 #include <boost/type_traits.hpp>
-#include <boost/utility/enable_if.hpp>
 
 namespace boost {
 namespace compute {

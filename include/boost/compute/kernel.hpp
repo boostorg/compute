@@ -14,7 +14,7 @@
 #include <string>
 
 #include <boost/assert.hpp>
-#include <boost/utility/enable_if.hpp>
+#include <boost/core/enable_if.hpp>
 #include <boost/optional.hpp>
 
 #include <boost/compute/cl_ext.hpp> // cl_khr_subgroups
