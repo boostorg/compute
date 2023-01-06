@@ -72,9 +72,8 @@ inline InputIterator find_extrema_on_cpu(InputIterator first,
         k.add_arg<uint_ *>(memory_object::global_memory, "output_idx");
 
     k <<
-        "uint block = " <<
-            "(uint)ceil(((float)count)/get_global_size(0));\n" <<
-        "uint index = get_global_id(0) * block;\n" <<
+        "uint block = (uint)ceil(((float)count)/get_global_size(0));\n" <<
+        "uint index = min(count - 1, (uint)get_global_id(0) * block);\n" <<
         "uint end = min(count, index + block);\n" <<
 
         "uint value_index = index;\n" <<

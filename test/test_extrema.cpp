@@ -158,6 +158,21 @@ BOOST_AUTO_TEST_CASE(int_min_max)
     BOOST_CHECK_EQUAL(max_iter.read(queue), 513);
 }
 
+BOOST_AUTO_TEST_CASE(int_unhandy_max)
+{
+    boost::compute::vector<int> vector(device.compute_units() * 10, context);
+
+    // fill with 0 -> 10 * device.compute_units()
+    boost::compute::iota(vector.begin(), vector.end(), 0, queue);
+    // Last compute unit may hit out of range if initial index isn't handled well
+    int unhandy = 2 * device.compute_units() + 1;
+
+    boost::compute::vector<int>::iterator max_iter =
+        boost::compute::max_element(vector.begin(), vector.begin() + unhandy, queue);
+    BOOST_CHECK(max_iter == (vector.begin() + unhandy - 1));
+    BOOST_CHECK_EQUAL(*max_iter, unhandy - 1);
+}
+
 BOOST_AUTO_TEST_CASE(int2_min_max_custom_comparision_function)
 {
     using boost::compute::int2_;
