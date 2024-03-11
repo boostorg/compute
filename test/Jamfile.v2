@@ -22,6 +22,7 @@ project
         <toolset>msvc:<cxxflags>/wd4800 # Warning C4800: 'uint32_t' : forcing value to bool 'true' or 'false' (performance warning)
         <toolset>msvc:<cxxflags>/wd4838 # Warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
         <library>/boost/test//boost_unit_test_framework
+        <source>/boost/accumulators//boost_accumulators
 
         [ check-target-builds has_opencl "OpenCL" : : <build>no ]
     ;

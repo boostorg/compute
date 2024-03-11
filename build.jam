@@ -1,0 +1,47 @@
+# Copyright René Ferdinand Rivera Morell 2023
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+import project ;
+
+project /boost/compute
+    : common-requirements
+        <source>/boost/algorithm//boost_algorithm
+        <source>/boost/array//boost_array
+        <source>/boost/assert//boost_assert
+        <source>/boost/atomic//boost_atomic
+        <source>/boost/chrono//boost_chrono
+        <source>/boost/config//boost_config
+        <source>/boost/core//boost_core
+        <source>/boost/filesystem//boost_filesystem
+        <source>/boost/function//boost_function
+        <source>/boost/function_types//boost_function_types
+        <source>/boost/fusion//boost_fusion
+        <source>/boost/iterator//boost_iterator
+        <source>/boost/lexical_cast//boost_lexical_cast
+        <source>/boost/mpl//boost_mpl
+        <source>/boost/optional//boost_optional
+        <source>/boost/preprocessor//boost_preprocessor
+        <source>/boost/property_tree//boost_property_tree
+        <source>/boost/proto//boost_proto
+        <source>/boost/range//boost_range
+        <source>/boost/smart_ptr//boost_smart_ptr
+        <source>/boost/static_assert//boost_static_assert
+        <source>/boost/thread//boost_thread
+        <source>/boost/throw_exception//boost_throw_exception
+        <source>/boost/tuple//boost_tuple
+        <source>/boost/type_traits//boost_type_traits
+        <source>/boost/typeof//boost_typeof
+        <source>/boost/utility//boost_utility
+        <source>/boost/uuid//boost_uuid
+        <include>include
+    ;
+
+explicit
+    [ alias boost_compute ]
+    [ alias all : boost_compute test ]
+    ;
+
+call-if : boost-library compute
+    ;
