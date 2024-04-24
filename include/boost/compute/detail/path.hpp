@@ -30,19 +30,19 @@ static const std::string& path_delim()
 // Path to appdata folder.
 inline const std::string& appdata_path()
 {
-    const char *home_path;
+    const char *user_path;
     #ifdef _WIN32
-    home_path = detail::getenv("HOME");
-    if (home_path == nullptr) {
+    user_path = detail::getenv("APPDATA");
+    if (user_path == nullptr) {
         std::cerr << "ERROR: Unable to find APPDATA environment variable." << std::endl;
     }
     #else
-    home_path = detail::getenv("HOME");
-    if (home_path == nullptr) {
-        std::cerr << "ERROR: Unable to find APPDATA environment variable." << std::endl;
+    user_path = detail::getenv("HOME");
+    if (user_path == nullptr) {
+        std::cerr << "ERROR: Unable to find HOME environment variable." << std::endl;
     }
     #endif
-    static const std::string appdata = home_path
+    static const std::string appdata = user_path
         + path_delim() + ".boost_compute";
     return appdata;
 }
