@@ -37,12 +37,12 @@ class sha1 {
         }
 
         operator std::string() {
-            unsigned int digest[5];
+            unsigned char digest[20];
             h.get_digest(digest);
 
             std::ostringstream buf;
-            for(int i = 0; i < 5; ++i)
-                buf << std::hex << std::setfill('0') << std::setw(8) << digest[i];
+            for(int i = 0; i < 20; ++i)
+                buf << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(digest[i]);
 
             return buf.str();
         }
