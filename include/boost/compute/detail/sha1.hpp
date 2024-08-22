@@ -37,13 +37,22 @@ class sha1 {
         }
 
         operator std::string() {
+            #if BOOST_VERSION >= 108600
+            boost::uuids::detail::sha1::digest_type digest;
+            #else
             unsigned int digest[5];
+            #endif
+
             h.get_digest(digest);
 
             std::ostringstream buf;
+            #if BOOST_VERSION >= 108600
+            for(int i = 0; i < 20; ++i)
+                buf << std::hex << std::setfill('0') << std::setw(2) << +digest[i];
+            #else
             for(int i = 0; i < 5; ++i)
                 buf << std::hex << std::setfill('0') << std::setw(8) << digest[i];
-
+            #endif
             return buf.str();
         }
     private:

@@ -10,6 +10,7 @@
 
 #define BOOST_TEST_MODULE TestFunctionalPopcount
 #include <boost/test/unit_test.hpp>
+#include <boost/mpl/list.hpp>
 
 #include <boost/compute/algorithm/transform.hpp>
 #include <boost/compute/container/vector.hpp>
