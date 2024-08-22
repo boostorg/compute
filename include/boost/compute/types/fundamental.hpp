@@ -14,6 +14,8 @@
 #include <cstring>
 #include <ostream>
 
+#include <boost/static_assert.hpp>
+
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/comma.hpp>
 #include <boost/preprocessor/repetition.hpp>
