@@ -48,7 +48,7 @@ class sha1 {
             std::ostringstream buf;
             #if BOOST_VERSION >= 108600
             for(int i = 0; i < 20; ++i)
-                buf << std::hex << std::setfill('0') << std::setw(2) << digest[i];
+                buf << std::hex << std::setfill('0') << std::setw(2) << +digest[i];
             #else
             for(int i = 0; i < 5; ++i)
                 buf << std::hex << std::setfill('0') << std::setw(8) << digest[i];
