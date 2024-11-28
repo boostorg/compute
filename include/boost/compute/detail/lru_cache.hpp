@@ -75,7 +75,7 @@ public:
 
             // insert the new item
             m_list.push_front(key);
-            m_map[key] = std::make_pair(value, m_list.begin());
+            m_map.emplace(key, std::make_pair(value, m_list.begin()));
         }
     }
 
@@ -97,18 +97,10 @@ public:
             m_list.push_front(key);
 
             // update iterator in map
-            j = m_list.begin();
-            const value_type &value = i->second.first;
-            m_map[key] = std::make_pair(value, j);
-
-            // return the value
-            return value;
+            i->second.second = m_list.begin();
         }
-        else {
-            // the item is already at the front of the most recently
-            // used list so just return it
-            return i->second.first;
-        }
+        // return the value
+        return i->second.first;
     }
 
     void clear()
