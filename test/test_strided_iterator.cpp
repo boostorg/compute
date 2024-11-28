@@ -113,6 +113,13 @@ BOOST_AUTO_TEST_CASE(copy)
     CHECK_RANGE_EQUAL(boost::compute::int_, 3, result, (1, 4, 7));
 }
 
+BOOST_AUTO_TEST_CASE(dereference)
+{
+  boost::compute::int_ data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+  auto it = boost::compute::make_strided_iterator(data, 3);
+  BOOST_CHECK_EQUAL(*it, 1);
+}
+
 BOOST_AUTO_TEST_CASE(make_strided_iterator_end)
 {
     boost::compute::int_ data[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
