@@ -97,12 +97,10 @@ public:
             m_list.push_front(key);
 
             // update iterator in map
-            j = m_list.begin();
-            const value_type &value = i->second.first;
-            m_map[key] = std::make_pair(value, j);
+            i->second.second = m_list.begin();
 
             // return the value
-            return value;
+            return i->second.first;
         }
         else {
             // the item is already at the front of the most recently
