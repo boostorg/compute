@@ -27,6 +27,8 @@ int rand_int()
 // this example demonstrates how to sort a vector of ints on the GPU
 int main()
 {
+    // fix random number generator : do not give always the same numbers
+    srand(time(NULL));
     // create vector of random values on the host
     std::vector<int> host_vector(10);
     std::generate(host_vector.begin(), host_vector.end(), rand_int);
