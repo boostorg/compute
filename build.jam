@@ -1,0 +1,50 @@
+# Copyright René Ferdinand Rivera Morell 2023-2024
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+require-b2 5.2 ;
+
+constant boost_dependencies :
+    /boost/algorithm//boost_algorithm
+    /boost/array//boost_array
+    /boost/assert//boost_assert
+    /boost/atomic//boost_atomic
+    /boost/chrono//boost_chrono
+    /boost/config//boost_config
+    /boost/core//boost_core
+    /boost/filesystem//boost_filesystem
+    /boost/function//boost_function
+    /boost/function_types//boost_function_types
+    /boost/fusion//boost_fusion
+    /boost/iterator//boost_iterator
+    /boost/lexical_cast//boost_lexical_cast
+    /boost/mpl//boost_mpl
+    /boost/optional//boost_optional
+    /boost/preprocessor//boost_preprocessor
+    /boost/property_tree//boost_property_tree
+    /boost/proto//boost_proto
+    /boost/range//boost_range
+    /boost/smart_ptr//boost_smart_ptr
+    /boost/static_assert//boost_static_assert
+    /boost/thread//boost_thread
+    /boost/throw_exception//boost_throw_exception
+    /boost/tuple//boost_tuple
+    /boost/type_traits//boost_type_traits
+    /boost/typeof//boost_typeof
+    /boost/utility//boost_utility
+    /boost/uuid//boost_uuid ;
+
+project /boost/compute
+    : common-requirements
+        <include>include
+    ;
+
+explicit
+    [ alias boost_compute : : : : <library>$(boost_dependencies) ]
+    [ alias all : boost_compute test ]
+    ;
+
+call-if : boost-library compute
+    ;
+
