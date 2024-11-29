@@ -188,7 +188,15 @@ public:
     /// Returns a vector of devices for the context.
     std::vector<device> get_devices() const
     {
-        return get_info<std::vector<device> >(CL_CONTEXT_DEVICES);
+        std::vector<cl_device_id> device_ids =
+            get_info<std::vector<cl_device_id> >(CL_CONTEXT_DEVICES);
+
+        std::vector<device> devices;
+        for(size_t i = 0; i < device_ids.size(); i++) {
+            devices.push_back(device(device_ids[i]));
+        }
+
+        return devices;
     }
 
     /// Returns information about the context.
