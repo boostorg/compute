@@ -26,7 +26,6 @@ constant boost_dependencies :
     /boost/proto//boost_proto
     /boost/range//boost_range
     /boost/smart_ptr//boost_smart_ptr
-    /boost/static_assert//boost_static_assert
     /boost/thread//boost_thread
     /boost/throw_exception//boost_throw_exception
     /boost/tuple//boost_tuple
