@@ -184,7 +184,7 @@ private:
 
     reference dereference() const
     {
-        return reference();
+        return *super_type::base_reference();
     }
 
     bool equal(const strided_iterator<Iterator> &other) const
