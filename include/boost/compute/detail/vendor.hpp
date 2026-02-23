@@ -43,6 +43,12 @@ inline bool is_apple_platform_device(const device &device)
     return is_apple_platform(device.platform());
 }
 
+// returns true if the device is an Intel GPU
+inline bool is_intel_gpu(const device& device)
+{
+    return device.name().find("Intel(R) HD Graphics") != std::string::npos;
+}
+
 } // end detail namespace
 } // end compute namespace
 } // end boost namespace
