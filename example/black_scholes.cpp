@@ -15,6 +15,8 @@
 #include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/copy_n.hpp>
 #include <boost/compute/container/vector.hpp>
+#include <boost/compute/random/default_random_engine.hpp>
+#include <boost/compute/random/uniform_real_distribution.hpp>
 #include <boost/compute/utility/source.hpp>
 
 namespace compute = boost::compute;
@@ -43,18 +45,6 @@ int main()
     compute::command_queue queue(context, gpu);
     std::cout << "device: " << gpu.name() << std::endl;
 
-    // initialize option data on host
-    std::vector<float> stock_price_data(N);
-    std::vector<float> option_strike_data(N);
-    std::vector<float> option_years_data(N);
-
-    std::srand(5347);
-    for(int i = 0; i < N; i++){
-        stock_price_data[i] = rand_float(5.0f, 30.0f);
-        option_strike_data[i] = rand_float(1.0f, 100.0f);
-        option_years_data[i] = rand_float(0.25f, 10.0f);
-    }
-
     // create memory buffers on the device
     compute::vector<float> call_result(N, context);
     compute::vector<float> put_result(N, context);
@@ -62,10 +52,15 @@ int main()
     compute::vector<float> option_strike(N, context);
     compute::vector<float> option_years(N, context);
 
-    // copy initial values to the device
-    compute::copy_n(stock_price_data.begin(), N, stock_price.begin(), queue);
-    compute::copy_n(option_strike_data.begin(), N, option_strike.begin(), queue);
-    compute::copy_n(option_years_data.begin(), N, option_years.begin(), queue);
+    // generate option data
+    compute::default_random_engine engine(queue, 5347);
+    compute::uniform_real_distribution<float> dist_stock_price(5.0f, 30.0f);
+    compute::uniform_real_distribution<float> dist_option_strike(1.0f, 100.0f);
+    compute::uniform_real_distribution<float> dist_option_years(0.25f, 10.0f);
+
+    dist_stock_price.generate(stock_price.begin(), stock_price.end(), engine, queue);
+    dist_option_strike.generate(option_strike.begin(), option_strike.end(), engine, queue);
+    dist_option_years.generate(option_years.begin(), option_years.end(), engine, queue);
 
     // source code for black-scholes program
     const char source[] = BOOST_COMPUTE_STRINGIZE_SOURCE(
