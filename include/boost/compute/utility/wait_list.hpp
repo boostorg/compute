@@ -155,6 +155,23 @@ public:
         insert(future.get_event());
     }
 
+    /// Inserts \p event into the wait-list.
+    bool safe_insert(const event &event)
+    {
+        if(event.get()) {
+            m_events.push_back(event);
+            return true;
+        }
+        return false;
+    }
+
+    /// Inserts the event from \p future into the wait-list.
+    template<class T>
+    bool safe_insert(const future<T> &future)
+    {
+        return safe_insert(future.get_event());
+    }
+
     /// Blocks until all of the events in the wait-list have completed.
     ///
     /// Does nothing if the wait-list is empty.
