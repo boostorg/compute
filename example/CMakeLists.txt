@@ -32,6 +32,7 @@ set(EXAMPLES
   vector_addition
   simple_moving_average
   matrix_transpose
+  print_kernel_id
 )
 
 # boost library link dependencies
